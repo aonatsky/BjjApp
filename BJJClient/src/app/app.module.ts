@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import { UniversalModule } from 'angular2-universal';
-import { AppComponent } from './components/app/app.component'
+import { AppComponent } from './app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
 import { ListUploadComponent } from './components/listupload/listupload.component';
@@ -11,7 +11,7 @@ import { DropdownComponent } from './components/Shared/DropDown/dropdown.compone
 import { FileUpload } from './components/Shared/fileUpload/fileUpload.component';
 
 import {routing, appRoutingProviders} from './app.routing';
-import {AboutComponent} from './about/about.component';
+
 
 @NgModule({
     declarations: [
@@ -21,8 +21,8 @@ import {AboutComponent} from './about/about.component';
         HomeComponent,
         ListUploadComponent,
         DropdownComponent,
-        ListUploadComponent,
-        AboutComponent
+        ListUploadComponent
+
     ],
     imports: [
        UniversalModule,
