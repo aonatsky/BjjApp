@@ -11,11 +11,8 @@ export class ListUploadComponent {
     public weightDivisions: weightDivision[];
     public dropdownValues: DropdownValue[];
 
-    // constructor(http: Http) {
-    //     http.get('/api/SampleData/WeatherForecasts').subscribe(result => {
-    //         this.forecasts = result.json();
-    //     });
-   constructor(){
+    
+    constructor(){
        this.weightDivisions = [new weightDivision(1,"light")]
    }
 }
