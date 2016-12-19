@@ -31,7 +31,8 @@
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
     "zone.js": "^0.6.25",
-    "@types/core-js": "^0.9.34"
+    "@types/core-js": "^0.9.34",
+    "json-typescript-mapper":"1.0.5"
   },
   "devDependencies": {
     "@types/jasmine": "^2.5.35",
@@ -48,6 +49,9 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "jasmine-core": "^2.4.1",
+    "angular2-router-loader": "^0.3.4",
+    "angular2-template-loader": "^0.6.0",
+    "awesome-typescript-loader": "3.0.0-beta.17",
     "karma": "^0.13.22",
     "karma-coverage": "^1.0.0",
     "karma-jasmine": "^0.3.8",

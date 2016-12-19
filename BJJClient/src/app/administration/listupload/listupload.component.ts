@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 
 @Component({
     selector: 'listupload',
-    template: require('./listupload.component.html')
+    templateUrl: './listupload.component.html'
 })
 
 

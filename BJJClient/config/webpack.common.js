@@ -19,7 +19,11 @@ module.exports = {
         loaders: [
             {
                 test: /\.ts$/,
-                loader: 'ts'
+                loaders: [
+                    'awesome-typescript-loader',
+                    'angular2-template-loader',
+                    'angular2-router-loader'
+                ]
             },
             {
                 test: /\.html$/,
@@ -57,7 +61,7 @@ module.exports = {
             template: 'src/index.html'
         }),
 
-          new webpack.ContextReplacementPlugin(
+        new webpack.ContextReplacementPlugin(
             // The (\\|\/) piece accounts for path separators in *nix and Windows
             /angular(\\|\/)core(\\|\/)src(\\|\/)linker/,
             path.resolve(__dirname, './src'),
