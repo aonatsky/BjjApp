@@ -16,7 +16,6 @@ export class DropdownValue {
 })
 export class DropdownComponent {
   @Input() dropDownValues;
-  //values: DropdownValue[];
 
   @Output()
   select: EventEmitter<string>;

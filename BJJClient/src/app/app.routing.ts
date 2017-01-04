@@ -2,8 +2,8 @@ import {ModuleWithProviders}  from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 
 
-import { HomeComponent } from './components/home/home.component';
-import { ListUploadComponent } from './components/listupload/listupload.component';
+import { HomeComponent } from './administration/home/home.component';
+import { ListUploadComponent } from './administration/listupload/listupload.component';
 
 const appRoutes: Routes = [
      { path: '', redirectTo: 'home', pathMatch: 'full' },

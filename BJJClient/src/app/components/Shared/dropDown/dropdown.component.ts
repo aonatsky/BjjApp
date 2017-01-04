@@ -21,9 +21,9 @@ export class DropdownComponent {
   @Output()
   select: EventEmitter<any>;
 
-  constructor() {
-    this.select = new EventEmitter();
-  }
+  // constructor() {
+  //   this.select = new EventEmitter();
+  // }
  
   selectItem(value) {
     this.select.emit(value);
