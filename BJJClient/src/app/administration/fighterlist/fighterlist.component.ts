@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
-import { DataFakeService } from '../../core/dal/fake/data-fake.service'
 import { ApiProviders } from '../../core/dal/api.providers'
 import { Fighter } from '../../core/model/fighter.model'
+
+import {NgxDataTableModule} from 'angular'
+
+
 
 @Component({
     selector: 'fighterlist',
