@@ -4,7 +4,7 @@ import {DataService} from '../contracts/data.service'
 import {Fighter} from '../../model/fighter.model'
 
 @Injectable()
-export class DataServiceFake extends DataService {
+export class DataFakeService extends DataService {
     public getFigters(weightClassName:string): Observable<Fighter[]>{
         //let fighters = new Fighter[];
         let fighters =  [
