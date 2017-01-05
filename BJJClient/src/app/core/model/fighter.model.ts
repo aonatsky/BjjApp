@@ -8,8 +8,10 @@ export class Fighter {
     /**
      *
      */
-    constructor() { 
-        super();
-        
+    constructor(firstName:string, lastName: string, team:string, weight: number) { 
+        this.FirstName = firstName;
+        this.LastName = lastName;
+        this.Team = team;
+        this.Weight = weight;
     }
 }
