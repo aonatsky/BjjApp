@@ -3,6 +3,9 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import { UniversalModule } from 'angular2-universal';
+//external tools
+import { DataTableModule } from 'angular-2-data-table';
+
 //Components
 import { AppComponent } from './app.component'
 import { NavMenuComponent } from './administration/navmenu/navmenu.component';
@@ -30,7 +33,8 @@ import {routing, appRoutingProviders} from './app.routing';
     ],
     imports: [
        UniversalModule,
-        routing
+        routing,
+        DataTableModule
     ],
     providers: [appRoutingProviders,ApiProviders],
     bootstrap: [AppComponent]
