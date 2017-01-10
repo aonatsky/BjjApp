@@ -18,14 +18,13 @@ export class DropdownValue {
 
 export class DropdownComponent {
   @Input() dropDownValues : any;
-
-  @Output() select: EventEmitter<string>;
+  @Output() onSelect : EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
-    this.select = new EventEmitter<string>();
+    this.onSelect = new EventEmitter<string>();
   }
 
   selectItem(value) {
-    this.select.emit(value);
+    this.onSelect.emit(value);
   }
 }
