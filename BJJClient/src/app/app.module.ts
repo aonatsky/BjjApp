@@ -34,7 +34,9 @@ import {routing, appRoutingProviders} from './app.routing';
     imports: [
        UniversalModule,
         routing,
-        DataTableModule
+        DataTableModule,
+        FormsModule
+        
     ],
     providers: [appRoutingProviders,ApiProviders],
     bootstrap: [AppComponent]

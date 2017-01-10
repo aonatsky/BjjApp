@@ -1,17 +1,17 @@
 export class Fighter {
-    FighterID: AAGUID;
-    FirstName: string;
-    LastName: string;
-    Team: string;
-    Weight: number;
+    fighterID: AAGUID;
+    firstName: string;
+    lastName: string;
+    team: string;
+    weight: number;
 
     /**
      *
      */
     constructor(firstName:string, lastName: string, team:string, weight: number) { 
-        this.FirstName = firstName;
-        this.LastName = lastName;
-        this.Team = team;
-        this.Weight = weight;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.team = team;
+        this.weight = weight;
     }
 }

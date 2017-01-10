@@ -14,14 +14,15 @@ export class DropdownValue {
   selector: 'dropdown',
   templateUrl: "./dropdown.component.html"
 })
-export class DropdownComponent {
-  @Input() dropDownValues;
 
-  @Output()
-  select: EventEmitter<string>;
+
+export class DropdownComponent {
+  @Input() dropDownValues : any;
+
+  @Output() select: EventEmitter<string>;
 
   constructor() {
-    this.select = new EventEmitter();
+    this.select = new EventEmitter<string>();
   }
 
   selectItem(value) {

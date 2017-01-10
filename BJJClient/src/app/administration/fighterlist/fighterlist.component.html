@@ -1,11 +1,68 @@
-<h1>Participants list </h1>
-
- <div>
-      <ngx-datatable
-        [rows]="rows"
-        [columns]="columns">
-      </ngx-datatable>
-    </div>
-
-
-
+<div style="margin: auto; max-width: 1000px; margin-bottom: 50px;">
+    <data-table id="persons-grid"
+        headerTitle="Employees"
+        [items]="fighters"
+        [itemCount]="fightersCount"
+        (reload)="reloadCars($event)"
+       
+        [rowTooltip]="rowTooltip"
+        >
+        <data-table-column
+            [property]="'firstName'"
+            [header]="'First Name'"
+            [sortable]="true"
+            [resizable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'lastName'"
+            [header]="'First Name'"
+            [sortable]="true"
+            [resizable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'team'"
+            [header]="'Team'"
+            [sortable]="true"
+            [resizable]="true">
+        </data-table-column>
+        <data-table-column
+            [property]="'weight'"
+            [header]="'Weight'"
+            [sortable]="true"
+            [resizable]="true">
+        </data-table-column>
+        <!--<data-table-column
+            [property]="'date'"
+            [header]="'Date'"
+            [sortable]="true">
+            <template #dataTableCell let-item="item">
+                <span>{{item.date | date:'yyyy-MM-dd'}}</span>
+            </template>
+        </data-table-column>
+        <data-table-column
+            property="phoneNumber"
+            header="Phone number"
+            width="150px">
+        </data-table-column>
+        <data-table-column
+            [property]="'jobTitle'"
+            [header]="'Job title'"
+            [visible]="false">
+        </data-table-column>
+        <data-table-column
+            [property]="'active'"
+            [header]="'Active'"
+            [width]="100"
+            [resizable]="true">
+            <template #dataTableHeader let-item="item">
+                <span style="color: rgb(232, 0, 0)">Active</span>
+            </template>
+            <template #dataTableCell let-item="item">
+                <span style="color: grey">
+                <span class="glyphicon glyphicon-ok" *ngIf="item.active"></span>
+                <span class="glyphicon glyphicon-remove" *ngIf="!item.active"></span>
+                </span>
+            </template>
+        </data-table-column>-->
+    </data-table>
+</div>
