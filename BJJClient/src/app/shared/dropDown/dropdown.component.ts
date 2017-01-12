@@ -1,14 +1,14 @@
 import{Component, Input, Output, EventEmitter} from '@angular/core'
 
-export class DropdownValue {
-  value:string;
-  label:string;
+// export class DropdownValue {
+//   value:string;
+//   label:string;
 
-  constructor(value:string,label:string) {
-    this.value = value;
-    this.label = label;
-  }
-}
+//   constructor(value:string,label:string) {
+//     this.value = value;
+//     this.label = label;
+//   }
+// }
 
 @Component({
   selector: 'dropdown',
@@ -17,7 +17,10 @@ export class DropdownValue {
 
 
 export class DropdownComponent {
-  @Input() dropDownValues : any;
+  @Input() dropdownValues : any;
+  @Input() nameProperty : string;
+  @Input() idProperty: string;
+  
   @Output() onSelect : EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {

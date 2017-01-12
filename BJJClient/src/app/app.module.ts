@@ -12,7 +12,7 @@ import { NavMenuComponent } from './administration/navmenu/navmenu.component';
 import { HomeComponent } from './administration/home/home.component';
 import { ListUploadComponent } from './administration/listupload/listupload.component';
 import { FighterListComponent } from './administration/fighterlist/fighterlist.component';
-import { DropdownComponent } from './shared/DropDown/dropdown.component';
+import { DropdownComponent } from './shared/dropdown/dropdown.component';
 //service
 import { DataService } from './core/dal/contracts/data.service';
 import { ApiProviders } from './core/dal/api.providers';
@@ -29,7 +29,8 @@ import {routing, appRoutingProviders} from './app.routing';
         ListUploadComponent,
         DropdownComponent,
         ListUploadComponent,
-        FighterListComponent
+        FighterListComponent,
+        DropdownComponent
     ],
     imports: [
        UniversalModule,
