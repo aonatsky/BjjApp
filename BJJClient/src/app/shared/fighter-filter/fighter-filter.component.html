@@ -1,0 +1,11 @@
+<div
+class = "fighter-filter" 
+*ngIf="weightClasses" >
+    <h5>Weight class:</h5>
+    <dropdown 
+    [dropdownValues]="weightClasses" 
+    [idProperty]= "idProperty" 
+    [nameProperty]="nameProperty"
+    (onSelect)= "weightSelect($event)"
+    ></dropdown>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { DataTable, DataTableResource } from 'angular-2-data-table';
+import { FighterFilter, FighterFilterValue } from '../../shared/fighter-filter/fighter-filter.component'
 
 
 
@@ -13,17 +14,11 @@ import { DataTable, DataTableResource } from 'angular-2-data-table';
 
 
 export class FighterListComponent implements OnInit {
-    
+
     fighters: Fighter[];
-    rows = [
-        { year: 1997, maker: 'Ford', model: 'E350', desc: 'ac, abs, moon', price: 3000.00 },
-        { year: 1999, maker: 'Chevy', model: 'Venture "Extended Edition"', price: 4900.00 },
-        { year: 1999, maker: 'Checy', model: 'Venture "Extended Edition, Very Large"', price: 5000.00 },
-        { year: 1996, maker: 'Jeep', model: 'Grand Cherokee', desc: 'air, moon roof, loaded', price: 4799.00 }
-    ];
 
 
-    fighterResource : DataTableResource<Fighter>;
+    fighterResource: DataTableResource<Fighter>;
     fightersCount = 0;
 
     @ViewChild(DataTable) fightersTable: DataTable;
@@ -44,17 +39,21 @@ export class FighterListComponent implements OnInit {
         alert(car.model);
     }
 
-    
 
-    populateTable(fighters:Fighter[]){
+
+    populateTable(fighters: Fighter[]) {
+        this.fighters = fighters;
         this.fighterResource = new DataTableResource(fighters);
         this.fightersCount = fighters.length;
     }
 
     ngOnInit() {
         this.dataService.getFigters("Light").subscribe(data => this.populateTable(data))
-        console.log("ON INIT")
-
     }
+
+    onFilterChanged(value:FighterFilterValue){
+        this.dataService.getFigters(value.weightClass.name).subscribe(data => this.populateTable(data))
+    }
+    
 }
 

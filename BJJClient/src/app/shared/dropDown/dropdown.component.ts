@@ -1,14 +1,5 @@
-import{Component, Input, Output, EventEmitter} from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 
-// export class DropdownValue {
-//   value:string;
-//   label:string;
-
-//   constructor(value:string,label:string) {
-//     this.value = value;
-//     this.label = label;
-//   }
-// }
 
 @Component({
   selector: 'dropdown',
@@ -16,18 +7,25 @@ import{Component, Input, Output, EventEmitter} from '@angular/core'
 })
 
 
-export class DropdownComponent {
-  @Input() dropdownValues : any;
-  @Input() nameProperty : string;
+export class DropdownComponent implements OnInit {
+  @Input() dropdownValues: any[];
+  @Input() nameProperty: string;
   @Input() idProperty: string;
-  
-  @Output() onSelect : EventEmitter<string> = new EventEmitter<string>();
+
+  @Output() onSelect: EventEmitter<any>;
+
+  selectedValue: any;
 
   constructor() {
-    this.onSelect = new EventEmitter<string>();
+    this.onSelect = new EventEmitter<any>();
+  }
+
+  ngOnInit(){
+    this.selectedValue = this.dropdownValues[0];
   }
 
   selectItem(value) {
+    this.selectedValue = value;
     this.onSelect.emit(value);
   }
 }

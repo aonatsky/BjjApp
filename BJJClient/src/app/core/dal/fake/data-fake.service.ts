@@ -22,7 +22,7 @@ export class DataFakeService extends DataService {
     weightClasses = [
         new WeightClass("Light",60),
         new WeightClass("Middle",80),
-        new WeightClass("Heavy",60)
+        new WeightClass("Heavy",90)
     ]
     
 
