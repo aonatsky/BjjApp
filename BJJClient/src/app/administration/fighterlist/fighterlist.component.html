@@ -1,4 +1,5 @@
-<div style="margin: auto; max-width: 1000px; margin-bottom: 50px;">
+
+<div *ngIf="fightersCount > 0" style="margin: auto; max-width: 1000px; margin-bottom: 50px;">
     <data-table id="persons-grid"
         headerTitle="Employees"
         [items]="fighters"
@@ -15,7 +16,7 @@
         </data-table-column>
         <data-table-column
             [property]="'lastName'"
-            [header]="'First Name'"
+            [header]="'Last Name'"
             [sortable]="true"
             [resizable]="true">
         </data-table-column>
