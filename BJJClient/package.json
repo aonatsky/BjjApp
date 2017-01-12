@@ -32,7 +32,8 @@
     "rxjs": "5.0.0-beta.12",
     "zone.js": "^0.6.25",
     "@types/core-js": "^0.9.34",
-    "json-typescript-mapper":"1.0.5"
+    "json-typescript-mapper":"1.0.5",
+    "angular-2-data-table":"0.1.2"
   },
   "devDependencies": {
     "@types/jasmine": "^2.5.35",
