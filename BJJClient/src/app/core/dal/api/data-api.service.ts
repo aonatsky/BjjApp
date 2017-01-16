@@ -33,9 +33,18 @@ export class DataApiService extends DataService {
         new Fight(this.fighters[6],this.fighters[7])
     ]
 
-    public getFigters(weightClass:string): Observable<Fighter[]>{
-        return Observable.of(this.fighters.filter(f => f.weight == this.weightClasses.filter(w => w.name == weightClass)[0].weight));
+    public getFigters(weightClass:string | null): Observable<Fighter[]>{
+        if (weightClass != null) {
+            return Observable.of(this.fighters.filter(f => f.weight == this.weightClasses.filter(w => w.name == weightClass)[0].weight));    
+        }else{
+            return Observable.of(this.fighters);
+        }
+        
     }
+    
+    // public getFigters(): Observable<Fighter[]>{
+    //     return Observable.of(this.fighters);
+    // }
 
     public getWeightClasses(): Observable<WeightClass[]>{
         return Observable.of(this.weightClasses);

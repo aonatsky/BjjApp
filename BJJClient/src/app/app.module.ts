@@ -12,6 +12,7 @@ import { NavMenuComponent } from './administration/navmenu/navmenu.component';
 import { HomeComponent } from './administration/home/home.component';
 import { ListUploadComponent } from './administration/listupload/listupload.component';
 import { FighterListComponent } from './administration/fighterlist/fighterlist.component';
+import { BracketsComponent } from './administration/brackets/brackets.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
 
@@ -27,11 +28,13 @@ import {routing, appRoutingProviders} from './app.routing';
         AppComponent,
         AppComponent,
         NavMenuComponent,
+        //administration        
         HomeComponent,
-        ListUploadComponent,
-        DropdownComponent,
-        ListUploadComponent,
         FighterListComponent,
+        ListUploadComponent,
+        BracketsComponent,
+        //shared
+        DropdownComponent,
         FighterFilter
     ],
     imports: [

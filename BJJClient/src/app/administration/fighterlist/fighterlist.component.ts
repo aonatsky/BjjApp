@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { DataTable, DataTableResource } from 'angular-2-data-table';
 import { FighterFilter, FighterFilterValue } from '../../shared/fighter-filter/fighter-filter.component'
+import { DefaultValues } from '../../core/consts/default-values'
 
 
 
@@ -13,7 +14,7 @@ import { FighterFilter, FighterFilterValue } from '../../shared/fighter-filter/f
 })
 
 
-export class FighterListComponent implements OnInit {
+export class FighterListComponent implements OnInit, AfterViewInit {
 
     fighters: Fighter[];
 
@@ -22,6 +23,7 @@ export class FighterListComponent implements OnInit {
     fightersCount = 0;
 
     @ViewChild(DataTable) fightersTable: DataTable;
+    @ViewChild(FighterFilter) fighterFilter: FighterFilter;
 
     private dataService: DataService;
 
@@ -47,13 +49,30 @@ export class FighterListComponent implements OnInit {
         this.fightersCount = fighters.length;
     }
 
+    //ng
     ngOnInit() {
-        this.dataService.getFigters("Light").subscribe(data => this.populateTable(data))
-    }
 
-    onFilterChanged(value:FighterFilterValue){
-        this.dataService.getFigters(value.weightClass.name).subscribe(data => this.populateTable(data))
     }
     
+    ngAfterViewInit() {
+        
+        this.dataService.getFigters(this.getWeightClassFromFilter()).subscribe(data => this.populateTable(data))
+    }
+
+    
+    //events
+    onFilterChanged(value: FighterFilterValue) {
+        this.dataService.getFigters(this.getWeightClassFromFilter()).subscribe(data => this.populateTable(data))
+    }
+
+    //private methods
+    private getWeightClassFromFilter():string{
+         let weightClassFromFilter = this.fighterFilter.currentFilterValue.weightClass.name == DefaultValues.ANY
+            ? null
+            : this.fighterFilter.currentFilterValue.weightClass.name;
+        return weightClassFromFilter;
+    }
+
+
 }
 

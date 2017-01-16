@@ -3,7 +3,8 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
 
 @Component({
   selector: 'dropdown',
-  templateUrl: "./dropdown.component.html"
+  templateUrl: "./dropdown.component.html",
+  styleUrls : ['./dropdown.component.css']
 })
 
 

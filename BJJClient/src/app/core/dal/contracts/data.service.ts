@@ -7,7 +7,7 @@ import {Fight} from '../../model/fight.model'
 
 @Injectable()
 export abstract class DataService {
-    public abstract getFigters(weightClass:string): Observable<Fighter[]>;
+    public abstract getFigters(weightClass:string | null): Observable<Fighter[]>
     public abstract getWeightClasses(): Observable<WeightClass[]>;
     public abstract getFights(fgihtListID:AAGUID) : Observable<Fight[]>
 }
