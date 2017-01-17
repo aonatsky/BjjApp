@@ -22,7 +22,13 @@
     <div class="col-md-4">
         <table class="table-condensed" style="width:100%">
           <tr *ngFor="let row of rowsCount">
-            <td *ngFor="let col of columnsCount" class="col-md-2">{{row}}</td>
+            <td *ngFor="let col of columnsCount" class="col-md-2">
+              <div *ngIf="col == 0 || col == columnsCount[columnsCount.length-1]">
+                FIGHTER
+              </div>
+                
+              
+             </td>
           </tr>
         </table>
     </div>
