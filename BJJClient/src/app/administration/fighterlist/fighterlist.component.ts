@@ -10,6 +10,7 @@ import { DefaultValues } from '../../core/consts/default-values'
 @Component({
     selector: 'fighterlist',
     templateUrl: './fighterlist.component.html',
+    styleUrls: ['./fighterlist.component.css']
 
 })
 
@@ -31,18 +32,6 @@ export class FighterListComponent implements OnInit, AfterViewInit {
         this.dataService = _dataService;
     }
 
-    reloadCars(params) {
-        //this.fighterResource.query(params).then(data => this.fighters = data);
-    }
-
-    // custom features:
-
-    carClicked(car) {
-        alert(car.model);
-    }
-
-
-
     populateTable(fighters: Fighter[]) {
         this.fighters = fighters;
         this.fighterResource = new DataTableResource(fighters);
@@ -61,7 +50,7 @@ export class FighterListComponent implements OnInit, AfterViewInit {
 
     
     //events
-    onFilterChanged(value: FighterFilterValue) {
+    onFilterChanged() {
         this.dataService.getFigters(this.getWeightClassFromFilter()).subscribe(data => this.populateTable(data))
     }
 
@@ -73,6 +62,7 @@ export class FighterListComponent implements OnInit, AfterViewInit {
         return weightClassFromFilter;
     }
 
+ 
 
 }
 

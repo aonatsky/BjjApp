@@ -3,8 +3,12 @@
         <table class="table-condensed" style="width:100%">
           <tr>
             <td class="col-md-5"><div class="input-group"><div class="form-control">Team 1</div><span class="input-group-addon"><span class="badge pull-right">1</span></span></div></td>
-            <td class="col-md-2" rowspan="2">L</td>
-            <td class="col-md-5" rowspan="2"><div class="input-group"><div class="form-control">Team 1</div><span class="input-group-addon"><span class="badge pull-right">0</span></span></div></td>
+          
+          </tr>
+          <tr>
+            <td class="col-md-5"></td>
+            <td class="col-md-2">L</td>
+            <td class="col-md-5"><div class="input-group"><div class="form-control">Team 1</div><span class="input-group-addon"><span class="badge pull-right">0</span></span></div></td>
           </tr>
           <tr>
             <td><div class="input-group"><div class="form-control">Team 2</div><span class="input-group-addon"><span class="badge pull-right">0</span></span></div></td>
@@ -12,3 +16,15 @@
         </table>
     </div>
   </div>
+
+
+ <div class="row">
+    <div class="col-md-4">
+        <table class="table-condensed" style="width:100%">
+          <tr *ngFor="let row of rowsCount">
+            <td *ngFor="let col of columnsCount" class="col-md-2">{{row}}</td>
+          </tr>
+        </table>
+    </div>
+  </div>
+
