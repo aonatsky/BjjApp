@@ -45,8 +45,8 @@ export class BracketsComponent implements OnInit {
 
     }
     getColumnsCount(): number {
-        let rounds = (Math.log2(this.fightersCount / 2) * 4) + 3;
-        return this.fightersCount / 2 * 2;
+        return (Math.log2(this.fightersCount / 2) * 4) + 3;
+
 
     }
 
