@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fight } from '../../core/model/fight.model'
 import { Fighter } from '../../core/model/fighter.model'
@@ -36,88 +36,42 @@ export class BracketsComponent implements OnInit {
     ngOnInit() {
 
         this.dataService.getFigters(null).subscribe(data => this.fighters = data);
-        this.rowsCount = this.getNumbersArray(this.getRowsCount());
-        this.columnsCount = this.getNumbersArray(this.getColumnsCount());
-        this.tableArray = this.populateTable(this.getTableArray(11, 7))
+    }
 
+    formatFighterName(fighter:Fighter):string {
+        return fighter.firstName + " " + fighter.lastName;;
+    }
+
+    getFighterDiv(fighter:Fighter){
+        return `<div class="input-group fighter">
+      <div class="form-control">`+ this.formatFighterName(fighter) +`</div></div>`;
     }
 
 
-    getRowsCount(): number {
-        return this.fightersCount / 2 * 2;
+    divFighter = `<div class="input-group fighter">
+      <div class="form-control"></div></div>`;
 
-    }
-    getColumnsCount(): number {
-        return (Math.log2(this.fightersCount / 2) * 4) + 3;
+    divleftToBottomSeparator =
+    `<table class='bracket-separator left-to-bottom'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
+    divleftToTopSeparator =
+    `<table class='bracket-separator left-to-top'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
-    }
+    divCenterToRightSeparator =
+    `<table class='bracket-separator center-to-right'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
-    getNumbersArray(count: number): number[] {
-        return Array(count).fill(0).map((x, i) => i); // [0,1,2,3,4]
-    }
+    divCenterSeparator =
+    `<table class='bracket-separator center'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
-    getTableArray(width: number, height: number): string[][] {
-        let tableArray = [];
-        for (var i = 0; i < width; i++) {
-            tableArray[i] = [];
-            for (var j = 0; j < height; j++) {
-                tableArray[i][j] = "";
-            }
-        }
-        return tableArray;
+    divBottomToRightSeparator =
+    `<table class='bracket-separator bottom-to-right'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
-    }
+    divTopToRightSeparator =
+    `<table class='bracket-separator top-to-right'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
-    populateTable(table: string[][]): string[][] {
-        let result = table;
-        let width = 11;
-        let height = 7;
-        let halfWidth = 11 - 1;
-        for (var x = 0; x < width; x = x + 2) {
-            let fightsCount = x == 0? 4 : 4/x;
-            //result[x] = this.getRound(x,fightsCount,result[x])
-            let ystart = x - 1 >= 0 ? x - 1 : 0;
-            let yend = height - x;
-            for (var y = ystart; y < yend; y = y + 2) {
-                if (y%2 == 0) {
-                    result[x][y] = `<div>FIGHTER` + x.toString() + y.toString() + `</div>`    
-                }else{
-                    result[x][yend - y] = `<div>FIGHTER` + x.toString() + y.toString() + `</div>`    
-                }
-                
-            }
+    divLeftToCenterSeparator =
+    `<table class='bracket-separator left-to-center'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
-        }
-
-        return result;
-
-    }
-
-    getRound(x: number, fightsCount: number, emptyRound: string[]) {
-        var result = emptyRound;
-        for (var i = 0; i < fightsCount; i++) {
-            let y = 0;
-            if (i % 2 == 0) {
-                y = result.length - 1 - x * i;
-            } else {
-                y = x * i;
-            }
-            result[y] = `<div>FIGHTER` + x.toString() + y.toString() + `</div>`
-
-        }
-        return result;
-
-
-    }
-
-    
-    divFighter = `<div class="input-group">
-      <div class="form-control">Team1</div><span class="input-group-addon"><span class="badge pull-right"></span></span>
-    </div>`;
-
-      divleftBottomCorner = 
-      `<table class='bracket-separator'><tr><td></td><td></td></td></tr><tr><td></td><td></td></td></tr></table>`;
 
 }
 

@@ -1,14 +1,11 @@
 
+.fighter {
+    width: 150px
+}
 
 td:nth-child(even){
     width:30px;
     height: 30px;
-    border: 1px solid black;
-}
-
-
-.bracket-separator:parent {
-    padding: 0px;
 }
 
 td.separator{
@@ -25,9 +22,55 @@ td.separator table td{
     width:50%;
     height: 50%;
     border: none;
+    border: 0px solid black;
 }
 
-td.separator table td::first{
-    border: 0px solid black;
-    border-bottom: 1px;
+
+/*left to bottom*/
+.bracket-separator.left-to-bottom tr:nth-child(2) td:nth-child(1){
+      border-top-width: 1px;
+     border-right-width: 1px
+}
+
+/*left to top*/
+.bracket-separator.left-to-top tr:nth-child(1) td:nth-child(1){
+      border-bottom-width: 1px;
+     border-right-width: 1px
+}
+
+/*center to right*/
+.bracket-separator.center-to-right tr td:nth-child(2){
+     border-left-width: 1px
+}
+
+.bracket-separator.center-to-right tr:nth-child(1) td:nth-child(2){
+     border-bottom-width: 1px
+}
+
+/*center pipe*/
+.bracket-separator.center tr td:nth-child(2){
+     border-left-width: 1px
+}
+
+
+/*bottom to right*/
+.bracket-separator.bottom-to-right tr:nth-child(2) td:nth-child(2){
+     border-top-width: 1px;
+     border-left-width: 1px
+}
+
+
+/*top to right*/
+.bracket-separator.top-to-right tr:nth-child(1) td:nth-child(2){
+     border-bottom-width: 1px;
+     border-left-width: 1px
+}
+
+/*left to center*/
+.bracket-separator.left-to-center tr td:nth-child(2){
+     border-left-width: 1px
+}
+
+.bracket-separator.left-to-center tr:nth-child(1) td:nth-child(1){
+     border-bottom-width: 1px
 }
