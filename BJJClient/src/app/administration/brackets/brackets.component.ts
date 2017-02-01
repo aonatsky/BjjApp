@@ -39,7 +39,7 @@ export class BracketsComponent implements OnInit {
     }
 
     formatFighterName(fighter:Fighter):string {
-        return fighter.firstName + " " + fighter.lastName;;
+        return fighter.firstName + " " + fighter.lastName;
     }
 
     getFighterDiv(fighter:Fighter){
