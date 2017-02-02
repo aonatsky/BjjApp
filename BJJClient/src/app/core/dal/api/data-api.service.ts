@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core'
 import {Observable} from 'rxjs/Observable';
 import {DataService} from '../contracts/data.service'
 import {Fighter} from '../../model/fighter.model'
-import {WeightClass} from '../../model/weight-class.model'
+import {WeightDivision} from '../../model/weight-division.model'
 import {Fight} from '../../model/fight.model'
 
 @Injectable()
@@ -21,9 +21,9 @@ export class DataApiService extends DataService {
             ];  
     
     weightClasses = [
-        new WeightClass("Light",60),
-        new WeightClass("Middle",80),
-        new WeightClass("Heavy",90)
+        new WeightDivision("Light",60),
+        new WeightDivision("Middle",80),
+        new WeightDivision("Heavy",90)
     ]
     
     fights = [
@@ -46,7 +46,7 @@ export class DataApiService extends DataService {
     //     return Observable.of(this.fighters);
     // }
 
-    public getWeightClasses(): Observable<WeightClass[]>{
+    public getWeightClasses(): Observable<WeightDivision[]>{
         return Observable.of(this.weightClasses);
     }
 

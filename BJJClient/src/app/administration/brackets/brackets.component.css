@@ -1,6 +1,6 @@
 
 .fighter {
-    width: 150px
+    min-width: 150px
 }
 
 td:nth-child(even){

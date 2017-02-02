@@ -1,13 +1,13 @@
-export class WeightClass {
-    weightClassID: AAGUID;
+export class AgeDivision {
+    weightClassID: number;
     name: string;
-    weight: number;
+    age: number;
 
     /**
      *
      */
     constructor(name: string, weight: number) { 
         this.name = name;
-        this.weight = weight;
+        this.age = weight;
     }
 }

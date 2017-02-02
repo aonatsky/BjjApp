@@ -2,6 +2,9 @@
 .fighter-filter{
     padding-top: 20px;
     padding-bottom: 20px;
+        margin: auto; 
+    max-width: 1000px; 
+    margin-bottom: 50px;
 }
 
 dropdown {

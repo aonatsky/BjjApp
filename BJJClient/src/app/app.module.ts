@@ -19,6 +19,8 @@ import { FighterFilter } from './shared/fighter-filter/fighter-filter.component'
 //service
 import { DataService } from './core/dal/contracts/data.service';
 import { ApiProviders } from './core/dal/api.providers';
+import { ServerSettingsService } from './core/dal/server.settings.service';
+
 
 import {routing, appRoutingProviders} from './app.routing';
 
@@ -44,7 +46,11 @@ import {routing, appRoutingProviders} from './app.routing';
         FormsModule
         
     ],
-    providers: [appRoutingProviders,ApiProviders],
+    providers: [
+        appRoutingProviders,
+        ApiProviders,
+        ServerSettingsService
+        ],
     bootstrap: [AppComponent]
 })
 
