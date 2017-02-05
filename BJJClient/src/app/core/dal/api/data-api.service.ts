@@ -1,56 +1,62 @@
-import {Injectable} from '@angular/core'
-import {Observable} from 'rxjs/Observable';
-import {DataService} from '../contracts/data.service'
-import {Fighter} from '../../model/fighter.model'
-import {WeightDivision} from '../../model/weight-division.model'
-import {Fight} from '../../model/fight.model'
+import {BeltDivision} from '../../model/belt-division.model';
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs/Observable';
+import { DataService } from '../contracts/data.service'
+import { LoggerService } from '../../../core/services/logger.service';
+
+import { ApiMethods } from '../consts/api-methods.consts'
+import { ApiServer } from '../servers/api.server'
+import { ResponseModel } from '../model/response.model'
+import { RequestModel } from '../model/request.model'
+
+import { Fighter } from '../../model/fighter.model'
+import { WeightDivision } from '../../model/weight-division.model'
+import { AgeDivision } from '../../model/age-division.model'
+import { Fight } from '../../model/fight.model'
 
 @Injectable()
 export class DataApiService extends DataService {
 
-    fighters =  [
-            new Fighter("Marcelo","Garcia","Alliance",80),
-            new Fighter("Saulo","Ribeiro","Ribeiro JJ",80),
-            new Fighter("Xandi","Ribeiro","Ribeiro JJ",90),
-            new Fighter("Braulio","Estima","Gracie Barra",80),
-            new Fighter("Victor","Estima","Gracie Barra",90),
-            new Fighter("Lucas","Rocha","ZRTeam",80),
-            new Fighter("Max","Carvalho","ZRTeam",90),
-            new Fighter("Bruno","Malfacine","Alliance",60),
-            new Fighter("Caio","Terra","CTA",60)
-            ];  
-    
-    weightClasses = [
-        new WeightDivision("Light",60),
-        new WeightDivision("Middle",80),
-        new WeightDivision("Heavy",90)
-    ]
-    
-    fights = [
-        new Fight(this.fighters[0],this.fighters[1]),
-        new Fight(this.fighters[2],this.fighters[3]),
-        new Fight(this.fighters[4],this.fighters[5]),
-        new Fight(this.fighters[6],this.fighters[7])
-    ]
-
-    public getFigters(weightClass:string | null): Observable<Fighter[]>{
-        if (weightClass != null) {
-            return Observable.of(this.fighters.filter(f => f.weight == this.weightClasses.filter(w => w.name == weightClass)[0].weight));    
-        }else{
-            return Observable.of(this.fighters);
-        }
-        
-    }
-    
-    // public getFigters(): Observable<Fighter[]>{
-    //     return Observable.of(this.fighters);
-    // }
-
-    public getWeightClasses(): Observable<WeightDivision[]>{
-        return Observable.of(this.weightClasses);
+    /**
+     *
+     */
+    constructor(private apiServer: ApiServer, private loggerService: LoggerService) {
+        super()
     }
 
-    public getFights(fgihtListID:AAGUID):Observable<Fight[]>{
-        return Observable.of(this.fights);
+    
+    public getFigters(weightClass: string | null): Observable<Fighter[]> {
+        return this.apiServer.get(ApiMethods.tournament.fighters)
+            .map(response => { return response.data })
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+    }
+
+
+    private handleErrorResponse(response: ResponseModel | any): Observable<any> {
+        let data: any = (response instanceof ResponseModel) ? response.data : response;
+        return Observable.throw(data);
+    }
+
+    public getWeightDivisions(): Observable<WeightDivision[]> {
+         return this.apiServer.get(ApiMethods.tournament.fighters)
+            .map(response => { return response.data })
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+    }
+
+    public getFights(fightListID: AAGUID): Observable<Fight[]> {
+         return this.apiServer.get(ApiMethods.tournament.ageDivisions)
+            .map(response => { return response.data })
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+    }
+    
+    public getAgeDivisions(): Observable<AgeDivision[]> {
+         return this.apiServer.get(ApiMethods.tournament.ageDivisions)
+            .map(response => { return response.data })
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+    }
+    public getBeltDivisions(): Observable<BeltDivision[]> {
+         return this.apiServer.get(ApiMethods.tournament.ageDivisions)
+            .map(response => { return response.data })
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
     }
 }

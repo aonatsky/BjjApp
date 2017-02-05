@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 
 import {ResponseModel} from '../model/response.model';
 import {RequestModel} from '../model/request.model';
-import {LoggerService} from '../../core/services/logger.service';
+import {LoggerService} from '../../../core/services/logger.service';
 
 @Injectable()
 export class BaseServer {

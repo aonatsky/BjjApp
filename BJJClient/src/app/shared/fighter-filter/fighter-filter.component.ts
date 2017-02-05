@@ -1,7 +1,7 @@
+import {WeightDivision} from '../../core/model/weight-division.model';
 import { Component, Input, Output, OnInit, EventEmitter } from "@angular/core"
 import { DropdownComponent } from '../dropdown/dropdown.component'
 import { DataService } from '../../core/dal/contracts/data.service'
-import { WeightDivision } from '../../core/model/weight-class.model'
 import { DefaultValues } from '../../core/consts/default-values'
 
 
@@ -13,7 +13,6 @@ import { DefaultValues } from '../../core/consts/default-values'
 
 export class FighterFilter implements OnInit {
 
-    dataService: DataService;
     weightClasses: WeightDivision[];
 
     
@@ -24,8 +23,7 @@ export class FighterFilter implements OnInit {
     @Output() currentFilterValue: FighterFilterValue;
 
 
-    constructor(dataService: DataService) {
-        this.dataService = dataService;
+    constructor(private dataService: DataService) {
         this.onFilterChanged = new EventEmitter<FighterFilterValue>();
     }
 
@@ -43,7 +41,7 @@ export class FighterFilter implements OnInit {
     
     private setupFilters() {
         //weightClasses
-        this.dataService.getWeightClasses().subscribe(data => this.setupWeightClassses(data))
+        this.dataService.getWeightDivisions().subscribe(data => this.setupWeightClassses(data))
         this.currentFilterValue = new FighterFilterValue(this.weightClasses[0])
     }
 
