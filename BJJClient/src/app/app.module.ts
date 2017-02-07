@@ -11,7 +11,7 @@ import { AppComponent } from './app.component'
 import { NavMenuComponent } from './administration/navmenu/navmenu.component';
 import { HomeComponent } from './administration/home/home.component';
 import { ListUploadComponent } from './administration/listupload/listupload.component';
-import { FighterListComponent } from './administration/fighterlist/fighterlist.component';
+import { FighterListComponent } from './administration/fighter-list/fighter-list.component';
 import { BracketsComponent } from './administration/brackets/brackets.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';

@@ -43,8 +43,8 @@ export class DataFakeService extends DataService {
 
     beltDivisions = [
         new BeltDivision(0, "White"),
-        new BeltDivision(0, "Blue"),
-        new BeltDivision(0, "Elite"),
+        new BeltDivision(1, "Blue"),
+        new BeltDivision(2, "Elite"),
     ]
 
     public getFigters(weightClass: string | null): Observable<Fighter[]> {
@@ -64,7 +64,7 @@ export class DataFakeService extends DataService {
         return Observable.of(this.fights);
     }
 
-    public getBeltDivisions(): Observable<BeltDivision[]{
+    public getBeltDivisions(): Observable<BeltDivision[]>{
         return Observable.of(this.beltDivisions);
     }
 

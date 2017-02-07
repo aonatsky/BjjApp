@@ -4,7 +4,7 @@ import {Routes, RouterModule} from '@angular/router';
 
 import { HomeComponent } from './administration/home/home.component';
 import { ListUploadComponent } from './administration/listupload/listupload.component';
-import { FighterListComponent } from './administration/fighterlist/fighterlist.component';
+import { FighterListComponent } from './administration/fighter-list/fighter-list.component';
 
 const appRoutes: Routes = [
      { path: '', redirectTo: 'home', pathMatch: 'full' },

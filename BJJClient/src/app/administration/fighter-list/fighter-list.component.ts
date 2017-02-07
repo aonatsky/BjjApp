@@ -9,8 +9,8 @@ import { DefaultValues } from '../../core/consts/default-values'
 
 @Component({
     selector: 'fighterlist',
-    templateUrl: './fighterlist.component.html',
-    styleUrls: ['./fighterlist.component.css']
+    templateUrl: './fighter-list.component.html',
+    styleUrls: ['./fighter-list.component.css']
 
 })
 
@@ -56,9 +56,9 @@ export class FighterListComponent implements OnInit, AfterViewInit {
 
     //private methods
     private getWeightClassFromFilter():string{
-         let weightClassFromFilter = this.fighterFilter.currentFilterValue.weightClass.name == DefaultValues.ANY
+         let weightClassFromFilter = this.fighterFilter.currentFilterValue.weightDivision.name == DefaultValues.DROPDOWN_VALUE_ANY
             ? null
-            : this.fighterFilter.currentFilterValue.weightClass.name;
+            : this.fighterFilter.currentFilterValue.weightDivision.name;
         return weightClassFromFilter;
     }
 
