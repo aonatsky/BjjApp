@@ -23,7 +23,6 @@ public class JettyInitializer {
 
     public static void main(String[] args) throws Exception {
         parseAgs(args);
-
         new JettyInitializer().startJetty(port);
     }
 
@@ -31,14 +30,13 @@ public class JettyInitializer {
      * Helper-method to process arguments of the application.
      * Argument #1: an integer type int representing port.
      * Argument #2: a string representing profile name.
-     * @param args
+     * @param args - array of arguments passed in main
      */
     private static void parseAgs(String... args) {
         try {
             port = Integer.valueOf(args[0]);
             profile = args[1];
-        } catch (NumberFormatException ignore) {
-        } catch (ArrayIndexOutOfBoundsException ignore) {
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException ignore) {
         } finally {
             if (port == null) port = DEFAULT_PORT;
             if (profile == null) profile = DEFAULT_PROFILE;
@@ -59,7 +57,7 @@ public class JettyInitializer {
         contextHandler.setConfigLocation(CONFIG_LOCATION);
         contextHandler.getEnvironment().setDefaultProfiles(DEFAULT_PROFILE);
 
-        if (profile != DEFAULT_PROFILE) {
+        if (!profile.equals(DEFAULT_PROFILE)) {
             contextHandler.getEnvironment().setActiveProfiles(profile);
         }
 
@@ -68,6 +66,7 @@ public class JettyInitializer {
 
     private static ServletContextHandler getServletContextHandler(WebApplicationContext context) throws IOException {
         ServletContextHandler contextHandler = new ServletContextHandler();
+        //FIXME: set error handler
         contextHandler.setErrorHandler(null);
         contextHandler.setContextPath(CONTEXT_PATH);
         contextHandler.addServlet(new ServletHolder(new DispatcherServlet(context)), MAPPING_URL);

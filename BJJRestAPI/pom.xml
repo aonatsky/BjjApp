@@ -17,7 +17,8 @@
         <spring.version>4.3.4.RELEASE</spring.version>
 
         <!-- Hibernate / JPA -->
-        <!--<hibernate.version></hibernate.version>-->
+        <hibernate-core.version>5.2.6.Final</hibernate-core.version>
+        <hibernate-validator.version>5.3.4.Final</hibernate-validator.version>
 
         <!--Maven Shade Plugin-->
         <maven.shade.version>2.4.3</maven.shade.version>
@@ -49,6 +50,13 @@
             <version>${spring.version}</version>
         </dependency>
 
+        <!-- Spring ORM support -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
         <!-- Jetty embedded -->
 
         <dependency>
@@ -69,6 +77,23 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4.1211</version>
         </dependency>
 
         <!--Testing-->
