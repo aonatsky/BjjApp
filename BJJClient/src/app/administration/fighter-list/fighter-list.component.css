@@ -1,0 +1,9 @@
+data-table .pagination-limit{
+    display: none;
+}
+
+.fighter-list{
+    margin: auto; 
+    max-width: 1000px; 
+    margin-bottom: 50px;
+}
