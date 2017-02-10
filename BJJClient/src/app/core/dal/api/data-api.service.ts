@@ -13,6 +13,7 @@ import { Fighter } from '../../model/fighter.model'
 import { WeightDivision } from '../../model/weight-division.model'
 import { AgeDivision } from '../../model/age-division.model'
 import { Fight } from '../../model/fight.model'
+import { FighterFilterModel } from '../../model/fighter-filter.model'
 
 @Injectable()
 export class DataApiService extends DataService {
@@ -25,7 +26,7 @@ export class DataApiService extends DataService {
     }
 
     
-    public getFigters(weightClass: string | null): Observable<Fighter[]> {
+    public getFigters(filter:FighterFilterModel): Observable<Fighter[]> {
         return this.apiServer.get(ApiMethods.tournament.fighters)
             .map(response => { return response.data })
             .catch(errorResponse => this.handleErrorResponse(errorResponse));

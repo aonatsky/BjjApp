@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { DataTable, DataTableResource } from 'angular-2-data-table';
-import { FighterFilter, FighterFilterValue } from '../../shared/fighter-filter/fighter-filter.component'
+import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.component'
 import { DefaultValues } from '../../core/consts/default-values'
 
 

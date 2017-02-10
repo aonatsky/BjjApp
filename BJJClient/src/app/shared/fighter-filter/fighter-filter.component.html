@@ -1,11 +1,14 @@
-
-<div class = "fighter-filter" 
-*ngIf="weightDivisions" >
-    <h5>Weight class:</h5>
-    <dropdown 
-    [dropdownValues]="weightDivisions"
-    [idProperty]= "weightDivisionIdProperty" 
-    [nameProperty]="nameProperty"
-    (onSelect)= "weightSelect($event)"
-    ></dropdown>
+<div class="fighter-filter" *ngIf="weightDivisions && beltDivisions && ageDivisions">
+    <div class="filter-section">
+        <h5>Weight class:</h5>
+        <dropdown [dropdownValues]="weightDivisions" [idProperty]="weightDivisionIdProperty" [nameProperty]="nameProperty" (onSelect)="weightSelect($event)"></dropdown>
+    </div>
+    <div class="filter-section">
+        <h5>Age division:</h5>
+        <dropdown [dropdownValues]="ageDivisions" [idProperty]="agetDivisionIdProperty" [nameProperty]="nameProperty" (onSelect)="ageSelect($event)"></dropdown>
+    </div>
+    <div class="filter-section">
+        <h5>Belt division:</h5>
+        <dropdown [dropdownValues]="beltDivisions" [idProperty]="beltDivisionIdProperty" [nameProperty]="nameProperty" (onSelect)="beltSelect($event)"></dropdown>
+    </div>
 </div>

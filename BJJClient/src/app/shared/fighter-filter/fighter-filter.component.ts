@@ -1,6 +1,8 @@
+
 import {AgeDivision} from '../../core/model/age-division.model';
 import {BeltDivision} from '../../core/model/belt-division.model';
 import {WeightDivision} from '../../core/model/weight-division.model';
+import {FighterFilterModel} from '../../core/model/fighter-filter.model';
 import { Component, Input, Output, OnInit, EventEmitter } from "@angular/core"
 import { DropdownComponent } from '../dropdown/dropdown.component'
 import { DataService } from '../../core/dal/contracts/data.service'
@@ -24,12 +26,12 @@ export class FighterFilter implements OnInit {
     BeltDivisionIdPropertyName = "beltDivisionID";
     nameProperty = "name";
 
-    @Output() onFilterChanged: EventEmitter<FighterFilterValue>
-    @Output() currentFilterValue: FighterFilterValue;
+    @Output() onFilterChanged: EventEmitter<FighterFilterModel>
+    @Output() currentFilterValue: FighterFilterModel;
 
 
     constructor(private dataService: DataService) {
-        this.onFilterChanged = new EventEmitter<FighterFilterValue>();
+        this.onFilterChanged = new EventEmitter<FighterFilterModel>();
     }
 
     ngOnInit() {
@@ -42,15 +44,23 @@ export class FighterFilter implements OnInit {
         this.onFilterChanged.emit(this.currentFilterValue);
     }
 
+    ageSelect(value) {
+        this.currentFilterValue.weightDivision = value;
+        this.onFilterChanged.emit(this.currentFilterValue);
+    }
+
+    beltSelect(value) {
+        this.currentFilterValue.weightDivision = value;
+        this.onFilterChanged.emit(this.currentFilterValue);
+    }
+
     //Private methods
     
     private setupFilters() {
-        //weightClasses
         this.dataService.getWeightDivisions().subscribe(data => this.setupWeightDivisions(data))
         this.dataService.getAgeDivisions().subscribe(data => this.setupAgeDivisions(data))
         this.dataService.getBeltDivisions().subscribe(data => this.setupBeltDivisions(data))
-        
-        this.currentFilterValue = new FighterFilterValue(this.weightDivisions[0])
+        this.currentFilterValue = new FighterFilterModel(this.weightDivisions[0],this.beltDivisions[0],this.ageDivisions[0])
     }
 
     private setupWeightDivisions(weightDivisions : WeightDivision[]){
@@ -69,7 +79,4 @@ export class FighterFilter implements OnInit {
 }
 
 
-export class FighterFilterValue {
-    constructor(public weightDivision: WeightDivision) {
-    }
-}
+
