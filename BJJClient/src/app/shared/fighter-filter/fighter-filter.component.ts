@@ -40,17 +40,17 @@ export class FighterFilter implements OnInit {
 
     //Events
     weightSelect(value) {
-        this.currentFilterValue.weightDivision = value;
+        this.currentFilterValue.weightDivisions = value;
         this.onFilterChanged.emit(this.currentFilterValue);
     }
 
     ageSelect(value) {
-        this.currentFilterValue.weightDivision = value;
+        this.currentFilterValue.weightDivisions = value;
         this.onFilterChanged.emit(this.currentFilterValue);
     }
 
     beltSelect(value) {
-        this.currentFilterValue.weightDivision = value;
+        this.currentFilterValue.weightDivisions = value;
         this.onFilterChanged.emit(this.currentFilterValue);
     }
 

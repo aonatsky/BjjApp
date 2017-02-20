@@ -45,24 +45,13 @@ export class FighterListComponent implements OnInit, AfterViewInit {
     
     ngAfterViewInit() {
         
-        this.dataService.getFigters(this.getWeightClassFromFilter()).subscribe(data => this.populateTable(data))
+        this.dataService.getFigters(this.fighterFilter.currentFilterValue).subscribe(data => this.populateTable(data))
     }
 
     
     //events
     onFilterChanged() {
-        this.dataService.getFigters(this.getWeightClassFromFilter()).subscribe(data => this.populateTable(data))
+        this.dataService.getFigters(this.fighterFilter.currentFilterValue).subscribe(data => this.populateTable(data))
     }
-
-    //private methods
-    private getWeightClassFromFilter():string{
-         let weightClassFromFilter = this.fighterFilter.currentFilterValue.weightDivision.name == DefaultValues.DROPDOWN_VALUE_ANY
-            ? null
-            : this.fighterFilter.currentFilterValue.weightDivision.name;
-        return weightClassFromFilter;
-    }
-
- 
-
 }
 

@@ -1,10 +1,11 @@
-import {FighterFilterValue} from '../../../shared/fighter-filter/fighter-filter.component';
+
 import { BeltDivision } from '../../model/belt-division.model';
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Observable';
 import { DataService } from '../contracts/data.service'
 import { Fighter } from '../../model/fighter.model'
 import { WeightDivision } from '../../model/weight-division.model'
+import { FighterFilterModel } from '../../model/fighter-filter.model'
 import { AgeDivision } from '../../model/age-division.model'
 import { Fight } from '../../model/fight.model'
 
@@ -48,7 +49,7 @@ export class DataFakeService extends DataService {
         new BeltDivision(2, "Elite"),
     ]
 
-    public getFigters(filter:FighterFilterValue): Observable<Fighter[]> {
+    public getFigters(filter:FighterFilterModel): Observable<Fighter[]> {
         if (weightClass != null) {
             return Observable.of(this.fighters.filter(f => f.weight == this.weightDivisions.filter(w => w.name == weightClass)[0].weight));
         } else {
