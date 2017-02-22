@@ -49,14 +49,40 @@ export class DataFakeService extends DataService {
         new BeltDivision(2, "Elite"),
     ]
 
-    public getFigters(filter:FighterFilterModel): Observable<Fighter[]> {
-        if (weightClass != null) {
-            return Observable.of(this.fighters.filter(f => f.weight == this.weightDivisions.filter(w => w.name == weightClass)[0].weight));
-        } else {
-            return Observable.of(this.fighters);
-        }
+    public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
+        return Observable.of(this.fighters.filter(f => this.checkWeight(filter.weightDivisions, f) && this.checkAge(filter.ageDivisions, f) && this.checkBelt(filter.beltDivisions, f)));
 
     }
+
+    private checkWeight(weightDivisions: WeightDivision[], fighter: Fighter): boolean {
+        if (weightDivisions.length > 1) {
+            return true;
+        } else {
+            return fighter.weight == weightDivisions[0].weight;
+        };
+    }
+
+    private checkAge(ageDivision: AgeDivision[], fighter: Fighter): boolean {
+        if (ageDivision.length > 1) {
+            return true;
+        } else {
+            return fighter.age > ageDivision[0].age;
+        }
+    }
+
+    private checkBelt(beltDivision: BeltDivision[], fighter: Fighter): boolean {
+        if (beltDivision.length > 1) {
+            return true;
+        } else {
+            return fighter.belt == beltDivision[0].name;
+        };
+
+    }
+
+
+
+
+
 
     public getWeightDivisions(): Observable<WeightDivision[]> {
         return Observable.of(this.weightDivisions);
@@ -66,7 +92,7 @@ export class DataFakeService extends DataService {
         return Observable.of(this.fights);
     }
 
-    public getBeltDivisions(): Observable<BeltDivision[]>{
+    public getBeltDivisions(): Observable<BeltDivision[]> {
         return Observable.of(this.beltDivisions);
     }
 

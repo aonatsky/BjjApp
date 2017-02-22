@@ -1,5 +1,5 @@
 export class WeightDivision {
-    weightClassId: number;
+    weightDivisionId: number;
     name: string;
     weight: number;
 
@@ -7,7 +7,7 @@ export class WeightDivision {
      *
      */
     constructor(id:number, name: string, weight: number) { 
-        this.weightClassId = id;
+        this.weightDivisionId = id;
         this.name = name;
         this.weight = weight;
     }
