@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TRNMNT.Data.Entities
@@ -11,6 +10,8 @@ namespace TRNMNT.Data.Entities
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public Guid TeamID { get; set; }
+        
+        
 
         public Team Team { get; set; }
 

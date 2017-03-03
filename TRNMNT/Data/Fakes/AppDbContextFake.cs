@@ -56,13 +56,13 @@ namespace TRNMNT.Data.Fake
            public DbSet<Owner> Owner { get; set; }
         public DbSet<Tournament> Tournament { get; set; }
         public DbSet<TournamentType> TournamentType { get; set; }
-        public DbSet<WeightClass> WeightClass { get; set; }
-        public DbSet<BeltClass> BeltClass { get; set; }
+        public DbSet<WeightDivision> WeightDivision { get; set; }
+        public DbSet<BeltDivision> BeltDivision { get; set; }
         public DbSet<Fighter> Fighter { get; set; }
         public DbSet<Team> Team { get; set; }
         public DbSet<Fight> Fight { get; set; }
         public DbSet<FightList> FightList { get; set; }
-        public DbSet<AgeClass> AgeClass {get;set;}
+        public DbSet<AgeDivision> AgeDivision {get;set;}
 
         
 

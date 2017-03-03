@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace TRNMNT.Data.Entities
 {
 
-    public class AgeClass
+    public class AgeDivision
     {
         [Key]
-        public Guid AgeClassID { get; set; }
+        public Guid AgeDivisionID { get; set; }
         public String Name { get; set; }
 
         public int Age {get;set;}

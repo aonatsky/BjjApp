@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace TRNMNT.Data.Entities
 {
 
-    public class BeltClass
+    public class BeltDivision
     {
         [Key]
-        public Guid BeltClassID { get; set; }
+        public Guid BeltDivisionID { get; set; }
         public String Name { get; set; }
         
     }

@@ -20,26 +20,26 @@ namespace TRNMNT.Controllers
         {
             _fighterService = fighterService;
             _bracketService = bracketService;
-            var test = fighterService.GetFightersByWeightClass(Guid.NewGuid());
+            var test = fighterService.GetFightersByWeightDivision(Guid.NewGuid());
         }
 
         // GET api/values
         [HttpGet]
         public IEnumerable<Fighter> Get()
         {
-            return _fighterService.GetFightersByWeightClass(Guid.NewGuid());
+            return _fighterService.GetFightersByWeightDivision(Guid.NewGuid());
 
         }
 
 
         [HttpGet("[action]")]
-        public IEnumerable<WeightClass> GetWeightClassses()
+        public IEnumerable<WeightDivision> GetWeightDivisionses()
         {
-            return new List<WeightClass>(){
-                new WeightClass(){WeightClassID = Guid.NewGuid(), Name = "Feather", Weight = 60},
-                new WeightClass(){WeightClassID = Guid.NewGuid(), Name = "Light", Weight = 70},
-                new WeightClass(){WeightClassID = Guid.NewGuid(), Name = "Medium", Weight = 80},
-                new WeightClass(){WeightClassID = Guid.NewGuid(), Name = "Heavy", Weight = 90}
+            return new List<WeightDivision>(){
+                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Feather", Weight = 60},
+                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Light", Weight = 70},
+                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Medium", Weight = 80},
+                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Heavy", Weight = 90}
             };
         }
 

@@ -45,7 +45,7 @@ namespace TRNMNT
            #region AppServices
            services.AddScoped(typeof(IFighterService),typeof(FighterServiceFake));
            services.AddScoped(typeof(IBracketsService),typeof(BracketsService));
-           services.AddScoped(typeof(IWeightClassService),typeof(WeightClassService));
+           services.AddScoped(typeof(IWeightDivisionService),typeof(WeightDivisionService));
            #endregion
 
 

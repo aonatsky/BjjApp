@@ -52,15 +52,15 @@ namespace TRNMNT.Data.Helpers
                 }
 
 
-                if (!context.WeightClass.Any())
+                if (!context.WeightDivision.Any())
                 {
-                    var classes = new WeightClass[]{
-                    new WeightClass(){WeightClassID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0531"), Name = "Feather", Weight = 60},
-                    new WeightClass(){WeightClassID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0532"), Name = "Light", Weight = 70},
-                    new WeightClass(){WeightClassID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0533"), Name = "Medium", Weight = 80},
-                    new WeightClass(){WeightClassID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0534"), Name = "Heavy", Weight = 90}
+                    var classes = new WeightDivision[]{
+                    new WeightDivision(){WeightDivisionID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0531"), Name = "Feather", Weight = 60},
+                    new WeightDivision(){WeightDivisionID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0532"), Name = "Light", Weight = 70},
+                    new WeightDivision(){WeightDivisionID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0533"), Name = "Medium", Weight = 80},
+                    new WeightDivision(){WeightDivisionID = new Guid("c56a4180-65aa-42ec-a945-5fd21dec0534"), Name = "Heavy", Weight = 90}
                 };
-                    context.WeightClass.AddRange(classes);
+                    context.WeightDivision.AddRange(classes);
                     context.Save(false);
                 }
 

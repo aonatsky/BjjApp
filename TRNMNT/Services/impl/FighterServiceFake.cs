@@ -15,7 +15,7 @@ namespace TRNMNT.Services.impl
         }
 
        
-       public IQueryable<Fighter> GetFightersByWeightClass(Guid weightClassID)
+       public IQueryable<Fighter> GetFightersByWeightDivision(Guid WeightDivisionID)
         {
             var result =  new List<Fighter>();
             result.Add(new Fighter(){FighterID = new Guid("d946322d-554c-437c-812a-da7906419215"),FirstName = "Marcelo", LastName = "Garcia", 

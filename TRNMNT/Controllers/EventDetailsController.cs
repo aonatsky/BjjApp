@@ -11,17 +11,17 @@ namespace TRNMNT.Controllers
     [Route("api/[controller]")]
     public class EventDetailsController : Controller
     {
-        private readonly IWeightClassService _weightClassService;
-        public EventDetailsController(IWeightClassService weightClassService)
+        private readonly IWeightDivisionService _WeightDivisionService;
+        public EventDetailsController(IWeightDivisionService WeightDivisionService)
         {
-            _weightClassService = weightClassService;
+            _WeightDivisionService = WeightDivisionService;
         }
         // GET api/values
         [HttpGet("[action]")]
-        public IEnumerable<WeightClass> GetWeightClasses()
+        public IEnumerable<WeightDivision> GetWeightDivisiones()
         {
-            var weightClasses = _weightClassService.GetWeghtClasses();
-            return weightClasses;
+            var WeightDivisiones = _WeightDivisionService.GetWeghtClasses();
+            return WeightDivisiones;
         }
 
     }

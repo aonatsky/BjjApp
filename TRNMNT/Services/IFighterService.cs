@@ -8,6 +8,6 @@ namespace TRNMNT.Services
 {
     public interface IFighterService
     {
-      IQueryable<Fighter> GetFightersByWeightClass(Guid weightClassID);
+      IQueryable<Fighter> GetFightersByWeightDivision(Guid WeightDivisionID);
     }
 }

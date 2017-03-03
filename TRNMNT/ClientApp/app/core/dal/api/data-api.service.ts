@@ -17,10 +17,13 @@ import { FighterFilterModel } from '../../model/fighter-filter.model'
 
 @Injectable()
 export class DataApiService extends DataService {
+       
+       
+        public uploadFighterList(file: any): Observable<any> {
+            throw new Error('Method not implemented.');
+        }
 
-    /**
-     *
-     */
+
     constructor(private apiServer: ApiServer, private loggerService: LoggerService) {
         super()
     }

@@ -26,10 +26,10 @@ export class FighterListComponent implements OnInit, AfterViewInit {
     @ViewChild(DataTable) fightersTable: DataTable;
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;
 
-    private dataService: DataService;
+    // private dataService: DataService;
 
-    constructor(_dataService: DataService) {
-        this.dataService = _dataService;
+    constructor(private dataService: DataService) {
+        // this.dataService = _dataService;
     }
 
     populateTable(fighters: Fighter[]) {

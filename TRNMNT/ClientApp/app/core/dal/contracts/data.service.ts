@@ -14,5 +14,5 @@ export abstract class DataService {
     public abstract getWeightDivisions(): Observable<WeightDivision[]>;
     public abstract getAgeDivisions(): Observable<AgeDivision[]>;
     public abstract getBeltDivisions(): Observable<BeltDivision[]>;
-    public abstract getFights(fgihtListID:AAGUID) : Observable<Fight[]>
+    public abstract uploadFighterList(file:any) : Observable<any>;
 }

@@ -6,8 +6,8 @@ using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Services
 {
-    public interface IWeightClassService
+    public interface IWeightDivisionService
     {
-        List<WeightClass> GetWeghtClasses();
+        List<WeightDivision> GetWeghtClasses();
     }
 }

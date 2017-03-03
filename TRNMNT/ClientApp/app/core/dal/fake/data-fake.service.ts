@@ -11,6 +11,11 @@ import { Fight } from '../../model/fight.model'
 
 @Injectable()
 export class DataFakeService extends DataService {
+       
+       public uploadFighterList(file: any): Observable<any> {
+            return Observable.of({result:"fake"})
+        }
+
 
     fighters = [
         new Fighter("Marcelo", "Garcia", "Alliance", 80, 37, "Elite"),

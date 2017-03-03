@@ -7,18 +7,18 @@ using TRNMNT.Data;
 
 namespace TRNMNT.Services
 {
-    public class WeightClassService : IWeightClassService
+    public class WeightDivisionService : IWeightDivisionService
     {
         IAppDbContext _context;
 
-        public WeightClassService(IAppDbContext context)
+        public WeightDivisionService(IAppDbContext context)
         {
             _context = context;
         }
 
-        public List<WeightClass> GetWeghtClasses()
+        public List<WeightDivision> GetWeghtClasses()
         {
-            return _context.WeightClass.ToList();
+            return _context.WeightDivision.ToList();
         }
     }
 }

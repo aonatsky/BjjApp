@@ -18,12 +18,12 @@ namespace TRNMNT.Data
          DbSet<Owner> Owner { get; set; }
          DbSet<Tournament> Tournament { get; set; }
          DbSet<TournamentType> TournamentType { get; set; }
-         DbSet<WeightClass> WeightClass { get; set; }
-         DbSet<BeltClass> BeltClass { get; set; }
+         DbSet<WeightDivision> WeightDivision { get; set; }
+         DbSet<BeltDivision> BeltDivision { get; set; }
          DbSet<Fighter> Fighter { get; set; }
          DbSet<Team> Team { get; set; }
          DbSet<Fight> Fight { get; set; }
          DbSet<FightList> FightList { get; set; }
-         DbSet<AgeClass> AgeClass {get;set;}
+         DbSet<AgeDivision> AgeDivision {get;set;}
     }
 }

@@ -13,7 +13,7 @@ namespace TRNMNT.Services.impl
             _context = context;
         }
 
-        public IQueryable<Fighter> GetFightersByWeightClass(Guid weightClassID)
+        public IQueryable<Fighter> GetFightersByWeightDivision(Guid WeightDivisionID)
         {
             return _context.Fighter;
         }
