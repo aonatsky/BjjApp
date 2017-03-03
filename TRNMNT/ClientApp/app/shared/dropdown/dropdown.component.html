@@ -1,0 +1,10 @@
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><div>{{selectedValue.name}}</div>
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li *ngFor="let value of dropdownValues" (click)="selectItem(value)"><a>{{value.name}}</a></li>
+  </ul>
+</div>
+
+
+ 

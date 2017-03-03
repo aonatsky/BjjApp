@@ -1,59 +1,49 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
-import {HttpModule, JsonpModule} from '@angular/http';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
-//external tools
-import { DataTableModule } from 'angular-2-data-table';
+import { AppComponent } from './components/app/app.component'
+import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
+import { CounterComponent } from './components/counter/counter.component';
+import { routing, appRoutingProviders } from "./app.routing";
 
-//Components
-import { AppComponent } from './app.component'
+//Administration components
 import { NavMenuComponent } from './administration/navmenu/navmenu.component';
 import { HomeComponent } from './administration/home/home.component';
 import { ListUploadComponent } from './administration/listupload/listupload.component';
 import { FighterListComponent } from './administration/fighter-list/fighter-list.component';
-import { BracketsComponent } from './administration/brackets/brackets.component';
 
+//Shared
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
+import { DataTableModule } from "angular-2-data-table";
 
-//service
+//Services
 import { DataService } from './core/dal/contracts/data.service';
 import { ApiProviders } from './core/dal/api.providers';
 import { ServerSettingsService } from './core/dal/server.settings.service';
 
-
-import {routing, appRoutingProviders} from './app.routing';
-
-
 @NgModule({
+    bootstrap: [ AppComponent ],
     declarations: [
         AppComponent,
-        AppComponent,
         NavMenuComponent,
-        //administration        
+        CounterComponent,
+        FetchDataComponent,
         HomeComponent,
-        FighterListComponent,
         ListUploadComponent,
-        BracketsComponent,
-        //shared
         DropdownComponent,
+        FighterListComponent,
         FighterFilter
     ],
     imports: [
-       UniversalModule,
+        UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
         routing,
-        DataTableModule,
-        FormsModule
-        
+        DataTableModule
     ],
-    providers: [
+    providers:[
         appRoutingProviders,
-        ApiProviders,
-        ServerSettingsService
-        ],
-    bootstrap: [AppComponent]
+        ApiProviders
+    ]
 })
-
 export class AppModule {
 }

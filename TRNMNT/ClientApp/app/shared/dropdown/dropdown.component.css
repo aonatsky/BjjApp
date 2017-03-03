@@ -1,0 +1,13 @@
+.dropdown-menu li{ 
+  cursor: pointer;
+}
+
+button{
+     justify-content: space-between;
+    display: flex;
+     width:100px;
+}
+
+button .caret{
+  margin-top: 9px;
+}
