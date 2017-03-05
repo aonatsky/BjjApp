@@ -1,3 +1,4 @@
+import { Http } from '@angular/http';
 
 import { BeltDivision } from '../../model/belt-division.model';
 import { Injectable } from '@angular/core'
@@ -11,10 +12,21 @@ import { Fight } from '../../model/fight.model'
 
 @Injectable()
 export class DataFakeService extends DataService {
-       
-       public uploadFighterList(file: any): Observable<any> {
-            return Observable.of({result:"fake"})
-        }
+
+    /**
+     *
+     */
+    constructor(private http: Http) {
+        super();
+
+    }
+
+    public uploadFighterList(file: any): Observable<any> {
+        let input = new FormData();
+        input.append("file", file);
+        return this.http
+            .post("/api/fighter/uploadlist", input);
+    }
 
 
     fighters = [

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -12,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using TRNMNT.Data;
 using TRNMNT.Services;
 using TRNMNT.Services.impl;
-using TRNMNT.Data.Helpers;
+using TRNMNT.Data.Repositories;
 
 namespace TRNMNT
 {
@@ -25,6 +21,7 @@ namespace TRNMNT
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
         }
 
@@ -39,17 +36,18 @@ namespace TRNMNT
             #region AppDBContext
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PNNConnection")));
-                services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
-           #endregion
+            services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
+            #endregion
 
-           #region AppServices
-           services.AddScoped(typeof(IFighterService),typeof(FighterServiceFake));
-           services.AddScoped(typeof(IBracketsService),typeof(BracketsService));
-           services.AddScoped(typeof(IWeightDivisionService),typeof(WeightDivisionService));
-           #endregion
+            #region AppServices
+            services.AddScoped(typeof(IFighterService), typeof(FighterService));
+            services.AddScoped(typeof(IBracketsService), typeof(BracketsService));
+            services.AddScoped(typeof(IWeightDivisionService), typeof(WeightDivisionService));
+            services.AddScoped(typeof(IRepository<>), typeof(RepositoryFake<>));
+            #endregion
 
 
-           
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,10 +58,11 @@ namespace TRNMNT
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
                     HotModuleReplacement = true
                 });
-                
+
             }
             else
             {
@@ -82,7 +81,7 @@ namespace TRNMNT
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-            app.EnsureSeedData();
+            //  app.EnsureSeedData();
         }
     }
 }

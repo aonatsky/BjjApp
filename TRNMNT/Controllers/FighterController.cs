@@ -1,27 +1,59 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TRNMNT.Services;
 using TRNMNT.Data.Entities;
+using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TRNMNT.Controllers
 {
     [Route("api/[controller]")]
-    public class FighterController : Controller
+    public class FighterController : BaseController
     {
         IFighterService _fighterService;
         IBracketsService _bracketService;
 
-        public FighterController(IFighterService fighterService, IBracketsService bracketService)
+        public FighterController(IFighterService fighterService, IBracketsService bracketService, ILogger logger) : base(logger)
         {
             _fighterService = fighterService;
             _bracketService = bracketService;
             var test = fighterService.GetFightersByWeightDivision(Guid.NewGuid());
         }
+
+        [HttpPost("[action]")]
+
+        public async Task UploadList(IFormFile file)
+        {
+            try
+            {
+                if (file == null) throw new Exception("File is null");
+                if (file.Length == 0) throw new Exception("File is empty");
+
+                using (Stream stream = file.OpenReadStream())
+                {
+                    using (var binaryReader = new BinaryReader(stream))
+                    {
+                        var fileContent = binaryReader.ReadBytes((int)file.Length);
+                        //await _uploadService.AddFile(fileContent, file.FileName, file.ContentType);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
+
+        }
+
+
+
 
         // GET api/values
         [HttpGet]
@@ -52,8 +84,8 @@ namespace TRNMNT.Controllers
         [HttpGet("[action]")]
         public string GetOrdered()
         {
-           //var result = GetOrdered(GetTestTeams()).AsEnumerable();
-           return "result";
+            //var result = GetOrdered(GetTestTeams()).AsEnumerable();
+            return "result";
 
         }
 
@@ -118,24 +150,27 @@ namespace TRNMNT.Controllers
                 if (i % 2 == 0)
                 {
                     listA.Add(fighter ?? "");
-                }else{
+                }
+                else
+                {
                     listB.Add(fighter ?? "");
                 }
             }
-            
+
             var sideB = GetBracketSide(listB);
-            sideB.Reverse();         
+            sideB.Reverse();
             result = GetBracketSide(listA);
-            result.AddRange(sideB); 
+            result.AddRange(sideB);
             return result;
         }
 
-        private List<Pair> GetBracketSide(List<string> list){
+        private List<Pair> GetBracketSide(List<string> list)
+        {
             var result = new List<Pair>();
-            var halfCount = list.Count/2;
+            var halfCount = list.Count / 2;
             for (int i = 0; i < halfCount; i++)
             {
-                result.Add(new Pair(list[i],list[halfCount +i]));
+                result.Add(new Pair(list[i], list[halfCount + i]));
             }
             return result;
         }

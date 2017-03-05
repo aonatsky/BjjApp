@@ -1,3 +1,4 @@
+import {FileUpload} from './shared/file-upload/file-upload.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
@@ -33,7 +34,8 @@ import { ServerSettingsService } from './core/dal/server.settings.service';
         ListUploadComponent,
         DropdownComponent,
         FighterListComponent,
-        FighterFilter
+        FighterFilter,
+        FileUpload
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.

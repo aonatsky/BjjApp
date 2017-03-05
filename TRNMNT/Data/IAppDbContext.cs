@@ -1,17 +1,20 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Data
 {
     public interface IAppDbContext 
     {
-        IQueryable<T> Set<T>() where T : class;
+        DbSet<T> Set<T>() where T : class;
         void Add<T>(T entity) where T : class;
         void Modify<T>(T entity) where T : class;
         void Remove<T>(T entity) where T : class;        
         bool Save(bool suppressExceptions = true);
+        
+        void AddRange(IEnumerable<object> entities);
         Task<int> SaveAsync(bool suppressExceptions = true);
 
         //DBSets

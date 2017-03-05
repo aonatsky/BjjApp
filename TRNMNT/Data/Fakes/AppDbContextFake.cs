@@ -51,9 +51,42 @@ namespace TRNMNT.Data.Fake
             throw new NotImplementedException();
         }
 
-       
+        DbSet<T> IAppDbContext.Set<T>()
+        {
+            throw new NotImplementedException();
+        }
 
-           public DbSet<Owner> Owner { get; set; }
+        void IAppDbContext.Add<T>(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IAppDbContext.Modify<T>(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IAppDbContext.Remove<T>(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IAppDbContext.Save(bool suppressExceptions)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IAppDbContext.AddRange(IEnumerable<object> entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<int> IAppDbContext.SaveAsync(bool suppressExceptions)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DbSet<Owner> Owner { get; set; }
         public DbSet<Tournament> Tournament { get; set; }
         public DbSet<TournamentType> TournamentType { get; set; }
         public DbSet<WeightDivision> WeightDivision { get; set; }
@@ -64,8 +97,134 @@ namespace TRNMNT.Data.Fake
         public DbSet<FightList> FightList { get; set; }
         public DbSet<AgeDivision> AgeDivision {get;set;}
 
-        
+        DbSet<Owner> IAppDbContext.Owner
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
 
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
+        DbSet<Tournament> IAppDbContext.Tournament
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<TournamentType> IAppDbContext.TournamentType
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<WeightDivision> IAppDbContext.WeightDivision
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<BeltDivision> IAppDbContext.BeltDivision
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<Fighter> IAppDbContext.Fighter
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<Team> IAppDbContext.Team
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<Fight> IAppDbContext.Fight
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<FightList> IAppDbContext.FightList
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        DbSet<AgeDivision> IAppDbContext.AgeDivision
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
