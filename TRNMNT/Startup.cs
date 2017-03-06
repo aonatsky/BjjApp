@@ -5,10 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using TRNMNT.Data;
-using TRNMNT.Services;
-using TRNMNT.Services.impl;
-using TRNMNT.Data.Repositories;
+using TRNMNT.Core.Data;
+using TRNMNT.Core.Services;
+using TRNMNT.Core.Services.impl;
+using TRNMNT.Core.Data.Repositories;
 
 namespace TRNMNT
 {

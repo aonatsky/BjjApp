@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TRNMNT.Services;
+using TRNMNT.Core.Services;
 
 namespace TRNMNT.Controllers
 {
