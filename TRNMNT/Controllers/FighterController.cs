@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Const;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -35,11 +36,11 @@ namespace TRNMNT.Controllers
             {
                 if (file == null)
                 {
-                    throw new Exception("File is null");
+                    throw new Exception(DefaultMessage.FILE_IS_INVALID);
                 }
                 if (file.Length == 0)
                 {
-                    throw new Exception("File is empty");
+                    throw new Exception(DefaultMessage.FILE_IS_INVALID);
                 }
 
                 using (Stream stream = file.OpenReadStream())

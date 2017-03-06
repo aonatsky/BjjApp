@@ -46,11 +46,6 @@ namespace TRNMNT.Core.Services.impl
                     return false;
                 }
             }
-
-
-
-
-
         }
 
         public IQueryable<Fighter> GetFightersByWeightDivision(Guid WeightDivisionID)
