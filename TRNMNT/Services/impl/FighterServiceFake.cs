@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TRNMNT.Data;
@@ -35,6 +36,12 @@ namespace TRNMNT.Services.impl
             
             
             return result.AsQueryable();
+        }
+
+
+        public bool ProcessFighterListFromFile(Stream stream)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -17,37 +17,40 @@ namespace TRNMNT.Controllers
     [Route("api/[controller]")]
     public class FighterController : BaseController
     {
-        IFighterService _fighterService;
-        IBracketsService _bracketService;
+        IFighterService fighterService;
+        IBracketsService bracketService;
 
-        public FighterController(IFighterService fighterService, IBracketsService bracketService, ILogger logger) : base(logger)
+        public FighterController(IFighterService fighterService, IBracketsService bracketService, ILogger<FighterController> logger) : base(logger)
         {
-            _fighterService = fighterService;
-            _bracketService = bracketService;
+            this.fighterService = fighterService;
+            this.bracketService = bracketService;
             var test = fighterService.GetFightersByWeightDivision(Guid.NewGuid());
         }
 
         [HttpPost("[action]")]
 
-        public async Task UploadList(IFormFile file)
+        public async Task<String> UploadList(IFormFile file)
         {
             try
             {
-                if (file == null) throw new Exception("File is null");
-                if (file.Length == 0) throw new Exception("File is empty");
+                if (file == null)
+                {
+                    throw new Exception("File is null");
+                }
+                if (file.Length == 0)
+                {
+                    throw new Exception("File is empty");
+                }
 
                 using (Stream stream = file.OpenReadStream())
                 {
-                    using (var binaryReader = new BinaryReader(stream))
-                    {
-                        var fileContent = binaryReader.ReadBytes((int)file.Length);
-                        //await _uploadService.AddFile(fileContent, file.FileName, file.ContentType);
-                    }
+                    return fighterService.ProcessFighterListFromFile(stream) ? "Success":"Falied";
                 }
             }
             catch (Exception ex)
             {
                 HandleException(ex);
+                return ex.Message;
             }
 
         }
@@ -59,7 +62,7 @@ namespace TRNMNT.Controllers
         [HttpGet]
         public IEnumerable<Fighter> Get()
         {
-            return _fighterService.GetFightersByWeightDivision(Guid.NewGuid());
+            return fighterService.GetFightersByWeightDivision(Guid.NewGuid());
 
         }
 
@@ -78,7 +81,7 @@ namespace TRNMNT.Controllers
         [HttpGet("[action]")]
         public void Test()
         {
-            _bracketService.Test();
+            bracketService.Test();
         }
 
         [HttpGet("[action]")]

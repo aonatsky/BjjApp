@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using OfficeOpenXml;
@@ -9,19 +10,47 @@ using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Services.impl
 {
-    public class FighterService: IFighterService
+    public class FighterService : IFighterService
     {
         private IAppDbContext context;
         private IRepository<Fighter> fighterRepository;
-        public FighterService(IAppDbContext context, IRepository<Fighter> fighterRepository) 
+        public FighterService(IAppDbContext context, IRepository<Fighter> fighterRepository)
         {
             this.fighterRepository = fighterRepository;
             this.context = context;
         }
 
 
-        public void ProcessFighterListFromStream(Stream stream){
-            var package = new ExcelPackage(stream);
+        public bool ProcessFighterListFromFile(Stream stream)
+        {
+            using (var excelPackage = new ExcelPackage(stream))
+            {
+                var sheet = excelPackage?.Workbook?.Worksheets[0];
+                if (sheet != null)
+                {
+                    var fighters = new List<Fighter>();
+                    for (int i = 1; i < sheet.Dimension.Rows; i++)
+                    {
+
+                        fighters.Add(new Fighter()
+                        {
+                            FighterID = Guid.NewGuid(),
+                            FirstName = sheet.Cells[i, 1].GetValue<string>(),
+                            LastName = sheet.Cells[i, 2].GetValue<string>()
+                        });
+                    }
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
+
+
+
         }
 
         public IQueryable<Fighter> GetFightersByWeightDivision(Guid WeightDivisionID)
