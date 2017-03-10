@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Const;
+using TRNMNT.Core.Enum;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,11 +21,13 @@ namespace TRNMNT.Controllers
     {
         IFighterService fighterService;
         IBracketsService bracketService;
+        FileService fileService;
 
-        public FighterController(IFighterService fighterService, IBracketsService bracketService, ILogger<FighterController> logger) : base(logger)
+        public FighterController(IFighterService fighterService, IBracketsService bracketService, ILogger<FighterController> logger, FileService fileService) : base(logger)
         {
             this.fighterService = fighterService;
             this.bracketService = bracketService;
+            this.fileService = fileService;
             var test = fighterService.GetFightersByWeightDivision(Guid.NewGuid());
         }
 
@@ -34,19 +37,12 @@ namespace TRNMNT.Controllers
         {
             try
             {
-                if (file == null)
+                
+                var fileProcessMessage = fileService.ValidateFile(file,FileTypeEnum.FighterList);
+                if (fileProcessMessage == FileProcessResultEnum.Success)
                 {
-                    throw new Exception(DefaultMessage.FILE_IS_INVALID);
-                }
-                if (file.Length == 0)
-                {
-                    throw new Exception(DefaultMessage.FILE_IS_INVALID);
-                }
-
-                using (Stream stream = file.OpenReadStream())
-                {
-                    return fighterService.ProcessFighterListFromFile(stream) ? "Success":"Falied";
-                }
+                    return fighterService.ProcessFighterListFromFile(fileService.GetStream(file)) ? "Success":"Falied";
+                }                               
             }
             catch (Exception ex)
             {

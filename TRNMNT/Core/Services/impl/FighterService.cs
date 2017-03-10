@@ -6,6 +6,7 @@ using OfficeOpenXml;
 using TRNMNT.Core.Data;
 using TRNMNT.Core.Data.Entities;
 using TRNMNT.Core.Data.Repositories;
+using TRNMNT.Core.Enum;
 
 
 namespace TRNMNT.Core.Services.impl
@@ -14,39 +15,60 @@ namespace TRNMNT.Core.Services.impl
     {
         private IAppDbContext context;
         private IRepository<Fighter> fighterRepository;
-        public FighterService(IAppDbContext context, IRepository<Fighter> fighterRepository)
+        private IRepository<Team> teamRepository;
+        private FileService fileService;
+        public FighterService(IAppDbContext context, IRepository<Fighter> fighterRepository, FileService fileService)
         {
             this.fighterRepository = fighterRepository;
             this.context = context;
+            this.fileService = fileService;
         }
 
 
-        public bool ProcessFighterListFromFile(Stream stream)
+        public FileProcessResultEnum ProcessFighterListFromFile(Stream stream)
         {
-            using (var excelPackage = new ExcelPackage(stream))
+            try
             {
-                var sheet = excelPackage?.Workbook?.Worksheets[1];
-                if (sheet != null)
+                using (var excelPackage = new ExcelPackage(stream))
                 {
-                    var fighters = new List<Fighter>();
-                    for (int i = 1; i < sheet.Dimension.Rows; i++)
+                    var sheet = excelPackage?.Workbook?.Worksheets[1];
+                    if (sheet != null)
                     {
-
-                        fighters.Add(new Fighter()
+                        var fighters = new List<Fighter>();
+                        var teams = this.teamRepository.GetAll().ToList();
+                        var teamsToAdd = new List<Team>();
+                        
+                        for (int i = 1; i < sheet.Dimension.Rows; i++)
                         {
-                            FighterID = Guid.NewGuid(),
-                            FirstName = sheet.Cells[i, 1].GetValue<string>(),
-                            LastName = sheet.Cells[i, 2].GetValue<string>()
-                        });
+
+                            var team = teams.FirstOrDefault(t => t.Name.Equals(sheet.Cells[i, 2].GetValue<string>()));
+                            if (team =)
+                            {
+                                
+                            }
+                            fighters.Add(new Fighter()
+                            {
+                                FighterID = Guid.NewGuid(),
+                                FirstName = sheet.Cells[i, 1].GetValue<string>(),
+                                LastName = sheet.Cells[i, 2].GetValue<string>()
+
+                            });
+                        }
+                        return FileProcessResultEnum.Success;
                     }
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    else
+                    {
+                        return FileProcessResultEnum.FileIsEmpty;
+                    }
                 }
             }
+            catch (System.Exception ex)
+            {
+                return FileProcessResultEnum.FileIsInvalid;
+            }
+
         }
+
 
         public IQueryable<Fighter> GetFightersByWeightDivision(Guid WeightDivisionID)
         {
