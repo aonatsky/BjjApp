@@ -9,9 +9,15 @@ import { WeightDivision } from '../../model/weight-division.model'
 import { FighterFilterModel } from '../../model/fighter-filter.model'
 import { AgeDivision } from '../../model/age-division.model'
 import { Fight } from '../../model/fight.model'
+import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataFakeService extends DataService {
+        
+        public getCategories(): Observable<Category[]> {
+            throw new Error('Method not implemented.');
+        }
+
 
     /**
      *

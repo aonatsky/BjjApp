@@ -1,10 +1,8 @@
-import {FileUpload} from './shared/file-upload/file-upload.component';
+
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { AppComponent } from './components/app/app.component'
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
 import { routing, appRoutingProviders } from "./app.routing";
 
 //Administration components
@@ -12,8 +10,11 @@ import { NavMenuComponent } from './administration/navmenu/navmenu.component';
 import { HomeComponent } from './administration/home/home.component';
 import { ListUploadComponent } from './administration/listupload/listupload.component';
 import { FighterListComponent } from './administration/fighter-list/fighter-list.component';
+import { TournamentSettingsComponent } from './administration/tournament-settings/tournament-settings.component';
+
 
 //Shared
+import {FileUpload} from './shared/file-upload/file-upload.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
 import { DataTableModule } from "angular-2-data-table";
@@ -28,14 +29,13 @@ import { ServerSettingsService } from './core/dal/server.settings.service';
     declarations: [
         AppComponent,
         NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
         HomeComponent,
         ListUploadComponent,
         DropdownComponent,
         FighterListComponent,
         FighterFilter,
-        FileUpload
+        FileUpload,
+        TournamentSettingsComponent
     ],
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.

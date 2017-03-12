@@ -3,6 +3,7 @@ export const ApiMethods = Object.freeze({
         fighters: '/fighters/',
         weightDivisions: '/weightDivisions/',
         ageDivisions: '/ageDivisions/',
-        beltDivisions: '/beltDivisions'
+        beltDivisions: '/beltDivisions',
+        categories: 'tournamentsettings/categories'
     }
 });

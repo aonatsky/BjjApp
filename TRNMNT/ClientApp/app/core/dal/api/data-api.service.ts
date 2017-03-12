@@ -14,10 +14,19 @@ import { WeightDivision } from '../../model/weight-division.model'
 import { AgeDivision } from '../../model/age-division.model'
 import { Fight } from '../../model/fight.model'
 import { FighterFilterModel } from '../../model/fighter-filter.model'
+import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataApiService extends DataService {
-       
+        
+        
+        public getCategories(): Observable<Category[]> {
+            return this.apiServer.get(ApiMethods.tournament.categories)
+            .map(response => { return response.data })
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+        }
+
+
        
         public uploadFighterList(file: any): Observable<any> {
             throw new Error('Method not implemented.');

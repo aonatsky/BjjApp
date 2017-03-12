@@ -6,7 +6,8 @@ import {Observable} from 'rxjs/Rx';
 import {Fighter} from '../../model/fighter.model'
 import {WeightDivision} from '../../model/weight-division.model'
 import {AgeDivision} from '../../model/age-division.model'
-import {Fight} from '../../model/fight.model'
+import { Fight } from '../../model/fight.model'
+import { Category } from "../../model/category.model";
 
 @Injectable()
 export abstract class DataService {
@@ -15,4 +16,5 @@ export abstract class DataService {
     public abstract getAgeDivisions(): Observable<AgeDivision[]>;
     public abstract getBeltDivisions(): Observable<BeltDivision[]>;
     public abstract uploadFighterList(file:any) : Observable<any>;
+    public abstract getCategories() : Observable<Category[]>;
 }
