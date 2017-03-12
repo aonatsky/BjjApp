@@ -1,24 +1,22 @@
-using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using TRNMNT.Core.Enum;
+using System;
 using Microsoft.AspNetCore.Http;
 
 namespace TRNMNT.Core.Services
 {
-    public class FileService
+    public abstract class FileService
     {
-        private const string FIGHTERLIST_FOLDER = "\\FighterList";
-        private const string FIGHTERLIST_FILE = "\\List";
+        protected abstract FileProcessResultEnum PostUploadProcess(Stream stream);
+        
+        protected abstract string GetFilePath(string rootPath);
+        
+
         private IHostingEnvironment env;
         public FileService(IHostingEnvironment env)
         {
             this.env = env;
-        }
-
-        public bool SaveFile(string fileType, Stream stream)
-        {
-            return true;
         }
 
         public string GetWebRootPath()
@@ -26,12 +24,8 @@ namespace TRNMNT.Core.Services
             return this.env.WebRootPath;
         }
 
-        public string GetFighterListPath()
-        {
-            return Path.Combine(GetWebRootPath(), FIGHTERLIST_FOLDER, $"{FIGHTERLIST_FILE}_{DateTime.UtcNow.ToString("yyyy.mm.dd")}");
-        }
 
-        public FileProcessResultEnum ValidateFile(IFormFile file, FileTypeEnum fileType)
+        public FileProcessResultEnum ProcessFile(IFormFile file)
         {
             if (file == null)
             {
@@ -42,28 +36,21 @@ namespace TRNMNT.Core.Services
                 return FileProcessResultEnum.FileIsEmpty;
             }
 
-            switch (fileType)
+            var postUploadProcessResult = PostUploadProcess(file.OpenReadStream());
+            if (postUploadProcessResult == FileProcessResultEnum.Success)
             {
-                case FileTypeEnum.FighterList:
-                    {
-                        using (var fileStream = new FileStream(GetFighterListPath(), FileMode.Create))
-                        {
-                            file.CopyTo(fileStream);
-                        }
-                        return FileProcessResultEnum.Success;
-                    };
-                default:
-                    {
-                        return FileProcessResultEnum.FileIsInvalid;
-                    }
+                SaveFile(file);
             }
+
+            return postUploadProcessResult;
         }
 
-        public Stream GetStream(IFormFile file){
-            using (Stream stream = file.OpenReadStream())
-                {
-                   return stream;
-                }
+        private void SaveFile(IFormFile file)
+        {
+            using (var fileStream = new FileStream(GetFilePath(GetWebRootPath()), FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
         }
     }
 }

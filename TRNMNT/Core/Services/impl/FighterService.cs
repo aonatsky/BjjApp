@@ -16,12 +16,10 @@ namespace TRNMNT.Core.Services.impl
         private IAppDbContext context;
         private IRepository<Fighter> fighterRepository;
         private IRepository<Team> teamRepository;
-        private FileService fileService;
-        public FighterService(IAppDbContext context, IRepository<Fighter> fighterRepository, FileService fileService)
+        public FighterService(IAppDbContext context, IRepository<Fighter> fighterRepository)
         {
             this.fighterRepository = fighterRepository;
             this.context = context;
-            this.fileService = fileService;
         }
 
 
@@ -42,10 +40,7 @@ namespace TRNMNT.Core.Services.impl
                         {
 
                             var team = teams.FirstOrDefault(t => t.Name.Equals(sheet.Cells[i, 2].GetValue<string>()));
-                            if (team =)
-                            {
-                                
-                            }
+                            
                             fighters.Add(new Fighter()
                             {
                                 FighterID = Guid.NewGuid(),

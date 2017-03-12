@@ -1,9 +1,5 @@
-
-using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using TRNMNT.Core.Data.Entities;
 
 namespace TRNMNT.Core.Data.Repositories
 {
@@ -40,6 +36,10 @@ namespace TRNMNT.Core.Data.Repositories
         public void AddRange(IEnumerable<T> entities)
         {
             context.AddRange(entities);
+        }
+
+        public void Save(bool supressExceptions = true){
+            context.Save(supressExceptions);
         }
 
     }

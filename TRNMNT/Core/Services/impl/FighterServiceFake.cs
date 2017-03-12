@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using TRNMNT.Core.Data;
 using TRNMNT.Core.Data.Entities;
+using TRNMNT.Core.Enum;
 
 namespace TRNMNT.Core.Services.impl
 {
@@ -39,6 +40,11 @@ namespace TRNMNT.Core.Services.impl
 
 
         public bool ProcessFighterListFromFile(Stream stream)
+        {
+            throw new NotImplementedException();
+        }
+
+        FileProcessResultEnum IFighterService.ProcessFighterListFromFile(Stream stream)
         {
             throw new NotImplementedException();
         }

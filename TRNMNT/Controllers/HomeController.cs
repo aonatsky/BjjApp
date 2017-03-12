@@ -6,9 +6,8 @@ namespace TRNMNT.Controllers
 {
     public class HomeController : BaseController
     {
-        public HomeController(IFighterService fighterService,ILogger<HomeController> logger):base(logger)
+        public HomeController(ILogger<HomeController> logger):base(logger)
         {
-            var test1 = fighterService;
         }
         public IActionResult Index()
         {

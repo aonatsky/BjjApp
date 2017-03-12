@@ -12,5 +12,6 @@ namespace TRNMNT.Core.Data.Repositories
         void Add(T entity);
         void Update(T entity);
         void AddRange(IEnumerable<T> entities);
+        void Save(bool supressExceptions = true);
     }
 }

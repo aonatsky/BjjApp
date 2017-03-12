@@ -39,7 +39,11 @@ namespace TRNMNT.Core.Data.Repositories
 
         public void AddRange(IEnumerable<T> entities)
         {
-            Console.WriteLine($"Entities are added");
+            Console.WriteLine($"Entities {typeof(T)} are added");
+        }
+
+        public void Save(bool supressExceptions){
+            Console.WriteLine($"Saved");
         }
 
     }

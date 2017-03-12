@@ -21,9 +21,9 @@ namespace TRNMNT.Controllers
     {
         IFighterService fighterService;
         IBracketsService bracketService;
-        FileService fileService;
+        FighterListFileService fileService;
 
-        public FighterController(IFighterService fighterService, IBracketsService bracketService, ILogger<FighterController> logger, FileService fileService) : base(logger)
+        public FighterController(IFighterService fighterService, IBracketsService bracketService, ILogger<FighterController> logger, FighterListFileService fileService) : base(logger)
         {
             this.fighterService = fighterService;
             this.bracketService = bracketService;
@@ -38,11 +38,12 @@ namespace TRNMNT.Controllers
             try
             {
                 
-                var fileProcessMessage = fileService.ValidateFile(file,FileTypeEnum.FighterList);
-                if (fileProcessMessage == FileProcessResultEnum.Success)
-                {
-                    return fighterService.ProcessFighterListFromFile(fileService.GetStream(file)) ? "Success":"Falied";
-                }                               
+                return fileService.ProcessFile(file).ToString();
+                // var fileProcessMessage = fileService.ValidateFile(file,FileTypeEnum.FighterList);
+                // if (fileProcessMessage == FileProcessResultEnum.Success)
+                // {
+                //     return fighterService.ProcessFighterListFromFile(fileService.GetStream(file)) ? "Success":"Falied";
+                // }                               
             }
             catch (Exception ex)
             {
