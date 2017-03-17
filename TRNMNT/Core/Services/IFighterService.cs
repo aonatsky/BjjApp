@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using OfficeOpenXml;
 using TRNMNT.Core.Data.Entities;
 using TRNMNT.Core.Enum;
 

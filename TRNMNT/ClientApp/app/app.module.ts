@@ -1,3 +1,5 @@
+import {HttpModule, Http} from '@angular/http';
+
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -14,7 +16,7 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
 
 
 //Shared
-import {FileUpload} from './shared/file-upload/file-upload.component';
+import { FileUpload } from './shared/file-upload/file-upload.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
 import { DataTableModule } from "angular-2-data-table";
@@ -23,9 +25,12 @@ import { DataTableModule } from "angular-2-data-table";
 import { DataService } from './core/dal/contracts/data.service';
 import { ApiProviders } from './core/dal/api.providers';
 import { ServerSettingsService } from './core/dal/server.settings.service';
+import {LoggerService} from './core/services/logger.service';
+import {ApiServer} from './core/dal/servers/api.server';
+
 
 @NgModule({
-    bootstrap: [ AppComponent ],
+    bootstrap: [AppComponent],
     declarations: [
         AppComponent,
         NavMenuComponent,
@@ -38,13 +43,17 @@ import { ServerSettingsService } from './core/dal/server.settings.service';
         TournamentSettingsComponent
     ],
     imports: [
-        UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
+        HttpModule,
         routing,
-        DataTableModule
+        DataTableModule,
+        UniversalModule
     ],
-    providers:[
+    providers: [
         appRoutingProviders,
-        ApiProviders
+        ApiProviders,
+        LoggerService,
+        HttpModule,
+        ServerSettingsService
     ]
 })
 export class AppModule {

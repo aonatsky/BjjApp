@@ -1,7 +1,6 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using TRNMNT.Core.Enum;
-using System;
 using Microsoft.AspNetCore.Http;
 
 namespace TRNMNT.Core.Services

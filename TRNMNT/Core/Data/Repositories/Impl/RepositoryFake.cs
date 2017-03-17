@@ -1,9 +1,7 @@
 
 using System;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using TRNMNT.Core.Data.Entities;
 
 namespace TRNMNT.Core.Data.Repositories
 {

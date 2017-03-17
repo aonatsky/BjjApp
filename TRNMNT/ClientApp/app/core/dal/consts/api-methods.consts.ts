@@ -4,6 +4,6 @@ export const ApiMethods = Object.freeze({
         weightDivisions: '/weightDivisions/',
         ageDivisions: '/ageDivisions/',
         beltDivisions: '/beltDivisions',
-        categories: 'tournamentsettings/categories'
+        categories: 'api/tournamentsettings/categories'
     }
 });

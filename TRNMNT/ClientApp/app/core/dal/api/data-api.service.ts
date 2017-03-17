@@ -6,8 +6,7 @@ import { LoggerService } from '../../../core/services/logger.service';
 
 import { ApiMethods } from '../consts/api-methods.consts'
 import { ApiServer } from '../servers/api.server'
-import { ResponseModel } from '../model/response.model'
-import { RequestModel } from '../model/request.model'
+
 
 import { Fighter } from '../../model/fighter.model'
 import { WeightDivision } from '../../model/weight-division.model'
@@ -18,25 +17,28 @@ import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataApiService extends DataService {
-        
-        
+       
+
+
+        constructor(private apiServer: ApiServer, private logger: LoggerService) {
+        super()
+    }
+
+      
         public getCategories(): Observable<Category[]> {
             return this.apiServer.get(ApiMethods.tournament.categories)
-            .map(response => { return response.data })
+            .map(response => { return response })
             .catch(errorResponse => this.handleErrorResponse(errorResponse));
         }
 
+        private processResponse(response : any) : any{
+            
+        }
 
        
         public uploadFighterList(file: any): Observable<any> {
             throw new Error('Method not implemented.');
         }
-
-
-    constructor(private apiServer: ApiServer, private loggerService: LoggerService) {
-        super()
-    }
-
     
     public getFigters(filter:FighterFilterModel): Observable<Fighter[]> {
         return this.apiServer.get(ApiMethods.tournament.fighters)
@@ -45,8 +47,8 @@ export class DataApiService extends DataService {
     }
 
 
-    private handleErrorResponse(response: ResponseModel | any): Observable<any> {
-        let data: any = (response instanceof ResponseModel) ? response.data : response;
+    private handleErrorResponse(response:  any): Observable<any> {
+        let data: any =  response;
         return Observable.throw(data);
     }
 

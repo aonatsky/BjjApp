@@ -19,7 +19,7 @@ namespace TRNMNT.Controllers
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<Category> GetCategories()
+        public IEnumerable<Category> Categories()
         {
             return new List<Category>(){
                 new Category(){CategoryID = 0, Name = "Kids"},

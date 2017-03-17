@@ -1,12 +1,19 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {BaseServer} from './base.server';
+import {Http, Response} from '@angular/http';
 import {ServerSettingsService} from '../server.settings.service';
-import {LoggerService} from '../../../core/services/logger.service';
+import { LoggerService } from '../../../core/services/logger.service';
+import { Observable } from "rxjs/Observable";
+import { ApiMethods } from "../consts/api-methods.consts";
 
 @Injectable()
-export class ApiServer extends BaseServer {
-    constructor(serverSettings: ServerSettingsService, loggerService: LoggerService,  http: Http ) {
-        super(serverSettings.getApiEndpoint(), loggerService, http)
+export class ApiServer {
+    constructor(serverSettings: ServerSettingsService, loggerService: LoggerService, private http: Http ) {
     }
+
+
+    public get(name:string): Observable<any> {
+        return this.http.get(name).map((r:Response) => {return r.json()});
+    }
+
 }
+
