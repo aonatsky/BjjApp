@@ -12,7 +12,11 @@ export class ApiServer {
 
 
     public get(name:string): Observable<any> {
-        return this.http.get(name).map((r:Response) => {return r.json()});
+        return this.http.get(name).map((r:Response) => this.processResponse(r));
+    }
+
+    private processResponse(response : Response) : Observable<any>{
+        return response.json();
     }
 
 }

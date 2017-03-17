@@ -4,7 +4,7 @@ import { Category } from "../../core/model/category.model";
 
 @Component({
     selector: 'tournament-settings',
-    template: `{{categories}}`
+    template: `<div *ngIf="categories">{{categories[0].name}}</div>`
 })
 
 
