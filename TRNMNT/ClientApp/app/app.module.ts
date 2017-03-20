@@ -24,6 +24,8 @@ import { DataTableModule } from "primeng/components/datatable/datatable";
 import { DialogModule } from "primeng/components/dialog/dialog";
 import { SharedModule } from "primeng/components/common/shared";
 import { ButtonModule } from "primeng/components/button/button";
+import { InputTextModule } from "primeng/components/inputtext/inputtext";
+
 
 //Services
 import { DataService } from './core/dal/contracts/data.service';
@@ -55,7 +57,8 @@ import { ApiServer } from './core/dal/servers/api.server';
         BrowserModule,
         UniversalModule,
         SharedModule,
-        HttpModule
+        HttpModule,
+        InputTextModule
     ],
     providers: [
         appRoutingProviders,
