@@ -1,5 +1,3 @@
-import { Http } from '@angular/http';
-
 import { BeltDivision } from '../../model/belt-division.model';
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
@@ -18,20 +16,12 @@ export class DataFakeService extends DataService {
             return Observable.of(this.categories);
         }
 
-
-    /**
-     *
-     */
-    constructor(private http: Http) {
+    constructor() {
         super();
-
     }
 
     public uploadFighterList(file: any): Observable<any> {
-        let input = new FormData();
-        input.append("file", file);
-        return this.http
-            .post("/api/fighter/uploadlist", input);
+      return Observable.of(this.fighters);
     }
 
 

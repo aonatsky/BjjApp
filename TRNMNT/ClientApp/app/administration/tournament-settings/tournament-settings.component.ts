@@ -5,27 +5,51 @@ import { Category } from "../../core/model/category.model";
 
 @Component({
     selector: 'tournament-settings',
-    template: `<p-dataTable [value]="categories">
-    <p-column field="categoruId" header="Vin"></p-column>
-    <p-column field="name" header="Year"></p-column>
-</p-dataTable>`
+    templateUrl: './tournament-settings.component.html'
 })
 
 
 export class TournamentSettingsComponent implements OnInit {
-    
-    isInit: boolean = false;
-    
+
+    displayDialog: boolean;
+    newEntity: boolean;
+    category: Category = new Category();
+
     ngOnInit(): void {
         this.dataService.getCategories().subscribe(data => this.categories = data)
-        this.isInit = true;
+    }
+
+
+    showDialogToAdd() {
+        this.newEntity = true;
+        this.category = new Category();
+        this.displayDialog = true;
     }
 
 
     categories: Category[];
-
     constructor(private dataService: DataService) {
 
+    }
+
+     save() {
+        this.displayDialog = false;
+    }
+    
+    delete() {
+        this.displayDialog = false;
+    }    
+    
+    onRowSelect(event) {
+        this.displayDialog = true;
+    }
+    
+    cloneCar(c: Category): Category {
+        let category = new Category();
+        for(let prop in c) {
+            category[prop] = c[prop];
+        }
+        return category;
     }
 
 }

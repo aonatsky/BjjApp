@@ -1,0 +1,9 @@
+   .datatable{
+        margin: auto; 
+        max-width: 1000px; 
+        margin-bottom: 50px;
+    }
+
+    .datatable .btn{
+        margin-top:5px;
+    }

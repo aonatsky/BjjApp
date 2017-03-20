@@ -3,44 +3,10 @@
 >
 </fighter-filter>
 
-<div *ngIf="fighters" class="fighter-list">
-    <data-table id="persons-grid"
-        headerTitle="Participants list"
-        [items]="fighters"
-        [itemCount]="fightersCount"
-             
-        [rowTooltip]="rowTooltip"
-        >
-        <data-table-column
-            [property]="'firstName'"
-            [header]="'First Name'"
-            [resizable]="true">
-        </data-table-column>
-        <data-table-column
-            [property]="'lastName'"
-            [header]="'Last Name'"
-            [resizable]="true">
-        </data-table-column>
-        <data-table-column
-            [property]="'team'"
-            [header]="'Team'"
-            [sortable]="true"
-            [resizable]="true">
-        </data-table-column>
-        <data-table-column
-            [property]="'weight'"
-            [header]="'Weight'"
-            [resizable]="true">
-        </data-table-column> 
-        <data-table-column
-            [property]="'belt'"
-            [header]="'Belt'"
-            [resizable]="true">
-        </data-table-column>
-         <data-table-column
-            [property]="'age'"
-            [header]="'Age'"
-            [resizable]="true">
-        </data-table-column>
-    </data-table>
+<div *ngIf="fighters" class="datatable">
+<p-dataTable [value]="fighters">
+    <p-column field="firstName" header="First Name"></p-column>
+    <p-column field="lastName" header="Last Name"></p-column>
+    <p-column field="team" header="Team"></p-column>
+</p-dataTable>
 </div>

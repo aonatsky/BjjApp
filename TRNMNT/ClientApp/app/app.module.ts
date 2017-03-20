@@ -1,7 +1,8 @@
-import {HttpModule, Http} from '@angular/http';
-import { ButtonModule } from 'primeng/components/button/button';
-
 import { NgModule } from '@angular/core';
+import { HttpModule, Http } from '@angular/http';
+import { FormsModule   } from '@angular/Forms';
+import {BrowserModule} from '@angular/platform-browser';
+
 import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 import { AppComponent } from './components/app/app.component'
@@ -20,13 +21,16 @@ import { FileUpload } from './shared/file-upload/file-upload.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
 import { DataTableModule } from "primeng/components/datatable/datatable";
+import { DialogModule } from "primeng/components/dialog/dialog";
+import { SharedModule } from "primeng/components/common/shared";
+import { ButtonModule } from "primeng/components/button/button";
 
 //Services
 import { DataService } from './core/dal/contracts/data.service';
 import { ApiProviders } from './core/dal/api.providers';
 import { ServerSettingsService } from './core/dal/server.settings.service';
-import {LoggerService} from './core/services/logger.service';
-import {ApiServer} from './core/dal/servers/api.server';
+import { LoggerService } from './core/services/logger.service';
+import { ApiServer } from './core/dal/servers/api.server';
 
 
 @NgModule({
@@ -37,23 +41,26 @@ import {ApiServer} from './core/dal/servers/api.server';
         HomeComponent,
         ListUploadComponent,
         DropdownComponent,
-        // FighterListComponent,
+        FighterListComponent,
         FighterFilter,
         FileUpload,
         TournamentSettingsComponent
+
     ],
     imports: [
-        HttpModule,
         routing,
         DataTableModule,
+        DialogModule,
+        FormsModule,
+        BrowserModule,
         UniversalModule,
-        ButtonModule
+        SharedModule,
+        HttpModule
     ],
     providers: [
         appRoutingProviders,
         ApiProviders,
         LoggerService,
-        HttpModule,
         ServerSettingsService
     ]
 })
