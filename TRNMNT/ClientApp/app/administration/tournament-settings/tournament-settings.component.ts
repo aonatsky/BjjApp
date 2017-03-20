@@ -2,21 +2,30 @@ import { DataService } from '../../core/dal/contracts/data.service'
 import { AfterViewInit, OnInit, Component } from '@angular/core';
 import { Category } from "../../core/model/category.model";
 
+
 @Component({
     selector: 'tournament-settings',
-    template: `<div *ngIf="categories">{{categories[0].name}}</div>`
+    template: `<p-dataTable [value]="categories">
+    <p-column field="categoruId" header="Vin"></p-column>
+    <p-column field="name" header="Year"></p-column>
+</p-dataTable>`
 })
 
 
 export class TournamentSettingsComponent implements OnInit {
-        ngOnInit(): void {
-            this.dataService.getCategories().subscribe(data => this.categories = data)
-        }
-
-categories : Category[];
-
-constructor(private dataService:DataService) {
     
-}
+    isInit: boolean = false;
+    
+    ngOnInit(): void {
+        this.dataService.getCategories().subscribe(data => this.categories = data)
+        this.isInit = true;
+    }
+
+
+    categories: Category[];
+
+    constructor(private dataService: DataService) {
+
+    }
 
 }

@@ -6,7 +6,7 @@ import { DataService } from './contracts/data.service'
 export const ApiProviders = [
     {
         provide: DataService,
-        useClass: DataApiService
+        useClass: DataFakeService
     },
     {
         provide: ApiServer,

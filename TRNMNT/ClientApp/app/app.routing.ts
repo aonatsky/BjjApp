@@ -10,7 +10,7 @@ const appRoutes: Routes = [
      { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'list-upload', component: ListUploadComponent },
-            { path: 'fighter-list', component: FighterListComponent },
+            // { path: 'fighter-list', component: FighterListComponent },
             { path: '**', redirectTo: 'home' }
 ];
 

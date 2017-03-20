@@ -1,5 +1,5 @@
 import {HttpModule, Http} from '@angular/http';
-
+import { ButtonModule } from 'primeng/components/button/button';
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -19,7 +19,7 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
 import { FileUpload } from './shared/file-upload/file-upload.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
-import { DataTableModule } from "angular-2-data-table";
+import { DataTableModule } from "primeng/components/datatable/datatable";
 
 //Services
 import { DataService } from './core/dal/contracts/data.service';
@@ -37,7 +37,7 @@ import {ApiServer} from './core/dal/servers/api.server';
         HomeComponent,
         ListUploadComponent,
         DropdownComponent,
-        FighterListComponent,
+        // FighterListComponent,
         FighterFilter,
         FileUpload,
         TournamentSettingsComponent
@@ -46,7 +46,8 @@ import {ApiServer} from './core/dal/servers/api.server';
         HttpModule,
         routing,
         DataTableModule,
-        UniversalModule
+        UniversalModule,
+        ButtonModule
     ],
     providers: [
         appRoutingProviders,

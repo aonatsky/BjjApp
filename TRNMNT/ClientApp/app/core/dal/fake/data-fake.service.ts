@@ -15,7 +15,7 @@ import { Category } from "../../model/category.model";
 export class DataFakeService extends DataService {
         
         public getCategories(): Observable<Category[]> {
-            throw new Error('Method not implemented.');
+            return Observable.of(this.categories);
         }
 
 
@@ -70,6 +70,10 @@ export class DataFakeService extends DataService {
         new BeltDivision(0, "White"),
         new BeltDivision(1, "Blue"),
         new BeltDivision(2, "Elite"),
+    ]
+
+    categories = [
+        new Category(0,"kids")
     ]
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
