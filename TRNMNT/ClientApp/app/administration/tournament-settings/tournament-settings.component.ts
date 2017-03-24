@@ -32,24 +32,26 @@ export class TournamentSettingsComponent implements OnInit {
 
     }
 
-     save() {
+    save() {
         this.displayDialog = false;
     }
-    
+
     delete() {
         this.displayDialog = false;
-    }    
-    
+    }
+
     onRowSelect(event) {
         this.displayDialog = true;
     }
-    
+
     cloneCar(c: Category): Category {
         let category = new Category();
-        for(let prop in c) {
+        for (let prop in c) {
             category[prop] = c[prop];
         }
         return category;
     }
+
+
 
 }

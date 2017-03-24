@@ -1,18 +1,20 @@
 <h1>Tournament settings</h1>
 <h3 class="first">Categories</h3>
 <div *ngIf='categories' class='datatable'>
-    <p-dataTable [value]="categories" >
+    <p-dataTable [value]="categories">
         <p-header>Categories</p-header>
         <p-column field="categoryId" header="id"></p-column>
         <p-column field="name" header="name"></p-column>
-        <p-footer>            
-            <div class="ui-helper-clearfix" style="width:100%"><button type="button" class="btn btn-primary float-left" (click)="showDialogToAdd()">Add</button></div></p-footer>
+        <p-footer>
+            <div class="ui-helper-clearfix" style="width:100%"><button type="button" class="btn btn-primary float-left" (click)="showDialogToAdd()">Add</button></div>
+        </p-footer>
     </p-dataTable>
-    
+
 </div>
 
 
-<p-dialog header="Category Details" [(visible)]="displayDialog" [responsive]="fade" showEffect="fade" [modal]="true" [width]="400" [height] = "200" [resizable]="false">
+<p-dialog header="Category Details" [(visible)]="displayDialog" [responsive]="fade" showEffect="fade" [modal]="true" [width]="400"
+    [height]="200" [resizable]="false">
     <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="category">
         <div class="ui-grid-row">
             <div class="ui-grid-col-4"><label for="categoryId">Vin</label></div>
@@ -26,7 +28,13 @@
     <p-footer>
         <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
             <button type="button" class="btn btn-primary" (click)="delete()">Delete</button>
-            <button type="button" class="btn btn-primary" (click)="save()" >Save</button>
+            <button type="button" class="btn btn-primary" (click)="save()">Save</button>
         </div>
     </p-footer>
 </p-dialog>
+
+
+<datatable [dataset]=categories [title]="'Categories'">
+    <column [value]="'categoryId'" [header]="'Id'"></column>
+    <column [value]="'name'" [header]="'name'"></column>
+</datatable>

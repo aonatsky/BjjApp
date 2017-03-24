@@ -19,6 +19,8 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
 //Shared
 import { FileUpload } from './shared/file-upload/file-upload.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
+import { DataTableComponent } from './shared/datatable/datatable.component';
+import { ColumnComponent } from './shared/column/column.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
 import { DataTableModule } from "primeng/components/datatable/datatable";
 import { DialogModule } from "primeng/components/dialog/dialog";
@@ -46,7 +48,9 @@ import { ApiServer } from './core/dal/servers/api.server';
         FighterListComponent,
         FighterFilter,
         FileUpload,
-        TournamentSettingsComponent
+        TournamentSettingsComponent,
+        DataTableComponent,
+        ColumnComponent
 
     ],
     imports: [

@@ -46,6 +46,7 @@
     "angular-2-data-table": "0.1.2",
     "primeng":"2.0.4",
     "font-awesome":"4.7.0",
+    "ng2-bootstrap-modal":"1.0.1",
     "zone.js": "^0.7.6"
   }
 }
