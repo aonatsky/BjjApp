@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
-import { FormsModule   } from '@angular/Forms';
+import { FormsModule   } from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
+
 
 import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
@@ -19,14 +20,13 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
 //Shared
 import { FileUpload } from './shared/file-upload/file-upload.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
-import { DataTableComponent } from './shared/datatable/datatable.component';
-import { ColumnComponent } from './shared/column/column.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
 import { DataTableModule } from "primeng/components/datatable/datatable";
 import { DialogModule } from "primeng/components/dialog/dialog";
 import { SharedModule } from "primeng/components/common/shared";
 import { ButtonModule } from "primeng/components/button/button";
 import { InputTextModule } from "primeng/components/inputtext/inputtext";
+import {CrudComponent} from './shared/crud/crud.component';
 
 
 //Services
@@ -49,20 +49,20 @@ import { ApiServer } from './core/dal/servers/api.server';
         FighterFilter,
         FileUpload,
         TournamentSettingsComponent,
-        DataTableComponent,
-        ColumnComponent
-
+        CrudComponent
     ],
     imports: [
         routing,
-        DataTableModule,
-        DialogModule,
-        FormsModule,
-        BrowserModule,
         UniversalModule,
         SharedModule,
         HttpModule,
-        InputTextModule
+        BrowserModule,
+        FormsModule,
+        DataTableModule,
+        DialogModule,
+        InputTextModule,
+        ButtonModule
+
     ],
     providers: [
         appRoutingProviders,

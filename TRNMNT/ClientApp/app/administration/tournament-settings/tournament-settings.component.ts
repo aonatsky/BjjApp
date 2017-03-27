@@ -5,7 +5,10 @@ import { Category } from "../../core/model/category.model";
 
 @Component({
     selector: 'tournament-settings',
-    templateUrl: './tournament-settings.component.html'
+    templateUrl: './tournament-settings.component.html',
+    styles: [`.ui-grid-row div{
+        padding: 4px 10px;
+    }`]
 })
 
 
@@ -13,6 +16,7 @@ export class TournamentSettingsComponent implements OnInit {
 
     displayDialog: boolean;
     newEntity: boolean;
+    selectedEntity : any;
     category: Category = new Category();
 
     ngOnInit(): void {
@@ -41,7 +45,7 @@ export class TournamentSettingsComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        this.displayDialog = true;
+        this.showDialogToAdd();
     }
 
     cloneCar(c: Category): Category {

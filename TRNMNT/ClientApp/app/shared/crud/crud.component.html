@@ -1,7 +1,7 @@
 <h1>Tournament settings</h1>
 <h3 class="first">Categories</h3>
-<div *ngIf='categories' class='datatable'>
-    <p-dataTable [value]="categories" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)" [responsive]="true">
+<div *ngIf='entities' class='datatable'>
+    <p-dataTable [value]="entities" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)" [responsive]="true">
         <p-column field="categoryId" header="id"></p-column>
         <p-column field="name" header="name"></p-column>
         <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div></p-footer>
@@ -11,14 +11,14 @@
 
 <p-dialog header="Category Details" [(visible)]="displayDialog" [responsive]="fade" showEffect="fade" [modal]="true" [width]="400"
     [resizable]="false">
-    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="category">
+    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="entity">
         <div class="ui-grid-row">
             <div class="ui-grid-col-4"><label for="categoryId">Vin</label></div>
-            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="category.categoryId" /></div>
+            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="entity.categoryId" /></div>
         </div>
         <div class="ui-grid-row">
             <div class="ui-grid-col-4"><label for="name">Name</label></div>
-            <div class="ui-grid-col-8"><input pInputText id="brand" [(ngModel)]="category.name" /></div>
+            <div class="ui-grid-col-8"><input pInputText id="brand" [(ngModel)]="entity.name" /></div>
         </div>
     </div>
     <p-footer>
@@ -28,6 +28,3 @@
         </div>
     </p-footer>
 </p-dialog>
-
-<crud *ngIf='categories' [entities] = 'categories'></crud>
-
