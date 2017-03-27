@@ -1,6 +1,7 @@
 import { DataService } from '../../core/dal/contracts/data.service'
 import { AfterViewInit, OnInit, Component } from '@angular/core';
 import { Category } from "../../core/model/category.model";
+import { CrudColumn } from "../../shared/crud/crud.component";
 
 
 @Component({
@@ -18,6 +19,7 @@ export class TournamentSettingsComponent implements OnInit {
     newEntity: boolean;
     selectedEntity : any;
     category: Category = new Category();
+    categoryColumns: CrudColumn[] = [{displayName: "ID",propertyName:"categoryId"},{displayName: "Name",propertyName:"name"}]
 
     ngOnInit(): void {
         this.dataService.getCategories().subscribe(data => this.categories = data)

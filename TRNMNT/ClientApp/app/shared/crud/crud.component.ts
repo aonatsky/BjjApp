@@ -11,22 +11,18 @@ import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
 export class CrudComponent implements OnInit {
 
     ngOnInit(): void {
-        for(let key in this.entities[0]){
-            // this.properties.push(key);
-            console.log(key);
-        }
+
     }
 
-
-
     @Input() entities: any[]
-
+    @Input() title:string = "";
+    @Input() columns: CrudColumn[];
+    
     displayDialog: boolean;
     newEntity: boolean;
     selectedEntity: any;
     entity: any = new Object();
 
-    properties: string[];
 
     showDialogToAdd() {
         this.newEntity = true;
@@ -53,4 +49,10 @@ export class CrudComponent implements OnInit {
         }
         return newEntity;
     }
+   
+}
+
+export interface CrudColumn{
+    displayName: string;
+    propertyName: string;
 }

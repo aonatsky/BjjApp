@@ -29,5 +29,5 @@
     </p-footer>
 </p-dialog>
 
-<crud *ngIf='categories' [entities] = 'categories'></crud>
+<crud [entities] = 'categories' [title]="'Categories'" [columns]="categoryColumns"></crud>
 
