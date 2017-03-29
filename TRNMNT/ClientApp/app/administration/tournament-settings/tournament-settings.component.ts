@@ -6,31 +6,23 @@ import { CrudColumn } from "../../shared/crud/crud.component";
 
 @Component({
     selector: 'tournament-settings',
-    templateUrl: './tournament-settings.component.html',
-    styles: [`.ui-grid-row div{
-        padding: 4px 10px;
-    }`]
+    templateUrl: './tournament-settings.component.html'
 })
 
 
 export class TournamentSettingsComponent implements OnInit {
 
-    displayDialog: boolean;
-    newEntity: boolean;
-    selectedEntity : any;
-    category: Category = new Category();
-    categoryColumns: CrudColumn[] = [{displayName: "ID",propertyName:"categoryId"},{displayName: "Name",propertyName:"name"}]
+    categoryColumns: CrudColumn[] = [
+        {displayName: "ID",propertyName:"categoryId", isEditable : false},
+        {displayName: "Name",propertyName:"name", isEditable : true}
+        ];
 
     ngOnInit(): void {
         this.dataService.getCategories().subscribe(data => this.categories = data)
     }
 
 
-    showDialogToAdd() {
-        this.newEntity = true;
-        this.category = new Category();
-        this.displayDialog = true;
-    }
+    
 
 
     categories: Category[];
@@ -38,25 +30,7 @@ export class TournamentSettingsComponent implements OnInit {
 
     }
 
-    save() {
-        this.displayDialog = false;
-    }
-
-    delete() {
-        this.displayDialog = false;
-    }
-
-    onRowSelect(event) {
-        this.showDialogToAdd();
-    }
-
-    cloneCar(c: Category): Category {
-        let category = new Category();
-        for (let prop in c) {
-            category[prop] = c[prop];
-        }
-        return category;
-    }
+   
 
 
 

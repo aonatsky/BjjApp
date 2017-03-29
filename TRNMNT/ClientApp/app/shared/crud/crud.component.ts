@@ -15,44 +15,55 @@ export class CrudComponent implements OnInit {
     }
 
     @Input() entities: any[]
-    @Input() title:string = "";
+    @Input() title: string = "";
     @Input() columns: CrudColumn[];
-    
+
+    @Output() onAdd: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onUpdate: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
+
+
+
     displayDialog: boolean;
     newEntity: boolean;
     selectedEntity: any;
-    entity: any = new Object();
+    entityToEdit: any = new Object();
 
 
     showDialogToAdd() {
         this.newEntity = true;
-        this.entity = new Object();
+        this.entityToEdit = new Object();
         this.displayDialog = true;
     }
 
     save() {
+        if (this.newEntity) {
+            this.onAdd.emit(this.entityToEdit)
+        } else {
+            this.onUpdate.emit(this.entityToEdit)
+        }
         this.displayDialog = false;
     }
 
     delete() {
+        this.onDelete.emit(this.entityToEdit)
         this.displayDialog = false;
     }
 
     onRowSelect(event) {
-        this.showDialogToAdd();
+        this.entityToEdit = event.data;
+        this.displayDialog = true;
     }
 
-    cloneEntity(e: any): any {
-        let newEntity = new Object();
-        for (let prop in e) {
-            newEntity[prop] = e[prop];
-        }
-        return newEntity;
+     isIdColumn(column:CrudColumn):boolean
+    {
+        return column.propertyName.endsWith('Id');
     }
-   
+
 }
 
-export interface CrudColumn{
+export interface CrudColumn {
     displayName: string;
     propertyName: string;
+    isEditable: boolean;
 }

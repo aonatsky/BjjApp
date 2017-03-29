@@ -1,18 +1,26 @@
-<h3 class="first">{{title}}</h3>
 <div *ngIf='entities' class='datatable'>
-    <p-dataTable [value]="entities" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)" [responsive]="true">
-        <p-column *ngFor ="let column of columns" field="{{column.propertyName}}" header="{{column.displayName}}"></p-column>
-        <p-footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div></p-footer>
+<h3 class="first">{{title}}</h3>
+    <p-dataTable [value]="entities" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)"
+        [responsive]="true">
+        <div *ngFor="let column of columns">
+            <p-column *ngIf="column.propertyName.endsWith('Id')" [style]="{'width':'9%'}" field="{{column.propertyName}}" header="{{column.displayName}}"></p-column>
+            <p-column *ngIf="!column.propertyName.endsWith('Id')" field="{{column.propertyName}}" header="{{column.displayName}}"></p-column>
+        </div>
+        <p-footer>
+            <div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div>
+        </p-footer>
     </p-dataTable>
 </div>
 
 
 <p-dialog header="{{title}} Details" [(visible)]="displayDialog" [responsive]="fade" showEffect="fade" [modal]="true" [width]="400"
     [resizable]="false">
-    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="entity">
-        <div class="ui-grid-row" *ngFor ="let column of columns">
+    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="entityToEdit">
+        <div class="ui-grid-row" *ngFor="let column of columns">
             <div class="ui-grid-col-4"><label for="{{column.propertyName}}">{{column.displayName}}</label></div>
-            <div class="ui-grid-col-8"><input pInputText id="{{column.displayName}}" [(ngModel)]="entity[column.propertyName]" /></div>
+            
+            <div *ngIf="!isIdColumn(column)" class="ui-grid-col-8"><input pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" /></div>
+            <div *ngIf="isIdColumn(column)" class="ui-grid-col-8"><input readonly pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" /></div>
         </div>
     </div>
     <p-footer>

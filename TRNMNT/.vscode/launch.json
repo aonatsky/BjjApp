@@ -37,6 +37,21 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command.pickProcess}"
+        },
+        {
+            "name": "Launch Chrome against localhost, with sourcemaps",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5000/home",
+            "sourceMaps": true,
+            "webRoot": "${workspaceRoot}"
+        },
+        {
+            "name": "Attach to Chrome, with sourcemaps",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "sourceMaps": true
         }
     ]
 }
