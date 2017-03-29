@@ -10,23 +10,24 @@ namespace TRNMNT.Controllers
     [Route("api/[controller]")]
     public class TournamentSettings : BaseController
     {
-        public TournamentSettings(ILogger<HomeController> logger, 
+        public TournamentSettings(ILogger<HomeController> logger,
         IRepository<WeightDivision> weightDivisionrepository,
         IRepository<Category> categoryRepository
-        ):base(logger)
+        ) : base(logger)
         {
-                        
+
         }
 
         [HttpGet("[action]")]
         public IEnumerable<Category> Categories()
         {
-            return new List<Category>(){
+            var response = new List<Category>(){
                 new Category(){CategoryID = 0, Name = "Kids"},
                 new Category(){CategoryID = 1, Name = "Junior"},
                 new Category(){CategoryID = 2, Name = "Adult - White"},
                 new Category(){CategoryID = 3, Name = "Adult - Blue"}
-            };
+                        };
+            return response;
         }
 
     }

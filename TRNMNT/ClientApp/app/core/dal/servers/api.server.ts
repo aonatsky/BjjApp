@@ -1,23 +1,53 @@
-import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
-import {ServerSettingsService} from '../server.settings.service';
+import { Injectable } from '@angular/core';
+import { RequestOptions, Http, Response, Headers } from '@angular/http';
+import { ServerSettingsService } from '../server.settings.service';
 import { LoggerService } from '../../../core/services/logger.service';
 import { Observable } from "rxjs/Observable";
 import { ApiMethods } from "../consts/api-methods.consts";
 
 @Injectable()
 export class ApiServer {
-    constructor(serverSettings: ServerSettingsService, loggerService: LoggerService, private http: Http ) {
+    constructor(serverSettings: ServerSettingsService, loggerService: LoggerService, private http: Http) {
     }
 
 
-    public get(name:string): Observable<any> {
-        return this.http.get(name).map((r:Response) => this.processResponse(r));
+    public get(name: string): Observable<any> {
+        return this.http.get(name).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
 
-    private processResponse(response : Response) : Observable<any>{
-        return response.json();
+    public post(name: string, model: any): Observable<any> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions();
+        options.headers = headers;
+        let body = JSON.stringify(model);
+        return this.http.post(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
 
+    public put(name: string, model: any): Observable<any> {
+        let body = JSON.stringify(model);
+        return this.http.post(name, body).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
+    }
+
+
+
+
+    private processResponse(response: Response): Observable<any> {
+        let body = response.json();
+        return body.data || {};
+
+    }
+    private handleError(error: Response | any) {
+        // In a real world app, you might use a remote logging infrastructure
+        let errMsg: string;
+        if (error instanceof Response) {
+            const body = error.json() || '';
+            const err = body.error || JSON.stringify(body);
+            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+        } else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Observable.throw(errMsg);
+    }
 }
 

@@ -17,10 +17,10 @@
     [resizable]="false">
     <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="entityToEdit">
         <div class="ui-grid-row" *ngFor="let column of columns">
-            <div class="ui-grid-col-4"><label for="{{column.propertyName}}">{{column.displayName}}</label></div>
+            <div *ngIf="!isIdColumn(column) || (isIdColumn(column) && !newEntity)"  class="ui-grid-col-4"><label for="{{column.propertyName}}">{{column.displayName}}</label></div>
             
             <div *ngIf="!isIdColumn(column)" class="ui-grid-col-8"><input pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" /></div>
-            <div *ngIf="isIdColumn(column)" class="ui-grid-col-8"><input readonly pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" /></div>
+            <div *ngIf="isIdColumn(column) && !newEntity" class="ui-grid-col-8"><input readonly pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" /></div>
         </div>
     </div>
     <p-footer>

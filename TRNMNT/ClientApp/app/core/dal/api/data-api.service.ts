@@ -17,9 +17,6 @@ import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataApiService extends DataService {
-       
-
-
         constructor(private apiServer: ApiServer, private logger: LoggerService) {
         super()
     }
@@ -27,15 +24,30 @@ export class DataApiService extends DataService {
       
         public getCategories(): Observable<Category[]> {
             return this.apiServer.get(ApiMethods.tournament.categories)
-            .map(response => { return response })
+            .map((response:Response) => this.processResponse(response))
             .catch(errorResponse => this.handleErrorResponse(errorResponse));
         }
 
-        private processResponse(response : any) : any{
+        public addCategory(category: Category): any {
+            return this.apiServer.post(ApiMethods.tournament.categories,category)
+            .map((response:Response) => this.processResponse(response))
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+        }
+
+        public updateCategory(category: Category): any {
+            return this.apiServer.put(ApiMethods.tournament.categories,category)
+            .map((response:Response) => this.processResponse(response))
+            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+        }
+
+        private processResponse(res: Response) {  
+             return res;
             
         }
 
-       
+
+
+
         public uploadFighterList(file: any): Observable<any> {
             throw new Error('Method not implemented.');
         }

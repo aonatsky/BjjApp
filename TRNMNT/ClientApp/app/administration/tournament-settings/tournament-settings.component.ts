@@ -18,11 +18,13 @@ export class TournamentSettingsComponent implements OnInit {
         ];
 
     ngOnInit(): void {
-        this.dataService.getCategories().subscribe(data => this.categories = data)
+        this.dataService.getCategories().subscribe(data => this.initCategories(data))
     }
 
 
-    
+    initCategories(data){
+        this.categories = data;
+    }
 
 
     categories: Category[];

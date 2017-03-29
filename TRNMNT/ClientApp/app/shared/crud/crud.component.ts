@@ -51,6 +51,7 @@ export class CrudComponent implements OnInit {
     }
 
     onRowSelect(event) {
+        this.newEntity = false;
         this.entityToEdit = event.data;
         this.displayDialog = true;
     }
