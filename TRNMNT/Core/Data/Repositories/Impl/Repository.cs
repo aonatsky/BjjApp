@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace TRNMNT.Core.Data.Repositories
 {
@@ -23,7 +24,7 @@ namespace TRNMNT.Core.Data.Repositories
             return context.Set<T>();
         }
 
-        public T GetByID<Guid>(Guid id)
+        public T GetByID<K>(K id)
         {
             return context.Set<T>().Find(id);
         }
@@ -41,6 +42,18 @@ namespace TRNMNT.Core.Data.Repositories
         public void Save(bool supressExceptions = true){
             context.Save(supressExceptions);
         }
+
+        public void Delete(T entity){
+            context.Set<T>().Remove(entity);
+        }
+        
+        public void DeleteByID<K>(K id) 
+        {
+            var entity = GetByID<K>(id);
+            context.Entry<T>(entity).State = EntityState.Deleted;
+        }
+
+        
 
     }
 }

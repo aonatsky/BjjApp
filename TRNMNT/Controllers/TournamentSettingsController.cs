@@ -8,14 +8,18 @@ using TRNMNT.Core.Services;
 namespace TRNMNT.Controllers
 {
     [Route("api/[controller]")]
-    public class TournamentSettings : BaseController
+    public class TournamentSettingsController : BaseController
     {
-        public TournamentSettings(ILogger<HomeController> logger,
-        IRepository<WeightDivision> weightDivisionrepository,
-        IRepository<Category> categoryRepository
+        
+        ILogger<TournamentSettingsController> logger;
+        ITournamentSettingsService tournamentSettingsService;
+        
+        public TournamentSettingsController(ILogger<TournamentSettingsController> logger,
+        ITournamentSettingsService tournamentSettingsService
         ) : base(logger)
         {
-
+            this.logger =logger;
+            this.tournamentSettingsService = tournamentSettingsService;
         }
 
         [HttpGet("[action]")]
