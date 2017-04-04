@@ -44,5 +44,9 @@ namespace TRNMNT.Core.Data.Repositories
             Console.WriteLine($"Saved");
         }
 
+        public void Delete(T entity)
+        {
+            Console.WriteLine($"Entities {typeof(T)} are delete");
+        }
     }
 }

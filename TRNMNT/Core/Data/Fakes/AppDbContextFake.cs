@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TRNMNT.Core.Data.Entities;
 
 namespace TRNMNT.Core.Data.Fake
@@ -57,6 +58,11 @@ namespace TRNMNT.Core.Data.Fake
         }
 
         public void AddRange(IEnumerable<object> entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public EntityEntry<T> Entry<T>(T entity) where T : class
         {
             throw new NotImplementedException();
         }

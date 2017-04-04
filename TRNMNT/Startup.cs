@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Data;
 using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.impl;
 using TRNMNT.Core.Data.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace TRNMNT
 {

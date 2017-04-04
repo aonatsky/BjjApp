@@ -52,8 +52,5 @@ namespace TRNMNT.Core.Data.Repositories
             var entity = GetByID<K>(id);
             context.Entry<T>(entity).State = EntityState.Deleted;
         }
-
-        
-
     }
 }
