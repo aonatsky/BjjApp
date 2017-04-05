@@ -7,7 +7,7 @@ import { ApiMethods } from "../consts/api-methods.consts";
 
 @Injectable()
 export class ApiServer {
-    constructor(serverSettings: ServerSettingsService, loggerService: LoggerService, private http: Http) {
+    constructor(private serverSettings: ServerSettingsService, private loggerService: LoggerService, private http: Http) {
     }
 
 
@@ -47,6 +47,7 @@ export class ApiServer {
             errMsg = error.message ? error.message : error.toString();
         }
         console.error(errMsg);
+        this.loggerService.logError(errMsg)
         return Observable.throw(errMsg);
     }
 }

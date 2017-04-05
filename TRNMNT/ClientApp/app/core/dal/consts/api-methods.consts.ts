@@ -5,5 +5,6 @@ export const ApiMethods = Object.freeze({
         ageDivisions: '/ageDivisions/',
         beltDivisions: '/beltDivisions',
         categories: 'api/categories'
-    }
+    },
+    log: "/api/log"
 });

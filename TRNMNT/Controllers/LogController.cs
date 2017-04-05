@@ -1,12 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace TRNMNT.Controllers
 {
+    [Route("api/[controller]")]
     public class LogController : Controller
     {
-        public IActionResult Index()
+        
+        private readonly ILogger logger;
+
+        public LogController(ILogger<LogController> logger)
         {
-            return View();
+            this.logger = logger;
+        }   
+        
+        [HttpPost]
+        public IActionResult Post([FromBody]string message)
+        {
+            logger.LogError(message);
+            return Ok();
         }
 
         public IActionResult Error()
