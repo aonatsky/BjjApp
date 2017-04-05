@@ -42,11 +42,7 @@ export class DataApiService extends DataService {
 
         private processResponse(res: Response) {  
              return res;
-            
-        }
-
-
-
+         }
 
         public uploadFighterList(file: any): Observable<any> {
             throw new Error('Method not implemented.');
