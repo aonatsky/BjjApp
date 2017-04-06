@@ -1,4 +1,4 @@
-import {BeltDivision} from '../../model/belt-division.model';
+import { BeltDivision } from '../../model/belt-division.model';
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
 import { DataService } from '../contracts/data.service'
@@ -17,69 +17,57 @@ import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataApiService extends DataService {
-        constructor(private apiServer: ApiServer, private logger: LoggerService) {
+    constructor(private apiServer: ApiServer, private logger: LoggerService) {
         super()
     }
 
-      
-        public getCategories(): Observable<Category[]> {
-            return this.apiServer.get(ApiMethods.tournament.categories)
-            .map((response:Response) => this.processResponse(response))
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
-        }
 
-        public addCategory(category: Category): any {
-            return this.apiServer.post(ApiMethods.tournament.categories,category)
-            .map((response:Response) => this.processResponse(response))
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
-        }
+    public getCategories(): Observable<Category[]> {
+        return this.apiServer.get(ApiMethods.tournament.categories)
+    }
 
-        public updateCategory(category: Category): any {
-            return this.apiServer.put(ApiMethods.tournament.categories,category)
-            .map((response:Response) => this.processResponse(response))
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
-        }
+    public addCategory(category: Category): any {
+        return this.apiServer.post(ApiMethods.tournament.categories, category)
+    }
 
-        private processResponse(res: Response) {  
-             return res;
-         }
+    public updateCategory(category: Category): any {
+        return this.apiServer.put(ApiMethods.tournament.categories, category)
+    }
 
-        public uploadFighterList(file: any): Observable<any> {
-            throw new Error('Method not implemented.');
-        }
-    
-    public getFigters(filter:FighterFilterModel): Observable<Fighter[]> {
+    public deleteCategory(category: Category): any {
+        return this.apiServer.delete(ApiMethods.tournament.categories, category)
+    }
+
+    private processResponse(res: Response) {
+        return res;
+    }
+
+    public uploadFighterList(file: any): Observable<any> {
+        throw new Error('Method not implemented.');
+    }
+
+    public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
         return this.apiServer.get(ApiMethods.tournament.fighters)
-            .map(response => { return response.data })
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
     }
 
 
-    private handleErrorResponse(response:  any): Observable<any> {
-        let data: any =  response;
+    private handleErrorResponse(response: any): Observable<any> {
+        let data: any = response;
         return Observable.throw(data);
     }
 
     public getWeightDivisions(): Observable<WeightDivision[]> {
-         return this.apiServer.get(ApiMethods.tournament.fighters)
-            .map(response => { return response.data })
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+        return this.apiServer.get(ApiMethods.tournament.fighters)
     }
 
     public getFights(fightListID: AAGUID): Observable<Fight[]> {
-         return this.apiServer.get(ApiMethods.tournament.ageDivisions)
-            .map(response => { return response.data })
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+        return this.apiServer.get(ApiMethods.tournament.ageDivisions)
     }
-    
+
     public getAgeDivisions(): Observable<AgeDivision[]> {
-         return this.apiServer.get(ApiMethods.tournament.ageDivisions)
-            .map(response => { return response.data })
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+        return this.apiServer.get(ApiMethods.tournament.ageDivisions)
     }
     public getBeltDivisions(): Observable<BeltDivision[]> {
-         return this.apiServer.get(ApiMethods.tournament.ageDivisions)
-            .map(response => { return response.data })
-            .catch(errorResponse => this.handleErrorResponse(errorResponse));
+        return this.apiServer.get(ApiMethods.tournament.ageDivisions)
     }
 }

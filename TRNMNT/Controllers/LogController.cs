@@ -6,18 +6,19 @@ namespace TRNMNT.Controllers
     [Route("api/[controller]")]
     public class LogController : Controller
     {
-        
+
         private readonly ILogger logger;
 
         public LogController(ILogger<LogController> logger)
         {
             this.logger = logger;
-        }   
-        
+        }
+
         [HttpPost]
-        public IActionResult Post([FromBody]string message)
+        public IActionResult Post([FromBody]ILogModel log)
         {
-            logger.LogError(message);
+            
+            logger.LogError(log.Message);
             return Ok();
         }
 
@@ -26,6 +27,11 @@ namespace TRNMNT.Controllers
         {
 
             return Ok();
+        }
+        public interface ILogModel
+        {
+            string LogLevel { get; set; }
+            string Message { get; set; }
         }
     }
 }

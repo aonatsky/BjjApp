@@ -16,9 +16,9 @@ export class ApiServer {
     }
 
     public post(name: string, model: any): Observable<any> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions();
-        options.headers = headers;
+        let options = new RequestOptions({
+            headers: new Headers({ 'Content-Type': 'application/json' })
+        });
         let body = JSON.stringify(model);
         return this.http.post(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
@@ -28,8 +28,13 @@ export class ApiServer {
         return this.http.post(name, body).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
 
-
-
+    public delete(name: string, model: any): Observable<any> {
+        let options = new RequestOptions({
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify(model)
+        });
+        return this.http.delete(name, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
+    }
 
     private processResponse(response: Response): Observable<any> {
         let body = response.json();
@@ -40,9 +45,7 @@ export class ApiServer {
         // In a real world app, you might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
-            const body = error.json() || '';
-            const err = body.error || JSON.stringify(body);
-            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+            errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
