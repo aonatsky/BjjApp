@@ -4,7 +4,7 @@ export const ApiMethods = Object.freeze({
         weightDivisions: '/weightDivisions/',
         ageDivisions: '/ageDivisions/',
         beltDivisions: '/beltDivisions',
-        categories: 'api/categories'
+        categories: 'api/category',
     },
-    log: "/api/log"
+    log: "api/log"
 });

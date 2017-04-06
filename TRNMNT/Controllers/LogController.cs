@@ -21,9 +21,11 @@ namespace TRNMNT.Controllers
             return Ok();
         }
 
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult Get()
         {
-            return View();
+
+            return Ok();
         }
     }
 }
