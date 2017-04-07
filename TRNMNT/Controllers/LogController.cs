@@ -15,7 +15,7 @@ namespace TRNMNT.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]ILogModel log)
+        public IActionResult Post([FromBody]LogModel log)
         {
             
             logger.LogError(log.Message);
@@ -28,10 +28,10 @@ namespace TRNMNT.Controllers
 
             return Ok();
         }
-        public interface ILogModel
+        public class LogModel
         {
-            string LogLevel { get; set; }
-            string Message { get; set; }
+            public string Level { get; set; }
+            public string Message { get; set; }
         }
     }
 }
