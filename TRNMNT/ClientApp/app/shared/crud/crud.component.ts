@@ -14,9 +14,9 @@ export class CrudComponent implements OnInit {
 
     }
 
-    @Input() entities: any[]
+    @Input() entities: any[] = [];
     @Input() title: string = "";
-    @Input() columns: CrudColumn[];
+    @Input() columns: CrudColumn[] = [];
 
     @Output() onAdd: EventEmitter<any> = new EventEmitter<any>();
     @Output() onUpdate: EventEmitter<any> = new EventEmitter<any>();

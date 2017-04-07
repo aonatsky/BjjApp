@@ -23,7 +23,15 @@ export class DataApiService extends DataService {
 
 
     public getCategories(): Observable<Category[]> {
-        return this.apiServer.get(ApiMethods.tournament.categories)
+        return this.apiServer.get(ApiMethods.tournament.categories).map(r => this.getArray<Category>(r))
+    }
+
+    private getArray<T>(result: any):T[] {
+        if (result == {}) {
+            let arrat = T[];
+            return T[];
+        }
+        return ;
     }
 
     public addCategory(category: Category): any {
@@ -36,10 +44,6 @@ export class DataApiService extends DataService {
 
     public deleteCategory(category: Category): any {
         return this.apiServer.delete(ApiMethods.tournament.categories, category)
-    }
-
-    private processResponse(res: Response) {
-        return res;
     }
 
     public uploadFighterList(file: any): Observable<any> {

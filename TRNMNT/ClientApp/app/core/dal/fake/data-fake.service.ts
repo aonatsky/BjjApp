@@ -11,17 +11,30 @@ import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataFakeService extends DataService {
-        
-        public getCategories(): Observable<Category[]> {
-            return Observable.of(this.categories);
-        }
-
+    
     constructor() {
         super();
     }
 
+    public addCategory(category: Category) {
+        throw new Error('Method not implemented.');
+    }
+    public updateCategory(category: Category) {
+        throw new Error('Method not implemented.');
+    }
+    public deleteCategory(category: Category) {
+        throw new Error('Method not implemented.');
+    }
+
+
+    public getCategories(): Observable<Category[]> {
+        return Observable.of(this.categories);
+    }
+
+    
+    
     public uploadFighterList(file: any): Observable<any> {
-      return Observable.of(this.fighters);
+        return Observable.of(this.fighters);
     }
 
 
@@ -63,7 +76,7 @@ export class DataFakeService extends DataService {
     ]
 
     categories = [
-        new Category(0,"kids")
+        new Category(0, "kids")
     ]
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {

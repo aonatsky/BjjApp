@@ -1,4 +1,4 @@
-<div *ngIf='entities' class='datatable'>
+<div class='datatable'>
 <h3 class="first">{{title}}</h3>
     <p-dataTable [value]="entities" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)"
         [responsive]="true">

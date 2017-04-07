@@ -39,8 +39,8 @@ export class ApiServer {
     private processResponse(response: Response): Observable<any> {
         let body = response.json();
         return body.data || {};
-
     }
+
     private handleError(error: Response | any) {
         // In a real world app, you might use a remote logging infrastructure
         let errMsg: string;
