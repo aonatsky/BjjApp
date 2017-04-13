@@ -52,17 +52,17 @@ namespace TRNMNT.Core.Services
                             {
                                 team = new Team()
                                 {
-                                    TeamID = Guid.NewGuid(),
+                                    TeamId = Guid.NewGuid(),
                                     Name = GetTeamName(sheet,i)
                                 };
                                 teamsToAdd.Add(team);
                             }
                             fighters.Add(new Fighter()
                             {
-                                FighterID = Guid.NewGuid(),
+                                FighterId = Guid.NewGuid(),
                                 FirstName = GetFirstName(sheet,i),
                                 LastName = GetLastName(sheet,i),
-                                TeamID = team.TeamID
+                                TeamId = team.TeamId
                             });
 
                             teamRepository.AddRange(teamsToAdd);

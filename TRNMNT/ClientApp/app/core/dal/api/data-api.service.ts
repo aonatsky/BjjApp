@@ -26,12 +26,12 @@ export class DataApiService extends DataService {
         return this.apiServer.get(ApiMethods.tournament.categories).map(r => this.getArray<Category>(r))
     }
 
-    private getArray<T>(result: any):T[] {
-        if (result == {}) {
-            let arrat = T[];
-            return T[];
+    private getArray<T>(response: any):T[] {
+        let result = response.json();
+        if (result.length == 0) {
+            return [];
         }
-        return ;
+        return result;
     }
 
     public addCategory(category: Category): any {

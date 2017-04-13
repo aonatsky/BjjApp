@@ -43,7 +43,7 @@ namespace TRNMNT.Core.Services.impl
                             
                             fighters.Add(new Fighter()
                             {
-                                FighterID = Guid.NewGuid(),
+                                FighterId = Guid.NewGuid(),
                                 FirstName = sheet.Cells[i, 1].GetValue<string>(),
                                 LastName = sheet.Cells[i, 2].GetValue<string>()
 

@@ -52,8 +52,8 @@ private IEnumerable<Fight> GetFightsForLevel(int level, IEnumerable<Fight> paren
     var result = new List<Fight>();
     foreach (var f in parentLevelFights.Where(pf => pf.Level == level-1))
     {
-        result.Add(new Fight(level,f.FightID));
-        result.Add(new Fight(level,f.FightID));
+        result.Add(new Fight(level,f.FightId));
+        result.Add(new Fight(level,f.FightId));
     }
     return result;
 }

@@ -8,21 +8,21 @@ namespace TRNMNT.Core.Data.Entities
     public class Fight
     {
         public Fight(int level, Guid? nextFightID){
-            FightID = Guid.NewGuid();
+            FightId = Guid.NewGuid();
             Level = level;
             IsCompleted = false;
-            NextFightID = nextFightID;
+            NextFightId = nextFightID;
         }
         
         [Key]
-        public Guid FightID { get; set; }
+        public Guid FightId { get; set; }
         public int Level { get; set; }
-        public Guid? NextFightID {get;set;}
-        public Guid? WhiteGIFighterID {get;set;}
-        public Guid? BlueGIFighterID {get;set;}
-        public Guid FightListID {get;set;}
+        public Guid? NextFightId {get;set;}
+        public Guid? WhiteGIFighterId {get;set;}
+        public Guid? BlueGIFighterId {get;set;}
+        public Guid FightListId {get;set;}
         public bool IsCompleted {get;set;}
-        public Guid? WinnerID {get;set;}
+        public Guid? WinnerId {get;set;}
         public String Result {get;set;} 
               
         

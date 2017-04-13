@@ -8,10 +8,10 @@ namespace TRNMNT.Core.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid FighterID { get; set; }
+        public Guid FighterId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
-        public Guid TeamID { get; set; }
+        public Guid TeamId { get; set; }
 
 
 

@@ -24,8 +24,11 @@ export class ApiServer {
     }
 
     public put(name: string, model: any): Observable<any> {
+         let options = new RequestOptions({
+            headers: new Headers({ 'Content-Type': 'application/json' })
+        });
         let body = JSON.stringify(model);
-        return this.http.post(name, body).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
+        return this.http.put(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
 
     public delete(name: string, model: any): Observable<any> {
@@ -36,9 +39,9 @@ export class ApiServer {
         return this.http.delete(name, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
 
-    private processResponse(response: Response): Observable<any> {
-        let body = response.json();
-        return body.data || {};
+    private processResponse(response: any): Observable<any> {
+        // add additional processing
+        return response;
     }
 
     private handleError(error: Response | any) {

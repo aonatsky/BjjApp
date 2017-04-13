@@ -59,7 +59,7 @@ namespace TRNMNT.Controllers
         }
 
         [HttpDelete]
-        public String Delete(T entity)
+        public String Delete([FromBody]T entity)
         {
             Response.StatusCode = 200;
 

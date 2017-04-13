@@ -9,7 +9,7 @@ namespace TRNMNT.Core.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid WeightDivisionID { get; set; }
+        public Guid WeightDivisionId { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
         public string Descritpion { get; set; }

@@ -7,7 +7,7 @@ namespace TRNMNT.Core.Data.Entities
     public class Team
     {
         [Key]
-        public Guid TeamID { get; set; }
+        public Guid TeamId { get; set; }
         public String Name { get; set; }
         public String Description { get; set; }
 

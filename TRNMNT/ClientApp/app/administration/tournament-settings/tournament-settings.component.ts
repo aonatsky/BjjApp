@@ -13,17 +13,17 @@ import { CrudColumn } from "../../shared/crud/crud.component";
 export class TournamentSettingsComponent implements OnInit {
 
     categoryColumns: CrudColumn[] = [
-        { displayName: "ID", propertyName: "categoryId", isEditable: false },
+        { displayName: "Id", propertyName: "categoryId", isEditable: false },
         { displayName: "Name", propertyName: "name", isEditable: true }
     ];
 
     ngOnInit(): void {
-        this.dataService.getCategories().subscribe(data => this.initCategories(data))
+        this.refreshCategories();
     }
 
 
-    initCategories(data) {
-        this.categories = data;
+    refreshCategories() {
+        this.dataService.getCategories().subscribe(data => this.categories = data)
     }
 
 
@@ -33,18 +33,16 @@ export class TournamentSettingsComponent implements OnInit {
     }
 
     addCategory(category: Category) {
-        this.dataService.addCategory(category);
+        this.dataService.addCategory(category).subscribe(() => this.refreshCategories());
     }
 
     updateCategory(category: Category) {
-        this.dataService.updateCategory(category);
-
+        this.dataService.updateCategory(category).subscribe(() => this.refreshCategories());
     }
 
     deleteCategory(category: Category) {
-        this.dataService.deleteCategory(category);
+        this.dataService.deleteCategory(category).subscribe(() =>  this.refreshCategories());
     }
-
 
 
 

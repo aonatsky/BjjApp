@@ -6,8 +6,8 @@ namespace TRNMNT.Core.Data.Entities
     public class Tournament
     {
         [Key]
-        public Guid TournamentID { get; set; }
-        public Guid OwnerID { get; set; }
+        public Guid TournamentId { get; set; }
+        public Guid OwnerId { get; set; }
         public DateTime Date { get; set; }
         public string Descritpion { get; set; }
         

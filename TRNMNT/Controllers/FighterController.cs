@@ -69,10 +69,10 @@ namespace TRNMNT.Controllers
         public IEnumerable<WeightDivision> GetWeightDivisionses()
         {
             return new List<WeightDivision>(){
-                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Feather", Weight = 60},
-                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Light", Weight = 70},
-                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Medium", Weight = 80},
-                new WeightDivision(){WeightDivisionID = Guid.NewGuid(), Name = "Heavy", Weight = 90}
+                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Feather", Weight = 60},
+                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Light", Weight = 70},
+                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Medium", Weight = 80},
+                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Heavy", Weight = 90}
             };
         }
 
