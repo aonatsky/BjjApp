@@ -21,13 +21,13 @@ namespace TRNMNT.Core.Data.Repositories
         public IQueryable<T> GetAll()
         {
              Console.WriteLine($"Get all is called");
-             throw new NotImplementedException();
+             return new List<T>().AsQueryable();
         }
 
         public T GetByID<Guid>(Guid id)
         {
             Console.WriteLine($"Entity with id {id} is called");
-             throw new NotImplementedException();
+            return null;
         }
 
         public void Update(T entity)
