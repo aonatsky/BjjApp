@@ -8,4 +8,13 @@
 (onDelete)="deleteCategory($event)"
 >
 </crud>
+<crud 
+[entities] = 'weightDivisions' 
+[title]="'Weight Divisions'" 
+[columns]="weightDivisionColumns" 
+(onAdd)="addWeightDivision($event)" 
+(onUpdate)="updateWeightDivision($event)" 
+(onDelete)="deleteWeightDivision($event)"
+>
+</crud>
 

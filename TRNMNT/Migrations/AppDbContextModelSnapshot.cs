@@ -19,7 +19,7 @@ namespace TRNMNT.Migrations
 
             modelBuilder.Entity("TRNMNT.Core.Data.Entities.Category", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
@@ -34,7 +34,9 @@ namespace TRNMNT.Migrations
                     b.Property<Guid>("FighterId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CategoryId");
+                    b.Property<Guid>("CategoryId");
+
+                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("FirstName");
 
@@ -42,11 +44,15 @@ namespace TRNMNT.Migrations
 
                     b.Property<Guid>("TeamId");
 
+                    b.Property<Guid>("WeightDivisionId");
+
                     b.HasKey("FighterId");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("TeamId");
+
+                    b.HasIndex("WeightDivisionId");
 
                     b.ToTable("Fighter");
                 });
@@ -84,12 +90,18 @@ namespace TRNMNT.Migrations
             modelBuilder.Entity("TRNMNT.Core.Data.Entities.Fighter", b =>
                 {
                     b.HasOne("TRNMNT.Core.Data.Entities.Category", "Category")
-                        .WithMany("Fighter")
-                        .HasForeignKey("CategoryId");
+                        .WithMany("Fighters")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TRNMNT.Core.Data.Entities.Team", "Team")
                         .WithMany("Fighters")
                         .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TRNMNT.Core.Data.Entities.WeightDivision", "WeightDivision")
+                        .WithMany("Fighters")
+                        .HasForeignKey("WeightDivisionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

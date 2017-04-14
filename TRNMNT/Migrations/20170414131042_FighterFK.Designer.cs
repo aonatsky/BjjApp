@@ -8,8 +8,8 @@ using TRNMNT.Core.Data;
 namespace TRNMNT.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20170405082036_IdentityAdded")]
-    partial class IdentityAdded
+    [Migration("20170414131042_FighterFK")]
+    partial class FighterFK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,55 +20,59 @@ namespace TRNMNT.Migrations
 
             modelBuilder.Entity("TRNMNT.Core.Data.Entities.Category", b =>
                 {
-                    b.Property<int>("CategoryID")
+                    b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
-                    b.HasKey("CategoryID");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Category");
                 });
 
             modelBuilder.Entity("TRNMNT.Core.Data.Entities.Fighter", b =>
                 {
-                    b.Property<Guid>("FighterID")
+                    b.Property<Guid>("FighterId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CategoryID");
+                    b.Property<Guid>("CategoryId");
 
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
-                    b.Property<Guid>("TeamID");
+                    b.Property<Guid>("TeamId");
 
-                    b.HasKey("FighterID");
+                    b.Property<Guid>("WeightDivisionId");
 
-                    b.HasIndex("CategoryID");
+                    b.HasKey("FighterId");
 
-                    b.HasIndex("TeamID");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("WeightDivisionId");
 
                     b.ToTable("Fighter");
                 });
 
             modelBuilder.Entity("TRNMNT.Core.Data.Entities.Team", b =>
                 {
-                    b.Property<Guid>("TeamID")
+                    b.Property<Guid>("TeamId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description");
 
                     b.Property<string>("Name");
 
-                    b.HasKey("TeamID");
+                    b.HasKey("TeamId");
 
                     b.ToTable("Team");
                 });
 
             modelBuilder.Entity("TRNMNT.Core.Data.Entities.WeightDivision", b =>
                 {
-                    b.Property<Guid>("WeightDivisionID")
+                    b.Property<Guid>("WeightDivisionId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Descritpion");
@@ -77,7 +81,7 @@ namespace TRNMNT.Migrations
 
                     b.Property<int>("Weight");
 
-                    b.HasKey("WeightDivisionID");
+                    b.HasKey("WeightDivisionId");
 
                     b.ToTable("WeightDivision");
                 });
@@ -85,12 +89,18 @@ namespace TRNMNT.Migrations
             modelBuilder.Entity("TRNMNT.Core.Data.Entities.Fighter", b =>
                 {
                     b.HasOne("TRNMNT.Core.Data.Entities.Category", "Category")
-                        .WithMany("Fighter")
-                        .HasForeignKey("CategoryID");
+                        .WithMany("Fighters")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TRNMNT.Core.Data.Entities.Team", "Team")
                         .WithMany("Fighters")
-                        .HasForeignKey("TeamID")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TRNMNT.Core.Data.Entities.WeightDivision", "WeightDivision")
+                        .WithMany("Fighters")
+                        .HasForeignKey("WeightDivisionId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

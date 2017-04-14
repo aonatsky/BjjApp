@@ -2,12 +2,13 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using TRNMNT.Core.Enum;
 using Microsoft.AspNetCore.Http;
+using TRNMNT.Core.Models;
 
 namespace TRNMNT.Core.Services
 {
     public abstract class FileService
     {
-        protected abstract FileProcessResultEnum PostUploadProcess(Stream stream);
+        protected abstract FileProcessResult PostUploadProcess(Stream stream);
         
         protected abstract string GetFilePath(string rootPath);
         
@@ -24,19 +25,19 @@ namespace TRNMNT.Core.Services
         }
 
 
-        public FileProcessResultEnum ProcessFile(IFormFile file)
+        public FileProcessResult ProcessFile(IFormFile file)
         {
             if (file == null)
             {
-                return FileProcessResultEnum.FileIsNull;
+                return new FileProcessResult(FileProcessResultEnum.FileIsNull);
             }
             if (file.Length == 0)
             {
-                return FileProcessResultEnum.FileIsEmpty;
+                return new FileProcessResult(FileProcessResultEnum.FileIsEmpty);
             }
 
             var postUploadProcessResult = PostUploadProcess(file.OpenReadStream());
-            if (postUploadProcessResult == FileProcessResultEnum.Success)
+            if (postUploadProcessResult.Result == FileProcessResultEnum.Success || postUploadProcessResult.Result == FileProcessResultEnum.SuccessWithErrors)
             {
                 SaveFile(file);
             }

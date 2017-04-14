@@ -9,10 +9,10 @@ namespace TRNMNT.Core.Data.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public String Name { get; set; }
-      
-        public ICollection<Fighter> Fighter {get;set;}
+
+        public ICollection<Fighter> Fighters {get;set;}
 
     }
 }

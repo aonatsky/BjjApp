@@ -37,13 +37,7 @@ namespace TRNMNT.Controllers
         {
             try
             {
-                
                 return fileService.ProcessFile(file).ToString();
-                // var fileProcessMessage = fileService.ValidateFile(file,FileTypeEnum.FighterList);
-                // if (fileProcessMessage == FileProcessResultEnum.Success)
-                // {
-                //     return fighterService.ProcessFighterListFromFile(fileService.GetStream(file)) ? "Success":"Falied";
-                // }                               
             }
             catch (Exception ex)
             {

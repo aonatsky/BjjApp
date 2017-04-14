@@ -11,7 +11,17 @@ import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataFakeService extends DataService {
-    
+        public addWeightDivision(weightDivision: WeightDivision) {
+            throw new Error('Method not implemented.');
+        }
+    public updateWeightDivision(weightDivision: WeightDivision) {
+        throw new Error('Method not implemented.');
+    }
+    public deleteWeightDivision(weightDivision: WeightDivision) {
+        throw new Error('Method not implemented.');
+    }
+
+
     constructor() {
         super();
     }
@@ -51,9 +61,9 @@ export class DataFakeService extends DataService {
     ];
 
     weightDivisions = [
-        new WeightDivision(0, "Light", 60),
-        new WeightDivision(1, "Middle", 80),
-        new WeightDivision(2, "Heavy", 90)
+        new WeightDivision("4c571d9a-3398-4677-831d-3373d270ec11", "Light", 60),
+        new WeightDivision("1e3602fc-687e-4ee7-a4a4-6202b3c0af54", "Middle", 80),
+        new WeightDivision("1e3602fc-687e-4ee7-a4a4-6202b3c0af54", "Heavy", 90)
     ]
 
     fights = [
@@ -76,7 +86,7 @@ export class DataFakeService extends DataService {
     ]
 
     categories = [
-        new Category(0, "kids")
+        new Category("4c571d9a-3398-4677-831d-3373d270ec12", "kids")
     ]
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {

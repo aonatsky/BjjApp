@@ -1,10 +1,10 @@
-import { Input, Component, ViewChild } from '@angular/core';
+import { Input, Component, ViewChild, EventEmitter, Output } from '@angular/core';
 import { DataService } from "../../core/dal/contracts/data.service";
 
 
 @Component({
     selector: 'file-upload',
-    template: `<input #fileInput type="file"/><button (click)="addFile()">Add</button>`
+    templateUrl: './file-upload.component.html'
 
 })
 
@@ -12,11 +12,12 @@ import { DataService } from "../../core/dal/contracts/data.service";
 export class FileUpload {
     @Input() actionUrl: string;
     @ViewChild("fileInput") fileInput;
+    @Output() onUpload: EventEmitter<any> = new EventEmitter<any>();
 
     /**
      *
      */
-    constructor(private dataService: DataService) {
+    constructor() {
 
     }
 
@@ -24,11 +25,12 @@ export class FileUpload {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            this.dataService
-                .uploadFighterList(fileToUpload)
-                .subscribe(res => {
-                    console.log(res);
-                });
+            this.onUpload.emit(fileToUpload);
+            // this.dataService
+            //     .uploadFighterList(fileToUpload)
+            //     .subscribe(res => {
+            //         console.log(res);
+                // });
         }
     }
 }

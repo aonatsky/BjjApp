@@ -1,12 +1,13 @@
 export class WeightDivision {
-    weightDivisionId: number;
+    weightDivisionId: AAGUID;
     name: string;
     weight: number;
+    description: string;
 
     /**
      *
      */
-    constructor(id:number, name: string, weight: number) { 
+    constructor(id:AAGUID, name: string, weight: number) { 
         this.weightDivisionId = id;
         this.name = name;
         this.weight = weight;

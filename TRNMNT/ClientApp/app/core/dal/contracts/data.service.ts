@@ -20,4 +20,7 @@ export abstract class DataService {
     public abstract addCategory(category: Category): any;
     public abstract updateCategory(category: Category): any;
     public abstract deleteCategory(category: Category): any;
+    public abstract addWeightDivision(weightDivision: WeightDivision): any;
+    public abstract updateWeightDivision(weightDivision: WeightDivision): any;
+    public abstract deleteWeightDivision(weightDivision: WeightDivision): any;
 }

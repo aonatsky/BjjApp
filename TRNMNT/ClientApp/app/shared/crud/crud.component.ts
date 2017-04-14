@@ -56,8 +56,7 @@ export class CrudComponent implements OnInit {
         this.displayDialog = true;
     }
 
-     isIdColumn(column:CrudColumn):boolean
-    {
+    isIdColumn(column: CrudColumn): boolean {
         return column.propertyName.endsWith('Id');
     }
 

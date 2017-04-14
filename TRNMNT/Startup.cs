@@ -45,7 +45,6 @@ namespace TRNMNT
             services.AddScoped(typeof(IWeightDivisionService), typeof(WeightDivisionService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(FighterListFileService));
-            services.AddScoped(typeof(ITournamentSettingsService),typeof(TournamentSettingsService));
             #endregion
 
 

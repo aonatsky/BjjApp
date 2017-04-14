@@ -17,21 +17,30 @@ import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataApiService extends DataService {
+        
+
     constructor(private apiServer: ApiServer, private logger: LoggerService) {
         super()
     }
 
-
-    public getCategories(): Observable<Category[]> {
-        return this.apiServer.get(ApiMethods.tournament.categories).map(r => this.getArray<Category>(r))
-    }
-
-    private getArray<T>(response: any):T[] {
+    //Common
+    private getArray<T>(response: any): T[] {
         let result = response.json();
         if (result.length == 0) {
             return [];
         }
         return result;
+    }
+
+     private handleErrorResponse(response: any): Observable<any> {
+        let data: any = response;
+        return Observable.throw(data);
+    }
+
+
+    //Categories
+    public getCategories(): Observable<Category[]> {
+        return this.apiServer.get(ApiMethods.tournament.categories).map(r => this.getArray<Category>(r))
     }
 
     public addCategory(category: Category): any {
@@ -46,23 +55,33 @@ export class DataApiService extends DataService {
         return this.apiServer.delete(ApiMethods.tournament.categories, category)
     }
 
+
+    //Fighters
     public uploadFighterList(file: any): Observable<any> {
-        throw new Error('Method not implemented.');
+        return this.apiServer.postFile(ApiMethods.tournament.fighters.uploadlist,file)
     }
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
-        return this.apiServer.get(ApiMethods.tournament.fighters)
+        return this.apiServer.get(ApiMethods.tournament.fighters.fighters)
     }
 
-
-    private handleErrorResponse(response: any): Observable<any> {
-        let data: any = response;
-        return Observable.throw(data);
-    }
-
+    //WeightDivisions
+    
     public getWeightDivisions(): Observable<WeightDivision[]> {
-        return this.apiServer.get(ApiMethods.tournament.fighters)
+         return this.apiServer.get(ApiMethods.tournament.weightDivisions).map(r => this.getArray<WeightDivision>(r))
     }
+    public addWeightDivision(weightDivision: WeightDivision) {
+            return this.apiServer.post(ApiMethods.tournament.weightDivisions, weightDivision)
+        }
+    public updateWeightDivision(weightDivision: WeightDivision) {
+        return this.apiServer.put(ApiMethods.tournament.weightDivisions, weightDivision)
+    }
+    public deleteWeightDivision(weightDivision: WeightDivision) {
+        return this.apiServer.delete(ApiMethods.tournament.weightDivisions, weightDivision)
+    }
+
+    //Obsolete
+    
 
     public getFights(fightListID: AAGUID): Observable<Fight[]> {
         return this.apiServer.get(ApiMethods.tournament.ageDivisions)

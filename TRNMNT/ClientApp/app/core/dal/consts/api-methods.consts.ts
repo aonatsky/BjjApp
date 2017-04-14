@@ -1,7 +1,10 @@
 export const ApiMethods = Object.freeze({
     tournament: {
-        fighters: '/fighters/',
-        weightDivisions: '/weightDivisions/',
+        fighters: {
+            fighters: "api/fighter",
+            uploadlist: "api/fighter/uploadlist"
+        },
+        weightDivisions: 'api/weightdivision/',
         ageDivisions: '/ageDivisions/',
         beltDivisions: '/beltDivisions',
         categories: 'api/category',

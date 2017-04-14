@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TRNMNT.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,13 +16,12 @@ namespace TRNMNT.Migrations
                 schema: "trnmnt",
                 columns: table => new
                 {
-                    CategoryID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CategoryId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.CategoryID);
+                    table.PrimaryKey("PK_Category", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,13 +29,13 @@ namespace TRNMNT.Migrations
                 schema: "trnmnt",
                 columns: table => new
                 {
-                    TeamID = table.Column<Guid>(nullable: false),
+                    TeamId = table.Column<Guid>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Team", x => x.TeamID);
+                    table.PrimaryKey("PK_Team", x => x.TeamId);
                 });
 
             migrationBuilder.CreateTable(
@@ -45,14 +43,14 @@ namespace TRNMNT.Migrations
                 schema: "trnmnt",
                 columns: table => new
                 {
-                    WeightDivisionID = table.Column<Guid>(nullable: false),
+                    WeightDivisionId = table.Column<Guid>(nullable: false),
                     Descritpion = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Weight = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeightDivision", x => x.WeightDivisionID);
+                    table.PrimaryKey("PK_WeightDivision", x => x.WeightDivisionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,28 +58,28 @@ namespace TRNMNT.Migrations
                 schema: "trnmnt",
                 columns: table => new
                 {
-                    FighterID = table.Column<Guid>(nullable: false),
-                    CategoryID = table.Column<int>(nullable: true),
+                    FighterId = table.Column<Guid>(nullable: false),
+                    CategoryID = table.Column<Guid>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    TeamID = table.Column<Guid>(nullable: false)
+                    TeamId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Fighter", x => x.FighterID);
+                    table.PrimaryKey("PK_Fighter", x => x.FighterId);
                     table.ForeignKey(
                         name: "FK_Fighter_Category_CategoryID",
                         column: x => x.CategoryID,
                         principalSchema: "trnmnt",
                         principalTable: "Category",
-                        principalColumn: "CategoryID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Fighter_Team_TeamID",
-                        column: x => x.TeamID,
+                        name: "FK_Fighter_Team_TeamId",
+                        column: x => x.TeamId,
                         principalSchema: "trnmnt",
                         principalTable: "Team",
-                        principalColumn: "TeamID",
+                        principalColumn: "TeamId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -92,10 +90,10 @@ namespace TRNMNT.Migrations
                 column: "CategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fighter_TeamID",
+                name: "IX_Fighter_TeamId",
                 schema: "trnmnt",
                 table: "Fighter",
-                column: "TeamID");
+                column: "TeamId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
