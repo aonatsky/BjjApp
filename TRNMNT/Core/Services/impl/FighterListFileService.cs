@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using OfficeOpenXml;
 using System.Linq;
 using TRNMNT.Core.Models;
-using System.Collections;
-using System.Globalization;
 
 namespace TRNMNT.Core.Services
 {
@@ -32,15 +30,18 @@ namespace TRNMNT.Core.Services
             this.weightDivisionRepository = weightDivisionRepository;
         }
 
-        private const string FIGHTERLIST_FOLDER = "\\FighterList";
-        private const string FIGHTERLIST_FILE = "\\List";
+        private const string FIGHTERLIST_FOLDER = "FighterList";
+        private const string FIGHTERLIST_FILE = "List";
         private const string DATE_FORMAT = "dd-mm-yy";
-
-
 
         protected override string GetFilePath(string rootPath)
         {
-            return Path.Combine(rootPath, FIGHTERLIST_FOLDER, $"{FIGHTERLIST_FILE}_{DateTime.UtcNow.ToString("yyyy.mm.dd")}");
+            var directoryPath = Path.Combine(rootPath, FIGHTERLIST_FOLDER);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+            return Path.Combine(rootPath, FIGHTERLIST_FOLDER, $"{FIGHTERLIST_FILE}_{DateTime.UtcNow.ToString("yyyy.mm.dd")}.xlsx");
         }
 
 
@@ -74,7 +75,7 @@ namespace TRNMNT.Core.Services
                             };
 
                             var dob = GetDateOfBirth(i);
-                            if(dob != null)
+                            if (dob != null)
                             {
                                 fighter.DateOfBirth = dob.Value;
                             }
@@ -86,15 +87,16 @@ namespace TRNMNT.Core.Services
                             }
 
                             //Comparison by full name and dob
-                            if(existingFighters.Any(f => comparer.Equals(f,fighter)))
+                            if (existingFighters.Any(f => comparer.Equals(f, fighter)))
                             {
                                 continue;
                             }
 
-                            
-                            
+
+
                             var category = GetCategory(GetCategoryName(i));
-                            if (category != null){
+                            if (category != null)
+                            {
                                 fighter.CategoryId = category.CategoryId;
                             }
                             else
@@ -103,7 +105,7 @@ namespace TRNMNT.Core.Services
                                 result.Message += $"Category {GetCategoryName(i)} is invalid ";
                                 continue;
                             }
-                            
+
 
                             var weightDivision = GetWeightDivision(GetWeightDivisionName(i));
                             if (weightDivision != null)
@@ -163,11 +165,12 @@ namespace TRNMNT.Core.Services
         private DateTime? GetDateOfBirth(int rowNumber)
         {
             //DateTime dob;
-            if (DateTime.TryParse(sheet.Cells[rowNumber, 3].GetValue<string>(),out var dob))
+            if (DateTime.TryParse(sheet.Cells[rowNumber, 3].GetValue<string>(), out var dob))
             {
                 return dob;
             }
-            else{
+            else
+            {
                 return null;
             }
         }

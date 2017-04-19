@@ -3,10 +3,12 @@
 >
 </fighter-filter>
 
-<div *ngIf="fighters" class="datatable">
-<p-dataTable [value]="fighters">
-    <p-column field="firstName" header="First Name"></p-column>
-    <p-column field="lastName" header="Last Name"></p-column>
-    <p-column field="team" header="Team"></p-column>
-</p-dataTable>
-</div>
+<crud 
+[entities] = 'fighters' 
+[title]="'Fighters'" 
+[columns]="weightDivisionColumns" 
+(onAdd)="addWeightDivision($event)" 
+(onUpdate)="updateWeightDivision($event)" 
+(onDelete)="deleteWeightDivision($event)"
+>
+</crud>

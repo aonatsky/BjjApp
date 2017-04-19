@@ -17,6 +17,7 @@ export class CrudComponent implements OnInit {
     @Input() entities: any[] = [];
     @Input() title: string = "";
     @Input() columns: CrudColumn[] = [];
+    @Input() readonly: boolean = false;
 
     @Output() onAdd: EventEmitter<any> = new EventEmitter<any>();
     @Output() onUpdate: EventEmitter<any> = new EventEmitter<any>();
@@ -31,9 +32,11 @@ export class CrudComponent implements OnInit {
 
 
     showDialogToAdd() {
+        if (!this.readonly) {
         this.newEntity = true;
-        this.entityToEdit = new Object();
-        this.displayDialog = true;
+            this.entityToEdit = new Object();
+            this.displayDialog = true;
+        }
     }
 
     save() {

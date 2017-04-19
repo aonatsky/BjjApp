@@ -49,15 +49,15 @@ export class DataFakeService extends DataService {
 
 
     fighters = [
-        new Fighter("Marcelo", "Garcia", "Alliance", 80, 37, "Elite"),
-        new Fighter("Saulo", "Ribeiro", "Ribeiro JJ", 80, 37, "Elite"),
-        new Fighter("Xandi", "Ribeiro", "Ribeiro JJ", 90, 33, "Elite"),
-        new Fighter("Braulio", "Estima", "Gracie Barra", 80, 25, "Elite"),
-        new Fighter("Victor", "Estima", "Gracie Barra", 90, 37, "Blue"),
-        new Fighter("Lucas", "Rocha", "ZRTeam", 80, 37, "White"),
-        new Fighter("Max", "Carvalho", "ZRTeam", 90, 25, "Blue"),
-        new Fighter("Bruno", "Malfacine", "Alliance", 60, 27, "White"),
-        new Fighter("Caio", "Terra", "CTA", 60, 16, "White")
+        new Fighter("Marcelo", "Garcia", "Alliance","1986-10-10","Elite"),
+        // new Fighter("Saulo", "Ribeiro", "Ribeiro JJ", 80, 37, "Elite"),
+        // new Fighter("Xandi", "Ribeiro", "Ribeiro JJ", 90, 33, "Elite"),
+        // new Fighter("Braulio", "Estima", "Gracie Barra", 80, 25, "Elite"),
+        // new Fighter("Victor", "Estima", "Gracie Barra", 90, 37, "Blue"),
+        // new Fighter("Lucas", "Rocha", "ZRTeam", 80, 37, "White"),
+        // new Fighter("Max", "Carvalho", "ZRTeam", 90, 25, "Blue"),
+        // new Fighter("Bruno", "Malfacine", "Alliance", 60, 27, "White"),
+        // new Fighter("Caio", "Terra", "CTA", 60, 16, "White")
     ];
 
     weightDivisions = [
@@ -90,34 +90,11 @@ export class DataFakeService extends DataService {
     ]
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
-        return Observable.of(this.fighters.filter(f => this.checkWeight(filter.weightDivisions, f) && this.checkAge(filter.ageDivisions, f) && this.checkBelt(filter.beltDivisions, f)));
+        return Observable.of(this.fighters);
 
     }
 
-    private checkWeight(weightDivisions: WeightDivision[], fighter: Fighter): boolean {
-        if (weightDivisions.length > 1) {
-            return true;
-        } else {
-            return fighter.weight == weightDivisions[0].weight;
-        };
-    }
-
-    private checkAge(ageDivision: AgeDivision[], fighter: Fighter): boolean {
-        if (ageDivision.length > 1) {
-            return true;
-        } else {
-            return fighter.age > ageDivision[0].age;
-        }
-    }
-
-    private checkBelt(beltDivision: BeltDivision[], fighter: Fighter): boolean {
-        if (beltDivision.length > 1) {
-            return true;
-        } else {
-            return fighter.belt == beltDivision[0].name;
-        };
-
-    }
+    
 
 
 

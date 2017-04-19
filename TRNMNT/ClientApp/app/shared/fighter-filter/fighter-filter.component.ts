@@ -1,3 +1,4 @@
+import {Category} from '../../core/model/category.model';
 
 import { AgeDivision } from '../../core/model/age-division.model';
 import { BeltDivision } from '../../core/model/belt-division.model';
@@ -18,15 +19,13 @@ import { DefaultValues } from '../../core/consts/default-values'
 export class FighterFilter implements OnInit {
 
     weightDivisions: WeightDivision[];
-    beltDivisions: BeltDivision[];
-    ageDivisions: AgeDivision[];
+    categories: Category[];
 
     weightDivisionDDLOptions: DropDownListOption[] = [];
-    ageDivisionDDLOptions: DropDownListOption[] = [];
-    beltDivisionDDLOptions: DropDownListOption[] = [];
+    categoryDDLOptions: DropDownListOption[] = [];
 
     @Output() onFilterChanged: EventEmitter<FighterFilterModel>
-    @Output() currentFilterValue: FighterFilterModel = new FighterFilterModel([], [], []);
+    @Output() currentFilterValue: FighterFilterModel = new FighterFilterModel([], []);
 
 
     constructor(private dataService: DataService) {
@@ -35,7 +34,7 @@ export class FighterFilter implements OnInit {
 
     ngOnInit() {
         this.getData();
-        this.currentFilterValue = new FighterFilterModel(this.weightDivisions, this.beltDivisions, this.ageDivisions);
+        this.currentFilterValue = new FighterFilterModel(this.weightDivisions, this.categories);
         this.setupFilters();
     }
 
@@ -50,22 +49,12 @@ export class FighterFilter implements OnInit {
         this.onFilterChanged.emit(this.currentFilterValue);
     }
 
-    ageSelect(value) {
-        if (value.name == DefaultValues.DROPDOWN_NAME_ANY) {
-            this.currentFilterValue.ageDivisions = this.ageDivisions;
-        }
-        else {
-            this.currentFilterValue.ageDivisions = this.ageDivisions.filter(ad => ad.ageDivisionId == value.id);
-        }
-        this.onFilterChanged.emit(this.currentFilterValue);
-    }
-
-    beltSelect(value) {
+    categorySelect(value) {
             if (value.name == DefaultValues.DROPDOWN_NAME_ANY) {
-            this.currentFilterValue.beltDivisions = this.beltDivisions;
+            this.currentFilterValue.categories = this.categories;
         }
         else {
-            this.currentFilterValue.beltDivisions = this.beltDivisions.filter(bd => bd.beltDivisionId == value.id);
+            this.currentFilterValue.categories = this.categories.filter(c => c.categoryId == value.id);
         }
         this.onFilterChanged.emit(this.currentFilterValue);
     }
@@ -76,17 +65,14 @@ export class FighterFilter implements OnInit {
         let defaultDDLOption = new DropDownListOption(DefaultValues.DROPDOWN_ID_ANY, DefaultValues.DROPDOWN_NAME_ANY);
         this.weightDivisionDDLOptions.push(defaultDDLOption)
         this.weightDivisions.map(wd => this.weightDivisionDDLOptions.push(new DropDownListOption(wd.weightDivisionId, wd.name)))
-        this.ageDivisionDDLOptions.push(defaultDDLOption)
-        this.ageDivisions.map(ad => this.ageDivisionDDLOptions.push(new DropDownListOption(ad.ageDivisionId, ad.name)))
-        this.beltDivisionDDLOptions.push(defaultDDLOption)
-        this.beltDivisions.map(wd => this.beltDivisionDDLOptions.push(new DropDownListOption(wd.beltDivisionId, wd.name)))
+        this.categoryDDLOptions.push(defaultDDLOption)
+        this.categories.map(c => this.categoryDDLOptions.push(new DropDownListOption(c.categoryId, c.name)))
 
     }
 
     private getData() {
         this.dataService.getWeightDivisions().subscribe(data => this.weightDivisions = data)
-        this.dataService.getAgeDivisions().subscribe(data => this.ageDivisions = data)
-        this.dataService.getBeltDivisions().subscribe(data => this.beltDivisions = data)
+        this.dataService.getCategories().subscribe(data => this.categories = data);
     }
 }
 

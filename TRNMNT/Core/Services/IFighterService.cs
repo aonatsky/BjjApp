@@ -1,14 +1,10 @@
-using System;
-using System.IO;
-using System.Linq;
-using TRNMNT.Core.Data.Entities;
-using TRNMNT.Core.Enum;
+using System.Collections.Generic;
+using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services
 {
     public interface IFighterService
     {
-      IQueryable<Fighter> GetFightersByWeightDivision(Guid WeightDivisionID);
-      FileProcessResultEnum ProcessFighterListFromFile(Stream stream);
-    }
+      List<FighterModel> GetFighterModels();
+   }
 }

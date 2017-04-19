@@ -1,8 +1,8 @@
+import {CrudColumn} from '../../shared/crud/crud.component';
 import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.component'
-import { DefaultValues } from '../../core/consts/default-values'
 
 
 
@@ -16,30 +16,35 @@ import { DefaultValues } from '../../core/consts/default-values'
 export class FighterListComponent implements OnInit, AfterViewInit {
 
     fighters: Fighter[];
+    fighterCRUDColumns: CrudColumn[] = [
+        { displayName: "Name", propertyName: "firstName", isEditable: false },
+        { displayName: "Name", propertyName: "lastName", isEditable: false },
+        { displayName: "Name", propertyName: "dateOfBirth", isEditable: false },
+        { displayName: "Name", propertyName: "team", isEditable: false },
+    ];
+    
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;
     constructor(private dataService: DataService) {
     }
 
-    populateTable(fighters: Fighter[]) {
-        this.fighters = fighters;
-    }
+    
 
     //ng
     ngOnInit() {
     }
 
     ngAfterViewInit() {
-        this.initTable();
+        this.refreshTable();
     }
 
 
     //events
     onFilterChanged() {
-        this.initTable();
+        this.refreshTable();
     }
 
-    private initTable() {
-        this.dataService.getFigters(this.fighterFilter.currentFilterValue).subscribe(data => this.populateTable(data))
+    private refreshTable() {
+        this.dataService.getFigters(this.fighterFilter.currentFilterValue).subscribe(data => this.fighters = data)
     }
 }
 

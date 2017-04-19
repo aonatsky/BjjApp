@@ -1,6 +1,6 @@
 using TRNMNT.Core.Enum;
 
-namespace TRNMNT.Core.Models
+namespace TRNMNT.Core.Model
 {
     public class FileProcessResult
     {

@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using TRNMNT.Core.Services;
 using TRNMNT.Core.Data.Entities;
 using System.Threading.Tasks;
-using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Const;
-using TRNMNT.Core.Enum;
+using TRNMNT.Core.Model;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -28,7 +26,6 @@ namespace TRNMNT.Controllers
             this.fighterService = fighterService;
             this.bracketService = bracketService;
             this.fileService = fileService;
-            var test = fighterService.GetFightersByWeightDivision(Guid.NewGuid());
         }
 
         [HttpPost("[action]")]
@@ -52,23 +49,15 @@ namespace TRNMNT.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<Fighter> Get()
+        public IEnumerable<FighterModel> Get()
         {
-            return fighterService.GetFightersByWeightDivision(Guid.NewGuid());
+            Response.StatusCode = 200;
+            return fighterService.GetFighterModels();
 
         }
 
 
-        [HttpGet("[action]")]
-        public IEnumerable<WeightDivision> GetWeightDivisionses()
-        {
-            return new List<WeightDivision>(){
-                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Feather", Weight = 60},
-                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Light", Weight = 70},
-                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Medium", Weight = 80},
-                new WeightDivision(){WeightDivisionId = Guid.NewGuid(), Name = "Heavy", Weight = 90}
-            };
-        }
+       
 
         [HttpGet("[action]")]
         public void Test()
@@ -204,34 +193,6 @@ namespace TRNMNT.Controllers
 
 
 
-        #region Common
-
-        // GET api/values/5
-
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-
-        #endregion
+      
     }
 }
