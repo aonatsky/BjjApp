@@ -16,11 +16,12 @@ import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.compon
 export class FighterListComponent implements OnInit, AfterViewInit {
 
     fighters: Fighter[];
-    fighterCRUDColumns: CrudColumn[] = [
-        { displayName: "Name", propertyName: "firstName", isEditable: false },
-        { displayName: "Name", propertyName: "lastName", isEditable: false },
-        { displayName: "Name", propertyName: "dateOfBirth", isEditable: false },
-        { displayName: "Name", propertyName: "team", isEditable: false },
+    fighterColumns: CrudColumn[] = [
+        { displayName: "First Name", propertyName: "firstName", isEditable: false },
+        { displayName: "Last Name", propertyName: "lastName", isEditable: false },
+        { displayName: "DOB", propertyName: "dateOfBirth", isEditable: false },
+        { displayName: "Team", propertyName: "team", isEditable: false },
+        { displayName: "Category", propertyName: "team", isEditable: false }
     ];
     
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;

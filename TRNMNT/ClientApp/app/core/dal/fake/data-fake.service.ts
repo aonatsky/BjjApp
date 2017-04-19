@@ -49,7 +49,7 @@ export class DataFakeService extends DataService {
 
 
     fighters = [
-        new Fighter("Marcelo", "Garcia", "Alliance","1986-10-10","Elite"),
+        new Fighter("4c571d9a-3398-4677-831d-3373d270ec11","Marcelo", "Garcia", "Alliance","1986-10-10","Elite"),
         // new Fighter("Saulo", "Ribeiro", "Ribeiro JJ", 80, 37, "Elite"),
         // new Fighter("Xandi", "Ribeiro", "Ribeiro JJ", 90, 33, "Elite"),
         // new Fighter("Braulio", "Estima", "Gracie Barra", 80, 25, "Elite"),

@@ -2,7 +2,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using TRNMNT.Core.Enum;
 using Microsoft.AspNetCore.Http;
-using TRNMNT.Core.Models;
+using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services
 {

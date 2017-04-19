@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Collections.Generic;
 using OfficeOpenXml;
 using System.Linq;
-using TRNMNT.Core.Models;
+using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services
 {

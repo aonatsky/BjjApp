@@ -62,7 +62,7 @@ export class DataApiService extends DataService {
     }
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
-        return this.apiServer.get(ApiMethods.tournament.fighters.fighters)
+        return this.apiServer.get(ApiMethods.tournament.fighters.fighters).map(r=>this.getArray<Fighter>(r))
     }
 
     //WeightDivisions
