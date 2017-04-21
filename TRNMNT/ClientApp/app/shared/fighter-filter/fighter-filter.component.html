@@ -1,9 +1,9 @@
-<div class="fighter-filter" *ngIf="weightDivisionDDLOptions && beltDivisions && ageDivisions">
-    <div class="filter-section">
+<div class="fighter-filter">
+    <div class="filter-section" *ngIf="weightDivisions">
         <h5>Weight class:</h5>
         <dropdown [dropdownValues]="weightDivisionDDLOptions" (onSelect)="weightSelect($event)"></dropdown>
     </div>
-    <div class="filter-section">
+    <div class="filter-section" *ngIf="categories">
         <h5>Category:</h5>
         <dropdown [dropdownValues]="categoryDDLOptions" (onSelect)="categorySelect($event)"></dropdown>
     </div>

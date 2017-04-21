@@ -32,11 +32,15 @@ export class CrudComponent implements OnInit {
 
 
     showDialogToAdd() {
-        if (!this.readonly) {
-        this.newEntity = true;
+            this.newEntity = true;
             this.entityToEdit = new Object();
             this.displayDialog = true;
-        }
+    }
+
+    showDialogToEdit(entity: any) {
+        this.newEntity = false;
+        this.entityToEdit = entity;
+        this.displayDialog = true;
     }
 
     save() {
@@ -54,15 +58,14 @@ export class CrudComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        this.newEntity = false;
-        this.entityToEdit = event.data;
-        this.displayDialog = true;
+        if (!this.readonly) {
+            this.showDialogToEdit(event.data)
+        }
     }
 
     isIdColumn(column: CrudColumn): boolean {
         return column.propertyName.endsWith('Id');
     }
-
 }
 
 export interface CrudColumn {

@@ -21,7 +21,7 @@ export class FighterListComponent implements OnInit, AfterViewInit {
         { displayName: "Last Name", propertyName: "lastName", isEditable: false },
         { displayName: "DOB", propertyName: "dateOfBirth", isEditable: false },
         { displayName: "Team", propertyName: "team", isEditable: false },
-        { displayName: "Category", propertyName: "team", isEditable: false }
+        { displayName: "Category", propertyName: "category", isEditable: false }
     ];
     
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;

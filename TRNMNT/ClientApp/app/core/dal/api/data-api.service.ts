@@ -62,7 +62,11 @@ export class DataApiService extends DataService {
     }
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
-        return this.apiServer.get(ApiMethods.tournament.fighters.fighters).map(r=>this.getArray<Fighter>(r))
+        return this.apiServer.get(ApiMethods.tournament.fighters.getAll).map(r=>this.getArray<Fighter>(r))
+    }
+
+    public getFigtersByFilter(filter: FighterFilterModel): Observable<Fighter[]> {
+        return this.apiServer.post(ApiMethods.tournament.fighters.getByFilter,filter).map(r=>this.getArray<Fighter>(r))
     }
 
     //WeightDivisions
@@ -78,19 +82,5 @@ export class DataApiService extends DataService {
     }
     public deleteWeightDivision(weightDivision: WeightDivision) {
         return this.apiServer.delete(ApiMethods.tournament.weightDivisions, weightDivision)
-    }
-
-    //Obsolete
-    
-
-    public getFights(fightListID: AAGUID): Observable<Fight[]> {
-        return this.apiServer.get(ApiMethods.tournament.ageDivisions)
-    }
-
-    public getAgeDivisions(): Observable<AgeDivision[]> {
-        return this.apiServer.get(ApiMethods.tournament.ageDivisions)
-    }
-    public getBeltDivisions(): Observable<BeltDivision[]> {
-        return this.apiServer.get(ApiMethods.tournament.ageDivisions)
     }
 }

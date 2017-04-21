@@ -1,13 +1,12 @@
-import {Category} from '../../core/model/category.model';
+import { Category } from '../../core/model/category.model';
 
-import { AgeDivision } from '../../core/model/age-division.model';
-import { BeltDivision } from '../../core/model/belt-division.model';
 import { WeightDivision } from '../../core/model/weight-division.model';
 import { FighterFilterModel } from '../../core/model/fighter-filter.model';
 import { Component, Input, Output, OnInit, EventEmitter } from "@angular/core"
 import { DropdownComponent, DropDownListOption } from '../dropdown/dropdown.component'
 import { DataService } from '../../core/dal/contracts/data.service'
 import { DefaultValues } from '../../core/consts/default-values'
+import { Observable } from "rxjs/Observable";
 
 
 @Component({
@@ -33,9 +32,8 @@ export class FighterFilter implements OnInit {
     }
 
     ngOnInit() {
-        this.getData();
-        this.currentFilterValue = new FighterFilterModel(this.weightDivisions, this.categories);
-        this.setupFilters();
+        Observable.forkJoin(this.dataService.getCategories(), this.dataService.getWeightDivisions())
+            .subscribe(data => this.initFilter(data))
     }
 
     //Events
@@ -50,7 +48,7 @@ export class FighterFilter implements OnInit {
     }
 
     categorySelect(value) {
-            if (value.name == DefaultValues.DROPDOWN_NAME_ANY) {
+        if (value.name == DefaultValues.DROPDOWN_NAME_ANY) {
             this.currentFilterValue.categories = this.categories;
         }
         else {
@@ -61,19 +59,19 @@ export class FighterFilter implements OnInit {
 
     //Private methods
 
-    private setupFilters() {
+
+    private initFilter(data: [Category[], WeightDivision[]]) {
         let defaultDDLOption = new DropDownListOption(DefaultValues.DROPDOWN_ID_ANY, DefaultValues.DROPDOWN_NAME_ANY);
-        this.weightDivisionDDLOptions.push(defaultDDLOption)
-        this.weightDivisions.map(wd => this.weightDivisionDDLOptions.push(new DropDownListOption(wd.weightDivisionId, wd.name)))
+        this.categories = data[0];
+        this.weightDivisions = data[1];
+        this.weightDivisionDDLOptions.push(defaultDDLOption);
         this.categoryDDLOptions.push(defaultDDLOption)
-        this.categories.map(c => this.categoryDDLOptions.push(new DropDownListOption(c.categoryId, c.name)))
-
+        this.categories.map(c => this.categoryDDLOptions.push(new DropDownListOption(c.categoryId, c.name)));
+        this.weightDivisions.map(wd => this.weightDivisionDDLOptions.push(new DropDownListOption(wd.weightDivisionId, wd.name)));
+        this.currentFilterValue = new FighterFilterModel(this.weightDivisions, this.categories);
     }
 
-    private getData() {
-        this.dataService.getWeightDivisions().subscribe(data => this.weightDivisions = data)
-        this.dataService.getCategories().subscribe(data => this.categories = data);
-    }
+
 }
 
 

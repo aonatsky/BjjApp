@@ -6,5 +6,6 @@ namespace TRNMNT.Core.Services
     public interface IFighterService
     {
       List<FighterModel> GetFighterModels();
+      List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter);
    }
 }
