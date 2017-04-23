@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
-import { Fight } from '../../core/model/fight.model'
 import { Fighter } from '../../core/model/fighter.model'
 
 
@@ -24,7 +23,6 @@ export class BracketsComponent implements OnInit {
 
     tableArray: string[][];
 
-    fights: Fight[];
     private dataService: DataService;
 
 

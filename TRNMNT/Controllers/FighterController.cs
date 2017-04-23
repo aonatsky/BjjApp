@@ -45,20 +45,20 @@ namespace TRNMNT.Controllers
         }
 
         
-        [HttpPost("[action]")]
-        public async Task<IEnumerable<FighterModel>> GetFightersByFilter([FromBody] FighterFilterModel filter)
-        {
-            try
-            {
-                return fighterService.GetFighterModels.ProcessFile(file).ToString();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return ex.Message;
-            }
+        //[HttpPost("[action]")]
+        //public async Task<IEnumerable<FighterModel>> GetFightersByFilter([FromBody] FighterFilterModel filter)
+        //{
+        //    try
+        //    {
+        //        return fighterService.GetFighterModels.ProcessFile(file).ToString();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        HandleException(ex);
+        //        return ex.Message;
+        //    }
 
-        }
+        //}
 
 
         // GET api/values

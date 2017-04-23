@@ -1,4 +1,3 @@
-import { BeltDivision } from '../../model/belt-division.model';
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
 import { DataService } from '../contracts/data.service'
@@ -10,8 +9,6 @@ import { ApiServer } from '../servers/api.server'
 
 import { Fighter } from '../../model/fighter.model'
 import { WeightDivision } from '../../model/weight-division.model'
-import { AgeDivision } from '../../model/age-division.model'
-import { Fight } from '../../model/fight.model'
 import { FighterFilterModel } from '../../model/fighter-filter.model'
 import { Category } from "../../model/category.model";
 

@@ -28,5 +28,10 @@ namespace TRNMNT.Core.Services.impl
             });
             return fighterModels.ToList();
         }
+
+        public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
