@@ -19,6 +19,7 @@ namespace TRNMNT.Core.Logger
             _xmlElement = xmlElement;
             _loggerRepository = log4net.LogManager.CreateRepository(
                 Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
+            _loggerRepository.Properties["appRoot"] = "Logs";
             _log = LogManager.GetLogger(_loggerRepository.Name, name);
             log4net.Config.XmlConfigurator.Configure(_loggerRepository, xmlElement);
         }
