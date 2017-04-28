@@ -1,5 +1,5 @@
 import {CrudColumn} from '../../shared/crud/crud.component';
-import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, AfterContentInit } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.component'
@@ -13,7 +13,7 @@ import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.compon
 })
 
 
-export class FighterListComponent implements OnInit, AfterViewInit {
+export class FighterListComponent implements OnInit, AfterContentInit {
 
     fighters: Fighter[];
     fighterColumns: CrudColumn[] = [
@@ -34,7 +34,8 @@ export class FighterListComponent implements OnInit, AfterViewInit {
     ngOnInit() {
     }
 
-    ngAfterViewInit() {
+    ngAfterContentInit() {
+        // this.fighterFilter.currentFilterValue.
         this.refreshTable();
     }
 
@@ -45,7 +46,7 @@ export class FighterListComponent implements OnInit, AfterViewInit {
     }
 
     private refreshTable() {
-        this.dataService.getFigters(this.fighterFilter.currentFilterValue).subscribe(data => this.fighters = data)
+        this.dataService.getFigtersByFilter(this.fighterFilter.currentFilterValue).subscribe(data => this.fighters = data)
     }
 }
 

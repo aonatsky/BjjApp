@@ -17,21 +17,26 @@ namespace TRNMNT.Core.Services.impl
 
         public List<FighterModel> GetFighterModels()
         {
-            var fighterModels = fighterRepository.GetAll()
-            .Select(f => new FighterModel(){
+            return GetModels(fighterRepository.GetAll());
+        }
+
+        public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
+        {
+            
+            var fighters = fighterRepository.GetAll().Where(f => filter.Categories.Contains(f.Category) && filter.WeightDivisions.Contains(f.WeightDivision));
+            return GetModels(fighters);
+        }
+
+        private List<FighterModel> GetModels(IEnumerable<Fighter> fighters){
+            return fighters.Select(f => new FighterModel(){
                 FighterId = f.FighterId,
                 FirstName = f.FirstName,
                 LastName = f.LastName,
                 Team = f.Team.Name,
                 Category = f.Category.Name,
                 DateOfBirth = f.DateOfBirth.ToString("yyyy-mm-dd")
-            });
-            return fighterModels.ToList();
-        }
+            }).ToList();
 
-        public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
-        {
-            throw new NotImplementedException();
         }
     }
 }

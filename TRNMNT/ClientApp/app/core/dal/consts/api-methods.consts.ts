@@ -3,7 +3,7 @@ export const ApiMethods = Object.freeze({
         fighters: {
             getAll: "api/fighter",
             uploadlist: "api/fighter/uploadlist",
-            getByFilter: "api/getFightersByFilter"
+            getByFilter: "api/fighter/getFightersByFilter"
         },
         weightDivisions: 'api/weightdivision/',
         categories: 'api/category',
