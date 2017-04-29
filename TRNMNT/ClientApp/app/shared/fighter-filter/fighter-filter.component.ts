@@ -23,12 +23,14 @@ export class FighterFilter implements OnInit {
     weightDivisionDDLOptions: DropDownListOption[] = [];
     categoryDDLOptions: DropDownListOption[] = [];
 
-    @Output() onFilterChanged: EventEmitter<FighterFilterModel>
-    @Output() currentFilterValue: FighterFilterModel = new FighterFilterModel([], []);
+    @Output() onFilterChanged: EventEmitter<FighterFilterModel>;
+    @Output() onFilterLoaded: EventEmitter<boolean>;
+    @Output() currentFilterValue: FighterFilterModel;
 
 
     constructor(private dataService: DataService) {
         this.onFilterChanged = new EventEmitter<FighterFilterModel>();
+        this.onFilterLoaded = new EventEmitter<boolean>();
     }
 
     ngOnInit() {
@@ -69,7 +71,8 @@ export class FighterFilter implements OnInit {
         this.categories.map(c => this.categoryDDLOptions.push(new DropDownListOption(c.categoryId, c.name)));
         this.weightDivisions.map(wd => this.weightDivisionDDLOptions.push(new DropDownListOption(wd.weightDivisionId, wd.name)));
         this.currentFilterValue = new FighterFilterModel(this.weightDivisions, this.categories);
-    }
+        this.onFilterChanged.emit(this.currentFilterValue);
+}
 
 
 }
