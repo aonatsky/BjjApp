@@ -9,6 +9,7 @@ using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.impl;
 using TRNMNT.Core.Data.Repositories;
 using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Logger;
 
 namespace TRNMNT
 {
@@ -54,8 +55,7 @@ namespace TRNMNT
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            loggerFactory.AddLog4Net();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
