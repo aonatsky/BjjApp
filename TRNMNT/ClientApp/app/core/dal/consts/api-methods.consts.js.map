@@ -1,0 +1,1 @@
+{"version":3,"file":"api-methods.consts.js","sourceRoot":"","sources":["api-methods.consts.ts"],"names":[],"mappings":";AAAa,QAAA,UAAU,GAAG,MAAM,CAAC,MAAM,CAAC;IACpC,UAAU,EAAE;QACR,QAAQ,EAAE;YACN,MAAM,EAAE,aAAa;YACrB,UAAU,EAAE,wBAAwB;YACpC,WAAW,EAAE,iCAAiC;SACjD;QACD,eAAe,EAAE,qBAAqB;QACtC,UAAU,EAAE,cAAc;KAC7B;IACD,GAAG,EAAE,SAAS;CACjB,CAAC,CAAC"}
