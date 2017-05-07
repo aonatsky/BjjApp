@@ -30,16 +30,18 @@ namespace TRNMNT.Controllers
 
         [HttpPost("[action]")]
 
-        public async Task<String> UploadList(IFormFile file)
+        public async Task<FileProcessResult> UploadList(IFormFile file)
         {
             try
             {
-                return fileService.ProcessFile(file).ToString();
+                return fileService.ProcessFile(file);
             }
             catch (Exception ex)
             {
                 HandleException(ex);
-                return ex.Message;
+                return new FileProcessResult {
+                    Result = Core.Enum.FileProcessResultEnum.Error,
+                };
             }
 
         }

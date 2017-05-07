@@ -12,14 +12,16 @@
     float: left;
 }
 
+.display-none {
+    display: none !important;
+}
+
 .section {
-    width:100%;
+    width: 100%;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     border: 1px solid #a6c9e2;
     padding: 20px;
-    margin:20px 0px;
+    margin: 20px 0px;
 }
-
-

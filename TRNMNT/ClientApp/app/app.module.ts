@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { FormsModule   } from '@angular/forms';
-import {BrowserModule} from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 import { RouterModule } from '@angular/router';
-import { UniversalModule } from 'angular2-universal';
 import { AppComponent } from './components/app/app.component'
 import { routing, appRoutingProviders } from "./app.routing";
 
@@ -53,7 +52,6 @@ import { ApiServer } from './core/dal/servers/api.server';
     ],
     imports: [
         routing,
-        UniversalModule,
         SharedModule,
         HttpModule,
         BrowserModule,

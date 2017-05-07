@@ -42,7 +42,9 @@ export class ApiServer {
     public postFile(name: string, file: any): Observable<any>{
         let formData = new FormData();
         formData.append("file",file)
-        return this.http.post(name,formData).catch((error: Response | any) => this.handleError(error));
+        return this.http.post(name, formData)
+            .map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleError(error));
     }
 
     private processResponse(response: any): Observable<any> {
