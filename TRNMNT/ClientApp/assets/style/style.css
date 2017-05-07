@@ -1,13 +1,25 @@
-   .datatable{
-        margin: auto; 
-        max-width: 1000px; 
-        margin-bottom: 50px;
+.datatable {
+    margin: auto;
+    max-width: 1000px;
+    margin-bottom: 50px;
+}
+
+    .datatable .btn {
+        margin-top: 5px;
     }
 
-    .datatable .btn{
-        margin-top:5px;
-    }
+.float-left {
+    float: left;
+}
 
-    .float-left{
-        float: left;
-    }
+.section {
+    width:100%;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid #a6c9e2;
+    padding: 20px;
+    margin:20px 0px;
+}
+
+

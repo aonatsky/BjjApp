@@ -8,7 +8,6 @@ namespace TRNMNT.Core.Data.Repositories
     public class Repository<T> : IRepository<T> where T : class
     {
         private IAppDbContext context;
-        private IQueryable<T> entities;
         string errorMessage = string.Empty;
         public Repository(IAppDbContext context)
         {

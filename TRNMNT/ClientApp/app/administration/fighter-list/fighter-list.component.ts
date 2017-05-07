@@ -36,13 +36,18 @@ export class FighterListComponent implements OnInit, AfterContentInit {
 
     ngAfterContentInit() {
         // this.fighterFilter.currentFilterValue.
-        this.refreshTable();
+        //this.refreshTable();
     }
 
 
     //events
     onFilterChanged() {
         this.refreshTable();
+    }
+
+    
+    uploadFile(file) {
+        this.dataService.uploadFighterList(file).subscribe();
     }
 
     private refreshTable() {

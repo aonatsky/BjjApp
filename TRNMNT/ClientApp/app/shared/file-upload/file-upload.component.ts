@@ -21,16 +21,15 @@ export class FileUpload {
 
     }
 
+    upload() {
+        alert("hey");
+    }
+
     addFile(): void {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
             this.onUpload.emit(fileToUpload);
-            // this.dataService
-            //     .uploadFighterList(fileToUpload)
-            //     .subscribe(res => {
-            //         console.log(res);
-                // });
         }
     }
 }

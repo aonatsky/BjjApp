@@ -139,10 +139,12 @@ namespace TRNMNT.Core.Services
             }
             catch (System.Exception ex)
             {
+
                 return new FileProcessResult(FileProcessResultEnum.FileIsInvalid);
             }
         }
 
+        #region private methods
         private string GetFirstName(int rowNumber)
         {
             return sheet.Cells[rowNumber, 1].GetValue<string>();
@@ -218,6 +220,7 @@ namespace TRNMNT.Core.Services
             }
 
 
-        }
+        } 
+        #endregion
     }
 }

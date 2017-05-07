@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,18 +18,22 @@ namespace TRNMNT.Core.Services.impl
 
         public List<FighterModel> GetFighterModels()
         {
+            //todo CHANGE
             return GetModels(fighterRepository.GetAll());
         }
 
         public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
         {
-            
-            var fighters = fighterRepository.GetAll().Where(f => filter.Categories.Contains(f.Category) && filter.WeightDivisions.Contains(f.WeightDivision));
+
+            var fighters = GetFighters().Where(f => filter.Categories.Select(c => c.CategoryId).Contains(f.CategoryId)
+                && filter.WeightDivisions.Select(wd => wd.WeightDivisionId).Contains(f.WeightDivisionId));
             return GetModels(fighters);
         }
 
-        private List<FighterModel> GetModels(IEnumerable<Fighter> fighters){
-            return fighters.Select(f => new FighterModel(){
+        private List<FighterModel> GetModels(IEnumerable<Fighter> fighters)
+        {
+            return fighters.Select(f => new FighterModel()
+            {
                 FighterId = f.FighterId,
                 FirstName = f.FirstName,
                 LastName = f.LastName,
@@ -37,6 +42,12 @@ namespace TRNMNT.Core.Services.impl
                 DateOfBirth = f.DateOfBirth.ToString("yyyy-mm-dd")
             }).ToList();
 
+        }
+
+        private IQueryable<Fighter> GetFighters()
+        {
+            return fighterRepository.GetAll().Include(f => f.Category)
+                .Include(f => f.Team).Include(f => f.WeightDivision);
         }
     }
 }

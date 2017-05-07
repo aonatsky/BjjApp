@@ -1,12 +1,14 @@
-<fighter-filter 
-(onFilterChanged) = "onFilterChanged($event)"
->
-</fighter-filter>
+<div class="section">
+    <fighter-filter (onFilterChanged)="onFilterChanged($event)">
+    </fighter-filter>
+</div>
 
-<crud 
-[entities] = 'fighters' 
-[title]="'Fighters'" 
-[columns]="fighterColumns" 
-[readonly]="true"
->
+<crud [entities]='fighters'
+      [title]="'Fighters'"
+      [columns]="fighterColumns"
+      [readonly]="true">
 </crud>
+
+<div class="section">
+    <file-upload (onUpload)="uploadFile($event)"></file-upload>
+</div>

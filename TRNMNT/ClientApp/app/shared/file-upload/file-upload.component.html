@@ -1,1 +1,2 @@
-<input #fileInput type="file"/><button (click)="addFile()">Add</button>
+<input #fileInput type="file" (change)="upload()"/>
+<button type="button" pButton (click)="addFile()" label="Upload"></button>
