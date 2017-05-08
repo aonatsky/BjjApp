@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, AfterCo
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.component'
+import { FileUpload } from '../../shared/file-upload/file-upload.component'
 
 
 
@@ -25,6 +26,8 @@ export class FighterListComponent implements OnInit, AfterContentInit {
     ];
     
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;
+    @ViewChild(FileUpload) fileUpload: FileUpload
+
     constructor(private dataService: DataService) {
     }
 
@@ -35,14 +38,17 @@ export class FighterListComponent implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit() {
-        // this.fighterFilter.currentFilterValue.
-        this.refreshTable();
     }
 
 
     //events
     onFilterChanged() {
         this.refreshTable();
+    }
+
+    
+    uploadFile(file) {
+        this.dataService.uploadFighterList(file);
     }
 
     private refreshTable() {

@@ -34,6 +34,11 @@ export class DataApiService extends DataService {
         return Observable.throw(data);
     }
 
+     private getResult(response: any)
+     {
+         return response.json();
+     }
+
 
     //Categories
     public getCategories(): Observable<Category[]> {
@@ -55,7 +60,7 @@ export class DataApiService extends DataService {
 
     //Fighters
     public uploadFighterList(file: any): Observable<any> {
-        return this.apiServer.postFile(ApiMethods.tournament.fighters.uploadlist,file)
+        return this.apiServer.postFile(ApiMethods.tournament.fighters.uploadlist, file).map(data => this.getResult(data))
     }
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {

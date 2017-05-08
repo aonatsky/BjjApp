@@ -1,0 +1,7 @@
+.upload-result{
+    color : lightgreen;
+}
+
+.upload-error {
+    color: red !important;
+}

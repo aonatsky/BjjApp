@@ -1,1 +1,4 @@
-<input #fileInput type="file"/><button (click)="addFile()">Add</button>
+
+<input #fileInput class="display-none" type="file" (change)="upload()"/>
+<button type="button" pButton (click)="addFile()" label="Upload List"></button>
+<span class="upload-result" [class.upload-error]="isError"  #uploadResult></span>
