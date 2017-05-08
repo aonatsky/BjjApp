@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { FormsModule   } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './components/app/app.component'
