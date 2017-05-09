@@ -30,7 +30,7 @@ export class FileUpload {
 
     private processUploadResult(result: UploadResult) {
         let span = this.uploadResultSpan.nativeElement;
-        this.isError = result.result >= 500;
+        this.isError = result.code >= 500;
         span.innerHTML = result.message;
     }
 
@@ -44,6 +44,6 @@ export class FileUpload {
 }
 
 export interface UploadResult {
-    result: number;
+    code: number;
     message: string;
 }

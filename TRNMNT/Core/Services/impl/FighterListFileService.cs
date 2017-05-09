@@ -56,7 +56,7 @@ namespace TRNMNT.Core.Services
                     sheet = excelPackage?.Workbook?.Worksheets[1];
                     if (sheet != null)
                     {
-                        result.Result = FileProcessResultEnum.Success;
+                        result.Code = FileProcessResultEnum.Success;
 
                         var existingTeams = this.teamRepository.GetAll().ToList();
                         var existingFighters = this.fighterRepository.GetAll().ToList();
@@ -81,7 +81,7 @@ namespace TRNMNT.Core.Services
                             }
                             else
                             {
-                                result.Result = FileProcessResultEnum.SuccessWithErrors;
+                                result.Code = FileProcessResultEnum.SuccessWithErrors;
                                 result.Message += $"Date of birth for {fighter.FirstName} {fighter.LastName} is invalid";
                                 continue;
                             }
@@ -101,7 +101,7 @@ namespace TRNMNT.Core.Services
                             }
                             else
                             {
-                                result.Result = FileProcessResultEnum.SuccessWithErrors;
+                                result.Code = FileProcessResultEnum.SuccessWithErrors;
                                 result.Message += $"Category {GetCategoryName(i)} is invalid ";
                                 continue;
                             }
@@ -114,7 +114,7 @@ namespace TRNMNT.Core.Services
                             }
                             else
                             {
-                                result.Result = FileProcessResultEnum.SuccessWithErrors;
+                                result.Code = FileProcessResultEnum.SuccessWithErrors;
                                 result.Message += $"Weight division {GetWeightDivisionName(i)} is invalid";
                                 continue;
                             }
@@ -131,7 +131,7 @@ namespace TRNMNT.Core.Services
                     }
                     else
                     {
-                        result.Result = FileProcessResultEnum.FileIsEmpty;
+                        result.Code = FileProcessResultEnum.FileIsEmpty;
                     }
 
                     return result;

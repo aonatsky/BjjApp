@@ -37,7 +37,7 @@ namespace TRNMNT.Core.Services
             }
 
             var postUploadProcessResult = PostUploadProcess(file.OpenReadStream());
-            if (postUploadProcessResult.Result == FileProcessResultEnum.Success || postUploadProcessResult.Result == FileProcessResultEnum.SuccessWithErrors)
+            if (postUploadProcessResult.Code == FileProcessResultEnum.Success || postUploadProcessResult.Code == FileProcessResultEnum.SuccessWithErrors)
             {
                 SaveFile(file);
             }

@@ -8,12 +8,12 @@ namespace TRNMNT.Core.Model
     {
 
     }
-    public FileProcessResult(FileProcessResultEnum result, string message = "")
+    public FileProcessResult(FileProcessResultEnum code, string message = "")
     {
-        this.Result = result;
+        this.Code = code;
         this.Message = message;
     }
-        public  FileProcessResultEnum Result {get;set;}
+        public  FileProcessResultEnum Code {get;set;}
         public string Message {get;set;}
     }
    

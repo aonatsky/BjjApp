@@ -40,7 +40,7 @@ namespace TRNMNT.Controllers
             {
                 HandleException(ex);
                 return new FileProcessResult {
-                    Result = Core.Enum.FileProcessResultEnum.Error,
+                    Code = Core.Enum.FileProcessResultEnum.Error,
                 };
             }
 
