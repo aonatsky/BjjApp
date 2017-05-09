@@ -51,6 +51,13 @@ export class FighterListComponent implements OnInit, AfterContentInit {
         this.dataService.uploadFighterList(file);
     }
 
+
+    getBracketsFile() {
+
+        //this.dataService.getBracketsFile()
+    }
+
+
     private refreshTable() {
         this.dataService.getFigtersByFilter(this.fighterFilter.currentFilterValue).subscribe(data => this.fighters = data)
     }
