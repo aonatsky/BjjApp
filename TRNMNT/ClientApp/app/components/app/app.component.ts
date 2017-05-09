@@ -1,20 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import { Message } from 'primeng/primeng';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
     selector: 'app',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-    //private infoMessages: Message[] = [];
+    private notifications: Message[] = [];
 
-    constructor() {
+    constructor(private notificationservice: NotificationService) {
 
     }
 
-    //ngOnInit() {
-    //    //this.messageService.messages.subscribe(data => this.infoMessages = data) 
-    //}
+    ngOnInit() {
+        this.notificationservice.notifications.subscribe(data => this.notifications = data); 
+    }
 
 }

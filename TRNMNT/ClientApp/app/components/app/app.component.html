@@ -5,7 +5,7 @@
         </div>
         <div class='col-sm-9 body-content'>
             <router-outlet>
-                
+                <p-growl [value]="notifications" [life]="3000" [sticky]="true"></p-growl>
             </router-outlet>
         </div>
     </div>

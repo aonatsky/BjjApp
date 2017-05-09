@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Rx';
 import { Input, Component, ViewChild, EventEmitter, Output, ElementRef } from '@angular/core';
 import { DataService } from "../../core/dal/contracts/data.service";
-//import { NotificationService } from "../../core/services/notification.service";
+import { NotificationService } from "../../core/services/notification.service";
 
 import { Message } from 'primeng/primeng';
 
@@ -18,7 +18,7 @@ export class FileUpload {
     @ViewChild("fileInput") fileInput: ElementRef;
     uploadMessages: Message[] = [];
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService, private notificationService: NotificationService) {
 
     }
 
@@ -29,7 +29,6 @@ export class FileUpload {
             let fileToUpload = fi.files[0];
             this.dataService.uploadFighterList(fileToUpload).subscribe(result => this.processUploadResult(result));
         }
-        fi.files = [];
     }
 
     private processUploadResult(result: UploadResult) {
@@ -43,7 +42,7 @@ export class FileUpload {
             severity = "error";
         }
         let message = { severity: severity, summary: summary, detail: result.message }
-        //this.notificationService.addNotification(message)
+        this.notificationService.showNotification(message)
 
         //this.uploadMessages.push({ severity: severity, summary: summary, detail: result.message })
 

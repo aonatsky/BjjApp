@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { RequestOptions, Http, Response, Headers } from '@angular/http';
-import { ServerSettingsService } from '../server.settings.service';
 import { LoggerService } from '../../../core/services/logger.service';
 import { Observable } from "rxjs/Observable";
 import { ApiMethods } from "../consts/api-methods.consts";
 
 @Injectable()
 export class ApiServer {
-    constructor(private serverSettings: ServerSettingsService, private loggerService: LoggerService, private http: Http) {
+    constructor(private loggerService: LoggerService, private http: Http) {
     }
 
 
