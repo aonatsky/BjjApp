@@ -3,8 +3,6 @@ import { Input, Component, ViewChild, EventEmitter, Output, ElementRef } from '@
 import { DataService } from "../../core/dal/contracts/data.service";
 import { NotificationService } from "../../core/services/notification.service";
 
-import { Message } from 'primeng/primeng';
-
 
 @Component({
     selector: 'file-upload',
@@ -32,19 +30,14 @@ export class FileUpload {
     }
 
     private processUploadResult(result: UploadResult) {
-        let severity = "success";
-        let summary = "Processed";
-        if (result.code == 201) {
-            summary = "Porcessed with errors"
-            severity = "warn";
+        if (result.code == 200) {
+            this.notificationService.showSuccess("Processed", result.message)
+        } else if (result.code == 201) {
+            this.notificationService.showWarn("Porcessed with errors", result.message)
         } else if (result.code >= 500) {
-            summary = "Fail"
-            severity = "error";
+            this.notificationService.showError("Fail", result.message)
         }
-        let message = { severity: severity, summary: summary, detail: result.message }
-        this.notificationService.showNotification(message)
 
-        //this.uploadMessages.push({ severity: severity, summary: summary, detail: result.message })
 
     }
 

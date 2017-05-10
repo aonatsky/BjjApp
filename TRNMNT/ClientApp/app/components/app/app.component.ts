@@ -16,7 +16,9 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.notificationservice.notifications.subscribe(data => this.notifications = data); 
+        this.notificationservice.notifications.subscribe(data => this.notifications = data);
     }
+
+    
 
 }

@@ -4,7 +4,7 @@ import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.component'
 import { FileUpload } from '../../shared/file-upload/file-upload.component'
-
+import { NotificationService} from '../../core/services/notification.service'
 
 
 @Component({
@@ -28,7 +28,7 @@ export class FighterListComponent implements OnInit, AfterContentInit {
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;
     @ViewChild(FileUpload) fileUpload: FileUpload
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService, private notificationService: NotificationService) {
     }
 
     
@@ -53,8 +53,9 @@ export class FighterListComponent implements OnInit, AfterContentInit {
 
 
     getBracketsFile() {
-
-        //this.dataService.getBracketsFile()
+        if (this.fighterFilter.currentFilterValue.categories.length != 1 && this.fighterFilter.currentFilterValue.weightDivisions.length != 1) {
+            this.notificationService.showWarn("Warning","Please specify weightdivision and category")
+        }
     }
 
 

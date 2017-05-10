@@ -7,11 +7,27 @@ export class NotificationService {
 
     notifications: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([]);
 
-    showNotification(message: Message) {
-        let value = this.notifications.getValue();
-        value.push(message)
-        this.notifications.next(value)
+    private showNotification(message: Message) {
+        this.notifications.next([message])
     }
+
+
+    showInfo(summary: string, detail: string): void {
+        this.showNotification({ severity: "info", summary: summary, detail: detail });
+    }
+
+    showWarn(summary: string, detail: string): void {
+        this.showNotification({ severity: "warn", summary: summary, detail: detail });
+    }
+
+    showError(summary: string, detail: string): void {
+        this.showNotification({ severity: "error", summary: summary, detail: detail });
+    }
+
+    showSuccess(summary: string, detail: string): void {
+        this.showNotification({ severity: "success", summary: summary, detail: detail });
+    }
+
 
     clearNotifications() {
         this.notifications.next([])
