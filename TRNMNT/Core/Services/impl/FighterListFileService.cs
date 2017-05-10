@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using OfficeOpenXml;
 using System.Linq;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Service;
 
 namespace TRNMNT.Core.Services
 {
-    public class FighterListFileService : FileService
+    public class FighterListFileService : FileUploadService
     {
         IRepository<Team> teamRepository;
         IRepository<Fighter> fighterRepository;
@@ -30,20 +31,17 @@ namespace TRNMNT.Core.Services
             this.weightDivisionRepository = weightDivisionRepository;
         }
 
-        private const string FIGHTERLIST_FOLDER = "FighterList";
-        private const string FIGHTERLIST_FILE = "List";
         private const string DATE_FORMAT = "dd-mm-yy";
 
-        protected override string GetFilePath(string rootPath)
+        protected override string GetFileUploadPath(string rootPath)
         {
-            var directoryPath = Path.Combine(rootPath, FIGHTERLIST_FOLDER);
+            var directoryPath = FilePathService.GetFighterListUploadFolder(rootPath);
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            return Path.Combine(rootPath, FIGHTERLIST_FOLDER, $"{FIGHTERLIST_FILE}_{DateTime.UtcNow.ToString("yyyy.mm.dd")}.xlsx");
+            return FilePathService.GetFighterListFilePath(rootPath); 
         }
-
 
         protected override FileProcessResult PostUploadProcess(Stream stream)
         {

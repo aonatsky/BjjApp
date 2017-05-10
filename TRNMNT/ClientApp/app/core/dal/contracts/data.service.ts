@@ -1,3 +1,4 @@
+
 import { FighterFilterModel } from '../../model/fighter-filter.model';
 
 import { Injectable } from '@angular/core'
@@ -12,6 +13,7 @@ export abstract class DataService {
     public abstract getFigtersByFilter(filter: FighterFilterModel): Observable<Fighter[]>
     public abstract getWeightDivisions(): Observable<WeightDivision[]>;
     public abstract uploadFighterList(file: any): Observable<any>;
+    public abstract getBracketsFile(filter: FighterFilterModel): Observable<File>
     public abstract getCategories(): Observable<Category[]>;
     public abstract addCategory(category: Category): any;
     public abstract updateCategory(category: Category): any;
@@ -19,4 +21,5 @@ export abstract class DataService {
     public abstract addWeightDivision(weightDivision: WeightDivision): any;
     public abstract updateWeightDivision(weightDivision: WeightDivision): any;
     public abstract deleteWeightDivision(weightDivision: WeightDivision): any;
+
 }

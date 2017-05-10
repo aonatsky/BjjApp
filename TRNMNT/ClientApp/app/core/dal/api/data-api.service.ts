@@ -14,7 +14,7 @@ import { Category } from "../../model/category.model";
 
 @Injectable()
 export class DataApiService extends DataService {
-        
+
 
     constructor(private apiServer: ApiServer, private logger: LoggerService) {
         super()
@@ -29,15 +29,20 @@ export class DataApiService extends DataService {
         return result;
     }
 
-     private handleErrorResponse(response: any): Observable<any> {
+    private handleErrorResponse(response: any): Observable<any> {
         let data: any = response;
+        this.logger.logError(data);
         return Observable.throw(data);
     }
 
-     private getResult(response: any)
-     {
-         return response.json();
-     }
+    private getResult(response: any) {
+        return response.json();
+    }
+
+    private getExcelFile(response: any) {
+        return new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+    }
+
 
 
     //Categories
@@ -64,21 +69,27 @@ export class DataApiService extends DataService {
     }
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
-        return this.apiServer.get(ApiMethods.tournament.fighters.getAll).map(r=>this.getArray<Fighter>(r))
+        return this.apiServer.get(ApiMethods.tournament.fighters.getAll).map(r => this.getArray<Fighter>(r))
     }
 
     public getFigtersByFilter(filter: FighterFilterModel): Observable<Fighter[]> {
-        return this.apiServer.post(ApiMethods.tournament.fighters.getByFilter,filter).map(r=>this.getArray<Fighter>(r))
+        return this.apiServer.post(ApiMethods.tournament.fighters.getByFilter, filter).map(r => this.getArray<Fighter>(r))
+    }
+
+    //Brackets
+
+    public getBracketsFile(filter: FighterFilterModel): Observable<File> {
+        return this.apiServer.get(ApiMethods.tournament.fighters.getAll).map(r => this.getExcelFile(r))
     }
 
     //WeightDivisions
-    
+
     public getWeightDivisions(): Observable<WeightDivision[]> {
-         return this.apiServer.get(ApiMethods.tournament.weightDivisions).map(r => this.getArray<WeightDivision>(r))
+        return this.apiServer.get(ApiMethods.tournament.weightDivisions).map(r => this.getArray<WeightDivision>(r))
     }
     public addWeightDivision(weightDivision: WeightDivision) {
-            return this.apiServer.post(ApiMethods.tournament.weightDivisions, weightDivision)
-        }
+        return this.apiServer.post(ApiMethods.tournament.weightDivisions, weightDivision)
+    }
     public updateWeightDivision(weightDivision: WeightDivision) {
         return this.apiServer.put(ApiMethods.tournament.weightDivisions, weightDivision)
     }

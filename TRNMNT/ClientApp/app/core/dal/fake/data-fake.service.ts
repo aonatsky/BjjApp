@@ -14,6 +14,10 @@ export class DataFakeService extends DataService {
         throw new Error('Method not implemented.');
     }
 
+    public getBracketsFile(filter: FighterFilterModel): Observable<File> {
+        throw new Error('Method not implemented.');
+    }
+
     public addWeightDivision(weightDivision: WeightDivision) {
         throw new Error('Method not implemented.');
     }

@@ -42,8 +42,6 @@ namespace TRNMNT
 
             #region AppServices
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
-            services.AddScoped(typeof(IBracketsService), typeof(BracketsService));
-            services.AddScoped(typeof(IWeightDivisionService), typeof(WeightDivisionService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(FighterListFileService));
             #endregion

@@ -16,6 +16,7 @@ namespace TRNMNT.Core.Services.impl
             this.fighterRepository = fighterRepository;
         }
 
+        #region Public Methods
         public List<FighterModel> GetFighterModels()
         {
             //todo CHANGE
@@ -24,12 +25,18 @@ namespace TRNMNT.Core.Services.impl
 
         public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
         {
-
-            var fighters = GetFighters().Where(f => filter.Categories.Select(c => c.CategoryId).Contains(f.CategoryId)
-                && filter.WeightDivisions.Select(wd => wd.WeightDivisionId).Contains(f.WeightDivisionId));
+            IQueryable<Fighter> fighters = GetFightersByFilter(filter);
             return GetModels(fighters);
         }
 
+        public IQueryable<Fighter> GetFightersByFilter(FighterFilterModel filter)
+        {
+            return GetFighters().Where(f => filter.Categories.Select(c => c.CategoryId).Contains(f.CategoryId)
+                            && filter.WeightDivisions.Select(wd => wd.WeightDivisionId).Contains(f.WeightDivisionId));
+        }
+        #endregion
+
+        #region Private methods
         private List<FighterModel> GetModels(IEnumerable<Fighter> fighters)
         {
             return fighters.Select(f => new FighterModel()
@@ -49,5 +56,7 @@ namespace TRNMNT.Core.Services.impl
             return fighterRepository.GetAll().Include(f => f.Category)
                 .Include(f => f.Team).Include(f => f.WeightDivision);
         }
+        #endregion
+
     }
 }

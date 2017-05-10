@@ -14,14 +14,12 @@ import { NotificationService } from "../../core/services/notification.service";
 export class FileUpload {
 
     @ViewChild("fileInput") fileInput: ElementRef;
-    uploadMessages: Message[] = [];
 
     constructor(private dataService: DataService, private notificationService: NotificationService) {
 
     }
 
     private upload() {
-        this.uploadMessages = [];
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
@@ -41,7 +39,7 @@ export class FileUpload {
 
     }
 
-    addFile(): void {
+    private addFile(): void {
         let fi = this.fileInput.nativeElement;
         fi.click();
     }

@@ -57,7 +57,7 @@ namespace TRNMNT.Controllers
         }
         catch (Exception ex)
         {
-            Response.StatusCode = 200;
+            Response.StatusCode = 500;
             HandleException(ex);
             return new List<FighterModel>();
 

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace TRNMNT.Core.Services
 {
-    public abstract class FileService
+    public abstract class FileUploadService
     {
         protected abstract FileProcessResult PostUploadProcess(Stream stream);
         
-        protected abstract string GetFilePath(string rootPath);
+        protected abstract string GetFileUploadPath(string rootPath);
         
 
         private IHostingEnvironment env;
-        public FileService(IHostingEnvironment env)
+        public FileUploadService(IHostingEnvironment env)
         {
             this.env = env;
         }
@@ -48,7 +48,7 @@ namespace TRNMNT.Core.Services
 
         private void SaveFile(IFormFile file)
         {
-            using (var fileStream = new FileStream(GetFilePath(GetWebRootPath()), FileMode.Create))
+            using (var fileStream = new FileStream(GetFileUploadPath(GetWebRootPath()), FileMode.Create))
             {
                 file.CopyTo(fileStream);
             }
