@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using TRNMNT.Core.Enum;
 using Microsoft.AspNetCore.Http;
 using TRNMNT.Core.Model;
+using System.Threading.Tasks;
 
 namespace TRNMNT.Core.Services
 {
@@ -25,24 +26,24 @@ namespace TRNMNT.Core.Services
         }
 
 
-        public FileProcessResult ProcessFile(IFormFile file)
+        public Task<FileProcessResult> ProcessFileAsync(IFormFile file)
         {
             if (file == null)
             {
-                return new FileProcessResult(FileProcessResultEnum.FileIsNull);
+                return Task.FromResult(new FileProcessResult(FileProcessResultEnum.FileIsNull));
             }
             if (file.Length == 0)
             {
-                return new FileProcessResult(FileProcessResultEnum.FileIsEmpty);
+                return Task.FromResult(new FileProcessResult(FileProcessResultEnum.FileIsEmpty));
             }
 
             var postUploadProcessResult = PostUploadProcess(file.OpenReadStream());
-            if (postUploadProcessResult.Result == FileProcessResultEnum.Success || postUploadProcessResult.Result == FileProcessResultEnum.SuccessWithErrors)
+            if (postUploadProcessResult.Code == FileProcessResultEnum.Success || postUploadProcessResult.Code == FileProcessResultEnum.SuccessWithErrors)
             {
                 SaveFile(file);
             }
 
-            return postUploadProcessResult;
+            return Task.FromResult(postUploadProcessResult);
         }
 
         private void SaveFile(IFormFile file)

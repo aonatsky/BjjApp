@@ -1,6 +1,9 @@
 import { Observable } from 'rxjs/Rx';
 import { Input, Component, ViewChild, EventEmitter, Output, ElementRef } from '@angular/core';
 import { DataService } from "../../core/dal/contracts/data.service";
+import { NotificationService } from "../../core/services/notification.service";
+
+import { Message } from 'primeng/primeng';
 
 
 @Component({
@@ -13,14 +16,14 @@ import { DataService } from "../../core/dal/contracts/data.service";
 export class FileUpload {
 
     @ViewChild("fileInput") fileInput: ElementRef;
-    @ViewChild("uploadResult") uploadResultSpan: ElementRef;
-    isError: boolean = false;
+    uploadMessages: Message[] = [];
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService, private notificationService: NotificationService) {
 
     }
 
     private upload() {
+        this.uploadMessages = [];
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
@@ -29,9 +32,20 @@ export class FileUpload {
     }
 
     private processUploadResult(result: UploadResult) {
-        let span = this.uploadResultSpan.nativeElement;
-        this.isError = result.result >= 500;
-        span.innerHTML = result.message;
+        let severity = "success";
+        let summary = "Processed";
+        if (result.code == 201) {
+            summary = "Porcessed with errors"
+            severity = "warn";
+        } else if (result.code >= 500) {
+            summary = "Fail"
+            severity = "error";
+        }
+        let message = { severity: severity, summary: summary, detail: result.message }
+        this.notificationService.showNotification(message)
+
+        //this.uploadMessages.push({ severity: severity, summary: summary, detail: result.message })
+
     }
 
     addFile(): void {
@@ -44,6 +58,6 @@ export class FileUpload {
 }
 
 export interface UploadResult {
-    result: number;
+    code: number;
     message: string;
 }

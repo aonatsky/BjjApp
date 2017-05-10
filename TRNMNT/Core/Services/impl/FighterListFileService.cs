@@ -47,8 +47,6 @@ namespace TRNMNT.Core.Services
 
         protected override FileProcessResult PostUploadProcess(Stream stream)
         {
-            var result = new FileProcessResult();
-
             try
             {
                 using (var excelPackage = new ExcelPackage(stream))
@@ -56,7 +54,7 @@ namespace TRNMNT.Core.Services
                     sheet = excelPackage?.Workbook?.Worksheets[1];
                     if (sheet != null)
                     {
-                        result.Result = FileProcessResultEnum.Success;
+                        var result = new FileProcessResult(FileProcessResultEnum.Success);
 
                         var existingTeams = this.teamRepository.GetAll().ToList();
                         var existingFighters = this.fighterRepository.GetAll().ToList();
@@ -81,7 +79,7 @@ namespace TRNMNT.Core.Services
                             }
                             else
                             {
-                                result.Result = FileProcessResultEnum.SuccessWithErrors;
+                                result.Code = FileProcessResultEnum.SuccessWithErrors;
                                 result.Message += $"Date of birth for {fighter.FirstName} {fighter.LastName} is invalid";
                                 continue;
                             }
@@ -101,7 +99,7 @@ namespace TRNMNT.Core.Services
                             }
                             else
                             {
-                                result.Result = FileProcessResultEnum.SuccessWithErrors;
+                                result.Code = FileProcessResultEnum.SuccessWithErrors;
                                 result.Message += $"Category {GetCategoryName(i)} is invalid ";
                                 continue;
                             }
@@ -114,7 +112,7 @@ namespace TRNMNT.Core.Services
                             }
                             else
                             {
-                                result.Result = FileProcessResultEnum.SuccessWithErrors;
+                                result.Code = FileProcessResultEnum.SuccessWithErrors;
                                 result.Message += $"Weight division {GetWeightDivisionName(i)} is invalid";
                                 continue;
                             }
@@ -128,19 +126,19 @@ namespace TRNMNT.Core.Services
                         teamRepository.AddRange(teamsToAdd);
                         fighterRepository.AddRange(fightersToAdd);
                         fighterRepository.Save();
+                        return result;
                     }
                     else
                     {
-                        result.Result = FileProcessResultEnum.FileIsEmpty;
+                        return new FileProcessResult(FileProcessResultEnum.FileIsEmpty);
                     }
 
-                    return result;
+
                 }
             }
             catch (System.Exception ex)
             {
-
-                return new FileProcessResult(FileProcessResultEnum.FileIsInvalid);
+                throw ex;
             }
         }
 
@@ -220,7 +218,7 @@ namespace TRNMNT.Core.Services
             }
 
 
-        } 
+        }
         #endregion
     }
 }
