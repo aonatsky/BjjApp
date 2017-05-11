@@ -11,17 +11,22 @@ namespace TRNMNT.Core.Services.impl
     public class FighterService : IFighterService
     {
         private IRepository<Fighter> fighterRepository;
-        public FighterService(IRepository<Fighter> fighterRepository)
+        private IRepository<Team> teamRepository;
+        private IRepository<Category> categoryRepository;
+        private IRepository<WeightDivision> weightDivisionRepository;
+
+        public FighterService(IRepository<Fighter> fighterRepository,
+            IRepository<Team> teamRepository,
+            IRepository<Category> categoryRepository,
+            IRepository<WeightDivision> weightDivisionRepository)
         {
             this.fighterRepository = fighterRepository;
+            this.teamRepository = teamRepository;
+            this.categoryRepository = categoryRepository;
+            this.weightDivisionRepository = weightDivisionRepository;
         }
 
         #region Public Methods
-        public List<FighterModel> GetFighterModels()
-        {
-            //todo CHANGE
-            return GetModels(fighterRepository.GetAll());
-        }
 
         public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
         {
@@ -29,10 +34,62 @@ namespace TRNMNT.Core.Services.impl
             return GetModels(fighters);
         }
 
-        public IQueryable<Fighter> GetFightersByFilter(FighterFilterModel filter)
+        public string AddFightersByModels(List<FighterModel> fighterModels)
         {
-            return GetFighters().Where(f => filter.Categories.Select(c => c.CategoryId).Contains(f.CategoryId)
-                            && filter.WeightDivisions.Select(wd => wd.WeightDivisionId).Contains(f.WeightDivisionId));
+            string message = "";
+            var existingTeams = this.teamRepository.GetAll().ToList();
+            var existingFighters = this.fighterRepository.GetAll().ToList();
+
+            var fightersToAdd = new List<Fighter>();
+            var teamsToAdd = new List<Team>();
+            var comparer = new FighterComparer();
+            foreach (var model in fighterModels)
+            {
+                var fighter = new Fighter()
+                {
+                    FighterId = Guid.NewGuid(),
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+                };
+
+                if (DateTime.TryParse(model.DateOfBirth, out var dob))
+                {
+                    fighter.DateOfBirth = dob;
+                }
+                else
+                {
+                    message += $"Date of birth for {fighter.FirstName} {fighter.LastName} is invalid";
+                    continue;
+                }
+
+                fighter.Team = ProcessTeam(model.Team, existingTeams,ref teamsToAdd);
+
+                var weightDivision = GetWeightDivision(model.WeightDivision);
+                if (weightDivision != null)
+                {
+                    fighter.WeightDivisionId = weightDivision.WeightDivisionId;
+                }
+                else
+                {
+                    message += $"Weight division {model.WeightDivision} is invalid";
+                    continue;
+                }
+
+                var category = GetCategory(model.Category);
+                if (category != null)
+                {
+                    fighter.CategoryId = category.CategoryId;
+                }
+                else
+                {
+                    message += $"Category {model.Category} is invalid ";
+                    continue;
+                }
+                fightersToAdd.Add(fighter);
+            }
+            fighterRepository.AddRange(fightersToAdd);
+            fighterRepository.Save();
+            return message;
         }
         #endregion
 
@@ -56,7 +113,77 @@ namespace TRNMNT.Core.Services.impl
             return fighterRepository.GetAll().Include(f => f.Category)
                 .Include(f => f.Team).Include(f => f.WeightDivision);
         }
+
+        private IQueryable<Fighter> GetFightersByFilter(FighterFilterModel filter)
+        {
+            return GetFighters().Where(f => filter.Categories.Select(c => c.CategoryId).Contains(f.CategoryId)
+                            && filter.WeightDivisions.Select(wd => wd.WeightDivisionId).Contains(f.WeightDivisionId));
+        }
         #endregion
 
+
+
+        private DateTime? GetDateOfBirth(string stringDob)
+        {
+            //DateTime dob;
+            if (DateTime.TryParse(stringDob, out var dob))
+            {
+                return dob;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private Team ProcessTeam(string name, List<Team> teams, ref List<Team> teamsToAdd)
+        {
+            Team team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (team == null)
+            {
+                team = teams.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (team == null)
+                {
+                    team = new Team
+                    {
+                        TeamId = Guid.NewGuid(),
+                        Name = name
+                    };
+                    teamsToAdd.Add(team);
+                }
+            }
+            return team;
+
+        }
+        private WeightDivision GetWeightDivision(string name)
+        {
+            return weightDivisionRepository.GetAll().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+        private Category GetCategory(string name)
+        {
+            return (categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+
+        }
+
+
+
+        private class FighterComparer : IEqualityComparer<Fighter>
+        {
+            public bool Equals(Fighter x, Fighter y)
+            {
+                return (x.FirstName == y.FirstName && x.LastName == y.LastName && x.DateOfBirth == y.DateOfBirth);
+            }
+
+            public int GetHashCode(Fighter fighter)
+            {
+                return fighter.FirstName.GetHashCode() ^ fighter.LastName.GetHashCode() ^ fighter.DateOfBirth.GetHashCode();
+            }
+
+
+        }
+
+
     }
+
+
 }

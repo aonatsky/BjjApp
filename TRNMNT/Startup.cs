@@ -43,7 +43,7 @@ namespace TRNMNT
             #region AppServices
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(FighterListFileService));
+            services.AddScoped(typeof(FighterFileService));
             #endregion
 
 

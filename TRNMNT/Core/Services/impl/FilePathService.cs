@@ -7,7 +7,11 @@ namespace TRNMNT.Core.Service
     {
         private const string FIGHTERLIST_FOLDER_NAME = "FighterList";
         public const string FIGHTERLIST_FILE_NAME = "List";
-        private const string DATE_FORMAT = "dd-mm-yy";
+
+        private const string BRACKETS_FILE_NAME_MASK = "brackets-";
+        private const string BRACKETS_FILE_FOLDER_NAME = "DocSamples";
+
+
 
         public static string GetFighterListUploadFolder(string rootpath)
         {
@@ -18,5 +22,13 @@ namespace TRNMNT.Core.Service
         {
             return Path.Combine(GetFighterListUploadFolder(rootpath), $"{FIGHTERLIST_FILE_NAME}_{DateTime.UtcNow.ToString("yyyy.mm.dd")}.xlsx");
         }
+
+        public static string GetBracketsFilePath(string rootpath, int size)
+        {
+            return Path.Combine(rootpath, BRACKETS_FILE_FOLDER_NAME, $"{BRACKETS_FILE_NAME_MASK}{size.ToString()}.xlsx");
+        }
+
+
+
     }
 }
