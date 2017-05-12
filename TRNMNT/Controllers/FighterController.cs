@@ -63,22 +63,23 @@ namespace TRNMNT.Controllers
 
         }
 
-        //[HttpPost("[action]")]
-        //public async Task<IActionResult> GetBrackets([FromBody] FighterFilterModel filter)
-        //{
-        //    try
-        //    {
-        //        Response.StatusCode = 200;
-        //        var models = fighterService.GetFighterModelsByFilter(filter);
-        //        return File(fileService.GetBracketsFile(models));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Response.StatusCode = 500;
-        //        HandleException(ex);
-        //    }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetBracketsFile([FromBody] FighterFilterModel filter)
+        {
+            try
+            {
+                Response.StatusCode = 200;
+                var models = fighterService.GetFighterModelsByFilter(filter);
+                return File(fileService.GetBracketsFile(models),"","brackets.xlsx");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 500;
+                HandleException(ex);
+                return null;
+            }
 
-        //}
+        }
 
 
         [HttpGet("[action]")]

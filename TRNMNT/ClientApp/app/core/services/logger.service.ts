@@ -3,6 +3,7 @@ import { AppConfig } from '../../app.config';
 import { ApiServer } from "../dal/servers/api.server";
 import { ApiMethods } from '../dal/consts/api-methods.consts'
 import { RequestOptions, Http, Headers, Response } from '@angular/http';
+import { isDevMode } from '@angular/core';
 
 @Injectable()
 export class LoggerService {

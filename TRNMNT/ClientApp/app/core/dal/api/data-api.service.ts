@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
 import { DataService } from '../contracts/data.service'
 import { LoggerService } from '../../../core/services/logger.service';
+import { Response} from '@angular/http'
 
 import { ApiMethods } from '../consts/api-methods.consts'
 import { ApiServer } from '../servers/api.server'
@@ -31,7 +32,7 @@ export class DataApiService extends DataService {
 
     private handleErrorResponse(response: any): Observable<any> {
         let data: any = response;
-        this.logger.logError(data);
+        //this.logger.logError(data);
         return Observable.throw(data);
     }
 
@@ -39,8 +40,8 @@ export class DataApiService extends DataService {
         return response.json();
     }
 
-    private getExcelFile(response: any) {
-        return new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+    private getExcelFile(response: Response) {
+        return response.blob();
     }
 
 
@@ -79,7 +80,7 @@ export class DataApiService extends DataService {
     //Brackets
 
     public getBracketsFile(filter: FighterFilterModel): Observable<File> {
-        return this.apiServer.get(ApiMethods.tournament.fighters.getAll).map(r => this.getExcelFile(r))
+        return this.apiServer.post(ApiMethods.tournament.fighters.getBrackets,filter).map(r => this.getExcelFile(r))
     }
 
     //WeightDivisions

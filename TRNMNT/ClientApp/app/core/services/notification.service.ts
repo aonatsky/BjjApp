@@ -28,6 +28,10 @@ export class NotificationService {
         this.showNotification({ severity: "success", summary: summary, detail: detail });
     }
 
+    showGenericError(): void {
+        this.showNotification({ severity: "error", summary: "ERROR", detail: "An error occured during request" });
+    }
+
 
     clearNotifications() {
         this.notifications.next([])

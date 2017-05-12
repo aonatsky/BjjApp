@@ -21,8 +21,8 @@ namespace TRNMNT.Core.Services.impl
         
         public Stream GetBracketsFile(List<FighterModel> orderedModels)
         {
-
-            return Stream.Null;
+            var stream = File.OpenRead(FilePathService.GetBracketsFilePath(GetWebRootPath(), 8));
+            return stream;
         }
 
         #endregion

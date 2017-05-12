@@ -23,7 +23,7 @@ export class FileUpload {
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
-            this.dataService.uploadFighterList(fileToUpload).subscribe(result => this.processUploadResult(result));
+            this.dataService.uploadFighterList(fileToUpload).subscribe(result => this.processUploadResult(result), () => this.notificationService.showGenericError());
         }
     }
 
@@ -38,6 +38,7 @@ export class FileUpload {
 
 
     }
+        
 
     private addFile(): void {
         let fi = this.fileInput.nativeElement;

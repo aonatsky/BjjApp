@@ -9,7 +9,7 @@ namespace TRNMNT.Core.Service
         public const string FIGHTERLIST_FILE_NAME = "List";
 
         private const string BRACKETS_FILE_NAME_MASK = "brackets-";
-        private const string BRACKETS_FILE_FOLDER_NAME = "DocSamples";
+        private const string BRACKETS_FILE_FOLDER_NAME = "FileSamples";
 
 
 

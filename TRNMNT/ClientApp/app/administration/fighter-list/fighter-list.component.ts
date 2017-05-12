@@ -53,17 +53,20 @@ export class FighterListComponent implements OnInit, AfterContentInit {
 
 
     getBracketsFile() {
-        if (this.fighterFilter.currentFilterValue.categories.length == 1 && this.fighterFilter.currentFilterValue.weightDivisions.length == 1) {
-            this.dataService.getBracketsFile(this.fighterFilter.currentFilterValue).subscribe(data => window.open(window.URL.createObjectURL(data)));
-        } else {
-            this.notificationService.showWarn("Warning", "Please specify weightdivision and category")
-        }
+        //if (this.fighterFilter.currentFilterValue.categories.length == 1 && this.fighterFilter.currentFilterValue.weightDivisions.length == 1) {
+        this.dataService.getBracketsFile(this.fighterFilter.currentFilterValue).subscribe(data => this.test(data), () => this.notificationService.showGenericError());
+        //} else {
+        //    this.notificationService.showWarn("Warning", "Please specify weightdivision and category")
+        //}
         
     }
 
+    private test(data) {
+        window.open(window.URL.createObjectURL(data));
+    }
 
     private refreshTable() {
-        this.dataService.getFigtersByFilter(this.fighterFilter.currentFilterValue).subscribe(data => this.fighters = data)
+        this.dataService.getFigtersByFilter(this.fighterFilter.currentFilterValue).subscribe(data => this.fighters = data, () => this.notificationService.showGenericError())
     }
 }
 
