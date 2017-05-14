@@ -70,7 +70,7 @@ namespace TRNMNT.Controllers
             {
                 Response.StatusCode = 200;
                 var models = fighterService.GetFighterModelsByFilter(filter);
-                return File(fileService.GetBracketsFile(models),"","brackets.xlsx");
+                return File(fileService.GetBracketsFile(models), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "brackets.xlsx");
             }
             catch (Exception ex)
             {

@@ -19,10 +19,10 @@ namespace TRNMNT.Core.Services.impl
 
         #region Public Methods
         
-        public Stream GetBracketsFile(List<FighterModel> orderedModels)
+        public byte[] GetBracketsFile(List<FighterModel> orderedModels)
         {
-            var stream = File.OpenRead(FilePathService.GetBracketsFilePath(GetWebRootPath(), 8));
-            return stream;
+            var byteArray = File.ReadAllBytes(FilePathService.GetBracketsFilePath(GetWebRootPath(), 8));
+            return byteArray;
         }
 
         #endregion

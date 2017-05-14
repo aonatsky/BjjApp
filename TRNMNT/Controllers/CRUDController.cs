@@ -18,7 +18,17 @@ namespace TRNMNT.Controllers
         [HttpGet]
         public IEnumerable<T> Get()
         {
-            return repository.GetAll().ToList();
+            try
+            {
+                return repository.GetAll().ToList();
+            }
+            catch (Exception ex)
+            {
+                base.HandleException(ex);
+                Response.StatusCode = 500;
+                return new List<T>();
+            }
+
         }
 
         [HttpPost]
