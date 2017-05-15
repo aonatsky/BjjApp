@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RequestOptions, Http, Response, Headers } from '@angular/http';
+import { RequestOptions, Http, Response, Headers, ResponseContentType } from '@angular/http';
 import { LoggerService } from '../../../core/services/logger.service';
 import { Observable } from "rxjs/Observable";
 import { ApiMethods } from "../consts/api-methods.consts";
@@ -14,10 +14,13 @@ export class ApiServer {
         return this.http.get(name).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
 
-    public post(name: string, model: any): Observable<any> {
+    public post(name: string, model: any, responseType?: ResponseContentType): Observable<any> {
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' })
         });
+        if (responseType) {
+            options.responseType = responseType;
+        }
         let body = JSON.stringify(model);
         return this.http.post(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }

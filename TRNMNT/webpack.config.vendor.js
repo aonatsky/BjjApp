@@ -30,6 +30,7 @@ module.exports = (env) => {
                 'angular2-universal-polyfills',
                 '@angular/animations',
                 'bootstrap',
+                'file-saver',
                 'bootstrap/dist/css/bootstrap.css',
                 'es6-shim',
                 'es6-promise',

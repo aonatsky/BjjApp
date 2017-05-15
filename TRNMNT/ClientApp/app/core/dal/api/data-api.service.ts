@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
 import { DataService } from '../contracts/data.service'
 import { LoggerService } from '../../../core/services/logger.service';
-import { Response} from '@angular/http'
+import { Response, ResponseContentType } from '@angular/http'
+
+import * as FileSaver from 'file-saver';
+
 
 import { ApiMethods } from '../consts/api-methods.consts'
 import { ApiServer } from '../servers/api.server'
@@ -40,8 +43,9 @@ export class DataApiService extends DataService {
         return response.json();
     }
 
-    private getExcelFile(response: Response) {
-        return new Blob([response], { type: response.headers.get("content-type") });
+    private getExcelFile(response: Response): void {
+        var blob = response.blob();
+        FileSaver.saveAs(blob, 'test.xlsx');
     }
 
 
@@ -79,8 +83,8 @@ export class DataApiService extends DataService {
 
     //Brackets
 
-    public getBracketsFile(filter: FighterFilterModel): Observable<File> {
-        return this.apiServer.post(ApiMethods.tournament.fighters.getBrackets,filter).map(r => this.getExcelFile(r))
+    public getBracketsFile(filter: FighterFilterModel): Observable<void> {
+        return this.apiServer.post(ApiMethods.tournament.fighters.getBrackets, filter, ResponseContentType.Blob).map(r => this.getExcelFile(r))
     }
 
     //WeightDivisions

@@ -14,7 +14,7 @@ export class DataFakeService extends DataService {
         throw new Error('Method not implemented.');
     }
 
-    public getBracketsFile(filter: FighterFilterModel): Observable<File> {
+    public getBracketsFile(filter: FighterFilterModel): Observable<void> {
         throw new Error('Method not implemented.');
     }
 
