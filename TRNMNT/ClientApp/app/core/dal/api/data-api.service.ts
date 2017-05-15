@@ -41,7 +41,7 @@ export class DataApiService extends DataService {
     }
 
     private getExcelFile(response: Response) {
-        return response.blob();
+        return new Blob([response], { type: response.headers.get("content-type") });
     }
 
 
