@@ -91,6 +91,20 @@ namespace TRNMNT.Core.Services.impl
             fighterRepository.Save();
             return message;
         }
+
+
+        public List<FighterModel> GetOrderedListForBrackets(FighterFilterModel filter)
+        {
+            var fighters = GetFighterModelsByFilter(filter);
+            var size = GetBracketsSize(fighters.Count());
+            
+            var orderedbyTeam = fighters.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
+            .SelectMany(f => f).ToList();
+
+
+            return fighters;
+            //return GetModels(fighters);
+        }
         #endregion
 
         #region Private methods
@@ -123,6 +137,8 @@ namespace TRNMNT.Core.Services.impl
 
 
 
+        #region Models parsing
+
         private DateTime? GetDateOfBirth(string stringDob)
         {
             //DateTime dob;
@@ -135,7 +151,6 @@ namespace TRNMNT.Core.Services.impl
                 return null;
             }
         }
-
         private Team ProcessTeam(string name, List<Team> teams, ref List<Team> teamsToAdd)
         {
             Team team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -165,7 +180,27 @@ namespace TRNMNT.Core.Services.impl
 
         }
 
+        #endregion
 
+
+        #region Brackets
+
+        private const int FIGHTERS_MAX_COUNT = 64;
+
+        private int GetBracketsSize(int fightersCount)
+        {
+            for (int i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT,2); i++)
+            {
+                var size = Math.Pow(2, i);
+                if (size > fightersCount)
+                {
+                    return (Int32)size;
+                }
+            }
+            return 2;
+        }
+
+        #endregion
 
         private class FighterComparer : IEqualityComparer<Fighter>
         {

@@ -19,8 +19,9 @@ namespace TRNMNT.Core.Services.impl
 
         #region Public Methods
         
-        public byte[] GetBracketsFile(List<FighterModel> orderedModels)
+        public byte[] GetBracketsFile(FighterFilterModel filter)
         {
+            var models = fighterService.GetOrderedListForBrackets(filter);
             var byteArray = File.ReadAllBytes(FilePathService.GetBracketsFilePath(GetWebRootPath(), 8));
             return byteArray;
         }

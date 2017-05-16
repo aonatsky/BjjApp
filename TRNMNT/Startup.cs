@@ -36,7 +36,7 @@ namespace TRNMNT
 
             #region AppDBContext
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("HomeConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("PnnConnection")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             #endregion
 
