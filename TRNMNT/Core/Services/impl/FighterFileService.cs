@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Service;
@@ -19,12 +20,7 @@ namespace TRNMNT.Core.Services.impl
 
         #region Public Methods
         
-        public byte[] GetBracketsFile(FighterFilterModel filter)
-        {
-            var models = fighterService.GetOrderedListForBrackets(filter);
-            var byteArray = File.ReadAllBytes(FilePathService.GetBracketsFilePath(GetWebRootPath(), 8));
-            return byteArray;
-        }
+        
 
         #endregion
         

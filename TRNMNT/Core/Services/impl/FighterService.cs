@@ -62,7 +62,7 @@ namespace TRNMNT.Core.Services.impl
                     continue;
                 }
 
-                fighter.Team = ProcessTeam(model.Team, existingTeams,ref teamsToAdd);
+                fighter.Team = ProcessTeam(model.Team, existingTeams, ref teamsToAdd);
 
                 var weightDivision = GetWeightDivision(model.WeightDivision);
                 if (weightDivision != null)
@@ -96,15 +96,44 @@ namespace TRNMNT.Core.Services.impl
         public List<FighterModel> GetOrderedListForBrackets(FighterFilterModel filter)
         {
             var fighters = GetFighterModelsByFilter(filter);
-            var size = GetBracketsSize(fighters.Count());
-            
+            var bracketSize = GetBracketsSize(fighters.Count());
+
             var orderedbyTeam = fighters.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
             .SelectMany(f => f).ToList();
 
-
-            return fighters;
+            List<FighterModel> sideA = new List<FighterModel>();
+            List<FighterModel> sideB = new List<FighterModel>();
+            for (int i = 0; i < bracketSize; i++)
+            {
+                var fighter = orderedbyTeam.ElementAtOrDefault(i);
+                if (i % 2 == 0)
+                {
+                    sideA.Add(fighter);
+                }
+                else
+                {
+                    sideB.Add(fighter);
+                }
+            }
+            return GetDistributedSide(sideA).Concat(GetDistributedSide(sideB)).ToList();
+            //return fighters;
             //return GetModels(fighters);
         }
+
+        private List<FighterModel> GetDistributedSide(List<FighterModel> list)
+        {
+            var halfCount = list.Count()/2;
+            var result = new List<FighterModel>();
+            for (int i = 0; i < halfCount; i++)
+            {
+                result.Add(list.ElementAtOrDefault(i));
+                result.Add(list.ElementAtOrDefault(halfCount + i));
+            }
+            return result;
+        }
+
+
+
         #endregion
 
         #region Private methods
@@ -116,6 +145,7 @@ namespace TRNMNT.Core.Services.impl
                 FirstName = f.FirstName,
                 LastName = f.LastName,
                 Team = f.Team.Name,
+                WeightDivision = f.WeightDivision.Name,
                 Category = f.Category.Name,
                 DateOfBirth = f.DateOfBirth.ToString("yyyy-mm-dd")
             }).ToList();
@@ -189,10 +219,10 @@ namespace TRNMNT.Core.Services.impl
 
         private int GetBracketsSize(int fightersCount)
         {
-            for (int i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT,2); i++)
+            for (int i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT, 2); i++)
             {
                 var size = Math.Pow(2, i);
-                if (size > fightersCount)
+                if (size >= fightersCount)
                 {
                     return (Int32)size;
                 }

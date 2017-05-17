@@ -44,6 +44,7 @@ namespace TRNMNT
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(FighterFileService));
+            services.AddScoped(typeof(BracketsFileService));
             #endregion
 
 

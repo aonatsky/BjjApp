@@ -35,7 +35,6 @@ export class DataApiService extends DataService {
 
     private handleErrorResponse(response: any): Observable<any> {
         let data: any = response;
-        //this.logger.logError(data);
         return Observable.throw(data);
     }
 
@@ -45,7 +44,7 @@ export class DataApiService extends DataService {
 
     private getExcelFile(response: Response): void {
         var blob = response.blob();
-        FileSaver.saveAs(blob, 'test.xlsx');
+        FileSaver.saveAs(blob, response.headers.get("filename"));
     }
 
 

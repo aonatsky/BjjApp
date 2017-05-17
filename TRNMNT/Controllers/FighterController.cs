@@ -19,12 +19,14 @@ namespace TRNMNT.Controllers
     public class FighterController : BaseController
     {
         IFighterService fighterService;
-        FighterFileService fileService;
+        FighterFileService fighterFileService;
+        BracketsFileService bracketsFileService;
 
-        public FighterController(IFighterService fighterService, ILogger<FighterController> logger, FighterFileService fileService) : base(logger)
+        public FighterController(IFighterService fighterService, ILogger<FighterController> logger, FighterFileService fighterFileService, BracketsFileService bracketsFileService) : base(logger)
         {
             this.fighterService = fighterService;
-            this.fileService = fileService;
+            this.fighterFileService = fighterFileService;
+            this.bracketsFileService = bracketsFileService;
         }
 
         [HttpPost("[action]")]
@@ -33,7 +35,7 @@ namespace TRNMNT.Controllers
         {
             try
             {
-                return fileService.ProcessFile(file);
+                return fighterFileService.ProcessFile(file);
             }
             catch (Exception ex)
             {
@@ -69,7 +71,9 @@ namespace TRNMNT.Controllers
             try
             {
                 Response.StatusCode = 200;
-                return File(fileService.GetBracketsFile(filter), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "brackets.xlsx");
+                var file = bracketsFileService.GetBracketsFile(filter);
+                Response.Headers.Add("filename", file.Name);
+                return File(file.ByteArray, file.ContentType);
             }
             catch (Exception ex)
             {
@@ -89,7 +93,7 @@ namespace TRNMNT.Controllers
         [HttpGet("[action]")]
         public string GetOrdered()
         {
-            //var result = GetOrdered(GetTestTeams()).AsEnumerable();
+            var result = GetOrdered(GetTestTeams()).AsEnumerable();
             return "result";
 
         }
