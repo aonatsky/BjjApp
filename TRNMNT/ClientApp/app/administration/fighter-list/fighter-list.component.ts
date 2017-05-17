@@ -22,7 +22,8 @@ export class FighterListComponent implements OnInit, AfterContentInit {
         { displayName: "Last Name", propertyName: "lastName", isEditable: false },
         { displayName: "DOB", propertyName: "dateOfBirth", isEditable: false },
         { displayName: "Team", propertyName: "team", isEditable: false },
-        { displayName: "Category", propertyName: "category", isEditable: false }
+        { displayName: "Category", propertyName: "category", isEditable: false },
+        { displayName: "Weight Division", propertyName: "weightDivision", isEditable: false }
     ];
     
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;
@@ -48,9 +49,12 @@ export class FighterListComponent implements OnInit, AfterContentInit {
 
     
     uploadFile(file) {
-        this.dataService.uploadFighterList(file);
+        this.dataService.uploadFighterList(file).subscribe(() => this.refreshTable());
     }
 
+    deleteFighter(fighter: Fighter) {
+        this.dataService.deleteFighter(fighter);
+    }
 
     getBracketsFile() {
         //if (this.fighterFilter.currentFilterValue.categories.length == 1 && this.fighterFilter.currentFilterValue.weightDivisions.length == 1) {
@@ -60,10 +64,6 @@ export class FighterListComponent implements OnInit, AfterContentInit {
         //    this.notificationService.showWarn("Warning", "Please specify weightdivision and category")
         //}
         
-    }
-
-    private test(data) {
-        window.open(data);
     }
 
     private refreshTable() {

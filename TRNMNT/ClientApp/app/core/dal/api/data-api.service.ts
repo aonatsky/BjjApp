@@ -73,13 +73,16 @@ export class DataApiService extends DataService {
     }
 
     public getFigters(filter: FighterFilterModel): Observable<Fighter[]> {
-        return this.apiServer.get(ApiMethods.tournament.fighters.getAll).map(r => this.getArray<Fighter>(r))
+        return this.apiServer.get(ApiMethods.tournament.fighters.fighter).map(r => this.getArray<Fighter>(r))
     }
 
     public getFigtersByFilter(filter: FighterFilterModel): Observable<Fighter[]> {
         return this.apiServer.post(ApiMethods.tournament.fighters.getByFilter, filter).map(r => this.getArray<Fighter>(r))
     }
 
+    public deleteFighter(fighter:Fighter): any {
+        return this.apiServer.delete(ApiMethods.tournament.fighters.fighter, fighter);
+    }
     //Brackets
 
     public getBracketsFile(filter: FighterFilterModel): Observable<void> {

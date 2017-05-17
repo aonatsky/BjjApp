@@ -27,6 +27,9 @@ export class DataFakeService extends DataService {
     public deleteWeightDivision(weightDivision: WeightDivision) {
         throw new Error('Method not implemented.');
     }
+    public deleteFighter(fighter: Fighter) {
+        throw new Error('Method not implemented.');
+    }
 
 
     constructor() {
@@ -56,7 +59,7 @@ export class DataFakeService extends DataService {
 
 
     fighters = [
-        new Fighter("4c571d9a-3398-4677-831d-3373d270ec11", "Marcelo", "Garcia", "Alliance", "1986-10-10", "Elite"),
+        new Fighter("4c571d9a-3398-4677-831d-3373d270ec11", "Marcelo", "Garcia", "Alliance", "1986-10-10", "Elite","100"),
     ];
 
     weightDivisions = [
