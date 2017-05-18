@@ -54,15 +54,15 @@ export class DataApiService extends DataService {
         return this.apiServer.get(ApiMethods.tournament.categories).map(r => this.getArray<Category>(r))
     }
 
-    public addCategory(category: Category): any {
+    public addCategory(category: Category): Observable<any> {
         return this.apiServer.post(ApiMethods.tournament.categories, category)
     }
 
-    public updateCategory(category: Category): any {
+    public updateCategory(category: Category): Observable<any> {
         return this.apiServer.put(ApiMethods.tournament.categories, category)
     }
 
-    public deleteCategory(category: Category): any {
+    public deleteCategory(category: Category): Observable<any> {
         return this.apiServer.delete(ApiMethods.tournament.categories, category)
     }
 
@@ -80,8 +80,8 @@ export class DataApiService extends DataService {
         return this.apiServer.post(ApiMethods.tournament.fighters.getByFilter, filter).map(r => this.getArray<Fighter>(r))
     }
 
-    public deleteFighter(fighter:Fighter): any {
-        return this.apiServer.delete(ApiMethods.tournament.fighters.fighter, fighter);
+    public deleteFighter(fighterId: string): Observable<any> {
+        return this.apiServer.deleteById(ApiMethods.tournament.fighters.fighter, fighterId);
     }
     //Brackets
 
@@ -94,13 +94,13 @@ export class DataApiService extends DataService {
     public getWeightDivisions(): Observable<WeightDivision[]> {
         return this.apiServer.get(ApiMethods.tournament.weightDivisions).map(r => this.getArray<WeightDivision>(r))
     }
-    public addWeightDivision(weightDivision: WeightDivision) {
+    public addWeightDivision(weightDivision: WeightDivision): Observable<any> {
         return this.apiServer.post(ApiMethods.tournament.weightDivisions, weightDivision)
     }
-    public updateWeightDivision(weightDivision: WeightDivision) {
+    public updateWeightDivision(weightDivision: WeightDivision): Observable<any> {
         return this.apiServer.put(ApiMethods.tournament.weightDivisions, weightDivision)
     }
-    public deleteWeightDivision(weightDivision: WeightDivision) {
+    public deleteWeightDivision(weightDivision: WeightDivision): Observable<any> {
         return this.apiServer.delete(ApiMethods.tournament.weightDivisions, weightDivision)
     }
 }

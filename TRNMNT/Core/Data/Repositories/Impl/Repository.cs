@@ -43,10 +43,10 @@ namespace TRNMNT.Core.Data.Repositories
         }
 
         public void Delete(T entity){
-            context.Set<T>().Remove(entity);
+            context.Entry<T>(entity).State = EntityState.Deleted;
         }
         
-        public void DeleteByID<K>(K id) 
+        public void Delete<K>(K id) 
         {
             var entity = GetByID<K>(id);
             context.Entry<T>(entity).State = EntityState.Deleted;

@@ -8,6 +8,7 @@ using System.Linq;
 using OfficeOpenXml;
 using System;
 using TRNMNT.Core.Const;
+using System.Threading.Tasks;
 
 namespace TRNMNT.Core.Services.impl
 {
@@ -22,7 +23,7 @@ namespace TRNMNT.Core.Services.impl
             this.fighterService = fighterService;
         }
 
-        public CustomFile GetBracketsFile(FighterFilterModel filter)
+        public async Task<CustomFile> GetBracketsFileAsync(FighterFilterModel filter)
         {
             var models = fighterService.GetOrderedListForBrackets(filter);
             var settings = GetSettings(models.Count);
@@ -50,7 +51,7 @@ namespace TRNMNT.Core.Services.impl
                         for (int i = 0; i < settings.Count; i++)
                         {
                             var fighter = models.ElementAtOrDefault(i);
-                            sheet.Cells[settings.NameCells[i]].Value = fighter != null ? $"{i}. {fighter.FirstName} {fighter.LastName}" : " - ";
+                            sheet.Cells[settings.NameCells[i]].Value = fighter != null ? $"{i}. {fighter.Team}" : " - ";
                         }
                     }
 

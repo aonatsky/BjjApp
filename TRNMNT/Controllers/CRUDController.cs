@@ -62,8 +62,8 @@ namespace TRNMNT.Controllers
             }
             catch (Exception e)
             {
+                base.HandleException(e);
                 Response.StatusCode = 500;
-                return e.ToString();
             }
             return "OK";
         }
@@ -81,8 +81,28 @@ namespace TRNMNT.Controllers
             }
             catch (Exception e)
             {
+                base.HandleException(e);
                 Response.StatusCode = 500;
-                return e.ToString();
+            }
+            return "OK";
+        }
+
+        [HttpDelete("{entityID}")]
+        public String Delete(string entityID)
+        {
+            Response.StatusCode = 200;
+
+            try
+            {
+                repository.Delete<Guid>(Guid.Parse(entityID));
+                repository.Save(false);
+
+            }
+            catch (Exception e)
+            {
+                base.HandleException(e);
+                Response.StatusCode = 500;
+                
             }
             return "OK";
         }

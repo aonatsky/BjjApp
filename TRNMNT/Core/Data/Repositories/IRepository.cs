@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace TRNMNT.Core.Data.Repositories
         void Update(T entity);
         void AddRange(IEnumerable<T> entities);
         void Delete (T entity);
+        void Delete<TKey>(TKey id);
         void Save(bool supressExceptions = true);
     }
 }

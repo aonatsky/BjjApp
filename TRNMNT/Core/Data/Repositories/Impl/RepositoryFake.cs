@@ -48,5 +48,10 @@ namespace TRNMNT.Core.Data.Repositories
         {
             Console.WriteLine($"Entities {typeof(T)} are delete");
         }
+
+        public void Delete<TKey>(TKey id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

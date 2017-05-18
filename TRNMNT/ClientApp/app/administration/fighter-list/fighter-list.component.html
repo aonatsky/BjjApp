@@ -6,7 +6,8 @@
 <crud [entities]='fighters'
       [title]="'Fighters'"
       [columns]="fighterColumns"
-      [readonly]="false"
+      [editEnabled]="false"
+      [deleteEnabled]="true"
       (onDelete)="deleteFighter($event)"
       >
 </crud>

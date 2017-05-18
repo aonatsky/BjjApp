@@ -53,7 +53,7 @@ export class FighterListComponent implements OnInit, AfterContentInit {
     }
 
     deleteFighter(fighter: Fighter) {
-        this.dataService.deleteFighter(fighter);
+        this.dataService.deleteFighter(fighter.fighterId).subscribe(() => this.refreshTable());
     }
 
     getBracketsFile() {

@@ -17,7 +17,8 @@ export class CrudComponent implements OnInit {
     @Input() entities: any[] = [];
     @Input() title: string = "";
     @Input() columns: CrudColumn[] = [];
-    @Input() readonly: boolean = false;
+    @Input() editEnabled: boolean = true;
+    @Input() deleteEnabled: boolean = true;
 
     @Output() onAdd: EventEmitter<any> = new EventEmitter<any>();
     @Output() onUpdate: EventEmitter<any> = new EventEmitter<any>();
@@ -58,7 +59,7 @@ export class CrudComponent implements OnInit {
     }
 
     onRowSelect(event) {
-        if (!this.readonly) {
+        if (this.editEnabled || this.deleteEnabled) {
             this.showDialogToEdit(event.data)
         }
     }

@@ -11,7 +11,7 @@
             <p-column *ngIf="!isIdColumn(column)" field="{{column.propertyName}}" header="{{column.displayName}}"></p-column>
         </div>
         <p-footer>
-            <div  *ngIf="readonly==false" class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div>
+            <div  *ngIf="editEnabled" class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div>
         </p-footer>
     </p-dataTable>
 </div>
@@ -23,7 +23,7 @@
         <div class="ui-grid-row" *ngFor="let column of columns">
             <div *ngIf="!isIdColumn(column) || (isIdColumn(column) && !newEntity)" class="ui-grid-col-4"><label for="{{column.propertyName}}">{{column.displayName}}</label></div>
 
-            <div *ngIf="!isIdColumn(column)" class="ui-grid-col-12"><input pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" /></div>
+            <div *ngIf="!isIdColumn(column)" class="ui-grid-col-12"><input [disabled] ="!column.isEditable" pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" /></div>
             <div *ngIf="isIdColumn(column) && !newEntity" class="ui-grid-col-12"><label class="id-label" for="{{column.propertyName}}">{{entityToEdit[column.propertyName]}}</label></div>
         </div>
     </div>
