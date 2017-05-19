@@ -1,9 +1,11 @@
+import { Observable } from "rxjs/Observable";
 import { WeightDivision } from '../../core/model/weight-division.model';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { AfterViewInit, OnInit, Component } from '@angular/core';
 import { Category } from "../../core/model/category.model";
 import { CrudColumn } from "../../shared/crud/crud.component";
 import { NotificationService } from '../../core/services/notification.service'
+import { LoaderService } from '../../core/services/loader.service'
 
 
 @Component({
@@ -15,15 +17,23 @@ import { NotificationService } from '../../core/services/notification.service'
 export class TournamentSettingsComponent implements OnInit {
 
 
-    constructor(private dataService: DataService, private notificationService: NotificationService) {
+    constructor(private dataService: DataService, private notificationService: NotificationService, private loaderService: LoaderService) {
     }
 
 
     ngOnInit(): void {
-        this.refreshCategories();
-        this.refreshWeightDivisions();
+        this.loaderService.showLoader();
+        Observable.forkJoin(this.dataService.getCategories(), this.dataService.getWeightDivisions())
+            .subscribe(data => this.onDataLoad(data))
     }
 
+
+    private onDataLoad(data) {
+        this.categories = data[0];
+        this.weightDivisions = data[1];
+        this.loaderService.hideLoader();
+
+    }
 
     //Categories    
     refreshCategories() {
@@ -75,7 +85,7 @@ export class TournamentSettingsComponent implements OnInit {
         this.dataService.deleteWeightDivision(category).subscribe(() => this.refreshWeightDivisions(), () => this.notificationService.showGenericError());
     }
 
-    private test(data: any){
+    private test(data: any) {
         this.weightDivisions = data;
     }
 

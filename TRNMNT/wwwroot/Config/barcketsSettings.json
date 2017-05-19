@@ -6,8 +6,13 @@
   },
   {
     "count": 3,
-    "titlecell": "F2",
-    "namecells": [ "B8", "B18", "I8" ]
+    "titlecell": "E2",
+    "namecells": [ "B7", "B17", "H7" ]
+  },
+  {
+    "count": 4,
+    "titlecell": "E2",
+    "namecells": [ "B7", "B17", "H7", "H17" ]
   },
   {
     "count": 16,

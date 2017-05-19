@@ -100,7 +100,7 @@ namespace TRNMNT.Core.Services.impl
             var bracketSize = GetBracketsSize(fighters.Count());
             for (int i = 0; i < bracketSize - count; i++)
             {
-                fighters.Add(null);
+                fighters.Add(new FighterModel() {});
             }
 
             return Distribute(fighters);

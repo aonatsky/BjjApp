@@ -36,6 +36,7 @@ import { DataService } from './core/dal/contracts/data.service';
 import { ApiProviders } from './core/dal/api.providers';
 import { LoggerService } from './core/services/logger.service';
 import { NotificationService } from './core/services/notification.service';
+import { LoaderService } from './core/services/loader.service';
 import { ApiServer } from './core/dal/servers/api.server';
 
 
@@ -70,7 +71,8 @@ import { ApiServer } from './core/dal/servers/api.server';
         appRoutingProviders,
         ApiProviders,
         LoggerService,
-        NotificationService
+        NotificationService,
+        LoaderService
     ]
 })
 export class AppModule {
