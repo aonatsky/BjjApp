@@ -7,12 +7,17 @@
   {
     "count": 3,
     "titlecell": "E2",
-    "namecells": [ "B7", "B17", "H7" ]
+    "namecells": [ "B11", "B21", "H11" ]
+  },
+  {
+    "count": 2,
+    "titlecell": "E2",
+    "namecells": [ "B16", "H16" ]
   },
   {
     "count": 4,
     "titlecell": "E2",
-    "namecells": [ "B7", "B17", "H7", "H17" ]
+    "namecells": [ "B11", "B21", "H11", "H21" ]
   },
   {
     "count": 16,

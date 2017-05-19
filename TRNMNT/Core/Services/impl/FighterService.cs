@@ -104,41 +104,10 @@ namespace TRNMNT.Core.Services.impl
             }
 
             return Distribute(fighters);
-            //var orderedbyTeam = fighters.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
-            //.SelectMany(f => f).ToList();
-
-            //List<FighterModel> sideA = new List<FighterModel>();
-            //List<FighterModel> sideB = new List<FighterModel>();
-            //for (int i = 0; i < bracketSize; i++)
-            //{
-            //    var fighter = orderedbyTeam.ElementAtOrDefault(i);
-            //    if (i % 2 == 0)
-            //    {
-            //        sideA.Add(fighter);
-            //    }
-            //    else
-            //    {
-            //        sideB.Add(fighter);
-            //    }
-            //}
-            //return GetDistributedSide(sideA).Concat(GetDistributedSide(sideB)).ToList();
-            //return fighters;
-            //return GetModels(fighters);
         }
 
 
 
-        private List<FighterModel> GetDistributedSide(List<FighterModel> list)
-        {
-            var halfCount = list.Count() / 2;
-            var result = new List<FighterModel>();
-            for (int i = 0; i < halfCount; i++)
-            {
-                result.Add(list.ElementAtOrDefault(i));
-                result.Add(list.ElementAtOrDefault(halfCount + i));
-            }
-            return result;
-        }
 
 
 
