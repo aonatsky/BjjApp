@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TRNMNT.Core.Data.Entities;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TRNMNT.Core.Data
 {
@@ -19,12 +20,18 @@ namespace TRNMNT.Core.Data
             //builder.Entity<Owner>().HasKey(o => o.OwnerId);
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("trnmnt");
-
+            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+      
+            
 
         #region interface Implementation
         public new IQueryable<T> Set<T>() where T : class

@@ -96,47 +96,53 @@ namespace TRNMNT.Core.Services.impl
         public List<FighterModel> GetOrderedListForBrackets(FighterFilterModel filter)
         {
             var fighters = GetFighterModelsByFilter(filter);
+            var count = fighters.Count;
             var bracketSize = GetBracketsSize(fighters.Count());
-
-            var orderedbyTeam = fighters.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
-            .SelectMany(f => f).ToList();
-
-            List<FighterModel> sideA = new List<FighterModel>();
-            List<FighterModel> sideB = new List<FighterModel>();
-            for (int i = 0; i < bracketSize; i++)
+            for (int i = 0; i < bracketSize - count; i++)
             {
-                var fighter = orderedbyTeam.ElementAtOrDefault(i);
-                if (i % 2 == 0)
-                {
-                    sideA.Add(fighter);
-                }
-                else
-                {
-                    sideB.Add(fighter);
-                }
+                fighters.Add(new FighterModel() {});
             }
-            return GetDistributedSide(sideA).Concat(GetDistributedSide(sideB)).ToList();
-            //return fighters;
-            //return GetModels(fighters);
+
+            return Distribute(fighters);
         }
 
-        private List<FighterModel> GetDistributedSide(List<FighterModel> list)
-        {
-            var halfCount = list.Count()/2;
-            var result = new List<FighterModel>();
-            for (int i = 0; i < halfCount; i++)
-            {
-                result.Add(list.ElementAtOrDefault(i));
-                result.Add(list.ElementAtOrDefault(halfCount + i));
-            }
-            return result;
-        }
+
+
 
 
 
         #endregion
 
+
         #region Private methods
+
+        private List<FighterModel> Distribute(List<FighterModel> fightersList)
+        {
+
+            var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
+           .SelectMany(f => f).ToList();
+            if (fightersList.Count() > 4)
+            {
+                List<FighterModel> sideA = new List<FighterModel>();
+                List<FighterModel> sideB = new List<FighterModel>();
+                for (int i = 0; i < orderedbyTeam.Count; i++)
+                {
+                    var fighter = orderedbyTeam.ElementAtOrDefault(i);
+                    if (i % 2 == 0)
+                    {
+                        sideA.Add(fighter);
+                    }
+                    else
+                    {
+                        sideB.Add(fighter);
+                    }
+                }
+                return Distribute(sideA).Concat(Distribute(sideB)).ToList();
+            }
+            return fightersList;
+            
+        } 
+
         private List<FighterModel> GetModels(IEnumerable<Fighter> fighters)
         {
             return fighters.Select(f => new FighterModel()

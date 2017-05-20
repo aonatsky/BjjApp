@@ -1,11 +1,11 @@
 import {CrudColumn} from '../../shared/crud/crud.component';
-import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, AfterContentInit, ElementRef } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
 import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.component'
 import { FileUpload } from '../../shared/file-upload/file-upload.component'
-import { NotificationService} from '../../core/services/notification.service'
-
+import { NotificationService } from '../../core/services/notification.service'
+import { LoaderService } from '../../core/services/loader.service'
 
 @Component({
     selector: 'fighterlist',
@@ -14,7 +14,7 @@ import { NotificationService} from '../../core/services/notification.service'
 })
 
 
-export class FighterListComponent implements OnInit, AfterContentInit {
+export class FighterListComponent {
 
     fighters: Fighter[];
     fighterColumns: CrudColumn[] = [
@@ -27,47 +27,52 @@ export class FighterListComponent implements OnInit, AfterContentInit {
     ];
     
     @ViewChild(FighterFilter) fighterFilter: FighterFilter;
-    @ViewChild(FileUpload) fileUpload: FileUpload
+    @ViewChild("bracketsButton") bracketsButton: ElementRef;
 
-    constructor(private dataService: DataService, private notificationService: NotificationService) {
+    private isLoaded: boolean = false;
+
+    constructor(private dataService: DataService, private notificationService: NotificationService, private loaderService: LoaderService) {
     }
 
-    
-
-    //ng
-    ngOnInit() {
+    ngOnInit(): void {
+        this.loaderService.showLoader();
     }
-
-    ngAfterContentInit() {
-    }
-
-
+      
     //events
     onFilterChanged() {
-        this.refreshTable();
+        this.loaderService.showLoader();
+        this.loadData();
     }
 
-    
-    uploadFile(file) {
-        this.dataService.uploadFighterList(file).subscribe(() => this.refreshTable());
+    private uploadFile(file) {
+        this.dataService.uploadFighterList(file).subscribe(() => this.loadData());
     }
 
-    deleteFighter(fighter: Fighter) {
-        this.dataService.deleteFighter(fighter);
+    private deleteFighter(fighter: Fighter) {
+        this.dataService.deleteFighter(fighter.fighterId).subscribe(() => this.loadData());
     }
 
-    getBracketsFile() {
-        //if (this.fighterFilter.currentFilterValue.categories.length == 1 && this.fighterFilter.currentFilterValue.weightDivisions.length == 1) {
+    private getBracketsFile() {
         var url = this.dataService.getBracketsFile(this.fighterFilter.currentFilterValue).subscribe();
-        //window.open()
-        //} else {
-        //    this.notificationService.showWarn("Warning", "Please specify weightdivision and category")
-        //}
-        
     }
 
-    private refreshTable() {
-        this.dataService.getFigtersByFilter(this.fighterFilter.currentFilterValue).subscribe(data => this.fighters = data, () => this.notificationService.showGenericError())
+
+
+ 
+    private loadData() {
+        this.dataService.getFigtersByFilter(this.fighterFilter.currentFilterValue).subscribe(data => this.onDataLoaded(data), () => this.notificationService.showGenericError())
+    }
+
+    private onDataLoaded(data) {
+        this.fighters = data;
+        this.setBracketsButtonVisibility();
+        this.loaderService.hideLoader();
+    }
+
+    private setBracketsButtonVisibility()
+    {
+        let btn = this.bracketsButton.nativeElement;
+        btn["disabled"] = !(this.fighterFilter.currentFilterValue.categories.length == 1 && this.fighterFilter.currentFilterValue.weightDivisions.length == 1 && this.fighters.length > 0);
     }
 }
 

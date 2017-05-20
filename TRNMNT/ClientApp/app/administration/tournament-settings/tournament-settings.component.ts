@@ -1,8 +1,11 @@
+import { Observable } from "rxjs/Observable";
 import { WeightDivision } from '../../core/model/weight-division.model';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { AfterViewInit, OnInit, Component } from '@angular/core';
 import { Category } from "../../core/model/category.model";
 import { CrudColumn } from "../../shared/crud/crud.component";
+import { NotificationService } from '../../core/services/notification.service'
+import { LoaderService } from '../../core/services/loader.service'
 
 
 @Component({
@@ -14,15 +17,23 @@ import { CrudColumn } from "../../shared/crud/crud.component";
 export class TournamentSettingsComponent implements OnInit {
 
 
-    constructor(private dataService: DataService) {
+    constructor(private dataService: DataService, private notificationService: NotificationService, private loaderService: LoaderService) {
     }
 
 
     ngOnInit(): void {
-        this.refreshCategories();
-        this.refreshWeightDivisions();
+        this.loaderService.showLoader();
+        Observable.forkJoin(this.dataService.getCategories(), this.dataService.getWeightDivisions())
+            .subscribe(data => this.onDataLoad(data))
     }
 
+
+    private onDataLoad(data) {
+        this.categories = data[0];
+        this.weightDivisions = data[1];
+        this.loaderService.hideLoader();
+
+    }
 
     //Categories    
     refreshCategories() {
@@ -37,15 +48,15 @@ export class TournamentSettingsComponent implements OnInit {
     ];
 
     addCategory(category: Category) {
-        this.dataService.addCategory(category).subscribe(() => this.refreshCategories());
+        this.dataService.addCategory(category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
     }
 
     updateCategory(category: Category) {
-        this.dataService.updateCategory(category).subscribe(() => this.refreshCategories());
+        this.dataService.updateCategory(category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
     }
 
     deleteCategory(category: Category) {
-        this.dataService.deleteCategory(category).subscribe(() => this.refreshCategories());
+        this.dataService.deleteCategory(category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
     }
 
 
@@ -63,18 +74,18 @@ export class TournamentSettingsComponent implements OnInit {
 
 
     addWeightDivision(category: WeightDivision) {
-        this.dataService.addWeightDivision(category).subscribe(() => this.refreshWeightDivisions());
+        this.dataService.addWeightDivision(category).subscribe(() => this.refreshWeightDivisions(), () => this.notificationService.showGenericError());
     }
 
     updateWeightDivision(category: WeightDivision) {
-        this.dataService.updateWeightDivision(category).subscribe(() => this.refreshWeightDivisions());
+        this.dataService.updateWeightDivision(category).subscribe(() => this.refreshWeightDivisions(), () => this.notificationService.showGenericError());
     }
 
     deleteWeightDivision(category: WeightDivision) {
-        this.dataService.deleteWeightDivision(category).subscribe(() => this.refreshWeightDivisions());
+        this.dataService.deleteWeightDivision(category).subscribe(() => this.refreshWeightDivisions(), () => this.notificationService.showGenericError());
     }
 
-    private test(data: any){
+    private test(data: any) {
         this.weightDivisions = data;
     }
 

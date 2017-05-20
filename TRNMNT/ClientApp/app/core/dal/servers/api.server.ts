@@ -41,6 +41,14 @@ export class ApiServer {
         return this.http.delete(name, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
     }
 
+    public deleteById(name: string, id: any): Observable<any> {
+        let options = new RequestOptions({
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+        });
+        let url = name + "/" + id;
+        return this.http.delete(url, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error));
+    }
+
     public postFile(name: string, file: any): Observable<any>{
         let formData = new FormData();
         formData.append("file",file)

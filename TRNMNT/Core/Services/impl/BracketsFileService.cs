@@ -8,6 +8,7 @@ using System.Linq;
 using OfficeOpenXml;
 using System;
 using TRNMNT.Core.Const;
+using System.Threading.Tasks;
 
 namespace TRNMNT.Core.Services.impl
 {
@@ -22,7 +23,7 @@ namespace TRNMNT.Core.Services.impl
             this.fighterService = fighterService;
         }
 
-        public CustomFile GetBracketsFile(FighterFilterModel filter)
+        public async Task<CustomFile> GetBracketsFileAsync(FighterFilterModel filter)
         {
             var models = fighterService.GetOrderedListForBrackets(filter);
             var settings = GetSettings(models.Count);
@@ -32,15 +33,14 @@ namespace TRNMNT.Core.Services.impl
 
             if (settings != null)
             {
-                var filepath = FilePathService.GetBracketsFilePath(env.WebRootPath, settings.Count);
-
-                if (!File.Exists(filepath))
+                var templateFilepath = Path.Combine(env.WebRootPath, FilePath.BRACKETS_FILE_NAME_MASK + settings.Count.ToString() + FilePath.EXCEL_EXTENSION); 
+                if (!File.Exists(templateFilepath))
                 {
-                    throw new Exception($"Bracket file {filepath} does not exist");
+                    throw new Exception($"Bracket file {templateFilepath} does not exist");
                 }
 
                 byte[] byteArray;
-                var stream = new FileStream(filepath, FileMode.Open);
+                var stream = new FileStream(templateFilepath, FileMode.Open);
                 using (var excelPackage = new ExcelPackage(stream))
                 {
                     var sheet = excelPackage?.Workbook?.Worksheets[1];
@@ -50,7 +50,7 @@ namespace TRNMNT.Core.Services.impl
                         for (int i = 0; i < settings.Count; i++)
                         {
                             var fighter = models.ElementAtOrDefault(i);
-                            sheet.Cells[settings.NameCells[i]].Value = fighter != null ? $"{i}. {fighter.FirstName} {fighter.LastName}" : " - ";
+                            sheet.Cells[settings.NameCells[i]].Value = fighter != null ? $"{i}. {fighter.Team}" : " - ";
                         }
                     }
 

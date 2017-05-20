@@ -6,12 +6,13 @@
 <crud [entities]='fighters'
       [title]="'Fighters'"
       [columns]="fighterColumns"
-      [readonly]="false"
+      [editEnabled]="false"
+      [deleteEnabled]="true"
       (onDelete)="deleteFighter($event)"
       >
 </crud>
 
 <div class="section">
     <file-upload></file-upload>
-    <button type="button" pButton (click)="getBracketsFile()" label="Get Brackets"></button>
+    <button type="button" #bracketsButton pButton [disabled] ="true" (click)="getBracketsFile()" label="Get Brackets"></button>
 </div>
