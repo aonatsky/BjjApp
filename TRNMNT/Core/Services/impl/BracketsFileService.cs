@@ -33,7 +33,7 @@ namespace TRNMNT.Core.Services.impl
 
             if (settings != null)
             {
-                var templateFilepath = Path.Combine(env.WebRootPath, FilePath.BRACKETS_FILE_NAME_MASK + settings.Count.ToString() + FilePath.EXCEL_EXTENSION); 
+                var templateFilepath = Path.Combine(env.WebRootPath, FilePath.BRACKETS_FILE_FOLDER_NAME, FilePath.BRACKETS_FILE_NAME_MASK + settings.Count.ToString() + FilePath.EXCEL_EXTENSION);
                 if (!File.Exists(templateFilepath))
                 {
                     throw new Exception($"Bracket file {templateFilepath} does not exist");
@@ -65,7 +65,7 @@ namespace TRNMNT.Core.Services.impl
                     ByteArray = byteArray,
                     ContentType = ContentTypes.EXCEL_CONTENT_TYPE
                 };
-                    
+
             }
             else
             {

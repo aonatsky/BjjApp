@@ -103,4 +103,10 @@ export class DataApiService extends DataService {
     public deleteWeightDivision(weightDivision: WeightDivision): Observable<any> {
         return this.apiServer.delete(ApiMethods.tournament.weightDivisions, weightDivision)
     }
+
+    //Static Content
+    public getStaticContent(url): Observable<any> {
+        return this.apiServer.get(url); 
+    }
+
 }

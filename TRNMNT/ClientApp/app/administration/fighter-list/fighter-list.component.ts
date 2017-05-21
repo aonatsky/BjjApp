@@ -49,6 +49,7 @@ export class FighterListComponent {
     }
 
     private deleteFighter(fighter: Fighter) {
+        this.loaderService.showLoader();
         this.dataService.deleteFighter(fighter.fighterId).subscribe(() => this.loadData());
     }
 

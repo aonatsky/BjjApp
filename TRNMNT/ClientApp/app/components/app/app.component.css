@@ -103,6 +103,9 @@
     height: 100%;
     background-color: white;
     opacity: 0.8;
-    padding-top: 50%;
     z-index:1;
+}
+
+.loader{
+    margin:50%; 
 }

@@ -22,5 +22,6 @@ export abstract class DataService {
     public abstract addWeightDivision(weightDivision: WeightDivision): Observable<any>;
     public abstract updateWeightDivision(weightDivision: WeightDivision): Observable<any>;
     public abstract deleteWeightDivision(weightDivision: WeightDivision): Observable<any>;
+    public abstract getStaticContent(url): Observable<any>
 
 }

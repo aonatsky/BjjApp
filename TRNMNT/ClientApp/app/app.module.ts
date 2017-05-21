@@ -14,6 +14,7 @@ import { SharedModule } from "primeng/components/common/shared";
 import { ButtonModule } from "primeng/components/button/button";
 import { InputTextModule } from "primeng/components/inputtext/inputtext";
 import { GrowlModule } from 'primeng/components/growl/growl';
+import { DropdownModule } from 'primeng/primeng';
 
 
 //Administration components
@@ -27,7 +28,7 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
 import { FileUpload } from './shared/file-upload/file-upload.component';
 import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
-
+import { StaticHtmlComponent } from './shared/static-html/static-html.component';
 import {CrudComponent} from './shared/crud/crud.component';
 
 
@@ -51,7 +52,8 @@ import { ApiServer } from './core/dal/servers/api.server';
         FighterFilter,
         FileUpload,
         TournamentSettingsComponent,
-        CrudComponent
+        CrudComponent,
+        StaticHtmlComponent
     ],
     imports: [
         routing,

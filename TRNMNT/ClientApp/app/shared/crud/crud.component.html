@@ -1,6 +1,6 @@
 <div class='datatable'>
     <h3 class="first">{{title}}</h3>
-    <p-dataTable [value]="entities" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)"
+    <p-dataTable [value]="entities" [rows]="10" [paginator]="entities.length > 10" [pageLinks]="3" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)"
         [responsive]="true">
         <p-column  header="#" [style]="{'width':'4%','text-align':'center'}">
             <template let-ri="rowIndex+1" pTemplate type="body">

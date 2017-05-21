@@ -11,7 +11,7 @@ import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
 export class CrudComponent implements OnInit {
 
     ngOnInit(): void {
-
+        this.entities = [];
     }
 
     @Input() entities: any[] = [];
@@ -23,7 +23,7 @@ export class CrudComponent implements OnInit {
     @Output() onAdd: EventEmitter<any> = new EventEmitter<any>();
     @Output() onUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
-
+    
 
 
     displayDialog: boolean;
