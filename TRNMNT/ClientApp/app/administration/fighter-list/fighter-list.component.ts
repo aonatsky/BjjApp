@@ -44,17 +44,14 @@ export class FighterListComponent {
         this.loadData();
     }
 
-    private uploadFile(file) {
-        this.dataService.uploadFighterList(file).subscribe(() => this.loadData());
-    }
-
     private deleteFighter(fighter: Fighter) {
         this.loaderService.showLoader();
         this.dataService.deleteFighter(fighter.fighterId).subscribe(() => this.loadData());
     }
 
     private getBracketsFile() {
-        var url = this.dataService.getBracketsFile(this.fighterFilter.currentFilterValue).subscribe();
+        this.loaderService.showLoader();
+        var url = this.dataService.getBracketsFile(this.fighterFilter.currentFilterValue).subscribe(() => this.loaderService.hideLoader());
     }
 
 

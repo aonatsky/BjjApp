@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using System.Collections.Generic;
 using System.IO;
 using TRNMNT.Core.Model;
-using TRNMNT.Core.Service;
+using TRNMNT.Core.Const;
 using Newtonsoft.Json;
 using System.Linq;
 using OfficeOpenXml;
 using System;
-using TRNMNT.Core.Const;
 using System.Threading.Tasks;
 
 namespace TRNMNT.Core.Services.impl
@@ -50,7 +48,7 @@ namespace TRNMNT.Core.Services.impl
                         for (int i = 0; i < settings.Count; i++)
                         {
                             var fighter = models.ElementAtOrDefault(i);
-                            sheet.Cells[settings.NameCells[i]].Value = fighter != null ? $"{i}. {fighter.Team}" : " - ";
+                            sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(fighter.FirstName) ? $"{i+1}. {fighter.FirstName} {fighter.LastName}" : " - ";
                         }
                     }
 

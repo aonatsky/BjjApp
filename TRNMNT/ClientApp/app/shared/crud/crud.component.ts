@@ -1,4 +1,5 @@
-import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
+import { OnInit, Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { LoaderService } from '../../core/services/loader.service'
 
 
 @Component({
@@ -8,10 +9,18 @@ import { OnInit, Component, Input, Output, EventEmitter } from '@angular/core';
 })
 
 
-export class CrudComponent implements OnInit {
+export class CrudComponent implements OnInit, OnChanges {
 
+    constructor(private loaderService: LoaderService) {
+
+    }
     ngOnInit(): void {
         this.entities = [];
+        this.loaderService.showLoader();
+    }
+
+    ngOnChanges(): void {
+        this.loaderService.hideLoader();
     }
 
     @Input() entities: any[] = [];
@@ -45,6 +54,7 @@ export class CrudComponent implements OnInit {
     }
 
     save() {
+        this.loaderService.showLoader();
         if (this.newEntity) {
             this.onAdd.emit(this.entityToEdit)
         } else {
@@ -54,6 +64,7 @@ export class CrudComponent implements OnInit {
     }
 
     delete() {
+        this.loaderService.showLoader();
         this.onDelete.emit(this.entityToEdit)
         this.displayDialog = false;
     }

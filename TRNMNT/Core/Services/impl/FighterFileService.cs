@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
-using TRNMNT.Core.Service;
+using TRNMNT.Core.Const;
 
 namespace TRNMNT.Core.Services.impl
 {

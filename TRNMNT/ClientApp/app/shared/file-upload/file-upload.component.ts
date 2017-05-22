@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Rx';
 import { Input, Component, ViewChild, EventEmitter, Output, ElementRef } from '@angular/core';
 import { DataService } from "../../core/dal/contracts/data.service";
 import { NotificationService } from "../../core/services/notification.service";
+import { LoaderService } from "../../core/services/loader.service";
 
 
 @Component({
@@ -13,13 +14,15 @@ import { NotificationService } from "../../core/services/notification.service";
 
 export class FileUpload {
 
+    @Output() onUpload: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild("fileInput") fileInput: ElementRef;
 
-    constructor(private dataService: DataService, private notificationService: NotificationService) {
+    constructor(private dataService: DataService, private notificationService: NotificationService, private loaderService: LoaderService) {
 
     }
 
     private upload() {
+        this.loaderService.showLoader();
         let fi = this.fileInput.nativeElement;
         if (fi.files && fi.files[0]) {
             let fileToUpload = fi.files[0];
@@ -35,7 +38,8 @@ export class FileUpload {
         } else if (result.code >= 500) {
             this.notificationService.showError("Fail", result.message)
         }
-
+        this.onUpload.emit();
+        this.loaderService.hideLoader();
 
     }
         

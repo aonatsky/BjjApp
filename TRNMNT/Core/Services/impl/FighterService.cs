@@ -42,7 +42,7 @@ namespace TRNMNT.Core.Services.impl
 
             var fightersToAdd = new List<Fighter>();
             var teamsToAdd = new List<Team>();
-            var comparer = new FighterComparer();
+            var fighterComparer = new FighterComparer();
             foreach (var model in fighterModels)
             {
                 var fighter = new Fighter()
@@ -85,7 +85,10 @@ namespace TRNMNT.Core.Services.impl
                     message += $"Category {model.Category} is invalid ";
                     continue;
                 }
-                fightersToAdd.Add(fighter);
+                if (!existingFighters.Contains(fighter,fighterComparer) && !fightersToAdd.Contains(fighter,fighterComparer))
+                {
+                    fightersToAdd.Add(fighter);
+                }
             }
             fighterRepository.AddRange(fightersToAdd);
             fighterRepository.Save();
@@ -153,7 +156,7 @@ namespace TRNMNT.Core.Services.impl
                 Team = f.Team.Name,
                 WeightDivision = f.WeightDivision.Name,
                 Category = f.Category.Name,
-                DateOfBirth = f.DateOfBirth.ToString("yyyy-mm-dd")
+                DateOfBirth = f.DateOfBirth.ToString("yyyy-MM-dd")
             }).ToList();
 
         }

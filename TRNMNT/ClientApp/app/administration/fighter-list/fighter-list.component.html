@@ -13,6 +13,6 @@
 </crud>
 
 <div class="section">
-    <file-upload></file-upload>
+    <file-upload (onUpload) ="loadData()"></file-upload>
     <button type="button" #bracketsButton pButton [disabled] ="true" (click)="getBracketsFile()" label="Get Brackets"></button>
 </div>
