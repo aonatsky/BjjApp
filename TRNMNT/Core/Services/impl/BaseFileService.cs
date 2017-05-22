@@ -39,7 +39,7 @@ namespace TRNMNT.Core.Services.impl
             }
 
             var internalProcessResult = ProcessInternal(file.OpenReadStream());
-            SaveFile(file);
+            //SaveFile(file);
 
             return internalProcessResult;
         }
