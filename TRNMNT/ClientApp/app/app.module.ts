@@ -4,7 +4,7 @@ import { FormsModule   } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router';
-import { AppComponent } from './components/app/app.component'
+import { AppComponent } from './app-component/app.component'
 import { routing, appRoutingProviders } from "./app.routing";
 
 //PrimeNG
@@ -34,6 +34,8 @@ import {CrudComponent} from './shared/crud/crud.component';
 
 //Services
 import { DataService } from './core/dal/contracts/data.service';
+import { HttpService } from './core/dal/http/http.service';
+import { RestService } from './core/dal/rest/rest.service';
 import { ApiProviders } from './core/dal/api.providers';
 import { LoggerService } from './core/services/logger.service';
 import { NotificationService } from './core/services/notification.service';
@@ -74,7 +76,9 @@ import { ApiServer } from './core/dal/servers/api.server';
         ApiProviders,
         LoggerService,
         NotificationService,
-        LoaderService
+        LoaderService,
+        HttpService,
+        RestService
     ]
 })
 export class AppModule {

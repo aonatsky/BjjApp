@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Message } from 'primeng/primeng';
-import { NotificationService } from '../../core/services/notification.service';
-import { LoaderService } from '../../core/services/loader.service';
+import { NotificationService } from '../core/services/notification.service';
+import { LoaderService } from '../core/services/loader.service';
 
 @Component({
     selector: 'app',
