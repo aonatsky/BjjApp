@@ -7,7 +7,7 @@ import { CrudColumn } from "../../shared/crud/crud.component";
 import { NotificationService } from '../../core/services/notification.service'
 import { LoaderService } from '../../core/services/loader.service'
 import { HttpService } from '../../core/dal/http/http.service';
-import { RestService } from '../../core/dal/rest/rest.service';
+
 
 
 @Component({
@@ -19,13 +19,13 @@ import { RestService } from '../../core/dal/rest/rest.service';
 export class TournamentSettingsComponent implements OnInit {
 
 
-    constructor(private dataService: DataService, private notificationService: NotificationService, private loaderService: LoaderService, private restService: RestService) {
+    constructor(private dataService: DataService, private notificationService: NotificationService, private loaderService: LoaderService) {
     }
 
 
     ngOnInit(): void {
         this.loaderService.showLoader();
-        Observable.forkJoin(this.restService.get<Category>(Category), this.dataService.getWeightDivisions())
+        Observable.forkJoin(this.dataService.getCategories(), this.dataService.getWeightDivisions())
             .subscribe(data => this.onDataLoad(data), () => this.notificationService.showGenericError())
     }
 
@@ -50,15 +50,15 @@ export class TournamentSettingsComponent implements OnInit {
     ];
 
     addCategory(category: Category) {
-        this.restService.add<Category>(Category, category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
+        this.dataService.addCategory(category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
     }
 
     updateCategory(category: Category) {
-        this.restService.update<Category>(Category, category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
+        this.dataService.updateCategory(category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
     }
 
     deleteCategory(category: Category) {
-        this.restService.delete<Category>(Category,category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
+        this.dataService.deleteCategory(category).subscribe(() => this.refreshCategories(), () => this.notificationService.showGenericError());
     }
 
 

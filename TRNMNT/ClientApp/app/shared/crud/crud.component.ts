@@ -9,18 +9,13 @@ import { LoaderService } from '../../core/services/loader.service'
 })
 
 
-export class CrudComponent implements OnInit, OnChanges {
+export class CrudComponent implements OnInit {
 
     constructor(private loaderService: LoaderService) {
 
     }
     ngOnInit(): void {
         this.entities = [];
-        this.loaderService.showLoader();
-    }
-
-    ngOnChanges(): void {
-        this.loaderService.hideLoader();
     }
 
     @Input() entities: any[] = [];
@@ -54,7 +49,6 @@ export class CrudComponent implements OnInit, OnChanges {
     }
 
     save() {
-        this.loaderService.showLoader();
         if (this.newEntity) {
             this.onAdd.emit(this.entityToEdit)
         } else {
@@ -64,7 +58,6 @@ export class CrudComponent implements OnInit, OnChanges {
     }
 
     delete() {
-        this.loaderService.showLoader();
         this.onDelete.emit(this.entityToEdit)
         this.displayDialog = false;
     }

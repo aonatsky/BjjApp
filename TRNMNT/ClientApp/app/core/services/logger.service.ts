@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AppConfig } from '../../app.config';
-import { ApiServer } from "../dal/servers/api.server";
 import { ApiMethods } from '../dal/consts/api-methods.consts'
 import { RequestOptions, Http, Headers, Response } from '@angular/http';
 import { isDevMode } from '@angular/core';
@@ -40,7 +39,7 @@ export class LoggerService {
 
 
     private log(msg: any, isErr = false) {
-        if (AppConfig.isDebug) {
+        if (isDevMode()) {
             this.logs.push(msg);
             isErr ? console.error(msg) : console.log(msg);
         }

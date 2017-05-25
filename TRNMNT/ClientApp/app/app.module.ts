@@ -35,12 +35,10 @@ import {CrudComponent} from './shared/crud/crud.component';
 //Services
 import { DataService } from './core/dal/contracts/data.service';
 import { HttpService } from './core/dal/http/http.service';
-import { RestService } from './core/dal/rest/rest.service';
 import { ApiProviders } from './core/dal/api.providers';
 import { LoggerService } from './core/services/logger.service';
 import { NotificationService } from './core/services/notification.service';
 import { LoaderService } from './core/services/loader.service';
-import { ApiServer } from './core/dal/servers/api.server';
 
 
 @NgModule({
@@ -78,7 +76,6 @@ import { ApiServer } from './core/dal/servers/api.server';
         NotificationService,
         LoaderService,
         HttpService,
-        RestService
     ]
 })
 export class AppModule {
