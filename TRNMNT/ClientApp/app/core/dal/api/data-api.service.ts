@@ -42,9 +42,9 @@ export class DataApiService extends DataService {
         return response.json();
     }
 
-    private getExcelFile(response: Response): void {
+    private getExcelFile(response: Response, fileName: string): void {
         var blob = response.blob();
-        FileSaver.saveAs(blob, response.headers.get("filename"));
+        FileSaver.saveAs(blob, fileName);
     }
 
 
@@ -85,8 +85,8 @@ export class DataApiService extends DataService {
     }
     //Brackets
 
-    public getBracketsFile(filter: FighterFilterModel): Observable<void> {
-        return this.apiServer.post(ApiMethods.tournament.fighters.getBrackets, filter, ResponseContentType.Blob).map(r => this.getExcelFile(r))
+    public getBracketsFile(filter: FighterFilterModel, fileName: string): Observable<void> {
+        return this.apiServer.post(ApiMethods.tournament.fighters.getBrackets, filter, ResponseContentType.Blob).map(r => this.getExcelFile(r, fileName))
     }
 
     //WeightDivisions

@@ -14,7 +14,7 @@ export abstract class DataService {
     public abstract deleteFighter(fighterId: string): Observable<any>;
     public abstract getWeightDivisions(): Observable<WeightDivision[]>;
     public abstract uploadFighterList(file: any): Observable<any>;
-    public abstract getBracketsFile(filter: FighterFilterModel): Observable<void>
+    public abstract getBracketsFile(filter: FighterFilterModel, fileName: string): Observable<void>
     public abstract getCategories(): Observable<Category[]>;
     public abstract addCategory(category: Category): Observable<any>;
     public abstract updateCategory(category: Category): Observable<any>;

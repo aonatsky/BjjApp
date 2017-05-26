@@ -51,7 +51,11 @@ export class FighterListComponent {
 
     private getBracketsFile() {
         this.loaderService.showLoader();
-        var url = this.dataService.getBracketsFile(this.fighterFilter.currentFilterValue).subscribe(() => this.loaderService.hideLoader());
+        var url = this.dataService.getBracketsFile(this.fighterFilter.currentFilterValue, this.getBracketsFileName()).subscribe(() => this.loaderService.hideLoader());
+    }
+
+    private getBracketsFileName(): string {
+        return this.fighterFilter.currentFilterValue.categories[0].name + "_" + this.fighterFilter.currentFilterValue.weightDivisions[0].name + ".xlsx"
     }
 
 
