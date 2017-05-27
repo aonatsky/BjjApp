@@ -124,7 +124,7 @@ namespace TRNMNT.Core.Services.impl
 
             var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
            .SelectMany(f => f).ToList();
-            if (fightersList.Count() > 4)
+            if (fightersList.Count() > 2)
             {
                 List<FighterModel> sideA = new List<FighterModel>();
                 List<FighterModel> sideB = new List<FighterModel>();
@@ -228,6 +228,10 @@ namespace TRNMNT.Core.Services.impl
 
         private int GetBracketsSize(int fightersCount)
         {
+            if (fightersCount == 3)
+            {
+                return 3;
+            }
             for (int i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT, 2); i++)
             {
                 var size = Math.Pow(2, i);

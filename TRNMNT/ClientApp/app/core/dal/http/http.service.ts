@@ -95,9 +95,8 @@ export class HttpService {
         return response.json();
     }
 
-    public getExcelFile(response: Response): void {
-        var blob = response.blob();
-        FileSaver.saveAs(blob, response.headers.get("filename"));
+    public getExcelFile(response: Response, fileName:string): void {
+        FileSaver.saveAs(response.blob(), fileName);
     }
 }
 

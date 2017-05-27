@@ -18,7 +18,6 @@ export class DataApiService extends DataService {
         super()
     }
 
-   
     //Categories
     public getCategories(): Observable<Category[]> {
         return this.httpService.get(ApiMethods.tournament.categories).map(r => this.httpService.getArray<Category>(r))
@@ -54,9 +53,8 @@ export class DataApiService extends DataService {
         return this.httpService.deleteById(ApiMethods.tournament.fighters.fighter, fighterId);
     }
     //Brackets
-
-    public getBracketsFile(filter: FighterFilterModel): Observable<void> {
-        return this.httpService.post(ApiMethods.tournament.fighters.getBrackets, filter, ResponseContentType.Blob).map(r => this.httpService.getExcelFile(r))
+    public getBracketsFile(filter: FighterFilterModel, fileName: string): Observable<void> {
+        return this.httpService.post(ApiMethods.tournament.fighters.getBrackets, filter, ResponseContentType.Blob).map(r => this.httpService.getExcelFile(r, fileName))
     }
 
     //WeightDivisions

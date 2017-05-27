@@ -75,7 +75,6 @@ namespace TRNMNT.Controllers
             {
                 Response.StatusCode = 200;
                 var file = await bracketsFileService.GetBracketsFileAsync(filter);
-                Response.Headers.Add("filename", file.Name);
                 return File(file.ByteArray, file.ContentType);
             }
             catch (Exception ex)
