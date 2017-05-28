@@ -14,7 +14,7 @@ import { SharedModule } from "primeng/components/common/shared";
 import { ButtonModule } from "primeng/components/button/button";
 import { InputTextModule } from "primeng/components/inputtext/inputtext";
 import { GrowlModule } from 'primeng/components/growl/growl';
-import { DropdownModule } from 'primeng/primeng';
+import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 
 
 //Administration components
@@ -61,12 +61,14 @@ import { LoaderService } from './core/services/loader.service';
         HttpModule,
         BrowserModule,
         FormsModule,
+        BrowserAnimationsModule,
         DataTableModule,
         DialogModule,
         InputTextModule,
         ButtonModule,
         GrowlModule,
-        BrowserAnimationsModule
+        DropdownModule
+
 
     ],
     providers: [

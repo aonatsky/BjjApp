@@ -8,6 +8,8 @@ import { DataService } from '../../core/dal/contracts/data.service'
 import { DefaultValues } from '../../core/consts/default-values'
 import { Observable } from "rxjs/Observable";
 
+import { SelectItem } from 'primeng/primeng'
+
 
 @Component({
     selector: 'fighter-filter',
@@ -22,6 +24,9 @@ export class FighterFilter implements OnInit {
 
     weightDivisionDDLOptions: DropDownListOption[] = [];
     categoryDDLOptions: DropDownListOption[] = [];
+
+    weightDivisionSelectOptions: SelectItem[] = [];
+    selectedWD: string;
 
     @Output() onFilterChanged: EventEmitter<FighterFilterModel>;
     @Output() onFilterLoaded: EventEmitter<boolean>;
@@ -72,7 +77,16 @@ export class FighterFilter implements OnInit {
         this.weightDivisions.map(wd => this.weightDivisionDDLOptions.push(new DropDownListOption(wd.weightDivisionId, wd.name)));
         this.currentFilterValue = new FighterFilterModel(this.weightDivisions, this.categories);
         this.onFilterChanged.emit(this.currentFilterValue);
-}
+        this.initPrimeNg();
+    }
+
+
+
+
+    private initPrimeNg() {
+        this.weightDivisionSelectOptions.push({ label: DefaultValues.DROPDOWN_NAME_ANY, value: DefaultValues.DROPDOWN_ID_ANY })
+        this.weightDivisions.map(wd => this.weightDivisionSelectOptions.push({ label: wd.name, value: wd.weightDivisionId }))
+    }
 
 
 }

@@ -7,4 +7,9 @@
         <h5>Category:</h5>
         <dropdown [dropdownValues]="categoryDDLOptions" (onSelect)="categorySelect($event)"></dropdown>
     </div>
+    <div class="filter-section" *ngIf="weightDivisions">
+        <h5>Weight class:</h5>
+        <p-dropdown [options]="weightDivisionSelectOptions" [(ngModel)]="selectedWD"></p-dropdown>
+    </div>
+
 </div>
