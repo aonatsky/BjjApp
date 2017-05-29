@@ -169,8 +169,8 @@ namespace TRNMNT.Core.Services.impl
 
         private IQueryable<Fighter> GetFightersByFilter(FighterFilterModel filter)
         {
-            return GetFighters().Where(f => filter.Categories.Select(c => c.CategoryId).Contains(f.CategoryId)
-                            && filter.WeightDivisions.Select(wd => wd.WeightDivisionId).Contains(f.WeightDivisionId));
+            return GetFighters().Where(f => filter.CategoryIds.Contains(f.CategoryId)
+                            && filter.WeightDivisionIds.Contains(f.WeightDivisionId));
         }
         #endregion
 

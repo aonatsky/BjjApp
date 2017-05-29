@@ -55,7 +55,7 @@ export class FighterListComponent {
     }
 
     private getBracketsFileName(): string {
-        return this.fighterFilter.currentFilterValue.categories[0].name + "_" + this.fighterFilter.currentFilterValue.weightDivisions[0].name + ".xlsx"
+        return "brackets.xlsx"
     }
 
 
@@ -74,7 +74,7 @@ export class FighterListComponent {
     private setBracketsButtonVisibility()
     {
         let btn = this.bracketsButton.nativeElement;
-        btn["disabled"] = !(this.fighterFilter.currentFilterValue.categories.length == 1 && this.fighterFilter.currentFilterValue.weightDivisions.length == 1 && this.fighters.length > 0);
+        btn["disabled"] = !(this.fighterFilter.currentFilterValue.categoryIds.length == 1 && this.fighterFilter.currentFilterValue.weightDivisionIds.length == 1 && this.fighters.length > 0);
     }
 }
 

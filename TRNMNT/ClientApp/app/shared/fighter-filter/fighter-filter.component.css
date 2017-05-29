@@ -4,19 +4,19 @@
     max-width: 1000px;
 }
 
-dropdown {
-    display: inline-block;
-    float: right;
 
-}
-
-
-h5 {
-    display: inline-block
-}
-
-.filter-section
-{
+.filter-section {
     display: block;
-    width: 200px;
+    width: 400px;
 }
+
+    .filter-section  h5 {
+        width: 150px ;
+        display: inline-block
+    }
+
+
+    .filter-section .dropdown {
+        display: inline-block;
+        width: 150px !important;
+    }

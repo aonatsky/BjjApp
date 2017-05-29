@@ -26,7 +26,6 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
 
 //Shared
 import { FileUpload } from './shared/file-upload/file-upload.component';
-import { DropdownComponent } from './shared/dropdown/dropdown.component';
 import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
 import { StaticHtmlComponent } from './shared/static-html/static-html.component';
 import {CrudComponent} from './shared/crud/crud.component';
@@ -47,7 +46,6 @@ import { LoaderService } from './core/services/loader.service';
         AppComponent,
         NavMenuComponent,
         HomeComponent,
-        DropdownComponent,
         FighterListComponent,
         FighterFilter,
         FileUpload,

@@ -1,15 +1,11 @@
 <div class="fighter-filter">
-    <div class="filter-section" *ngIf="weightDivisions">
-        <h5>Weight class:</h5>
-        <dropdown [dropdownValues]="weightDivisionDDLOptions" (onSelect)="weightSelect($event)"></dropdown>
-    </div>
     <div class="filter-section" *ngIf="categories">
         <h5>Category:</h5>
-        <dropdown [dropdownValues]="categoryDDLOptions" (onSelect)="categorySelect($event)"></dropdown>
+        <p-dropdown [options]="categorySelectOptions" [autoWidth]="false" styleClass="dropdown" (onChange)="categorySelect($event)"></p-dropdown>
     </div>
     <div class="filter-section" *ngIf="weightDivisions">
         <h5>Weight class:</h5>
-        <p-dropdown [options]="weightDivisionSelectOptions" [(ngModel)]="selectedWD"></p-dropdown>
+        <p-dropdown [options]="weightDivisionSelectOptions" [autoWidth]="false" styleClass="dropdown" (onChange)="weightSelect($event)"></p-dropdown>
     </div>
 
 </div>

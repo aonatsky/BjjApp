@@ -2,8 +2,7 @@ import { Category } from '../../core/model/category.model';
 
 import { WeightDivision } from '../../core/model/weight-division.model';
 import { FighterFilterModel } from '../../core/model/fighter-filter.model';
-import { Component, Input, Output, OnInit, EventEmitter } from "@angular/core"
-import { DropdownComponent, DropDownListOption } from '../dropdown/dropdown.component'
+import { Component, Input, Output, OnInit, EventEmitter, ViewEncapsulation } from "@angular/core"
 import { DataService } from '../../core/dal/contracts/data.service'
 import { DefaultValues } from '../../core/consts/default-values'
 import { Observable } from "rxjs/Observable";
@@ -14,7 +13,8 @@ import { SelectItem } from 'primeng/primeng'
 @Component({
     selector: 'fighter-filter',
     templateUrl: 'fighter-filter.component.html',
-    styleUrls: ['fighter-filter.component.css']
+    styleUrls: ['fighter-filter.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class FighterFilter implements OnInit {
@@ -22,20 +22,16 @@ export class FighterFilter implements OnInit {
     weightDivisions: WeightDivision[];
     categories: Category[];
 
-    weightDivisionDDLOptions: DropDownListOption[] = [];
-    categoryDDLOptions: DropDownListOption[] = [];
-
     weightDivisionSelectOptions: SelectItem[] = [];
-    selectedWD: string;
+    categorySelectOptions: SelectItem[] = [];
+
 
     @Output() onFilterChanged: EventEmitter<FighterFilterModel>;
-    @Output() onFilterLoaded: EventEmitter<boolean>;
     @Output() currentFilterValue: FighterFilterModel;
 
 
     constructor(private dataService: DataService) {
         this.onFilterChanged = new EventEmitter<FighterFilterModel>();
-        this.onFilterLoaded = new EventEmitter<boolean>();
     }
 
     ngOnInit() {
@@ -44,50 +40,42 @@ export class FighterFilter implements OnInit {
     }
 
     //Events
-    weightSelect(value) {
-        if (value.name == DefaultValues.DROPDOWN_NAME_ANY) {
-            this.currentFilterValue.weightDivisions = this.weightDivisions;
+    weightSelect(event) {
+        if (event.value == DefaultValues.DROPDOWN_ID_ANY) {
+            this.currentFilterValue.weightDivisionIds = this.weightDivisions.map(wd => wd.weightDivisionId);
         }
         else {
-            this.currentFilterValue.weightDivisions = this.weightDivisions.filter(wd => wd.weightDivisionId == value.id);
+            this.currentFilterValue.weightDivisionIds = this.weightDivisions.filter(wd => wd.weightDivisionId == event.value).map(wd => wd.weightDivisionId);
         }
         this.onFilterChanged.emit(this.currentFilterValue);
     }
 
-    categorySelect(value) {
-        if (value.name == DefaultValues.DROPDOWN_NAME_ANY) {
-            this.currentFilterValue.categories = this.categories;
+    categorySelect(event) {
+        if (event.value == DefaultValues.DROPDOWN_ID_ANY) {
+            this.currentFilterValue.categoryIds = this.categories.map(c => c.categoryId);
         }
         else {
-            this.currentFilterValue.categories = this.categories.filter(c => c.categoryId == value.id);
+            this.currentFilterValue.categoryIds = this.categories.filter(c => c.categoryId == event.value).map(c => c.categoryId);
         }
         this.onFilterChanged.emit(this.currentFilterValue);
     }
+
+   
 
     //Private methods
 
 
     private initFilter(data: [Category[], WeightDivision[]]) {
-        let defaultDDLOption = new DropDownListOption(DefaultValues.DROPDOWN_ID_ANY, DefaultValues.DROPDOWN_NAME_ANY);
+        let defaultDDLOption = { label: DefaultValues.DROPDOWN_NAME_ANY, value: DefaultValues.DROPDOWN_ID_ANY };
         this.categories = data[0];
         this.weightDivisions = data[1];
-        this.weightDivisionDDLOptions.push(defaultDDLOption);
-        this.categoryDDLOptions.push(defaultDDLOption)
-        this.categories.map(c => this.categoryDDLOptions.push(new DropDownListOption(c.categoryId, c.name)));
-        this.weightDivisions.map(wd => this.weightDivisionDDLOptions.push(new DropDownListOption(wd.weightDivisionId, wd.name)));
-        this.currentFilterValue = new FighterFilterModel(this.weightDivisions, this.categories);
-        this.onFilterChanged.emit(this.currentFilterValue);
-        this.initPrimeNg();
-    }
-
-
-
-
-    private initPrimeNg() {
-        this.weightDivisionSelectOptions.push({ label: DefaultValues.DROPDOWN_NAME_ANY, value: DefaultValues.DROPDOWN_ID_ANY })
+        this.categorySelectOptions.push(defaultDDLOption)
+        this.categories.map(c => this.categorySelectOptions.push({ label: c.name, value: c.categoryId }));
+        this.weightDivisionSelectOptions.push(defaultDDLOption);
         this.weightDivisions.map(wd => this.weightDivisionSelectOptions.push({ label: wd.name, value: wd.weightDivisionId }))
+        this.currentFilterValue = new FighterFilterModel(this.weightDivisions.map(wd => wd.weightDivisionId), this.categories.map(c => c.categoryId));
+        this.onFilterChanged.emit(this.currentFilterValue);
     }
-
 
 }
 

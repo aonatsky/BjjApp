@@ -25,8 +25,6 @@ namespace TRNMNT.Core.Services.impl
         {
             var models = fighterService.GetOrderedListForBrackets(filter);
             var settings = GetSettings(models.Count);
-            var categoryName = filter.Categories.FirstOrDefault()?.Name;
-            var weightDivisionName = filter.WeightDivisions.FirstOrDefault()?.Name;
 
 
             if (settings != null)
@@ -44,7 +42,6 @@ namespace TRNMNT.Core.Services.impl
                     var sheet = excelPackage?.Workbook?.Worksheets[1];
                     if (sheet != null)
                     {
-                        sheet.Cells[settings.TitleCell].Value = $"{categoryName}/{weightDivisionName}";
                         for (int i = 0; i < settings.Count; i++)
                         {
                             var fighter = models.ElementAtOrDefault(i);
@@ -59,7 +56,6 @@ namespace TRNMNT.Core.Services.impl
 
                 return new CustomFile
                 {
-                    Name = $"Brackets_{models.Count()}_{categoryName}_{weightDivisionName}.xlsx",
                     ByteArray = byteArray,
                     ContentType = ContentTypes.EXCEL_CONTENT_TYPE
                 };
