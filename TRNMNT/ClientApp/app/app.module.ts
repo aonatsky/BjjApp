@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
-import { HttpModule, Http } from '@angular/http';
-import { FormsModule   } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { RouterModule } from '@angular/router';
-import { AppComponent } from './app-component/app.component'
 import { routing, appRoutingProviders } from "./app.routing";
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app-component/app.component'
+
+//modules
+import { CoreModule } from './core/core.module'
+import { AdministrationModule } from './administration/administration.module'
+
 
 //PrimeNG
 import { DataTableModule } from "primeng/components/datatable/datatable";
@@ -24,58 +25,27 @@ import { FighterListComponent } from './administration/fighter-list/fighter-list
 import { TournamentSettingsComponent } from './administration/tournament-settings/tournament-settings.component';
 
 
-//Shared
-import { FileUpload } from './shared/file-upload/file-upload.component';
-import { FighterFilter } from './shared/fighter-filter/fighter-filter.component';
-import { StaticHtmlComponent } from './shared/static-html/static-html.component';
-import {CrudComponent} from './shared/crud/crud.component';
 
 
 //Services
-import { DataService } from './core/dal/contracts/data.service';
-import { HttpService } from './core/dal/http/http.service';
-import { ApiProviders } from './core/dal/api.providers';
-import { LoggerService } from './core/services/logger.service';
-import { NotificationService } from './core/services/notification.service';
-import { LoaderService } from './core/services/loader.service';
+
 
 
 @NgModule({
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        NavMenuComponent,
-        HomeComponent,
-        FighterListComponent,
-        FighterFilter,
-        FileUpload,
-        TournamentSettingsComponent,
-        CrudComponent,
-        StaticHtmlComponent
+       
     ],
     imports: [
         routing,
         SharedModule,
-        HttpModule,
-        BrowserModule,
-        FormsModule,
-        BrowserAnimationsModule,
-        DataTableModule,
-        DialogModule,
-        InputTextModule,
-        ButtonModule,
-        GrowlModule,
-        DropdownModule
-
-
-    ],
+        CoreModule,
+        AdministrationModule,
+        GrowlModule
+],
     providers: [
         appRoutingProviders,
-        ApiProviders,
-        LoggerService,
-        NotificationService,
-        LoaderService,
-        HttpService,
     ]
 })
 export class AppModule {

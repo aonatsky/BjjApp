@@ -1,9 +1,9 @@
-import {CrudColumn} from '../../shared/crud/crud.component';
+import {CrudColumn} from '../shared/crud/crud.component';
 import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation, AfterContentInit, ElementRef } from '@angular/core';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { Fighter } from '../../core/model/fighter.model'
-import { FighterFilter } from '../../shared/fighter-filter/fighter-filter.component'
-import { FileUpload } from '../../shared/file-upload/file-upload.component'
+import { FighterFilter } from '../shared/fighter-filter/fighter-filter.component'
+import { FileUpload } from '../shared/file-upload/file-upload.component'
 import { NotificationService } from '../../core/services/notification.service'
 import { LoaderService } from '../../core/services/loader.service'
 

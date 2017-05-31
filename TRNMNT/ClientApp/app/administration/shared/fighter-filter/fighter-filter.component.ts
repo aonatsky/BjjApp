@@ -1,10 +1,10 @@
-import { Category } from '../../core/model/category.model';
+import { Category } from '../../../core/model/category.model';
 
-import { WeightDivision } from '../../core/model/weight-division.model';
-import { FighterFilterModel } from '../../core/model/fighter-filter.model';
+import { WeightDivision } from '../../../core/model/weight-division.model';
+import { FighterFilterModel } from '../../../core/model/fighter-filter.model';
 import { Component, Input, Output, OnInit, EventEmitter, ViewEncapsulation } from "@angular/core"
-import { DataService } from '../../core/dal/contracts/data.service'
-import { DefaultValues } from '../../core/consts/default-values'
+import { DataService } from '../../../core/dal/contracts/data.service'
+import { DefaultValues } from '../../../core/consts/default-values'
 import { Observable } from "rxjs/Observable";
 
 import { SelectItem } from 'primeng/primeng'

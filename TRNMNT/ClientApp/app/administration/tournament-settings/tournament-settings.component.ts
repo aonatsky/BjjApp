@@ -3,7 +3,7 @@ import { WeightDivision } from '../../core/model/weight-division.model';
 import { DataService } from '../../core/dal/contracts/data.service'
 import { AfterViewInit, OnInit, Component } from '@angular/core';
 import { Category } from "../../core/model/category.model";
-import { CrudColumn } from "../../shared/crud/crud.component";
+import { CrudColumn } from "../shared/crud/crud.component";
 import { NotificationService } from '../../core/services/notification.service'
 import { LoaderService } from '../../core/services/loader.service'
 import { HttpService } from '../../core/dal/http/http.service';

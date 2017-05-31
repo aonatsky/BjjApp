@@ -1,5 +1,5 @@
 import { OnInit, Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { LoaderService } from '../../core/services/loader.service'
+import { LoaderService } from '../../../core/services/loader.service'
 
 
 @Component({
