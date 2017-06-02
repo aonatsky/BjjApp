@@ -1,2 +1,19 @@
-<static-html [body]="readmeHtml" ></static-html>
 
+
+<div class='container-fluid'>
+    <div class='row'>
+        <div class='col-sm-3'>
+            <nav-menu></nav-menu>
+        </div>
+        <div class='col-sm-9 body-content'>
+            <router-outlet>
+                <p-growl [value]="notifications" [life]="3000" [sticky]="true"></p-growl>
+                <div *ngIf="isLoaderShown" class="loader-modal">
+                    <div class="loader">
+                        <div class="cssload-ball"></div>
+                    </div>
+                </div>
+            </router-outlet>
+        </div>
+    </div>
+</div>

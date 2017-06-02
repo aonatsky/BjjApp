@@ -24,6 +24,7 @@ import { CrudComponent } from './shared/crud/crud.component';
 
 
 //Administration components
+import { AdministrationRootComponent } from './administration.root/administration.root.component';
 import { NavMenuComponent } from './navmenu/navmenu.component';
 import { HomeComponent } from './home/home.component';
 import { FighterListComponent } from './fighter-list/fighter-list.component';
@@ -39,11 +40,15 @@ import { TournamentSettingsComponent } from './tournament-settings/tournament-se
         InputTextModule,
         ButtonModule,
         DropdownModule,
+        GrowlModule,
         RouterModule.forChild([
-            { path: 'settings', component: TournamentSettingsComponent }
+            { path: 'administration/home', component: HomeComponent },
+            { path: 'administration/fighter-list', component: FighterListComponent },
+            { path: 'administration/settings', component: TournamentSettingsComponent },
         ]),
     ],
     declarations: [
+        AdministrationRootComponent,
         NavMenuComponent,
         HomeComponent,
         FighterListComponent,
@@ -51,13 +56,14 @@ import { TournamentSettingsComponent } from './tournament-settings/tournament-se
         FighterFilter,
         FileUpload,
         CrudComponent,
-        StaticHtmlComponent
+        StaticHtmlComponent,
     ],
 
     providers: [],
 
     exports: [
-        NavMenuComponent
+        NavMenuComponent,
+        AdministrationRootComponent
     ]
 })
 

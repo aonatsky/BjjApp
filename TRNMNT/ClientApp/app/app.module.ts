@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { routing, appRoutingProviders } from "./app.routing";
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app-component/app.component'
+import { Routes, RouterModule } from '@angular/router';
 
 //modules
 import { CoreModule } from './core/core.module'
@@ -29,6 +30,11 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
 
 //Services
 
+const appRoutes: Routes = [
+    { path: '', redirectTo: 'administration/home', pathMatch: 'full' },
+    { path: 'home', redirectTo: 'administration/home' },
+    { path: '**', redirectTo: 'administration/home' }
+];
 
 
 @NgModule({
@@ -38,14 +44,13 @@ import { TournamentSettingsComponent } from './administration/tournament-setting
        
     ],
     imports: [
-        routing,
+        RouterModule.forRoot(appRoutes),
         SharedModule,
         CoreModule,
-        AdministrationModule,
-        GrowlModule
+        AdministrationModule
+      
 ],
     providers: [
-        appRoutingProviders,
     ]
 })
 export class AppModule {

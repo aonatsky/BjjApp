@@ -7,7 +7,7 @@ import { Router, RouterModule } from '@angular/router';
     selector: 'administration-root',
     templateUrl: './administration.root.component.html'
 })
-export class HomeComponent{
+export class AdministrationRootComponent{
 
     constructor(private router: Router) {
         
