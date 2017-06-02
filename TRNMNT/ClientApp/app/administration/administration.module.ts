@@ -39,7 +39,9 @@ import { TournamentSettingsComponent } from './tournament-settings/tournament-se
         InputTextModule,
         ButtonModule,
         DropdownModule,
-        RouterModule,
+        RouterModule.forChild([
+            { path: 'settings', component: TournamentSettingsComponent }
+        ]),
     ],
     declarations: [
         NavMenuComponent,
