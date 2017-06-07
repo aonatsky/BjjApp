@@ -1,4 +1,4 @@
-namespace TRNMNT.Core.Const
+namespace TRNMNT.Web.Core.Const
 {
     public static class FilePath
     {

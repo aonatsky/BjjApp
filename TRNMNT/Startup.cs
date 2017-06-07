@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using TRNMNT.Core.Data;
-using TRNMNT.Core.Services;
-using TRNMNT.Core.Services.impl;
-using TRNMNT.Core.Data.Repositories;
+using TRNMNT.Data;
+using TRNMNT.Web.Core.Services;
+using TRNMNT.Web.Core.Services.impl;
+using TRNMNT.Data.Repositories;
 using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Logger;
+using TRNMNT.Web.Core.Logger;
 using System.IO;
 
-namespace TRNMNT
+namespace TRNMNT.Web
 {
     public class Startup
     {
@@ -82,7 +82,6 @@ namespace TRNMNT
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
-            //  app.EnsureSeedData();
         }
     }
 }

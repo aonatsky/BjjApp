@@ -2,20 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using TRNMNT.Core.Services;
+using TRNMNT.Web.Core.Services;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Model;
-using TRNMNT.Core.Enum;
-using TRNMNT.Core.Services.impl;
-using TRNMNT.Core.Data.Entities;
-using TRNMNT.Core.Data.Repositories;
+using TRNMNT.Web.Core.Model;
+using TRNMNT.Web.Core.Enum;
+using TRNMNT.Web.Core.Services.impl;
+using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace TRNMNT.Controllers
+namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
     public class FighterController : CRUDController<Fighter>

@@ -1,4 +1,4 @@
-namespace TRNMNT.Core.Enum
+namespace TRNMNT.Web.Core.Enum
 {
     public enum FileProcessResultEnum
     {

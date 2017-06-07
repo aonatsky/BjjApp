@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Data.Repositories;
+using TRNMNT.Data.Repositories;
 
-namespace TRNMNT.Controllers
+namespace TRNMNT.Web.Controllers
 {
     public abstract class CRUDController<T> : BaseController where T : class
     {

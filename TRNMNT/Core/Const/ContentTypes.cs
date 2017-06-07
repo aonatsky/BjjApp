@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TRNMNT.Core.Const
+namespace TRNMNT.Web.Core.Const
 {
     public class ContentTypes
     {

@@ -2,6 +2,8 @@
 import { HttpModule, Http } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
+import { AuthHttp, AuthConfig, AUTH_PROVIDERS, provideAuth } from 'angular2-jwt';
+
 import { RouterModule } from '@angular/router';
 import { DataService } from './dal/contracts/data.service';
 import { HttpService } from './dal/http/http.service';
@@ -23,7 +25,14 @@ import { BrowserModule } from '@angular/platform-browser'
     ],
     declarations: [],
 
-    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService],
+    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthHttp, provideAuth({
+        headerName: 'Authorization',
+        headerPrefix: 'bearer',
+        tokenName: 'token',
+        tokenGetter: (() => localStorage.getItem('id_token')),
+        globalHeaders: [{ 'Content-Type': 'application/json' }],
+        noJwtError: true
+    })],
 
     exports: [
         FormsModule,

@@ -1,7 +1,7 @@
 using System;
-using TRNMNT.Core.Enum;
+using TRNMNT.Web.Core.Enum;
 
-namespace TRNMNT.Core.Model
+namespace TRNMNT.Web.Core.Model
 {
     public class FileProcessResult
     {

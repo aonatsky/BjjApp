@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using TRNMNT.Core.Data.Entities;
+using TRNMNT.Data.Entities;
 
-namespace TRNMNT.Core.Data.Fake
+namespace TRNMNT.Data.Fake
 {
         public class FakeAppDbContext : IAppDbContext
     {

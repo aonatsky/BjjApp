@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml;
 using Microsoft.Extensions.Logging;
 
-namespace TRNMNT.Core.Logger
+namespace TRNMNT.Web.Core.Logger
 {
 
 

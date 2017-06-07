@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace TRNMNT.Core.Logger
+namespace TRNMNT.Web.Core.Logger
 {
     public static class Log4netExtensions
     {

@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using TRNMNT.Core.Data;
+using TRNMNT.Data;
 
-namespace TRNMNT.Migrations
+namespace TRNMNT.Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20170414151708_FighterDOBAdd")]
@@ -18,7 +18,7 @@ namespace TRNMNT.Migrations
                 .HasAnnotation("ProductVersion", "1.1.1")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TRNMNT.Core.Data.Entities.Category", b =>
+            modelBuilder.Entity("TRNMNT.Data.Entities.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd();
@@ -30,7 +30,7 @@ namespace TRNMNT.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("TRNMNT.Core.Data.Entities.Fighter", b =>
+            modelBuilder.Entity("TRNMNT.Data.Entities.Fighter", b =>
                 {
                     b.Property<Guid>("FighterId")
                         .ValueGeneratedOnAdd();
@@ -58,7 +58,7 @@ namespace TRNMNT.Migrations
                     b.ToTable("Fighter");
                 });
 
-            modelBuilder.Entity("TRNMNT.Core.Data.Entities.Team", b =>
+            modelBuilder.Entity("TRNMNT.Data.Entities.Team", b =>
                 {
                     b.Property<Guid>("TeamId")
                         .ValueGeneratedOnAdd();
@@ -72,7 +72,7 @@ namespace TRNMNT.Migrations
                     b.ToTable("Team");
                 });
 
-            modelBuilder.Entity("TRNMNT.Core.Data.Entities.WeightDivision", b =>
+            modelBuilder.Entity("TRNMNT.Data.Entities.WeightDivision", b =>
                 {
                     b.Property<Guid>("WeightDivisionId")
                         .ValueGeneratedOnAdd();
@@ -88,19 +88,19 @@ namespace TRNMNT.Migrations
                     b.ToTable("WeightDivision");
                 });
 
-            modelBuilder.Entity("TRNMNT.Core.Data.Entities.Fighter", b =>
+            modelBuilder.Entity("TRNMNT.Data.Entities.Fighter", b =>
                 {
-                    b.HasOne("TRNMNT.Core.Data.Entities.Category", "Category")
+                    b.HasOne("TRNMNT.Data.Entities.Category", "Category")
                         .WithMany("Fighters")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TRNMNT.Core.Data.Entities.Team", "Team")
+                    b.HasOne("TRNMNT.Data.Entities.Team", "Team")
                         .WithMany("Fighters")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TRNMNT.Core.Data.Entities.WeightDivision", "WeightDivision")
+                    b.HasOne("TRNMNT.Data.Entities.WeightDivision", "WeightDivision")
                         .WithMany("Fighters")
                         .HasForeignKey("WeightDivisionId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace TRNMNT.Controllers
+namespace TRNMNT.Web.Controllers
 {
     public class BaseController : Controller
     {

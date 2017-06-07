@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Services;
+using TRNMNT.Web.Core.Services;
 
-namespace TRNMNT.Controllers
+namespace TRNMNT.Web.Controllers
 {
     public class HomeController : BaseController
     {

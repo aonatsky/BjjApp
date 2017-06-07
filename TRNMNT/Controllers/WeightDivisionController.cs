@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Data.Entities;
-using TRNMNT.Core.Data.Repositories;
+using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories;
 
-namespace TRNMNT.Controllers
+namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
     public class WeightDivisionController : CRUDController<WeightDivision>

@@ -2,10 +2,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using TRNMNT.Core.Data.Entities;
+using TRNMNT.Data.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace TRNMNT.Core.Data
+namespace TRNMNT.Data
 {
     public interface IAppDbContext
     {

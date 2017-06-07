@@ -1,7 +1,7 @@
 
 using System;
 
-namespace TRNMNT.Core.Model
+namespace TRNMNT.Web.Core.Model
 {
     public class FighterModel
     {

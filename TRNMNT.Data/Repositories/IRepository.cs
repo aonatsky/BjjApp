@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TRNMNT.Core.Data.Repositories
+namespace TRNMNT.Data.Repositories
 {
     public interface IRepository<T> where T:class  
     {

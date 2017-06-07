@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TRNMNT.Core.Data.Entities
+namespace TRNMNT.Data.Entities
 {
     public class Team
     {

@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using TRNMNT.Core.Enum;
-using TRNMNT.Core.Model;
-using TRNMNT.Core.Const;
+using TRNMNT.Web.Core.Enum;
+using TRNMNT.Web.Core.Model;
+using TRNMNT.Web.Core.Const;
 
-namespace TRNMNT.Core.Services.impl
+namespace TRNMNT.Web.Core.Services.impl
 {
     public class FighterFileService : BaseFileService
     {

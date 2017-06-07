@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TRNMNT.Core.Data.Entities
+namespace TRNMNT.Data.Entities
 {
 
     public class BeltDivision

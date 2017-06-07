@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TRNMNT.Migrations
+namespace TRNMNT.Web.Migrations
 {
     public partial class FighterDOBAdd : Migration
     {

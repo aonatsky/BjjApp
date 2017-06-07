@@ -5,11 +5,12 @@ import { LoaderService } from '../../../core/services/loader.service';
 import { Observable } from "rxjs/Observable";
 import { ApiMethods } from "../consts/api-methods.consts";
 import * as FileSaver from 'file-saver';
+import { AuthHttp } from 'angular2-jwt';
 import 'rxjs/Rx';
 
 @Injectable()
 export class HttpService {
-    constructor(private loggerService: LoggerService, private http: Http, private loaderService: LoaderService) {
+    constructor(private loggerService: LoggerService, private http: AuthHttp, private loaderService: LoaderService) {
     }
 
 

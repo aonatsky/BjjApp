@@ -2,7 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace TRNMNT.Core.Data.Repositories
+namespace TRNMNT.Data.Repositories
 {
 
     public class Repository<T> : IRepository<T> where T : class

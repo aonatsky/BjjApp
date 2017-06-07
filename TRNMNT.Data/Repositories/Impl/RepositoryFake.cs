@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace TRNMNT.Core.Data.Repositories
+namespace TRNMNT.Data.Repositories
 {
 
     public class RepositoryFake<T> : IRepository<T> where T : class

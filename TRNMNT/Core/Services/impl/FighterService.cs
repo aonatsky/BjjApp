@@ -2,11 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TRNMNT.Core.Data.Entities;
-using TRNMNT.Core.Data.Repositories;
-using TRNMNT.Core.Model;
+using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories;
+using TRNMNT.Web.Core.Model;
 
-namespace TRNMNT.Core.Services.impl
+namespace TRNMNT.Web.Core.Services.impl
 {
     public class FighterService : IFighterService
     {
