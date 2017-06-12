@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using TRNMNT.Data;
+using TRNMNT.Data.Context;
 using TRNMNT.Web.Core.Services;
 using TRNMNT.Web.Core.Services.impl;
 using TRNMNT.Data.Repositories;

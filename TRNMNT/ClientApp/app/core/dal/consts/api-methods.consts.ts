@@ -9,5 +9,9 @@ export const ApiMethods = Object.freeze({
         weightDivisions: 'api/weightdivision/',
         categories: 'api/category',
     },
+    auth: {
+        getToken: "api/gettoken",
+        refreshToken: "api/refreshtoken"
+        },
     log: "api/log"
 });

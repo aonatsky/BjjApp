@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using TRNMNT.Data.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace TRNMNT.Data
+namespace TRNMNT.Data.Context
 {
     public interface IAppDbContext
     {
@@ -22,16 +22,8 @@ namespace TRNMNT.Data
 
         //DBSets
         DbSet<WeightDivision> WeightDivision { get; set; }
-        //DbSet<BeltDivision> BeltDivision { get; set; }
         DbSet<Fighter> Fighter { get; set; }
         DbSet<Team> Team { get; set; }
         DbSet<Category> Category { get; set; }
-
-        //DbSet<Owner> Owner { get; set; }
-        //DbSet<Tournament> Tournament { get; set; }
-        //DbSet<TournamentType> TournamentType { get; set; }
-        //DbSet<Fight> Fight { get; set; }
-        //DbSet<FightList> FightList { get; set; }
-        //DbSet<AgeDivision> AgeDivision {get;set;}
     }
 }

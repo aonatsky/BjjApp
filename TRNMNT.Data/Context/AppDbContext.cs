@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TRNMNT.Data.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace TRNMNT.Data
+namespace TRNMNT.Data.Context
 {
     public class AppDbContext : DbContext, IAppDbContext
     {
