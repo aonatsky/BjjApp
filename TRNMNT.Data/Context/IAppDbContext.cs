@@ -25,5 +25,7 @@ namespace TRNMNT.Data.Context
         DbSet<Fighter> Fighter { get; set; }
         DbSet<Team> Team { get; set; }
         DbSet<Category> Category { get; set; }
+        DbSet<User> User{ get; set; }
+
     }
 }

@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TRNMNT.Data.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace TRNMNT.Data.Context
 {
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User>, IAppDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -19,7 +20,6 @@ namespace TRNMNT.Data.Context
         {
             //builder.Entity<Owner>().HasKey(o => o.OwnerId);
             base.OnModelCreating(builder);
-            builder.HasDefaultSchema("trnmnt");
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
@@ -110,13 +110,7 @@ namespace TRNMNT.Data.Context
         public DbSet<Fighter> Fighter { get; set; }
         public DbSet<Team> Team { get; set; }
         public DbSet<Category> Category { get; set; }
-        // public DbSet<BeltDivision> BeltDivision { get; set; }
-        // public DbSet<Owner> Owner { get; set; }
-        // public DbSet<Tournament> Tournament { get; set; }
-        // public DbSet<TournamentType> TournamentType { get; set; }
-        // public DbSet<Fight> Fight { get; set; }
-        // public DbSet<FightList> FightList { get; set; }
-        // public DbSet<AgeDivision> AgeDivision {get;set;}
+        public DbSet<User> User { get; set; }
 
     }
 }
