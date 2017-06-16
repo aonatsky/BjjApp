@@ -11,6 +11,8 @@ using TRNMNT.Data.Repositories;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Web.Core.Logger;
 using System.IO;
+using TRNMNT.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace TRNMNT.Web
 {
@@ -39,6 +41,8 @@ namespace TRNMNT.Web
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
+            services.AddIdentity<User, IdentityRole>()
+               .AddEntityFrameworkStores<AppDbContext>();
             #endregion
 
             #region AppServices
