@@ -10,8 +10,8 @@ export const ApiMethods = Object.freeze({
         categories: 'api/category',
     },
     auth: {
-        getToken: "api/gettoken",
-        refreshToken: "api/refreshtoken"
+        getToken: "api/auth/gettoken",
+        refreshToken: "api/auth/refreshtoken"
         },
     log: "api/log"
 });

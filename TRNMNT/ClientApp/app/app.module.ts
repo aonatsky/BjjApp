@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 //modules
 import { CoreModule } from './core/core.module'
 import { AdministrationModule } from './administration/administration.module'
+import { SharedModule } from './shared/shared.module'
+
 
 
 import { appRoutes } from './core/routing/app.routing'
@@ -19,10 +21,9 @@ import { appRoutes } from './core/routing/app.routing'
     ],
     imports: [
         RouterModule.forRoot(appRoutes),
-
         CoreModule,
-        AdministrationModule
-      
+        AdministrationModule,
+        SharedModule
 ],
     providers: [
     ]

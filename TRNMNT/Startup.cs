@@ -13,6 +13,10 @@ using TRNMNT.Web.Core.Logger;
 using System.IO;
 using TRNMNT.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using TRNMNT.Web.Core.Authentication;
 
 namespace TRNMNT.Web
 {
@@ -86,6 +90,24 @@ namespace TRNMNT.Web
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
             });
+
+            var options = new JwtBearerOptions
+            {
+
+                TokenValidationParameters = {
+                   ValidIssuer = TokenAuthOption.ISSUER,
+                   ValidAudience = TokenAuthOption.AUDIENCE,
+                   ValidateIssuer = true,
+                   IssuerSigningKey = TokenAuthOption.GetKey(),
+                   ValidateIssuerSigningKey = true,
+                   ValidateLifetime = true,
+                   ClockSkew = TimeSpan.Zero
+                }
+            };
+
+            app.UseJwtBearerAuthentication(options);
+
         }
     }
 }
+;
