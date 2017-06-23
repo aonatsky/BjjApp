@@ -1,12 +1,26 @@
-﻿
-import { Component } from 'angular/core';
+﻿import { Component } from '@angular/core';
+import { AuthenticationService } from './../../core/services/authentication.service';
+
 
 @Component({
     selector: 'login',
-    template: 'Hello my name is {{name}}.'
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent {
-    constructor() {
-        this.name = 'Sam';
+
+    username: string = "";
+    password: string = "";
+
+    constructor(private authenticationService: AuthenticationService) {
+
+    }
+
+
+    login(): any {
+
+        this.authenticationService.signin(this.username, this.password).subscribe();
+
     }
 }

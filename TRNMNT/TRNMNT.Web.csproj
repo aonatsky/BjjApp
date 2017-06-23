@@ -14,7 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Core\Data\**" />
     <Compile Remove="node_modules\**\*" />
+    <Content Remove="Core\Data\**" />
+    <EmbeddedResource Remove="Core\Data\**" />
+    <None Remove="Core\Data\**" />
     <None Update="ClientApp\dist\**\*;Views\**\*;wwwroot\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None> 
@@ -68,11 +72,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Data\" />
+    <ProjectReference Include="..\TRNMNT.Data\TRNMNT.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TRNMNT.Data\TRNMNT.Data.csproj" />
+    <Folder Include="Core\Authentication\" />
   </ItemGroup>
 
 </Project>

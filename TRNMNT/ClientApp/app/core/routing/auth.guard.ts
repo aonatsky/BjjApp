@@ -4,17 +4,18 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { tokenNotExpired } from 'angular2-jwt';
 
 import { AuthenticationService } from '../services/authentication.service';
+import { RouterService } from '../services/router.service'
 
 /** 
  * Decides if a route can be activated. 
  */
 @Injectable() export class AuthGuard implements CanActivate {
 
-    constructor(public authenticationService: AuthenticationService, private router: Router) { }
+    constructor(public authenticationService: AuthenticationService, private routerService: RouterService) { }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-        if (tokenNotExpired()) {
+        if (this.authenticationService.isLoggedIn()) {
             // Signed in.  
             return true;
         }
@@ -22,7 +23,7 @@ import { AuthenticationService } from '../services/authentication.service';
         let url: string = state.url;
         this.authenticationService.redirectUrl = url;
         // Not signed in so redirects to signin page.  
-        this.router.navigate(['/administration/home']);
+        this.routerService.GoToLogin();
         return false;
     }
 

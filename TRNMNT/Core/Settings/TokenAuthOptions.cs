@@ -3,9 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 
-namespace TRNMNT.Web.Core.Authentication
+namespace TRNMNT.Web.Core.Settings
 {
-    public static class TokenAuthOption
+    public static class TokenAuthOptions
     {
         public static SecurityKey GetKey()
         {

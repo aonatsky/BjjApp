@@ -1,18 +1,21 @@
 ﻿import { NgModule } from "@angular/core"
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'
-//Core
+
 
 import { CoreModule } from "./../core/core.module"
 import { RouterModule } from '@angular/router';
 
+import { LoginComponent } from './login/login.component'
+
+
+
 @NgModule({
     imports: [
         CoreModule,
-        //RouterModule.forChild(administrationRoutes),
     ],
     declarations: [
-        
+        LoginComponent        
     ],
 
     providers: [],

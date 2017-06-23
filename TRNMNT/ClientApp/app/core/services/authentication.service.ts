@@ -33,12 +33,34 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
         this.decodeToken();
 
         // Creates header for post requests.  
-        this.headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        this.headers = new Headers({ 'Content-Type': 'application/json' });
         this.options = new RequestOptions({ headers: this.headers });
 
     }
 
-    /** 
+
+    login(username: string, password: string) {
+
+        let params: any = {
+            username: username,
+            password: password
+        };
+        this.http.post(ApiMethods.auth.getToken, params)
+            .map(res => res.json())
+            .subscribe(
+            // We're assuming the response will be an object
+            // with the JWT on an id_token key
+            data => localStorage.setItem('id_token', data.id_token),
+            error => console.log(error)
+            );
+    }
+
+
+
+
+
+
+    /**
      * Tries to sign in the user. 
      * 
      * @param username 
@@ -56,7 +78,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
         };
 
         // Encodes the parameters.  
-        let body: string = this.encodeParams(params);
+        let body = JSON.stringify(params);
 
         return this.http.post(tokenEndpoint, body, this.options)
             .map((res: Response) => {
@@ -64,7 +86,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
                 let body: any = res.json();
 
                 // Sign in successful if there's an access token in the response.  
-                if (typeof body.access_token !== 'undefined') {
+                if (typeof body.id_token !== 'undefined') {
 
                     // Stores access token & refresh token.  
                     this.store(body);
@@ -107,7 +129,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
                     let body: any = res.json();
 
                     // Successful if there's an access token in the response.  
-                    if (typeof body.access_token !== 'undefined') {
+                    if (typeof body.id_token !== 'undefined') {
 
                         // Stores access token & refresh token.  
                         this.store(body);
@@ -117,6 +139,15 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
                 });
 
         }
+
+    }
+
+    /** 
+    * Indicates if token is not expired
+    */
+    public isLoggedIn(): boolean {
+
+        return tokenNotExpired("id_token");
 
     }
 
@@ -133,7 +164,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
             let revocationEndpoint: string = ApiMethods.auth.refreshToken;
 
             let params: any = {
-                token_type_hint: "access_token",
+                token_type_hint: "id_token",
                 token: token
             };
 
@@ -217,7 +248,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
      */
     private decodeToken(): void {
 
-        if (tokenNotExpired()) {
+        if (this.isLoggedIn()) {
 
             let token: string = localStorage.getItem('id_token');
 
@@ -256,7 +287,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
     private store(body: any): void {
 
         // Stores access token in local storage to keep user signed in.  
-        localStorage.setItem('id_token', body.access_token);
+        localStorage.setItem('id_token', body.id_token);
         // Stores refresh token in local storage.  
         localStorage.setItem('refresh_token', body.refresh_token);
 

@@ -13,10 +13,10 @@ using TRNMNT.Web.Core.Logger;
 using System.IO;
 using TRNMNT.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using TRNMNT.Web.Core.Authentication;
+using TRNMNT.Web.Core.Settings;
+using TRNMNT.Web.Core.Services.Authentication;
+using TRNMNT.Web.Core.Services.Authentication.Impl;
 
 namespace TRNMNT.Web
 {
@@ -54,6 +54,7 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(FighterFileService));
             services.AddScoped(typeof(BracketsFileService));
+            services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             #endregion
 
 
@@ -95,10 +96,10 @@ namespace TRNMNT.Web
             {
 
                 TokenValidationParameters = {
-                   ValidIssuer = TokenAuthOption.ISSUER,
-                   ValidAudience = TokenAuthOption.AUDIENCE,
+                   ValidIssuer = TokenAuthOptions.ISSUER,
+                   ValidAudience = TokenAuthOptions.AUDIENCE,
                    ValidateIssuer = true,
-                   IssuerSigningKey = TokenAuthOption.GetKey(),
+                   IssuerSigningKey = TokenAuthOptions.GetKey(),
                    ValidateIssuerSigningKey = true,
                    ValidateLifetime = true,
                    ClockSkew = TimeSpan.Zero
