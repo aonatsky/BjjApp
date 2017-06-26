@@ -17,5 +17,9 @@ export class RouterService {
         this.router.navigateByUrl("/administration/home");
     }
 
+
+    public GoToDashboard() {
+        this.router.navigateByUrl("/dashboard");
+    }
 }
 

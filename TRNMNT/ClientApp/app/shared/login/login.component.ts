@@ -1,5 +1,6 @@
 ﻿import { Component } from '@angular/core';
 import { AuthenticationService } from './../../core/services/authentication.service';
+import { RouterService } from './../../core/services/router.service';
 
 
 @Component({
@@ -13,14 +14,20 @@ export class LoginComponent {
     username: string = "";
     password: string = "";
 
-    constructor(private authenticationService: AuthenticationService) {
+    constructor(private authenticationService: AuthenticationService, private routerService: RouterService) {
 
     }
 
 
     login(): any {
 
-        this.authenticationService.signin(this.username, this.password).subscribe();
+        this.authenticationService.signin(this.username, this.password).subscribe(data => this.processLogin(data));
 
+    }
+
+    processLogin(isAuthenticated: boolean) {
+        if (isAuthenticated) {
+            this.routerService.GoToDashboard();
+        }
     }
 }

@@ -7,6 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { CoreModule } from './core/core.module'
 import { AdministrationModule } from './administration/administration.module'
 import { SharedModule } from './shared/shared.module'
+import { DashboardModule } from './dashboard/dashboard.module'
 
 
 
@@ -23,7 +24,9 @@ import { appRoutes } from './core/routing/app.routing'
         RouterModule.forRoot(appRoutes),
         CoreModule,
         AdministrationModule,
-        SharedModule
+        SharedModule,
+        DashboardModule
+    
 ],
     providers: [
     ]

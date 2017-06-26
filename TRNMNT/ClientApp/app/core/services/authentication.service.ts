@@ -67,7 +67,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
      * @param password 
      * @return The user's data 
      */
-    public signin(username: string, password: string): Observable<any> {
+    public signin(username: string, password: string): Observable<boolean> {
 
         // Token endpoint & params.  
         let tokenEndpoint: string = ApiMethods.auth.getToken;
@@ -90,8 +90,9 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
                     // Stores access token & refresh token.  
                     this.store(body);
-
+                    return true;
                 }
+                return false;
 
             }).catch((error: any) => {
 

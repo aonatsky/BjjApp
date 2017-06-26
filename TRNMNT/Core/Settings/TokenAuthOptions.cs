@@ -13,7 +13,7 @@ namespace TRNMNT.Web.Core.Settings
         }
         public const string AUDIENCE = "trnmntAudience";
         public const string ISSUER = "trnmntIssuer";
-        public const int LIFETIME = 1; // время жизни токена - 1 минута
+        public const int LIFETIME = 50; // время жизни токена - 1 минута
 
     }
 }
