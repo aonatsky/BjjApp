@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { DataService } from './dal/contracts/data.service';
 import { HttpService } from './dal/http/http.service';
 import { AuthenticationService } from './services/authentication.service';
+import { UserService } from './services/user.service';
 import { ApiProviders } from './dal/api.providers';
 import { LoggerService } from './services/logger.service';
 import { RouterService } from './services/router.service';
@@ -47,7 +48,7 @@ import { AuthGuard } from './routing/auth.guard';
     ],
     declarations: [],
 
-    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthenticationService, AuthHttp, provideAuth({
+    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthenticationService, UserService, AuthHttp, provideAuth({
         headerName: 'Authorization',
         headerPrefix: 'bearer',
         tokenName: 'token',

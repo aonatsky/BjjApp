@@ -31,12 +31,13 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
             {
                 await _userManager.CreateAsync(new User
                 {
-                    UserName = "admin"
-                });
+                    UserName = "admin",
+                    FirstName = "Ivan",
+                    LastName= "Drago"
+                },"1");
                 existUser = await _userManager.FindByNameAsync("admin");
             }
 
-            
 
 
             if (existUser != null)

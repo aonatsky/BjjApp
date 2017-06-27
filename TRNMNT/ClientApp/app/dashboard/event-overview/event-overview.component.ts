@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'event-overview',
-    template: 'Hello my name is {{name}}.'
+    templateUrl: './event-overview.component.html'
 })
 export class EventOverviewComponent {
     constructor() {

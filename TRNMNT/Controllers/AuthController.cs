@@ -30,6 +30,8 @@ namespace TRNMNT.Web.Controllers
         {
 
                 var token = await _authenticationSerivce.GetToken();
+            if (token != null)
+            {
                 Response.StatusCode = (int)HttpStatusCode.OK;
                 var response = new
                 {
@@ -38,6 +40,12 @@ namespace TRNMNT.Web.Controllers
                 await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 
             }
+            else
+            {
+                Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            }
+        }
+            
         }
 
        

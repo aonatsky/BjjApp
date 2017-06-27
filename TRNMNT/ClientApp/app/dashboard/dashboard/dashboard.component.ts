@@ -1,6 +1,8 @@
 import { DataService } from '../../core/dal/contracts/data.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {LoggerService} from './../../core/services/logger.service'
+import {UserService} from './../../core/services/user.service'
 
 
 @Component({
@@ -9,19 +11,16 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-    readmeHtml: string;
+    userData: string;
 
-    constructor(private dataService: DataService, private router: Router) {
+    constructor(private dataService: DataService, private loggerService: LoggerService, private userService: UserService) {
 
     }
 
     ngOnInit() {
-        this.dataService.getStaticContent("readme.md.html").subscribe(data => this.processHtml(data));
+        this.userData = this.userService.getUser();
     }
 
-    private processHtml(data) {
-        this.readmeHtml = data.text();
-    }
 
 
 
