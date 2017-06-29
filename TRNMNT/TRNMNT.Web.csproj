@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>TRNMNT</AssemblyName>
+    <AssemblyName>TRNMNT.Web</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>TRNMNT</PackageId>
     <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>

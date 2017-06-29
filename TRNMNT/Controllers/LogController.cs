@@ -17,8 +17,15 @@ namespace TRNMNT.Web.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]LogModel log)
         {
-            
-            logger.LogError(log.Message);
+
+            if (log != null)
+            {
+                logger.LogError(log.Message);
+            }
+            else
+            {
+                logger.LogError("An Error Occured");
+            }
             return Ok();
         }
 

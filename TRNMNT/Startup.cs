@@ -45,7 +45,14 @@ namespace TRNMNT.Web
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(o => {
+                o.Password.RequireDigit = false;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 1;
+            }
+                )
                .AddEntityFrameworkStores<AppDbContext>();
             #endregion
 

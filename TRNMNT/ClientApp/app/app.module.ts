@@ -28,8 +28,7 @@ import { appRoutes } from './core/routing/app.routing'
         DashboardModule
     
 ],
-    providers: [
-    ]
+    providers: []
 })
 export class AppModule {
 }

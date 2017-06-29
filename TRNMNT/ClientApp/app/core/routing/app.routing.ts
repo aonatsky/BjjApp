@@ -23,7 +23,7 @@ export const appRoutes: Routes = [
             },
             {
                 path: "", outlet: "topmenu", component: TopbarComponent
-            }]
+            }], canActivate: [AuthGuard]
 
     },
     { path: '**', redirectTo: 'administration/home' }

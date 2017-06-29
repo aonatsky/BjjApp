@@ -7,8 +7,7 @@ import { AuthHttp, AuthConfig, AUTH_PROVIDERS, provideAuth } from 'angular2-jwt'
 import { RouterModule } from '@angular/router';
 import { DataService } from './dal/contracts/data.service';
 import { HttpService } from './dal/http/http.service';
-import { AuthenticationService } from './services/authentication.service';
-import { UserService } from './services/user.service';
+import { AuthService } from './services/auth.service';
 import { ApiProviders } from './dal/api.providers';
 import { LoggerService } from './services/logger.service';
 import { RouterService } from './services/router.service';
@@ -16,6 +15,8 @@ import { NotificationService } from './services/notification.service';
 import { LoaderService } from './services/loader.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { BrowserModule } from '@angular/platform-browser'
+
+import { UserModel } from './model/user.model'
 
 //PrimeNG
 import { DataTableModule } from "primeng/components/datatable/datatable";
@@ -46,9 +47,11 @@ import { AuthGuard } from './routing/auth.guard';
         InputMaskModule
 
     ],
-    declarations: [],
+    declarations: [
+        
+    ],
 
-    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthenticationService, UserService, AuthHttp, provideAuth({
+    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthService, AuthHttp, provideAuth({
         headerName: 'Authorization',
         headerPrefix: 'bearer',
         tokenName: 'token',

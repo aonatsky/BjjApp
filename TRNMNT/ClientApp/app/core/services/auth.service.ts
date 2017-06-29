@@ -8,11 +8,13 @@ import 'rxjs/add/observable/throw';
 
 import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
+import { UserModel } from './../model/user.model'
+
 
 /** 
  * Authentication service. 
  */
-@Injectable() export class AuthenticationService {
+@Injectable() export class AuthService {
 
     /** 
      * Stores the URL so we can redirect after signing in. 
@@ -94,10 +96,17 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
                 }
                 return false;
 
-            }).catch((error: any) => {
+            }).catch((data: any) => {
 
                 // Error on post request.  
-                return Observable.throw(error);
+                if (data instanceof Response) {
+                    if (data.status != 401) {
+                        return Observable.throw(data);
+                    }
+                } else {
+                    return Observable.throw(data);
+                }
+
 
             });
 
@@ -238,9 +247,9 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
      * 
      * @return The user's data 
      */
-    public getUser(): any {
+    public getUser(): UserModel {
 
-        return this.user;
+        return new UserModel(this.user.UserId, this.user.first_name, this.user.last_name, this.user.email, this.user.role)                
 
     }
 
