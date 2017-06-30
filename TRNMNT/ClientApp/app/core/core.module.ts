@@ -27,8 +27,8 @@ import { InputTextModule } from "primeng/components/inputtext/inputtext";
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputMaskModule } from 'primeng/primeng';
-import { StepsModule, MenuItem } from 'primeng/primeng';
-import { CalendarModule } from 'primeng/primeng';
+import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule } from 'primeng/primeng';
+
 
 import { AuthGuard } from './routing/auth.guard';
 
@@ -47,7 +47,8 @@ import { AuthGuard } from './routing/auth.guard';
         GrowlModule,
         InputMaskModule,
         StepsModule,
-        CalendarModule
+        CalendarModule,
+        InputTextareaModule
     ],
     declarations: [
         
@@ -77,7 +78,9 @@ import { AuthGuard } from './routing/auth.guard';
         GrowlModule,
         InputMaskModule,
         StepsModule,
-        CalendarModule
+        CalendarModule,
+        InputTextareaModule,
+        FileUploadModule
     ]
 })
 export class CoreModule { }

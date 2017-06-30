@@ -9,8 +9,8 @@ export class EventModel{
     public description: string;
     public address: string;
     public image: any;
-    public eventDate: Date;
-    public registrationStartTs: Date;
-    public registrationEndTs: Date;
+    public date: Date;
+    public registrationStartDate: Date;
+    public registrationEndDate: Date;
 
 };
