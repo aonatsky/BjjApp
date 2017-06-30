@@ -13,20 +13,10 @@ import { LoginComponent } from '../../shared/login/login.component';
 
 
 export const appRoutes: Routes = [
-    { path: '', component: LoginComponent, pathMatch: 'full' },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, pathMatch: 'full' },
-    { path: 'home', redirectTo: 'administration/home' },
-    {
-        path: 'dashboard', component: DashboardComponent, children: [
-            {
-                path: "", component: EventOverviewComponent
-            },
-            {
-                path: "", outlet: "topmenu", component: TopbarComponent
-            }], canActivate: [AuthGuard]
-
-    },
-    { path: '**', redirectTo: 'administration/home' }
+    { path: 'home', redirectTo: 'dashboard' },
+    { path: '**', redirectTo: 'dashboard' }
 ];
 
 

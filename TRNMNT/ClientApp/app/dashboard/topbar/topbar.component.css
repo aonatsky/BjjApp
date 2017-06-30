@@ -4,4 +4,14 @@
 
 .topbar .logo{
     color: white;
+    text-decoration:underline
+}
+
+.profile-section{
+    float:right;
+    text-align:right;
+}
+
+.topbar .fabula{
+    font-style:italic;
 }

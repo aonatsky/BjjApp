@@ -76,6 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\app\dashboard\event-create\NewFolder\" />
     <Folder Include="Core\Authentication\" />
   </ItemGroup>
 
