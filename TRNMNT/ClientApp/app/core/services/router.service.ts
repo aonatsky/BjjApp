@@ -21,5 +21,9 @@ export class RouterService {
     public GoToDashboard() {
         this.router.navigateByUrl("/dashboard");
     }
+
+    public GoToCreateEvent() {
+        this.router.navigateByUrl("/dashboard/create");
+    }
 }
 

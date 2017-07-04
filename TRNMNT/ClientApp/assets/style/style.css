@@ -30,3 +30,84 @@
 body {
     background-color: #f8f8f8;
 }
+
+
+/*BOOTSTRAP ANALOGS*/
+
+.ui-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 768px) {
+    .ui-container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .ui-container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .ui-container {
+        width: 1170px;
+    }
+}
+
+
+.ui-g-offset-1 {
+    margin-left: 8.3333%;
+}
+
+.ui-g-offset-2 {
+    margin-left: 16.6667%;
+}
+
+.ui-g-offset-3 {
+    margin-left: 25%;
+}
+
+.ui-g-offset-4 {
+    margin-left: 33.3333%;
+}
+
+.ui-g-offset-5 {
+    margin-left: 41.6667%;
+}
+
+.ui-g-offset-6 {
+    margin-left: 50%;
+}
+
+.ui-g-offset-7 {
+    margin-left: 58.3333%;
+}
+
+.ui-g-offset-8 {
+    margin-left: 66.6667%;
+}
+
+.ui-g-offset-9 {
+    margin-left: 75%;
+}
+
+.ui-g-offset-10 {
+    margin-left: 83.3333%;
+}
+
+.ui-g-offset-11 {
+    margin-left: 91.6667%;
+}
+
+.ui-g-offset-12 {
+    margin-left: 100%;
+}
+
+.float-right{
+    float: right;
+}

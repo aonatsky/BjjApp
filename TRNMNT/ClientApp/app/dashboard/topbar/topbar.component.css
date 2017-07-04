@@ -4,7 +4,7 @@
 
 .topbar .logo{
     color: white;
-    text-decoration:underline
+    border: 1px solid white;
 }
 
 .profile-section{

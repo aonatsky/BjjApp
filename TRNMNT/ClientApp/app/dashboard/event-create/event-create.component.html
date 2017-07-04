@@ -2,53 +2,44 @@
     <h3>Create your event</h3>
 
     <p-steps [model]="items"></p-steps>
-    <div>
+    <div class="ui-g">
+    <div class="ui-g-6 ui-g-offset-3">
         <div class="ui-g">
-            <div class="ui-g-6">
-                <div class="ui-g-3 ui-fluid"><label>Title</label></div>
-                <div class="ui-g-9 ui-fluid"><input pInputText id="color" [(ngModel)]="eventModel.title" /></div>
+            <div class="ui-g-3 ui-fluid"><label>Title</label></div>
+            <div class="ui-g-9 ui-fluid"><input pInputText id="color" [(ngModel)]="eventModel.title" /></div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Date</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <p-calendar [(ngModel)]="eventModel.date" [showIcon]="true"></p-calendar>
             </div>
         </div>
         <div class="ui-g">
-            <div class="ui-g-6">
-                <div class="ui-g-3 ui-fluid"><label>Date</label></div>
-                <div class="ui-g-9 ui-fluid">
-                    <p-calendar [(ngModel)]="eventModel.date" [showIcon]="true"></p-calendar>
-                </div>
+            <div class="ui-g-3 ui-fluid"><label>Registration Start</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <p-calendar [(ngModel)]="eventModel.registrationStartDate" [showIcon]="true"></p-calendar>
             </div>
         </div>
         <div class="ui-g">
-            <div class="ui-g-6">
-                <div class="ui-g-3 ui-fluid"><label>Registration Start</label></div>
-                <div class="ui-g-9 ui-fluid">
-                    <p-calendar [(ngModel)]="eventModel.registrationStartDate" [showIcon]="true"></p-calendar>
-                </div>
-            </div>
+            <div class="ui-g-3 ui-fluid"><label>Registration End</label></div>
+            <div class="ui-g-9 ui-fluid"><p-calendar [(ngModel)]="eventModel.registrationEndDate" [showIcon]="true"></p-calendar></div>
         </div>
         <div class="ui-g">
-            <div class="ui-g-6">
-                <div class="ui-g-3 ui-fluid"><label>Registration End</label></div>
-                <div class="ui-g-9 ui-fluid"><p-calendar [(ngModel)]="eventModel.registrationEndDate" [showIcon]="true"></p-calendar></div>
-            </div>
+            <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
+            <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.description" style="resize:none; height:20em"></textarea></div>
         </div>
         <div class="ui-g">
-            <div class="ui-g-6">
-                <div class="ui-g-3 ui-fluid"><label>Description</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.description" style="resize:none; height:20em"></textarea></div>
-            </div>
+            <div class="ui-g-3 ui-fluid"><label>Location</label></div>
+            <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.adress" style="resize:none; height:10em"></textarea></div>
         </div>
         <div class="ui-g">
-            <div class="ui-g-6">
-                <div class="ui-g-3 ui-fluid"><label>Location</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.adress" style="resize:none; height:10em"></textarea></div>
-            </div>
+            <div class="ui-g-3 ui-fluid"><label>Description</label></div>
+            <div class="ui-g-9 ui-fluid">todo</div>
         </div>
-        <div class="ui-g">
-            <div class="ui-g-6">
-                <div class="ui-g-3 ui-fluid"><label>Description</label></div>
-                <div class="ui-g-9 ui-fluid"><p-fileUpload #fubauto name="myfile[]" mode="basic" customUpload="true" (uploadHandler)="myUploader($event)"></p-fileUpload></div>
-            </div>
         </div>
     </div>
-
+    <div class="ui-g">
+        <div class="float-right"><button pButton type="button" class="float-right" label="Save as draft" (click)="createEvent()"></button></div>
+        <div class="float-right"><button pButton type="button" class="float-right" label="Continue" (click)="createEvent()"></button></div>
+    </div>
 </div>
