@@ -1,12 +1,12 @@
-﻿<div class="ui-panel ui-panel-content">
+﻿
+<div class="ui-panel ui-panel-content">
     <fieldset class="ui-widget-content second-color-border ui-fluid ui-corner-all">
         <legend>
             <div class="category-header">
-                <label *ngIf="!isEdit" (click)="toggleEdit()">{{category.name}}</label>
-                <div *ngIf="isEdit">
-                    <input #inputCategoryName pInputText [(ngModel)]="category.name" (focus)="toggleEdit()" (blur)="toggleEdit()" />
-                    <button pButton type="button" class="ui-button-success" icon="fa-save" ></button>
-                </div>
+                <input #inputCategoryName class="second-color-border" pInputText [(ngModel)]="category.name" [disabled]="!isEdit" autofocus/>
+                <button pButton type="button" class="ui-button-success ui-button-icon-only" icon="fa-save" (click)="save()" *ngIf="isEdit"></button>
+                <button pButton type="button" class="ui-button-icon-only" icon="fa-edit" (click)="edit()" *ngIf="!isEdit"></button>
+                <button pButton type="button" class="ui-button-danger ui-button-icon-only" icon="fa-times" (click)="delete()"></button>
             </div>
         </legend>
         contenet

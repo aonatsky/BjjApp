@@ -1,5 +1,5 @@
 ﻿
-import { Component, Input, Output, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { EventModel } from './../../core/model/event.model';
 import { Category } from './../../core/model/category.model';
 import { WeightDivision } from './../../core/model/weight-division.model';
@@ -33,10 +33,20 @@ export class EventCreateCategoryComponent {
         
     }
 
-    private toggleEdit() {
-        this.isEdit = !this.isEdit;
+    private edit() {
+        this.isEdit = true;
         this.inputCategoryName.nativeElement.focus();
         
     }
+
+    private save() {
+        this.isEdit = false;
+    }
+
+    private delete() {
+        //rodo
+    }
+
+
 }
 
