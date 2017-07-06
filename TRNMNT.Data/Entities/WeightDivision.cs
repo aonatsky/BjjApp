@@ -14,7 +14,9 @@ namespace TRNMNT.Data.Entities
         public string Name { get; set; }
         public int Weight { get; set; }
         public string Descritpion { get; set; }
+        public Guid CategoryId { get; set; }
 
-        public ICollection<Fighter> Fighters {get;set;}
+        public virtual Category Category { get; set; }
+        public virtual ICollection<Fighter> Fighters {get;set;}
     }
 }

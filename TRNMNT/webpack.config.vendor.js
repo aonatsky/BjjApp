@@ -31,7 +31,7 @@ module.exports = (env) => {
                 '@angular/animations',
                 'bootstrap',
                 'file-saver',
-                'bootstrap/dist/css/bootstrap.css',
+                //'bootstrap/dist/css/bootstrap.css',
                 'es6-shim',
                 'es6-promise',
                 'event-source-polyfill',

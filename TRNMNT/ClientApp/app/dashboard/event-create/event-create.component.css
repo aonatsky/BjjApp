@@ -1,4 +1,29 @@
 ﻿
 .ui-steps .ui-steps-item {
-    width: 25% 
+    width: 25%
+}
+
+.second-color-border {
+    border-color: #1976d2;
+}
+
+.category-header {
+    width: 100%
+}
+
+legend {
+    /*width:100%*/
+}
+
+.category-header input {
+    margin-left: 2px;
+    width: 200px;
+}
+
+.category-header button {
+    width: 25px;
+}
+
+.category-header label {
+    margin: 10px;
 }

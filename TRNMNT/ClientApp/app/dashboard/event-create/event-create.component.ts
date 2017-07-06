@@ -1,5 +1,5 @@
 ﻿
-import { Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuModule, MenuItem } from 'primeng/primeng';
 import { EventModel } from './../../core/model/event.model';
 import { AuthService } from './../../core/services/auth.service'
@@ -15,7 +15,7 @@ export class EventCreateComponent implements OnInit {
     }
 
     private items: MenuItem[];
-    private currentStep: number = 1;
+    private currentStep: number = 0;
     private eventModel: EventModel;
 
 
@@ -34,7 +34,7 @@ export class EventCreateComponent implements OnInit {
                 { label: 'Undo', icon: 'fa-refresh' },
                 { label: 'Redo', icon: 'fa-repeat' }
             ]
-            },
+        },
         {
             label: 'Confirmation',
             items: [
@@ -50,5 +50,13 @@ export class EventCreateComponent implements OnInit {
             ]
         }
         ];
+    }
+
+    private nextStep() {
+        this.currentStep++;
+    }
+
+    private saveAsDraft() {
+        //todo 
     }
 }

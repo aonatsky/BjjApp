@@ -1,4 +1,6 @@
-﻿
+﻿import { Category } from "./category.model"
+
+
 export class EventModel{
     constructor(
         
@@ -12,5 +14,6 @@ export class EventModel{
     public date: Date;
     public registrationStartDate: Date;
     public registrationEndDate: Date;
+    public categories: Category[]
 
 };

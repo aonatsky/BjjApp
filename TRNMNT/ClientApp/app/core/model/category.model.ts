@@ -1,5 +1,11 @@
+import {WeightDivision} from "./weight-division.model"
+
 export class Category {
 
-    constructor(public categoryId?:AAGUID ,public name?:string) {
+    constructor() {
     }
+
+    public name: string
+    public categoryId: AAGUID;
+    public weightDivisions: WeightDivision[];
 }

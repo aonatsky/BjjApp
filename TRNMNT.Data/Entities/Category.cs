@@ -11,8 +11,10 @@ namespace TRNMNT.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid CategoryId { get; set; }
         public String Name { get; set; }
-
-        public ICollection<Fighter> Fighters {get;set;}
+        
+        
+        public virtual ICollection<Fighter> Fighters {get;set;}
+        public virtual ICollection<WeightDivision> WeightDivisions { get; set; }
 
     }
 }
