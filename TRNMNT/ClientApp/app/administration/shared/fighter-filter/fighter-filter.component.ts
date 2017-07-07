@@ -1,6 +1,6 @@
-import { Category } from '../../../core/model/category.model';
+import { CategoryModel } from '../../../core/model/category.model';
 
-import { WeightDivision } from '../../../core/model/weight-division.model';
+import { WeightDivisionModel } from '../../../core/model/weight-division.model';
 import { FighterFilterModel } from '../../../core/model/fighter-filter.model';
 import { Component, Input, Output, OnInit, EventEmitter, ViewEncapsulation } from "@angular/core"
 import { DataService } from '../../../core/dal/contracts/data.service'
@@ -19,8 +19,8 @@ import { SelectItem } from 'primeng/primeng'
 
 export class FighterFilter implements OnInit {
 
-    weightDivisions: WeightDivision[];
-    categories: Category[];
+    weightDivisions: WeightDivisionModel[];
+    categories: CategoryModel[];
 
     weightDivisionSelectOptions: SelectItem[] = [];
     categorySelectOptions: SelectItem[] = [];
@@ -65,7 +65,7 @@ export class FighterFilter implements OnInit {
     //Private methods
 
 
-    private initFilter(data: [Category[], WeightDivision[]]) {
+    private initFilter(data: [CategoryModel[], WeightDivisionModel[]]) {
         let defaultDDLOption = { label: DefaultValues.DROPDOWN_NAME_ANY, value: DefaultValues.DROPDOWN_ID_ANY };
         this.categories = data[0];
         this.weightDivisions = data[1];

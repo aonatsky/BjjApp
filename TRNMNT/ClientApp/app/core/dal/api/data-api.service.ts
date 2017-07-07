@@ -6,9 +6,9 @@ import { Response, ResponseContentType } from '@angular/http'
 import { ApiMethods } from '../consts/api-methods.consts'
 import { HttpService } from '../http/http.service'
 import { Fighter } from '../../model/fighter.model'
-import { WeightDivision } from '../../model/weight-division.model'
+import { WeightDivisionModel } from '../../model/weight-division.model'
 import { FighterFilterModel } from '../../model/fighter-filter.model'
-import { Category } from "../../model/category.model";
+import { CategoryModel } from "../../model/category.model";
 
 @Injectable()
 export class DataApiService extends DataService {
@@ -19,19 +19,19 @@ export class DataApiService extends DataService {
     }
 
     //Categories
-    public getCategories(): Observable<Category[]> {
-        return this.httpService.get(ApiMethods.tournament.categories).map(r => this.httpService.getArray<Category>(r))
+    public getCategories(): Observable<CategoryModel[]> {
+        return this.httpService.get(ApiMethods.tournament.categories).map(r => this.httpService.getArray<CategoryModel>(r))
     }
 
-    public addCategory(category: Category): Observable<any> {
+    public addCategory(category: CategoryModel): Observable<any> {
         return this.httpService.post(ApiMethods.tournament.categories, category)
     }
 
-    public updateCategory(category: Category): Observable<any> {
+    public updateCategory(category: CategoryModel): Observable<any> {
         return this.httpService.put(ApiMethods.tournament.categories, category)
     }
 
-    public deleteCategory(category: Category): Observable<any> {
+    public deleteCategory(category: CategoryModel): Observable<any> {
         return this.httpService.delete(ApiMethods.tournament.categories, category)
     }
 
@@ -59,16 +59,16 @@ export class DataApiService extends DataService {
 
     //WeightDivisions
 
-    public getWeightDivisions(): Observable<WeightDivision[]> {
-        return this.httpService.get(ApiMethods.tournament.weightDivisions).map(r => this.httpService.getArray<WeightDivision>(r))
+    public getWeightDivisions(): Observable<WeightDivisionModel[]> {
+        return this.httpService.get(ApiMethods.tournament.weightDivisions).map(r => this.httpService.getArray<WeightDivisionModel>(r))
     }
-    public addWeightDivision(weightDivision: WeightDivision): Observable<any> {
+    public addWeightDivision(weightDivision: WeightDivisionModel): Observable<any> {
         return this.httpService.post(ApiMethods.tournament.weightDivisions, weightDivision)
     }
-    public updateWeightDivision(weightDivision: WeightDivision): Observable<any> {
+    public updateWeightDivision(weightDivision: WeightDivisionModel): Observable<any> {
         return this.httpService.put(ApiMethods.tournament.weightDivisions, weightDivision)
     }
-    public deleteWeightDivision(weightDivision: WeightDivision): Observable<any> {
+    public deleteWeightDivision(weightDivision: WeightDivisionModel): Observable<any> {
         return this.httpService.delete(ApiMethods.tournament.weightDivisions, weightDivision)
     }
 

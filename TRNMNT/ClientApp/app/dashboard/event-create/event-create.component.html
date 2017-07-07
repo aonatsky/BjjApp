@@ -1,12 +1,12 @@
 ﻿<div class="ui-widget">
     <h3>Create your event</h3>
-    <p-steps [model]="items" [activeIndex]="currentStep"></p-steps>
+    <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
     <div class="ui-g">
-        <div *ngIf="currentStep==0" class="ui-g-6 ui-g-offset-3 panel">
+        <div *ngIf="currentStep==1" class="ui-g-6 ui-g-offset-3 panel">
             <h2>General Information</h2>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Title</label></div>
-                <div class="ui-g-9 ui-fluid"><input pInputText  [(ngModel)]="eventModel.title" /></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Date</label></div>
@@ -39,9 +39,12 @@
         </div>
 
 
-        <div *ngIf="currentStep==1" class="ui-g-6 ui-g-offset-3">
+        <div *ngIf="currentStep==0" class="ui-g-6 ui-g-offset-3">
             <div class="category-list">
-                <div class="float-right"><button pButton type="button" class="float-right" label="Add category" (click)="saveAsDraft()"></button></div>
+                <div class="ui-g">
+                    <category #categoryList *ngFor="let category of eventModel.categories;" [category]="category" (onCategoryDelete)="categoryDelete($event)" class="ui-g-12"></category>
+                </div>
+                <div class="ui-g"><button pButton type="button" class="ui-button-icon-left" icon="fa-plus" label="Add category" (click)="categoryCreate()"></button></div>
             </div>
         </div>
     </div>

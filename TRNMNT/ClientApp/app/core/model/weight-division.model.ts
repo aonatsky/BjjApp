@@ -1,4 +1,4 @@
-export class WeightDivision {
+export class WeightDivisionModel {
     weightDivisionId: AAGUID;
     name: string;
     weight: number;

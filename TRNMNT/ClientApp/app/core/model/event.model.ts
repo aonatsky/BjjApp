@@ -1,4 +1,4 @@
-﻿import { Category } from "./category.model"
+﻿import { CategoryModel } from "./category.model"
 
 
 export class EventModel{
@@ -14,6 +14,6 @@ export class EventModel{
     public date: Date;
     public registrationStartDate: Date;
     public registrationEndDate: Date;
-    public categories: Category[]
+    public categories: CategoryModel[]
 
 };

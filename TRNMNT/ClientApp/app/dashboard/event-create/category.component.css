@@ -1,0 +1,24 @@
+﻿.category-header {
+    width: 100%
+}
+
+fieldset {
+    width:100%
+}
+
+.category-header input {
+    margin-left: 2px;
+    width: 200px;
+}
+
+.category-header button {
+    width: 25px;
+}
+
+.category-header label {
+    margin: 10px;
+}
+
+input:disabled {
+    opacity: 1;
+}

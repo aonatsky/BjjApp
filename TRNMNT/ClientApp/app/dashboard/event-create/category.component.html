@@ -1,0 +1,23 @@
+﻿
+<div class="ui-panel ui-panel-content ui-g">
+    <fieldset class="ui-widget-content second-color-border ui-corner-all">
+        <legend>
+            <div class="category-header">
+                <input #inputCategoryName class="second-color-border" pInputText [(ngModel)]="category.name" (blur)="categorySave()" disabled />
+                <button #btnCategorySave pButton type="button" class="ui-button-success ui-button-icon-only" icon="fa-check" (click)="categorySave()" *ngIf="isEdit"></button>
+                <button pButton type="button" class="ui-button-icon-only" icon="fa-pencil" (click)="categoryEdit()" *ngIf="!isEdit"></button>
+                <button pButton type="button" class="ui-button-danger ui-button-icon-only" icon="fa-times" (click)="categoryDelete()"></button>
+            </div>
+        </legend>
+        <div class="ui-g" *ngIf="category.weightDivisions">
+            <p-dataTable [value]="category.weightDivisions" [editable]="true">
+                <p-column field="name" header="Vin" [editable]="true"></p-column>
+                <p-column field="weight" header="Year" [editable]="true"></p-column>
+            </p-dataTable>
+        </div>
+        <div class="ui-g">
+            <button pButton type="button" class="ui-button-icon-left" label="Add Weight Divsion" icon="fa-plus"></button>
+        </div>
+    </fieldset>
+    <!--<div class="ui-widget-content second-color-border ui-fluid ui-corner-all">    <h3>content</h3></div>-->
+</div>

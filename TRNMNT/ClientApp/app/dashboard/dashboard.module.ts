@@ -10,7 +10,7 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
 import { EventCreateComponent } from './event-create/event-create.component'
-import { EventCreateCategoryComponent } from './event-create/event-create.category.component'
+import { CategoryComponent } from './event-create/category.component'
 import { BaseComponent } from './base.component'
 import { dashboardRoutes } from './dashboard.routing'
 
@@ -27,7 +27,7 @@ import { dashboardRoutes } from './dashboard.routing'
         EventOverviewComponent,
         EventCreateComponent,
         BaseComponent,
-        EventCreateCategoryComponent
+        CategoryComponent
     ],
 
     providers: [],
