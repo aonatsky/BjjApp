@@ -23,7 +23,7 @@ export const dashboardRoutes: Routes = [
                 path: "", outlet: "topmenu", component: TopbarComponent
             },
         ]
-        , canActivate: [AuthGuard]
+        , canActivate: []
 
     },
 ];
