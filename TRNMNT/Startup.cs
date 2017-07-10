@@ -19,6 +19,9 @@ using TRNMNT.Web.Core.Services.Authentication;
 using TRNMNT.Web.Core.Services.Authentication.Impl;
 using TRNMNT.Core.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace TRNMNT.Web
 {
@@ -47,7 +50,8 @@ namespace TRNMNT.Web
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
-            services.AddIdentity<User, IdentityRole>(o => {
+            services.AddIdentity<User, IdentityRole>(o =>
+            {
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
@@ -75,7 +79,7 @@ namespace TRNMNT.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath,"Config", "log4net.config"));
+            loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -104,20 +108,27 @@ namespace TRNMNT.Web
                    ValidateLifetime = true,
                    ClockSkew = TimeSpan.Zero,
                 },
-                AutomaticAuthenticate = false
+                AutomaticAuthenticate = false,
+                AutomaticChallenge = false,
+                AuthenticationScheme = JwtBearerDefaults.AuthenticationScheme,
+                Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Task.FromResult(0);
+                    },
+                    OnChallenge = context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Task.FromResult(0);
+                    }
+                }
+
             };
             app.UseJwtBearerAuthentication(options);
             app.UseIdentity();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
-            });
+            app.UseMvc();
         }
     }
 }
