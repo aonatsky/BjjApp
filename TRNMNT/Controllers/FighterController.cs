@@ -25,7 +25,7 @@ namespace TRNMNT.Web.Controllers
         BracketsFileService bracketsFileService;
 
         public FighterController(IFighterService fighterService, ILogger<FighterController> logger, FighterFileService fighterFileService, 
-            BracketsFileService bracketsFileService, IRepository<Fighter> fighterRepository) : base(logger, fighterRepository)
+            BracketsFileService bracketsFileService, IRepository<Fighter> fighterRepository, IHttpContextAccessor httpContextAccessor) : base(logger, fighterRepository, httpContextAccessor)
         {
             this.fighterService = fighterService;
             this.fighterFileService = fighterFileService;

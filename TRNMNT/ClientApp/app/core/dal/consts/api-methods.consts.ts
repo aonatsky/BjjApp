@@ -13,5 +13,9 @@ export const ApiMethods = Object.freeze({
         getToken: "api/auth/gettoken",
         refreshToken: "api/auth/refreshtoken"
         },
-    log: "api/log"
+    log: "api/log",
+    event: {
+        getEvents: "api/event/getEvents",
+        addEvent: "api/event/addEvent"
+    }
 });

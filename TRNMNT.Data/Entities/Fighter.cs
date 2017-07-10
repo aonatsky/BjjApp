@@ -20,7 +20,7 @@ namespace TRNMNT.Data.Entities
         public DateTime UpdateTs { get; set; }
 
         public Team Team { get; set; }
-        public virtual Category Category { get; set; }
+
         public virtual WeightDivision WeightDivision { get; set; }
         
 

@@ -14,6 +14,7 @@ export class EventModel{
     public date: Date;
     public registrationStartDate: Date;
     public registrationEndDate: Date;
+    public statusId: number;
     public categories: CategoryModel[]
 
 };

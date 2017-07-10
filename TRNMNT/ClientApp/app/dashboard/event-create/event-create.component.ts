@@ -5,6 +5,7 @@ import { EventModel } from './../../core/model/event.model';
 import { CategoryModel } from './../../core/model/category.model';
 import { WeightDivisionModel } from './../../core/model/weight-division.model';
 import { AuthService } from './../../core/services/auth.service'
+import { EventService } from './../../core/services/event.service'
 import { CategoryComponent } from './../event-create/category.component'
 
 
@@ -15,7 +16,7 @@ import { CategoryComponent } from './../event-create/category.component'
     encapsulation: ViewEncapsulation.None
 })
 export class EventCreateComponent implements OnInit {
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService, private eventService: EventService) {
     }
 
     private menuItems: MenuItem[];
@@ -30,8 +31,8 @@ export class EventCreateComponent implements OnInit {
     ngOnInit() {
         this.initMenu();
         this.initData();
-        
-        
+
+
     }
 
 
@@ -55,7 +56,7 @@ export class EventCreateComponent implements OnInit {
         var cat1 = new CategoryModel();
         cat1.categoryId = "02b44457-be9e-4196-a666-e5602e04ee61";
         cat1.name = "category 1"
-        cat1.weightDivisions = [wd1,wd2,wd3];
+        cat1.weightDivisions = [wd1, wd2, wd3];
 
 
         var cat2 = new CategoryModel();
@@ -79,7 +80,8 @@ export class EventCreateComponent implements OnInit {
         {
             label: 'Confirmation',
         },
-        ];}
+        ];
+    }
 
 
     private nextStep() {
@@ -87,7 +89,7 @@ export class EventCreateComponent implements OnInit {
     }
 
     private saveAsDraft() {
-        //todo 
+        this.eventService.saveAsDraft(this.eventModel).subscribe();
     }
 
     private categoryDelete(model: CategoryModel) {
@@ -96,7 +98,7 @@ export class EventCreateComponent implements OnInit {
             this.eventModel.categories.splice(index, 1);
             this.categoryCount = this.eventModel.categories.length;
         }
-        
+
     }
 
     private categoryCreate() {
@@ -105,9 +107,7 @@ export class EventCreateComponent implements OnInit {
         this.eventModel.categories.push(category);
     }
 
-    trackCategory(index, category) {
-        return index;
-    }
+
 
     private onNewCategoryCreate() {
         if (this.categoryComponents) {

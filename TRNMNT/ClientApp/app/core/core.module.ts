@@ -5,6 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { AuthHttp, AuthConfig, AUTH_PROVIDERS, provideAuth } from 'angular2-jwt';
 
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { BrowserModule } from '@angular/platform-browser'
+
+
 import { DataService } from './dal/contracts/data.service';
 import { HttpService } from './dal/http/http.service';
 import { AuthService } from './services/auth.service';
@@ -13,8 +17,7 @@ import { LoggerService } from './services/logger.service';
 import { RouterService } from './services/router.service';
 import { NotificationService } from './services/notification.service';
 import { LoaderService } from './services/loader.service';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { BrowserModule } from '@angular/platform-browser'
+import { EventService } from './services/event.service';
 
 import { UserModel } from './model/user.model'
 
@@ -54,7 +57,7 @@ import { AuthGuard } from './routing/auth.guard';
         
     ],
 
-    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthService, AuthHttp, provideAuth({
+    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthService, AuthHttp, EventService, provideAuth({
         headerName: 'Authorization',
         headerPrefix: 'bearer',
         tokenName: 'token',

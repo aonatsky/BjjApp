@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRNMNT.Web", "TRNMNT.Web.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRNMNT.Data", "..\TRNMNT.Data\TRNMNT.Data.csproj", "{ADE68249-D27B-42D3-BA50-1845A1CC79E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRNMNT.Core", "..\TRNMNT.Core\TRNMNT.Core.csproj", "{C4D3C628-6EF9-47C7-AB86-4EF775B21957}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{ADE68249-D27B-42D3-BA50-1845A1CC79E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADE68249-D27B-42D3-BA50-1845A1CC79E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADE68249-D27B-42D3-BA50-1845A1CC79E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4D3C628-6EF9-47C7-AB86-4EF775B21957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4D3C628-6EF9-47C7-AB86-4EF775B21957}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4D3C628-6EF9-47C7-AB86-4EF775B21957}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4D3C628-6EF9-47C7-AB86-4EF775B21957}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

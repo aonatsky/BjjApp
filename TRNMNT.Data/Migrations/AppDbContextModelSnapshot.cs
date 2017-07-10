@@ -146,9 +146,15 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsApproved");
+
                     b.Property<string>("LastName");
 
                     b.Property<Guid>("TeamId");
+
+                    b.Property<DateTime>("UpdateTs");
 
                     b.Property<Guid>("WeightDivisionId");
 
@@ -238,6 +244,8 @@ namespace TRNMNT.Data.Migrations
                     b.Property<Guid>("WeightDivisionId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("CategoryId");
+
                     b.Property<string>("Descritpion");
 
                     b.Property<string>("Name");
@@ -245,6 +253,8 @@ namespace TRNMNT.Data.Migrations
                     b.Property<int>("Weight");
 
                     b.HasKey("WeightDivisionId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("WeightDivision");
                 });
@@ -283,7 +293,7 @@ namespace TRNMNT.Data.Migrations
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Fighter", b =>
                 {
-                    b.HasOne("TRNMNT.Data.Entities.Category", "Category")
+                    b.HasOne("TRNMNT.Data.Entities.Category")
                         .WithMany("Fighters")
                         .HasForeignKey("CategoryId");
 
@@ -294,6 +304,13 @@ namespace TRNMNT.Data.Migrations
                     b.HasOne("TRNMNT.Data.Entities.WeightDivision", "WeightDivision")
                         .WithMany("Fighters")
                         .HasForeignKey("WeightDivisionId");
+                });
+
+            modelBuilder.Entity("TRNMNT.Data.Entities.WeightDivision", b =>
+                {
+                    b.HasOne("TRNMNT.Data.Entities.Category", "Category")
+                        .WithMany("WeightDivisions")
+                        .HasForeignKey("CategoryId");
                 });
         }
     }

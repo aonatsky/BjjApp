@@ -1,0 +1,9 @@
+D:\Onatsky\BjjApp\TRNMNT.Core\bin\Debug\netcoreapp1.1\TRNMNT.Core.deps.json
+D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.csprojResolveAssemblyReference.cache
+D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.AssemblyInfo.cs
+D:\Onatsky\BjjApp\TRNMNT.Core\bin\Debug\netcoreapp1.1\TRNMNT.Core.dll
+D:\Onatsky\BjjApp\TRNMNT.Core\bin\Debug\netcoreapp1.1\TRNMNT.Data.dll
+D:\Onatsky\BjjApp\TRNMNT.Core\bin\Debug\netcoreapp1.1\TRNMNT.Data.pdb
+D:\Onatsky\BjjApp\TRNMNT.Core\bin\Debug\netcoreapp1.1\TRNMNT.Core.pdb
+D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.dll
+D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.pdb

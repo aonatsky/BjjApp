@@ -17,6 +17,8 @@ using System;
 using TRNMNT.Web.Core.Settings;
 using TRNMNT.Web.Core.Services.Authentication;
 using TRNMNT.Web.Core.Services.Authentication.Impl;
+using TRNMNT.Core.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace TRNMNT.Web
 {
@@ -57,11 +59,13 @@ namespace TRNMNT.Web
             #endregion
 
             #region AppServices
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(FighterFileService));
             services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
+            services.AddScoped(typeof(IEventService), typeof(EventService));
             #endregion
 
 
@@ -88,17 +92,6 @@ namespace TRNMNT.Web
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
-            });
-
             var options = new JwtBearerOptions
             {
 
@@ -109,12 +102,22 @@ namespace TRNMNT.Web
                    IssuerSigningKey = TokenAuthOptions.GetKey(),
                    ValidateIssuerSigningKey = true,
                    ValidateLifetime = true,
-                   ClockSkew = TimeSpan.Zero
-                }
+                   ClockSkew = TimeSpan.Zero,
+                },
+                AutomaticAuthenticate = false
             };
-
             app.UseJwtBearerAuthentication(options);
+            app.UseIdentity();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
 
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
         }
     }
 }
