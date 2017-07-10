@@ -7,9 +7,8 @@ export class WeightDivisionModel {
     /**
      *
      */
-    constructor(id:AAGUID, name: string, weight: number) { 
+    constructor(name: string, id?: AAGUID ) { 
         this.weightDivisionId = id;
         this.name = name;
-        this.weight = weight;
     }
 }

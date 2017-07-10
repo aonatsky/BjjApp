@@ -8,11 +8,8 @@ fieldset {
 
 .category-header input {
     margin-left: 2px;
-    width: 200px;
-}
-
-.category-header button {
-    width: 25px;
+    width: 82%;
+    display:inline-block;
 }
 
 .category-header label {
@@ -21,4 +18,14 @@ fieldset {
 
 input:disabled {
     opacity: 1;
+}
+
+
+legend{
+    width:90%
+}
+
+.category-header .header-buttons{
+    width: 16%;
+    display:inline-block;
 }

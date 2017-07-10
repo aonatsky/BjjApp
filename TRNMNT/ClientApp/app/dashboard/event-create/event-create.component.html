@@ -2,7 +2,7 @@
     <h3>Create your event</h3>
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
     <div class="ui-g">
-        <div *ngIf="currentStep==1" class="ui-g-6 ui-g-offset-3 panel">
+        <div *ngIf="currentStep==0" class="ui-g-6 ui-g-offset-3 panel">
             <h2>General Information</h2>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Title</label></div>
@@ -30,7 +30,7 @@
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Location</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.adress" style="resize:none; height:10em"></textarea></div>
+                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:10em"></textarea></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Description</label></div>
@@ -39,12 +39,49 @@
         </div>
 
 
-        <div *ngIf="currentStep==0" class="ui-g-6 ui-g-offset-3">
+        <div *ngIf="currentStep==1" class="ui-g-6 ui-g-offset-3">
             <div class="category-list">
                 <div class="ui-g">
                     <category #categoryList *ngFor="let category of eventModel.categories;" [category]="category" (onCategoryDelete)="categoryDelete($event)" class="ui-g-12"></category>
                 </div>
                 <div class="ui-g"><button pButton type="button" class="ui-button-icon-left" icon="fa-plus" label="Add category" (click)="categoryCreate()"></button></div>
+            </div>
+        </div>
+
+        <div *ngIf="currentStep==2" class="ui-g-6 ui-g-offset-3">
+            <div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Title</label></div>
+                    <div class="ui-g-9 ui-fluid">{{eventModel.title}}</div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Date</label></div>
+                    <div class="ui-g-9 ui-fluid">
+                        {{eventModel.date.toDateString()}}
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Registration Start</label></div>
+                    <div class="ui-g-9 ui-fluid">
+                        {{eventModel.registrationStartDate.toDateString()}}
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Registration End</label></div>
+                    <div class="ui-g-9 ui-fluid">{{eventModel.registrationEndDate.toDateString()}}</div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
+                    <div class="ui-g-9 ui-fluid">{{eventModel.description}}</div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Location</label></div>
+                    <div class="ui-g-9 ui-fluid">{{eventModel.address}}</div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Image</label></div>
+                    <div class="ui-g-9 ui-fluid">todo</div>
+                </div>    
             </div>
         </div>
     </div>

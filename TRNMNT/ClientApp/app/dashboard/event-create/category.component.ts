@@ -46,5 +46,16 @@ export class CategoryComponent {
         this.onCategoryDelete.emit(this.category);
     }
 
+
+    private weightDivisionDelete( wd : WeightDivisionModel) {
+        let index = this.category.weightDivisions.indexOf(wd)
+        this.category.weightDivisions.splice(index);
+    }
+
+    private weightDivisionAdd() {
+        let wd = new WeightDivisionModel("Weight Divison");
+        this.category.weightDivisions.push(wd);
+    }
+
 }
 
