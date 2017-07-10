@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using TRNMNT.Web.Core.Services.Authentication;
 using TRNMNT.Web.Core.Model;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,10 +27,11 @@ namespace TRNMNT.Web.Controllers
         }
 
 
-        [HttpPost("[action]")]
+        [AllowAnonymous, HttpPost("[action]")]
         public async Task GetToken([FromBody] UserCredentialsModel credentials)
         {
-            try {
+            try
+            {
                 //var token = await _authenticationSerivce.GetToken(credentials.Username, credentials.Password);
                 var token = await _authenticationSerivce.GetTokenAsync();
                 if (!string.IsNullOrEmpty(token))
@@ -47,14 +49,14 @@ namespace TRNMNT.Web.Controllers
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 HandleException(ex);
             }
-            
+
         }
 
-        
+
 
     }
 

@@ -1,4 +1,5 @@
 ﻿using log4net.Core;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,23 +11,28 @@ namespace TRNMNT.Core.Services
 {
     public class EventService : IEventService
     {
-        private IRepository<Event> _eventRepository;
+        private IRepository<Event> eventRepository;
 
-        public EventService(IRepository<Event> eventRepository) 
+        public EventService(IRepository<Event> eventRepository)
         {
-            _eventRepository = eventRepository;
+            this.eventRepository = eventRepository;
         }
 
 
         public async Task AddEventAsync(Event eventToAdd)
         {
-            _eventRepository.Add(eventToAdd);
-            await _eventRepository.SaveAsync(); 
+            eventRepository.Add(eventToAdd);
+            await eventRepository.SaveAsync();
         }
 
         public async Task<Event> GetEventAsync(Guid id)
         {
-            return await _eventRepository.GetByIDAsync(id);
+            return await eventRepository.GetByIDAsync(id);
+        }
+
+        public async Task<bool> IsPrefixExistAsync(string prefix)
+        {
+            return await eventRepository.GetAll().AnyAsync();
         }
     }
 }

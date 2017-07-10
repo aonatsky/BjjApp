@@ -10,5 +10,6 @@ namespace TRNMNT.Core.Services
     {
         Task AddEventAsync(Event eventToAdd);
         Task<Event> GetEventAsync(Guid id);
+        Task<bool> IsPrefixExistAsync(string prefix);
     }
 }

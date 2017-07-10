@@ -23,6 +23,7 @@ namespace TRNMNT.Data.Entities
         public DateTime UpdateTS { get; set; }
         public bool IsActive { get; set; }
         public int StatusId { get; set; }
+        public string UrlPrefix { get; set; }
 
 
         [ForeignKey("OwnerId")]

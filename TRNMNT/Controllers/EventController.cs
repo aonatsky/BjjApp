@@ -60,5 +60,29 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+        [Authorize, HttpGet("[action]")]
+        public async Task IsPrefixExists(string prefix)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            try
+            {
+                if (await eventService.IsPrefixExistAsync(prefix))
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Found;
+                }
+                else
+                {
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+               
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(e);
+            }
+        }
+
     }
 }
