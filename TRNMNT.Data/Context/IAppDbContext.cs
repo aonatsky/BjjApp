@@ -26,6 +26,7 @@ namespace TRNMNT.Data.Context
         DbSet<Team> Team { get; set; }
         DbSet<Category> Category { get; set; }
         DbSet<User> User{ get; set; }
+        DbSet<Event> Event { get; set; }
 
     }
 }

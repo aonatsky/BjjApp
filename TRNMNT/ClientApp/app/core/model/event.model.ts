@@ -12,9 +12,10 @@ export class EventModel{
     public address: string;
     public image: any;
     public date: Date;
-    public registrationStartDate: Date;
-    public registrationEndDate: Date;
+    public registrationStartTS: Date;
+    public registrationEndTS: Date;
     public statusId: number;
+    public urlPrefix: string;
     public categories: CategoryModel[]
 
 };

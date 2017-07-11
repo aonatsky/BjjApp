@@ -1,8 +1,12 @@
 ﻿
 
 .ui-steps .ui-steps-item {
-    width: 25%
+    width: 33.3%
 }
 
+.ui-widget-content {
+    height: 74vh;
+    overflow: auto;
+}
 
 

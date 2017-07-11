@@ -70,6 +70,7 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));
+            services.AddScoped(typeof(IUserService),typeof(UserService));
             #endregion
 
 
@@ -108,27 +109,37 @@ namespace TRNMNT.Web
                    ValidateLifetime = true,
                    ClockSkew = TimeSpan.Zero,
                 },
-                AutomaticAuthenticate = false,
-                AutomaticChallenge = false,
-                AuthenticationScheme = JwtBearerDefaults.AuthenticationScheme,
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
                 Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = context =>
                     {
                         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        context.HandleResponse();
                         return Task.FromResult(0);
                     },
                     OnChallenge = context =>
                     {
                         context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        context.HandleResponse();
                         return Task.FromResult(0);
                     }
                 }
 
             };
             app.UseJwtBearerAuthentication(options);
-            app.UseIdentity();
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
+
         }
     }
 }

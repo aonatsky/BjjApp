@@ -12,7 +12,7 @@ namespace TRNMNT.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid EventId { get; set; }
 
-        public Guid OwnerId { get; set; }
+        public string OwnerId { get; set; }
         public DateTime EventDate { get; set; }
         public DateTime RegistrationStartTS { get; set; }
         public DateTime RegistrationEndTS { get; set; }

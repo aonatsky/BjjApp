@@ -27,6 +27,10 @@ export class EventService {
 
 
     private addEvent(event: EventModel): Observable<any> {
-        return this.httpService.post(ApiMethods.event.addEvent, event);
+        return this.httpService.post(ApiMethods.event.saveEvent, event);
+    }
+
+    public getEventsForUser(): Observable<EventModel[]> {
+        return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventModel>(res));
     }
 }

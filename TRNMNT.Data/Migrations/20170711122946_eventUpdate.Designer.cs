@@ -8,9 +8,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170711122946_eventUpdate")]
+    partial class eventUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -128,51 +129,11 @@ namespace TRNMNT.Data.Migrations
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("EventId");
-
                     b.Property<string>("Name");
 
                     b.HasKey("CategoryId");
 
-                    b.HasIndex("EventId");
-
                     b.ToTable("Category");
-                });
-
-            modelBuilder.Entity("TRNMNT.Data.Entities.Event", b =>
-                {
-                    b.Property<Guid>("EventId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Address");
-
-                    b.Property<string>("Descritpion");
-
-                    b.Property<DateTime>("EventDate");
-
-                    b.Property<string>("ImgPath");
-
-                    b.Property<bool>("IsActive");
-
-                    b.Property<string>("OwnerId");
-
-                    b.Property<DateTime>("RegistrationEndTS");
-
-                    b.Property<DateTime>("RegistrationStartTS");
-
-                    b.Property<int>("StatusId");
-
-                    b.Property<string>("Title");
-
-                    b.Property<DateTime>("UpdateTS");
-
-                    b.Property<string>("UrlPrefix");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Event");
                 });
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Fighter", b =>
@@ -329,20 +290,6 @@ namespace TRNMNT.Data.Migrations
                     b.HasOne("TRNMNT.Data.Entities.User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("TRNMNT.Data.Entities.Category", b =>
-                {
-                    b.HasOne("TRNMNT.Data.Entities.Event")
-                        .WithMany("Categories")
-                        .HasForeignKey("EventId");
-                });
-
-            modelBuilder.Entity("TRNMNT.Data.Entities.Event", b =>
-                {
-                    b.HasOne("TRNMNT.Data.Entities.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Fighter", b =>

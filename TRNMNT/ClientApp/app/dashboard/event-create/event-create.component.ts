@@ -24,6 +24,7 @@ export class EventCreateComponent implements OnInit {
     private eventModel: EventModel;
     private categoryCount: number;
 
+    private lastStep: number = 2;
 
     @ViewChildren(CategoryComponent) categoryComponents;
 
@@ -45,8 +46,8 @@ export class EventCreateComponent implements OnInit {
         this.eventModel = new EventModel();
         this.eventModel.title = "Kiev open 2020"
         this.eventModel.date = new Date(2017, 5, 5)
-        this.eventModel.registrationStartDate = new Date(2017, 4, 5)
-        this.eventModel.registrationEndDate = new Date(2017, 5, 2)
+        this.eventModel.registrationStartTS = new Date(2017, 4, 5)
+        this.eventModel.registrationEndTS = new Date(2017, 5, 2)
         this.eventModel.description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis enim neque. Sed congue, enim vitae varius vulputate, lorem mauris feugiat enim, sit amet congue elit purus eget felis. Donec maximus consectetur nibh. Vestibulum tellus turpis, venenatis eu blandit id, tincidunt vitae nisi. Proin in erat vitae metus accumsan consectetur. Cras nec ipsum eros. Sed eu auctor urna. Nullam efficitur dolor ut scelerisque blandit. Fusce ut rhoncus felis, et auctor est. Vivamus vel ornare nisi, ac auctor mauris. Pellentesque a diam urna. Aenean vitae mi egestas turpis dignissim suscipit non et leo. Integer lacus diam, placerat non scelerisque vel, luctus vitae turpis. Duis nec libero vel ligula tempus lacinia vel sed eros."
         this.eventModel.address = "In in congue elit. Donec feugiat neque nec lacus vehicula tristique. Ut in libero nec odio malesuada interdum sed non nulla. Vestibulum orci erat, cursus at purus vitae"
 
@@ -86,6 +87,10 @@ export class EventCreateComponent implements OnInit {
 
     private nextStep() {
         this.currentStep++;
+    }
+
+    private previousStep() {
+        this.currentStep--;
     }
 
     private saveAsDraft() {

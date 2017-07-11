@@ -19,7 +19,7 @@ namespace TRNMNT.Web.Controllers
         private IEventService eventService;
         IHttpContextAccessor httpContextAccessor;
 
-        public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor) : base(logger, httpContextAccessor)
+        public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, httpContextAccessor, userService)
         {
             this.eventService = eventService;
             this.httpContextAccessor = httpContextAccessor;
@@ -27,12 +27,13 @@ namespace TRNMNT.Web.Controllers
 
 
         [Authorize, HttpPost("[action]")]
-        public async Task AddEvent([FromBody] Event eventToAdd)
+        public async Task SaveEvent([FromBody] Event eventToAdd)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                await eventService.AddEventAsync(eventToAdd);
+                var user = await GetUserAsync();
+                await eventService.SaveEventAsync(eventToAdd,user.Id);
             }
             catch (Exception e)
             {
@@ -50,6 +51,26 @@ namespace TRNMNT.Web.Controllers
             {
                 var _event = await eventService.GetEventAsync(id);
                 return _event;
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(e);
+                return null;
+            }
+        }
+
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<Event[]> GetEventsForOwner()
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            try
+            {
+                
+                var events = await eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
+                return events.ToArray();
 
             }
             catch (Exception e)
