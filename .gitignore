@@ -38,12 +38,12 @@ jspm_packages
 
 # Intellij IDEA project info
 .idea
-TRNMNT.Data/obj/
-TRNMNT.Data/bin/
-TRNMNT.Web/obj/
-TRNMNT.Web/bin/
-TRNMNT/obj/
-TRNMNT/bin/
-TRNMNT.Core/obj/
-TRNMNT.Core/bin/
+/TRNMNT.Data/obj/
+/TRNMNT.Data/bin/
+/TRNMNT.Web/obj/
+/TRNMNT.Web/bin/
+/TRNMNT/obj/
+/TRNMNT/bin/
+/TRNMNT.Core/obj/
+/TRNMNT.Core/bin/
 /TRNMNT/appsettings.home.json
