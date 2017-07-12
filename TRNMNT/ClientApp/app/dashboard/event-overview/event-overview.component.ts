@@ -3,7 +3,7 @@ import { AuthService } from './../../core/services/auth.service';
 import { EventService } from './../../core/services/event.service';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { EventModel} from './../../core/model/event.model';
+import { EventModel } from './../../core/model/event.model';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -13,20 +13,20 @@ import { Component, OnInit } from '@angular/core';
 export class EventOverviewComponent {
 
     private events: EventModel[] = [];
-    
+
     constructor(private loggerService: LoggerService, private routerService: RouterService, private authService: AuthService, private eventService: EventService) {
-        
+
     }
 
     public createEvent() {
         this.routerService.GoToCreateEvent();
     }
 
-    ngOnInit() {
-        this.eventService.getEventsForUser().subscribe(res => this.test(res));
+    public editEvent(id: string) {
+        this.routerService.GoToEditEvent(id);
     }
 
-    private test(res) {
-        this.events = res;
+    ngOnInit() {
+        this.eventService.getEventsForUser().subscribe(res => this.events = res);
     }
 }

@@ -23,7 +23,11 @@ export class RouterService {
     }
 
     public GoToCreateEvent() {
-        this.router.navigateByUrl("/dashboard/create");
+        this.router.navigateByUrl("/dashboard/edit");
+    }
+
+    public GoToEditEvent(id:string) {
+        this.router.navigateByUrl("/dashboard/edit/"+id);
     }
 }
 

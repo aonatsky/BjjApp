@@ -1,5 +1,6 @@
 ﻿
 import { Component, OnInit, ViewEncapsulation, ViewChildren } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MenuModule, MenuItem } from 'primeng/primeng';
 import { EventModel } from './../../core/model/event.model';
 import { CategoryModel } from './../../core/model/category.model';
@@ -16,23 +17,29 @@ import { CategoryComponent } from './../event-create/category.component'
     encapsulation: ViewEncapsulation.None
 })
 export class EventCreateComponent implements OnInit {
-    constructor(private authService: AuthService, private eventService: EventService) {
+    constructor(private authService: AuthService, private eventService: EventService, private route: ActivatedRoute) {
+        this.route.params.subscribe(p => this.eventId = p["id"])
     }
 
     private menuItems: MenuItem[];
     private currentStep: number = 0;
+    private eventId: string = "";
     private eventModel: EventModel;
-    private categoryCount: number;
+    private categoryCount: number = 0;
+
+    private isNew: boolean = true;
 
     private lastStep: number = 2;
 
     @ViewChildren(CategoryComponent) categoryComponents;
-
-
+    
     ngOnInit() {
         this.initMenu();
-        this.initData();
-
+        if (this.eventId != "") {
+            this.eventService.getEvent(this.eventId).subscribe(res => this.initData(res));
+        }
+        //this.initData(null);
+        
 
     }
 
@@ -42,10 +49,24 @@ export class EventCreateComponent implements OnInit {
     }
 
 
-    private initData() {
+    private initData(res) {
+        if (res) {
+            this.eventModel = res;
+        } else {
+            this.isNew = true;
+            this.fillSampleData()
+        }
+        
+        if (this.eventModel.categories) {
+            this.categoryCount = this.eventModel.categories.length;
+        }
+        
+    }
+
+    private fillSampleData() {
         this.eventModel = new EventModel();
         this.eventModel.title = "Kiev open 2020"
-        this.eventModel.date = new Date(2017, 5, 5)
+        this.eventModel.eventDate = new Date(2017, 5, 5)
         this.eventModel.registrationStartTS = new Date(2017, 4, 5)
         this.eventModel.registrationEndTS = new Date(2017, 5, 2)
         this.eventModel.description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis enim neque. Sed congue, enim vitae varius vulputate, lorem mauris feugiat enim, sit amet congue elit purus eget felis. Donec maximus consectetur nibh. Vestibulum tellus turpis, venenatis eu blandit id, tincidunt vitae nisi. Proin in erat vitae metus accumsan consectetur. Cras nec ipsum eros. Sed eu auctor urna. Nullam efficitur dolor ut scelerisque blandit. Fusce ut rhoncus felis, et auctor est. Vivamus vel ornare nisi, ac auctor mauris. Pellentesque a diam urna. Aenean vitae mi egestas turpis dignissim suscipit non et leo. Integer lacus diam, placerat non scelerisque vel, luctus vitae turpis. Duis nec libero vel ligula tempus lacinia vel sed eros."
@@ -67,7 +88,6 @@ export class EventCreateComponent implements OnInit {
 
 
         this.eventModel.categories = [cat1, cat2];
-        this.categoryCount = this.eventModel.categories.length;
     }
 
 

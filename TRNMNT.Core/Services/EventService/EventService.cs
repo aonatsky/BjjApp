@@ -1,6 +1,7 @@
 ﻿using log4net.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
+
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,10 @@ namespace TRNMNT.Core.Services
             await eventRepository.SaveAsync();
         }
 
+        public async Task<Event> GetFullEventAsync(Guid id)
+        {
+            return await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();
+        }
         public async Task<Event> GetEventAsync(Guid id)
         {
             return await eventRepository.GetByIDAsync(id);

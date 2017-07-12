@@ -1,4 +1,4 @@
-﻿import {Injectable} from "@angular/core"
+﻿import { Injectable } from "@angular/core"
 
 import { LoggerService } from "./logger.service"
 import { AuthService } from "./auth.service"
@@ -26,11 +26,16 @@ export class EventService {
     }
 
 
-    private addEvent(event: EventModel): Observable<any> {
-        return this.httpService.post(ApiMethods.event.saveEvent, event);
-    }
-
     public getEventsForUser(): Observable<EventModel[]> {
         return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventModel>(res));
+    }
+
+    public getEvent(id): Observable<EventModel> {
+        return this.httpService.get(ApiMethods.event.getEvent + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+    }
+
+    //private methods
+    private addEvent(event: EventModel): Observable<any> {
+        return this.httpService.post(ApiMethods.event.saveEvent, event);
     }
 }

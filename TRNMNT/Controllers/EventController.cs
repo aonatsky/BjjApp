@@ -7,6 +7,7 @@ using TRNMNT.Core.Services;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -43,21 +44,21 @@ namespace TRNMNT.Web.Controllers
         }
 
 
-        [Authorize, HttpGet("[action]")]
-        public async Task<Event> GetEvent([FromBody] Guid id)
+        [Authorize, HttpGet("[action]/{id}")]
+        public async Task GetEvent(Guid id)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                var _event = await eventService.GetEventAsync(id);
-                return _event;
+                var _event = await eventService.GetFullEventAsync(id);
+                await Response.WriteAsync(JsonConvert.SerializeObject(_event));
 
             }
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(e);
-                return null;
+
             }
         }
 

@@ -4,8 +4,8 @@
     width: 33.3%
 }
 
-.ui-widget-content {
-    height: 74vh;
+.content {
+    height: 73vh;
     overflow: auto;
 }
 
