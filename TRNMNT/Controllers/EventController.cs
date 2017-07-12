@@ -8,6 +8,7 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -51,7 +52,12 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 var _event = await eventService.GetFullEventAsync(id);
-                await Response.WriteAsync(JsonConvert.SerializeObject(_event));
+                var jsonSerializerSettings = new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    NullValueHandling = NullValueHandling.Ignore // ignore null values
+                };
+                await Response.WriteAsync(JsonConvert.SerializeObject(_event,jsonSerializerSettings));
 
             }
             catch (Exception e)

@@ -20,6 +20,9 @@ export const dashboardRoutes: Routes = [
                 path: "edit/:id", component: EventCreateComponent
             },
             {
+                path: "edit", component: EventCreateComponent
+            },
+            {
                 path: "", outlet: "topmenu", component: TopbarComponent
             },
         ]

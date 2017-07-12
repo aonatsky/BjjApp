@@ -22,7 +22,7 @@ namespace TRNMNT.Data.Entities
         public bool IsActive { get; set; }
         public int StatusId { get; set; }
         public string UrlPrefix { get; set; }
-        public string Descritpion { get; set; }
+        public string Description { get; set; }
         public string Address { get; set; }
         public string TNCFilePath { get; set; }
         public string CardNumber { get; set; }

@@ -35,10 +35,7 @@ export class EventCreateComponent implements OnInit {
     
     ngOnInit() {
         this.initMenu();
-        if (this.eventId != "") {
-            this.eventService.getEvent(this.eventId).subscribe(res => this.initData(res));
-        }
-        //this.initData(null);
+        this.initData();
         
 
     }
@@ -49,18 +46,17 @@ export class EventCreateComponent implements OnInit {
     }
 
 
-    private initData(res) {
-        if (res) {
-            this.eventModel = res;
-        } else {
-            this.isNew = true;
-            this.fillSampleData()
-        }
-        
-        if (this.eventModel.categories) {
-            this.categoryCount = this.eventModel.categories.length;
-        }
-        
+    private initData() {
+        this.route.params.subscribe(p => {
+            let id = p["id"];
+            if (id && id != "") {
+                this.eventService.getEvent(this.eventId).subscribe(r => this.eventModel = r);
+                this.isNew = false;
+            } else {
+                this.isNew = true;
+                this.eventModel = new EventModel();
+            }
+        })
     }
 
     private fillSampleData() {

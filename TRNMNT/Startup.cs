@@ -33,6 +33,7 @@ namespace TRNMNT.Web
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.home.json", optional: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();

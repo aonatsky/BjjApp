@@ -2,7 +2,9 @@
 
 
 export class EventModel{
-    constructor() { }
+    constructor() {
+        this.categories = [];
+    }
 
     public eventId: AAGUID;
     public title: string;
