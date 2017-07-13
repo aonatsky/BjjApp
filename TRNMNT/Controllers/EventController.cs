@@ -35,7 +35,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 var user = await GetUserAsync();
-                await eventService.SaveEventAsync(eventToAdd,user.Id);
+                await eventService.SaveEventAsync(eventToAdd, user.Id);
             }
             catch (Exception e)
             {
@@ -57,7 +57,7 @@ namespace TRNMNT.Web.Controllers
                     ContractResolver = new CamelCasePropertyNamesContractResolver(),
                     NullValueHandling = NullValueHandling.Ignore // ignore null values
                 };
-                await Response.WriteAsync(JsonConvert.SerializeObject(_event,jsonSerializerSettings));
+                await Response.WriteAsync(JsonConvert.SerializeObject(_event, jsonSerializerSettings));
 
             }
             catch (Exception e)
@@ -75,7 +75,7 @@ namespace TRNMNT.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                
+
                 var events = await eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
                 return events.ToArray();
 
@@ -102,7 +102,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
                 }
-               
+
 
             }
             catch (Exception e)
@@ -112,5 +112,33 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+
+        [Authorize, HttpPost("[action]/{id}")]
+        public async Task UploadEventImage(IFormFile file,string id)
+        {
+            try
+            {
+                await eventService.SaveEventImageAsync(file.OpenReadStream(),id);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(ex);
+            };
+        }
+
+        [Authorize, HttpPost("[action]/{id}")]
+        public async Task UploadEventTnc(IFormFile file, string id)
+        {
+            try
+            {
+                await eventService.SaveEventImageAsync(file.OpenReadStream(), id);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(ex);
+            };
+        }
     }
 }

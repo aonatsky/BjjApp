@@ -1,11 +1,10 @@
 ﻿<div class="ui-widget">
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
     <div class="ui-g-6 ui-g-offset-3 content" *ngIf="eventModel">
-        {{eventModel.Title}}
         <div *ngIf="currentStep==0" class="ui-widget-content ui-corner-all">
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Title</label></div>
-                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.Title" /></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Date</label></div>
@@ -32,8 +31,10 @@
                 <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:10em"></textarea></div>
             </div>
             <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Description</label></div>
-                <div class="ui-g-9 ui-fluid">todo</div>
+                <div class="ui-g-3 ui-fluid"><label>Image</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-fileUpload #fubauto mode="basic" name="demo[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" auto="true" chooseLabel="Browse"></p-fileUpload>
+                </div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>URL</label></div>

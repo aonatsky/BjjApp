@@ -139,4 +139,12 @@ export class EventCreateComponent implements OnInit {
             };
         }
     }
+
+    private onImageUpload(file) {
+        this.eventService.uploadEventImage(file, this.eventModel.eventId).subscribe();
+    }
+
+    private onTncUpload(file) {
+        this.eventService.uploadEventTncFile(file, this.eventModel.eventId).subscribe();
+    }
 }
