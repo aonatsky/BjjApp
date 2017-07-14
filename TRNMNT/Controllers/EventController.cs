@@ -88,6 +88,45 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+
+        [Authorize, HttpGet("[action]/{url}")]
+        public async Task<string> GetEventIdByUrl(string url)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            try
+            {
+
+                var eventId= await eventService.GetEventIdAsync(url);
+                return eventId;
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(e);
+                return null;
+            }
+        }
+
+        [AllowAnonymous, HttpGet("[action]/{url}")]
+        public async Task<Event> GetEventByUrl(string url)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            try
+            {
+
+                var _event = await eventService.GetEventByPrefixAsync(url);
+                return _event;
+
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(e);
+                return null;
+            }
+        }
+
         [Authorize, HttpGet("[action]")]
         public async Task IsPrefixExists(string prefix)
         {
@@ -118,7 +157,11 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await eventService.SaveEventImageAsync(file.OpenReadStream(),id);
+                using (var stream = file.OpenReadStream())
+                {
+                    await eventService.SaveEventImageAsync(stream, id);
+                }
+                
             }
             catch (Exception ex)
             {

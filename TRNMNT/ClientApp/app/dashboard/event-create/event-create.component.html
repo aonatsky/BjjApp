@@ -1,6 +1,6 @@
 ﻿<div class="ui-widget">
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
-    <div class="ui-g-6 ui-g-offset-3 content" *ngIf="eventModel">
+    <div class="ui-g-8 ui-g-offset-2 content" *ngIf="eventModel">
         <div *ngIf="currentStep==0" class="ui-widget-content ui-corner-all">
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Title</label></div>
@@ -23,28 +23,57 @@
                 <div class="ui-g-9 ui-fluid"><p-calendar [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true"></p-calendar></div>
             </div>
             <div class="ui-g">
-                <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.description" style="resize:none; height:20em"></textarea></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Location</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:10em"></textarea></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Image</label></div>
-                <div class="ui-g-9 ui-fluid">
-                    <p-fileUpload #fubauto mode="basic" name="demo[]" url="./upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" auto="true" chooseLabel="Browse"></p-fileUpload>
-                </div>
-            </div>
-            <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>URL</label></div>
                 <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.urlPrefix" /></div>
                 <div class="ui-g-6 ui-fluid">.trnmnt.pro</div>
             </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
+                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.description" style="resize:none; height:20em"></textarea></div>
+            </div>
+        </div>
+        <div *ngIf="currentStep==1" class="ui-widget-content ui-corner-all">
+            
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Image</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-fileUpload #fubauto mode="basic" accept="image/*" maxFileSize="1000000" (onUpload)="onImageUpload($event)" auto="true" chooseLabel="Choose Image"></p-fileUpload>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Terms and Conditions</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-fileUpload #fubauto mode="basic" maxFileSize="1000000" (onUpload)="onTncUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Location</label></div>
+                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:5em"></textarea></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Contact Phone</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.contactPhone" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Contact Email</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.contactEmail" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Facebook Link</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.fbLink" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Vkontakte Link</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.vkLink" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Additional Information</label></div>
+                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.additionalData" style="resize:none; height:10em"></textarea></div>
+            </div>
+
         </div>
 
-
-        <div *ngIf="currentStep==1" class="">
+        <div *ngIf="currentStep==2" class="">
             <div class="category-list">
                 <div class="ui-g">
                     <category #categoryList *ngFor="let category of eventModel.categories;" [category]="category" (onCategoryDelete)="categoryDelete($event)" class="ui-g-12"></category>
@@ -53,7 +82,7 @@
             </div>
         </div>
 
-        <div *ngIf="currentStep==2" class="">
+        <div *ngIf="currentStep==3" class="">
             <div>
                 <div class="ui-g">
                     <div class="ui-g-3 ui-fluid"><label>Title</label></div>

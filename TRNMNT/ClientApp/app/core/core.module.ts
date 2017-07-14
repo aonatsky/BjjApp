@@ -34,6 +34,7 @@ import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule } fr
 
 
 import { AuthGuard } from './routing/auth.guard';
+import { RedirectGuard } from './routing/redirect.guard';
 
 @NgModule({
     imports: [
@@ -62,10 +63,9 @@ import { AuthGuard } from './routing/auth.guard';
         headerPrefix: 'bearer',
         tokenName: 'token',
         tokenGetter: (() => localStorage.getItem('id_token')),
-        globalHeaders: [{ 'Content-Type': 'application/json' }],
         noJwtError: true
     }),
-        AuthGuard, RouterService],
+        AuthGuard, RouterService, RedirectGuard],
 
     exports: [
         FormsModule,

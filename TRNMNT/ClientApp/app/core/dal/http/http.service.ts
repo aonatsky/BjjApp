@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { RequestOptions, Http, Response, Headers, ResponseContentType } from '@angular/http';
 import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
+import { RouterService } from '../../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
 import { ApiMethods } from "../consts/api-methods.consts";
 import * as FileSaver from 'file-saver';
@@ -10,7 +11,7 @@ import 'rxjs/Rx';
 
 @Injectable()
 export class HttpService {
-    constructor(private loggerService: LoggerService, private http: AuthHttp, private loaderService: LoaderService) {
+    constructor(private loggerService: LoggerService, private http: AuthHttp, private loaderService: LoaderService, private routerService: RouterService) {
     }
 
 
@@ -80,6 +81,9 @@ export class HttpService {
         // In a real world app, you might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
+            if (error.status == 401) {
+                this.routerService.GoToLogin();
+            }
             errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
         } else {
             errMsg = error.message ? error.message : error.toString();

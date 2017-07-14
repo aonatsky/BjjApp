@@ -16,15 +16,14 @@ export class EventModel{
     public registrationEndTS: Date;
     public statusId: number;
     public urlPrefix: string;
-    public Descritpion : string;
-    public Address : string;
-    public TNCFilePath: string;
-    public CardNumber: string;
-    public ContactEmail : string;
-    public ContactPhone : string;
-    public FBLink : string;
-    public VKLink : string;
-    public AdditionalData: string;
+    public descritpion : string;
+    public tncFilePath: string;
+    public cardNumber: string;
+    public contactEmail : string;
+    public contactPhone : string;
+    public fbLink : string;
+    public vkLink : string;
+    public additionalData: string;
     public categories: CategoryModel[]
 
 };

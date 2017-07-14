@@ -42,10 +42,20 @@ export class EventService {
         return this.httpService.postFile(ApiMethods.event.uploadTnc + "/" + id, file);
     }
 
+    public getEventIdByUrl(url: string) {
+        return this.httpService.get(ApiMethods.event.getEventIdByUrl + "/" + url);
+    }
+
+    public getEventByUrl(url: string) {
+        return this.httpService.get(ApiMethods.event.getEventByUrl + "/" + url).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+    }
+
     //private methods
     private addEvent(event: EventModel): Observable<any> {
         return this.httpService.post(ApiMethods.event.saveEvent, event);
     }
+
+  
 
     
 }

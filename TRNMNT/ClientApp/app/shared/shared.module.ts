@@ -7,6 +7,7 @@ import { CoreModule } from "./../core/core.module"
 import { RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component'
+import { EventInfoComponent } from './event-info/event-info.component'
 
 
 
@@ -15,7 +16,8 @@ import { LoginComponent } from './login/login.component'
         CoreModule,
     ],
     declarations: [
-        LoginComponent        
+        LoginComponent,
+        EventInfoComponent
     ],
 
     providers: [],

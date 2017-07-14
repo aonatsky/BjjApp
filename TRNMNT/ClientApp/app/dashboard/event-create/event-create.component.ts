@@ -18,7 +18,7 @@ import { CategoryComponent } from './../event-create/category.component'
 })
 export class EventCreateComponent implements OnInit {
     constructor(private authService: AuthService, private eventService: EventService, private route: ActivatedRoute) {
-        this.route.params.subscribe(p => this.eventId = p["id"])
+       
     }
 
     private menuItems: MenuItem[];
@@ -29,7 +29,7 @@ export class EventCreateComponent implements OnInit {
 
     private isNew: boolean = true;
 
-    private lastStep: number = 2;
+    private lastStep: number = 3;
 
     @ViewChildren(CategoryComponent) categoryComponents;
     
@@ -92,6 +92,9 @@ export class EventCreateComponent implements OnInit {
             label: 'General Information',
         },
         {
+            label: 'Additional information',
+        },
+        {
             label: 'Category Setup',
         },
         {
@@ -140,11 +143,11 @@ export class EventCreateComponent implements OnInit {
         }
     }
 
-    private onImageUpload(file) {
-        this.eventService.uploadEventImage(file, this.eventModel.eventId).subscribe();
+    private onImageUpload(event) {
+        this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe();
     }
 
-    private onTncUpload(file) {
-        this.eventService.uploadEventTncFile(file, this.eventModel.eventId).subscribe();
+    private onTncUpload(event) {
+        this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe();
     }
 }

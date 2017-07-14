@@ -65,14 +65,21 @@ namespace TRNMNT.Core.Services
 
         public async Task SaveEventImageAsync(Stream stream, string eventId)
         {
+            var fileName = FilePath.EVENT_IMAGE_FILE;
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, FilePath.EVENT_IMAGE_FILE);
-            await fileService.SaveImageAsync(path,stream);
+
+            await fileService.SaveImageAsync(path,stream, fileName);
         }
 
         public async Task SaveEventTncAsync(Stream stream, string eventId, string fileName)
         {
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, fileName);
             await fileService.SaveFileAsync(path, stream);
+        }
+
+        public async Task<string> GetEventIdAsync(string url)
+        {
+            return (await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e=> e.EventId).FirstOrDefaultAsync()).ToString();
         }
     }
 }

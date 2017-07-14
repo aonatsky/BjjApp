@@ -17,9 +17,11 @@ export const ApiMethods = Object.freeze({
     event: {
         getEvents: "api/event/getEvents",
         saveEvent: "api/event/saveEvent",
-        uploadImage: "api/event/uploadImage",
-        uploadTnc: "api/event/uploadTnc",
+        uploadImage: "api/event/uploadEventImage",
+        uploadTnc: "api/event/uploadEventTnc",
         getEvent: "api/event/getEvent",
-        getEventsForOwner: "api/event/getEventsForOwner"
+        getEventsForOwner: "api/event/getEventsForOwner",
+        getEventIdByUrl: "api/event/getEventIdByUrl",
+        getEventByUrl: "api/event/getEventByUrl"
     }
 });

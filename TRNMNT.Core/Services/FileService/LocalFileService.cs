@@ -40,10 +40,17 @@ namespace TRNMNT.Core.Services
             throw new NotImplementedException();
         }
 
-        public async Task SaveImageAsync(string path, Stream stream)
+        public async Task SaveImageAsync(string path, Stream stream, string fileName)
         {
-            Image img = Image.FromStream(stream);
-            img.Save(System.IO.Path.GetTempPath() + "\\myImage.Jpeg", ImageFormat.Jpeg);
+            CheckPath(path);
+            Image img = Image.FromStream(stream, true, true);
+            img.Save(Path.Combine(rootPath,path), ImageFormat.Jpeg);
+        }
+
+        private void CheckPath(string path)
+        {
+            var pathInfo = new FileInfo(path);
+            pathInfo.Directory.Create();
         }
     }
 }
