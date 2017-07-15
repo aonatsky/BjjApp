@@ -29,7 +29,8 @@ export class AppComponent implements OnInit {
 
     private processSubdomain() {
         let subdomain = this.getSubdomain();
-        this.routerService.GoToEventInfo("test")
+        if(subdomain != "")
+        {this.routerService.GoToEventInfo("test")}
         //this.eventService.getEventIdByUrl(subdomain);
     }
 

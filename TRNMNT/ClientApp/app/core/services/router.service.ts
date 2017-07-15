@@ -1,4 +1,4 @@
-﻿
+
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,8 +13,9 @@ export class RouterService {
     public GoHome(subdomain: string = "") {
         if (subdomain != "") {
             let path = location.host.replace(subdomain + ".", "");
-            debugger;
-            location.replace(path);
+            window.location.href = "http://"+ path;
+        } else {
+            this.router.navigateByUrl("");
         }
 
     }
