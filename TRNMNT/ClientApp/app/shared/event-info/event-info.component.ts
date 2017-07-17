@@ -24,7 +24,6 @@ export class EventInfoComponent implements OnInit {
             let url = p['id'];
             console.log("url " + url)
             this.eventService.getEventByUrl(url).subscribe(r => {
-                debugger
                 this.eventModel = r;
                 if (!this.eventModel) {
                     this.routerService.GoHome(url);

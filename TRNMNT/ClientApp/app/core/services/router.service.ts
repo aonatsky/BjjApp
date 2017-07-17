@@ -13,8 +13,7 @@ export class RouterService {
     public GoHome(subdomain: string = "") {
         if (subdomain != "") {
             let path = location.host.replace(subdomain + ".", "");
-            debugger;
-            location.replace(path);
+            location.href = location.protocol + "//" + path;
         }
 
     }
