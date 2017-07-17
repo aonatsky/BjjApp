@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TRNMNT.Data.Repositories
 {
@@ -50,6 +51,16 @@ namespace TRNMNT.Data.Repositories
         }
 
         public void Delete<TKey>(TKey id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync(bool supressExceptions = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> GetByIDAsync<TKey>(TKey id)
         {
             throw new NotImplementedException();
         }

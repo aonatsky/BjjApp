@@ -1,0 +1,17 @@
+﻿.topbar {
+    background-image: linear-gradient(270deg,#2bc0ec,#2399e5);
+}
+
+.topbar .logo{
+    color: white;
+    border: 1px solid white;
+}
+
+.profile-section{
+    float:right;
+    text-align:right;
+}
+
+.topbar .fabula{
+    font-style:italic;
+}

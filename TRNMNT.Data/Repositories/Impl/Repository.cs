@@ -1,6 +1,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using TRNMNT.Data.Context;
+using System;
+using System.Threading.Tasks;
 
 namespace TRNMNT.Data.Repositories
 {
@@ -28,6 +31,11 @@ namespace TRNMNT.Data.Repositories
             return context.Set<T>().Find(id);
         }
 
+        public async Task<T> GetByIDAsync<K>(K id)
+        {
+            return await context.Set<T>().FindAsync(id);
+        }
+
         public void Update(T entity)
         {
             context.Modify(entity);
@@ -50,6 +58,11 @@ namespace TRNMNT.Data.Repositories
         {
             var entity = GetByID<K>(id);
             context.Entry<T>(entity).State = EntityState.Deleted;
+        }
+
+        public async Task SaveAsync(bool supressExceptions = true)
+        {
+            await context.SaveAsync(supressExceptions);
         }
     }
 }

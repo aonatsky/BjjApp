@@ -31,14 +31,14 @@ module.exports = (env) => {
                 '@angular/animations',
                 'bootstrap',
                 'file-saver',
-                'bootstrap/dist/css/bootstrap.css',
+                //'bootstrap/dist/css/bootstrap.css',
                 'es6-shim',
                 'es6-promise',
                 'event-source-polyfill',
                 'jquery',
                 'zone.js',
                 'font-awesome/css/font-awesome.css',
-                'primeng/resources/themes/omega/theme.css',
+                'primeng/resources/themes/bootstrap/theme.css',
                 './ClientApp/assets/style/style.css',
                 'primeng/resources/primeng.css'
             ]

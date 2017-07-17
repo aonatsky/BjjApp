@@ -15,11 +15,13 @@ namespace TRNMNT.Data.Entities
         public Guid TeamId { get; set; }
         public Guid CategoryId{get;set;}
         public Guid WeightDivisionId{get;set;}
-
+        public bool IsActive { get; set; }
+        public bool IsApproved { get; set; }
+        public DateTime UpdateTs { get; set; }
 
         public Team Team { get; set; }
-        public Category Category { get; set; }
-        public WeightDivision WeightDivision { get; set; }
+
+        public virtual WeightDivision WeightDivision { get; set; }
         
 
     }

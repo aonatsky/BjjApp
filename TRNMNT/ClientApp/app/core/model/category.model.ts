@@ -1,5 +1,12 @@
-export class Category {
+import {WeightDivisionModel} from "./weight-division.model"
 
-    constructor(public categoryId?:AAGUID ,public name?:string) {
+export class CategoryModel {
+
+    constructor() {
+        this.weightDivisions = []
     }
+
+    public name: string
+    public categoryId? : AAGUID;
+    public weightDivisions: WeightDivisionModel[];
 }

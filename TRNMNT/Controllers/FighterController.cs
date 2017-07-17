@@ -11,6 +11,7 @@ using TRNMNT.Web.Core.Enum;
 using TRNMNT.Web.Core.Services.impl;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
+using TRNMNT.Core.Services;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -25,7 +26,7 @@ namespace TRNMNT.Web.Controllers
         BracketsFileService bracketsFileService;
 
         public FighterController(IFighterService fighterService, ILogger<FighterController> logger, FighterFileService fighterFileService, 
-            BracketsFileService bracketsFileService, IRepository<Fighter> fighterRepository) : base(logger, fighterRepository)
+            BracketsFileService bracketsFileService, IRepository<Fighter> fighterRepository, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, fighterRepository, httpContextAccessor, userService)
         {
             this.fighterService = fighterService;
             this.fighterFileService = fighterFileService;

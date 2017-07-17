@@ -4,13 +4,15 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Data.Repositories;
+using Microsoft.AspNetCore.Http;
+using TRNMNT.Core.Services;
 
 namespace TRNMNT.Web.Controllers
 {
     public abstract class CRUDController<T> : BaseController where T : class
     {
         IRepository<T> repository;
-        public CRUDController(ILogger logger, IRepository<T> repository) : base(logger)
+        public CRUDController(ILogger logger, IRepository<T> repository, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, httpContextAccessor, userService)
         {
             this.repository = repository;
         }

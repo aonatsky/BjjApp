@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,7 +15,10 @@ namespace TRNMNT.Data.Entities
         public string Name { get; set; }
         public int Weight { get; set; }
         public string Descritpion { get; set; }
+        public Guid CategoryId { get; set; }
 
-        public ICollection<Fighter> Fighters {get;set;}
+        [JsonIgnore]
+        public virtual Category Category { get; set; }
+        public virtual ICollection<Fighter> Fighters {get;set;}
     }
 }

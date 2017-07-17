@@ -1,0 +1,29 @@
+﻿
+<div class="ui-panel ui-panel-content ui-g">
+    <fieldset class="ui-widget-content second-color-border ui-corner-all">
+        <legend>
+            <div class="category-header">
+                <input #inputCategoryName class="second-color-border " pInputText [(ngModel)]="category.name" (blur)="categorySave()" disabled />
+                
+                <div class="header-buttons">
+                    <button #btnCategorySave pButton type="button" class="ui-button-success ui-button-icon-only" icon="fa-check" (click)="categorySave()" *ngIf="isEdit"></button>
+                    <button pButton type="button" class="ui-button-icon-only " icon="fa-pencil" (click)="categoryEdit()" *ngIf="!isEdit"></button>
+                    <button pButton type="button" class="ui-button-danger ui-button-icon-only " icon="fa-times" (click)="categoryDelete()"></button>
+                </div>
+                
+            </div>
+        </legend>
+        <div class="ui-g" *ngIf="category.weightDivisions">
+            <div class="ui-g-12" *ngFor="let wd of category.weightDivisions">
+                <div class="ui-g-10 ui-fluid"><input class="second-color-border" pInputText [(ngModel)]="wd.name" /></div>
+                <div class="ui-g-2">
+                    <button pButton type="button" class="ui-button-danger ui-button-icon-only" icon="fa-times" (click)="weightDivisionDelete(wd)"></button>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g">
+            <button pButton type="button" class="ui-button-icon-left" label="Add Weight Divsion" icon="fa-plus" (click) ="weightDivisionAdd()"></button>
+        </div>
+    </fieldset>
+    <!--<div class="ui-widget-content second-color-border ui-fluid ui-corner-all">    <h3>content</h3></div>-->
+</div>

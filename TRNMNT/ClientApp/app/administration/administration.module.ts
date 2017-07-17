@@ -6,14 +6,8 @@ import { FormsModule } from '@angular/forms'
 import { CoreModule } from "./../core/core.module"
 import { RouterModule } from '@angular/router';
 
-//PrimeNG
-import { DataTableModule } from "primeng/components/datatable/datatable";
-import { DialogModule } from "primeng/components/dialog/dialog";
-import { SharedModule } from "primeng/components/common/shared";
-import { ButtonModule } from "primeng/components/button/button";
-import { InputTextModule } from "primeng/components/inputtext/inputtext";
-import { GrowlModule } from 'primeng/components/growl/growl';
-import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { administrationRoutes } from './administration.routing'
+
 
 
 //Shared
@@ -35,17 +29,7 @@ import { TournamentSettingsComponent } from './tournament-settings/tournament-se
 @NgModule({
     imports: [
         CoreModule,
-        DataTableModule,
-        DialogModule,
-        InputTextModule,
-        ButtonModule,
-        DropdownModule,
-        GrowlModule,
-        RouterModule.forChild([
-            { path: 'administration/home', component: HomeComponent },
-            { path: 'administration/fighter-list', component: FighterListComponent },
-            { path: 'administration/settings', component: TournamentSettingsComponent },
-        ]),
+        RouterModule.forChild(administrationRoutes),
     ],
     declarations: [
         AdministrationRootComponent,
