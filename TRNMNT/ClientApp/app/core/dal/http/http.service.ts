@@ -101,8 +101,12 @@ export class HttpService {
         return result;
     }
 
-    public getJson(response: any) {
+    public getJson(response: Response) {
         return response.json();
+    }
+
+    public getString(response: Response) {
+        return response.text();
     }
 
     public getExcelFile(response: Response, fileName:string): void {

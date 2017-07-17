@@ -1,3 +1,8 @@
-﻿<div *ngIf="eventModel" class="ui-widget ui-widget-content">
-    <h5>{{eventModel.title}}</h5>
+﻿<div class="ui-container">
+    <div *ngIf="eventModel" class="ui-widget ui-widget-content ui-corner-all ui-g">
+        <div class="ui-g-8 event-image"><img src={{eventModel.imgPath}} alt="Alternate Text" /></div>
+        <div class="event-details ui-g-4 ui-fluid">
+            <div class="ui-g event-title">{{eventModel.title}}</div>
+        </div>
+    </div>
 </div>

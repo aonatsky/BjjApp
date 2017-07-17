@@ -14,8 +14,9 @@ namespace TRNMNT.Core.Services
         Task<Event> GetEventByPrefixAsync(string prefix);
         Task<List<Event>> GetEventsForOwnerAsync(string userId);
         Task<bool> IsPrefixExistAsync(string prefix);
-        Task SaveEventImageAsync(Stream stream, string eventId);
+        Task AddEventImageAsync(Stream stream, string eventId);
         Task SaveEventTncAsync(Stream stream, string eventId, string fileName);
         Task <string>GetEventIdAsync(string url);
+        Task <Event>CreateEventAsync();
     }
 }

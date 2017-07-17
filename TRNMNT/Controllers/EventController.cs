@@ -159,7 +159,7 @@ namespace TRNMNT.Web.Controllers
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventImageAsync(stream, id);
+                    await eventService.AddEventImageAsync(stream, id);
                 }
                 
             }
@@ -175,12 +175,27 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await eventService.SaveEventImageAsync(file.OpenReadStream(), id);
+                await eventService.SaveEventTncAsync(file.OpenReadStream(), id, file.FileName);
             }
             catch (Exception ex)
             {
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(ex);
+            };
+        }
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<string> CreateEvent()
+        {
+            try
+            {
+                return (await eventService.CreateEventAsync()).EventId.ToString();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(ex);
+                return "";
             };
         }
     }

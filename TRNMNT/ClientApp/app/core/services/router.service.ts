@@ -31,9 +31,6 @@ export class RouterService {
         this.router.navigateByUrl("/dashboard");
     }
 
-    public GoToCreateEvent() {
-        this.router.navigateByUrl("/dashboard/edit");
-    }
 
     public GoToEditEvent(id: string) {
         this.router.navigateByUrl("/dashboard/edit/" + id);

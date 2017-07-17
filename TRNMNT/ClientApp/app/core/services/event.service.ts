@@ -50,6 +50,10 @@ export class EventService {
         return this.httpService.get(ApiMethods.event.getEventByUrl + "/" + url).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
+    public createEvent(): Observable<string> {
+        return this.httpService.get(ApiMethods.event.createEvent).map(res => this.httpService.getString(res));
+    }
+
     //private methods
     private addEvent(event: EventModel): Observable<any> {
         return this.httpService.post(ApiMethods.event.saveEvent, event);

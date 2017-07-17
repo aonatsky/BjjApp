@@ -50,7 +50,7 @@ export class EventCreateComponent implements OnInit {
         this.route.params.subscribe(p => {
             let id = p["id"];
             if (id && id != "") {
-                this.eventService.getEvent(this.eventId).subscribe(r => this.eventModel = r);
+                this.eventService.getEvent(id).subscribe(r => this.eventModel = r);
                 this.isNew = false;
             } else {
                 this.isNew = true;

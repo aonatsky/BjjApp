@@ -26,7 +26,6 @@ import { appRoutes } from './core/routing/app.routing'
         AdministrationModule,
         SharedModule,
         DashboardModule
-    
 ],
     providers: []
 })

@@ -9,6 +9,7 @@ using TRNMNT.Data.Repositories;
 using System.Linq;
 using System.IO;
 using TRNMNT.Web.Core.Const;
+using TRNMNT.Web.Core.Enum;
 
 namespace TRNMNT.Core.Services
 {
@@ -41,7 +42,7 @@ namespace TRNMNT.Core.Services
 
         public async Task<Event> GetFullEventAsync(Guid id)
         {
-            return await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();
+            return await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
         }
         public async Task<Event> GetEventAsync(Guid id)
         {
@@ -63,23 +64,38 @@ namespace TRNMNT.Core.Services
             return await eventRepository.GetAll().AnyAsync();
         }
 
-        public async Task SaveEventImageAsync(Stream stream, string eventId)
+        public async Task AddEventImageAsync(Stream stream, string eventId)
         {
             var fileName = FilePath.EVENT_IMAGE_FILE;
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, FilePath.EVENT_IMAGE_FILE);
-
-            await fileService.SaveImageAsync(path,stream, fileName);
+            var _event =  await GetEventAsync(new Guid(eventId));
+            await fileService.SaveImageAsync(path, stream, fileName);
+            _event.ImgPath = path;
+            eventRepository.Update(_event);
+            await eventRepository.SaveAsync();
         }
 
         public async Task SaveEventTncAsync(Stream stream, string eventId, string fileName)
         {
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, fileName);
             await fileService.SaveFileAsync(path, stream);
+            var _event = await GetEventAsync(new Guid(eventId));
+            _event.TNCFilePath = path;
+            eventRepository.Update(_event);
+            await eventRepository.SaveAsync();
         }
 
         public async Task<string> GetEventIdAsync(string url)
         {
-            return (await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e=> e.EventId).FirstOrDefaultAsync()).ToString();
+            return (await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e => e.EventId).FirstOrDefaultAsync()).ToString();
+        }
+
+        public async Task<Event> CreateEventAsync()
+        {
+            var _event = new Event() { StatusId = (int)EventStatusEnum.Init, IsActive = false };
+            eventRepository.Add(_event);
+            await eventRepository.SaveAsync();
+            return _event;
         }
     }
 }

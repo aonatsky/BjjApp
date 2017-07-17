@@ -15,7 +15,7 @@ namespace TRNMNT.Core.Services
 
         public LocalFileService(IHostingEnvironment env)
         {
-            rootPath = env.ContentRootPath;
+            rootPath = env.WebRootPath;
         }
         public Task<bool> IsFileExistAsync(string path)
         {
@@ -24,7 +24,7 @@ namespace TRNMNT.Core.Services
 
         public async Task SaveFileAsync(string path, Stream stream)
         {
-            using (var fileStream = new FileStream(path, FileMode.Create))
+            using (var fileStream = new FileStream(Path.Combine(rootPath, path), FileMode.Create))
             {
                 await stream.CopyToAsync(fileStream);
             }

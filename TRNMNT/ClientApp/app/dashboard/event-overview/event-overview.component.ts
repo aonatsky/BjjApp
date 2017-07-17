@@ -19,7 +19,8 @@ export class EventOverviewComponent {
     }
 
     public createEvent() {
-        this.routerService.GoToCreateEvent();
+        this.eventService.createEvent().subscribe(r => this.routerService.GoToEditEvent(r))
+        //this.routerService.GoToEditEvent();
     }
 
     public editEvent(id: string) {
