@@ -1,18 +1,19 @@
-﻿<div class="ui-container">
-    <div class="ui-widget">
-        <div class="ui-g">
-            <div class="ui-g-3 ui-fluid"><label>Email</label></div>
-            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="email" /></div>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-3 ui-fluid"><label>Password</label></div>
-            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="password" /></div>
-        </div>
-        <div class="ui-g">
-            <div class="ui-g-3 ui-fluid"><label>Confirm Password</label></div>
-            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="confirmPassword" /></div>
-        </div>
-        <button pButton class="ui-button-text-icon-left" icon ="check-circle-o" (click) ="register"></button>
-
+﻿
+<div class="ui-widget ui-widget-content ui-corner-all ui-g-offset-3 ui-g-6">
+    <div class="ui-g">
+        <div class="ui-g-3 ui-fluid"><label>First Name</label></div>
+        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participation.firstName" /></div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-3 ui-fluid"><label>Last Name</label></div>
+        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participation.lastName" /></div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-3 ui-fluid"><label>Team</label></div>
+        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participation.team" /></div>
+    </div>
+    <div class="ui-g-12">
+        <button pButton class="ui-button-success" icon="fa-check-circle" label="Register" (click)="register()"></button>
     </div>
 </div>
+

@@ -22,6 +22,7 @@ export class RouterService {
         this.router.navigateByUrl("/login");
     }
 
+
     public GoToOrganizerScreen() {
         this.router.navigateByUrl("/administration/home");
     }
@@ -37,7 +38,11 @@ export class RouterService {
     }
 
     public GoToEventInfo(id: string) {
-        this.router.navigateByUrl("/event-info/" + id, { skipLocationChange: true });
+        this.router.navigateByUrl("event-participation/event-info/" + id, { skipLocationChange: false });    
+    }
+
+    public GoToParticipate(id: string) {
+        this.router.navigateByUrl("event-participation/participate/" + id, { skipLocationChange: false });
     }
 }
 

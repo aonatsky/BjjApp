@@ -1,5 +1,7 @@
 ﻿import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from './../../core/services/auth.service';
+import { ParticipationModel } from './../../core/model/participation.model';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 
@@ -12,18 +14,19 @@ import { RouterService } from './../../core/services/router.service';
 
 export class ParticipateComponent {
 
+    private eventId: string;
+    private participation: ParticipationModel;
 
-    email: string = "";
-    password: string = "";
-    confirmPassword: string = "";
 
-    constructor(private AuthService: AuthService, private routerService: RouterService, private loggerService: LoggerService) {
+    constructor(private AuthService: AuthService, private routerService: RouterService, private loggerService: LoggerService, private route: ActivatedRoute) {
 
     }
 
-
-    register(): any {
-
+    ngOnInit() {
+        this.route.params.subscribe(p => {
+            this.eventId = p['id'];
+        });
+        this.participation = new ParticipationModel();
     }
 
     processLogin(isAuthenticated: boolean) {
@@ -31,4 +34,5 @@ export class ParticipateComponent {
             this.routerService.GoToEventAdmin();
         }
     }
+
 }

@@ -18,7 +18,6 @@ export const appRoutes: Routes = [
     { path: '', redirectTo: 'event-admin', pathMatch: 'full', canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent, pathMatch: 'full' },
     { path: 'home', redirectTo: 'event-admin' },
-    { path: 'event-info/:id', component: EventInfoComponent },
     { path: '**', redirectTo: 'event-admin', canActivate: [AuthGuard]  }
 ];
 
