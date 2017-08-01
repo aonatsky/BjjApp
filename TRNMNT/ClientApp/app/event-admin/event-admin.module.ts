@@ -6,27 +6,25 @@ import { FormsModule } from '@angular/forms'
 import { CoreModule } from "./../core/core.module"
 import { RouterModule, Routes } from '@angular/router';
 
-import { DashboardComponent } from './dashboard/dashboard.component'
+import { EventAdminComponent } from './event-admin/event-admin.component'
 import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
 import { EventCreateComponent } from './event-create/event-create.component'
 import { CategoryComponent } from './event-create/category.component'
-import { BaseComponent } from './base.component'
-import { dashboardRoutes } from './dashboard.routing'
+import { eventAdminRoutes } from './event-admin.routing'
 
 
 @NgModule({
 
     imports: [
         CoreModule,
-        RouterModule.forChild(dashboardRoutes)
+        RouterModule.forChild(eventAdminRoutes)
     ],
     declarations: [
-        DashboardComponent,
+        EventAdminComponent,
         TopbarComponent,
         EventOverviewComponent,
         EventCreateComponent,
-        BaseComponent,
         CategoryComponent
     ],
 
@@ -37,5 +35,5 @@ import { dashboardRoutes } from './dashboard.routing'
     ]
 })
 
-export class DashboardModule {
+export class EventAdminModule {
 }

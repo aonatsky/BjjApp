@@ -5,12 +5,12 @@ import { RouterService } from './../../core/services/router.service';
 
 
 @Component({
-    selector: 'registration',
-    templateUrl: './registration.component.html',
-    styleUrls: ['./registration.component.css']
+    selector: 'register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.css']
 })
 
-export class RegistrationComponent {
+export class RegisterComponent {
 
 
     email: string = "";
@@ -28,7 +28,7 @@ export class RegistrationComponent {
 
     processLogin(isAuthenticated: boolean) {
         if (isAuthenticated) {
-            this.routerService.GoToDashboard();
+            this.routerService.GoToEventAdmin();
         }
     }
 }

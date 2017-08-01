@@ -27,13 +27,13 @@ export class RouterService {
     }
 
 
-    public GoToDashboard() {
-        this.router.navigateByUrl("/dashboard");
+    public GoToEventAdmin() {
+        this.router.navigateByUrl("/event-admin");
     }
 
 
     public GoToEditEvent(id: string) {
-        this.router.navigateByUrl("/dashboard/edit/" + id);
+        this.router.navigateByUrl("/event-admin/edit/" + id);
     }
 
     public GoToEventInfo(id: string) {

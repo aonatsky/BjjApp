@@ -7,7 +7,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { CoreModule } from './core/core.module'
 import { AdministrationModule } from './administration/administration.module'
 import { SharedModule } from './shared/shared.module'
-import { DashboardModule } from './dashboard/dashboard.module'
+import { EventAdminModule } from './event-admin/event-admin.module'
+import { EventPaticipationModule } from './event-participation/event-participation.module'
 
 
 
@@ -25,7 +26,8 @@ import { appRoutes } from './core/routing/app.routing'
         CoreModule,
         AdministrationModule,
         SharedModule,
-        DashboardModule
+        EventAdminModule,
+        EventPaticipationModule
 ],
     providers: []
 })

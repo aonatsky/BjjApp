@@ -4,28 +4,25 @@ import { FormsModule } from '@angular/forms'
 
 
 import { CoreModule } from "./../core/core.module"
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import { LoginComponent } from './login/login.component'
-import { RegisterComponent } from './register/register.component'
-
+import { EventInfoComponent } from './event-info/event-info.component'
 
 
 @NgModule({
+
     imports: [
         CoreModule,
     ],
     declarations: [
-        LoginComponent,
-        RegisterComponent
+        EventInfoComponent
     ],
 
     providers: [],
 
     exports: [
-       
     ]
 })
 
-export class SharedModule {
+export class EventPaticipationModule {
 }

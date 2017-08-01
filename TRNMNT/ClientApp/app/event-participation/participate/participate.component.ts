@@ -5,24 +5,24 @@ import { RouterService } from './../../core/services/router.service';
 
 
 @Component({
-    selector: 'login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    selector: 'participate',
+    templateUrl: './participate.component.html',
+    styleUrls: ['./participate.component.css']
 })
 
-export class LoginComponent {
+export class ParticipateComponent {
 
-    username: string = "";
+
+    email: string = "";
     password: string = "";
+    confirmPassword: string = "";
 
     constructor(private AuthService: AuthService, private routerService: RouterService, private loggerService: LoggerService) {
 
     }
 
 
-    login(): any {
-
-        this.AuthService.signin(this.username, this.password).subscribe(data => this.processLogin(data), error => this.loggerService.logError(error));
+    register(): any {
 
     }
 

@@ -76,8 +76,4 @@
     <ProjectReference Include="..\TRNMNT.Data\TRNMNT.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ClientApp\app\eventparticipation\" />
-  </ItemGroup>
-
 </Project>

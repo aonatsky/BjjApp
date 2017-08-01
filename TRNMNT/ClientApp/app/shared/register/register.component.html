@@ -1,0 +1,18 @@
+﻿<div class="ui-container">
+    <div class="ui-widget">
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Email</label></div>
+            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="email" /></div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Password</label></div>
+            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="password" /></div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Confirm Password</label></div>
+            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="confirmPassword" /></div>
+        </div>
+        <button pButton class="ui-button-text-icon-left" icon ="check-circle-o" (click) ="register"></button>
+
+    </div>
+</div>
