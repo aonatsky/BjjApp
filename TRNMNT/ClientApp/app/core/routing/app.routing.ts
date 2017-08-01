@@ -15,11 +15,11 @@ import { EventInfoComponent } from '../../shared/event-info/event-info.component
 
 
 export const appRoutes: Routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [RedirectGuard] },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent, pathMatch: 'full' },
     { path: 'home', redirectTo: 'dashboard' },
     { path: 'event-info/:id', component: EventInfoComponent },
-    { path: '**', redirectTo: 'dashboard', canActivate: [RedirectGuard]  }
+    { path: '**', redirectTo: 'dashboard', canActivate: [AuthGuard]  }
 ];
 
 

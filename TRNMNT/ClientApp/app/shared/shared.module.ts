@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component'
 import { EventInfoComponent } from './event-info/event-info.component'
+import { RegistrationComponent } from './registration/registration.component'
 
 
 
@@ -17,7 +18,8 @@ import { EventInfoComponent } from './event-info/event-info.component'
     ],
     declarations: [
         LoginComponent,
-        EventInfoComponent
+        EventInfoComponent,
+        RegistrationComponent
     ],
 
     providers: [],
