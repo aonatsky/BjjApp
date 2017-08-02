@@ -10,6 +10,10 @@ export class RouterService {
 
     }
 
+    public navigateByUrl(url: string) {
+        this.router.navigateByUrl(url);
+    } 
+
     public GoHome(subdomain: string = "") {
         if (subdomain != "") {
             let path = location.host.replace(subdomain + ".", "");
@@ -18,8 +22,8 @@ export class RouterService {
 
     }
 
-    public GoToLogin() {
-        this.router.navigateByUrl("/login");
+    public GoToLogin(returnUrl? : string) {
+        this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl } });
     }
 
 
@@ -37,8 +41,8 @@ export class RouterService {
         this.router.navigateByUrl("/event-admin/edit/" + id);
     }
 
-    public GoToEventInfo(id: string) {
-        this.router.navigateByUrl("event-participation/event-info/" + id, { skipLocationChange: false });    
+    public GoToEventInfo(subdomain: string) {
+        this.router.navigateByUrl("event-participation/event-info/" + subdomain, { skipLocationChange: false });    
     }
 
     public GoToParticipate(id: string) {

@@ -1,7 +1,8 @@
 ﻿import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from './../../core/services/auth.service';
-import { ParticipationModel } from './../../core/model/participation.model';
+import { TeamService } from './../../core/services/team.service';
+import { ParticipantModel } from './../../core/model/participant.model';
+import { TeamModel } from './../../core/model/team.model';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 
@@ -15,10 +16,11 @@ import { RouterService } from './../../core/services/router.service';
 export class ParticipateComponent {
 
     private eventId: string;
-    private participation: ParticipationModel;
+    private participation: ParticipantModel;
+    private existingTeams: TeamModel[] = [];
 
 
-    constructor(private AuthService: AuthService, private routerService: RouterService, private loggerService: LoggerService, private route: ActivatedRoute) {
+    constructor(private routerService: RouterService, private loggerService: LoggerService, private route: ActivatedRoute, private teamService: TeamService) {
 
     }
 
@@ -26,13 +28,10 @@ export class ParticipateComponent {
         this.route.params.subscribe(p => {
             this.eventId = p['id'];
         });
-        this.participation = new ParticipationModel();
+        this.participation = new ParticipantModel();
+        this.teamService.getTeams().subscribe(r => this.existingTeams = r);
     }
 
-    processLogin(isAuthenticated: boolean) {
-        if (isAuthenticated) {
-            this.routerService.GoToEventAdmin();
-        }
-    }
+ 
 
 }

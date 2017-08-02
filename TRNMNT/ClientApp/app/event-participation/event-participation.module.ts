@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms'
 
 
 import { CoreModule } from "./../core/core.module"
-import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from "./../core/routing/auth.guard"
+import { RouterModule, Routes } from '@angular/router'
 
 import { EventInfoComponent } from './event-info/event-info.component'
 import { ParticipateComponent } from './participate/participate.component'
@@ -20,10 +21,10 @@ import { EventParticipationComponent } from './event-participation.component'
                 {
                     path: 'event-participation', component: EventParticipationComponent, children: [
                         {
-                             path: 'event-info/:prefix', component: EventInfoComponent 
+                            path: 'event-info/:prefix', component: EventInfoComponent
                         },
                         {
-                            path: 'participate/:id', component: ParticipateComponent
+                            path: 'participate/:id', component: ParticipateComponent, canActivate : [AuthGuard]
                         }
                     ]
                 }

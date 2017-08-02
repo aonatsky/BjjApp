@@ -15,7 +15,7 @@ import { EventInfoComponent } from '../../event-participation/event-info/event-i
 
 
 export const appRoutes: Routes = [
-    { path: '', redirectTo: 'event-admin', pathMatch: 'full', canActivate: [AuthGuard] },
+    { path: '', component: LoginComponent, pathMatch: 'full', canActivate: [RedirectGuard] },
     { path: 'login', component: LoginComponent, pathMatch: 'full' },
     { path: 'home', redirectTo: 'event-admin' },
     { path: '**', redirectTo: 'event-admin', canActivate: [AuthGuard]  }

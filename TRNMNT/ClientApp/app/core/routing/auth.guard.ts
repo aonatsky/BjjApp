@@ -15,6 +15,7 @@ import { RouterService } from '../services/router.service'
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
+        debugger;
         if (this.AuthService.isLoggedIn()) {
             // Signed in.  
             return true;
@@ -23,7 +24,7 @@ import { RouterService } from '../services/router.service'
         let url: string = state.url;
         this.AuthService.redirectUrl = url;
         // Not signed in so redirects to signin page.  
-        this.routerService.GoToLogin();
+        this.routerService.GoToLogin(url);
         return false;
     }
 

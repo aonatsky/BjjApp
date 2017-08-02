@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TRNMNT.Data.Repositories;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,12 +17,12 @@ using Newtonsoft.Json.Serialization;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class EventController : BaseController
+    public class EventController : CRUDController<Event>
     {
         private IEventService eventService;
         IHttpContextAccessor httpContextAccessor;
 
-        public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, httpContextAccessor, userService)
+        public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Event> repository) : base(logger, repository, httpContextAccessor, userService)
         {
             this.eventService = eventService;
             this.httpContextAccessor = httpContextAccessor;
@@ -46,7 +47,7 @@ namespace TRNMNT.Web.Controllers
 
 
         [Authorize, HttpGet("[action]/{id}")]
-        public async Task GetEvent(Guid id)
+        public async Task<IActionResult> GetEvent(Guid id)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
@@ -58,13 +59,12 @@ namespace TRNMNT.Web.Controllers
                     NullValueHandling = NullValueHandling.Ignore // ignore null values
                 };
                 await Response.WriteAsync(JsonConvert.SerializeObject(_event, jsonSerializerSettings));
-
+                return Ok();
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(e);
-
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -183,6 +183,7 @@ namespace TRNMNT.Web.Controllers
                 HandleException(ex);
             };
         }
+
 
         [Authorize, HttpGet("[action]")]
         public async Task<string> CreateEvent()

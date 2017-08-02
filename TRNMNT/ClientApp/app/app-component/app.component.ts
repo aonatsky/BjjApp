@@ -21,29 +21,7 @@ export class AppComponent implements OnInit {
     
 
     ngOnInit() {
-        this.notificationservice.notifications.subscribe(data => this.notifications = data);
         this.loaderService.isLoaderShown.subscribe(data => this.isLoaderShown = data);
-        this.processSubdomain();
-    }
-
-
-    private processSubdomain() {
-        let subdomain = this.getSubdomain();
-        if (subdomain && subdomain != "") {
-            this.routerService.GoToEventInfo(subdomain)
-        }
-    }
-
-    getSubdomain() : string {
-        let subdomain = '';
-        const domain = window.location.hostname;
-        if (domain.indexOf('.') < 0 ||
-            domain.split('.')[0] === 'example' || domain.split('.')[0] === 'lvh' || domain.split('.')[0] === 'www') {
-            subdomain = '';
-        } else {
-            subdomain = domain.split('.')[0];
-        }
-        return subdomain;
     }
 
 }

@@ -1,6 +1,6 @@
-﻿export class ParticipationModel {
+﻿export class ParticipantModel {
 
-    public participationId: AAGUID;
+    public participantId: AAGUID;
     public firstName: string;
     public lastName: string;
     public team: string;

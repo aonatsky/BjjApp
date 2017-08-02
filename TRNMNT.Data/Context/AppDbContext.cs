@@ -112,6 +112,7 @@ namespace TRNMNT.Data.Context
         public DbSet<Category> Category { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Event> Event { get; set; }
+        public DbSet<Participant> Participant { get; set; }
 
     }
 }

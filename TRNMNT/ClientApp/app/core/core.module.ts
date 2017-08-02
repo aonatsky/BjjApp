@@ -18,6 +18,7 @@ import { RouterService } from './services/router.service';
 import { NotificationService } from './services/notification.service';
 import { LoaderService } from './services/loader.service';
 import { EventService } from './services/event.service';
+import { TeamService } from './services/team.service';
 
 import { UserModel } from './model/user.model'
 
@@ -30,7 +31,7 @@ import { InputTextModule } from "primeng/components/inputtext/inputtext";
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputMaskModule } from 'primeng/primeng';
-import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule } from 'primeng/primeng';
+import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule } from 'primeng/primeng';
 
 
 import { AuthGuard } from './routing/auth.guard';
@@ -52,20 +53,21 @@ import { RedirectGuard } from './routing/redirect.guard';
         InputMaskModule,
         StepsModule,
         CalendarModule,
-        InputTextareaModule
+        InputTextareaModule,
+        AutoCompleteModule
     ],
     declarations: [
         
     ],
 
-    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthService, AuthHttp, EventService, provideAuth({
+    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthService, AuthHttp, EventService, TeamService, provideAuth({
         headerName: 'Authorization',
         headerPrefix: 'bearer',
         tokenName: 'token',
         tokenGetter: (() => localStorage.getItem('id_token')),
         noJwtError: true
     }),
-        AuthGuard, RouterService, RedirectGuard],
+        AuthGuard, RedirectGuard, RouterService],
 
     exports: [
         FormsModule,
@@ -83,7 +85,8 @@ import { RedirectGuard } from './routing/redirect.guard';
         StepsModule,
         CalendarModule,
         InputTextareaModule,
-        FileUploadModule
+        FileUploadModule,
+        AutoCompleteModule
     ]
 })
 export class CoreModule { }

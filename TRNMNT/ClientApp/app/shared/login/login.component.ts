@@ -1,5 +1,6 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../../core/services/auth.service';
+import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 
@@ -14,9 +15,22 @@ export class LoginComponent {
 
     username: string = "";
     password: string = "";
+    returnUrl: string;
 
-    constructor(private AuthService: AuthService, private routerService: RouterService, private loggerService: LoggerService) {
+    constructor(
+        private route: ActivatedRoute,
+        private AuthService: AuthService,
+        private routerService: RouterService,
+        private loggerService: LoggerService) {
 
+    }
+
+    ngOnInit() {
+        // reset login status
+        this.AuthService.signout();
+
+        // get return url from route parameters or default to '/'
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
 
@@ -28,7 +42,7 @@ export class LoginComponent {
 
     processLogin(isAuthenticated: boolean) {
         if (isAuthenticated) {
-            this.routerService.GoToEventAdmin();
+            this.routerService.navigateByUrl(this.returnUrl);
         }
     }
 }

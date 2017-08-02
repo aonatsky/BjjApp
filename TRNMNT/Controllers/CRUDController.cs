@@ -6,6 +6,10 @@ using Microsoft.Extensions.Logging;
 using TRNMNT.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using TRNMNT.Core.Services;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -18,95 +22,103 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<T> Get()
+        public async Task<IEnumerable<T>> Get()
         {
             try
             {
-                return repository.GetAll().ToList();
+                return await repository.GetAll().ToListAsync();
             }
             catch (Exception ex)
             {
-                base.HandleException(ex);
-                Response.StatusCode = 500;
+                HandleException(ex);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 return new List<T>();
             }
 
         }
 
-        [HttpPost]
-        public string Post([FromBody] T entity)
+        [HttpGet("{entityID}")]
+        public async Task<T> Get(string entityID)
+        {
+            try
+            {
+                return await repository.GetByIDAsync(entityID);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                return null;
+            }
+
+        }
+
+        [Authorize, HttpPost]
+        public async Task Post([FromBody] T entity)
         {
             Response.StatusCode = 200;
 
             try
             {
                 repository.Add(entity);
-                repository.Save(false);
+                await repository.SaveAsync(false);
+                Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception e)
             {
-                Response.StatusCode = 500;
-                return e.ToString();
+                HandleException(e);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                
             }
-            return "OK";
+            
         }
-        [HttpPut]
-        public string Put([FromBody] T entity)
+        [Authorize, HttpPut]
+        public async Task Put([FromBody] T entity)
         {
-            Response.StatusCode = 200;
-
             try
             {
-
                 repository.Update(entity);
-                repository.Save(false);
-
+                await repository.SaveAsync(false);
+                Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception e)
             {
                 base.HandleException(e);
-                Response.StatusCode = 500;
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
-            return "OK";
         }
 
-        [HttpDelete]
-        public String Delete([FromBody]T entity)
+        [Authorize, HttpDelete]
+        public async Task Delete([FromBody]T entity)
         {
-            Response.StatusCode = 200;
-
             try
             {
                 repository.Delete(entity);
-                repository.Save(false);
-
+                await repository.SaveAsync(false);
+                Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception e)
             {
-                base.HandleException(e);
-                Response.StatusCode = 500;
+                HandleException(e);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
-            return "OK";
         }
 
-        [HttpDelete("{entityID}")]
-        public String Delete(string entityID)
+        [Authorize, HttpDelete("{entityID}")]
+        public async Task Delete(string entityID)
         {
-            Response.StatusCode = 200;
-
             try
             {
                 repository.Delete<Guid>(Guid.Parse(entityID));
-                repository.Save(false);
+                await repository.SaveAsync(false);
+                Response.StatusCode = (int)HttpStatusCode.OK;
 
             }
             catch (Exception e)
             {
                 base.HandleException(e);
-                Response.StatusCode = 500;
-                
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
-            return "OK";
         }
     }
 }

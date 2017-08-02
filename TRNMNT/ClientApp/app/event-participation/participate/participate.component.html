@@ -10,7 +10,10 @@
     </div>
     <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>Team</label></div>
-        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participation.team" /></div>
+        
+        <div class="ui-g-9 ui-fluid">
+            <p-autoComplete [(ngModel)]="participation.team" [suggestions]="existingTeams" [field] = "name"></p-autoComplete>
+        </div>
     </div>
     <div class="ui-g-12">
         <button pButton class="ui-button-success" icon="fa-check-circle" label="Register" (click)="register()"></button>
