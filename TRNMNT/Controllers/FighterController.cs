@@ -87,19 +87,9 @@ namespace TRNMNT.Web.Controllers
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        public override IQueryable<Fighter> ProcessQuery(string key, string value, IQueryable<Fighter> query)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

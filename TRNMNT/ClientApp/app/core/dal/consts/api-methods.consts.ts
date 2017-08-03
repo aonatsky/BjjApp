@@ -28,5 +28,11 @@ export const ApiMethods = Object.freeze({
     },
     team: {
         team: "api/team"
+    },
+    weightDivision: {
+        weightDivision: "api/weightdivision"
+    },
+    category: {
+        category: "api/category"
     }
 });

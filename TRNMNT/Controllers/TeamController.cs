@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TRNMNT.Data.Repositories;
+using System.Linq;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -25,6 +26,11 @@ namespace TRNMNT.Web.Controllers
             : base(logger, repository, httpContextAccessor, userService)
         {
             this.httpContextAccessor = httpContextAccessor;
+        }
+
+        public override IQueryable<Team> ProcessQuery(string key, string value, IQueryable<Team> query)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -24,9 +24,10 @@ namespace TRNMNT.Data.Context
         DbSet<WeightDivision> WeightDivision { get; set; }
         DbSet<Fighter> Fighter { get; set; }
         DbSet<Team> Team { get; set; }
-        DbSet<Category> Category { get; set; }
+        DbSet<WeightDivision> Category { get; set; }
         DbSet<User> User{ get; set; }
         DbSet<Event> Event { get; set; }
+        DbSet<Participant> Participant{ get; set; }
 
     }
 }

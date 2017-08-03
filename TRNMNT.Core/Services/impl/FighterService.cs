@@ -12,12 +12,12 @@ namespace TRNMNT.Web.Core.Services.impl
     {
         private IRepository<Fighter> fighterRepository;
         private IRepository<Team> teamRepository;
-        private IRepository<Category> categoryRepository;
+        private IRepository<WeightDivision> categoryRepository;
         private IRepository<WeightDivision> weightDivisionRepository;
 
         public FighterService(IRepository<Fighter> fighterRepository,
             IRepository<Team> teamRepository,
-            IRepository<Category> categoryRepository,
+            IRepository<WeightDivision> categoryRepository,
             IRepository<WeightDivision> weightDivisionRepository)
         {
             this.fighterRepository = fighterRepository;
@@ -212,7 +212,7 @@ namespace TRNMNT.Web.Core.Services.impl
         {
             return weightDivisionRepository.GetAll().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
-        private Category GetCategory(string name)
+        private WeightDivision GetCategory(string name)
         {
             return (categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
 

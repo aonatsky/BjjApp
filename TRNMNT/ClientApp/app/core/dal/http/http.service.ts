@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RequestOptions, Http, Response, Headers, ResponseContentType } from '@angular/http';
+import { RequestOptions, Http, Response, Headers, ResponseContentType, URLSearchParams } from '@angular/http';
 import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { RouterService } from '../../../core/services/router.service';
@@ -15,9 +15,22 @@ export class HttpService {
     }
 
 
-    public get(name: string): Observable<any> {
+    public get(name: string, params: SearchParams[] = []): Observable<any> {
+        let httpRequest = this.http.get(name);
+
+        if (params && params.length > 0) {
+            let urlSearchParams = new URLSearchParams();
+            for (var i = 0; i < params.length; i++) {
+                urlSearchParams.set(params[i].name, params[i].value);
+            }
+            httpRequest = this.http.get(name, { search: urlSearchParams });
+        }
+
         this.loaderService.showLoader();
-        return this.http.get(name).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());
+        return httpRequest
+            .map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleError(error))
+            .finally(() => this.loaderService.hideLoader());
     }
 
     public getById(name: string, id: string): Observable<any> {
@@ -64,10 +77,10 @@ export class HttpService {
         return this.http.delete(url, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    public postFile(name: string, file: any): Observable<any>{
+    public postFile(name: string, file: any): Observable<any> {
         this.loaderService.showLoader();
         let formData = new FormData();
-        formData.append("file",file)
+        formData.append("file", file)
         return this.http.post(name, formData)
             .map((r: Response) => this.processResponse(r))
             .catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
@@ -109,17 +122,16 @@ export class HttpService {
         return response.text();
     }
 
-    public getExcelFile(response: Response, fileName:string): void {
+    public getExcelFile(response: Response, fileName: string): void {
         FileSaver.saveAs(response.blob(), fileName);
     }
 
 
-    
+
     private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
 
-     convertDate(input) {
-        if (typeof input !== "object") 
-        {
+    convertDate(input) {
+        if (typeof input !== "object") {
             return input
         };
 
@@ -138,5 +150,10 @@ export class HttpService {
         }
         return input;
     }
+}
+
+export interface SearchParams {
+    name: string;
+    value: string;
 }
 

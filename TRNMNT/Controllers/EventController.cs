@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TRNMNT.Data.Repositories;
+using System.Linq;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -198,6 +199,11 @@ namespace TRNMNT.Web.Controllers
                 HandleException(ex);
                 return "";
             };
+        }
+
+        public override IQueryable<Event> ProcessQuery(string key, string value, IQueryable<Event> query)
+        {
+            throw new NotImplementedException();
         }
     }
 }

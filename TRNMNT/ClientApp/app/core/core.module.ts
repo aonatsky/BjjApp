@@ -19,6 +19,8 @@ import { NotificationService } from './services/notification.service';
 import { LoaderService } from './services/loader.service';
 import { EventService } from './services/event.service';
 import { TeamService } from './services/team.service';
+import { WeightDivisionService } from './services/weight-division.service';
+import { CategoryService } from './services/category.service';
 
 import { UserModel } from './model/user.model'
 
@@ -57,16 +59,28 @@ import { RedirectGuard } from './routing/redirect.guard';
         AutoCompleteModule
     ],
     declarations: [
-        
+
     ],
 
-    providers: [HttpService, ApiProviders, LoggerService, LoaderService, NotificationService, AuthService, AuthHttp, EventService, TeamService, provideAuth({
-        headerName: 'Authorization',
-        headerPrefix: 'bearer',
-        tokenName: 'token',
-        tokenGetter: (() => localStorage.getItem('id_token')),
-        noJwtError: true
-    }),
+    providers: [
+        HttpService,
+        ApiProviders,
+        LoggerService,
+        LoaderService,
+        NotificationService,
+        AuthService,
+        AuthHttp,
+        EventService,
+        TeamService,
+        CategoryService,
+        WeightDivisionService,
+        provideAuth({
+            headerName: 'Authorization',
+            headerPrefix: 'bearer',
+            tokenName: 'token',
+            tokenGetter: (() => localStorage.getItem('id_token')),
+            noJwtError: true
+        }),
         AuthGuard, RedirectGuard, RouterService],
 
     exports: [

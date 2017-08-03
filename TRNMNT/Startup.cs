@@ -71,6 +71,8 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));
+            services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+            services.AddScoped(typeof(IWeightDivisionService), typeof(WeightDivisionService));
             services.AddScoped(typeof(IUserService),typeof(UserService));
             services.AddScoped(typeof(IFileService),typeof(LocalFileService));
             #endregion

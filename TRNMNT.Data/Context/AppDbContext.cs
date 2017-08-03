@@ -109,7 +109,7 @@ namespace TRNMNT.Data.Context
         public DbSet<WeightDivision> WeightDivision { get; set; }
         public DbSet<Fighter> Fighter { get; set; }
         public DbSet<Team> Team { get; set; }
-        public DbSet<Category> Category { get; set; }
+        public DbSet<WeightDivision> Category { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Event> Event { get; set; }
         public DbSet<Participant> Participant { get; set; }

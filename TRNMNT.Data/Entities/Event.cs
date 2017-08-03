@@ -36,5 +36,6 @@ namespace TRNMNT.Data.Entities
         public User Owner { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<Participant> Participants { get; set; }
     }
 }

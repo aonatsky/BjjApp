@@ -15,7 +15,6 @@ import { RouterService } from '../services/router.service'
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-        debugger;
         if (this.AuthService.isLoggedIn()) {
             // Signed in.  
             return true;

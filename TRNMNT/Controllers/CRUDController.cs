@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using Microsoft.Extensions.Primitives;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -26,7 +27,16 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                return await repository.GetAll().ToListAsync();
+                var query = repository.GetAll();
+                var queryParams = HttpContext.Request.Query.ToList();
+                if (queryParams.Any())
+                {
+                    foreach (var param in queryParams)
+                    {
+                        query = ProcessQuery(param.Key,param.Value, query);
+                    }
+                }
+                return await query.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -37,6 +47,8 @@ namespace TRNMNT.Web.Controllers
 
         }
 
+        public abstract IQueryable<T> ProcessQuery(string key, string value, IQueryable<T> query);
+        
         [HttpGet("{entityID}")]
         public async Task<T> Get(string entityID)
         {
