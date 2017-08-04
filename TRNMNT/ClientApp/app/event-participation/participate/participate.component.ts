@@ -5,9 +5,12 @@ import { CategoryService } from './../../core/services/category.service';
 import { WeightDivisionService } from './../../core/services/weight-division.service';
 import { ParticipantModel } from './../../core/model/participant.model';
 import { TeamModel } from './../../core/model/team.model';
+import { CategoryModel } from './../../core/model/category.model';
+import { WeightDivisionModel } from './../../core/model/weight-division.model';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
+import { SelectItem } from 'primeng/primeng'
 
 @Component({
     selector: 'participate',
@@ -18,15 +21,19 @@ import { Observable } from "rxjs/Observable";
 export class ParticipateComponent {
 
     private eventId: string;
-    private participation: ParticipantModel;
+    private participant: ParticipantModel;
+    private categories: CategoryModel[] = [];
+    private weightDivisions: WeightDivisionModel[] = [];
+    private categorySelectItems: SelectItem[];
+    private weightDivisionsSelectItems: SelectItem[];
     private existingTeams: TeamModel[] = [];
-
+    private teamSuggestions: TeamModel[] = [];
 
     constructor(
         private routerService: RouterService,
         private loggerService: LoggerService,
         private route: ActivatedRoute,
-        private weightDivisionservice: WeightDivisionService,
+        private weightDivisionService: WeightDivisionService,
         private categoryService: CategoryService,
         private teamService: TeamService,
 
@@ -38,7 +45,7 @@ export class ParticipateComponent {
         this.route.params.subscribe(p => {
             this.eventId = p['id'];
         });
-        this.participation = new ParticipantModel();
+        this.participant = new ParticipantModel();
         this.loadData();
     }
 
@@ -48,12 +55,41 @@ export class ParticipateComponent {
             .subscribe(data => this.initData(data));
     }
 
-    private initData(data: Object[]) {
-        let teams = data[0];
-        let categories = data[1];
-        console.log(teams);
-        console.log(categories);
+    private initData(data) {
+        this.existingTeams = data[0];
+        this.categories = data[1];
+        this.initCategoryDropdown();
     }
 
 
+    private teamSearch(event) {
+        this.teamSuggestions = this.existingTeams.filter((team: TeamModel) => team.name.toLowerCase().startsWith(event.query.trim().toLowerCase()))
+    };
+
+    private getDefaultDateOfBirth() {
+        let date = new Date();
+        date.setFullYear(date.getFullYear() - 20);
+        return date;
+    }
+
+    private initCategoryDropdown() {
+        this.categorySelectItems = [];
+        for (var i = 0; i < this.categories.length; i++) {
+            let category = this.categories[i];
+            this.categorySelectItems.push({ label: category.name, value: category.categoryId })
+        }
+    }
+
+    private initWeightDivisionDropdown(event) {
+        this.weightDivisionService.getWeightDivisions(event.value).subscribe(w => {
+            this.weightDivisions = w;
+            this.weightDivisionsSelectItems = [];
+            for (var i = 0; i < this.weightDivisions.length; i++) {
+                let weightDivision = this.weightDivisions[i];
+                this.weightDivisionsSelectItems.push({ label: weightDivision.name, value: weightDivision.weightDivisionId })
+            }
+        })
+
+    }
 }
+

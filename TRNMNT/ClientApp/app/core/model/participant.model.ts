@@ -10,6 +10,8 @@
     public weightDivisionId: string;
     public eventId: AAGUID;
     public userId: string;
+    public email: string;
+    public phoneNumber: string;
     constructor() { }
 
 }

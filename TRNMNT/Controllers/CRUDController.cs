@@ -33,7 +33,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     foreach (var param in queryParams)
                     {
-                        query = ProcessQuery(param.Key,param.Value, query);
+                        query = ModifyQuery(param.Key, param.Value, query);
                     }
                 }
                 return await query.ToListAsync();
@@ -47,8 +47,8 @@ namespace TRNMNT.Web.Controllers
 
         }
 
-        public abstract IQueryable<T> ProcessQuery(string key, string value, IQueryable<T> query);
-        
+        public abstract IQueryable<T> ModifyQuery(string key, string value, IQueryable<T> query);
+
         [HttpGet("{entityID}")]
         public async Task<T> Get(string entityID)
         {
@@ -80,9 +80,9 @@ namespace TRNMNT.Web.Controllers
             {
                 HandleException(e);
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                
+
             }
-            
+
         }
         [Authorize, HttpPut]
         public async Task Put([FromBody] T entity)

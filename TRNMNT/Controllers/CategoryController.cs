@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,34 +25,17 @@ namespace TRNMNT.Web.Controllers
         }
 
 
-        //[Authorize, HttpGet]
-        //public async Task<IEnumerable<Category>> Get()
-        //{
-        //    try
-        //    {
-        //        Response.StatusCode = (int)HttpStatusCode.OK;
-        //        return await categoryService.GetCategoriesByEventId(Guid.Parse("1"));
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //        HandleException(e);
-        //        return null;
-        //    }
-        //}
-
-        public override IQueryable<Category> ProcessQuery(string key, string value, IQueryable<Category> query)
+        public override IQueryable<Category> ModifyQuery(string key, string value, IQueryable<Category> query)
         {
-            var newQuery = query;
             switch (key)
             {
                 case "eventId":
                     {
-                        newQuery = newQuery.Where(c => c.EventId == Guid.Parse(value));
+                        query = query.Where(c => c.EventId == Guid.Parse(value));
                         break;
                     } 
             }
-            return newQuery;
+            return query;
         }
     }
 }

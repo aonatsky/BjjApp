@@ -22,26 +22,18 @@ namespace TRNMNT.Web.Controllers
         {
             this.weightDivisionService = weightDivisionService;
         }
-
-        [Authorize, HttpGet]
-        public async Task<List<WeightDivision>> Get(string categoryId)
+        public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
         {
-            try
+            switch (key)
             {
-                Response.StatusCode = (int)HttpStatusCode.OK;
-                return await weightDivisionService.GetWeightDivisionsByCategoryId(Guid.Parse(categoryId));
+                case "categoryId":
+                    {
+                        query = query.Where(w => w.CategoryId == Guid.Parse(value));
+                        break;
+                    }
             }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(e);
-                return null;
-            }
-        }
 
-        public override IQueryable<WeightDivision> ProcessQuery(string key, string value, IQueryable<WeightDivision> query)
-        {
-            throw new NotImplementedException();
+            return query;
         }
     }
 

@@ -22,11 +22,17 @@ namespace TRNMNT.Web.Controllers
     {
         private IEventService eventService;
         IHttpContextAccessor httpContextAccessor;
+        private JsonSerializerSettings jsonSerializerSettings;
 
         public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Event> repository) : base(logger, repository, httpContextAccessor, userService)
         {
             this.eventService = eventService;
             this.httpContextAccessor = httpContextAccessor;
+            jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore // ignore null values
+            };
         }
 
 
@@ -54,13 +60,8 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 var _event = await eventService.GetFullEventAsync(id);
-                var jsonSerializerSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    NullValueHandling = NullValueHandling.Ignore // ignore null values
-                };
-                await Response.WriteAsync(JsonConvert.SerializeObject(_event, jsonSerializerSettings));
-                return Ok();
+                var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
+                return Ok(jsonobj);
             }
             catch (Exception e)
             {
@@ -110,21 +111,22 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpGet("[action]/{url}")]
-        public async Task<Event> GetEventByUrl(string url)
+        public async Task<IActionResult> GetEventByUrl(string url)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
 
                 var _event = await eventService.GetEventByPrefixAsync(url);
-                return _event;
+                var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
+                return Ok(jsonobj);
 
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                
                 HandleException(e);
-                return null;
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -201,7 +203,7 @@ namespace TRNMNT.Web.Controllers
             };
         }
 
-        public override IQueryable<Event> ProcessQuery(string key, string value, IQueryable<Event> query)
+        public override IQueryable<Event> ModifyQuery(string key, string value, IQueryable<Event> query)
         {
             throw new NotImplementedException();
         }

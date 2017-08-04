@@ -18,7 +18,7 @@ namespace TRNMNT.Data.Entities
         public Guid CategoryId { get; set; }
 
         [JsonIgnore]
-        public virtual WeightDivision Category { get; set; }
+        public virtual Category Category { get; set; }
         [JsonIgnore]
         public virtual ICollection<Fighter> Fighters {get;set;}
         [JsonIgnore]

@@ -28,7 +28,7 @@ namespace TRNMNT.Web.Controllers
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public override IQueryable<Team> ProcessQuery(string key, string value, IQueryable<Team> query)
+        public override IQueryable<Team> ModifyQuery(string key, string value, IQueryable<Team> query)
         {
             throw new NotImplementedException();
         }

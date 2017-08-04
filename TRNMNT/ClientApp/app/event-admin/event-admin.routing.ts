@@ -2,6 +2,7 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from '../core/routing/auth.guard';
+import { RedirectGuard } from '../core/routing/redirect.guard';
 
 import { EventAdminComponent } from './event-admin/event-admin.component'
 import { TopbarComponent } from './topbar/topbar.component'
@@ -26,7 +27,7 @@ export const eventAdminRoutes: Routes = [
                 path: "", outlet: "topmenu", component: TopbarComponent
             },
         ]
-        , canActivate: [AuthGuard]
+        , canActivate: [RedirectGuard]
 
     },
 ];

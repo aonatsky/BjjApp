@@ -17,7 +17,6 @@ import { RouterService } from '../services/router.service'
     private subdomain: string;
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        debugger;
         this.getSubdomain();
         if (this.subdomain && this.subdomain != "") {
             this.routerService.GoToEventInfo(this.subdomain);
@@ -35,7 +34,6 @@ import { RouterService } from '../services/router.service'
         } else {
             this.subdomain = domain.split('.')[0];
         }
-        console.log('subdomain', this.subdomain);
     }
 
 
