@@ -38,7 +38,7 @@
     <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>Weight Division</label></div>
         <div class="ui-g-9 ui-fluid">
-            <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="participant.weightDivisionId" [autoWidth]="false" placeholder="Select Weight Division"></p-dropdown>
+            <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="participant.weightDivisionId" [autoWidth]="false" placeholder="Select Weight Division" [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0"></p-dropdown>
         </div>
     </div>
     <div class="ui-g">

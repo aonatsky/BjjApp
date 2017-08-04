@@ -14,21 +14,25 @@ export class RegisterComponent {
 
 
     email: string = "";
+    confirmEmail: string = "";
     password: string = "";
     confirmPassword: string = "";
 
-    constructor(private AuthService: AuthService, private routerService: RouterService, private loggerService: LoggerService) {
+    constructor(private authService: AuthService, private routerService: RouterService, private loggerService: LoggerService) {
 
     }
 
 
     register(): any {
-
-    }
-
-    processLogin(isAuthenticated: boolean) {
-        if (isAuthenticated) {
-            this.routerService.GoToEventAdmin();
+        if (this.email != this.confirmEmail) {
+            //to show error
+        } else if (this.password != this.confirmPassword) {
+            //to show error
+        } else {
+            this.authService.register(this.email, this.password).subscribe(r => this.authService.login(this.email, this.password));
         }
+        
     }
+
+    
 }

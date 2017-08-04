@@ -112,6 +112,36 @@ import { UserModel } from './../model/user.model'
 
     }
 
+
+    public register(email, password): Observable<string> {
+
+        let params: any = {
+            username: email,
+            password: password
+        };
+
+        let body = JSON.stringify(params);
+
+       return this.http.post(ApiMethods.auth.register, body, this.options)
+            .map((res: Response) => {
+
+                return res.json();
+
+            }).catch((data: any) => {
+
+                // Error on post request.  
+                if (data instanceof Response) {
+                    if (data.status != 401) {
+                        return Observable.throw(data);
+                    }
+                } else {
+                    return Observable.throw(data);
+                }
+
+
+            });
+    }
+
     /** 
      * Tries to get a new token using refresh token. 
      */
