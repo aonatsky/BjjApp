@@ -35,5 +35,9 @@ export const ApiMethods = Object.freeze({
     },
     category: {
         category: "api/category"
+    },
+     participant: {
+         participant: "api/participant/",
+         createParticipant: "api/createParticipant/"
     }
 });

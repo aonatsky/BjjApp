@@ -21,13 +21,14 @@ import { SelectItem } from 'primeng/primeng'
 export class ParticipateComponent {
 
     private eventId: string;
-    private participant: ParticipantModel;
+    private participant: ParticipantModel = new ParticipantModel();
     private categories: CategoryModel[] = [];
     private weightDivisions: WeightDivisionModel[] = [];
     private categorySelectItems: SelectItem[];
     private weightDivisionsSelectItems: SelectItem[];
     private existingTeams: TeamModel[] = [];
     private teamSuggestions: TeamModel[] = [];
+    private tncAccepted: boolean = false;
 
     constructor(
         private routerService: RouterService,
@@ -44,8 +45,8 @@ export class ParticipateComponent {
     ngOnInit() {
         this.route.params.subscribe(p => {
             this.eventId = p['id'];
+            this.participant.eventId = this.eventId;
         });
-        this.participant = new ParticipantModel();
         this.loadData();
     }
 
@@ -79,7 +80,7 @@ export class ParticipateComponent {
             this.categorySelectItems.push({ label: category.name, value: category.categoryId })
         }
     }
-
+    
     private initWeightDivisionDropdown(event) {
         this.weightDivisionService.getWeightDivisions(event.value).subscribe(w => {
             this.weightDivisions = w;
@@ -90,6 +91,10 @@ export class ParticipateComponent {
             }
         })
 
+    }
+
+    private createParticipant() {
+        
     }
 
 }
