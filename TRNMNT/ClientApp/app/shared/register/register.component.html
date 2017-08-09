@@ -10,11 +10,11 @@
         </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid"><label>Password</label></div>
-            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="password" /></div>
+            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="password" type="password"/></div>
         </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid"><label>Confirm Password</label></div>
-            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="confirmPassword" /></div>
+            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="confirmPassword" type="password"/></div>
         </div>
         <div class="ui-g-12">
             <button pButton class="ui-button-success" icon="fa-check-circle" label="Create Account" (click)="register()"></button>

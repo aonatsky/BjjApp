@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TRNMNT.Data.Repositories;
 using System.Linq;
+using TRNMNT.Core.Model;
+using TRNMNT.Web.Core.Enum;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,11 +23,13 @@ namespace TRNMNT.Web.Controllers
     public class ParticipantController : CRUDController<Participant>
     {
         IHttpContextAccessor httpContextAccessor;
+        private IParticipantService participantService;
 
-        public ParticipantController(IEventService eventService, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Participant> repository) 
+        public ParticipantController(IEventService eventService, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Participant> repository, IParticipantService participantService)
             : base(logger, repository, httpContextAccessor, userService)
         {
             this.httpContextAccessor = httpContextAccessor;
+            this.participantService = participantService;
         }
 
         public override IQueryable<Participant> ModifyQuery(string key, string value, IQueryable<Participant> query)
@@ -34,12 +38,12 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> CreateParticipant(Participant participant)
+        public async Task<IActionResult> RegisterParticipant([FromBody]ParticipantRegistrationModel model)
         {
             try
             {
-
-                return Ok();
+                var result = await participantService.RegisterParticipantAsync(model);
+                return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
             }
             catch (Exception ex)
             {

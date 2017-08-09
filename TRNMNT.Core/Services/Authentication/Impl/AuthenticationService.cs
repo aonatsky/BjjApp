@@ -10,6 +10,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using TRNMNT.Data.Entities;
 using TRNMNT.Web.Core.Settings;
+using TRNMNT.Core.Model.Result;
 
 namespace TRNMNT.Web.Core.Services.Authentication.Impl
 {
@@ -18,6 +19,7 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
         private readonly UserManager<User> userManager;
         private SignInManager<User> signInManager;
         private RoleManager<IdentityRole> roleManager;
+        private IdentityErrorDescriber identityErrorDescriber = new IdentityErrorDescriber();
 
         public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
         {
@@ -60,18 +62,44 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
             }
         }
 
-        public async Task CreateAccountAsync(string email, string password)
+        public async Task<UserRegistrationResult> CreateParticipantUserAsync(string email, string password)
+        {
+            return await CreateUser(email, password, Roles.ROLE_PARTICIPANT);
+        }
+
+        public async Task<UserRegistrationResult> CreateOwnerUserAsync(string email, string password)
+        {
+            return await CreateUser(email, password, Roles.ROLE_OWNER);
+        }
+
+
+
+        #endregion
+
+        #region Private Methods
+        private async Task<UserRegistrationResult> CreateUser(string email, string password, string roleClaim)
         {
             var user = new User()
             {
                 Email = email,
                 UserName = email
             };
-            await userManager.CreateAsync(user, password);
-        }
-        #endregion
+            var identityResult = await userManager.CreateAsync(user, password);
+            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, roleClaim));
 
-        #region Private Methods
+            if (identityResult.Succeeded)
+            {
+                return new UserRegistrationResult(true);
+            }
+            else
+            {
+                return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault().Description);
+            }
+
+
+
+        }
+
         private async Task AddSampleUserAsync()
         {
             await AddSampleRolesAsync();

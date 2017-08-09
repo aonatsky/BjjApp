@@ -1,17 +1,15 @@
-﻿export class ParticipantModel {
-
-    public participantId: AAGUID;
+﻿export class ParticipantRegistrationModel {
     public firstName: string;
     public lastName: string;
     public team: string;
     public dateOfBirth: Date;
-    public isApproved: boolean;
     public categoryId: string;
     public weightDivisionId: string;
     public eventId: AAGUID;
     public userId: string;
     public email: string;
     public phoneNumber: string;
-    constructor() { }
+    constructor() {
+    }
 
 }

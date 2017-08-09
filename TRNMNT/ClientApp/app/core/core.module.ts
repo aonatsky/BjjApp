@@ -19,6 +19,7 @@ import { NotificationService } from './services/notification.service';
 import { LoaderService } from './services/loader.service';
 import { EventService } from './services/event.service';
 import { TeamService } from './services/team.service';
+import { ParticipantService } from './services/participant.service';
 import { WeightDivisionService } from './services/weight-division.service';
 import { CategoryService } from './services/category.service';
 
@@ -75,6 +76,7 @@ import { RedirectGuard } from './routing/redirect.guard';
         TeamService,
         CategoryService,
         WeightDivisionService,
+        ParticipantService,
         provideAuth({
             headerName: 'Authorization',
             headerPrefix: 'bearer',

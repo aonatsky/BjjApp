@@ -22,7 +22,7 @@ namespace TRNMNT.Web.Controllers
             this.repository = repository;
         }
 
-        [HttpGet]
+        [Authorize, HttpGet]
         public async Task<IEnumerable<T>> Get()
         {
             try

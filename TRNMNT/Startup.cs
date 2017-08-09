@@ -72,6 +72,8 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));
             services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+            services.AddScoped(typeof(IParticipantService), typeof(ParticipantService));
+            services.AddScoped(typeof(ITeamService), typeof(TeamService));
             services.AddScoped(typeof(IWeightDivisionService), typeof(WeightDivisionService));
             services.AddScoped(typeof(IUserService),typeof(UserService));
             services.AddScoped(typeof(IFileService),typeof(LocalFileService));
@@ -114,7 +116,7 @@ namespace TRNMNT.Web
                    ClockSkew = TimeSpan.Zero,
                 },
                 AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
+                AutomaticChallenge = false,
                 Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = context =>
@@ -133,6 +135,7 @@ namespace TRNMNT.Web
 
             };
             app.UseJwtBearerAuthentication(options);
+            app.UseIdentity();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

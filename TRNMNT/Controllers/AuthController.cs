@@ -34,7 +34,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 //var token = await _authenticationSerivce.GetToken(credentials.Username, credentials.Password);
-                var token = await authenticationSerivce.GetTokenAsync();
+                var token = await authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
                 if (!string.IsNullOrEmpty(token))
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
@@ -62,7 +62,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await authenticationSerivce.CreateAccountAsync(credentials.Username, credentials.Password);
+                await authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
                 Response.StatusCode = ((int)HttpStatusCode.OK);
             }
             catch (Exception ex)

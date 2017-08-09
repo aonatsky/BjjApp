@@ -27,7 +27,11 @@
     <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>Team</label></div>
         <div class="ui-g-9 ui-fluid">
-            <p-autoComplete [(ngModel)]="participant.team" [suggestions]="teamSuggestions" (completeMethod)="teamSearch($event)" field="name" required></p-autoComplete>
+            <p-autoComplete 
+                            [(ngModel)]="participant.team" 
+                            [suggestions]="teamSuggestions" 
+                            (completeMethod)="teamSearch($event)" 
+                            required></p-autoComplete>
         </div>
     </div> <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>Category</label></div>

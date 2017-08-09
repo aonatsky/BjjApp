@@ -1,9 +1,11 @@
 ﻿import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
+import { ParticipantService } from './../../core/services/participant.service';
 import { CategoryService } from './../../core/services/category.service';
 import { WeightDivisionService } from './../../core/services/weight-division.service';
-import { ParticipantModel } from './../../core/model/participant.model';
+import { ParticipantRegistrationModel } from './../../core/model/participant-registration.model';
+import { ParticipantRegistrationResultModel } from './../../core/model/result/participant-registration-result.model';
 import { TeamModel } from './../../core/model/team.model';
 import { CategoryModel } from './../../core/model/category.model';
 import { WeightDivisionModel } from './../../core/model/weight-division.model';
@@ -21,13 +23,13 @@ import { SelectItem } from 'primeng/primeng'
 export class ParticipateComponent {
 
     private eventId: string;
-    private participant: ParticipantModel = new ParticipantModel();
+    private participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
     private categories: CategoryModel[] = [];
     private weightDivisions: WeightDivisionModel[] = [];
     private categorySelectItems: SelectItem[];
     private weightDivisionsSelectItems: SelectItem[];
     private existingTeams: TeamModel[] = [];
-    private teamSuggestions: TeamModel[] = [];
+    private teamSuggestions: string[] = [];
     private tncAccepted: boolean = false;
 
     constructor(
@@ -37,6 +39,7 @@ export class ParticipateComponent {
         private weightDivisionService: WeightDivisionService,
         private categoryService: CategoryService,
         private teamService: TeamService,
+        private participantService : ParticipantService
 
     ) {
 
@@ -64,7 +67,7 @@ export class ParticipateComponent {
 
 
     private teamSearch(event) {
-        this.teamSuggestions = this.existingTeams.filter((team: TeamModel) => team.name.toLowerCase().startsWith(event.query.trim().toLowerCase()))
+        this.teamSuggestions = this.existingTeams.filter((team: TeamModel) => team.name.toLowerCase().startsWith(event.query.trim().toLowerCase())).map(t => { return t.name });
     };
 
     private getDefaultDateOfBirth() {
@@ -94,8 +97,17 @@ export class ParticipateComponent {
     }
 
     private createParticipant() {
-        
+        debugger;
+        this.participantService.createParticipant(this.participant).subscribe((r : ParticipantRegistrationResultModel) => {
+            if (!r.success) {
+                this.showMessage(r.reason);
+            }        
+        })
     }
+
+    private showMessage(message: string) {
+        console.log(message);
+    };
 
 }
 

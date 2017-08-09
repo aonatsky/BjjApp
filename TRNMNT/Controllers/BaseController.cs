@@ -6,6 +6,8 @@ using TRNMNT.Core.Services;
 using TRNMNT.Data.Entities;
 using System.Threading.Tasks;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -14,6 +16,8 @@ namespace TRNMNT.Web.Controllers
         private ILogger logger;
         private readonly IHttpContextAccessor contextAccessor;
         private IUserService userService;
+        protected JsonSerializerSettings jsonSerializerSettings;
+
 
         private User user;
 
@@ -22,6 +26,12 @@ namespace TRNMNT.Web.Controllers
             this.contextAccessor = context;
             this.logger = logger;
             this.userService = userService;
+
+            jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore // ignore null values
+            };
         }
         protected void HandleException(Exception ex)
         {

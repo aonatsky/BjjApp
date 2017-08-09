@@ -38,7 +38,7 @@ export class HttpService {
         return this.http.get(name).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());
     }
 
-    public post(name: string, model: any, responseType?: ResponseContentType): Observable<any> {
+    public post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' })

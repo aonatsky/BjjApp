@@ -9,6 +9,7 @@ namespace TRNMNT.Core.Services
     public interface IEventService
     {
         Task SaveEventAsync(Event eventToAdd, string userId);
+        Task <Event>AddEventAsync(string userId);
         Task<Event> GetFullEventAsync(Guid id);
         Task<Event> GetEventAsync(Guid id);
         Task<Event> GetEventByPrefixAsync(string prefix);

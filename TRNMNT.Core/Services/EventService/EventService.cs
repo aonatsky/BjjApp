@@ -40,6 +40,20 @@ namespace TRNMNT.Core.Services
             await eventRepository.SaveAsync();
         }
 
+        public async Task<Event> AddEventAsync(string userId)
+        {
+            var eventToAdd = new Event()
+            {
+                OwnerId = userId,
+                UpdateTS = DateTime.UtcNow,
+                IsActive = true,
+                StatusId = (int)EventStatusEnum.Init
+            };
+            eventRepository.Add(eventToAdd);
+            await eventRepository.SaveAsync();
+            return eventToAdd;
+        }
+
         public async Task<Event> GetFullEventAsync(Guid id)
         {
             return await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
@@ -77,7 +91,7 @@ namespace TRNMNT.Core.Services
 
         public async Task SaveEventTncAsync(Stream stream, string eventId, string fileName)
         {
-            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, fileName);
+            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, fileName);
             await fileService.SaveFileAsync(path, stream);
             var _event = await GetEventAsync(new Guid(eventId));
             _event.TNCFilePath = path;

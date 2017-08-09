@@ -54,7 +54,7 @@ export class EventCreateComponent implements OnInit {
                 this.isNew = false;
             } else {
                 this.isNew = true;
-                this.eventModel = new EventModel();
+                this.eventService.addEvent().subscribe(r => this.eventModel = r)
             }
         })
     }
@@ -113,7 +113,7 @@ export class EventCreateComponent implements OnInit {
     }
 
     private saveAsDraft() {
-        this.eventService.saveAsDraft(this.eventModel).subscribe();
+        this.eventService.updateEvent(this.eventModel).subscribe();
     }
 
     private categoryDelete(model: CategoryModel) {

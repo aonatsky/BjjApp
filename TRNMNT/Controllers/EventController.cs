@@ -22,22 +22,16 @@ namespace TRNMNT.Web.Controllers
     {
         private IEventService eventService;
         IHttpContextAccessor httpContextAccessor;
-        private JsonSerializerSettings jsonSerializerSettings;
 
         public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Event> repository) : base(logger, repository, httpContextAccessor, userService)
         {
             this.eventService = eventService;
             this.httpContextAccessor = httpContextAccessor;
-            jsonSerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore // ignore null values
-            };
+
         }
 
-
         [Authorize, HttpPost("[action]")]
-        public async Task SaveEvent([FromBody] Event eventToAdd)
+        public async Task UpdateEvent([FromBody] Event eventToAdd)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
@@ -49,6 +43,25 @@ namespace TRNMNT.Web.Controllers
             {
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(e);
+            }
+        }
+
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> AddEvent()
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            try
+            {
+                var user = await GetUserAsync();
+                var addedEvent = await eventService.AddEventAsync(user.Id);
+                return Ok(JsonConvert.SerializeObject(addedEvent, jsonSerializerSettings));
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -98,7 +111,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
 
-                var eventId= await eventService.GetEventIdAsync(url);
+                var eventId = await eventService.GetEventIdAsync(url);
                 return eventId;
 
             }
@@ -124,7 +137,7 @@ namespace TRNMNT.Web.Controllers
             }
             catch (Exception e)
             {
-                
+
                 HandleException(e);
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -156,7 +169,7 @@ namespace TRNMNT.Web.Controllers
 
 
         [Authorize, HttpPost("[action]/{id}")]
-        public async Task UploadEventImage(IFormFile file,string id)
+        public async Task UploadEventImage(IFormFile file, string id)
         {
             try
             {
@@ -164,7 +177,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     await eventService.AddEventImageAsync(stream, id);
                 }
-                
+
             }
             catch (Exception ex)
             {

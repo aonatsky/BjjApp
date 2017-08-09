@@ -20,9 +20,12 @@ export class EventService {
     }
 
 
-    public saveAsDraft(event: EventModel): Observable<any> {
-        event.statusId = EventStatus.Draft;
-        return this.addEvent(event);
+    public updateEvent(event: EventModel): Observable<any> {
+        return this.httpService.post(ApiMethods.event.updateEvent, event);
+    }
+
+    public addEvent(): Observable<EventModel> {
+        return this.httpService.post(ApiMethods.event.addEvent);
     }
 
 
@@ -55,9 +58,7 @@ export class EventService {
     }
 
     //private methods
-    private addEvent(event: EventModel): Observable<any> {
-        return this.httpService.post(ApiMethods.event.saveEvent, event);
-    }
+   
 
   
 
