@@ -54,6 +54,7 @@ export class CategoryComponent {
 
     private weightDivisionAdd() {
         let wd = new WeightDivisionModel("Weight Divison");
+        wd.categoryId = this.category.categoryId;
         this.category.weightDivisions.push(wd);
     }
 

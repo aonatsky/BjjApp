@@ -7,6 +7,7 @@ export class CategoryModel {
     }
 
     public name: string
-    public categoryId? : AAGUID;
+    public categoryId?: AAGUID;
+    public eventId: string;
     public weightDivisions: WeightDivisionModel[];
 }

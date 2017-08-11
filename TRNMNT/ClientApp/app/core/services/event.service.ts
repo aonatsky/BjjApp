@@ -25,7 +25,7 @@ export class EventService {
     }
 
     public addEvent(): Observable<EventModel> {
-        return this.httpService.post(ApiMethods.event.addEvent);
+        return this.httpService.post(ApiMethods.event.getNewEvent);
     }
 
 

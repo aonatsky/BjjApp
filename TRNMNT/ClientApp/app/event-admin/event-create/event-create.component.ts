@@ -23,7 +23,6 @@ export class EventCreateComponent implements OnInit {
 
     private menuItems: MenuItem[];
     private currentStep: number = 0;
-    private eventId: string = "";
     private eventModel: EventModel;
     private categoryCount: number = 0;
 
@@ -128,6 +127,7 @@ export class EventCreateComponent implements OnInit {
     private categoryCreate() {
         let category = new CategoryModel();
         category.name = "Category";
+        category.eventId = this.eventModel.eventId;
         this.eventModel.categories.push(category);
     }
 

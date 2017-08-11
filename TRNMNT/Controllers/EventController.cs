@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TRNMNT.Data.Repositories;
 using System.Linq;
+using TRNMNT.Core.Model;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -31,30 +32,37 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpPost("[action]")]
-        public async Task UpdateEvent([FromBody] Event eventToAdd)
+        public async Task<IActionResult> UpdateEvent([FromBody] EventModel eventModel)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                var user = await GetUserAsync();
-                await eventService.SaveEventAsync(eventToAdd, user.Id);
+                if (await CheckEventOwnerAsync(eventModel.EventId))
+                {
+                    await eventService.UpdateEventAsync(eventModel);
+                    return Ok();
+                }
+                else
+                {
+                    return Unauthorized();
+                }
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
 
 
         [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> AddEvent()
+        public async Task<IActionResult> GetNewEvent()
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
                 var user = await GetUserAsync();
-                var addedEvent = await eventService.AddEventAsync(user.Id);
+                var addedEvent = await eventService.GetNewEventAsync(user.Id);
                 return Ok(JsonConvert.SerializeObject(addedEvent, jsonSerializerSettings));
             }
             catch (Exception e)
@@ -219,6 +227,20 @@ namespace TRNMNT.Web.Controllers
         public override IQueryable<Event> ModifyQuery(string key, string value, IQueryable<Event> query)
         {
             throw new NotImplementedException();
+        }
+
+        private async Task<bool> CheckEventOwnerAsync(Guid eventId)
+        {
+            var user = await GetUserAsync();
+            var eventOwner = await eventService.GetEventOwnerIdAsync(eventId);
+            if (eventOwner != "" && user.Id == eventOwner)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

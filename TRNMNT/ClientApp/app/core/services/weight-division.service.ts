@@ -16,4 +16,8 @@ export class WeightDivisionService {
         let params: SearchParams[] = [{ name: "categoryId", value: categoryId }];
         return this.httpService.get(ApiMethods.weightDivision.weightDivision, params).map(res => this.httpService.getArray<WeightDivisionModel>(res));
     }
+
+    //public getNewWeightDivision(): Observable<WeightDivisionModel> {
+    //    return this.httpService.post(ApiMethods.weightDivision)
+    //}
 }

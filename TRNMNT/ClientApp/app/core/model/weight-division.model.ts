@@ -3,6 +3,7 @@ export class WeightDivisionModel {
     name: string;
     weight: number;
     description: string;
+    categoryId: string;
 
     /**
      *
