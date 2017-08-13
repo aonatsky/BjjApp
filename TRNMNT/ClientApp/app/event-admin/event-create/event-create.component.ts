@@ -2,7 +2,7 @@
 import { Component, OnInit, ViewEncapsulation, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MenuModule, MenuItem } from 'primeng/primeng';
-import { EventModel } from './../../core/model/event.model';
+import { EventModel } from './../../core/model/event.models';
 import { CategoryModel } from './../../core/model/category.model';
 import { WeightDivisionModel } from './../../core/model/weight-division.model';
 import { AuthService } from './../../core/services/auth.service'
@@ -53,7 +53,7 @@ export class EventCreateComponent implements OnInit {
                 this.isNew = false;
             } else {
                 this.isNew = true;
-                this.eventService.addEvent().subscribe(r => this.eventModel = r)
+                this.eventService.getNewEvent().subscribe(r => this.eventModel = r)
             }
         })
     }

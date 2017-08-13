@@ -1,20 +1,26 @@
 ﻿import { CategoryModel } from "./category.model"
 
 
-export class EventModel{
+export class EventModelBase {
     constructor() {
-        this.categories = [];
     }
-
     public eventId: AAGUID;
     public title: string;
-    public description: string;
-    public address: string;
-    public image: any;
     public eventDate: Date;
     public registrationStartTS: Date;
     public registrationEndTS: Date;
-    public statusId: number;
+
+};
+
+export class EventModel extends EventModelBase {
+    constructor() {
+        super();
+        this.categories = [];
+    }
+
+    public description: string;
+    public address: string;
+    public image: any;
     public urlPrefix: string;
     public descritpion : string;
     public tncFilePath: string;
@@ -27,3 +33,12 @@ export class EventModel{
     public categories: CategoryModel[]
 
 };
+
+export class EventPreviewModel extends EventModelBase {
+    constructor() {
+        super();
+    }
+};
+
+
+

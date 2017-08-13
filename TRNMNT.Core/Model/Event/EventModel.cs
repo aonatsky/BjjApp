@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TRNMNT.Core.Model
+namespace TRNMNT.Core.Model.Event
 {
-    public class EventModel
+    public class EventModel : EventModelBase
     {
-        public Guid EventId { get; set; }
-        public DateTime EventDate { get; set; }
-        public DateTime RegistrationStartTS { get; set; }
-        public DateTime RegistrationEndTS { get; set; }
         public string ImgPath { get; set; }
-        public string Title { get; set; }
         public string UrlPrefix { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }

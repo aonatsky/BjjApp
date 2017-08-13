@@ -8,10 +8,9 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using TRNMNT.Data.Repositories;
 using System.Linq;
-using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Event;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -93,7 +92,7 @@ namespace TRNMNT.Web.Controllers
 
 
         [Authorize, HttpGet("[action]")]
-        public async Task<Event[]> GetEventsForOwner()
+        public async Task<EventModelBase[]> GetEventsForOwner()
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
@@ -101,26 +100,6 @@ namespace TRNMNT.Web.Controllers
 
                 var events = await eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
                 return events.ToArray();
-
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(e);
-                return null;
-            }
-        }
-
-
-        [Authorize, HttpGet("[action]/{url}")]
-        public async Task<string> GetEventIdByUrl(string url)
-        {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
-            {
-
-                var eventId = await eventService.GetEventIdAsync(url);
-                return eventId;
 
             }
             catch (Exception e)
@@ -177,7 +156,7 @@ namespace TRNMNT.Web.Controllers
 
 
         [Authorize, HttpPost("[action]/{id}")]
-        public async Task UploadEventImage(IFormFile file, string id)
+        public async Task<IActionResult> UploadEventImage(IFormFile file, string id)
         {
             try
             {
@@ -185,26 +164,33 @@ namespace TRNMNT.Web.Controllers
                 {
                     await eventService.AddEventImageAsync(stream, id);
                 }
+                return Ok();
 
             }
             catch (Exception ex)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(ex);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             };
         }
 
         [Authorize, HttpPost("[action]/{id}")]
-        public async Task UploadEventTnc(IFormFile file, string id)
+        public async Task<IActionResult> UploadEventTnc(IFormFile file, string id)
         {
             try
             {
-                await eventService.SaveEventTncAsync(file.OpenReadStream(), id, file.FileName);
+                using (var stream = file.OpenReadStream())
+                {
+                    await eventService.SaveEventTncAsync(stream, id, file.FileName);
+
+                }
+                return Ok();
             }
+
             catch (Exception ex)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(ex);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             };
         }
 

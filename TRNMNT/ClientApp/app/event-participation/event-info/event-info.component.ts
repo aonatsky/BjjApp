@@ -4,7 +4,7 @@ import { AuthService } from './../../core/services/auth.service';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { EventService } from './../../core/services/event.service';
-import { EventModel} from './../../core/model/event.model';
+import { EventModel} from './../../core/model/event.models';
 
 @Component({
     selector: 'event-info',

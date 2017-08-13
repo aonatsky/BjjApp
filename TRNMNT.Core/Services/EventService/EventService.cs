@@ -10,6 +10,7 @@ using System.Linq;
 using System.IO;
 using TRNMNT.Web.Core.Const;
 using TRNMNT.Web.Core.Enum;
+using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services
@@ -62,7 +63,6 @@ namespace TRNMNT.Core.Services
                     categoryRepository.Add(category);
                 }
 
-                
 
                 foreach (var wdModel in categoryModel.WeightDivisions)
                 {
@@ -85,38 +85,41 @@ namespace TRNMNT.Core.Services
             await eventRepository.SaveAsync();
         }
 
-        public async Task<Event> GetNewEventAsync(string userId)
+        public async Task<EventModel> GetNewEventAsync(string userId)
         {
             var eventToAdd = new Event()
             {
                 OwnerId = userId,
                 UpdateTS = DateTime.UtcNow,
-                IsActive = true,
+                IsActive = false,
                 StatusId = (int)EventStatusEnum.Init
             };
             eventRepository.Add(eventToAdd);
             await eventRepository.SaveAsync();
-            return eventToAdd;
+            return GetEventModel(eventToAdd);
         }
 
-        public async Task<Event> GetFullEventAsync(Guid id)
+        public async Task<EventModel> GetFullEventAsync(Guid id)
         {
-            return await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
+            var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
+            return GetEventModel(_event);
         }
 
-        public async Task<Event> GetEventAsync(Guid id)
+
+
+        public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId)
         {
-            return await eventRepository.GetByIDAsync(id);
+            var models = await eventRepository.GetAll().
+                Where(e => e.OwnerId == userId).
+                Select(e=> new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS =e.RegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title= e.Title })
+                .ToListAsync();
+
+            return models;
         }
 
-        public async Task<List<Event>> GetEventsForOwnerAsync(string userId)
+        public async Task<EventModel> GetEventByPrefixAsync(string prefix)
         {
-            return await eventRepository.GetAll().Where(e => e.OwnerId == userId).ToListAsync();
-        }
-
-        public async Task<Event> GetEventByPrefixAsync(string prefix)
-        {
-            return await eventRepository.GetAll().FirstOrDefaultAsync(e => e.UrlPrefix == prefix);
+            return GetEventModel(await eventRepository.GetAll().FirstOrDefaultAsync(e => e.UrlPrefix == prefix));
         }
 
         public async Task<bool> IsPrefixExistAsync(string prefix)
@@ -128,7 +131,7 @@ namespace TRNMNT.Core.Services
         {
             var fileName = FilePath.EVENT_IMAGE_FILE;
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, FilePath.EVENT_IMAGE_FILE);
-            var _event = await GetEventAsync(new Guid(eventId));
+            var _event = await this.eventRepository.GetByIDAsync(new Guid(eventId));
             await fileService.SaveImageAsync(path, stream, fileName);
             _event.ImgPath = path;
             eventRepository.Update(_event);
@@ -139,7 +142,7 @@ namespace TRNMNT.Core.Services
         {
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, fileName);
             await fileService.SaveFileAsync(path, stream);
-            var _event = await GetEventAsync(new Guid(eventId));
+            var _event = await eventRepository.GetByIDAsync(new Guid(eventId));
             _event.TNCFilePath = path;
             eventRepository.Update(_event);
             await eventRepository.SaveAsync();

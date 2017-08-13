@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Event;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services
@@ -10,11 +10,10 @@ namespace TRNMNT.Core.Services
     public interface IEventService
     {
         Task UpdateEventAsync(EventModel eventModel);
-        Task <Event>GetNewEventAsync(string userId);
-        Task<Event> GetFullEventAsync(Guid id);
-        Task<Event> GetEventAsync(Guid id);
-        Task<Event> GetEventByPrefixAsync(string prefix);
-        Task<List<Event>> GetEventsForOwnerAsync(string userId);
+        Task <EventModel>GetNewEventAsync(string userId);
+        Task<EventModel> GetFullEventAsync(Guid id);
+        Task<EventModel> GetEventByPrefixAsync(string prefix);
+        Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId);
         Task<bool> IsPrefixExistAsync(string prefix);
         Task AddEventImageAsync(Stream stream, string eventId);
         Task SaveEventTncAsync(Stream stream, string eventId, string fileName);

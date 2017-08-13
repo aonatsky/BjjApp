@@ -3,7 +3,7 @@ import { AuthService } from './../../core/services/auth.service';
 import { EventService } from './../../core/services/event.service';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { EventModel } from './../../core/model/event.model';
+import { EventPreviewModel } from './../../core/model/event.models';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventOverviewComponent {
 
-    private events: EventModel[] = [];
+    private events: EventPreviewModel[] = [];
 
     constructor(private loggerService: LoggerService, private routerService: RouterService, private authService: AuthService, private eventService: EventService) {
 
@@ -28,6 +28,6 @@ export class EventOverviewComponent {
     }
 
     ngOnInit() {
-        this.eventService.getEventsForUser().subscribe(res => this.events = res);
+        this.eventService.getEventsForOwner().subscribe(res => this.events = res);
     }
 }
