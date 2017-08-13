@@ -1,0 +1,15 @@
+﻿.event-image{
+    padding: 0 !important
+}
+
+.event-image img{
+    width: 100%;
+    height: 100%
+}
+
+.event-details .event-title {
+    text-align: center;
+    padding: 0em 1em;
+    
+    
+}

@@ -64,5 +64,13 @@ namespace TRNMNT.Data.Repositories
         {
             await context.SaveAsync(supressExceptions);
         }
+
+        public void DeleteRange(IEnumerable<T> entities)
+        {
+            foreach (var entitity in entities)
+            {
+                Delete(entitity);
+            }
+        }
     }
 }

@@ -12,11 +12,13 @@ namespace TRNMNT.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid CategoryId { get; set; }
         public String Name { get; set; }
-        public Guid EventID { get; set; }
+        public Guid EventId { get; set; }
 
         [JsonIgnore]
         public virtual Event Event {get;set;}
         public virtual ICollection<WeightDivision> WeightDivisions { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Participant> Participants{ get; set; }
 
     }
 }

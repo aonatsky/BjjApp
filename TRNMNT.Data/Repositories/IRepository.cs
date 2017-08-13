@@ -14,6 +14,7 @@ namespace TRNMNT.Data.Repositories
         void Update(T entity);
         void AddRange(IEnumerable<T> entities);
         void Delete (T entity);
+        void DeleteRange(IEnumerable<T> entity);
         void Delete<TKey>(TKey id);
         void Save(bool supressExceptions = true);
         Task SaveAsync(bool supressExceptions = true);

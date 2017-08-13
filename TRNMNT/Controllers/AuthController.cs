@@ -20,11 +20,11 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class AuthController : BaseController
     {
-        private readonly IAuthenticationService _authenticationSerivce;
+        private readonly IAuthenticationService authenticationSerivce;
 
         public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, httpContextAccessor,userService)
         {
-            _authenticationSerivce = authenticationService;
+            authenticationSerivce = authenticationService;
         }
 
 
@@ -34,7 +34,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 //var token = await _authenticationSerivce.GetToken(credentials.Username, credentials.Password);
-                var token = await _authenticationSerivce.GetTokenAsync();
+                var token = await authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
                 if (!string.IsNullOrEmpty(token))
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
@@ -52,6 +52,22 @@ namespace TRNMNT.Web.Controllers
             }
             catch (Exception ex)
             {
+                HandleException(ex);
+            }
+
+        }
+
+        [AllowAnonymous, HttpPost("[action]")]
+        public async Task Register([FromBody] UserCredentialsModel credentials)
+        {
+            try
+            {
+                await authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
+                Response.StatusCode = ((int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = ((int)HttpStatusCode.InternalServerError);
                 HandleException(ex);
             }
 

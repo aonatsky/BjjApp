@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TRNMNT.Data.Repositories;
+using System.Linq;
+using TRNMNT.Core.Model;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,55 +19,75 @@ using Newtonsoft.Json.Serialization;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class EventController : BaseController
+    public class EventController : CRUDController<Event>
     {
         private IEventService eventService;
         IHttpContextAccessor httpContextAccessor;
 
-        public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, httpContextAccessor, userService)
+        public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Event> repository) : base(logger, repository, httpContextAccessor, userService)
         {
             this.eventService = eventService;
             this.httpContextAccessor = httpContextAccessor;
+
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> UpdateEvent([FromBody] EventModel eventModel)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            try
+            {
+                if (await CheckEventOwnerAsync(eventModel.EventId))
+                {
+                    await eventService.UpdateEventAsync(eventModel);
+                    return Ok();
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
         }
 
 
         [Authorize, HttpPost("[action]")]
-        public async Task SaveEvent([FromBody] Event eventToAdd)
+        public async Task<IActionResult> GetNewEvent()
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
                 var user = await GetUserAsync();
-                await eventService.SaveEventAsync(eventToAdd, user.Id);
+                var addedEvent = await eventService.GetNewEventAsync(user.Id);
+                return Ok(JsonConvert.SerializeObject(addedEvent, jsonSerializerSettings));
             }
             catch (Exception e)
             {
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
 
 
         [Authorize, HttpGet("[action]/{id}")]
-        public async Task GetEvent(Guid id)
+        public async Task<IActionResult> GetEvent(Guid id)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
                 var _event = await eventService.GetFullEventAsync(id);
-                var jsonSerializerSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    NullValueHandling = NullValueHandling.Ignore // ignore null values
-                };
-                await Response.WriteAsync(JsonConvert.SerializeObject(_event, jsonSerializerSettings));
-
+                var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
+                return Ok(jsonobj);
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(e);
-
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -96,7 +119,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
 
-                var eventId= await eventService.GetEventIdAsync(url);
+                var eventId = await eventService.GetEventIdAsync(url);
                 return eventId;
 
             }
@@ -109,21 +132,22 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpGet("[action]/{url}")]
-        public async Task<Event> GetEventByUrl(string url)
+        public async Task<IActionResult> GetEventByUrl(string url)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
 
                 var _event = await eventService.GetEventByPrefixAsync(url);
-                return _event;
+                var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
+                return Ok(jsonobj);
 
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
                 HandleException(e);
-                return null;
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -153,15 +177,15 @@ namespace TRNMNT.Web.Controllers
 
 
         [Authorize, HttpPost("[action]/{id}")]
-        public async Task UploadEventImage(IFormFile file,string id)
+        public async Task UploadEventImage(IFormFile file, string id)
         {
             try
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventImageAsync(stream, id);
+                    await eventService.AddEventImageAsync(stream, id);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -175,13 +199,48 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await eventService.SaveEventImageAsync(file.OpenReadStream(), id);
+                await eventService.SaveEventTncAsync(file.OpenReadStream(), id, file.FileName);
             }
             catch (Exception ex)
             {
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(ex);
             };
+        }
+
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<string> CreateEvent()
+        {
+            try
+            {
+                return (await eventService.CreateEventAsync()).EventId.ToString();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(ex);
+                return "";
+            };
+        }
+
+        public override IQueryable<Event> ModifyQuery(string key, string value, IQueryable<Event> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task<bool> CheckEventOwnerAsync(Guid eventId)
+        {
+            var user = await GetUserAsync();
+            var eventOwner = await eventService.GetEventOwnerIdAsync(eventId);
+            if (eventOwner != "" && user.Id == eventOwner)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,8 +12,31 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class CategoryController : CRUDController<Category>
     {
-        public CategoryController(ILogger<CategoryController> logger, IRepository<Category> repository, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger,repository, httpContextAccessor, userService)
-        { }
+        private ICategoryService categoryService;
+
+        public CategoryController(
+            ILogger<CategoryController> logger, 
+            ICategoryService categoryService, 
+            IRepository<Category> repository, 
+            IHttpContextAccessor httpContextAccessor, 
+            IUserService userService) : base(logger, repository, httpContextAccessor, userService)
+        {
+            this.categoryService = categoryService;
+        }
+
+
+        public override IQueryable<Category> ModifyQuery(string key, string value, IQueryable<Category> query)
+        {
+            switch (key)
+            {
+                case "eventId":
+                    {
+                        query = query.Where(c => c.EventId == Guid.Parse(value));
+                        break;
+                    } 
+            }
+            return query;
+        }
     }
 }
 

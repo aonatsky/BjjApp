@@ -4,6 +4,7 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { tokenNotExpired } from 'angular2-jwt';
 
 import { AuthService } from '../services/auth.service';
+import { AuthGuard } from '../routing/auth.guard';
 import { RouterService } from '../services/router.service'
 
 /** 
@@ -11,13 +12,18 @@ import { RouterService } from '../services/router.service'
  */
 @Injectable() export class RedirectGuard implements CanActivate {
 
-    constructor(public AuthService: AuthService, private routerService: RouterService) { }
+    constructor(public AuthService: AuthService, private routerService: RouterService, private authGuard: AuthGuard) { }
 
     private subdomain: string;
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         this.getSubdomain();
-        return true;
+        if (this.subdomain && this.subdomain != "") {
+            this.routerService.GoToEventInfo(this.subdomain);
+        }
+        else {
+            return this.authGuard.canActivate(route, state)
+        };
     }
 
     getSubdomain() {
@@ -28,7 +34,6 @@ import { RouterService } from '../services/router.service'
         } else {
             this.subdomain = domain.split('.')[0];
         }
-        console.log('subdomain', this.subdomain);
     }
 
 

@@ -1,4 +1,4 @@
-
+﻿
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -10,39 +10,43 @@ export class RouterService {
 
     }
 
+    public navigateByUrl(url: string) {
+        this.router.navigateByUrl(url);
+    } 
+
     public GoHome(subdomain: string = "") {
         if (subdomain != "") {
             let path = location.host.replace(subdomain + ".", "");
-            window.location.href = "http://"+ path;
-        } else {
-            this.router.navigateByUrl("");
+            location.href = location.protocol + "//" + path;
         }
 
     }
 
-    public GoToLogin() {
-        this.router.navigateByUrl("/login");
+    public GoToLogin(returnUrl? : string) {
+        this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl } });
     }
+
 
     public GoToOrganizerScreen() {
         this.router.navigateByUrl("/administration/home");
     }
 
 
-    public GoToDashboard() {
-        this.router.navigateByUrl("/dashboard");
+    public GoToEventAdmin() {
+        this.router.navigateByUrl("/event-admin");
     }
 
-    public GoToCreateEvent() {
-        this.router.navigateByUrl("/dashboard/edit");
-    }
 
     public GoToEditEvent(id: string) {
-        this.router.navigateByUrl("/dashboard/edit/" + id);
+        this.router.navigateByUrl("/event-admin/edit/" + id);
     }
 
-    public GoToEventInfo(id: string) {
-        this.router.navigateByUrl("/event-info/" + id, { skipLocationChange: true });
+    public GoToEventInfo(subdomain: string) {
+        this.router.navigateByUrl("event-participation/event-info/" + subdomain, { skipLocationChange: false });    
+    }
+
+    public GoToParticipate(id: string) {
+        this.router.navigateByUrl("event-participation/participate/" + id, { skipLocationChange: false });
     }
 }
 

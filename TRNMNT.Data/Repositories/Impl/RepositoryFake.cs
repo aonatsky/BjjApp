@@ -64,5 +64,10 @@ namespace TRNMNT.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public void DeleteRange(IEnumerable<T> entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

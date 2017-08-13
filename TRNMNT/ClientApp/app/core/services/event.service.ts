@@ -20,9 +20,12 @@ export class EventService {
     }
 
 
-    public saveAsDraft(event: EventModel): Observable<any> {
-        event.statusId = EventStatus.Draft;
-        return this.addEvent(event);
+    public updateEvent(event: EventModel): Observable<any> {
+        return this.httpService.post(ApiMethods.event.updateEvent, event);
+    }
+
+    public addEvent(): Observable<EventModel> {
+        return this.httpService.post(ApiMethods.event.getNewEvent);
     }
 
 
@@ -50,10 +53,12 @@ export class EventService {
         return this.httpService.get(ApiMethods.event.getEventByUrl + "/" + url).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
-    //private methods
-    private addEvent(event: EventModel): Observable<any> {
-        return this.httpService.post(ApiMethods.event.saveEvent, event);
+    public createEvent(): Observable<string> {
+        return this.httpService.get(ApiMethods.event.createEvent).map(res => this.httpService.getString(res));
     }
+
+    //private methods
+   
 
   
 

@@ -6,11 +6,11 @@ import {AuthService} from './../../core/services/auth.service'
 
 
 @Component({
-    selector: 'dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls:['./dashboard.component.css']
+    selector: 'event-admin',
+    templateUrl: './event-admin.component.html',
+    styleUrls:['./event-admin.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class EventAdminComponent implements OnInit {
 
     userData: string;
 

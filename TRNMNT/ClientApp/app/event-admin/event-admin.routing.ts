@@ -2,17 +2,18 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from '../core/routing/auth.guard';
+import { RedirectGuard } from '../core/routing/redirect.guard';
 
-import { DashboardComponent } from './dashboard/dashboard.component'
+import { EventAdminComponent } from './event-admin/event-admin.component'
 import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
 import { EventCreateComponent } from './event-create/event-create.component'
 
 
 
-export const dashboardRoutes: Routes = [
+export const eventAdminRoutes: Routes = [
     {
-        path: 'dashboard', component: DashboardComponent, children: [
+        path: 'event-admin', component: EventAdminComponent, children: [
             {
                 path: "", component: EventOverviewComponent
             },
@@ -26,7 +27,7 @@ export const dashboardRoutes: Routes = [
                 path: "", outlet: "topmenu", component: TopbarComponent
             },
         ]
-        , canActivate: [AuthGuard]
+        , canActivate: [RedirectGuard]
 
     },
 ];

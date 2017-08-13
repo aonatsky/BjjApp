@@ -128,13 +128,13 @@ namespace TRNMNT.Data.Migrations
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("EventID");
+                    b.Property<Guid>("EventId");
 
                     b.Property<string>("Name");
 
                     b.HasKey("CategoryId");
 
-                    b.HasIndex("EventID");
+                    b.HasIndex("EventId");
 
                     b.ToTable("Category");
                 });
@@ -221,6 +221,50 @@ namespace TRNMNT.Data.Migrations
                     b.ToTable("Fighter");
                 });
 
+            modelBuilder.Entity("TRNMNT.Data.Entities.Participant", b =>
+                {
+                    b.Property<Guid>("ParticipantId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CategoryId");
+
+                    b.Property<DateTime>("DateOfBirth");
+
+                    b.Property<string>("Email");
+
+                    b.Property<Guid>("EventId");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsApproved");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<Guid>("TeamId");
+
+                    b.Property<DateTime>("UpdateTS");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<Guid>("WeightDivisionId");
+
+                    b.HasKey("ParticipantId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("TeamId");
+
+                    b.HasIndex("WeightDivisionId");
+
+                    b.ToTable("Participant");
+                });
+
             modelBuilder.Entity("TRNMNT.Data.Entities.Team", b =>
                 {
                     b.Property<Guid>("TeamId")
@@ -245,6 +289,8 @@ namespace TRNMNT.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<DateTime>("DateOfBirth");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -263,8 +309,6 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
-
-                    b.Property<string>("Password");
 
                     b.Property<string>("PasswordHash");
 
@@ -347,7 +391,7 @@ namespace TRNMNT.Data.Migrations
                 {
                     b.HasOne("TRNMNT.Data.Entities.Event", "Event")
                         .WithMany("Categories")
-                        .HasForeignKey("EventID");
+                        .HasForeignKey("EventId");
                 });
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Event", b =>
@@ -360,11 +404,30 @@ namespace TRNMNT.Data.Migrations
             modelBuilder.Entity("TRNMNT.Data.Entities.Fighter", b =>
                 {
                     b.HasOne("TRNMNT.Data.Entities.Team", "Team")
-                        .WithMany("Fighters")
+                        .WithMany()
                         .HasForeignKey("TeamId");
 
                     b.HasOne("TRNMNT.Data.Entities.WeightDivision", "WeightDivision")
                         .WithMany("Fighters")
+                        .HasForeignKey("WeightDivisionId");
+                });
+
+            modelBuilder.Entity("TRNMNT.Data.Entities.Participant", b =>
+                {
+                    b.HasOne("TRNMNT.Data.Entities.Category", "Category")
+                        .WithMany("Participants")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("TRNMNT.Data.Entities.Event", "Event")
+                        .WithMany("Participants")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("TRNMNT.Data.Entities.Team", "Team")
+                        .WithMany("Participants")
+                        .HasForeignKey("TeamId");
+
+                    b.HasOne("TRNMNT.Data.Entities.WeightDivision", "WeightDivision")
+                        .WithMany("Participants")
                         .HasForeignKey("WeightDivisionId");
                 });
 

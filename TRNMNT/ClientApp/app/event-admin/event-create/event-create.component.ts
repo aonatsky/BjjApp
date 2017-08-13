@@ -23,7 +23,6 @@ export class EventCreateComponent implements OnInit {
 
     private menuItems: MenuItem[];
     private currentStep: number = 0;
-    private eventId: string = "";
     private eventModel: EventModel;
     private categoryCount: number = 0;
 
@@ -54,7 +53,7 @@ export class EventCreateComponent implements OnInit {
                 this.isNew = false;
             } else {
                 this.isNew = true;
-                this.eventModel = new EventModel();
+                this.eventService.addEvent().subscribe(r => this.eventModel = r)
             }
         })
     }
@@ -113,7 +112,7 @@ export class EventCreateComponent implements OnInit {
     }
 
     private saveAsDraft() {
-        this.eventService.saveAsDraft(this.eventModel).subscribe();
+        this.eventService.updateEvent(this.eventModel).subscribe();
     }
 
     private categoryDelete(model: CategoryModel) {
@@ -128,6 +127,7 @@ export class EventCreateComponent implements OnInit {
     private categoryCreate() {
         let category = new CategoryModel();
         category.name = "Category";
+        category.eventId = this.eventModel.eventId;
         this.eventModel.categories.push(category);
     }
 
