@@ -1,6 +1,6 @@
 ﻿
 import { Component, Input, Output, OnInit, ViewChild, ElementRef, Renderer2, EventEmitter } from '@angular/core';
-import { EventModel } from './../../core/model/event.model';
+import { EventModel } from './../../core/model/event.models';
 import { CategoryModel } from './../../core/model/category.model';
 import { WeightDivisionModel } from './../../core/model/weight-division.model';
 

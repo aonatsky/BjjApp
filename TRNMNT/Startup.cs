@@ -65,6 +65,7 @@ namespace TRNMNT.Web
 
             #region AppServices
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(FighterFileService));
