@@ -8,9 +8,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170815105247_EventUpdate5")]
+    partial class EventUpdate5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -166,8 +167,6 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("FBLink");
 
-                    b.Property<Guid>("FederationId");
-
                     b.Property<string>("ImgPath");
 
                     b.Property<bool>("IsActive");
@@ -195,8 +194,6 @@ namespace TRNMNT.Data.Migrations
                     b.Property<string>("VKLink");
 
                     b.HasKey("EventId");
-
-                    b.HasIndex("FederationId");
 
                     b.HasIndex("OwnerId");
 
@@ -486,10 +483,6 @@ namespace TRNMNT.Data.Migrations
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Event", b =>
                 {
-                    b.HasOne("TRNMNT.Data.Entities.Federation", "Federation")
-                        .WithMany()
-                        .HasForeignKey("FederationId");
-
                     b.HasOne("TRNMNT.Data.Entities.User", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");

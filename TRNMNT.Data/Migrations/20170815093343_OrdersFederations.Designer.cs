@@ -8,9 +8,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170815093343_OrdersFederations")]
+    partial class OrdersFederations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -156,25 +157,13 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<DateTime>("EarlyRegistrationEndTS");
-
-                    b.Property<int>("EarlyRegistrationPrice");
-
-                    b.Property<int>("EarlyRegistrationPriceForMembers");
-
                     b.Property<DateTime>("EventDate");
 
                     b.Property<string>("FBLink");
 
-                    b.Property<Guid>("FederationId");
-
                     b.Property<string>("ImgPath");
 
                     b.Property<bool>("IsActive");
-
-                    b.Property<int>("LateRegistrationPrice");
-
-                    b.Property<int>("LateRegistrationPriceForMembers");
 
                     b.Property<string>("OwnerId");
 
@@ -195,8 +184,6 @@ namespace TRNMNT.Data.Migrations
                     b.Property<string>("VKLink");
 
                     b.HasKey("EventId");
-
-                    b.HasIndex("FederationId");
 
                     b.HasIndex("OwnerId");
 
@@ -486,10 +473,6 @@ namespace TRNMNT.Data.Migrations
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Event", b =>
                 {
-                    b.HasOne("TRNMNT.Data.Entities.Federation", "Federation")
-                        .WithMany()
-                        .HasForeignKey("FederationId");
-
                     b.HasOne("TRNMNT.Data.Entities.User", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");

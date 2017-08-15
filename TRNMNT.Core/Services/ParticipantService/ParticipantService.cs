@@ -14,7 +14,6 @@ namespace TRNMNT.Core.Services
     public class ParticipantService : IParticipantService
     {
         private IRepository<Participant> repository;
-        private IParticipantService participantService;
         private ITeamService teamService;
 
         public ParticipantService(IRepository<Participant> repository, ITeamService teamService)
@@ -22,6 +21,8 @@ namespace TRNMNT.Core.Services
             this.repository = repository;
             this.teamService = teamService;
         }
+
+
 
         public async Task<bool> IsParticipantExistsAsync(Participant participant)
         {
@@ -48,6 +49,7 @@ namespace TRNMNT.Core.Services
             }
         }
 
+        #region private helpers
         private async Task<Participant> GetParticipantByModel(ParticipantRegistrationModel model)
         {
             var team = await GetTeamAsync(model.Team);
@@ -83,8 +85,8 @@ namespace TRNMNT.Core.Services
             }
             return team;
         }
-    }
-
+    } 
+    #endregion
 
 }
 

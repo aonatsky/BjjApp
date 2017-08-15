@@ -3,10 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
 import { ParticipantService } from './../../core/services/participant.service';
 import { CategoryService } from './../../core/services/category.service';
+import { PaymentService } from './../../core/services/payment.service';
 import { WeightDivisionService } from './../../core/services/weight-division.service';
 import { ParticipantRegistrationModel } from './../../core/model/participant-registration.model';
 import { ParticipantRegistrationResultModel } from './../../core/model/result/participant-registration-result.model';
 import { TeamModel } from './../../core/model/team.model';
+import { PaymentDataModel } from './../../core/model/payment-data.model';
 import { CategoryModel } from './../../core/model/category.model';
 import { WeightDivisionModel } from './../../core/model/weight-division.model';
 import { LoggerService } from './../../core/services/logger.service';
@@ -31,6 +33,7 @@ export class ParticipateComponent {
     private existingTeams: TeamModel[] = [];
     private teamSuggestions: string[] = [];
     private tncAccepted: boolean = false;
+    private paymentDataModel: PaymentDataModel;
 
     constructor(
         private routerService: RouterService,
@@ -39,7 +42,8 @@ export class ParticipateComponent {
         private weightDivisionService: WeightDivisionService,
         private categoryService: CategoryService,
         private teamService: TeamService,
-        private participantService : ParticipantService
+        private participantService: ParticipantService,
+        private paymentService: PaymentService
 
     ) {
 
@@ -49,19 +53,20 @@ export class ParticipateComponent {
         this.route.params.subscribe(p => {
             this.eventId = p['id'];
             this.participant.eventId = this.eventId;
+            this.loadData();
         });
-        this.loadData();
     }
 
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategories(this.eventId))
+        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategories(this.eventId), this.paymentService.getPaymentData())
             .subscribe(data => this.initData(data));
     }
 
     private initData(data) {
         this.existingTeams = data[0];
         this.categories = data[1];
+        this.paymentDataModel = data[2]
         this.initCategoryDropdown();
     }
 
@@ -109,5 +114,9 @@ export class ParticipateComponent {
         console.log(message);
     };
 
+
+    private onPaymentSubmit() {
+        console.log("submited");
+    }
 }
 

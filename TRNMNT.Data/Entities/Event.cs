@@ -15,6 +15,7 @@ namespace TRNMNT.Data.Entities
         public string OwnerId { get; set; }
         public DateTime EventDate { get; set; }
         public DateTime RegistrationStartTS { get; set; }
+        public DateTime EarlyRegistrationEndTS { get; set; }
         public DateTime RegistrationEndTS { get; set; }
         public string ImgPath { get; set; }
         public string Title { get; set; }
@@ -31,9 +32,16 @@ namespace TRNMNT.Data.Entities
         public string FBLink { get; set; }
         public string VKLink { get; set; }
         public string AdditionalData { get; set; }
+        public Guid FederationId { get; set; }
+
+        public int EarlyRegistrationPrice { get; set; }
+        public int LateRegistrationPrice { get; set; }
+        public int EarlyRegistrationPriceForMembers { get; set; }
+        public int LateRegistrationPriceForMembers { get; set; }
 
         [ForeignKey("OwnerId")]
         public User Owner { get; set; }
+        public virtual Federation Federation { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Participant> Participants { get; set; }

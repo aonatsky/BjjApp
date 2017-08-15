@@ -21,17 +21,20 @@ namespace TRNMNT.Core.Services
         private IRepository<Category> categoryRepository;
         private IRepository<WeightDivision> weightDivisionRepository;
         private IFileService fileService;
+        private IRepository<FederationMembership> federationMembershipRepository;
 
         public EventService(
             IRepository<Event> eventRepository,
             IRepository<Category> categoryRepository,
             IRepository<WeightDivision> weightDivisionRepository,
+            IRepository<FederationMembership> federationMembershipRepository,
             IFileService fileservice
             )
         {
             this.eventRepository = eventRepository;
             this.categoryRepository = categoryRepository;
             this.weightDivisionRepository = weightDivisionRepository;
+            this.federationMembershipRepository = federationMembershipRepository;
             this.fileService = fileservice;
         }
 
@@ -111,7 +114,7 @@ namespace TRNMNT.Core.Services
         {
             var models = await eventRepository.GetAll().
                 Where(e => e.OwnerId == userId).
-                Select(e=> new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS =e.RegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title= e.Title })
+                Select(e => new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS = e.RegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title = e.Title })
                 .ToListAsync();
 
             return models;
@@ -119,7 +122,15 @@ namespace TRNMNT.Core.Services
 
         public async Task<EventModel> GetEventByPrefixAsync(string prefix)
         {
-            return GetEventModel(await eventRepository.GetAll().FirstOrDefaultAsync(e => e.UrlPrefix == prefix));
+            var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.UrlPrefix == prefix);
+            if (_event != null)
+            {
+                return GetEventModel(_event);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<bool> IsPrefixExistAsync(string prefix)
@@ -174,6 +185,24 @@ namespace TRNMNT.Core.Services
             }
         }
 
+        public async Task<int> GetPrice(Guid eventId, string userId)
+        {
+            var _event = await eventRepository.GetByIDAsync(eventId);
+            if (_event != null)
+            {
+                var isMember = await federationMembershipRepository.GetAll().Where(fm => fm.UserId == userId && fm.FederationId == _event.FederationId).AnyAsync();
+                var dateNow = DateTime.UtcNow;
+                if (dateNow <= _event.EarlyRegistrationEndTS)
+                {
+                    return isMember ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+                }
+                else
+                {
+                    return isMember ? _event.LateRegistrationPriceForMembers : _event.LateRegistrationPrice;
+                }
+            }
+            return 0;
+        }
 
         #region Helpers
 
@@ -204,14 +233,17 @@ namespace TRNMNT.Core.Services
         private ICollection<CategoryModel> GetCategoryModels(ICollection<Category> categories)
         {
             var categoryModels = new List<CategoryModel>();
-            foreach (var category in categories)
+            if (categories != null)
             {
-                categoryModels.Add(new CategoryModel()
+                foreach (var category in categories)
                 {
-                    CategoryId = category.CategoryId,
-                    Name = category.Name,
-                    WeightDivisions = GetWeightDeivisionsModels(category.WeightDivisions)
-                });
+                    categoryModels.Add(new CategoryModel()
+                    {
+                        CategoryId = category.CategoryId,
+                        Name = category.Name,
+                        WeightDivisions = GetWeightDeivisionsModels(category.WeightDivisions)
+                    });
+                }
             }
             return categoryModels;
         }
@@ -219,15 +251,18 @@ namespace TRNMNT.Core.Services
         private ICollection<WeightDivisionModel> GetWeightDeivisionsModels(ICollection<WeightDivision> weightDivisions)
         {
             var weightDivisionModels = new List<WeightDivisionModel>();
-            foreach (var weightDivision in weightDivisions)
+            if (weightDivisions != null)
             {
-                weightDivisionModels.Add(new WeightDivisionModel()
+                foreach (var weightDivision in weightDivisions)
                 {
-                    WeightDivisionId = weightDivision.WeightDivisionId,
-                    Weight = weightDivision.Weight,
-                    Descritpion = weightDivision.Descritpion,
-                    Name = weightDivision.Descritpion
-                });
+                    weightDivisionModels.Add(new WeightDivisionModel()
+                    {
+                        WeightDivisionId = weightDivision.WeightDivisionId,
+                        Weight = weightDivision.Weight,
+                        Descritpion = weightDivision.Descritpion,
+                        Name = weightDivision.Descritpion
+                    });
+                }
             }
             return weightDivisionModels;
         }
@@ -316,12 +351,10 @@ namespace TRNMNT.Core.Services
             categoryRepository.DeleteRange(categories);
         }
 
+        #endregion
+
+
     }
-
-
-
-
-    #endregion
 
 }
 

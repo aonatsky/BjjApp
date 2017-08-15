@@ -20,22 +20,22 @@ using TRNMNT.Web.Core.Enum;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class ParticipantController : CRUDController<Participant>
+    public class ParticipantController : BaseController
     {
         IHttpContextAccessor httpContextAccessor;
         private IParticipantService participantService;
+        private IPaymentService paymentService;
+        private IEventService eventService;
 
-        public ParticipantController(IEventService eventService, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Participant> repository, IParticipantService participantService)
-            : base(logger, repository, httpContextAccessor, userService)
+        public ParticipantController(IEventService eventService, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IParticipantService participantService, IPaymentService paymentService)
+            : base(logger, httpContextAccessor, userService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.participantService = participantService;
+            this.paymentService = paymentService;
+            this.eventService = eventService;
         }
-
-        public override IQueryable<Participant> ModifyQuery(string key, string value, IQueryable<Participant> query)
-        {
-            throw new NotImplementedException();
-        }
+  
 
         [HttpPost("[action]")]
         public async Task<IActionResult> RegisterParticipant([FromBody]ParticipantRegistrationModel model)
@@ -49,6 +49,56 @@ namespace TRNMNT.Web.Controllers
             {
                 HandleException(ex);
                 return StatusCode((int)HttpStatusCode.InternalServerError);
+
+            }
+        }
+
+
+
+        [HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetPaymentData(string eventId)
+        {
+            try
+            {
+                var user = await GetUserAsync();
+                var data =paymentService.GetPaymentDataModel(await eventService.GetPrice(Guid.Parse(eventId),user.Id));
+                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            }
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            }
+        }
+
+        [HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetPrice(string dventId)
+        {
+            try
+            {
+                var user = await GetUserAsync();
+                return Ok(0);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
 
             }
         }

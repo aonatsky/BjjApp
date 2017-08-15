@@ -2,35 +2,32 @@
 <div class="ui-widget ui-widget-content ui-corner-all ui-g-offset-3 ui-g-6">
     <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>First Name</label></div>
-        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.firstName" required/></div>
+        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.firstName" required /></div>
     </div>
     <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>Last Name</label></div>
-        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.lastName" required/></div>
+        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.lastName" required /></div>
     </div>
     <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>Date Of Birth</label></div>
         <div class="ui-g-9 ui-fluid">
-            <p-calendar 
-                        [(ngModel)]="participant.dateOfBirth" 
-                        dateFormat="dd.mm.yy" 
-                        readonlyInput="readonlyInput" 
-                        showIcon="true" monthNavigator="true" 
-                        yearNavigator="true" 
+            <p-calendar [(ngModel)]="participant.dateOfBirth"
+                        dateFormat="dd.mm.yy"
+                        readonlyInput="readonlyInput"
+                        showIcon="true" monthNavigator="true"
+                        yearNavigator="true"
                         yearRange="1960:2015"
                         [defaultDate]="getDefaultDateOfBirth()"
                         required>
-
             </p-calendar>
         </div>
     </div>
     <div class="ui-g">
         <div class="ui-g-3 ui-fluid"><label>Team</label></div>
         <div class="ui-g-9 ui-fluid">
-            <p-autoComplete 
-                            [(ngModel)]="participant.team" 
-                            [suggestions]="teamSuggestions" 
-                            (completeMethod)="teamSearch($event)" 
+            <p-autoComplete [(ngModel)]="participant.team"
+                            [suggestions]="teamSuggestions"
+                            (completeMethod)="teamSearch($event)"
                             required></p-autoComplete>
         </div>
     </div> <div class="ui-g">
@@ -59,5 +56,13 @@
     </div>
     <div class="ui-g-12">
         <button pButton class="ui-button-success" icon="fa-check-circle" label="Register" (click)="createParticipant()"></button>
+    </div>
+
+    <div *ngIf="paymentDataModel" class="ui-g-12">
+        <form ngNoForm id="formPrivat" method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8" novalidate>
+            <input type="hidden" name="data" value="{{paymentDataModel.data}}" />
+            <input type="hidden" name="signature" value={{paymentDataModel.signature}} />
+            <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />
+        </form>
     </div>
 </div> 

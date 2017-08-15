@@ -40,5 +40,10 @@ export const ApiMethods = Object.freeze({
      participant: {
          participant: "api/participant/",
          registerParticipant: "api/participant/registerParticipant/"
-    }
+    },
+     payment: {
+         payment: "api/payment",
+         getPaymentData: "api/payment/getPaymentData"
+
+     }
 });

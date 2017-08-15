@@ -20,5 +20,6 @@ namespace TRNMNT.Core.Services
         Task <string>GetEventIdAsync(string url);
         Task <Event>CreateEventAsync();
         Task<string> GetEventOwnerIdAsync(Guid eventId);
+        Task<int> GetPrice(Guid EventId, string userId);
     }
 }

@@ -30,8 +30,8 @@ namespace TRNMNT.Data.Context
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-      
-            
+
+
 
         #region interface Implementation
         public new IQueryable<T> Set<T>() where T : class
@@ -73,7 +73,7 @@ namespace TRNMNT.Data.Context
             }
         }
 
-        EntityEntry<T> Entry<T> (T entity) where T : class
+        EntityEntry<T> Entry<T>(T entity) where T : class
         {
             return base.Entry(entity);
         }
@@ -113,6 +113,8 @@ namespace TRNMNT.Data.Context
         public DbSet<User> User { get; set; }
         public DbSet<Event> Event { get; set; }
         public DbSet<Participant> Participant { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<Federation> Federation { get; set; }
 
     }
 }

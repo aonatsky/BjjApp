@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 
 namespace TRNMNT.Data.Entities
 {
@@ -8,5 +9,8 @@ namespace TRNMNT.Data.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
+
+        public virtual ICollection<FederationMembership> FederationMemberships { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

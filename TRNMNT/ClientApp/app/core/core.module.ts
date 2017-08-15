@@ -22,6 +22,7 @@ import { TeamService } from './services/team.service';
 import { ParticipantService } from './services/participant.service';
 import { WeightDivisionService } from './services/weight-division.service';
 import { CategoryService } from './services/category.service';
+import { PaymentService } from './services/payment.service';
 
 import { UserModel } from './model/user.model'
 
@@ -84,7 +85,7 @@ import { RedirectGuard } from './routing/redirect.guard';
             tokenGetter: (() => localStorage.getItem('id_token')),
             noJwtError: true
         }),
-        AuthGuard, RedirectGuard, RouterService],
+        AuthGuard, RedirectGuard, RouterService, PaymentService],
 
     exports: [
         FormsModule,
