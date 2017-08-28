@@ -4,8 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { RedirectGuard } from './redirect.guard';
 
-
-import { HomeComponent } from '../../administration/home/home.component';
 import { EventOverviewComponent } from '../../event-admin/event-overview/event-overview.component';
 import { TopbarComponent } from '../../event-admin/topbar/topbar.component';
 import { EventAdminComponent } from '../../event-admin/event-admin/event-admin.component';

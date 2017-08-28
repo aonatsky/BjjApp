@@ -4,8 +4,8 @@ import { FighterFilterModel } from '../../model/fighter-filter.model';
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
 import { Fighter } from '../../model/fighter.model'
-import { WeightDivisionModel } from '../../model/weight-division.model'
-import { CategoryModel } from "../../model/category.model";
+import { WeightDivisionModel } from '../../model/weight-division.models'
+import { CategoryModel } from "../../model/category.models";
 
 @Injectable()
 export abstract class DataService {

@@ -1,4 +1,4 @@
-﻿import { CategoryModel } from "./category.model"
+﻿import { CategoryModel } from "./category.models"
 
 
 export class EventModelBase {

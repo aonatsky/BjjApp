@@ -13,11 +13,11 @@ export class TeamService {
     }
 
     public getTeams(): Observable<TeamModel[]> {
-        return this.httpService.get(ApiMethods.team.team).map(res => this.httpService.getArray<TeamModel>(res));
+        return this.httpService.get(ApiMethods.team.getTeams).map(res => this.httpService.getArray<TeamModel>(res));
     }
 
     public addTeam(team: TeamModel): Observable<any> {
-        return this.httpService.post(ApiMethods.team.team, team);
+        return this.httpService.post(ApiMethods.team.getTeams, team);
     }
    
 }

@@ -9,8 +9,8 @@ import { ParticipantRegistrationModel } from './../../core/model/participant-reg
 import { ParticipantRegistrationResultModel } from './../../core/model/result/participant-registration-result.model';
 import { TeamModel } from './../../core/model/team.model';
 import { PaymentDataModel } from './../../core/model/payment-data.model';
-import { CategoryModel } from './../../core/model/category.model';
-import { WeightDivisionModel } from './../../core/model/weight-division.model';
+import { CategorySimpleModel } from './../../core/model/category.models';
+import { WeightDivisionModel, WeightDivisionSimpleModel } from './../../core/model/weight-division.models';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
@@ -26,8 +26,8 @@ export class ParticipateComponent {
 
     private eventId: string;
     private participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
-    private categories: CategoryModel[] = [];
-    private weightDivisions: WeightDivisionModel[] = [];
+    private categories: CategorySimpleModel[] = [];
+    private weightDivisions: WeightDivisionSimpleModel[] = [];
     private categorySelectItems: SelectItem[];
     private weightDivisionsSelectItems: SelectItem[];
     private existingTeams: TeamModel[] = [];
@@ -59,7 +59,7 @@ export class ParticipateComponent {
 
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategories(this.eventId), this.paymentService.getPaymentData())
+        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId), this.paymentService.getPaymentData())
             .subscribe(data => this.initData(data));
     }
 
@@ -90,7 +90,7 @@ export class ParticipateComponent {
     }
     
     private initWeightDivisionDropdown(event) {
-        this.weightDivisionService.getWeightDivisions(event.value).subscribe(w => {
+        this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
             this.weightDivisions = w;
             this.weightDivisionsSelectItems = [];
             for (var i = 0; i < this.weightDivisions.length; i++) {

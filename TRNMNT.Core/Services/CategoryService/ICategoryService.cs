@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TRNMNT.Data.Entities;
+using TRNMNT.Core.Model.Category;
 
 namespace TRNMNT.Core.Services
 {
     public interface ICategoryService
     {
-        Task<List<Category>> GetCategoriesByEventId(Guid eventId);
+        Task<IEnumerable<CategoryModelBase>> GetCategoriesByEventIdAsync(Guid eventId);
     }
 }

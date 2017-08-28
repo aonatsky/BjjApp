@@ -6,9 +6,9 @@ import { Response, ResponseContentType } from '@angular/http'
 import { ApiMethods } from '../consts/api-methods.consts'
 import { HttpService } from '../http/http.service'
 import { Fighter } from '../../model/fighter.model'
-import { WeightDivisionModel } from '../../model/weight-division.model'
+import { WeightDivisionModel } from '../../model/weight-division.models'
 import { FighterFilterModel } from '../../model/fighter-filter.model'
-import { CategoryModel } from "../../model/category.model";
+import { CategoryModel } from "../../model/category.models";
 
 @Injectable()
 export class DataApiService extends DataService {

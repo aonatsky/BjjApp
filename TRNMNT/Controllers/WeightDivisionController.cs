@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TRNMNT.Core.Services;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -22,6 +23,28 @@ namespace TRNMNT.Web.Controllers
         {
             this.weightDivisionService = weightDivisionService;
         }
+
+
+
+        [Authorize]
+        [HttpGet("[action]/{categoryId}")]
+        public async Task<IActionResult> GetWeightDivisionsByCategory(string categoryId)
+        {
+            try
+            {
+                var data = await weightDivisionService.GetWeightDivisionsByCategoryIdAsync(Guid.Parse(categoryId));
+                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            }
+        }
+
+
+
         public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
         {
             switch (key)

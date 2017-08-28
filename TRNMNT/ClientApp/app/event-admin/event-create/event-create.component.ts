@@ -3,8 +3,8 @@ import { Component, OnInit, ViewEncapsulation, ViewChildren } from '@angular/cor
 import { ActivatedRoute } from '@angular/router';
 import { MenuModule, MenuItem } from 'primeng/primeng';
 import { EventModel } from './../../core/model/event.models';
-import { CategoryModel } from './../../core/model/category.model';
-import { WeightDivisionModel } from './../../core/model/weight-division.model';
+import { CategoryModel } from './../../core/model/category.models';
+import { WeightDivisionModel } from './../../core/model/weight-division.models';
 import { AuthService } from './../../core/services/auth.service'
 import { EventService } from './../../core/services/event.service'
 import { CategoryComponent } from './../event-create/category.component'

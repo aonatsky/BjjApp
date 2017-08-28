@@ -11,7 +11,9 @@ using System.IO;
 using TRNMNT.Web.Core.Const;
 using TRNMNT.Web.Core.Enum;
 using TRNMNT.Core.Model.Event;
+using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.WeightDivision;
 
 namespace TRNMNT.Core.Services
 {
@@ -47,17 +49,17 @@ namespace TRNMNT.Core.Services
             _event.IsActive = true;
             eventRepository.Update(_event);
 
-            var categoriesToDelete = await categoryRepository.GetAll().Where(c => c.EventId == _event.EventId && !eventModel.Categories.Select(cm => cm.CategoryId).Contains(c.CategoryId)).ToListAsync();
+            var categoriesToDelete = await categoryRepository.GetAll().Where(c => c.EventId == _event.EventId && !eventModel.CategoryModels.Select(cm => Guid.Parse(cm.CategoryId)).Contains(c.CategoryId)).ToListAsync();
             categoryRepository.DeleteRange(categoriesToDelete);
 
-            foreach (var categoryModel in eventModel.Categories)
+            foreach (var categoryModel in eventModel.CategoryModels)
             {
-                var category = categoryRepository.GetByID<Guid>(categoryModel.CategoryId);
+                var category = categoryRepository.GetByID<Guid>(Guid.Parse(categoryModel.CategoryId));
                 if (category != null)
                 {
                     category.Name = categoryModel.Name;
                     categoryRepository.Update(category);
-                    var wdToDelete = await weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !categoryModel.WeightDivisions.Select(wdm => wdm.WeightDivisionId).Contains(wd.WeightDivisionId)).ToListAsync();
+                    var wdToDelete = await weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !categoryModel.WeightDivisionModels.Select(wdm => Guid.Parse(wdm.WeightDivisionId)).Contains(wd.WeightDivisionId)).ToListAsync();
                     weightDivisionRepository.DeleteRange(wdToDelete);
                 }
                 else
@@ -67,9 +69,9 @@ namespace TRNMNT.Core.Services
                 }
 
 
-                foreach (var wdModel in categoryModel.WeightDivisions)
+                foreach (var wdModel in categoryModel.WeightDivisionModels)
                 {
-                    var wd = weightDivisionRepository.GetByID<Guid>(wdModel.WeightDivisionId);
+                    var wd = weightDivisionRepository.GetByID<Guid>(Guid.Parse(wdModel.WeightDivisionId));
                     if (wd != null)
                     {
                         wd.Name = wdModel.Name;
@@ -226,7 +228,7 @@ namespace TRNMNT.Core.Services
                 RegistrationStartTS = _event.RegistrationStartTS,
                 UrlPrefix = _event.UrlPrefix,
                 VKLink = _event.VKLink,
-                Categories = GetCategoryModels(_event.Categories)
+                CategoryModels = GetCategoryModels(_event.Categories)
             };
         }
 
@@ -239,9 +241,9 @@ namespace TRNMNT.Core.Services
                 {
                     categoryModels.Add(new CategoryModel()
                     {
-                        CategoryId = category.CategoryId,
+                        CategoryId = category.CategoryId.ToString(),
                         Name = category.Name,
-                        WeightDivisions = GetWeightDeivisionsModels(category.WeightDivisions)
+                        WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions)
                     });
                 }
             }
@@ -257,7 +259,7 @@ namespace TRNMNT.Core.Services
                 {
                     weightDivisionModels.Add(new WeightDivisionModel()
                     {
-                        WeightDivisionId = weightDivision.WeightDivisionId,
+                        WeightDivisionId = weightDivision.WeightDivisionId.ToString(),
                         Weight = weightDivision.Weight,
                         Descritpion = weightDivision.Descritpion,
                         Name = weightDivision.Descritpion
@@ -287,7 +289,7 @@ namespace TRNMNT.Core.Services
                 RegistrationStartTS = _eventModel.RegistrationStartTS,
                 UrlPrefix = _eventModel.UrlPrefix,
                 VKLink = _eventModel.VKLink,
-                Categories = GetCategoriesFromModels(_eventModel.Categories)
+                Categories = GetCategoriesFromModels(_eventModel.CategoryModels)
             };
         }
 
@@ -299,9 +301,9 @@ namespace TRNMNT.Core.Services
             {
                 categories.Add(new Category()
                 {
-                    CategoryId = model.CategoryId,
+                    CategoryId = Guid.Parse(model.CategoryId),
                     Name = model.Name,
-                    WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisions)
+                    WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels)
                 });
             }
             return categories;
@@ -314,7 +316,7 @@ namespace TRNMNT.Core.Services
             {
                 weightDivisions.Add(new WeightDivision()
                 {
-                    WeightDivisionId = model.WeightDivisionId,
+                    WeightDivisionId = Guid.Parse(model.WeightDivisionId),
                     Weight = model.Weight,
                     Descritpion = model.Descritpion,
                     Name = model.Descritpion

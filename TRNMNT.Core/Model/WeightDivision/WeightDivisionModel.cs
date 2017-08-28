@@ -1,11 +1,9 @@
 ﻿using System;
 
-namespace TRNMNT.Core.Model
+namespace TRNMNT.Core.Model.WeightDivision
 {
-    public class WeightDivisionModel
+    public class WeightDivisionModel : WeightDivisionModelBase
     {
-        public Guid WeightDivisionId { get; set; }
-        public string Name { get; set; }
         public int Weight { get; set; }
         public string Descritpion { get; set; }
         public string CategoryId { get; set; }

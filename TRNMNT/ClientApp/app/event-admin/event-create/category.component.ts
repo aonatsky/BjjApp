@@ -1,8 +1,8 @@
 ﻿
 import { Component, Input, Output, OnInit, ViewChild, ElementRef, Renderer2, EventEmitter } from '@angular/core';
 import { EventModel } from './../../core/model/event.models';
-import { CategoryModel } from './../../core/model/category.model';
-import { WeightDivisionModel } from './../../core/model/weight-division.model';
+import { CategoryModel } from './../../core/model/category.models';
+import { WeightDivisionModel } from './../../core/model/weight-division.models';
 
 @Component({
     selector: 'category',

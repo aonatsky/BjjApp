@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core"
 import { LoggerService } from "./logger.service"
 import { HttpService, SearchParams } from "./../dal/http/http.service"
-import { WeightDivisionModel } from "./../model/weight-division.model"
+import { WeightDivisionModel, WeightDivisionSimpleModel } from "./../model/weight-division.models"
 import { ApiMethods } from "./../dal/consts/api-methods.consts"
 import { Observable } from 'rxjs/Rx';
 
@@ -15,6 +15,10 @@ export class WeightDivisionService {
     public getWeightDivisions(categoryId: string): Observable<WeightDivisionModel[]> {
         let params: SearchParams[] = [{ name: "categoryId", value: categoryId }];
         return this.httpService.get(ApiMethods.weightDivision.weightDivision, params).map(res => this.httpService.getArray<WeightDivisionModel>(res));
+    }
+
+    public getWeightDivisionsByCategory(categoryId: string): Observable<WeightDivisionSimpleModel[]> {
+        return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByCategory + "/" + categoryId).map(res => this.httpService.getArray<WeightDivisionSimpleModel>(res));
     }
 
     //public getNewWeightDivision(): Observable<WeightDivisionModel> {

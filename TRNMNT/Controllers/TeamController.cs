@@ -18,20 +18,35 @@ using System.Linq;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class TeamController : CRUDController<Team>
+    public class TeamController : BaseController
     {
         IHttpContextAccessor httpContextAccessor;
+        ITeamService teamService;
 
-        public TeamController(IEventService eventService, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Team> repository) 
-            : base(logger, repository, httpContextAccessor, userService)
+        public TeamController(IEventService eventService, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, ITeamService teamService)
+        : base(logger, httpContextAccessor, userService)
         {
             this.httpContextAccessor = httpContextAccessor;
+            this.teamService = teamService;
         }
 
-        public override IQueryable<Team> ModifyQuery(string key, string value, IQueryable<Team> query)
+        [Authorize]
+        [HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetTeams(string eventId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = await teamService.GetTeams();
+                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            }
         }
+
     }
 }
 

@@ -29,13 +29,15 @@ export const ApiMethods = Object.freeze({
         createEvent: "api/event/createEvent"
     },
     team: {
-        team: "api/team"
+        getTeams: "api/team/getTeams"
     },
     weightDivision: {
-        weightDivision: "api/weightdivision"
+        weightDivision: "api/weightdivision",
+        getWeightDivisionsByCategory: "api/weightdivision/getWeightDivisionsByCategory"
     },
     category: {
-        category: "api/category"
+        category: "api/category",
+        getCategoriesForEvent: "api/category/getCategoriesForEvent"
     },
      participant: {
          participant: "api/participant/",

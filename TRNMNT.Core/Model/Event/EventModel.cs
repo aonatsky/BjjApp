@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using TRNMNT.Core.Model.Category;
 
 namespace TRNMNT.Core.Model.Event
 {
@@ -18,7 +17,7 @@ namespace TRNMNT.Core.Model.Event
         public string VKLink { get; set; }
         public string AdditionalData { get; set; }
 
-        public virtual ICollection<CategoryModel> Categories { get; set; }
+        public virtual ICollection<CategoryModel> CategoryModels { get; set; }
         
     }
 }
