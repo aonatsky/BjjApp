@@ -210,11 +210,31 @@ namespace TRNMNT.Web.Controllers
             };
         }
 
+        
+        [Authorize, HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetPrice(string eventId)
+        {
+            try
+            {
+                var user = await GetUserAsync();
+                var price = eventService.GetPrice(Guid.Parse(eventId), user.Id);
+                return Ok(price);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            }
+        }
+
+
         public override IQueryable<Event> ModifyQuery(string key, string value, IQueryable<Event> query)
         {
             throw new NotImplementedException();
         }
 
+        #region helpers
         private async Task<bool> CheckEventOwnerAsync(Guid eventId)
         {
             var user = await GetUserAsync();
@@ -227,6 +247,7 @@ namespace TRNMNT.Web.Controllers
             {
                 return false;
             }
-        }
+        } 
+        #endregion
     }
 }

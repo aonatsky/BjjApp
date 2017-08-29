@@ -59,7 +59,7 @@ export class ParticipateComponent {
 
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId), this.paymentService.getPaymentData())
+        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId), this.paymentService.getPaymentData(this.eventId))
             .subscribe(data => this.initData(data));
     }
 

@@ -52,56 +52,6 @@ namespace TRNMNT.Web.Controllers
 
             }
         }
-
-
-
-        [HttpGet("[action]/{eventId}")]
-        public async Task<IActionResult> GetPaymentData(string eventId)
-        {
-            try
-            {
-                var user = await GetUserAsync();
-                var data =paymentService.GetPaymentDataModel(await eventService.GetPrice(Guid.Parse(eventId),user.Id));
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
-        }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
-        {
-            try
-            {
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
-        }
-
-        [HttpGet("[action]/{eventId}")]
-        public async Task<IActionResult> GetPrice(string dventId)
-        {
-            try
-            {
-                var user = await GetUserAsync();
-                return Ok(0);
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
-        }
     }
 }
 

@@ -31,8 +31,8 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet("[action]/{eventId}")]
-        public async Task<IActionResult> GetTeams(string eventId)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetTeams()
         {
             try
             {

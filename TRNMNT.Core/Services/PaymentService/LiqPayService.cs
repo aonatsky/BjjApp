@@ -11,17 +11,17 @@ namespace TRNMNT.Core.Services
     {
         private string publicKey = "i15572856226";
         private string privateKey = "z7TS5ObVdlVvXo7hqlRLQNgLjDHMtuycIndFsxq9";
-
+        private IConfiguration configuration;
 
         public LiqPayService(IConfiguration configuration)
         {
-
+            this.configuration = configuration;
         }
 
 
-        public PaymentDataModel GetPaymentDataModel(int price)
+        public PaymentDataModel GetPaymentDataModel(int price, string callbackUrl)
         {
-            var encodedData = GetBase64EncodedData(GetStringJsonData(price));
+            var encodedData = GetBase64EncodedData(GetStringJsonData(price, callbackUrl));
             var stringSignature = String.Concat(privateKey, encodedData, privateKey);
             var encodedsignature = Convert.ToBase64String(SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(stringSignature)));
             return new PaymentDataModel()
@@ -37,7 +37,7 @@ namespace TRNMNT.Core.Services
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(data));
         }
 
-        private string GetStringJsonData(int price)
+        private string GetStringJsonData(int price, string callbackUrl)
         {
             var result = new JObject();
             result["version"] = 3;
@@ -49,6 +49,7 @@ namespace TRNMNT.Core.Services
             result["order_id"] = Guid.NewGuid().ToString();
             result["expired_date"] = "2017-10-24 00:00:00";
             result["sandbox"] = "1";
+            result["result_url"] = callbackUrl;
             return result.ToString();
         }
     }
