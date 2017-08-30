@@ -13,7 +13,7 @@ export class ParticipantService {
 
     }
 
-    public createParticipant(participant: ParticipantRegistrationModel): Observable<ParticipantRegistrationResultModel> {
+    public addParticipant(participant: ParticipantRegistrationModel): Observable<ParticipantRegistrationResultModel> {
         return this.httpService.post(ApiMethods.participant.registerParticipant, participant).map(r => this.httpService.getJson(r));
     }
 

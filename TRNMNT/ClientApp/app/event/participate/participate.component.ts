@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, ViewEncapsulation} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
 import { ParticipantService } from './../../core/services/participant.service';
@@ -14,23 +14,38 @@ import { WeightDivisionModel, WeightDivisionSimpleModel } from './../../core/mod
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
-import { SelectItem } from 'primeng/primeng'
+import { SelectItem, MenuModule, MenuItem } from 'primeng/primeng'
 
 @Component({
     selector: 'participate',
     templateUrl: './participate.component.html',
-    styleUrls: ['./participate.component.css']
+    styleUrls: ['./participate.component.css'],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class ParticipateComponent {
 
     private eventId: string;
+    private lastStep: number = 1;
+    private currentStep: number = 0;
+    private menuItems: MenuItem[] = [{
+        label: 'Participant Info',
+    },
+    {
+        label: 'Confirmation',
+    },
+    {
+        label: 'Payment',
+    }
+    
+    ];
     private participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
     private categories: CategorySimpleModel[] = [];
     private weightDivisions: WeightDivisionSimpleModel[] = [];
     private categorySelectItems: SelectItem[];
     private weightDivisionsSelectItems: SelectItem[];
-    private existingTeams: TeamModel[] = [];
+    private teamSelectItems: SelectItem[] = [];
+    private teams: TeamModel[] = [];
     private teamSuggestions: string[] = [];
     private tncAccepted: boolean = false;
     private paymentDataModel: PaymentDataModel;
@@ -64,21 +79,32 @@ export class ParticipateComponent {
     }
 
     private initData(data) {
-        this.existingTeams = data[0];
+        this.teams = data[0];
         this.categories = data[1];
         this.paymentDataModel = data[2]
         this.initCategoryDropdown();
+        this.initTeamDropdown();
+
     }
 
 
     private teamSearch(event) {
-        this.teamSuggestions = this.existingTeams.filter((team: TeamModel) => team.name.toLowerCase().startsWith(event.query.trim().toLowerCase())).map(t => { return t.name });
+        this.teamSuggestions = this.teams.filter((team: TeamModel) => team.name.toLowerCase().startsWith(event.query.trim().toLowerCase())).map(t => { return t.name });
     };
 
     private getDefaultDateOfBirth() {
         let date = new Date();
         date.setFullYear(date.getFullYear() - 20);
         return date;
+    }
+
+    private initTeamDropdown()
+    {
+        this.teamSelectItems = [];
+        for (var i = 0; i < this.teams.length; i++) {
+            let team = this.teams[i];
+            this.teamSelectItems.push({ label: team.name, value: team.teamId })
+        }
     }
 
     private initCategoryDropdown() {
@@ -101,9 +127,21 @@ export class ParticipateComponent {
 
     }
 
+    private getTeam() {
+        return this.teams.filter(t => t.teamId == this.participant.teamId)[0].name;
+    }
+
+    private getCategory() {
+        return this.categories.filter(c => c.categoryId == this.participant.categoryId)[0].name;
+    }
+
+    private getWeightDivision() {
+        return this.weightDivisions.filter(wd => wd.weightDivisionId == this.participant.weightDivisionId)[0].name;
+    }
+
+
     private createParticipant() {
-        debugger;
-        this.participantService.createParticipant(this.participant).subscribe((r : ParticipantRegistrationResultModel) => {
+        this.participantService.addParticipant(this.participant).subscribe((r : ParticipantRegistrationResultModel) => {
             if (!r.success) {
                 this.showMessage(r.reason);
             }        
@@ -117,6 +155,14 @@ export class ParticipateComponent {
 
     private onPaymentSubmit() {
         console.log("submited");
+    }
+
+    private nextStep() {
+        this.currentStep++;
+    }
+
+    private previousStep() {
+        this.currentStep--;
     }
 }
 

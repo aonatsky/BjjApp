@@ -42,11 +42,11 @@ export class RouterService {
     }
 
     public GoToEventInfo(subdomain: string) {
-        this.router.navigateByUrl("event-participation/event-info/" + subdomain, { skipLocationChange: false });    
+        this.router.navigateByUrl("event/event-info/" + subdomain, { skipLocationChange: false });    
     }
 
     public GoToParticipate(id: string) {
-        this.router.navigateByUrl("event-participation/participate/" + id, { skipLocationChange: false });
+        this.router.navigateByUrl("event/participate/" + id, { skipLocationChange: false });
     }
 }
 

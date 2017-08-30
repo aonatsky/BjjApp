@@ -10,6 +10,6 @@ namespace TRNMNT.Core.Services
     public interface IParticipantService
     {
         Task <ParticipantRegistrationResult> RegisterParticipantAsync(ParticipantRegistrationModel participant);
-        Task <bool>IsParticipantExistsAsync(Participant participant);
+        Task <bool>IsParticipantExistsAsync(ParticipantRegistrationModel participant);
     }
 }

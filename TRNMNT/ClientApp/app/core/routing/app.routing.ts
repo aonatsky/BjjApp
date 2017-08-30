@@ -9,7 +9,7 @@ import { TopbarComponent } from '../../event-admin/topbar/topbar.component';
 import { EventAdminComponent } from '../../event-admin/event-admin/event-admin.component';
 import { LoginComponent } from '../../shared/login/login.component';
 import { RegisterComponent } from '../../shared/register/register.component';
-import { EventInfoComponent } from '../../event-participation/event-info/event-info.component';
+import { EventInfoComponent } from '../../event/event-info/event-info.component';
 
 
 

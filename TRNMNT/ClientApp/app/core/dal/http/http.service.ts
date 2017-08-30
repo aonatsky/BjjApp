@@ -115,7 +115,6 @@ export class HttpService {
     }
 
     public getJson(response: Response) {
-        debugger;
         return response.json();
     }
 

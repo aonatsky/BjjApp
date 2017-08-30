@@ -6,11 +6,11 @@ import {AuthService} from './../core/services/auth.service'
 
 
 @Component({
-    selector: 'event-participation',
-    templateUrl: './event-participation.component.html',
-    styleUrls: ['./event-participation.component.css']
+    selector: 'event',
+    templateUrl: './event.component.html',
+    styleUrls: ['./event.component.css']
 })
-export class EventParticipationComponent implements OnInit {
+export class EventComponent implements OnInit {
 
     userData: string;
 

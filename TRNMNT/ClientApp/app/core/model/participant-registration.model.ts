@@ -1,7 +1,7 @@
 ﻿export class ParticipantRegistrationModel {
     public firstName: string;
     public lastName: string;
-    public team: string;
+    public teamId: string;
     public dateOfBirth: Date;
     public categoryId: string;
     public weightDivisionId: string;

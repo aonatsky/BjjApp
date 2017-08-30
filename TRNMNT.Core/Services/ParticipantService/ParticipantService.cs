@@ -24,25 +24,25 @@ namespace TRNMNT.Core.Services
 
 
 
-        public async Task<bool> IsParticipantExistsAsync(Participant participant)
+        public async Task<bool> IsParticipantExistsAsync(ParticipantRegistrationModel model)
         {
             return await repository.GetAll().AnyAsync(p =>
-             p.EventId == participant.EventId
-             && p.FirstName == participant.FirstName
-             && p.LastName == participant.LastName
-             && p.DateOfBirth == participant.DateOfBirth
+             p.EventId == model.EventId
+             && p.FirstName == model.FirstName
+             && p.LastName == model.LastName
+             && p.DateOfBirth == model.DateOfBirth
              );
         }
 
         public async Task<ParticipantRegistrationResult> RegisterParticipantAsync(ParticipantRegistrationModel model)
         {
-            var participant = await GetParticipantByModel(model);
-            if (await IsParticipantExistsAsync(participant))
+            if (await IsParticipantExistsAsync(model))
             {
                 return new ParticipantRegistrationResult(false, DefaultMessage.PARTICIPANT_REGISTRATION_PARTICIPANT_ALREADY_EXISTS);
             }
             else
             {
+                var participant = GetParticipantByModel(model);
                 repository.Add(participant);
                 await repository.SaveAsync();
                 return new ParticipantRegistrationResult(true);
@@ -50,15 +50,13 @@ namespace TRNMNT.Core.Services
         }
 
         #region private helpers
-        private async Task<Participant> GetParticipantByModel(ParticipantRegistrationModel model)
+        private  Participant GetParticipantByModel(ParticipantRegistrationModel model)
         {
-            var team = await GetTeamAsync(model.Team);
             return new Participant()
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Team = team,
-                TeamId = team.TeamId,
+                TeamId = Guid.Parse(model.TeamId),
                 DateOfBirth = model.DateOfBirth,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
@@ -68,22 +66,8 @@ namespace TRNMNT.Core.Services
                 UserId = model.UserId,
                 IsActive = true,
                 IsApproved = false,
-                UpdateTS = DateTime.UtcNow
+                UpdateTS = DateTime.UtcNow,
             };
-        }
-
-        private async Task<Team> GetTeamAsync(string name)
-        {
-            var team = await teamService.GetTeamByNameAsync(name);
-            if (team == null)
-            {
-                team = new Team()
-                {
-                    TeamId = Guid.NewGuid(),
-                    Name = name
-                };
-            }
-            return team;
         }
     } 
     #endregion

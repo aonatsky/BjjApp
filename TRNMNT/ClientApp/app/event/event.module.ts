@@ -9,7 +9,7 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { EventInfoComponent } from './event-info/event-info.component'
 import { ParticipateComponent } from './participate/participate.component'
-import { EventParticipationComponent } from './event-participation.component'
+import { EventComponent } from './event.component'
 
 
 @NgModule({
@@ -19,7 +19,7 @@ import { EventParticipationComponent } from './event-participation.component'
         RouterModule.forChild(
             [
                 {
-                    path: 'event-participation', component: EventParticipationComponent, children: [
+                    path: 'event', component: EventComponent, children: [
                         {
                             path: 'event-info/:prefix', component: EventInfoComponent
                         },
@@ -32,7 +32,7 @@ import { EventParticipationComponent } from './event-participation.component'
     ],
     declarations: [
         EventInfoComponent,
-        EventParticipationComponent,
+        EventComponent,
         ParticipateComponent
     ],
 
@@ -42,5 +42,5 @@ import { EventParticipationComponent } from './event-participation.component'
     ]
 })
 
-export class EventPaticipationModule {
+export class EventModule {
 }

@@ -13,9 +13,13 @@ namespace TRNMNT.Data.Entities
         public Guid TeamId { get; set; }
         public String Name { get; set; }
         public String Description { get; set; }
+        public DateTime UpdateTs { get; set; }
+        public string UpdateBy { get; set; }
+        public Guid FederationId { get; set; }
 
         [JsonIgnore]
         public ICollection<Participant> Participants { get; set; }
+        public Federation Federation { get; set; }
 
     }
 }
