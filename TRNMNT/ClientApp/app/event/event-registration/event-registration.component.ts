@@ -5,7 +5,7 @@ import { ParticipantService } from './../../core/services/participant.service';
 import { CategoryService } from './../../core/services/category.service';
 import { PaymentService } from './../../core/services/payment.service';
 import { WeightDivisionService } from './../../core/services/weight-division.service';
-import { ParticipantRegistrationModel } from './../../core/model/participant-registration.model';
+import { ParticipantRegistrationModel, ParticipantModelBase } from './../../core/model/participant.models';
 import { ParticipantRegistrationResultModel } from './../../core/model/result/participant-registration-result.model';
 import { TeamModel } from './../../core/model/team.model';
 import { PaymentDataModel } from './../../core/model/payment-data.model';
@@ -14,31 +14,19 @@ import { WeightDivisionModel, WeightDivisionSimpleModel } from './../../core/mod
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
-import { SelectItem, MenuModule, MenuItem } from 'primeng/primeng'
+import { SelectItem, MenuModule, MenuItem, Message } from 'primeng/primeng'
 
 @Component({
-    selector: 'participate',
-    templateUrl: './participate.component.html',
-    styleUrls: ['./participate.component.css'],
+    selector: 'event-registration',
+    templateUrl: './event-registration.component.html',
+    styleUrls: ['./event-registration.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class ParticipateComponent {
+export class EventRegistrationComponent {
 
     private eventId: string;
-    private lastStep: number = 1;
     private currentStep: number = 0;
-    private menuItems: MenuItem[] = [{
-        label: 'Participant Info',
-    },
-    {
-        label: 'Confirmation',
-    },
-    {
-        label: 'Payment',
-    }
-    
-    ];
     private participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
     private categories: CategorySimpleModel[] = [];
     private weightDivisions: WeightDivisionSimpleModel[] = [];
@@ -49,6 +37,7 @@ export class ParticipateComponent {
     private teamSuggestions: string[] = [];
     private tncAccepted: boolean = false;
     private paymentDataModel: PaymentDataModel;
+    private messages: Message[] = []
 
     constructor(
         private routerService: RouterService,
@@ -149,12 +138,25 @@ export class ParticipateComponent {
     }
 
     private showMessage(message: string) {
-        console.log(message);
+        this.messages.push({ severity: 'error', summary: 'Error', detail: message });
     };
 
 
     private onPaymentSubmit() {
         console.log("submited");
+    }
+
+    private goToPayment() {
+        // todo click payment form
+
+        this.participantService.addParticipant(this.participant).subscribe((r: ParticipantRegistrationResultModel) => {
+            if (!r.success) {
+                this.showMessage(r.reason);
+            } else {
+                this.routerService.navigateByUrl("event/event-registration-complete/" + this.eventId)
+            }
+        }
+        
     }
 
     private nextStep() {
@@ -164,5 +166,7 @@ export class ParticipateComponent {
     private previousStep() {
         this.currentStep--;
     }
+
+    
 }
 

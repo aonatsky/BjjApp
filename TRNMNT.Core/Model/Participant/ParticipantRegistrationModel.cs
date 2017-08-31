@@ -1,15 +1,11 @@
 ﻿using System;
 
-namespace TRNMNT.Core.Model
+namespace TRNMNT.Core.Model.Participant
 {
-    public class ParticipantRegistrationModel
+    public class ParticipantRegistrationModel : ParticipantModelBase
     {
-        public Guid EventId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public string UserId { get; set; }
         public string TeamId { get; set; }
         public string CategoryId { get; set; }

@@ -95,7 +95,7 @@ export class HttpService {
         let errMsg: string;
         if (error instanceof Response) {
             if (error.status == 401) {
-                this.routerService.GoToLogin();
+                this.routerService.goToLogin();
             }
             errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
         } else {

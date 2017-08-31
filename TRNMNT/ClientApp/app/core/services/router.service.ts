@@ -14,7 +14,7 @@ export class RouterService {
         this.router.navigateByUrl(url);
     } 
 
-    public GoHome(subdomain: string = "") {
+    public goHome(subdomain: string = "") {
         if (subdomain != "") {
             let path = location.host.replace(subdomain + ".", "");
             location.href = location.protocol + "//" + path;
@@ -22,31 +22,31 @@ export class RouterService {
 
     }
 
-    public GoToLogin(returnUrl? : string) {
+    public goToLogin(returnUrl? : string) {
         this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl } });
     }
 
 
-    public GoToOrganizerScreen() {
+    public goToOrganizerScreen() {
         this.router.navigateByUrl("/administration/home");
     }
 
 
-    public GoToEventAdmin() {
+    public goToEventAdmin() {
         this.router.navigateByUrl("/event-admin");
     }
 
 
-    public GoToEditEvent(id: string) {
+    public goToEditEvent(id: string) {
         this.router.navigateByUrl("/event-admin/edit/" + id);
     }
 
-    public GoToEventInfo(subdomain: string) {
+    public goToEventInfo(subdomain: string) {
         this.router.navigateByUrl("event/event-info/" + subdomain, { skipLocationChange: false });    
     }
 
-    public GoToParticipate(id: string) {
-        this.router.navigateByUrl("event/participate/" + id, { skipLocationChange: false });
+    public goToRegistration(id: string) {
+        this.router.navigateByUrl("event/event-registration/" + id, { skipLocationChange: false });
     }
 }
 

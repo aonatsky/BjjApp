@@ -11,8 +11,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TRNMNT.Data.Repositories;
 using System.Linq;
-using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Participant;
 using TRNMNT.Web.Core.Enum;
+using TRNMNT.Core.Model.Participant;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -37,7 +38,7 @@ namespace TRNMNT.Web.Controllers
         }
   
 
-        [HttpPost("[action]")]
+        [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> RegisterParticipant([FromBody]ParticipantRegistrationModel model)
         {
             try
@@ -49,9 +50,27 @@ namespace TRNMNT.Web.Controllers
             {
                 HandleException(ex);
                 return StatusCode((int)HttpStatusCode.InternalServerError);
-
             }
         }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> IsParticipantExist([FromBody]ParticipantRegistrationModel model)
+        {
+            try
+            {
+                var result = await participantService.IsParticipantExistsAsync(model);
+                return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+
+
+
     }
 }
 

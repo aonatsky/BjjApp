@@ -8,7 +8,8 @@ import { AuthGuard } from "./../core/routing/auth.guard"
 import { RouterModule, Routes } from '@angular/router'
 
 import { EventInfoComponent } from './event-info/event-info.component'
-import { ParticipateComponent } from './participate/participate.component'
+import { EventRegistrationComponent } from './event-registration/event-registration.component'
+import { EventRegistrationCompleteComponent } from './event-registration-complete/event-registration-complete.component'
 import { EventComponent } from './event.component'
 
 
@@ -24,7 +25,10 @@ import { EventComponent } from './event.component'
                             path: 'event-info/:prefix', component: EventInfoComponent
                         },
                         {
-                            path: 'participate/:id', component: ParticipateComponent, canActivate : [AuthGuard]
+                            path: 'event-registration/:id', component: EventRegistrationComponent, canActivate : [AuthGuard]
+                        },
+                        {
+                            path: 'event-registration-complete/:id', component: EventRegistrationCompleteComponent, canActivate: [AuthGuard]
                         }
                     ]
                 }
@@ -33,7 +37,8 @@ import { EventComponent } from './event.component'
     declarations: [
         EventInfoComponent,
         EventComponent,
-        ParticipateComponent
+        EventRegistrationComponent,
+        EventRegistrationCompleteComponent
     ],
 
     providers: [],

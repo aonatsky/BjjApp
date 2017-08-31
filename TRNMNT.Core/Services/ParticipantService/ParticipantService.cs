@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -24,7 +24,7 @@ namespace TRNMNT.Core.Services
 
 
 
-        public async Task<bool> IsParticipantExistsAsync(ParticipantRegistrationModel model)
+        public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model)
         {
             return await repository.GetAll().AnyAsync(p =>
              p.EventId == model.EventId

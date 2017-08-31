@@ -1,15 +1,18 @@
-﻿export class ParticipantRegistrationModel {
+﻿export class ParticipantModelBase {
     public firstName: string;
     public lastName: string;
-    public teamId: string;
     public dateOfBirth: Date;
+    public eventId: AAGUID;
+    constructor() {
+    }
+}
+
+export class ParticipantRegistrationModel extends ParticipantModelBase {
+    public teamId: string;
     public categoryId: string;
     public weightDivisionId: string;
-    public eventId: AAGUID;
     public userId: string;
     public email: string;
     public phoneNumber: string;
-    constructor() {
-    }
-
 }
+

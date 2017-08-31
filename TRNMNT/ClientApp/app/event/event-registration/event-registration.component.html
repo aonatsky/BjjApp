@@ -1,0 +1,124 @@
+﻿<div class="ui-widget ui-widget-content ui-corner-all ui-g-offset-3 ui-g-6">
+    <div *ngIf="currentStep == 0">
+        <form novalidate #participantForm="ngForm">
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>First Name</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.firstName" required name="firstName" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Last Name</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.lastName" required name="lastName" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Date Of Birth</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-calendar [(ngModel)]="participant.dateOfBirth"
+                                dateFormat="dd.mm.yy"
+                                readonlyInput="readonlyInput"
+                                showIcon="true" monthNavigator="true"
+                                yearNavigator="true"
+                                yearRange="1960:2015"
+                                [defaultDate]="getDefaultDateOfBirth()"
+                                required
+                                name="dateOfBirth">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Team</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-dropdown [options]="teamSelectItems" [(ngModel)]="participant.teamId" [autoWidth]="false" placeholder="Select Team" name="team" required></p-dropdown>
+                </div>
+            </div> <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Category</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-dropdown [options]="categorySelectItems" [(ngModel)]="participant.categoryId" [autoWidth]="false" placeholder="Select Category" (onChange)="initWeightDivisionDropdown($event)" name="category" required></p-dropdown>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Weight Division</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="participant.weightDivisionId" [autoWidth]="false" placeholder="Select Weight Division" [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0" name="weightDivision" required></p-dropdown>
+                </div>
+            </div>
+            <!--<div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Email</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.email" name="email" email /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Phone Number</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.phoneNumber" name="phoneNumber" /></div>
+            </div>-->
+            <div class="ui-g-12">
+                <div class="float-right"><button pButton type="button" class="float-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep" [disabled]="participantForm.invalid"></button></div>
+            </div>
+        </form>
+        <div *ngIf="paymentDataModel" class="ui-g-12" [hidden]="true">
+            <form ngNoForm id="formPrivat" method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8" novalidate>
+                <input type="hidden" name="data" value="{{paymentDataModel.data}}" />
+                <input type="hidden" name="signature" value={{paymentDataModel.signature}} />
+                <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />
+            </form>
+        </div>
+    </div>
+    <div *ngIf="currentStep == 1">
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>First Name</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{participant.firstName}}</b></label>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Last Name</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{participant.lastName}}</b></label>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Date Of Birth</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{participant.dateOfBirth | date}}</b></label>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Team</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{getTeam()}}</b></label>
+            </div>
+        </div> <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Category</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{getCategory()}}</b></label>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Weight Division</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{getWeightDivision()}}</b></label>
+            </div>
+        </div>
+        <!--<div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Email</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{participant.email}}</b></label>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Phone Number</label></div>
+            <div class="ui-g-9 ui-fluid">
+                <label><b>{{participant.phoneNumber}}</b></label>
+            </div>
+        </div>-->
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>I Accept TnC</label></div>
+            <p-checkbox [(ngModel)]="tncAccepted"></p-checkbox>
+        </div>
+        <div class="ui-g-12">
+            <p-messages [(value)]="message"></p-messages>
+        </div>
+        <div class="ui-g-12">
+            <div class="float-right"><button pButton type="button" class="float-right" label="Go to payment" (click)="goToPayment()" [disabled]="!tncAccepted"></button></div>
+            <div class="float-left"><button pButton type="button" class="float-left" label="Back" (click)="previousStep()"></button></div>
+        </div>
+    </div>
+</div> 

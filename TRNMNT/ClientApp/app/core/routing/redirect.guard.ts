@@ -19,7 +19,7 @@ import { RouterService } from '../services/router.service'
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         this.getSubdomain();
         if (this.subdomain && this.subdomain != "") {
-            this.routerService.GoToEventInfo(this.subdomain);
+            this.routerService.goToEventInfo(this.subdomain);
         }
         else {
             return this.authGuard.canActivate(route, state)

@@ -23,7 +23,7 @@ import { RouterService } from '../services/router.service'
         let url: string = state.url;
         this.AuthService.redirectUrl = url;
         // Not signed in so redirects to signin page.  
-        this.routerService.GoToLogin(url);
+        this.routerService.goToLogin(url);
         return false;
     }
 

@@ -7,11 +7,10 @@ import { EventService } from './../../core/services/event.service';
 import { EventModel} from './../../core/model/event.models';
 
 @Component({
-    selector: 'event-info',
-    templateUrl: './event-info.component.html',
-    styleUrls: ['./event-info.component.css']
+    selector: 'event-registration-complete',
+    templateUrl: './event-registration-complete.component.html',
 })
-export class EventInfoComponent implements OnInit {
+export class EventRegistrationCompleteComponent implements OnInit {
 
     private eventModel: EventModel
 
@@ -21,18 +20,12 @@ export class EventInfoComponent implements OnInit {
 
     ngOnInit() {
         this.route.params.subscribe(p => {
-            let url = p['prefix'];
-            console.log("url " + url)
-            this.eventService.getEventByUrl(url).subscribe(r => {
-                this.eventModel = r;
-                if (!this.eventModel) {
-                    this.routerService.goHome(url);
-                }
-            });
+            let eventId = p['id'];
+            this.loadEvent(eventId);
         });
     }
 
-    private participate() {
-        this.routerService.goToRegistration(this.eventModel.eventId);
+    private loadEvent(eventId: string) {
+        this.eventService.getEvent(eventId).subscribe(e => this.eventModel = e);
     }
 }
