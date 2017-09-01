@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using TRNMNT.Core.Model;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services
 {
@@ -19,9 +20,9 @@ namespace TRNMNT.Core.Services
         }
 
 
-        public PaymentDataModel GetPaymentDataModel(int price, string callbackUrl)
+        public PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl)
         {
-            var encodedData = GetBase64EncodedData(GetStringJsonData(price, callbackUrl));
+            var encodedData = GetBase64EncodedData(GetStringJsonData(order, callbackUrl));
             var stringSignature = String.Concat(privateKey, encodedData, privateKey);
             var encodedsignature = Convert.ToBase64String(SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(stringSignature)));
             return new PaymentDataModel()
@@ -37,16 +38,16 @@ namespace TRNMNT.Core.Services
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(data));
         }
 
-        private string GetStringJsonData(int price, string callbackUrl)
+        private string GetStringJsonData(Order order, string callbackUrl)
         {
             var result = new JObject();
             result["version"] = 3;
             result["public_key"] = publicKey;
             result["action"] = "pay";
-            result["amount"] = price;
-            result["currency"] = "UAH";
+            result["amount"] = order.Amount;
+            result["currency"] = order.Currency;
             result["description"] = "Sport Event Participation";
-            result["order_id"] = Guid.NewGuid().ToString();
+            result["order_id"] = order.OrderId.ToString();
             result["expired_date"] = "2017-10-24 00:00:00";
             result["sandbox"] = "1";
             result["result_url"] = callbackUrl;

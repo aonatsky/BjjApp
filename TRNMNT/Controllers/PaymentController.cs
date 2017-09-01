@@ -30,10 +30,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                var user = await GetUserAsync();
-                var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment")}/{eventId}";
-                var data = paymentService.GetPaymentDataModel(await eventService.GetPrice(Guid.Parse(eventId), user.Id), callbackUrl);
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                return Ok();
             }
             catch (Exception e)
             {

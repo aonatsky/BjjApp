@@ -94,6 +94,7 @@ namespace TRNMNT.Core.Services
         {
             var eventToAdd = new Event()
             {
+                EventId = Guid.NewGuid(),
                 OwnerId = userId,
                 UpdateTS = DateTime.UtcNow,
                 IsActive = false,
@@ -166,13 +167,6 @@ namespace TRNMNT.Core.Services
             return (await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e => e.EventId).FirstOrDefaultAsync()).ToString();
         }
 
-        public async Task<Event> CreateEventAsync()
-        {
-            var _event = new Event() { StatusId = (int)EventStatusEnum.Init, IsActive = false };
-            eventRepository.Add(_event);
-            await eventRepository.SaveAsync();
-            return _event;
-        }
 
         public async Task<string> GetEventOwnerIdAsync(Guid eventId)
         {

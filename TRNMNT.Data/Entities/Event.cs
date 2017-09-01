@@ -9,9 +9,7 @@ namespace TRNMNT.Data.Entities
     public class Event
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid EventId { get; set; }
-
         public string OwnerId { get; set; }
         public DateTime EventDate { get; set; }
         public DateTime RegistrationStartTS { get; set; }

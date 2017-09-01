@@ -9,7 +9,6 @@ namespace TRNMNT.Data.Entities
     public class Federation
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid FederationId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

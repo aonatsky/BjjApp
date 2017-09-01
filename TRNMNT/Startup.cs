@@ -79,6 +79,8 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IUserService),typeof(UserService));
             services.AddScoped(typeof(IFileService),typeof(LocalFileService));
             services.AddScoped(typeof(IPaymentService),typeof(LiqPayService));
+            services.AddScoped(typeof(IOrderService),typeof(OrderService));
+            services.AddScoped(typeof(IParticipantRegistrationService),typeof(ParticipantRegistrationService));
             #endregion
 
 

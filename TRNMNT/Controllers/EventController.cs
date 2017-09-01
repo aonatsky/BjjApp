@@ -195,22 +195,6 @@ namespace TRNMNT.Web.Controllers
         }
 
 
-        [Authorize, HttpGet("[action]")]
-        public async Task<string> CreateEvent()
-        {
-            try
-            {
-                return (await eventService.CreateEventAsync()).EventId.ToString();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(ex);
-                return "";
-            };
-        }
-
-        
         [Authorize, HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetPrice(string eventId)
         {

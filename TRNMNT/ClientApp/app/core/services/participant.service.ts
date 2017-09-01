@@ -13,8 +13,8 @@ export class ParticipantService {
 
     }
 
-    public addParticipant(participant: ParticipantRegistrationModel): Observable<ParticipantRegistrationResultModel> {
-        return this.httpService.post(ApiMethods.participant.registerParticipant, participant).map(r => this.httpService.getJson(r));
+    public processParticipantRegistration(participant: ParticipantRegistrationModel): Observable<ParticipantRegistrationResultModel> {
+        return this.httpService.post(ApiMethods.participant.processParticipantRegistration, participant).map(r => this.httpService.getJson(r));
     }
 
     public isParticipantExists(participant: ParticipantModelBase): Observable<boolean> {

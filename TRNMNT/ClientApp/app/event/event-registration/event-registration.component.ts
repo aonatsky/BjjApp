@@ -1,4 +1,5 @@
-﻿import { Component, ViewEncapsulation} from '@angular/core';
+﻿import { Component, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+import { NgForm } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
 import { ParticipantService } from './../../core/services/participant.service';
@@ -34,10 +35,10 @@ export class EventRegistrationComponent {
     private weightDivisionsSelectItems: SelectItem[];
     private teamSelectItems: SelectItem[] = [];
     private teams: TeamModel[] = [];
-    private teamSuggestions: string[] = [];
     private tncAccepted: boolean = false;
     private paymentDataModel: PaymentDataModel;
     private messages: Message[] = []
+    @ViewChild('formPrivat') formPrivat: ElementRef
 
     constructor(
         private routerService: RouterService,
@@ -63,23 +64,19 @@ export class EventRegistrationComponent {
 
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId), this.paymentService.getPaymentData(this.eventId))
+        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId))
             .subscribe(data => this.initData(data));
     }
 
     private initData(data) {
         this.teams = data[0];
         this.categories = data[1];
-        this.paymentDataModel = data[2]
         this.initCategoryDropdown();
         this.initTeamDropdown();
 
     }
 
 
-    private teamSearch(event) {
-        this.teamSuggestions = this.teams.filter((team: TeamModel) => team.name.toLowerCase().startsWith(event.query.trim().toLowerCase())).map(t => { return t.name });
-    };
 
     private getDefaultDateOfBirth() {
         let date = new Date();
@@ -128,34 +125,25 @@ export class EventRegistrationComponent {
         return this.weightDivisions.filter(wd => wd.weightDivisionId == this.participant.weightDivisionId)[0].name;
     }
 
-
-    private createParticipant() {
-        this.participantService.addParticipant(this.participant).subscribe((r : ParticipantRegistrationResultModel) => {
-            if (!r.success) {
-                this.showMessage(r.reason);
-            }        
-        })
-    }
-
     private showMessage(message: string) {
         this.messages.push({ severity: 'error', summary: 'Error', detail: message });
     };
 
 
-    private onPaymentSubmit() {
-        console.log("submited");
-    }
 
     private goToPayment() {
         // todo click payment form
 
-        this.participantService.addParticipant(this.participant).subscribe((r: ParticipantRegistrationResultModel) => {
+        this.participantService.processParticipantRegistration(this.participant).subscribe((r: ParticipantRegistrationResultModel) => {
             if (!r.success) {
                 this.showMessage(r.reason);
             } else {
-                this.routerService.navigateByUrl("event/event-registration-complete/" + this.eventId)
+                debugger;
+                this.paymentDataModel = r.paymentData;
+                this.formPrivat.nativeElement.submit();
+                this.routerService.navigateByUrl("event/event-registration-complete/" + this.eventId);
             }
-        }
+        });
         
     }
 

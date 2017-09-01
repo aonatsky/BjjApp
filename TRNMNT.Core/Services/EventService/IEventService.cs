@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Data.Entities;
 
@@ -18,7 +19,6 @@ namespace TRNMNT.Core.Services
         Task AddEventImageAsync(Stream stream, string eventId);
         Task SaveEventTncAsync(Stream stream, string eventId, string fileName);
         Task <string>GetEventIdAsync(string url);
-        Task <Event>CreateEventAsync();
         Task<string> GetEventOwnerIdAsync(Guid eventId);
         Task<int> GetPrice(Guid EventId, string userId);
     }

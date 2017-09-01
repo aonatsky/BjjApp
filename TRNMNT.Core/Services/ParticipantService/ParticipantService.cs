@@ -15,11 +15,15 @@ namespace TRNMNT.Core.Services
     {
         private IRepository<Participant> repository;
         private ITeamService teamService;
+        private IOrderService orderService;
+        private IPaymentService paymentService;
 
-        public ParticipantService(IRepository<Participant> repository, ITeamService teamService)
+        public ParticipantService(IRepository<Participant> repository, ITeamService teamService, IOrderService orderService, IPaymentService paymentService)
         {
             this.repository = repository;
             this.teamService = teamService;
+            this.orderService = orderService;
+            this.paymentService = paymentService;
         }
 
 
@@ -34,43 +38,15 @@ namespace TRNMNT.Core.Services
              );
         }
 
-        public async Task<ParticipantRegistrationResult> RegisterParticipantAsync(ParticipantRegistrationModel model)
+        public async Task AddParticipant(Participant participant)
         {
-            if (await IsParticipantExistsAsync(model))
-            {
-                return new ParticipantRegistrationResult(false, DefaultMessage.PARTICIPANT_REGISTRATION_PARTICIPANT_ALREADY_EXISTS);
-            }
-            else
-            {
-                var participant = GetParticipantByModel(model);
-                repository.Add(participant);
-                await repository.SaveAsync();
-                return new ParticipantRegistrationResult(true);
-            }
+            repository.Add(participant);
+            await repository.SaveAsync();
         }
 
-        #region private helpers
-        private  Participant GetParticipantByModel(ParticipantRegistrationModel model)
-        {
-            return new Participant()
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                TeamId = Guid.Parse(model.TeamId),
-                DateOfBirth = model.DateOfBirth,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                CategoryId = Guid.Parse(model.CategoryId),
-                WeightDivisionId = Guid.Parse(model.WeightDivisionId),
-                EventId = model.EventId,
-                UserId = model.UserId,
-                IsActive = true,
-                IsApproved = false,
-                UpdateTS = DateTime.UtcNow,
-            };
-        }
-    } 
-    #endregion
+       
+    }
+    
 
 }
 

@@ -10,7 +10,6 @@ namespace TRNMNT.Data.Entities
     public class Participant
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ParticipantId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
