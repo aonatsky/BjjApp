@@ -50,5 +50,7 @@ jspm_packages
 .vs/
 obj/
 bin/
-debug/
-release/
+Debug/
+Debug
+Release/
+Release
