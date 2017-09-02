@@ -47,3 +47,8 @@ jspm_packages
 /TRNMNT.Core/obj/
 /TRNMNT.Core/bin/
 /TRNMNT/appsettings.home.json
+.vs/
+obj/
+bin/
+debug/
+release/
