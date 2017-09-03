@@ -1,8 +1,6 @@
-﻿using log4net.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -12,8 +10,8 @@ using TRNMNT.Web.Core.Const;
 using TRNMNT.Web.Core.Enum;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.Category;
-using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.WeightDivision;
+using TRNMNT.Data.UnitOfWork;
 
 namespace TRNMNT.Core.Services
 {
@@ -24,13 +22,15 @@ namespace TRNMNT.Core.Services
         private IRepository<WeightDivision> weightDivisionRepository;
         private IFileService fileService;
         private IRepository<FederationMembership> federationMembershipRepository;
+        private IUnitOfWork unitOfWork;
 
         public EventService(
             IRepository<Event> eventRepository,
             IRepository<Category> categoryRepository,
             IRepository<WeightDivision> weightDivisionRepository,
             IRepository<FederationMembership> federationMembershipRepository,
-            IFileService fileservice
+            IFileService fileservice,
+            IUnitOfWork unitOfWork
             )
         {
             this.eventRepository = eventRepository;
@@ -38,6 +38,7 @@ namespace TRNMNT.Core.Services
             this.weightDivisionRepository = weightDivisionRepository;
             this.federationMembershipRepository = federationMembershipRepository;
             this.fileService = fileservice;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task UpdateEventAsync(EventModel eventModel)
@@ -87,7 +88,7 @@ namespace TRNMNT.Core.Services
 
             }
 
-            await eventRepository.SaveAsync();
+            await unitOfWork.SaveAsync();
         }
 
         public async Task<EventModel> GetNewEventAsync(string userId)
@@ -101,7 +102,7 @@ namespace TRNMNT.Core.Services
                 StatusId = (int)EventStatusEnum.Init
             };
             eventRepository.Add(eventToAdd);
-            await eventRepository.SaveAsync();
+            await unitOfWork.SaveAsync();
             return GetEventModel(eventToAdd);
         }
 
@@ -149,7 +150,7 @@ namespace TRNMNT.Core.Services
             await fileService.SaveImageAsync(path, stream, fileName);
             _event.ImgPath = path;
             eventRepository.Update(_event);
-            await eventRepository.SaveAsync();
+            await unitOfWork.SaveAsync();
         }
 
         public async Task SaveEventTncAsync(Stream stream, string eventId, string fileName)
@@ -159,7 +160,7 @@ namespace TRNMNT.Core.Services
             var _event = await eventRepository.GetByIDAsync(new Guid(eventId));
             _event.TNCFilePath = path;
             eventRepository.Update(_event);
-            await eventRepository.SaveAsync();
+            await unitOfWork.SaveAsync();
         }
 
         public async Task<string> GetEventIdAsync(string url)

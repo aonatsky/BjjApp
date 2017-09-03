@@ -15,7 +15,7 @@ export class EventModelBase {
 export class EventModel extends EventModelBase {
     constructor() {
         super();
-        this.categories = [];
+        this.categoryModels = [];
     }
 
     public description: string;
@@ -30,7 +30,7 @@ export class EventModel extends EventModelBase {
     public fbLink : string;
     public vkLink : string;
     public additionalData: string;
-    public categories: CategoryModel[]
+    public categoryModels: CategoryModel[]
 
 };
 

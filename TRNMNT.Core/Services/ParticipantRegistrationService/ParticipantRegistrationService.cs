@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Data.Entities;
+using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Web.Core.Const;
 using TRNMNT.Web.Core.Enum;
 
@@ -16,13 +15,19 @@ namespace TRNMNT.Core.Services
         private IParticipantService participantService;
         private IOrderService orderService;
         private IEventService eventService;
+        private IUnitOfWork unitOfWork;
 
-        public ParticipantRegistrationService(IOrderService orderService, IPaymentService paymentService, IParticipantService participantservice, IEventService eventService)
+        public ParticipantRegistrationService(IOrderService orderService, 
+            IPaymentService paymentService, 
+            IParticipantService participantService, 
+            IEventService eventService,
+            IUnitOfWork unitOfWork)
         {
             this.orderService = orderService;
-            this.participantService = participantservice;
+            this.participantService = participantService;
             this.paymentService = paymentService;
             this.eventService = eventService;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(ParticipantRegistrationModel model, string userId, string callbackUrl) {
@@ -36,12 +41,17 @@ namespace TRNMNT.Core.Services
             else
             {
                 var participant = GetParticipantByModel(model);
-                var participantId = participantService.AddParticipant(participant);
+
                 var price = await eventService.GetPrice(model.EventId, userId);
-                var order = await orderService.GetNewOrderAsync(OrderTypeEnum.EventParticipation, userId, price, "UAH", participantId.ToString());
+                var order = orderService.GetNewOrder(OrderTypeEnum.EventParticipation, userId, price, "UAH", participant.ParticipantId.ToString());
                 var paymentData = paymentService.GetPaymentDataModel(order, callbackUrl);
+
+                await participantService.AddParticipant(participant, false);
+                await orderService.AddOrderAsync(order, false);
+                await unitOfWork.SaveAsync();
+
                 return new ParticipantRegistrationResult() {
-                    ParticipantId = participantId.ToString(),
+                    ParticipantId = participant.ParticipantId.ToString(),
                     Success = true,
                     PaymentData = paymentData
                 };

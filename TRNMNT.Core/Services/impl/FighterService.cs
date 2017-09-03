@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
+using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Web.Core.Model;
 
 namespace TRNMNT.Web.Core.Services.impl
@@ -14,16 +15,20 @@ namespace TRNMNT.Web.Core.Services.impl
         private IRepository<Team> teamRepository;
         private IRepository<WeightDivision> categoryRepository;
         private IRepository<WeightDivision> weightDivisionRepository;
+        private IUnitOfWork unitOfWork;
 
         public FighterService(IRepository<Fighter> fighterRepository,
             IRepository<Team> teamRepository,
             IRepository<WeightDivision> categoryRepository,
-            IRepository<WeightDivision> weightDivisionRepository)
+            IRepository<WeightDivision> weightDivisionRepository,
+            IUnitOfWork unitOfWork)
+            
         {
             this.fighterRepository = fighterRepository;
             this.teamRepository = teamRepository;
             this.categoryRepository = categoryRepository;
             this.weightDivisionRepository = weightDivisionRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         #region Public Methods
@@ -91,7 +96,7 @@ namespace TRNMNT.Web.Core.Services.impl
                 }
             }
             fighterRepository.AddRange(fightersToAdd);
-            fighterRepository.Save();
+            unitOfWork.Save();
             return message;
         }
 

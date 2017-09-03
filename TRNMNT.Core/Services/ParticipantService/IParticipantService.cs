@@ -13,6 +13,6 @@ namespace TRNMNT.Core.Services
 
         Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant);
 
-        Task AddParticipant(Participant participant);
+        Task AddParticipant(Participant participant, bool saveContext = true);
     }
 }
