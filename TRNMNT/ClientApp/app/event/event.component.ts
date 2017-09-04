@@ -1,4 +1,3 @@
-import { DataService } from './../core/dal/contracts/data.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {LoggerService} from './../core/services/logger.service'
@@ -14,7 +13,7 @@ export class EventComponent implements OnInit {
 
     userData: string;
 
-    constructor(private dataService: DataService, private loggerService: LoggerService, private authService: AuthService) {
+    constructor(private loggerService: LoggerService, private authService: AuthService) {
 
     }
 

@@ -1,4 +1,4 @@
-﻿import { Component, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, OnChanges } from '@angular/core';
 import { NgForm } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
@@ -24,7 +24,7 @@ import { SelectItem, MenuModule, MenuItem, Message } from 'primeng/primeng'
     encapsulation: ViewEncapsulation.None
 })
 
-export class EventRegistrationComponent {
+export class EventRegistrationComponent implements OnInit, OnChanges {
 
     private eventId: string;
     private currentStep: number = 0;
@@ -62,6 +62,10 @@ export class EventRegistrationComponent {
         });
     }
 
+    ngOnChanges() {
+        debugger;
+        this.formPrivat.nativeElement.click();
+    }
 
     private loadData() {
         Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId))
@@ -146,6 +150,8 @@ export class EventRegistrationComponent {
         });
         
     }
+
+   
 
     private nextStep() {
         this.currentStep++;

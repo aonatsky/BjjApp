@@ -1,4 +1,3 @@
-import { DataService } from '../../core/dal/contracts/data.service';
 import { Component, OnInit } from '@angular/core';
 import { RouterService } from './../../core/services/router.service';
 import { AuthService } from './../../core/services/auth.service';
@@ -14,7 +13,7 @@ export class TopbarComponent  implements OnInit {
 
     user: UserModel;
 
-    constructor(private dataService: DataService, private routerService: RouterService, private authService: AuthService) {
+    constructor(private routerService: RouterService, private authService: AuthService) {
 
     }
 

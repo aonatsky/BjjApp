@@ -1,5 +1,10 @@
 
 <router-outlet>
+    <div *ngIf="isLoaderShown" class="loader-modal">
+        <div class="loader">
+            <div class="cssload-ball"></div>
+        </div>
+    </div>
 </router-outlet>
 
 

@@ -12,7 +12,6 @@ import { BrowserModule } from '@angular/platform-browser'
 import { DataService } from './dal/contracts/data.service';
 import { HttpService } from './dal/http/http.service';
 import { AuthService } from './services/auth.service';
-import { ApiProviders } from './dal/api.providers';
 import { LoggerService } from './services/logger.service';
 import { RouterService } from './services/router.service';
 import { NotificationService } from './services/notification.service';
@@ -67,7 +66,6 @@ import { RedirectGuard } from './routing/redirect.guard';
 
     providers: [
         HttpService,
-        ApiProviders,
         LoggerService,
         LoaderService,
         NotificationService,
