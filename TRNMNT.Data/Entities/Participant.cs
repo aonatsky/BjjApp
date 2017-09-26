@@ -25,6 +25,7 @@ namespace TRNMNT.Data.Entities
         public Guid CategoryId { get; set; }
         public Guid WeightDivisionId { get; set; }
         public Guid EventId { get; set; }
+        public String ActivatedPromoCode { get; set; }
 
         [JsonIgnore]
         public virtual Team Team { get; set; }
