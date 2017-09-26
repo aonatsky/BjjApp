@@ -8,6 +8,7 @@ export class EventModelBase {
     public title: string;
     public eventDate: Date;
     public registrationStartTS: Date;
+    public earlyRegistrationEndTS: Date;
     public registrationEndTS: Date;
 
 };
@@ -20,7 +21,7 @@ export class EventModel extends EventModelBase {
 
     public description: string;
     public address: string;
-    public image: any;
+    public imagePath: any;
     public urlPrefix: string;
     public descritpion : string;
     public tncFilePath: string;
@@ -30,6 +31,13 @@ export class EventModel extends EventModelBase {
     public fbLink : string;
     public vkLink : string;
     public additionalData: string;
+    public promoCodeEnabled: boolean;
+    public promoCodeListPath: string
+    public earlyRegistrationPrice: number;
+    public lateRegistrationPrice: number;
+    public earlyRegistrationPriceForMembers: number;
+    public lateRegistrationPriceForMembers: number;
+
     public categoryModels: CategoryModel[]
 
 };

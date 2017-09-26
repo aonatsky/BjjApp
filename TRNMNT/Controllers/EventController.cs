@@ -194,6 +194,25 @@ namespace TRNMNT.Web.Controllers
             };
         }
 
+        [Authorize, HttpPost("[action]/{id}")]
+        public async Task<IActionResult> UploadPromoCodeList(IFormFile file, string id)
+        {
+            try
+            {
+                using (var stream = file.OpenReadStream())
+                {
+                    await eventService.SaveEventTncAsync(stream, id, file.FileName);
+                }
+                return Ok();
+            }
+
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            };
+        }
+
 
         [Authorize, HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetPrice(string eventId)

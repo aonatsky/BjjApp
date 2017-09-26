@@ -16,7 +16,13 @@ namespace TRNMNT.Core.Model.Event
         public string FBLink { get; set; }
         public string VKLink { get; set; }
         public string AdditionalData { get; set; }
-
+        public int EarlyRegistrationPrice { get; set; }
+        public int LateRegistrationPrice { get; set; }
+        public int EarlyRegistrationPriceForMembers { get; set; }
+        public int LateRegistrationPriceForMembers { get; set; }
+        public bool PromoCodeEnabled { get; set; }
+        public string PromoCodeListPath { get; set; }
+        
         public virtual ICollection<CategoryModel> CategoryModels { get; set; }
         
     }

@@ -120,4 +120,8 @@ export class EventEditComponent implements OnInit {
     private onTncUpload(event) {
         this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe();
     }
+
+    private onPromoCodeUpload(event) {
+        this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe();
+    }
 }

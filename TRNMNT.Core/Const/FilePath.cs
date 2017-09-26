@@ -10,7 +10,9 @@ namespace TRNMNT.Web.Core.Const
         public const string EVENT_DATA_FOLDER = "EventData";
         public const string EVENT_IMAGE_FOLDER = "EventImage";
         public const string EVENT_IMAGE_FILE = "image.jpeg";
-        public const string EVENT_TNC_FOLDER = "EventImage";
-        
+        public const string EVENT_TNC_FOLDER = "EventTnc";
+        public const string EVENT_PROMOCODE_LIST_FOLDER = "PromoCodeList";
+        public const string EVENT_PROMOCODE_LIST_FILE = "codes.csv";
+
     }
 }

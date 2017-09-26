@@ -19,21 +19,23 @@
                 </div>
             </div>
             <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Early Registration End</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-calendar [(ngModel)]="eventModel.earlyRegistrationEndTS" [showIcon]="true"></p-calendar>
+                </div>
+            </div>
+            <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Registration End</label></div>
                 <div class="ui-g-9 ui-fluid"><p-calendar [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true"></p-calendar></div>
             </div>
             <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>URL</label></div>
-                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.urlPrefix" /></div>
-                <div class="ui-g-6 ui-fluid">.trnmnt.pro</div>
+                <div class="ui-g-3 ui-fluid"><label>Location</label></div>
+                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:5em"></textarea></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
                 <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.description" style="resize:none; height:20em"></textarea></div>
             </div>
-        </div>
-        <div *ngIf="currentStep==1" class="ui-widget-content ui-corner-all">
-            
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Image</label></div>
                 <div class="ui-g-9 ui-fluid">
@@ -47,9 +49,21 @@
                 </div>
             </div>
             <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Location</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:5em"></textarea></div>
+                <div class="ui-g-3 ui-fluid"><label>Promo Code Enabled</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-checkbox [(ngModel)]="eventModel.promoCodeEnabled" binary="true"></p-checkbox>
+                </div>
             </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Promo Code List</label></div>
+                <div class="ui-g-9 ui-fluid">
+                    <p-fileUpload #fubauto mode="basic" maxFileSize="1000000" (onUpload)="onPromoCodeUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="currentStep==1" class="ui-widget-content ui-corner-all">
+            
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Contact Phone</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.contactPhone" /></div>

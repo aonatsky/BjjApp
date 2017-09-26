@@ -163,6 +163,17 @@ namespace TRNMNT.Core.Services
             await unitOfWork.SaveAsync();
         }
 
+
+        public async Task SavePromoCodeListAsync(Stream stream, string eventId)
+        {
+            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, fileName);
+            await fileService.SaveFileAsync(path, stream);
+            var _event = await eventRepository.GetByIDAsync(new Guid(eventId));
+            _event.TNCFilePath = path;
+            eventRepository.Update(_event);
+            await unitOfWork.SaveAsync();
+        }
+
         public async Task<string> GetEventIdAsync(string url)
         {
             return (await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e => e.EventId).FirstOrDefaultAsync()).ToString();
@@ -223,6 +234,13 @@ namespace TRNMNT.Core.Services
                 RegistrationStartTS = _event.RegistrationStartTS,
                 UrlPrefix = _event.UrlPrefix,
                 VKLink = _event.VKLink,
+                EarlyRegistrationEndTS = _event.EarlyRegistrationEndTS,
+                EarlyRegistrationPrice = _event.EarlyRegistrationPrice,
+                EarlyRegistrationPriceForMembers = _event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPrice = _event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPriceForMembers = _event.LateRegistrationPriceForMembers,
+                PromoCodeEnabled = _event.PromoCodeEnabled,
+                PromoCodeListPath  = _event.PromoCodeListPath,
                 CategoryModels = GetCategoryModels(_event.Categories)
             };
         }
@@ -284,6 +302,11 @@ namespace TRNMNT.Core.Services
                 RegistrationStartTS = _eventModel.RegistrationStartTS,
                 UrlPrefix = _eventModel.UrlPrefix,
                 VKLink = _eventModel.VKLink,
+                PromoCodeEnabled = _eventModel.PromoCodeEnabled,
+                LateRegistrationPrice = _eventModel.LateRegistrationPrice,
+                EarlyRegistrationPriceForMembers = _eventModel.EarlyRegistrationPriceForMembers,
+                EarlyRegistrationPrice = _eventModel.EarlyRegistrationPriceForMembers,
+                EarlyRegistrationEndTS = _eventModel.EarlyRegistrationEndTS,
                 Categories = GetCategoriesFromModels(_eventModel.CategoryModels)
             };
         }
@@ -337,9 +360,14 @@ namespace TRNMNT.Core.Services
             _event.RegistrationStartTS = eventModel.RegistrationStartTS;
             _event.UrlPrefix = eventModel.UrlPrefix;
             _event.VKLink = eventModel.VKLink;
+            _event.EarlyRegistrationEndTS = eventModel.EarlyRegistrationEndTS;
+            _event.EarlyRegistrationPrice = eventModel.EarlyRegistrationPrice;
+            _event.EarlyRegistrationPriceForMembers = eventModel.EarlyRegistrationPriceForMembers;
+            _event.LateRegistrationPrice = eventModel.EarlyRegistrationPriceForMembers;
+            _event.LateRegistrationPriceForMembers = eventModel.LateRegistrationPriceForMembers;
+            _event.PromoCodeEnabled = eventModel.PromoCodeEnabled;
+            _event.PromoCodeListPath = eventModel.PromoCodeListPath;
             return _event;
-
-
         }
 
 
@@ -347,7 +375,6 @@ namespace TRNMNT.Core.Services
         {
             categoryRepository.DeleteRange(categories);
         }
-
         #endregion
 
 

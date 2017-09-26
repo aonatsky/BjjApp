@@ -18,6 +18,7 @@ namespace TRNMNT.Core.Services
         Task<bool> IsPrefixExistAsync(string prefix);
         Task AddEventImageAsync(Stream stream, string eventId);
         Task SaveEventTncAsync(Stream stream, string eventId, string fileName);
+        Task SavePromoCodeListAsync(Stream stream, string eventId);
         Task <string>GetEventIdAsync(string url);
         Task<string> GetEventOwnerIdAsync(Guid eventId);
         Task<int> GetPrice(Guid EventId, string userId);
