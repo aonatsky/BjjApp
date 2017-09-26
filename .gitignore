@@ -54,3 +54,5 @@ Debug/
 Debug
 Release/
 Release
+bin
+obj
