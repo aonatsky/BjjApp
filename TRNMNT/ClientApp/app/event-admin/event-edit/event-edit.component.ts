@@ -16,7 +16,7 @@ import { CategoryComponent } from './../event-create/category.component'
     styleUrls: ['./event-create.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class EventCreateComponent implements OnInit {
+export class EventEditComponent implements OnInit {
     constructor(private authService: AuthService, private eventService: EventService, private route: ActivatedRoute) {
        
     }
@@ -35,8 +35,6 @@ export class EventCreateComponent implements OnInit {
     ngOnInit() {
         this.initMenu();
         this.initData();
-        
-
     }
 
 
@@ -52,37 +50,9 @@ export class EventCreateComponent implements OnInit {
                 this.eventService.getEvent(id).subscribe(r => this.eventModel = r);
                 this.isNew = false;
             } else {
-                this.isNew = true;
-                this.eventService.getNewEvent().subscribe(r => this.eventModel = r)
+                alert("No data to display")
             }
         })
-    }
-
-    private fillSampleData() {
-        this.eventModel = new EventModel();
-        this.eventModel.title = "Kiev open 2020"
-        this.eventModel.eventDate = new Date(2017, 5, 5)
-        this.eventModel.registrationStartTS = new Date(2017, 4, 5)
-        this.eventModel.registrationEndTS = new Date(2017, 5, 2)
-        this.eventModel.description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque quis enim neque. Sed congue, enim vitae varius vulputate, lorem mauris feugiat enim, sit amet congue elit purus eget felis. Donec maximus consectetur nibh. Vestibulum tellus turpis, venenatis eu blandit id, tincidunt vitae nisi. Proin in erat vitae metus accumsan consectetur. Cras nec ipsum eros. Sed eu auctor urna. Nullam efficitur dolor ut scelerisque blandit. Fusce ut rhoncus felis, et auctor est. Vivamus vel ornare nisi, ac auctor mauris. Pellentesque a diam urna. Aenean vitae mi egestas turpis dignissim suscipit non et leo. Integer lacus diam, placerat non scelerisque vel, luctus vitae turpis. Duis nec libero vel ligula tempus lacinia vel sed eros."
-        this.eventModel.address = "In in congue elit. Donec feugiat neque nec lacus vehicula tristique. Ut in libero nec odio malesuada interdum sed non nulla. Vestibulum orci erat, cursus at purus vitae"
-
-        let wd1 = new WeightDivisionModel("weight division 1");
-        let wd2 = new WeightDivisionModel("weight division 2");
-        let wd3 = new WeightDivisionModel("weight division 3");
-        var cat1 = new CategoryModel();
-        cat1.categoryId = "02b44457-be9e-4196-a666-e5602e04ee61";
-        cat1.name = "category 1"
-        cat1.weightDivisions = [wd1, wd2, wd3];
-
-
-        var cat2 = new CategoryModel();
-        cat2.categoryId = "02b44457-be9e-4196-a666-e5602e04ee63";
-        cat2.name = "category 2"
-        cat2.weightDivisions = [wd1, wd2];
-
-
-        this.eventModel.categoryModels = [cat1, cat2];
     }
 
 

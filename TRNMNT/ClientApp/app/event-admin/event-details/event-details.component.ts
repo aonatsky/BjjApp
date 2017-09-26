@@ -21,7 +21,6 @@ export class EventDetailsComponent implements OnInit{
 
     public createEvent() {
         this.eventService.createEvent().subscribe(r => this.routerService.goToEditEvent(r))
-        //this.routerService.GoToEditEvent();
     }
 
     public editEvent(id: string) {

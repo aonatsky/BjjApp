@@ -9,8 +9,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { EventAdminComponent } from './event-admin/event-admin.component'
 import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
-import { EventCreateComponent } from './event-create/event-create.component'
-import { CategoryComponent } from './event-create/category.component'
+import { EventEditComponent } from './event-edit/event-edit.component'
+import { CategoryComponent } from './event-edit/category.component'
 import { eventAdminRoutes } from './event-admin.routing'
 
 
@@ -24,7 +24,7 @@ import { eventAdminRoutes } from './event-admin.routing'
         EventAdminComponent,
         TopbarComponent,
         EventOverviewComponent,
-        EventCreateComponent,
+        EventEditComponent,
         CategoryComponent
     ],
 

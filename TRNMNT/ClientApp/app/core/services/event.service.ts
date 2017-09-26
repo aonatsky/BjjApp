@@ -24,11 +24,6 @@ export class EventService {
         return this.httpService.post(ApiMethods.event.updateEvent, event);
     }
 
-    public getNewEvent(): Observable<EventModel> {
-        return this.httpService.post(ApiMethods.event.getNewEvent);
-    }
-
-
     public getEventsForOwner(): Observable<EventPreviewModel[]> {
         return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventModel>(res));
     }
