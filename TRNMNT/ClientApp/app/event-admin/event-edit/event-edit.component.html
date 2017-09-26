@@ -33,6 +33,22 @@
                 <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:5em"></textarea></div>
             </div>
             <div class="ui-g">
+                <div class="ui-g-3 ui-fluid o"><label>Early Registration Price</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid o"><label>Early Registration Price For Members</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid o"><label>Late Registration Price </label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPrice" /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid o"><label>Late Registration Price For Members</label></div>
+                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers" /></div>
+            </div>
+            <div class="ui-g">
                 <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
                 <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.description" style="resize:none; height:20em"></textarea></div>
             </div>
@@ -141,6 +157,6 @@
     <div class="ui-g-12">
         <div class="float-left"><button pButton type="button" class="float-right" label="Back" (click)="previousStep()" *ngIf="currentStep != 0"></button></div>
         <div class="float-right"><button pButton type="button" class="float-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep"></button></div>
-        <div class="float-right"><button pButton type="button" class="float-right" label="Save as draft" (click)="saveAsDraft()"></button></div>
+        <div class="float-right"><button pButton type="button" class="float-right" label="Save" (click)="saveAsDraft()"></button></div>
     </div>
 </div>

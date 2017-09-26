@@ -53,6 +53,7 @@ namespace TRNMNT.Web.Controllers
             catch (Exception ex)
             {
                 HandleException(ex);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
 
         }

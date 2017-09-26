@@ -79,9 +79,17 @@ namespace TRNMNT.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                var _event = await eventService.GetFullEventAsync(id);
-                var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
-                return Ok(jsonobj);
+                var eventModel = await eventService.GetFullEventAsync(id);
+                if (eventModel != null)
+                {
+                    var jsonobj = JsonConvert.SerializeObject(eventModel, jsonSerializerSettings);
+                    return Ok(jsonobj);
+                }
+                else
+                {
+                    return new StatusCodeResult((int)HttpStatusCode.NotFound);
+                }
+                
             }
             catch (Exception e)
             {

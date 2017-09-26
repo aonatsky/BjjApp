@@ -12,6 +12,7 @@ using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Data.UnitOfWork;
+using TRNMNT.Data.Context;
 
 namespace TRNMNT.Core.Services
 {
@@ -22,7 +23,7 @@ namespace TRNMNT.Core.Services
         private IRepository<WeightDivision> weightDivisionRepository;
         private IFileService fileService;
         private IRepository<FederationMembership> federationMembershipRepository;
-        private IUnitOfWork unitOfWork;
+        private IAppDbContext unitOfWork;
 
         public EventService(
             IRepository<Event> eventRepository,
@@ -30,7 +31,7 @@ namespace TRNMNT.Core.Services
             IRepository<WeightDivision> weightDivisionRepository,
             IRepository<FederationMembership> federationMembershipRepository,
             IFileService fileservice,
-            IUnitOfWork unitOfWork
+            IAppDbContext unitOfWork
             )
         {
             this.eventRepository = eventRepository;
@@ -43,15 +44,15 @@ namespace TRNMNT.Core.Services
 
         public async Task UpdateEventAsync(EventModel eventModel)
         {
-
             var _event = await eventRepository.GetByIDAsync<Guid>(eventModel.EventId);
+
             _event = UpdateFromModel(_event, eventModel);
             _event.UpdateTS = DateTime.UtcNow;
             _event.IsActive = true;
             eventRepository.Update(_event);
-
             var categoriesToDelete = await categoryRepository.GetAll().Where(c => c.EventId == _event.EventId && !eventModel.CategoryModels.Select(cm => Guid.Parse(cm.CategoryId)).Contains(c.CategoryId)).ToListAsync();
-            categoryRepository.DeleteRange(categoriesToDelete);
+            var wdIdsToDelete = eventModel.CategoryModels.Select(c=>c.WeightDivisionModels.Select(wd => wd.WeightDivisionId))
+
 
             foreach (var categoryModel in eventModel.CategoryModels)
             {
@@ -85,9 +86,8 @@ namespace TRNMNT.Core.Services
                     }
                 }
 
-
             }
-
+            categoryRepository.DeleteRange(categoriesToDelete);
             await unitOfWork.SaveAsync();
         }
 
@@ -109,7 +109,7 @@ namespace TRNMNT.Core.Services
         public async Task<EventModel> GetFullEventAsync(Guid id)
         {
             var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
-            return GetEventModel(_event);
+            return _event != null ? GetEventModel(_event) : null;
         }
 
 
@@ -166,10 +166,10 @@ namespace TRNMNT.Core.Services
 
         public async Task SavePromoCodeListAsync(Stream stream, string eventId)
         {
-            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, fileName);
+            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, FilePath.EVENT_PROMOCODE_LIST_FILE);
             await fileService.SaveFileAsync(path, stream);
             var _event = await eventRepository.GetByIDAsync(new Guid(eventId));
-            _event.TNCFilePath = path;
+            _event.PromoCodeListPath = path;
             eventRepository.Update(_event);
             await unitOfWork.SaveAsync();
         }
@@ -240,7 +240,7 @@ namespace TRNMNT.Core.Services
                 LateRegistrationPrice = _event.EarlyRegistrationPriceForMembers,
                 LateRegistrationPriceForMembers = _event.LateRegistrationPriceForMembers,
                 PromoCodeEnabled = _event.PromoCodeEnabled,
-                PromoCodeListPath  = _event.PromoCodeListPath,
+                PromoCodeListPath = _event.PromoCodeListPath,
                 CategoryModels = GetCategoryModels(_event.Categories)
             };
         }
@@ -256,7 +256,8 @@ namespace TRNMNT.Core.Services
                     {
                         CategoryId = category.CategoryId.ToString(),
                         Name = category.Name,
-                        WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions)
+                        WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions),
+                        EventId = category.EventId
                     });
                 }
             }
@@ -275,7 +276,7 @@ namespace TRNMNT.Core.Services
                         WeightDivisionId = weightDivision.WeightDivisionId.ToString(),
                         Weight = weightDivision.Weight,
                         Descritpion = weightDivision.Descritpion,
-                        Name = weightDivision.Descritpion
+                        Name = weightDivision.Name
                     });
                 }
             }

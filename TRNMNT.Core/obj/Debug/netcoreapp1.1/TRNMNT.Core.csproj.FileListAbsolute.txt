@@ -17,3 +17,4 @@ C:\dev\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.AssemblyInfo.cs
 C:\dev\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.dll
 C:\dev\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.pdb
 D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.csproj.CoreCompileInputs.cache
+C:\dev\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.csproj.CoreCompileInputs.cache

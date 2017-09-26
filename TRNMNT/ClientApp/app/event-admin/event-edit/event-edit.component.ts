@@ -7,13 +7,13 @@ import { CategoryModel } from './../../core/model/category.models';
 import { WeightDivisionModel } from './../../core/model/weight-division.models';
 import { AuthService } from './../../core/services/auth.service'
 import { EventService } from './../../core/services/event.service'
-import { CategoryComponent } from './../event-create/category.component'
+import { CategoryComponent } from './category.component'
 
 
 @Component({
-    selector: 'event-create',
-    templateUrl: './event-create.component.html',
-    styleUrls: ['./event-create.component.css'],
+    selector: 'event-edit',
+    templateUrl: './event-edit.component.html',
+    styleUrls: ['./event-edit.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 export class EventEditComponent implements OnInit {
@@ -47,7 +47,7 @@ export class EventEditComponent implements OnInit {
         this.route.params.subscribe(p => {
             let id = p["id"];
             if (id && id != "") {
-                this.eventService.getEvent(id).subscribe(r => this.eventModel = r);
+                this.eventService.getEvent(id).subscribe(r => {this.eventModel = r });
                 this.isNew = false;
             } else {
                 alert("No data to display")
