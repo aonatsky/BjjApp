@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
+using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Web.Core.Enum;
 
 namespace TRNMNT.Core.Services
@@ -9,21 +10,36 @@ namespace TRNMNT.Core.Services
     public class OrderService : IOrderService
     {
         private IRepository<Order> orderRepository;
+        private IUnitOfWork unitOfWork;
 
-        public OrderService(IRepository<Order> orderRepository)
+        public OrderService(IRepository<Order> orderRepository, IUnitOfWork unitOfWork)
         {
             this.orderRepository = orderRepository;
+            this.unitOfWork = unitOfWork;
         }
 
-        public async Task ApproveOrderAsync(Guid orderId)
+        public async Task AddOrderAsync(Order order, bool saveContext = true)
+        {
+            orderRepository.Add(order);
+            if (saveContext)
+            {
+                await unitOfWork.SaveAsync();
+            }
+
+        }
+
+        public async Task ApproveOrderAsync(Guid orderId, bool saveContext = true)
         {
             var order = await orderRepository.GetByIDAsync(orderId);
             order.PaymentApproved = true;
             orderRepository.Update(order);
-            await orderRepository.SaveAsync();
+            if (saveContext)
+            {
+                await unitOfWork.SaveAsync();
+            }
         }
 
-        public async Task<Order> GetNewOrderAsync(OrderTypeEnum orderType, string userId, int ammount, string currency, string reference)
+        public Order GetNewOrder(OrderTypeEnum orderType, string userId, int ammount, string currency, string reference)
         {
             var order = new Order
             {
@@ -35,8 +51,6 @@ namespace TRNMNT.Core.Services
                 PaymentApproved = false,
                 Reference = reference
             };
-            orderRepository.Add(order);
-            await orderRepository.SaveAsync();
             return order;
         }
     }

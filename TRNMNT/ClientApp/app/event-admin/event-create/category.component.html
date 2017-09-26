@@ -13,8 +13,8 @@
                 
             </div>
         </legend>
-        <div class="ui-g" *ngIf="category.weightDivisions">
-            <div class="ui-g-12" *ngFor="let wd of category.weightDivisions">
+        <div class="ui-g" *ngIf="category.weightDivisionModels">
+            <div class="ui-g-12" *ngFor="let wd of category.weightDivisionModels">
                 <div class="ui-g-10 ui-fluid"><input class="second-color-border" pInputText [(ngModel)]="wd.name" /></div>
                 <div class="ui-g-2">
                     <button pButton type="button" class="ui-button-danger ui-button-icon-only" icon="fa-times" (click)="weightDivisionDelete(wd)"></button>

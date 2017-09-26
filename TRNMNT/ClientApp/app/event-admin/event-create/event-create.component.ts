@@ -82,7 +82,7 @@ export class EventCreateComponent implements OnInit {
         cat2.weightDivisions = [wd1, wd2];
 
 
-        this.eventModel.categories = [cat1, cat2];
+        this.eventModel.categoryModels = [cat1, cat2];
     }
 
 
@@ -116,10 +116,10 @@ export class EventCreateComponent implements OnInit {
     }
 
     private categoryDelete(model: CategoryModel) {
-        let index = this.eventModel.categories.indexOf(model);
+        let index = this.eventModel.categoryModels.indexOf(model);
         if (index !== -1) {
-            this.eventModel.categories.splice(index, 1);
-            this.categoryCount = this.eventModel.categories.length;
+            this.eventModel.categoryModels.splice(index, 1);
+            this.categoryCount = this.eventModel.categoryModels.length;
         }
 
     }
@@ -128,7 +128,7 @@ export class EventCreateComponent implements OnInit {
         let category = new CategoryModel();
         category.name = "Category";
         category.eventId = this.eventModel.eventId;
-        this.eventModel.categories.push(category);
+        this.eventModel.categoryModels.push(category);
     }
 
 
@@ -138,7 +138,7 @@ export class EventCreateComponent implements OnInit {
             let controls = (this.categoryComponents.toArray());
             if (controls.length > this.categoryCount) {
                 controls[controls.length - 1].categoryEdit();
-                this.categoryCount = this.eventModel.categories.length;
+                this.categoryCount = this.eventModel.categoryModels.length;
             };
         }
     }

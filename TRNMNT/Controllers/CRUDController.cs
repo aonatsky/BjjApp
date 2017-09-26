@@ -73,7 +73,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 repository.Add(entity);
-                await repository.SaveAsync(false);
+                //await repository.SaveAsync(false);
                 Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -90,7 +90,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 repository.Update(entity);
-                await repository.SaveAsync(false);
+                //await repository.SaveAsync(false);
                 Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -106,7 +106,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 repository.Delete(entity);
-                await repository.SaveAsync(false);
+                //await repository.SaveAsync(false);
                 Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception e)
@@ -122,7 +122,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 repository.Delete<Guid>(Guid.Parse(entityID));
-                await repository.SaveAsync(false);
+                //await repository.SaveAsync(false);
                 Response.StatusCode = (int)HttpStatusCode.OK;
 
             }

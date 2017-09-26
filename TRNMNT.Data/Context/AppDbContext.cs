@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TRNMNT.Data.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using TRNMNT.Data.UnitOfWork;
+using System;
 
 namespace TRNMNT.Data.Context
 {
-    public class AppDbContext : IdentityDbContext<User>, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User>, IAppDbContext, IUnitOfWork
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -102,9 +104,7 @@ namespace TRNMNT.Data.Context
             return base.Set<T>();
         }
 
-
-
-
+        
 
         public DbSet<WeightDivision> WeightDivision { get; set; }
         public DbSet<Fighter> Fighter { get; set; }
