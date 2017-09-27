@@ -49,7 +49,7 @@ export class CategoryComponent {
 
     private weightDivisionDelete(wd: WeightDivisionModel) {
         let index = this.category.weightDivisionModels.indexOf(wd)
-        this.category.weightDivisionModels.splice(index);
+        this.category.weightDivisionModels.splice(index,1);
     }
 
     private weightDivisionAdd() {

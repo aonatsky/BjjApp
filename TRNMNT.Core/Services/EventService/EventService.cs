@@ -75,9 +75,12 @@ namespace TRNMNT.Core.Services
                 }
 
 
-                var wdToDelete = weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId
-                    && !(categoryModel.WeightDivisionModels.Where(wdm => !String.IsNullOrEmpty(wdm.WeightDivisionId)).Select(wdm => new Guid(wdm.WeightDivisionId))).Contains(wd.WeightDivisionId));
+                
+
+                var actualWeightDivisionIds = categoryModel.WeightDivisionModels.Where(wdm => !String.IsNullOrEmpty(wdm.WeightDivisionId)).Select(wdm => new Guid(wdm.WeightDivisionId));
+                var wdToDelete = weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !actualWeightDivisionIds.Contains(wd.WeightDivisionId));
                 weightDivisionRepository.DeleteRange(wdToDelete);
+
 
                 foreach (var wdModel in categoryModel.WeightDivisionModels)
                 {
