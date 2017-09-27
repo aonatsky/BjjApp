@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 using TRNMNT.Data.UnitOfWork;
@@ -10,9 +11,9 @@ namespace TRNMNT.Core.Services
     public class OrderService : IOrderService
     {
         private IRepository<Order> orderRepository;
-        private IUnitOfWork unitOfWork;
+        private IAppDbContext unitOfWork;
 
-        public OrderService(IRepository<Order> orderRepository, IUnitOfWork unitOfWork)
+        public OrderService(IRepository<Order> orderRepository, IAppDbContext unitOfWork)
         {
             this.orderRepository = orderRepository;
             this.unitOfWork = unitOfWork;

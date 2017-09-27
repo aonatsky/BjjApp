@@ -9,7 +9,6 @@ namespace TRNMNT.Data.Entities
     public class Category
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid CategoryId { get; set; }
         public String Name { get; set; }
         public Guid EventId { get; set; }

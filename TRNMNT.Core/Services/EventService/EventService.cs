@@ -44,36 +44,44 @@ namespace TRNMNT.Core.Services
 
         public async Task UpdateEventAsync(EventModel eventModel)
         {
-            var _event = await eventRepository.GetByIDAsync<Guid>(eventModel.EventId);
+            var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();// GetByIDAsync<Guid>(eventModel.EventId);
 
             _event = UpdateFromModel(_event, eventModel);
             _event.UpdateTS = DateTime.UtcNow;
             _event.IsActive = true;
             eventRepository.Update(_event);
-            var categoriesToDelete = await categoryRepository.GetAll().Where(c => c.EventId == _event.EventId && !eventModel.CategoryModels.Select(cm => Guid.Parse(cm.CategoryId)).Contains(c.CategoryId)).ToListAsync();
-            var wdIdsToDelete = eventModel.CategoryModels.Select(c=>c.WeightDivisionModels.Select(wd => wd.WeightDivisionId))
+
+            DeleteCategories(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
 
 
             foreach (var categoryModel in eventModel.CategoryModels)
             {
-                var category = categoryRepository.GetByID<Guid>(Guid.Parse(categoryModel.CategoryId));
+
+                Category category = Guid.TryParse(categoryModel.CategoryId, out Guid categoryId) ? categoryRepository.GetByID(categoryId) : null;
                 if (category != null)
                 {
                     category.Name = categoryModel.Name;
                     categoryRepository.Update(category);
-                    var wdToDelete = await weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !categoryModel.WeightDivisionModels.Select(wdm => Guid.Parse(wdm.WeightDivisionId)).Contains(wd.WeightDivisionId)).ToListAsync();
-                    weightDivisionRepository.DeleteRange(wdToDelete);
                 }
                 else
                 {
-                    category = new Category() { Name = categoryModel.Name, EventId = categoryModel.EventId };
+                    category = new Category()
+                    {
+                        Name = categoryModel.Name,
+                        EventId = categoryModel.EventId,
+                        CategoryId = Guid.NewGuid()
+                    };
                     categoryRepository.Add(category);
                 }
 
 
+                var wdToDelete = weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId
+                    && !(categoryModel.WeightDivisionModels.Where(wdm => !String.IsNullOrEmpty(wdm.WeightDivisionId)).Select(wdm => new Guid(wdm.WeightDivisionId))).Contains(wd.WeightDivisionId));
+                weightDivisionRepository.DeleteRange(wdToDelete);
+
                 foreach (var wdModel in categoryModel.WeightDivisionModels)
                 {
-                    var wd = weightDivisionRepository.GetByID<Guid>(Guid.Parse(wdModel.WeightDivisionId));
+                    var wd = Guid.TryParse(wdModel.WeightDivisionId, out var weightDivisionId) ? weightDivisionRepository.GetByID(weightDivisionId) : null;
                     if (wd != null)
                     {
                         wd.Name = wdModel.Name;
@@ -81,13 +89,18 @@ namespace TRNMNT.Core.Services
                     }
                     else
                     {
-                        wd = new WeightDivision() { Name = wdModel.Name, CategoryId = category.CategoryId };
+                        wd = new WeightDivision()
+                        {
+                            WeightDivisionId = Guid.NewGuid(),
+                            Name = wdModel.Name,
+                            CategoryId = category.CategoryId
+                        };
                         weightDivisionRepository.Add(wd);
                     }
                 }
 
             }
-            categoryRepository.DeleteRange(categoriesToDelete);
+
             await unitOfWork.SaveAsync();
         }
 
@@ -276,7 +289,8 @@ namespace TRNMNT.Core.Services
                         WeightDivisionId = weightDivision.WeightDivisionId.ToString(),
                         Weight = weightDivision.Weight,
                         Descritpion = weightDivision.Descritpion,
-                        Name = weightDivision.Name
+                        Name = weightDivision.Name,
+                        CategoryId = weightDivision.CategoryId.ToString()
                     });
                 }
             }
@@ -312,7 +326,6 @@ namespace TRNMNT.Core.Services
             };
         }
 
-
         private ICollection<Category> GetCategoriesFromModels(ICollection<CategoryModel> models)
         {
             var categories = new List<Category>();
@@ -320,6 +333,7 @@ namespace TRNMNT.Core.Services
             {
                 categories.Add(new Category()
                 {
+                    EventId = model.EventId,
                     CategoryId = Guid.Parse(model.CategoryId),
                     Name = model.Name,
                     WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels)
@@ -338,7 +352,8 @@ namespace TRNMNT.Core.Services
                     WeightDivisionId = Guid.Parse(model.WeightDivisionId),
                     Weight = model.Weight,
                     Descritpion = model.Descritpion,
-                    Name = model.Descritpion
+                    Name = model.Name,
+                    CategoryId = Guid.Parse(model.CategoryId)
                 });
             }
             return weightDivisions;
@@ -372,9 +387,17 @@ namespace TRNMNT.Core.Services
         }
 
 
-        private void DeleteCategories(List<Category> categories)
+        private async void DeleteCategories(Guid eventId, IEnumerable<Guid> eventCategoryIds)
         {
-            categoryRepository.DeleteRange(categories);
+            var categoriesToDelete = await categoryRepository.GetAll().Where(c => c.EventId == eventId && !eventCategoryIds.Contains(c.CategoryId)).ToListAsync();
+            var weightDivisionsToDelete = await weightDivisionRepository.GetAll().Where(wd => categoriesToDelete.Select(c => c.CategoryId).Contains(wd.CategoryId)).ToListAsync();
+            weightDivisionRepository.DeleteRange(weightDivisionsToDelete);
+            categoryRepository.DeleteRange(categoriesToDelete);
+        }
+
+        private async void DeleteWeightDivisions(Guid categoryId)
+        {
+
         }
         #endregion
 

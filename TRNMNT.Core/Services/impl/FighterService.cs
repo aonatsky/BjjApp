@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 using TRNMNT.Data.UnitOfWork;
@@ -15,14 +16,14 @@ namespace TRNMNT.Web.Core.Services.impl
         private IRepository<Team> teamRepository;
         private IRepository<WeightDivision> categoryRepository;
         private IRepository<WeightDivision> weightDivisionRepository;
-        private IUnitOfWork unitOfWork;
+        private IAppDbContext unitOfWork;
 
         public FighterService(IRepository<Fighter> fighterRepository,
             IRepository<Team> teamRepository,
             IRepository<WeightDivision> categoryRepository,
             IRepository<WeightDivision> weightDivisionRepository,
-            IUnitOfWork unitOfWork)
-            
+            IAppDbContext unitOfWork)
+
         {
             this.fighterRepository = fighterRepository;
             this.teamRepository = teamRepository;

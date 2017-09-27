@@ -10,7 +10,6 @@ namespace TRNMNT.Data.Entities
     public class WeightDivision
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid WeightDivisionId { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }

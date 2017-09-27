@@ -98,6 +98,8 @@ export class EventEditComponent implements OnInit {
         let category = new CategoryModel();
         category.name = "Category";
         category.eventId = this.eventModel.eventId;
+        category.weightDivisionModels.push(new WeightDivisionModel("Weight Division"));
+        
         this.eventModel.categoryModels.push(category);
     }
 

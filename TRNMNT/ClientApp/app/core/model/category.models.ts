@@ -14,11 +14,11 @@ export class CategoryModel extends CategoryModelBase {
 
     constructor() {
         super();
-        this.weightDivisions = []
+        this.weightDivisionModels = []
     }
 
     public eventId: string;
-    public weightDivisions: WeightDivisionModel[];
+    public weightDivisionModels: WeightDivisionModel[];
 }
 
 

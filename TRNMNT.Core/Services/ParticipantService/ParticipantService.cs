@@ -9,6 +9,7 @@ using TRNMNT.Data.Repositories;
 using TRNMNT.Web.Core.Const;
 using TRNMNT.Web.Core.Enum;
 using TRNMNT.Data.UnitOfWork;
+using TRNMNT.Data.Context;
 
 namespace TRNMNT.Core.Services
 {
@@ -18,10 +19,10 @@ namespace TRNMNT.Core.Services
         private ITeamService teamService;
         private IOrderService orderService;
         private IPaymentService paymentService;
-        private IUnitOfWork unitOfWork;
+        private IAppDbContext unitOfWork;
 
         public ParticipantService(IRepository<Participant> repository, ITeamService teamService, IOrderService orderService, IPaymentService paymentService,
-            IUnitOfWork unitOfWork)
+            IAppDbContext unitOfWork)
         {
             this.repository = repository;
             this.teamService = teamService;

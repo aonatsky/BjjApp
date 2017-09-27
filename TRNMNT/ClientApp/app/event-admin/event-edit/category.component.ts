@@ -47,15 +47,15 @@ export class CategoryComponent {
     }
 
 
-    private weightDivisionDelete( wd : WeightDivisionModel) {
-        let index = this.category.weightDivisions.indexOf(wd)
-        this.category.weightDivisions.splice(index);
+    private weightDivisionDelete(wd: WeightDivisionModel) {
+        let index = this.category.weightDivisionModels.indexOf(wd)
+        this.category.weightDivisionModels.splice(index);
     }
 
     private weightDivisionAdd() {
         let wd = new WeightDivisionModel("Weight Divison");
         wd.categoryId = this.category.categoryId;
-        this.category.weightDivisions.push(wd);
+        this.category.weightDivisionModels.push(wd);
     }
 
 }
