@@ -51,7 +51,7 @@ namespace TRNMNT.Core.Services
             _event.IsActive = true;
             eventRepository.Update(_event);
 
-            DeleteCategories(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
+            await DeleteCategoriesAsync(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
 
 
             foreach (var categoryModel in eventModel.CategoryModels)
@@ -390,7 +390,7 @@ namespace TRNMNT.Core.Services
         }
 
 
-        private async void DeleteCategories(Guid eventId, IEnumerable<Guid> eventCategoryIds)
+        private async Task DeleteCategoriesAsync(Guid eventId, IEnumerable<Guid> eventCategoryIds)
         {
             var categoriesToDelete = await categoryRepository.GetAll().Where(c => c.EventId == eventId && !eventCategoryIds.Contains(c.CategoryId)).ToListAsync();
             var weightDivisionsToDelete = await weightDivisionRepository.GetAll().Where(wd => categoriesToDelete.Select(c => c.CategoryId).Contains(wd.CategoryId)).ToListAsync();

@@ -1,7 +1,7 @@
 ﻿<div class="ui-widget">
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
-    <div class="ui-g-8 ui-g-offset-2 content" *ngIf="eventModel">
-        <div *ngIf="currentStep==0" class="ui-widget-content ui-corner-all">
+    <div class="ui-g-8 ui-g-offset-2 content ui-widget-content ui-corner-all" *ngIf="eventModel">
+        <div *ngIf="currentStep==0" class="">
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Title</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>
@@ -34,19 +34,15 @@
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid o"><label>Early Registration Price</label></div>
-                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" /></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid o"><label>Early Registration Price For Members</label></div>
-                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers" /></div>
+                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" type="number" /></div>
+                <div class="ui-g-3 ui-fluid o"><label>For Members</label></div>
+                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers" type="number" /></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid o"><label>Late Registration Price </label></div>
-                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPrice" /></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid o"><label>Late Registration Price For Members</label></div>
-                <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers" /></div>
+                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPrice" type="number" /></div>
+                <div class="ui-g-3 ui-fluid o"><label>For Members</label></div>
+                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers" type="number" /></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
@@ -57,12 +53,14 @@
                 <div class="ui-g-9 ui-fluid">
                     <p-fileUpload #fubauto mode="basic" accept="image/*" maxFileSize="1000000" (onUpload)="onImageUpload($event)" auto="true" chooseLabel="Choose Image"></p-fileUpload>
                 </div>
+                <img src={{eventModel.imgPath}} class="ui-g-9 ui-g-offset-3" />
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Terms and Conditions</label></div>
-                <div class="ui-g-9 ui-fluid">
+                <div class="ui-g-4 ui-fluid">
                     <p-fileUpload #fubauto mode="basic" maxFileSize="1000000" (onUpload)="onTncUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
                 </div>
+                <div class="ui-g-offset-1 ui-g-4 ui-fluid" ><button  pButton type="button" label="Download" (click)="downloadTnc()" [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Promo Code Enabled</label></div>
@@ -78,8 +76,8 @@
             </div>
 
         </div>
-        <div *ngIf="currentStep==1" class="ui-widget-content ui-corner-all">
-            
+        <div *ngIf="currentStep==2">
+
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Contact Phone</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.contactPhone" /></div>
@@ -103,7 +101,7 @@
 
         </div>
 
-        <div *ngIf="currentStep==2" class="">
+        <div *ngIf="currentStep==1">
             <div class="category-list">
                 <div class="ui-g">
                     <category #categoryList *ngFor="let category of eventModel.categoryModels;" [category]="category" (onCategoryDelete)="categoryDelete($event)" class="ui-g-12"></category>

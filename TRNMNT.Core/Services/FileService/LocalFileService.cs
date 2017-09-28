@@ -22,9 +22,11 @@ namespace TRNMNT.Core.Services
             throw new NotImplementedException();
         }
 
-        public async Task SaveFileAsync(string path, Stream stream)
+        public async Task SaveFileAsync(string relativePath, Stream stream)
         {
-            using (var fileStream = new FileStream(Path.Combine(rootPath, path), FileMode.Create))
+            var path = Path.Combine(rootPath, relativePath);
+            CheckPath(path);
+            using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 await stream.CopyToAsync(fileStream);
             }
@@ -40,11 +42,12 @@ namespace TRNMNT.Core.Services
             throw new NotImplementedException();
         }
 
-        public async Task SaveImageAsync(string path, Stream stream, string fileName)
+        public async Task SaveImageAsync(string relativePath, Stream stream, string fileName)
         {
+            var path = Path.Combine(rootPath, relativePath);
             CheckPath(path);
             Image img = Image.FromStream(stream, true, true);
-            img.Save(Path.Combine(rootPath,path), ImageFormat.Jpeg);
+            img.Save(path, ImageFormat.Jpeg);
         }
 
         private void CheckPath(string path)

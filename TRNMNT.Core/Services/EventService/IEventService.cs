@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Event;
-using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services
 {

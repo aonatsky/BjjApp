@@ -40,6 +40,10 @@ export class EventService {
         return this.httpService.postFile(ApiMethods.event.uploadTnc + "/" + id, file);
     }
 
+    public downloadEventTncFile(tncPath: string): Observable<any> {
+        return this.httpService.getPdf(tncPath, "TNC");
+    }
+
     public uploadPromoCodeList(file, id) {
         return this.httpService.postFile(ApiMethods.event.uploadPromoCodeList + "/" + id, file);
     }
