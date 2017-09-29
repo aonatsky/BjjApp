@@ -13,6 +13,7 @@ namespace TRNMNT.Core.Services
         Task<EventModel> GetFullEventAsync(Guid id);
         Task<EventModel> GetEventByPrefixAsync(string prefix);
         Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId);
+        Task<EventModelBase> GetEventBaseInfoAsync(Guid id);
         Task<bool> IsPrefixExistAsync(string prefix);
         Task AddEventImageAsync(Stream stream, string eventId);
         Task SaveEventTncAsync(Stream stream, string eventId, string fileName);
