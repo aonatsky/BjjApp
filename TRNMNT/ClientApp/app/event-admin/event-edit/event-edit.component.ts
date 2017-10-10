@@ -55,7 +55,6 @@ export class EventEditComponent implements OnInit {
         })
     }
 
-
     private initMenu() {
         this.menuItems = [{
             label: 'General Information',
@@ -69,6 +68,9 @@ export class EventEditComponent implements OnInit {
         ];
     }
 
+    private modelReload() {
+        this.eventService.getEvent(this.eventModel.eventId).subscribe(r => { this.eventModel = r });
+    }
 
     private nextStep() {
         this.currentStep++;
@@ -113,15 +115,15 @@ export class EventEditComponent implements OnInit {
     }
 
     private onImageUpload(event) {
-        this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe();
+        this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
     }
 
     private onTncUpload(event) {
-        this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe();
+        this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
     }
 
     private onPromoCodeUpload(event) {
-        this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe();
+        this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
     }
 
     private downloadTnc() {
