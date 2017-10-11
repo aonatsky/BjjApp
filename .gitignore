@@ -38,3 +38,9 @@ jspm_packages
 
 # Intellij IDEA project info
 .idea
+
+/TRNMNT.Core/bin/Debug/netcoreapp1.1
+/TRNMNT.Data/bin/Debug/netcoreapp1.1
+/TRNMNT.Data/obj/Debug
+/TRNMNT.Data/obj
+/TRNMNT.Core/obj

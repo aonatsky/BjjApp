@@ -49,7 +49,8 @@ namespace TRNMNT.Core.Services.impl
                 {
                     FighterId = Guid.NewGuid(),
                     FirstName = model.FirstName,
-                    LastName = model.LastName
+                    LastName = model.LastName,
+                    Region = model.Region
                 };
 
                 if (DateTime.TryParse(model.DateOfBirth, out var dob))
@@ -122,7 +123,7 @@ namespace TRNMNT.Core.Services.impl
         private List<FighterModel> Distribute(List<FighterModel> fightersList)
         {
 
-            var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
+            var orderedbyTeam = fightersList.ToList().GroupBy(f => new { f.Team, f.Region }).OrderByDescending(g => g.Count())
            .SelectMany(f => f).ToList();
             if (fightersList.Count() > 2)
             {
@@ -156,7 +157,8 @@ namespace TRNMNT.Core.Services.impl
                 Team = f.Team.Name,
                 WeightDivision = f.WeightDivision.Name,
                 Category = f.Category.Name,
-                DateOfBirth = f.DateOfBirth.ToString("yyyy-MM-dd")
+                DateOfBirth = f.DateOfBirth.ToString("yyyy-MM-dd"),
+                Region = f.Region
             }).ToList();
 
         }

@@ -22,6 +22,7 @@ export class FighterListComponent {
         { displayName: "Last Name", propertyName: "lastName", isEditable: false },
         { displayName: "DOB", propertyName: "dateOfBirth", isEditable: false },
         { displayName: "Team", propertyName: "team", isEditable: false },
+        { displayName: "Region", propertyName: "region", isEditable: false },
         { displayName: "Category", propertyName: "category", isEditable: false },
         { displayName: "Weight Division", propertyName: "weightDivision", isEditable: false }
     ];

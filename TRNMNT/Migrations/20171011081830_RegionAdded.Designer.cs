@@ -8,9 +8,10 @@ using TRNMNT.Core.Data;
 namespace TRNMNT.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171011081830_RegionAdded")]
+    partial class RegionAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasDefaultSchema("trnmnt")

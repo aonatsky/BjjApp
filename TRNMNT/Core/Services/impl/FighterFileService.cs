@@ -54,7 +54,8 @@ namespace TRNMNT.Core.Services.impl
                                 DateOfBirth = sheet.Cells[i, 3].GetValue<string>(),
                                 Team = sheet.Cells[i, 4].GetValue<string>(),
                                 WeightDivision = sheet.Cells[i, 5].GetValue<string>(),
-                                Category = sheet.Cells[i, 6].GetValue<string>()
+                                Category = sheet.Cells[i, 6].GetValue<string>(),
+                                Region = sheet.Cells[i, 7].GetValue<string>()
                             });
                         }
                         var message = fighterService.AddFightersByModels(fighterModelList);

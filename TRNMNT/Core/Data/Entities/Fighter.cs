@@ -13,6 +13,7 @@ namespace TRNMNT.Core.Data.Entities
         public String LastName { get; set; }
         public DateTime DateOfBirth {get;set;}
         public Guid TeamId { get; set; }
+        public string Region { get; set; }
         public Guid CategoryId{get;set;}
         public Guid WeightDivisionId{get;set;}
 
