@@ -7,7 +7,6 @@
 dropdown {
     display: inline-block;
     float: right;
-
 }
 
 
@@ -18,5 +17,9 @@ h5 {
 .filter-section
 {
     display: block;
-    width: 200px;
+    width: 300px;
+}
+
+button {
+    width: 200px !important;
 }

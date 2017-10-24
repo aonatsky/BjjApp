@@ -15,6 +15,6 @@ export class LoaderService {
     }
 
     private showHideLoader(value: boolean) {
-        this.isLoaderShown.next(value);
+        //this.isLoaderShown.next(value);
     }
 }

@@ -87,6 +87,7 @@ export class TournamentSettingsComponent implements OnInit {
 
     private test(data: any) {
         this.weightDivisions = data;
+        this.loaderService.hideLoader();
     }
 
 }

@@ -48,7 +48,7 @@ namespace TRNMNT.Core.Services.impl
                         for (int i = 0; i < settings.Count; i++)
                         {
                             var fighter = models.ElementAtOrDefault(i);
-                            sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(fighter.FirstName) ? $"{i+1}. {fighter.FirstName} {fighter.LastName} {fighter.Team} {fighter.Region}" : " - ";
+                            sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(fighter.FirstName) ? $"{i+1}. {fighter.FirstName} {fighter.LastName}" : " - ";
                         }
                     }
 
