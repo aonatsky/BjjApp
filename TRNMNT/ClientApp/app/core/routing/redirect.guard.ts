@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { tokenNotExpired } from 'angular2-jwt';
-
 import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '../routing/auth.guard';
 import { RouterService } from '../services/router.service'
+import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser_adapter";
 
 /** 
  * Decides if a route can be activated. 
@@ -15,11 +15,15 @@ import { RouterService } from '../services/router.service'
     constructor(public AuthService: AuthService, private routerService: RouterService, private authGuard: AuthGuard) { }
 
     private subdomain: string;
+    private dom: BrowserDomAdapter;
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         this.getSubdomain();
+        debugger;
+        var id = this.getEventId();
         if (this.subdomain && this.subdomain != "") {
             this.routerService.goToEventInfo(this.subdomain);
+
         }
         else {
             return this.authGuard.canActivate(route, state)
@@ -36,5 +40,9 @@ import { RouterService } from '../services/router.service'
         }
     }
 
+    getEventId() : string
+    {
+        return document.getElementById("eventIdField").innerText;   
+    }
 
 }  
