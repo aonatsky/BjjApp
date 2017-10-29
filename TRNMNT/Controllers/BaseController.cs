@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TRNMNT.Web.Const;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -52,6 +54,22 @@ namespace TRNMNT.Web.Controllers
             return user;
         }
 
+        protected string GetEventId()
+        {
+            return this.RouteData.Values[AppConstants.RouteDataKeyEventId] as string;
+        }
+
+        protected string GetFederationId()
+        {
+            return this.RouteData.Values[AppConstants.RouteDataKeyFederationId] as string;
+        }
+
+        public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            ViewBag.EventId = GetEventId();
+            ViewBag.FederationId = GetFederationId();
+            return base.OnActionExecutionAsync(context, next);
+        }
 
     }
 }

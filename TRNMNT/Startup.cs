@@ -23,6 +23,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Net;
 using System.Threading.Tasks;
 using TRNMNT.Data.UnitOfWork;
+using TRNMNT.Web.Routing;
+using Microsoft.AspNetCore.Routing;
 
 namespace TRNMNT.Web
 {
@@ -146,7 +148,9 @@ namespace TRNMNT.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller}/{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index"},
+                    constraints: new { TenantAccess = new TenantRouteConstraint(app.ApplicationServices.GetRequiredService<IEventService>()) });
 
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",

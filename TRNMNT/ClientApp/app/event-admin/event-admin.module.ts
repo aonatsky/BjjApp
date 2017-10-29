@@ -10,6 +10,7 @@ import { EventAdminComponent } from './event-admin/event-admin.component'
 import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
 import { EventEditComponent } from './event-edit/event-edit.component'
+import { EventDetailsComponent } from './event-details/event-details.component'
 import { CategoryComponent } from './event-edit/category.component'
 import { eventAdminRoutes } from './event-admin.routing'
 
@@ -25,7 +26,8 @@ import { eventAdminRoutes } from './event-admin.routing'
         TopbarComponent,
         EventOverviewComponent,
         EventEditComponent,
-        CategoryComponent
+        CategoryComponent,
+        EventDetailsComponent
     ],
 
     providers: [],
