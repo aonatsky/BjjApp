@@ -45,8 +45,8 @@ export class RouterService {
         this.router.navigateByUrl("/event-admin/details/" + id);
     }
 
-    public goToEventInfo(subdomain: string) {
-        this.router.navigateByUrl("event/event-info/" + subdomain, { skipLocationChange: false });    
+    public goToEventInfo() {
+        this.router.navigateByUrl("event/event-info/", { skipLocationChange: false });    
     }
 
     public goToRegistration(id: string) {

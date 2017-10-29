@@ -64,8 +64,14 @@ namespace TRNMNT.Web.Controllers
             return this.RouteData.Values[AppConstants.RouteDataKeyFederationId] as string;
         }
 
+        private string GetHomePage()
+        {
+            return RouteData.Values[AppConstants.RouteDataKeyHomePage] as string;
+        }
+
         public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            ViewBag.HomePage = GetHomePage();
             ViewBag.EventId = GetEventId();
             ViewBag.FederationId = GetFederationId();
             return base.OnActionExecutionAsync(context, next);

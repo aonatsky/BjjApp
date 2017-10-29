@@ -17,8 +17,16 @@ namespace TRNMNT.Web.Routing
 
         public bool Match(HttpContext httpContext, IRouter route, string routeKey, RouteValueDictionary values, RouteDirection routeDirection)
         {
+            if (!values.ContainsKey("homepage"))
+            {
+                values.Add("homepage", "event-info");
+            }
 
-            var fullAddress = httpContext.Request.Headers["Host"].FirstOrDefault().Split('.');
+            return true;    
+        
+
+
+        var fullAddress = httpContext.Request.Headers["Host"].FirstOrDefault().Split('.');
             if (fullAddress.Length < 2)
             {
                 return false;

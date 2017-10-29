@@ -18,12 +18,10 @@ import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser
     private dom: BrowserDomAdapter;
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        this.getSubdomain();
         debugger;
-        var id = this.getEventId();
-        if (this.subdomain && this.subdomain != "") {
-            this.routerService.goToEventInfo(this.subdomain);
-
+        var homepage = this.getHomePage();
+        if (homepage != "") {
+            this.routerService.goToEventInfo();
         }
         else {
             return this.authGuard.canActivate(route, state)
@@ -40,9 +38,9 @@ import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser
         }
     }
 
-    getEventId() : string
+    getHomePage() : string
     {
-        return document.getElementById("eventIdField").innerText;   
+        return document.getElementById("homepage").innerText;   
     }
 
 }  

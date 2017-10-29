@@ -9,5 +9,6 @@ namespace TRNMNT.Web.Const
     {
         public const string RouteDataKeyEventId = "eventId";
         public const string RouteDataKeyFederationId = "federationId";
+        public const string RouteDataKeyHomePage = "homepage";
     }
 }

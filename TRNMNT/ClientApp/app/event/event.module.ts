@@ -22,7 +22,7 @@ import { EventComponent } from './event.component'
                 {
                     path: 'event', component: EventComponent, children: [
                         {
-                            path: 'event-info/:prefix', component: EventInfoComponent
+                            path: 'event-info/', component: EventInfoComponent
                         },
                         {
                             path: 'event-registration/:id', component: EventRegistrationComponent, canActivate : [AuthGuard]

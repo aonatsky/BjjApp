@@ -20,6 +20,7 @@ export class EventInfoComponent implements OnInit {
     }
 
     ngOnInit() {
+        debugger;
         this.route.params.subscribe(p => {
             let url = p['prefix'];
             console.log("url " + url)
