@@ -86,6 +86,14 @@ export class HttpService {
             .catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
+    public getPdf(url, fileName): Observable<any> {
+        return this.http.get(url, { responseType: ResponseContentType.Blob }).map((res) => {
+            FileSaver.saveAs(new Blob([res.blob()], { type: 'application/pdf' }), fileName);
+        });
+    }
+
+
+    //PRIVATE
     private processResponse(response: any): Observable<any> {
         return response;
     }
@@ -125,6 +133,7 @@ export class HttpService {
     public getExcelFile(response: Response, fileName: string): void {
         FileSaver.saveAs(response.blob(), fileName);
     }
+
 
 
 

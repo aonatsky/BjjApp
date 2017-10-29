@@ -20,11 +20,14 @@ export class EventOverviewComponent {
 
     public createEvent() {
         this.eventService.createEvent().subscribe(r => this.routerService.goToEditEvent(r))
-        //this.routerService.GoToEditEvent();
     }
 
     public editEvent(id: string) {
         this.routerService.goToEditEvent(id);
+    }
+
+    public openDetails(id: string) {
+        this.routerService.goToEventDetails(id);
     }
 
     ngOnInit() {

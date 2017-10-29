@@ -13,24 +13,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventDetailsComponent implements OnInit{
         
-    private events: EventPreviewModel[] = [];
+    private eventModel: EventPreviewModel;
 
     constructor(private loggerService: LoggerService, private routerService: RouterService, private eventService: EventService, private route: ActivatedRoute) {
 
     }
 
-    public createEvent() {
-        this.eventService.createEvent().subscribe(r => this.routerService.goToEditEvent(r))
-    }
-
-    public editEvent(id: string) {
-        this.routerService.goToEditEvent(id);
-    }
-
+    
     ngOnInit() {
         this.route.params.subscribe(p => {
             let id = p["id"];
-
+            if (id && id != "") {
+                this.eventService.getEventBaseInfo(id).subscribe(r => { this.eventModel = r });
+            } else {
+                alert("No data to display")
+            }
         });
+    }
+
+    goToOverview() {
+        this.routerService.goToEventAdmin();
     }
 }

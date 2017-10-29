@@ -51,7 +51,7 @@ namespace TRNMNT.Core.Services
             _event.IsActive = true;
             eventRepository.Update(_event);
 
-            DeleteCategories(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
+            await DeleteCategoriesAsync(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
 
 
             foreach (var categoryModel in eventModel.CategoryModels)
@@ -75,7 +75,7 @@ namespace TRNMNT.Core.Services
                 }
 
 
-                
+
 
                 var actualWeightDivisionIds = categoryModel.WeightDivisionModels.Where(wdm => !String.IsNullOrEmpty(wdm.WeightDivisionId)).Select(wdm => new Guid(wdm.WeightDivisionId));
                 var wdToDelete = weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !actualWeightDivisionIds.Contains(wd.WeightDivisionId));
@@ -134,7 +134,7 @@ namespace TRNMNT.Core.Services
         {
             var models = await eventRepository.GetAll().
                 Where(e => e.OwnerId == userId).
-                Select(e => new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS = e.RegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title = e.Title })
+                Select(e => new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS = e.RegistrationEndTS, EarlyRegistrationEndTS = e.EarlyRegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title = e.Title })
                 .ToListAsync();
 
             return models;
@@ -390,7 +390,7 @@ namespace TRNMNT.Core.Services
         }
 
 
-        private async void DeleteCategories(Guid eventId, IEnumerable<Guid> eventCategoryIds)
+        private async Task DeleteCategoriesAsync(Guid eventId, IEnumerable<Guid> eventCategoryIds)
         {
             var categoriesToDelete = await categoryRepository.GetAll().Where(c => c.EventId == eventId && !eventCategoryIds.Contains(c.CategoryId)).ToListAsync();
             var weightDivisionsToDelete = await weightDivisionRepository.GetAll().Where(wd => categoriesToDelete.Select(c => c.CategoryId).Contains(wd.CategoryId)).ToListAsync();
@@ -401,6 +401,15 @@ namespace TRNMNT.Core.Services
         private async void DeleteWeightDivisions(Guid categoryId)
         {
 
+        }
+
+        public async Task<EventModelBase> GetEventBaseInfoAsync(Guid id)
+        {
+            var model = await eventRepository.GetAll().
+            Where(e => e.EventId == id).
+            Select(e => new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS = e.RegistrationEndTS, EarlyRegistrationEndTS = e.EarlyRegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title = e.Title })
+            .FirstOrDefaultAsync();
+            return model;
         }
         #endregion
 

@@ -98,6 +98,31 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+        [Authorize, HttpGet("[action]/{id}")]
+        public async Task<IActionResult> GetEventBaseInfo(Guid id)
+        {
+            Response.StatusCode = (int)HttpStatusCode.OK;
+            try
+            {
+                var eventModel = await eventService.GetFullEventAsync(id);
+                if (eventModel != null)
+                {
+                    var jsonobj = JsonConvert.SerializeObject(eventModel, jsonSerializerSettings);
+                    return Ok(jsonobj);
+                }
+                else
+                {
+                    return new StatusCodeResult((int)HttpStatusCode.NotFound);
+                }
+
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
 
         [Authorize, HttpGet("[action]")]
         public async Task<EventModelBase[]> GetEventsForOwner()

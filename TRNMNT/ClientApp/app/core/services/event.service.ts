@@ -31,6 +31,10 @@ export class EventService {
     public getEvent(id): Observable<EventModel> {
         return this.httpService.get(ApiMethods.event.getEvent + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
+
+    public getEventBaseInfo(id): Observable<EventPreviewModel> {
+        return this.httpService.get(ApiMethods.event.getEventBaseInfo + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+    }
         
     public uploadEventImage(file, id) {
         return this.httpService.postFile(ApiMethods.event.uploadImage + "/" + id, file);
@@ -38,6 +42,10 @@ export class EventService {
 
     public uploadEventTncFile(file, id) {
         return this.httpService.postFile(ApiMethods.event.uploadTnc + "/" + id, file);
+    }
+
+    public downloadEventTncFile(tncPath: string): Observable<any> {
+        return this.httpService.getPdf(tncPath, "TNC");
     }
 
     public uploadPromoCodeList(file, id) {

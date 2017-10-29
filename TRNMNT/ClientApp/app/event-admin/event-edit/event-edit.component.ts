@@ -18,7 +18,7 @@ import { CategoryComponent } from './category.component'
 })
 export class EventEditComponent implements OnInit {
     constructor(private authService: AuthService, private eventService: EventService, private route: ActivatedRoute) {
-       
+
     }
 
     private menuItems: MenuItem[];
@@ -31,7 +31,7 @@ export class EventEditComponent implements OnInit {
     private lastStep: number = 3;
 
     @ViewChildren(CategoryComponent) categoryComponents;
-    
+
     ngOnInit() {
         this.initMenu();
         this.initData();
@@ -47,7 +47,7 @@ export class EventEditComponent implements OnInit {
         this.route.params.subscribe(p => {
             let id = p["id"];
             if (id && id != "") {
-                this.eventService.getEvent(id).subscribe(r => {this.eventModel = r });
+                this.eventService.getEvent(id).subscribe(r => { this.eventModel = r });
                 this.isNew = false;
             } else {
                 alert("No data to display")
@@ -55,23 +55,22 @@ export class EventEditComponent implements OnInit {
         })
     }
 
-
     private initMenu() {
         this.menuItems = [{
             label: 'General Information',
         },
         {
-            label: 'Additional information',
-        },
-        {
             label: 'Category Setup',
         },
         {
-            label: 'Confirmation',
-        },
+            label: 'Additional information',
+        }
         ];
     }
 
+    private modelReload() {
+        this.eventService.getEvent(this.eventModel.eventId).subscribe(r => { this.eventModel = r });
+    }
 
     private nextStep() {
         this.currentStep++;
@@ -99,7 +98,7 @@ export class EventEditComponent implements OnInit {
         category.name = "Category";
         category.eventId = this.eventModel.eventId;
         category.weightDivisionModels.push(new WeightDivisionModel("Weight Division"));
-        
+
         this.eventModel.categoryModels.push(category);
     }
 
@@ -116,14 +115,18 @@ export class EventEditComponent implements OnInit {
     }
 
     private onImageUpload(event) {
-        this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe();
+        this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
     }
 
     private onTncUpload(event) {
-        this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe();
+        this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
     }
 
     private onPromoCodeUpload(event) {
-        this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe();
+        this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
+    }
+
+    private downloadTnc() {
+        this.eventService.downloadEventTncFile(this.eventModel.tncFilePath).subscribe();
     }
 }
