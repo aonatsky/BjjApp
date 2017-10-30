@@ -8,17 +8,20 @@ namespace TRNMNT.Core.Services
 {
     public interface IEventService
     {
-        Task UpdateEventAsync(EventModel eventModel);
-        Task <EventModel>GetNewEventAsync(string userId);
-        Task<EventModel> GetFullEventAsync(Guid id);
-        Task<EventModel> GetEventByPrefixAsync(string prefix);
+        Task UpdateEventAsync(EventModelFull eventModel);
+        Task <EventModelFull>GetNewEventAsync(string userId);
+        Task<EventModelFull> GetFullEventAsync(Guid id);
+        Task<EventModelFull> GetEventByPrefixAsync(string prefix);
+        Task<EventModelFull> GetEventInfoAsync(Guid id);
         Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId);
         Task<EventModelBase> GetEventBaseInfoAsync(Guid id);
+
         Task<bool> IsPrefixExistAsync(string prefix);
+
         Task AddEventImageAsync(Stream stream, string eventId);
         Task SaveEventTncAsync(Stream stream, string eventId, string fileName);
         Task SavePromoCodeListAsync(Stream stream, string eventId);
-        Task <string>GetEventIdAsync(string url);
+        Task <Guid?>GetEventIdAsync(string url);
         Task<string> GetEventOwnerIdAsync(Guid eventId);
         Task<int> GetPrice(Guid EventId, string userId);
     }

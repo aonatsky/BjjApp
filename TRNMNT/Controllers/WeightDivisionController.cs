@@ -19,7 +19,8 @@ namespace TRNMNT.Web.Controllers
     {
         private IWeightDivisionService weightDivisionService;
 
-        public WeightDivisionController(ILogger<WeightDivisionController> logger, IWeightDivisionService weightDivisionService, IRepository<WeightDivision> repository, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, repository, httpContextAccessor, userService)
+        public WeightDivisionController(ILogger<WeightDivisionController> logger, IWeightDivisionService weightDivisionService, IRepository<WeightDivision> repository, IUserService userService, IEventService eventService)
+            : base(logger, repository, userService, eventService)
         {
             this.weightDivisionService = weightDivisionService;
         }

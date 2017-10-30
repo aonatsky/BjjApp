@@ -22,7 +22,7 @@ namespace TRNMNT.Web.Controllers
     {
         private readonly IAuthenticationService authenticationSerivce;
 
-        public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, httpContextAccessor,userService)
+        public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IUserService userService, IEventService eventService) : base(logger,userService, eventService)
         {
             authenticationSerivce = authenticationService;
         }

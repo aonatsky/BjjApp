@@ -22,7 +22,8 @@ namespace TRNMNT.Web.Controllers
             ICategoryService categoryService, 
             IRepository<Category> repository, 
             IHttpContextAccessor httpContextAccessor, 
-            IUserService userService) : base(logger, repository, httpContextAccessor, userService)
+            IEventService eventService,
+            IUserService userService) : base(logger, repository, userService, eventService)
         {
             this.categoryService = categoryService;
         }

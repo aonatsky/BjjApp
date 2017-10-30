@@ -42,7 +42,7 @@ namespace TRNMNT.Core.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task UpdateEventAsync(EventModel eventModel)
+        public async Task UpdateEventAsync(EventModelFull eventModel)
         {
             var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();// GetByIDAsync<Guid>(eventModel.EventId);
 
@@ -107,7 +107,7 @@ namespace TRNMNT.Core.Services
             await unitOfWork.SaveAsync();
         }
 
-        public async Task<EventModel> GetNewEventAsync(string userId)
+        public async Task<EventModelFull> GetNewEventAsync(string userId)
         {
             var eventToAdd = new Event()
             {
@@ -122,7 +122,7 @@ namespace TRNMNT.Core.Services
             return GetEventModel(eventToAdd);
         }
 
-        public async Task<EventModel> GetFullEventAsync(Guid id)
+        public async Task<EventModelFull> GetFullEventAsync(Guid id)
         {
             var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
             return _event != null ? GetEventModel(_event) : null;
@@ -140,7 +140,7 @@ namespace TRNMNT.Core.Services
             return models;
         }
 
-        public async Task<EventModel> GetEventByPrefixAsync(string prefix)
+        public async Task<EventModelFull> GetEventByPrefixAsync(string prefix)
         {
             var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.UrlPrefix == prefix);
             if (_event != null)
@@ -179,7 +179,6 @@ namespace TRNMNT.Core.Services
             await unitOfWork.SaveAsync();
         }
 
-
         public async Task SavePromoCodeListAsync(Stream stream, string eventId)
         {
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, FilePath.EVENT_PROMOCODE_LIST_FILE);
@@ -190,11 +189,19 @@ namespace TRNMNT.Core.Services
             await unitOfWork.SaveAsync();
         }
 
-        public async Task<string> GetEventIdAsync(string url)
+        public async Task<Guid?> GetEventIdAsync(string url)
         {
-            return (await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e => e.EventId).FirstOrDefaultAsync()).ToString();
+            var ids = await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e => e.EventId).ToListAsync();
+            if (ids.Any())
+            {
+                return ids.FirstOrDefault();
+            }
+            else
+            {
+                return null;
+            }
+            
         }
-
 
         public async Task<string> GetEventOwnerIdAsync(Guid eventId)
         {
@@ -228,17 +235,40 @@ namespace TRNMNT.Core.Services
             return 0;
         }
 
+        public async Task<EventModelBase> GetEventBaseInfoAsync(Guid id)
+        {
+            var model = await eventRepository.GetAll().
+            Where(e => e.EventId == id).
+            Select(e => new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS = e.RegistrationEndTS, EarlyRegistrationEndTS = e.EarlyRegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title = e.Title })
+            .FirstOrDefaultAsync();
+            return model;
+        }
+
+        public async Task<EventModelFull> GetEventInfoAsync(Guid id)
+        {
+            var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
+            if (_event != null)
+            {
+                return GetEventModel(_event);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+
         #region Helpers
 
-        private EventModel GetEventModel(Event _event)
+        private EventModelFull GetEventModel(Event _event)
         {
-            return new EventModel()
+            return new EventModelFull()
             {
                 EventId = _event.EventId,
                 EventDate = _event.EventDate,
                 AdditionalData = _event.AdditionalData,
                 Address = _event.Address,
-                CardNumber = _event.CardNumber,
                 ContactEmail = _event.ContactEmail,
                 Description = _event.Description,
                 ImgPath = _event.ImgPath,
@@ -258,6 +288,32 @@ namespace TRNMNT.Core.Services
                 PromoCodeEnabled = _event.PromoCodeEnabled,
                 PromoCodeListPath = _event.PromoCodeListPath,
                 CategoryModels = GetCategoryModels(_event.Categories)
+            };
+        }
+
+        private EventModelInfo GetEventModelInfo(Event _event)
+        {
+            return new EventModelInfo()
+            {
+                EventId = _event.EventId,
+                EventDate = _event.EventDate,
+                AdditionalData = _event.AdditionalData,
+                Address = _event.Address,
+                ContactEmail = _event.ContactEmail,
+                Description = _event.Description,
+                ImgPath = _event.ImgPath,
+                TNCFilePath = _event.TNCFilePath,
+                ContactPhone = _event.ContactPhone,
+                Title = _event.Title,
+                FBLink = _event.FBLink,
+                RegistrationEndTS = _event.RegistrationEndTS,
+                RegistrationStartTS = _event.RegistrationStartTS,
+                VKLink = _event.VKLink,
+                EarlyRegistrationEndTS = _event.EarlyRegistrationEndTS,
+                EarlyRegistrationPrice = _event.EarlyRegistrationPrice,
+                EarlyRegistrationPriceForMembers = _event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPrice = _event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPriceForMembers = _event.LateRegistrationPriceForMembers,
             };
         }
 
@@ -300,7 +356,7 @@ namespace TRNMNT.Core.Services
             return weightDivisionModels;
         }
 
-        private Event GetEventFromModel(EventModel _eventModel)
+        private Event GetEventFromModel(EventModelFull _eventModel)
         {
             return new Event()
             {
@@ -308,7 +364,6 @@ namespace TRNMNT.Core.Services
                 EventDate = _eventModel.EventDate,
                 AdditionalData = _eventModel.AdditionalData,
                 Address = _eventModel.Address,
-                CardNumber = _eventModel.CardNumber,
                 ContactEmail = _eventModel.ContactEmail,
                 Description = _eventModel.Description,
                 ImgPath = _eventModel.ImgPath,
@@ -362,12 +417,11 @@ namespace TRNMNT.Core.Services
             return weightDivisions;
         }
 
-        private Event UpdateFromModel(Event _event, EventModel eventModel)
+        private Event UpdateFromModel(Event _event, EventModelFull eventModel)
         {
             _event.EventDate = eventModel.EventDate;
             _event.AdditionalData = eventModel.AdditionalData;
             _event.Address = eventModel.Address;
-            _event.CardNumber = eventModel.CardNumber;
             _event.ContactEmail = eventModel.ContactEmail;
             _event.Description = eventModel.Description;
             _event.ImgPath = eventModel.ImgPath;
@@ -398,19 +452,6 @@ namespace TRNMNT.Core.Services
             categoryRepository.DeleteRange(categoriesToDelete);
         }
 
-        private async void DeleteWeightDivisions(Guid categoryId)
-        {
-
-        }
-
-        public async Task<EventModelBase> GetEventBaseInfoAsync(Guid id)
-        {
-            var model = await eventRepository.GetAll().
-            Where(e => e.EventId == id).
-            Select(e => new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS = e.RegistrationEndTS, EarlyRegistrationEndTS = e.EarlyRegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title = e.Title })
-            .FirstOrDefaultAsync();
-            return model;
-        }
         #endregion
 
 

@@ -17,8 +17,8 @@ namespace TRNMNT.Web.Controllers
         IPaymentService paymentService;
         IEventService eventService;
 
-        public PaymentController(IEventService eventService, ILogger<PaymentController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IPaymentService paymentService)
-        : base(logger, httpContextAccessor, userService)
+        public PaymentController(IEventService eventService, ILogger<PaymentController> logger, IUserService userService, IPaymentService paymentService)
+        : base(logger, userService, eventService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.paymentService = paymentService;

@@ -17,7 +17,7 @@ namespace TRNMNT.Web.Controllers
     public abstract class CRUDController<T> : BaseController where T : class
     {
         IRepository<T> repository;
-        public CRUDController(ILogger logger, IRepository<T> repository, IHttpContextAccessor httpContextAccessor, IUserService userService) : base(logger, httpContextAccessor, userService)
+        public CRUDController(ILogger logger, IRepository<T> repository, IUserService userService, IEventService eventService) : base(logger, userService, eventService)
         {
             this.repository = repository;
         }

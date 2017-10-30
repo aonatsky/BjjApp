@@ -20,13 +20,11 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class TeamController : BaseController
     {
-        IHttpContextAccessor httpContextAccessor;
         ITeamService teamService;
 
-        public TeamController(IEventService eventService, ILogger<TeamController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, ITeamService teamService)
-        : base(logger, httpContextAccessor, userService)
+        public TeamController(IEventService eventService, ILogger<TeamController> logger, IUserService userService, ITeamService teamService)
+        : base(logger, userService, eventService)
         {
-            this.httpContextAccessor = httpContextAccessor;
             this.teamService = teamService;
         }
 

@@ -16,18 +16,20 @@ namespace TRNMNT.Web.Controllers
     public class BaseController : Controller
     {
         private ILogger logger;
-        private readonly IHttpContextAccessor contextAccessor;
+        private readonly HttpContext httpContext;
         private IUserService userService;
+        private IEventService eventService;
         protected JsonSerializerSettings jsonSerializerSettings;
 
+        private Guid? eventId;
 
         private User user;
 
-        public BaseController(ILogger logger, IHttpContextAccessor context, IUserService userService)
+        public BaseController(ILogger logger, IUserService userService, IEventService eventService)
         {
-            this.contextAccessor = context;
             this.logger = logger;
             this.userService = userService;
+            this.eventService = eventService;
 
             jsonSerializerSettings = new JsonSerializerSettings
             {
@@ -54,9 +56,28 @@ namespace TRNMNT.Web.Controllers
             return user;
         }
 
-        protected string GetEventId()
+        private async Task ParseEventSubdomain()
         {
-            return this.RouteData.Values[AppConstants.RouteDataKeyEventId] as string;
+            var fullAddress = HttpContext.Request.Headers["Host"].FirstOrDefault().Split('.');
+            if (fullAddress.Length == 2)
+            {
+                var eventSubdomain = fullAddress[0];
+                var host = fullAddress[1];
+                var eventId = await eventService.GetEventIdAsync(eventSubdomain);
+                if (eventId != null)
+                {
+                    this.eventId = eventId;
+                }
+                else
+                {
+                    HttpContext.Response.Redirect($"{HttpContext.Request.Scheme}://{host}/");
+                }
+            }
+        }
+
+        protected Guid? GetEventId()
+        {
+            return eventId;
         }
 
         protected string GetFederationId()
@@ -64,17 +85,10 @@ namespace TRNMNT.Web.Controllers
             return this.RouteData.Values[AppConstants.RouteDataKeyFederationId] as string;
         }
 
-        private string GetHomePage()
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            return RouteData.Values[AppConstants.RouteDataKeyHomePage] as string;
-        }
-
-        public override Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            ViewBag.HomePage = GetHomePage();
-            ViewBag.EventId = GetEventId();
-            ViewBag.FederationId = GetFederationId();
-            return base.OnActionExecutionAsync(context, next);
+            await ParseEventSubdomain();
+            await base.OnActionExecutionAsync(context, next);
         }
 
     }

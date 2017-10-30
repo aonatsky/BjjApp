@@ -18,22 +18,21 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class ParticipantController : BaseController
     {
-        IHttpContextAccessor httpContextAccessor;
         private IParticipantService participantService;
         private IEventService eventService;
         private IParticipantRegistrationService participantRegistrationService;
 
-        public ParticipantController(IEventService eventService, ILogger<TeamController> logger, 
-            IHttpContextAccessor httpContextAccessor, IUserService userService, IParticipantService participantService, 
+        public ParticipantController(IEventService eventService, ILogger<TeamController> logger,
+            IUserService userService, IParticipantService participantService,
             IPaymentService paymentService, IOrderService orderService, IParticipantRegistrationService participantRegistrationService)
-            : base(logger, httpContextAccessor, userService)
+            : base(logger,  userService, eventService)
         {
-            this.httpContextAccessor = httpContextAccessor;
+            
             this.participantService = participantService;
             this.participantRegistrationService = participantRegistrationService;
             this.eventService = eventService;
         }
-  
+
 
 
         [Authorize, HttpPost("[action]")]
@@ -52,14 +51,14 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult>ProcessParticipantRegistration([FromBody]ParticipantRegistrationModel model)
+        public async Task<IActionResult> ProcessParticipantRegistration([FromBody]ParticipantRegistrationModel model)
         {
             try
             {
 
                 var user = await GetUserAsync();
                 var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment")}/{model.EventId}";
-                var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(model,user.Id,callbackUrl);
+                var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(model, user.Id, callbackUrl);
                 return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
             }
             catch (Exception ex)

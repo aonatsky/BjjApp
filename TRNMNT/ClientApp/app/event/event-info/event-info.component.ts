@@ -20,16 +20,11 @@ export class EventInfoComponent implements OnInit {
     }
 
     ngOnInit() {
-        debugger;
-        this.route.params.subscribe(p => {
-            let url = p['prefix'];
-            console.log("url " + url)
-            this.eventService.getEventByUrl(url).subscribe(r => {
-                this.eventModel = r;
-                if (!this.eventModel) {
-                    this.routerService.goHome(url);
-                }
-            });
+        this.eventService.getEventInfo().subscribe(r => {
+            this.eventModel = r;
+            if (!this.eventModel) {
+                this.routerService.goHome();
+            }
         });
     }
 
