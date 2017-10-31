@@ -52,26 +52,6 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> GetNewEvent()
-        {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
-            {
-                var user = await GetUserAsync();
-                var addedEvent = await eventService.GetNewEventAsync(user.Id);
-                return Ok(JsonConvert.SerializeObject(addedEvent, jsonSerializerSettings));
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
-
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEvent(Guid id)
         {
@@ -142,25 +122,6 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        [AllowAnonymous, HttpGet("[action]/{url}")]
-        public async Task<IActionResult> GetEventByUrl(string url)
-        {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
-            {
-                var _event = await eventService.GetEventByPrefixAsync(url);
-                var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
-                return Ok(jsonobj);
-
-            }
-            catch (Exception e)
-            {
-
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
         [AllowAnonymous, HttpGet("[action]")]
         public async Task<IActionResult> GetEventInfo()
         {
@@ -192,7 +153,6 @@ namespace TRNMNT.Web.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
-
 
         [Authorize, HttpGet("[action]")]
         public async Task IsPrefixExists(string prefix)
@@ -276,7 +236,6 @@ namespace TRNMNT.Web.Controllers
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             };
         }
-
 
         [Authorize, HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetPrice(string eventId)

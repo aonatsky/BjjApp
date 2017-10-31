@@ -9,6 +9,6 @@ namespace TRNMNT.Core.Services
     {
         Order GetNewOrder(OrderTypeEnum orderType, string userId, int ammount, string currency, string reference);
         Task ApproveOrderAsync(Guid orderId, bool saveContext = true);
-        Task AddOrderAsync(Order order, bool saveContext = true);
+        void AddOrder(Order order);
     }
 }

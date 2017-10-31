@@ -115,6 +115,7 @@ namespace TRNMNT.Data.Context
         public DbSet<Participant> Participant { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<Federation> Federation { get; set; }
+        public DbSet<PromoCode> PromoCode { get; set; }
 
     }
 }

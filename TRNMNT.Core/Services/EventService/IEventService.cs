@@ -24,5 +24,19 @@ namespace TRNMNT.Core.Services
         Task <Guid?>GetEventIdAsync(string url);
         Task<string> GetEventOwnerIdAsync(Guid eventId);
         Task<int> GetPrice(Guid EventId, string userId);
+        /// <summary>
+        /// Returns price based on registration dates. And promocode (optional)
+        /// </summary>
+        /// <param name="EventId"></param>
+        /// <returns></returns>
+        Task<int> GetPrice(Guid eventId, string userId, string promocode = "");
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventId">Event Id</param>
+        /// <param name="isMember">Is special price</param>
+        /// <returns></returns>
+        Task<int> GetPrice(Guid eventId, bool specialPrice);
+
     }
 }

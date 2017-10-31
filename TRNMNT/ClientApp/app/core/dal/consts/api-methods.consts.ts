@@ -18,7 +18,6 @@ export const ApiMethods = Object.freeze({
     event: {
         event: "api/event",
         getEvents: "api/event/getEvents",
-        getNewEvent: "api/event/getNewEvent",
         updateEvent: "api/event/updateEvent",
         uploadImage: "api/event/uploadEventImage",
         uploadTnc: "api/event/uploadEventTnc",
@@ -26,8 +25,6 @@ export const ApiMethods = Object.freeze({
         getEvent: "api/event/getEvent",
         getEventBaseInfo: "api/event/getEventBaseInfo",
         getEventsForOwner: "api/event/getEventsForOwner",
-        getEventIdByUrl: "api/event/getEventIdByUrl",
-        getEventByUrl: "api/event/getEventByUrl",
         getEventInfo: "api/event/getEventInfo",
         createEvent: "api/event/createEvent"
     },

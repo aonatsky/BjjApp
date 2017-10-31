@@ -25,9 +25,9 @@ namespace TRNMNT.Web.Controllers
         public ParticipantController(IEventService eventService, ILogger<TeamController> logger,
             IUserService userService, IParticipantService participantService,
             IPaymentService paymentService, IOrderService orderService, IParticipantRegistrationService participantRegistrationService)
-            : base(logger,  userService, eventService)
+            : base(logger, userService, eventService)
         {
-            
+
             this.participantService = participantService;
             this.participantRegistrationService = participantRegistrationService;
             this.eventService = eventService;
@@ -40,8 +40,15 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                var result = await participantService.IsParticipantExistsAsync(model);
-                return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                if (GetEventId() != null)
+                {
+                    var result = await participantService.IsParticipantExistsAsync(model, GetEventId().Value);
+                    return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch (Exception ex)
             {
@@ -55,11 +62,20 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
+                var eventId = GetEventId();
+                if (eventId != null)
+                {
+                    var user = await GetUserAsync();
+                    var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment")}/{eventId.Value.ToString()}";
+                    var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, user.Id, callbackUrl);
+                    return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                }
+                else
+                {
+                    return NotFound();
+                }
 
-                var user = await GetUserAsync();
-                var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment")}/{model.EventId}";
-                var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(model, user.Id, callbackUrl);
-                return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+
             }
             catch (Exception ex)
             {

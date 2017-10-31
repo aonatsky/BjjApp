@@ -11,7 +11,6 @@ using TRNMNT.Web.Core.Enum;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.WeightDivision;
-using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Data.Context;
 
 namespace TRNMNT.Core.Services
@@ -24,22 +23,25 @@ namespace TRNMNT.Core.Services
         private IFileService fileService;
         private IRepository<FederationMembership> federationMembershipRepository;
         private IAppDbContext unitOfWork;
+        private IPromoCodeService promoCodeService;
 
         public EventService(
             IRepository<Event> eventRepository,
             IRepository<Category> categoryRepository,
             IRepository<WeightDivision> weightDivisionRepository,
             IRepository<FederationMembership> federationMembershipRepository,
-            IFileService fileservice,
-            IAppDbContext unitOfWork
+            IFileService fileService,
+            IAppDbContext unitOfWork,
+            IPromoCodeService promoCodeService
             )
         {
             this.eventRepository = eventRepository;
             this.categoryRepository = categoryRepository;
             this.weightDivisionRepository = weightDivisionRepository;
             this.federationMembershipRepository = federationMembershipRepository;
-            this.fileService = fileservice;
+            this.fileService = fileService;
             this.unitOfWork = unitOfWork;
+            this.promoCodeService = promoCodeService;
         }
 
         public async Task UpdateEventAsync(EventModelFull eventModel)
@@ -200,7 +202,7 @@ namespace TRNMNT.Core.Services
             {
                 return null;
             }
-            
+
         }
 
         public async Task<string> GetEventOwnerIdAsync(Guid eventId)
@@ -234,6 +236,49 @@ namespace TRNMNT.Core.Services
             }
             return 0;
         }
+
+        public async Task<int> GetPrice(Guid eventId, string userId, string promoCode = "")
+        {
+            var _event = await eventRepository.GetByIDAsync(eventId);
+            if (_event != null)
+            {
+                var isPromoCodeUsed = false;
+                if (string.IsNullOrEmpty(promoCode))
+                {
+                    isPromoCodeUsed = await promoCodeService.ValidateCodeAsync(eventId, promoCode, userId);
+                }
+                var dateNow = DateTime.UtcNow;
+                if (dateNow <= _event.EarlyRegistrationEndTS)
+                {
+                    return isPromoCodeUsed ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+                }
+                else
+                {
+                    return isPromoCodeUsed ? _event.LateRegistrationPriceForMembers : _event.LateRegistrationPrice;
+                }
+            }
+            return 0;
+        }
+
+
+        public async Task<int> GetPrice(Guid eventId, bool specialPrice)
+        {
+            var _event = await eventRepository.GetByIDAsync(eventId);
+            if (_event != null)
+            {
+                var dateNow = DateTime.UtcNow;
+                if (dateNow <= _event.EarlyRegistrationEndTS)
+                {
+                    return specialPrice ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+                }
+                else
+                {
+                    return specialPrice ? _event.LateRegistrationPriceForMembers : _event.LateRegistrationPrice;
+                }
+            }
+            return 0;
+        }
+
 
         public async Task<EventModelBase> GetEventBaseInfoAsync(Guid id)
         {

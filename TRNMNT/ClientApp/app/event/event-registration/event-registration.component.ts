@@ -55,11 +55,7 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.route.params.subscribe(p => {
-            this.eventId = p['id'];
-            this.participant.eventId = this.eventId;
-            this.loadData();
-        });
+        this.loadData();
     }
 
     ngOnChanges() {
@@ -68,7 +64,7 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
     }
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId))
+        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent())
             .subscribe(data => this.initData(data));
     }
 

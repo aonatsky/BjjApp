@@ -13,7 +13,7 @@ using TRNMNT.Data.Repositories;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class CategoryController : CRUDController<Category>
+    public class CategoryController : BaseController
     {
         private ICategoryService categoryService;
 
@@ -23,20 +23,28 @@ namespace TRNMNT.Web.Controllers
             IRepository<Category> repository, 
             IHttpContextAccessor httpContextAccessor, 
             IEventService eventService,
-            IUserService userService) : base(logger, repository, userService, eventService)
+            IUserService userService) : base(logger, userService, eventService)
         {
             this.categoryService = categoryService;
         }
 
 
-        [HttpGet("[action]/{eventId}")]
-        public async Task<IActionResult> GetCategoriesForEvent(string eventId)
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetCategoriesForEvent()
         {
             try
             {
-                var user = await GetUserAsync();
-                var data = await categoryService.GetCategoriesByEventIdAsync(Guid.Parse(eventId));
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                var eventId = GetEventId();
+                if (eventId != null)
+                {
+                    var data = await categoryService.GetCategoriesByEventIdAsync(eventId.Value);
+                    return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                }
+                else
+                {
+                    return NotFound();
+                }
+                
             }
             catch (Exception e)
             {
@@ -44,21 +52,6 @@ namespace TRNMNT.Web.Controllers
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
 
             }
-        }
-
-
-
-        public override IQueryable<Category> ModifyQuery(string key, string value, IQueryable<Category> query)
-        {
-            switch (key)
-            {
-                case "eventId":
-                    {
-                        query = query.Where(c => c.EventId == Guid.Parse(value));
-                        break;
-                    } 
-            }
-            return query;
         }
     }
 }

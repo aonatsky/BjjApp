@@ -19,14 +19,9 @@ namespace TRNMNT.Core.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task AddOrderAsync(Order order, bool saveContext = true)
+        public void AddOrder(Order order)
         {
             orderRepository.Add(order);
-            if (saveContext)
-            {
-                await unitOfWork.SaveAsync();
-            }
-
         }
 
         public async Task ApproveOrderAsync(Guid orderId, bool saveContext = true)
