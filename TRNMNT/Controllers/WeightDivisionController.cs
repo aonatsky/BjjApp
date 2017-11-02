@@ -26,8 +26,6 @@ namespace TRNMNT.Web.Controllers
         }
 
 
-
-        [Authorize]
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetWeightDivisionsByCategory(string categoryId)
         {

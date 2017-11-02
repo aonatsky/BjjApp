@@ -34,7 +34,7 @@ namespace TRNMNT.Core.Services
             this.promoCodeService = promoCodeService;
         }
 
-        public async Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string userId, string callbackUrl)
+        public async Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl)
         {
             if (await participantService.IsParticipantExistsAsync(model, eventId))
             {
@@ -46,11 +46,11 @@ namespace TRNMNT.Core.Services
             }
             else
             {
-                var participant = participantService.CreatePaticipant(model,eventId);
+                var participant = participantService.CreatePaticipant(model, eventId);
                 var promoCodeUsed = await promoCodeService.ValidateCodeAsync(eventId, model.PromoCode, participant.ParticipantId.ToString());
                 participantService.AddParticipant(participant);
                 var price = await eventService.GetPrice(eventId, promoCodeUsed);
-                var order = orderService.GetNewOrder(OrderTypeEnum.EventParticipation, userId, price, "UAH", participant.ParticipantId.ToString());
+                var order = orderService.GetNewOrder(OrderTypeEnum.EventParticipation, price, "UAH", $"{participant.FirstName} {participant.LastName} {participant.ParticipantId.ToString()}");
                 orderService.AddOrder(order);
                 var paymentData = paymentService.GetPaymentDataModel(order, callbackUrl);
                 await unitOfWork.SaveAsync();

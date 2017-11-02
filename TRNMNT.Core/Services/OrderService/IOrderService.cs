@@ -7,7 +7,7 @@ namespace TRNMNT.Core.Services
 {
     public interface IOrderService
     {
-        Order GetNewOrder(OrderTypeEnum orderType, string userId, int ammount, string currency, string reference);
+        Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference);
         Task ApproveOrderAsync(Guid orderId, bool saveContext = true);
         void AddOrder(Order order);
     }

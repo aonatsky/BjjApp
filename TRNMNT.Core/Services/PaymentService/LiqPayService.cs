@@ -5,18 +5,20 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
+using Microsoft.AspNetCore.Http;
 
 namespace TRNMNT.Core.Services
 {
     public class LiqPayService : IPaymentService
     {
-        private string publicKey = "i15572856226";
-        private string privateKey = "z7TS5ObVdlVvXo7hqlRLQNgLjDHMtuycIndFsxq9";
+        private string publicKey = "i39927249084";
+        private string privateKey = "LRGmWbN29X05TT0M8j0sSbWgw2UoY1K9uWnp4Nqy";
         private IConfiguration configuration;
+        private IHttpContextAccessor accessor;
 
-        public LiqPayService(IConfiguration configuration)
+        public LiqPayService(IHttpContextAccessor accessor)
         {
-            this.configuration = configuration;
+            this.accessor = accessor;
         }
 
 

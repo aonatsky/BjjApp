@@ -57,7 +57,7 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        [Authorize, HttpPost("[action]")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> ProcessParticipantRegistration([FromBody]ParticipantRegistrationModel model)
         {
             try
@@ -67,7 +67,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     var user = await GetUserAsync();
                     var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment")}/{eventId.Value.ToString()}";
-                    var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, user.Id, callbackUrl);
+                    var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl);
                     return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
                 }
                 else

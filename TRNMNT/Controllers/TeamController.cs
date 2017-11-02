@@ -23,14 +23,21 @@ namespace TRNMNT.Web.Controllers
             this.teamService = teamService;
         }
 
-        [Authorize]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetTeams()
         {
             try
             {
-                var data = await teamService.GetTeams();
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                if (GetEventId() != null)
+                {
+                    var data = await teamService.GetTeams();
+                    return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                }
+                else
+                {
+                    return NotFound();
+                }
+
             }
             catch (Exception e)
             {

@@ -1,4 +1,4 @@
-﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, OnChanges } from '@angular/core';
+﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
@@ -36,9 +36,11 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
     private teamSelectItems: SelectItem[] = [];
     private teams: TeamModel[] = [];
     private tncAccepted: boolean = false;
-    private paymentDataModel: PaymentDataModel;
     private messages: Message[] = []
-    @ViewChild('formPrivat') formPrivat: ElementRef
+    private paymentData: string = "";
+    private paymentSignature: string = "";
+
+    @ViewChild('formPrivatElement') formPrivat: ElementRef
 
     constructor(
         private routerService: RouterService,
@@ -48,7 +50,8 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         private categoryService: CategoryService,
         private teamService: TeamService,
         private participantService: ParticipantService,
-        private paymentService: PaymentService
+        private paymentService: PaymentService,
+        private cd: ChangeDetectorRef
 
     ) {
 
@@ -135,19 +138,18 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         // todo click payment form
 
         this.participantService.processParticipantRegistration(this.participant).subscribe((r: ParticipantRegistrationResultModel) => {
+            debugger;
             if (!r.success) {
                 this.showMessage(r.reason);
             } else {
-                debugger;
-                this.paymentDataModel = r.paymentData;
+                this.paymentData = r.paymentData.data;
+                this.paymentSignature = r.paymentData.signature;
                 this.formPrivat.nativeElement.submit();
                 this.routerService.navigateByUrl("event/event-registration-complete/" + this.eventId);
             }
         });
         
     }
-
-   
 
     private nextStep() {
         this.currentStep++;

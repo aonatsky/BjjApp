@@ -16,7 +16,6 @@ namespace TRNMNT.Web.Controllers
     public class BaseController : Controller
     {
         private ILogger logger;
-        private readonly HttpContext httpContext;
         private IUserService userService;
         private IEventService eventService;
         protected JsonSerializerSettings jsonSerializerSettings;

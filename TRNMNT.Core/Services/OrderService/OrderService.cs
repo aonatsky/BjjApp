@@ -35,11 +35,10 @@ namespace TRNMNT.Core.Services
             }
         }
 
-        public Order GetNewOrder(OrderTypeEnum orderType, string userId, int ammount, string currency, string reference)
+        public Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference)
         {
             var order = new Order
             {
-                UserId = userId,
                 CreateTS = DateTime.UtcNow,
                 OrderType = (int)orderType,
                 Amount = ammount,
