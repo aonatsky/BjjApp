@@ -25,26 +25,12 @@ namespace TRNMNT.Web.Controllers
             this.eventService = eventService;
         }
 
-        [HttpGet("[action]/{eventId}")]
-        public async Task<IActionResult> GetPaymentDataForParticipant(string eventId)
-        {
-            try
-            {
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
-        }
-
         [HttpPost("[action]/{eventId}")]
         public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
         {
             try
             {
+                paymentService.
                 return Ok();
             }
             catch (Exception e)

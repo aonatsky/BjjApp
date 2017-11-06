@@ -24,7 +24,7 @@ import { SelectItem, MenuModule, MenuItem, Message } from 'primeng/primeng'
     encapsulation: ViewEncapsulation.None
 })
 
-export class EventRegistrationComponent implements OnInit, OnChanges {
+export class EventRegistrationComponent implements OnInit {
 
     private eventId: string;
     private currentStep: number = 0;
@@ -61,10 +61,7 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         this.loadData();
     }
 
-    ngOnChanges() {
-        debugger;
-        this.formPrivat.nativeElement.click();
-    }
+
 
     private loadData() {
         Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent())
@@ -87,8 +84,7 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         return date;
     }
 
-    private initTeamDropdown()
-    {
+    private initTeamDropdown() {
         this.teamSelectItems = [];
         for (var i = 0; i < this.teams.length; i++) {
             let team = this.teams[i];
@@ -103,7 +99,7 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
             this.categorySelectItems.push({ label: category.name, value: category.categoryId })
         }
     }
-    
+
     private initWeightDivisionDropdown(event) {
         this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
             this.weightDivisions = w;
@@ -142,13 +138,16 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
             if (!r.success) {
                 this.showMessage(r.reason);
             } else {
-                this.paymentData = r.paymentData.data;
-                this.paymentSignature = r.paymentData.signature;
-                this.formPrivat.nativeElement.submit();
-                this.routerService.navigateByUrl("event/event-registration-complete/" + this.eventId);
+                this.submitPaymentForm(r.paymentData);
             }
         });
-        
+
+    }
+
+    private submitPaymentForm(paymentData: PaymentDataModel) {
+        this.formPrivat.nativeElement.elements[0].value = paymentData.data;
+        this.formPrivat.nativeElement.elements[1].value = paymentData.signature;
+        this.formPrivat.nativeElement.submit();
     }
 
     private nextStep() {
@@ -159,6 +158,6 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         this.currentStep--;
     }
 
-    
+
 }
 

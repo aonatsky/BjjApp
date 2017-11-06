@@ -24,15 +24,12 @@ namespace TRNMNT.Core.Services
             orderRepository.Add(order);
         }
 
-        public async Task ApproveOrderAsync(Guid orderId, bool saveContext = true)
+        public async Task ApproveOrderAsync(Guid orderId, string paymentProviderReference)
         {
             var order = await orderRepository.GetByIDAsync(orderId);
+            order.PaymentProviderReference = paymentProviderReference;
             order.PaymentApproved = true;
             orderRepository.Update(order);
-            if (saveContext)
-            {
-                await unitOfWork.SaveAsync();
-            }
         }
 
         public Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference)

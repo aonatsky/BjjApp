@@ -66,7 +66,7 @@ namespace TRNMNT.Web.Controllers
                 if (eventId != null)
                 {
                     var user = await GetUserAsync();
-                    var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment")}/{eventId.Value.ToString()}";
+                    var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment","Payment")}";
                     var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl);
                     return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
                 }
