@@ -1,18 +1,28 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Participant;
-using TRNMNT.Core.Model.Result;
 using TRNMNT.Data.Entities;
-using TRNMNT.Web.Core.Enum;
 
 namespace TRNMNT.Core.Services
 {
     public interface IParticipantService
     {
 
-        Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant);
+        Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant, Guid eventId);
 
-        Task AddParticipant(Participant participant, bool saveContext = true);
+        /// <summary>
+        /// Adds participant to specified event. 
+        /// </summary>
+        /// <param name="participant">Participant to add</param>
+        /// <returns>Participant Id</returns>
+        void AddParticipant(Participant participant);
+
+        /// <summary>
+        /// Creates new participant to save from model
+        /// </summary>
+        /// <param name="model">Registration Model</param>
+        /// <param name="eventId">Event Id</param>
+        /// <returns></returns>
+        Participant CreatePaticipant(ParticipantRegistrationModel model, Guid eventId);
     }
 }

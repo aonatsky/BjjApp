@@ -25,10 +25,10 @@ import { EventComponent } from './event.component'
                             path: 'event-info/', component: EventInfoComponent
                         },
                         {
-                            path: 'event-registration/:id', component: EventRegistrationComponent, canActivate : [AuthGuard]
+                            path: 'event-registration/', component: EventRegistrationComponent
                         },
                         {
-                            path: 'event-registration-complete/:id', component: EventRegistrationCompleteComponent, canActivate: [AuthGuard]
+                            path: 'event-registration-complete/', component: EventRegistrationCompleteComponent
                         }
                     ]
                 }

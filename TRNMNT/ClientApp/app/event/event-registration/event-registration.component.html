@@ -41,25 +41,19 @@
                     <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="participant.weightDivisionId" [autoWidth]="false" placeholder="Select Weight Division" [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0" name="weightDivision" required></p-dropdown>
                 </div>
             </div>
-            <!--<div class="ui-g">
+            <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Email</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.email" name="email" email /></div>
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Phone Number</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.phoneNumber" name="phoneNumber" /></div>
-            </div>-->
+            </div>
             <div class="ui-g-12">
                 <div class="float-right"><button pButton type="button" class="float-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep" [disabled]="participantForm.invalid"></button></div>
             </div>
         </form>
-        <div *ngIf="paymentDataModel" class="ui-g-12" [hidden]="true">
-            <form ngNoForm #formPrivat id="formPrivat" method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8" novalidate>
-                <input type="hidden" name="data" value="{{paymentDataModel.data}}" />
-                <input type="hidden" name="signature" value={{paymentDataModel.signature}} />
-                <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />
-            </form>
-        </div>
+        
     </div>
     <div *ngIf="currentStep == 1">
         <div class="ui-g">
@@ -97,7 +91,7 @@
                 <label><b>{{getWeightDivision()}}</b></label>
             </div>
         </div>
-        <!--<div class="ui-g">
+        <div class="ui-g">
             <div class="ui-g-3 ui-fluid"><label>Email</label></div>
             <div class="ui-g-9 ui-fluid">
                 <label><b>{{participant.email}}</b></label>
@@ -108,13 +102,24 @@
             <div class="ui-g-9 ui-fluid">
                 <label><b>{{participant.phoneNumber}}</b></label>
             </div>
-        </div>-->
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid"><label>Promo Code</label></div>
+            <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="participant.promoCode" name="Promo Code" email /></div>
+        </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid"><label>I Accept TnC</label></div>
             <p-checkbox [(ngModel)]="tncAccepted"></p-checkbox>
         </div>
         <div class="ui-g-12">
             <p-messages [(value)]="message"></p-messages>
+        </div>
+        <div class="ui-g-12 display-none">
+            <form #formPrivat="ngForm" #formPrivatElement method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8" novalidate>
+                <input type="hidden" name="data" value="{{paymentData}}" />
+                <input type="hidden" name="signature" value={{paymentSignature}} />
+                <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />
+            </form>
         </div>
         <div class="ui-g-12">
             <div class="float-right"><button pButton type="button" class="float-right" label="Go to payment" (click)="goToPayment()" [disabled]="!tncAccepted"></button></div>

@@ -1,4 +1,4 @@
-﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, OnChanges } from '@angular/core';
+﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
@@ -24,7 +24,7 @@ import { SelectItem, MenuModule, MenuItem, Message } from 'primeng/primeng'
     encapsulation: ViewEncapsulation.None
 })
 
-export class EventRegistrationComponent implements OnInit, OnChanges {
+export class EventRegistrationComponent implements OnInit {
 
     private eventId: string;
     private currentStep: number = 0;
@@ -36,9 +36,11 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
     private teamSelectItems: SelectItem[] = [];
     private teams: TeamModel[] = [];
     private tncAccepted: boolean = false;
-    private paymentDataModel: PaymentDataModel;
     private messages: Message[] = []
-    @ViewChild('formPrivat') formPrivat: ElementRef
+    private paymentData: string = "";
+    private paymentSignature: string = "";
+
+    @ViewChild('formPrivatElement') formPrivat: ElementRef
 
     constructor(
         private routerService: RouterService,
@@ -48,27 +50,21 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         private categoryService: CategoryService,
         private teamService: TeamService,
         private participantService: ParticipantService,
-        private paymentService: PaymentService
+        private paymentService: PaymentService,
+        private cd: ChangeDetectorRef
 
     ) {
 
     }
 
     ngOnInit() {
-        this.route.params.subscribe(p => {
-            this.eventId = p['id'];
-            this.participant.eventId = this.eventId;
-            this.loadData();
-        });
+        this.loadData();
     }
 
-    ngOnChanges() {
-        debugger;
-        this.formPrivat.nativeElement.click();
-    }
+
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent(this.eventId))
+        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent())
             .subscribe(data => this.initData(data));
     }
 
@@ -88,8 +84,7 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         return date;
     }
 
-    private initTeamDropdown()
-    {
+    private initTeamDropdown() {
         this.teamSelectItems = [];
         for (var i = 0; i < this.teams.length; i++) {
             let team = this.teams[i];
@@ -104,7 +99,7 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
             this.categorySelectItems.push({ label: category.name, value: category.categoryId })
         }
     }
-    
+
     private initWeightDivisionDropdown(event) {
         this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
             this.weightDivisions = w;
@@ -139,19 +134,21 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         // todo click payment form
 
         this.participantService.processParticipantRegistration(this.participant).subscribe((r: ParticipantRegistrationResultModel) => {
+            debugger;
             if (!r.success) {
                 this.showMessage(r.reason);
             } else {
-                debugger;
-                this.paymentDataModel = r.paymentData;
-                this.formPrivat.nativeElement.submit();
-                this.routerService.navigateByUrl("event/event-registration-complete/" + this.eventId);
+                this.submitPaymentForm(r.paymentData);
             }
         });
-        
+
     }
 
-   
+    private submitPaymentForm(paymentData: PaymentDataModel) {
+        this.formPrivat.nativeElement.elements[0].value = paymentData.data;
+        this.formPrivat.nativeElement.elements[1].value = paymentData.signature;
+        this.formPrivat.nativeElement.submit();
+    }
 
     private nextStep() {
         this.currentStep++;
@@ -161,6 +158,6 @@ export class EventRegistrationComponent implements OnInit, OnChanges {
         this.currentStep--;
     }
 
-    
+
 }
 

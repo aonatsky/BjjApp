@@ -18,24 +18,13 @@ import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser
     private dom: BrowserDomAdapter;
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        debugger;
         var homepage = this.getHomePage();
         if (homepage != "") {
-            this.routerService.goToEventInfo();
+            this.routerService.navigateByUrl(homepage);
         }
         else {
             return this.authGuard.canActivate(route, state)
         };
-    }
-
-    getSubdomain() {
-        const domain = window.location.hostname;
-        if (domain.indexOf('.') < 0 ||
-            domain.split('.')[0] === 'example' || domain.split('.')[0] === 'lvh' || domain.split('.')[0] === 'www') {
-            this.subdomain = '';
-        } else {
-            this.subdomain = domain.split('.')[0];
-        }
     }
 
     getHomePage() : string

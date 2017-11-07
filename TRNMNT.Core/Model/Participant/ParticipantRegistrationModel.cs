@@ -10,5 +10,6 @@ namespace TRNMNT.Core.Model.Participant
         public string TeamId { get; set; }
         public string CategoryId { get; set; }
         public string WeightDivisionId { get; set; }
+        public string PromoCode { get; set; }
     }
 }

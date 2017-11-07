@@ -18,22 +18,21 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class ParticipantController : BaseController
     {
-        IHttpContextAccessor httpContextAccessor;
         private IParticipantService participantService;
         private IEventService eventService;
         private IParticipantRegistrationService participantRegistrationService;
 
-        public ParticipantController(IEventService eventService, ILogger<TeamController> logger, 
-            IHttpContextAccessor httpContextAccessor, IUserService userService, IParticipantService participantService, 
+        public ParticipantController(IEventService eventService, ILogger<TeamController> logger,
+            IUserService userService, IParticipantService participantService,
             IPaymentService paymentService, IOrderService orderService, IParticipantRegistrationService participantRegistrationService)
-            : base(logger, httpContextAccessor, userService)
+            : base(logger, userService, eventService)
         {
-            this.httpContextAccessor = httpContextAccessor;
+
             this.participantService = participantService;
             this.participantRegistrationService = participantRegistrationService;
             this.eventService = eventService;
         }
-  
+
 
 
         [Authorize, HttpPost("[action]")]
@@ -41,8 +40,15 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                var result = await participantService.IsParticipantExistsAsync(model);
-                return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                if (GetEventId() != null)
+                {
+                    var result = await participantService.IsParticipantExistsAsync(model, GetEventId().Value);
+                    return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch (Exception ex)
             {
@@ -51,16 +57,25 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult>ProcessParticipantRegistration([FromBody]ParticipantRegistrationModel model)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ProcessParticipantRegistration([FromBody]ParticipantRegistrationModel model)
         {
             try
             {
+                var eventId = GetEventId();
+                if (eventId != null)
+                {
+                    var user = await GetUserAsync();
+                    var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment","Payment")}";
+                    var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl);
+                    return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                }
+                else
+                {
+                    return NotFound();
+                }
 
-                var user = await GetUserAsync();
-                var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment")}/{model.EventId}";
-                var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(model,user.Id,callbackUrl);
-                return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+
             }
             catch (Exception ex)
             {

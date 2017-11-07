@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using TRNMNT.Data.Repositories;
 using System.Linq;
 using TRNMNT.Core.Model.Event;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,20 +19,18 @@ using TRNMNT.Core.Model.Event;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class EventController : CRUDController<Event>
+    public class EventController : BaseController 
     {
         private IEventService eventService;
-        IHttpContextAccessor httpContextAccessor;
+        Guid? eventId;
 
-        public EventController(IEventService eventService, ILogger<EventController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IRepository<Event> repository) : base(logger, repository, httpContextAccessor, userService)
+        public EventController(IEventService eventService, ILogger<EventController> logger,  IUserService userService) : base(logger, userService, eventService)
         {
             this.eventService = eventService;
-            this.httpContextAccessor = httpContextAccessor;
-
         }
 
         [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> UpdateEvent([FromBody] EventModel eventModel)
+        public async Task<IActionResult> UpdateEvent([FromBody] EventModelFull eventModel)
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
@@ -52,26 +51,6 @@ namespace TRNMNT.Web.Controllers
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
         }
-
-
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> GetNewEvent()
-        {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
-            {
-                var user = await GetUserAsync();
-                var addedEvent = await eventService.GetNewEventAsync(user.Id);
-                return Ok(JsonConvert.SerializeObject(addedEvent, jsonSerializerSettings));
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
 
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEvent(Guid id)
@@ -143,17 +122,29 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        [AllowAnonymous, HttpGet("[action]/{url}")]
-        public async Task<IActionResult> GetEventByUrl(string url)
+        [AllowAnonymous, HttpGet("[action]")]
+        public async Task<IActionResult> GetEventInfo()
         {
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-
-                var _event = await eventService.GetEventByPrefixAsync(url);
-                var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
-                return Ok(jsonobj);
-
+                EventModelInfo _event;
+                var eventId = GetEventId();
+                if (eventId != null)
+                {
+                    _event = await eventService.GetEventInfoAsync(eventId.Value);
+                    if (_event != null)
+                    {
+                        var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
+                        return Ok(jsonobj);
+                    }
+                    return NotFound();
+                }
+                else
+                {
+                    return NotFound();
+                }
+                
             }
             catch (Exception e)
             {
@@ -246,7 +237,6 @@ namespace TRNMNT.Web.Controllers
             };
         }
 
-
         [Authorize, HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetPrice(string eventId)
         {
@@ -264,12 +254,6 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-
-        public override IQueryable<Event> ModifyQuery(string key, string value, IQueryable<Event> query)
-        {
-            throw new NotImplementedException();
-        }
-
         #region helpers
         private async Task<bool> CheckEventOwnerAsync(Guid eventId)
         {
@@ -283,7 +267,8 @@ namespace TRNMNT.Web.Controllers
             {
                 return false;
             }
-        } 
-        #endregion
+        }
+
+        #endregion  
     }
 }

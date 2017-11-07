@@ -17,27 +17,12 @@ namespace TRNMNT.Web.Controllers
         IPaymentService paymentService;
         IEventService eventService;
 
-        public PaymentController(IEventService eventService, ILogger<PaymentController> logger, IHttpContextAccessor httpContextAccessor, IUserService userService, IPaymentService paymentService)
-        : base(logger, httpContextAccessor, userService)
+        public PaymentController(IEventService eventService, ILogger<PaymentController> logger, IUserService userService, IPaymentService paymentService)
+        : base(logger, userService, eventService)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.paymentService = paymentService;
             this.eventService = eventService;
-        }
-
-        [HttpGet("[action]/{eventId}")]
-        public async Task<IActionResult> GetPaymentDataForParticipant(string eventId)
-        {
-            try
-            {
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
         }
 
         [HttpPost("[action]/{eventId}")]
@@ -45,6 +30,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
+                paymentService.
                 return Ok();
             }
             catch (Exception e)

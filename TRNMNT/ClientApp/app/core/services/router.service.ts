@@ -46,11 +46,11 @@ export class RouterService {
     }
 
     public goToEventInfo() {
-        this.router.navigateByUrl("event/event-info/", { skipLocationChange: false });    
+        this.router.navigateByUrl("event/event-info/");    
     }
 
     public goToRegistration(id: string) {
-        this.router.navigateByUrl("event/event-registration/" + id, { skipLocationChange: false });
+        this.router.navigateByUrl("event/event-registration/");
     }
 }
 

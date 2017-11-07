@@ -9,5 +9,6 @@ namespace TRNMNT.Core.Services
     public interface IPaymentService
     {
         PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl);
+        void ConfirmPayment(PaymentDataModel dataModel);
     }
 }

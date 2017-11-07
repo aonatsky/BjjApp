@@ -52,8 +52,8 @@ export class EventService {
         return this.httpService.postFile(ApiMethods.event.uploadPromoCodeList + "/" + id, file);
     }
 
-    public getEventByUrl(url: string) {
-        return this.httpService.get(ApiMethods.event.getEventByUrl + "/" + url).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+    public getEventInfo() {
+        return this.httpService.get(ApiMethods.event.getEventInfo + "/").map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
     public createEvent(): Observable<string> {

@@ -17,8 +17,8 @@ export class CategoryService {
         return this.httpService.get(ApiMethods.category.category, params).map(res => this.httpService.getArray<CategoryModel>(res));
     }
 
-    public getCategoriesForEvent(eventId: string): Observable<CategorySimpleModel[]> {
-        return this.httpService.get(ApiMethods.category.getCategoriesForEvent + "/" + eventId).map(res => this.httpService.getArray<CategorySimpleModel>(res));
+    public getCategoriesForEvent(): Observable<CategorySimpleModel[]> {
+        return this.httpService.get(ApiMethods.category.getCategoriesForEvent).map(res => this.httpService.getArray<CategorySimpleModel>(res));
     }
    
 }

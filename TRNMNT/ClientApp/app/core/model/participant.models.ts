@@ -2,7 +2,6 @@
     public firstName: string;
     public lastName: string;
     public dateOfBirth: Date;
-    public eventId: AAGUID;
     constructor() {
     }
 }
@@ -14,5 +13,6 @@ export class ParticipantRegistrationModel extends ParticipantModelBase {
     public userId: string;
     public email: string;
     public phoneNumber: string;
+    public promoCode: string;
 }
 

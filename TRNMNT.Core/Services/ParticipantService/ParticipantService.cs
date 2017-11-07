@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model.Participant;
-using TRNMNT.Core.Model.Result;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Web.Core.Const;
-using TRNMNT.Web.Core.Enum;
-using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Data.Context;
 
 namespace TRNMNT.Core.Services
@@ -33,28 +28,46 @@ namespace TRNMNT.Core.Services
 
 
 
-        public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model)
+        public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model, Guid eventId)
         {
             return await repository.GetAll().AnyAsync(p =>
-             p.EventId == model.EventId
+             p.EventId == eventId
              && p.FirstName == model.FirstName
              && p.LastName == model.LastName
              && p.DateOfBirth == model.DateOfBirth
              );
         }
 
-        public async Task AddParticipant(Participant participant, bool saveContext = true)
+        public void AddParticipant(Participant participant)
         {
             repository.Add(participant);
-            if (saveContext)
-            {
-                await unitOfWork.SaveAsync();
-            }
         }
 
-       
+
+
+        public Participant CreatePaticipant(ParticipantRegistrationModel model, Guid eventId)
+        {
+            return new Participant()
+            {
+                ParticipantId = Guid.NewGuid(),
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                TeamId = Guid.Parse(model.TeamId),
+                DateOfBirth = model.DateOfBirth,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                CategoryId = Guid.Parse(model.CategoryId),
+                WeightDivisionId = Guid.Parse(model.WeightDivisionId),
+                EventId = eventId,
+                UserId = model.UserId,
+                IsActive = true,
+                IsApproved = false,
+                UpdateTS = DateTime.UtcNow,
+            };
+        }
+        
     }
-    
+
 
 }
 

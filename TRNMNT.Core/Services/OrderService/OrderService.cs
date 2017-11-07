@@ -19,32 +19,23 @@ namespace TRNMNT.Core.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task AddOrderAsync(Order order, bool saveContext = true)
+        public void AddOrder(Order order)
         {
             orderRepository.Add(order);
-            if (saveContext)
-            {
-                await unitOfWork.SaveAsync();
-            }
-
         }
 
-        public async Task ApproveOrderAsync(Guid orderId, bool saveContext = true)
+        public async Task ApproveOrderAsync(Guid orderId, string paymentProviderReference)
         {
             var order = await orderRepository.GetByIDAsync(orderId);
+            order.PaymentProviderReference = paymentProviderReference;
             order.PaymentApproved = true;
             orderRepository.Update(order);
-            if (saveContext)
-            {
-                await unitOfWork.SaveAsync();
-            }
         }
 
-        public Order GetNewOrder(OrderTypeEnum orderType, string userId, int ammount, string currency, string reference)
+        public Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference)
         {
             var order = new Order
             {
-                UserId = userId,
                 CreateTS = DateTime.UtcNow,
                 OrderType = (int)orderType,
                 Amount = ammount,

@@ -45,5 +45,6 @@ namespace TRNMNT.Data.Entities
 
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Participant> Participants { get; set; }
+        public virtual ICollection<PromoCode> PromoCodes { get; set; }
     }
 }
