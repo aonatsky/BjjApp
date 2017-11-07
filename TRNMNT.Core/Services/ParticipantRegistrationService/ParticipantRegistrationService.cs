@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Data.Context;
-using TRNMNT.Data.Entities;
-using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Web.Core.Const;
 using TRNMNT.Web.Core.Enum;
 

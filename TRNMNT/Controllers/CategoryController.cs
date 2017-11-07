@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using TRNMNT.Core.Services;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
+using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -23,7 +24,8 @@ namespace TRNMNT.Web.Controllers
             IRepository<Category> repository, 
             IHttpContextAccessor httpContextAccessor, 
             IEventService eventService,
-            IUserService userService) : base(logger, userService, eventService)
+            IUserService userService,
+            IAppDbContext context) : base(logger, userService, eventService, context)
         {
             this.categoryService = categoryService;
         }

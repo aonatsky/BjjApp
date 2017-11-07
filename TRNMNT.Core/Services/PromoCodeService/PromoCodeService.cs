@@ -4,19 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Data.UnitOfWork;
+
 
 namespace TRNMNT.Core.Services
 {
     public class PromoCodeService : IPromoCodeService
     {
         private IRepository<PromoCode> promoCodeRepository;
-        private IUnitOfWork unitOfWork;
+        
 
-        public PromoCodeService(IRepository<PromoCode> promoCodeRepository, IUnitOfWork unitOfWork)
+        public PromoCodeService(IRepository<PromoCode> promoCodeRepository)
         {
             this.promoCodeRepository = promoCodeRepository;
-            this.unitOfWork = unitOfWork;
         }
 
 

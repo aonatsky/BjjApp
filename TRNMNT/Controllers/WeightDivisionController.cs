@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using TRNMNT.Core.Services;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
+using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -19,8 +20,13 @@ namespace TRNMNT.Web.Controllers
     {
         private IWeightDivisionService weightDivisionService;
 
-        public WeightDivisionController(ILogger<WeightDivisionController> logger, IWeightDivisionService weightDivisionService, IRepository<WeightDivision> repository, IUserService userService, IEventService eventService)
-            : base(logger, repository, userService, eventService)
+        public WeightDivisionController(ILogger<WeightDivisionController> logger,
+            IWeightDivisionService weightDivisionService,
+            IRepository<WeightDivision> repository,
+            IUserService userService,
+            IEventService eventService,
+            IAppDbContext context)
+            : base(logger, repository, userService, eventService, context)
         {
             this.weightDivisionService = weightDivisionService;
         }

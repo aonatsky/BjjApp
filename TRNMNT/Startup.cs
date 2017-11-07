@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Net;
 using System.Threading.Tasks;
-using TRNMNT.Data.UnitOfWork;
 using Microsoft.AspNetCore.Routing;
 
 namespace TRNMNT.Web
@@ -68,7 +67,6 @@ namespace TRNMNT.Web
             #region AppServices
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddScoped(typeof(IUnitOfWork), typeof(AppDbContext));
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(FighterFileService));

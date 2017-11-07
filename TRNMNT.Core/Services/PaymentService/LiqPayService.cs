@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
-using TRNMNT.Data.UnitOfWork;
+
 
 namespace TRNMNT.Core.Services
 {
@@ -16,15 +16,14 @@ namespace TRNMNT.Core.Services
         private IConfiguration configuration;
         private IParticipantService participantService;
         private ITeamService teamService;
-        private IUnitOfWork unitOfWork;
+        
         private IOrderService orderService;
 
-        public LiqPayService(IConfiguration configuration, IParticipantService participantService, ITeamService teamService, IUnitOfWork unitOfWork, IOrderService orderService)
+        public LiqPayService(IConfiguration configuration, IParticipantService participantService, ITeamService teamService, IOrderService orderService)
         {
             this.configuration = configuration;
             this.participantService = participantService;
             this.teamService = teamService;
-            this.unitOfWork = unitOfWork;
             this.orderService = orderService;
 
         }

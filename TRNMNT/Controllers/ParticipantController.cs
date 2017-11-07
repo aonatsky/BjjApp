@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model;
+using TRNMNT.Data.Context;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,10 +23,15 @@ namespace TRNMNT.Web.Controllers
         private IEventService eventService;
         private IParticipantRegistrationService participantRegistrationService;
 
-        public ParticipantController(IEventService eventService, ILogger<TeamController> logger,
-            IUserService userService, IParticipantService participantService,
-            IPaymentService paymentService, IOrderService orderService, IParticipantRegistrationService participantRegistrationService)
-            : base(logger, userService, eventService)
+        public ParticipantController(IEventService eventService,
+            ILogger<TeamController> logger,
+            IUserService userService,
+            IParticipantService participantService,
+            IPaymentService paymentService,
+            IOrderService orderService,
+            IParticipantRegistrationService participantRegistrationService,
+            IAppDbContext context)
+            : base(logger, userService, eventService, context)
         {
 
             this.participantService = participantService;

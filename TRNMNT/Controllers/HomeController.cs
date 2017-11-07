@@ -5,12 +5,17 @@ using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Services;
 using TRNMNT.Web.Core.Services;
 using TRNMNT.Web.Const;
+using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        public HomeController(ILogger<HomeController> logger, IUserService userService, IEventService eventService) : base(logger, userService, eventService)
+        public HomeController(ILogger<HomeController> logger, 
+            IUserService userService,
+            IEventService eventService,
+            IAppDbContext context
+            ) : base(logger, userService, eventService, context)
         {
         }
         public IActionResult Index()

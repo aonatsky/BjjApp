@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Data.UnitOfWork;
+
 using TRNMNT.Web.Core.Enum;
 
 namespace TRNMNT.Core.Services

@@ -12,6 +12,7 @@ using TRNMNT.Data.Repositories;
 using System.Linq;
 using TRNMNT.Core.Model.Event;
 using Microsoft.AspNetCore.Mvc.Filters;
+using TRNMNT.Data.Context;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,7 +25,7 @@ namespace TRNMNT.Web.Controllers
         private IEventService eventService;
         Guid? eventId;
 
-        public EventController(IEventService eventService, ILogger<EventController> logger,  IUserService userService) : base(logger, userService, eventService)
+        public EventController(IEventService eventService, ILogger<EventController> logger,  IUserService userService, IAppDbContext context ) : base(logger, userService, eventService, context)
         {
             this.eventService = eventService;
         }
