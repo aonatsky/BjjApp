@@ -5,19 +5,20 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using TRNMNT.Data.Entities;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using TRNMNT.Data.UnitOfWork;
-using System;
 
 namespace TRNMNT.Data.Context
 {
-    public class AppDbContext : IdentityDbContext<User>, IAppDbContext, IUnitOfWork
+    public class AppDbContext : IdentityDbContext<User>, IAppDbContext
     {
+        #region .ctor
         public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
+           : base(options)
         {
 
         }
+        #endregion
 
+        #region protected
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //builder.Entity<Owner>().HasKey(o => o.OwnerId);
@@ -31,11 +32,10 @@ namespace TRNMNT.Data.Context
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+        #endregion
 
 
-
-
-        #region interface Implementation
+        #region interface implementation
         public new IQueryable<T> Set<T>() where T : class
         {
             return SetInternal<T>().AsQueryable();
@@ -98,13 +98,11 @@ namespace TRNMNT.Data.Context
 
         #endregion
 
-
+        #region dbSets
         protected DbSet<T> SetInternal<T>() where T : class
         {
             return base.Set<T>();
         }
-
-        
 
         public DbSet<WeightDivision> WeightDivision { get; set; }
         public DbSet<Fighter> Fighter { get; set; }
@@ -116,5 +114,6 @@ namespace TRNMNT.Data.Context
         public DbSet<Order> Order { get; set; }
         public DbSet<Federation> Federation { get; set; }
 
+        #endregion
     }
 }
