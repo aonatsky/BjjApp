@@ -11,13 +11,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using Microsoft.Extensions.Primitives;
+using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
     public abstract class CRUDController<T> : BaseController where T : class
     {
         IRepository<T> repository;
-        public CRUDController(ILogger logger, IRepository<T> repository, IUserService userService, IEventService eventService) : base(logger, userService, eventService)
+        public CRUDController(ILogger logger,
+            IRepository<T> repository,
+            IUserService userService,
+            IEventService eventService,
+            IAppDbContext context) : base(logger, userService, eventService, context)
         {
             this.repository = repository;
         }

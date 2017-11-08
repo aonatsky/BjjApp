@@ -6,6 +6,7 @@ using TRNMNT.Core.Services;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using TRNMNT.Data.Context;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,8 +18,13 @@ namespace TRNMNT.Web.Controllers
     {
         ITeamService teamService;
 
-        public TeamController(IEventService eventService, ILogger<TeamController> logger, IUserService userService, ITeamService teamService)
-        : base(logger, userService, eventService)
+        public TeamController(
+            IEventService eventService, 
+            ILogger<TeamController> logger, 
+            IUserService userService, 
+            ITeamService teamService,
+            IAppDbContext context
+            ): base(logger, userService, eventService, context)
         {
             this.teamService = teamService;
         }

@@ -5,7 +5,6 @@ using System.Linq;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Web.Core.Model;
 
 namespace TRNMNT.Web.Core.Services.impl

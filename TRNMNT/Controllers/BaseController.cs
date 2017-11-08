@@ -10,6 +10,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using TRNMNT.Web.Const;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net.Http;
+using TRNMNT.Data.Context;
+using System.Net;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -18,18 +21,18 @@ namespace TRNMNT.Web.Controllers
         private ILogger logger;
         private IUserService userService;
         private IEventService eventService;
+        private readonly IAppDbContext context;
         protected JsonSerializerSettings jsonSerializerSettings;
 
         private Guid? eventId;
-
         private User user;
 
-        public BaseController(ILogger logger, IUserService userService, IEventService eventService)
+        public BaseController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context)
         {
             this.logger = logger;
             this.userService = userService;
             this.eventService = eventService;
-
+            this.context = context;
             jsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -50,7 +53,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     user = await userService.GetUserAsync(userIdClaim.Value);
                 }
-                
+
             }
             return user;
         }
@@ -79,16 +82,90 @@ namespace TRNMNT.Web.Controllers
             return eventId;
         }
 
-        protected string GetFederationId()
-        {
-            return this.RouteData.Values[AppConstants.RouteDataKeyFederationId] as string;
-        }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             await ParseEventSubdomain();
             await base.OnActionExecutionAsync(context, next);
         }
+
+
+        #region Protected Methods
+
+        protected async Task<IActionResult> HandleRequestAsync(Func<Task> action)
+        {
+            try
+            {
+                await action();
+                await context.SaveAsync();
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        protected async Task<IActionResult> HandleRequestAsync(Action action)
+        {
+
+            try
+            {
+                action();
+                await context.SaveAsync();
+                return Ok();
+
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        //protected async Task<IActionResult> HandleSuccessRequestAsync(Func<Task> action)
+        //{
+        //    await action();
+        //    return Request.CreateResponse(HttpStatusCode.OK);
+        //}
+
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action)
+        {
+            try
+            {
+                var result = await action();
+                await context.SaveAsync();
+                return Ok(result);
+
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<T> action)
+        {
+            try
+            {
+                var result = action();
+                await context.SaveAsync();
+                return Ok(result);
+
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+
+
+        #endregion
 
     }
 }

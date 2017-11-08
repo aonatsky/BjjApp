@@ -9,6 +9,7 @@ using TRNMNT.Web.Core.Model;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using TRNMNT.Core.Services;
+using TRNMNT.Data.Context;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +23,13 @@ namespace TRNMNT.Web.Controllers
     {
         private readonly IAuthenticationService authenticationSerivce;
 
-        public AuthController(ILogger<AuthController> logger, IAuthenticationService authenticationService, IUserService userService, IEventService eventService) : base(logger,userService, eventService)
+        public AuthController(
+            ILogger<AuthController> logger,
+            IAuthenticationService authenticationService,
+            IUserService userService,
+            IEventService eventService,
+            IAppDbContext context
+            ) : base(logger, userService, eventService, context)
         {
             authenticationSerivce = authenticationService;
         }

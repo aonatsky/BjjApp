@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TRNMNT.Data.Context;
 using System;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace TRNMNT.Data.Repositories
 {
@@ -16,6 +17,8 @@ namespace TRNMNT.Data.Repositories
         {
             this.context = context;
         }
+
+        
         public void Add(T entity)
         {
             context.Add(entity);
@@ -46,15 +49,17 @@ namespace TRNMNT.Data.Repositories
             context.AddRange(entities);
         }
 
-        public void Save(bool supressExceptions = true){
+        public void Save(bool supressExceptions = true)
+        {
             context.Save(supressExceptions);
         }
 
-        public void Delete(T entity){
+        public void Delete(T entity)
+        {
             context.Entry<T>(entity).State = EntityState.Deleted;
         }
-        
-        public void Delete<K>(K id) 
+
+        public void Delete<K>(K id)
         {
             var entity = GetByID<K>(id);
             context.Entry<T>(entity).State = EntityState.Deleted;
@@ -71,6 +76,29 @@ namespace TRNMNT.Data.Repositories
             {
                 Delete(entitity);
             }
+        }
+
+        public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return context.Set<T>().FirstOrDefaultAsync(predicate);
+        }
+
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate)
+        {
+            return GetAll().Where(predicate);
+        }
+
+        public IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties)
+        {
+
+            IQueryable<T> queryable = GetAll();
+            foreach (Expression<Func<T, object>> includeProperty in includeProperties)
+            {
+
+                queryable = queryable.Include<T, object>(includeProperty);
+            }
+
+            return queryable;
         }
     }
 }

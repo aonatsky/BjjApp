@@ -7,6 +7,7 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using TRNMNT.Core.Model;
+using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -17,8 +18,13 @@ namespace TRNMNT.Web.Controllers
         IPaymentService paymentService;
         IEventService eventService;
 
-        public PaymentController(IEventService eventService, ILogger<PaymentController> logger, IUserService userService, IPaymentService paymentService)
-        : base(logger, userService, eventService)
+        public PaymentController(
+            IEventService eventService,
+            ILogger<PaymentController> logger,
+            IUserService userService,
+            IPaymentService paymentService,
+            IAppDbContext context)
+        : base(logger, userService, eventService, context)
         {
             this.httpContextAccessor = httpContextAccessor;
             this.paymentService = paymentService;
@@ -30,7 +36,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await paymentService.ConfirmPaymentAsync(model);
+                paymentService.ConfirmPayment(model);
                 return Ok();
             }
             catch (Exception e)
