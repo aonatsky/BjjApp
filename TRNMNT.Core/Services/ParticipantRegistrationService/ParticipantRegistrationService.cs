@@ -50,7 +50,7 @@ namespace TRNMNT.Core.Services
                 var promoCodeUsed = await promoCodeService.ValidateCodeAsync(eventId, model.PromoCode, participant.ParticipantId.ToString());
                 participantService.AddParticipant(participant);
                 var price = await eventService.GetPrice(eventId, promoCodeUsed);
-                var order = orderService.GetNewOrder(OrderTypeEnum.EventParticipation, price, "UAH", $"{participant.FirstName} {participant.LastName} {participant.ParticipantId.ToString()}");
+                var order = orderService.GetNewOrder(OrderTypeEnum.EventParticipation, price, "UAH", participant.ParticipantId.ToString());
                 orderService.AddOrder(order);
                 var paymentData = paymentService.GetPaymentDataModel(order, callbackUrl);
                 await unitOfWork.SaveAsync();

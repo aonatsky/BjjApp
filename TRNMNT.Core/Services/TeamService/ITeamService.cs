@@ -5,7 +5,7 @@ using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services
 {
-    public interface ITeamService
+    public interface ITeamService : IPaidEntityService
     {
         Task<Team> GetTeamByNameAsync(string name);
         Task<IEnumerable<TeamModel>> GetTeams();

@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.UnitOfWork;
+using TRNMNT.Core.Helpers;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace TRNMNT.Core.Services
 {
@@ -14,37 +17,52 @@ namespace TRNMNT.Core.Services
         private string publicKey = "i39927249084";
         private string privateKey = "LRGmWbN29X05TT0M8j0sSbWgw2UoY1K9uWnp4Nqy";
         private IConfiguration configuration;
+        private readonly IPaidServiceFactory paidServiceFactory;
         private IParticipantService participantService;
         private ITeamService teamService;
         private IUnitOfWork unitOfWork;
         private IOrderService orderService;
+        private readonly ILogger logger;
 
-        public LiqPayService(IConfiguration configuration, IParticipantService participantService, ITeamService teamService, IUnitOfWork unitOfWork, IOrderService orderService)
+        public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IUnitOfWork unitOfWork, IOrderService orderService, ILogger logger)
         {
             this.configuration = configuration;
-            this.participantService = participantService;
-            this.teamService = teamService;
+            this.paidServiceFactory = paidServiceFactory;
             this.unitOfWork = unitOfWork;
             this.orderService = orderService;
-
+            this.logger = logger;
         }
 
-        public void ConfirmPayment(PaymentDataModel dataModel)
+        public async Task ConfirmPaymentAsync(PaymentDataModel dataModel)
         {
             if (dataModel.Signature == GetSignature(dataModel.Data))
             {
-                JObject jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
-                var paymentReference = jsonData["payment_id"].ToString();
-                var orderId = jsonData["order_id"].ToString();
-                var status = jsonData["status"].ToString();
-                if (status == "success" || status =="sandbox")
+                try
                 {
-                    orderService.ApproveOrderAsync(Guid.Parse(orderId), paymentReference);
+                    JObject jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
+                    var paymentReference = jsonData["payment_id"].ToString();
+                    var orderId = jsonData["order_id"].ToString();
+                    var status = jsonData["status"].ToString();
+                    logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
 
+                    if (status == "success" || status == "sandbox")
+                    {
+                        var order = await orderService.GetOrder(Guid.Parse(orderId));
+                        if (order != null)
+                        {
+                            await orderService.ApproveOrderAsync(order.OrderId, paymentReference);
+                            var service = paidServiceFactory.GetService(order.OrderTypeId);
+                            await service.ApproveEntityAsync(Guid.Parse(order.Reference), order.OrderId);
+                        }
+                    }
                 }
-            } 
+                catch (Exception ex)
+                {
+                    logger.LogError(ex.Message);
+                }
 
-
+            }
+            logger.LogError("Signature declined");
         }
 
         public PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl)
@@ -59,12 +77,14 @@ namespace TRNMNT.Core.Services
         }
 
 
-        private string GetSignature(string encodedData) {
+        private string GetSignature(string encodedData)
+        {
             var stringSignature = String.Concat(privateKey, encodedData, privateKey);
             return Convert.ToBase64String(SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(stringSignature)));
         }
 
-        private string EncodeData(Order order, string callbackUrl) {
+        private string EncodeData(Order order, string callbackUrl)
+        {
             var jsonData = new JObject();
             jsonData["version"] = 3;
             jsonData["public_key"] = publicKey;
@@ -88,7 +108,6 @@ namespace TRNMNT.Core.Services
         {
             return Encoding.UTF8.GetString(Convert.FromBase64String(data));
         }
-        
-        
+
     }
 }

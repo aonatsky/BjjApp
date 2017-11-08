@@ -9,7 +9,7 @@ namespace TRNMNT.Data.Entities
     {
         [Key]
         public Guid OrderId { get; set; }
-        public int OrderType { get; set; }
+        public int OrderTypeId { get; set; }
         public bool PaymentApproved { get; set; }
         public int Amount { get; set; }
         public string PaymentProviderReference { get; set; }

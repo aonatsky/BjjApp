@@ -5,7 +5,7 @@ using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services
 {
-    public interface IParticipantService
+    public interface IParticipantService : IPaidEntityService
     {
 
         Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant, Guid eventId);

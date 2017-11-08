@@ -65,7 +65,17 @@ namespace TRNMNT.Core.Services
                 UpdateTS = DateTime.UtcNow,
             };
         }
-        
+
+        public async  Task ApproveEntityAsync(Guid entityId, Guid orderId)
+        {
+            var participant = await repository.GetByIDAsync(entityId);
+            if (participant != null)
+            {
+                participant.IsApproved = true;
+                participant.OrderId = orderId;
+                repository.Update(participant);
+            }
+        }
     }
 
 

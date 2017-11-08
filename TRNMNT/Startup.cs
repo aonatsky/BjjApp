@@ -24,6 +24,7 @@ using System.Net;
 using System.Threading.Tasks;
 using TRNMNT.Data.UnitOfWork;
 using Microsoft.AspNetCore.Routing;
+using TRNMNT.Core.Helpers;
 
 namespace TRNMNT.Web
 {
@@ -69,10 +70,10 @@ namespace TRNMNT.Web
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped(typeof(IUnitOfWork), typeof(AppDbContext));
-            services.AddScoped(typeof(IFighterService), typeof(FighterService));
+            //services.AddScoped(typeof(IFighterService), typeof(FighterService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(FighterFileService));
-            services.AddScoped(typeof(BracketsFileService));
+            //services.AddScoped(typeof(FighterFileService));
+            //services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));
             services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
@@ -85,6 +86,7 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IOrderService),typeof(OrderService));
             services.AddScoped(typeof(IPromoCodeService), typeof(PromoCodeService));
             services.AddScoped(typeof(IParticipantRegistrationService),typeof(ParticipantRegistrationService));
+            services.AddScoped(typeof(IPaidServiceFactory), typeof(PaidServiceFactory));
             #endregion
 
 

@@ -30,7 +30,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                paymentService.
+                await paymentService.ConfirmPaymentAsync(model);
                 return Ok();
             }
             catch (Exception e)

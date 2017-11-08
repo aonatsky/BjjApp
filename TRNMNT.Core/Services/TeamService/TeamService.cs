@@ -18,6 +18,16 @@ namespace TRNMNT.Core.Services
             this.repository = repository;
         }
 
+        public async Task ApproveEntityAsync(Guid entityId, Guid orderId)
+        {
+            var team = await repository.GetByIDAsync(entityId);
+            if (team != null)
+            {
+                team.IsApproved = true;
+                team.OrderId = orderId;
+            }
+        }
+
         public async Task<Team> GetTeamByNameAsync(string name)
         {
             return await repository.GetAll().Where(t => t.Name == name).FirstOrDefaultAsync();

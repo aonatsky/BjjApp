@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
 
@@ -9,6 +10,6 @@ namespace TRNMNT.Core.Services
     public interface IPaymentService
     {
         PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl);
-        void ConfirmPayment(PaymentDataModel dataModel);
+        Task ConfirmPaymentAsync(PaymentDataModel dataModel);
     }
 }

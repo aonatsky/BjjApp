@@ -16,6 +16,8 @@ namespace TRNMNT.Data.Entities
         public DateTime UpdateTs { get; set; }
         public string UpdateBy { get; set; }
         public Guid FederationId { get; set; }
+        public Guid? OrderId { get; set; }
+        public bool IsApproved { get; set; }
 
         [JsonIgnore]
         public ICollection<Participant> Participants { get; set; }

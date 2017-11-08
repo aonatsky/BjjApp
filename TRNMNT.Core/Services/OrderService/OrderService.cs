@@ -3,33 +3,35 @@ using System.Threading.Tasks;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Web.Core.Enum;
 
 namespace TRNMNT.Core.Services
 {
     public class OrderService : IOrderService
     {
-        private IRepository<Order> orderRepository;
+        private IRepository<Order> repository;
         private IAppDbContext unitOfWork;
 
         public OrderService(IRepository<Order> orderRepository, IAppDbContext unitOfWork)
         {
-            this.orderRepository = orderRepository;
+            this.repository = orderRepository;
             this.unitOfWork = unitOfWork;
         }
 
         public void AddOrder(Order order)
         {
-            orderRepository.Add(order);
+            repository.Add(order);
         }
 
         public async Task ApproveOrderAsync(Guid orderId, string paymentProviderReference)
         {
-            var order = await orderRepository.GetByIDAsync(orderId);
-            order.PaymentProviderReference = paymentProviderReference;
-            order.PaymentApproved = true;
-            orderRepository.Update(order);
+            var order = await repository.GetByIDAsync(orderId);
+            if (order != null)
+            {
+                order.PaymentProviderReference = paymentProviderReference;
+                order.PaymentApproved = true;
+                repository.Update(order);
+            }            
         }
 
         public Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference)
@@ -37,13 +39,18 @@ namespace TRNMNT.Core.Services
             var order = new Order
             {
                 CreateTS = DateTime.UtcNow,
-                OrderType = (int)orderType,
+                OrderTypeId = (int)orderType,
                 Amount = ammount,
                 Currency = currency,
                 PaymentApproved = false,
                 Reference = reference
             };
             return order;
+        }
+
+        public async Task<Order> GetOrder(Guid orderId)
+        {
+            return await repository.GetByIDAsync(orderId);
         }
     }
 }
