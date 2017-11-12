@@ -193,7 +193,7 @@ namespace TRNMNT.Core.Services
 
         public async Task<Guid?> GetEventIdAsync(string url)
         {
-            var ids = await eventRepository.GetAll().Where(e => e.UrlPrefix == url).Select(e => e.EventId).ToListAsync();
+            var ids = await eventRepository.GetAll().Where(e => e.UrlPrefix == url && e.IsActive).Select(e => e.EventId).ToListAsync();
             if (ids.Any())
             {
                 return ids.FirstOrDefault();

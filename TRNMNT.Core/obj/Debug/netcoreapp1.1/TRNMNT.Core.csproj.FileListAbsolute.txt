@@ -18,3 +18,4 @@ D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.csproj.CoreCom
 D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.AssemblyInfo.cs
 D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.dll
 D:\Onatsky\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.pdb
+C:\dev\BjjApp\TRNMNT.Core\obj\Debug\netcoreapp1.1\TRNMNT.Core.AssemblyInfoInputs.cache

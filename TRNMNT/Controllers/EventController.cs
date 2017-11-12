@@ -8,7 +8,6 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
-using TRNMNT.Data.Repositories;
 using System.Linq;
 using TRNMNT.Core.Model.Event;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -23,7 +22,6 @@ namespace TRNMNT.Web.Controllers
     public class EventController : BaseController 
     {
         private IEventService eventService;
-        Guid? eventId;
 
         public EventController(IEventService eventService, ILogger<EventController> logger,  IUserService userService, IAppDbContext context ) : base(logger, userService, eventService, context)
         {
@@ -126,33 +124,11 @@ namespace TRNMNT.Web.Controllers
         [AllowAnonymous, HttpGet("[action]")]
         public async Task<IActionResult> GetEventInfo()
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
-                EventModelInfo _event;
-                var eventId = GetEventId();
-                if (eventId != null)
-                {
-                    _event = await eventService.GetEventInfoAsync(eventId.Value);
-                    if (_event != null)
-                    {
-                        var jsonobj = JsonConvert.SerializeObject(_event, jsonSerializerSettings);
-                        return Ok(jsonobj);
-                    }
-                    return NotFound();
-                }
-                else
-                {
-                    return NotFound();
-                }
-                
-            }
-            catch (Exception e)
-            {
-
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
+                var jsonobj = JsonConvert.SerializeObject(await eventService.GetEventInfoAsync(GetEventId().Value), jsonSerializerSettings);
+                return Ok(jsonobj);
+            }, true);
         }
 
         [Authorize, HttpGet("[action]")]

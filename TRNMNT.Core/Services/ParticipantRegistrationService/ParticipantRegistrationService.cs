@@ -39,7 +39,7 @@ namespace TRNMNT.Core.Services
                 return new ParticipantRegistrationResult()
                 {
                     Success = false,
-                    Reason = DefaultMessage.PARTICIPANT_REGISTRATION_PARTICIPANT_ALREADY_EXISTS
+                    Reason = DefaultMessage.ParticipantRegistrationParticipantIsAlreadyExists
                 };
             }
             else
