@@ -34,17 +34,9 @@ namespace TRNMNT.Web.Controllers
         [HttpPost("[action]/{eventId}")]
         public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
         {
-            try
-            {
-                paymentService.ConfirmPayment(model);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
+            return await HandleRequestAsync(async () => {
+                await paymentService.ConfirmPaymentAsync(model);
+            });
         }
 
     }

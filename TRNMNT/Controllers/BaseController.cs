@@ -99,7 +99,6 @@ namespace TRNMNT.Web.Controllers
                 await action();
                 await context.SaveAsync();
                 return Ok();
-
             }
             catch (Exception e)
             {

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
-using TRNMNT.Data.UnitOfWork;
 using TRNMNT.Core.Helpers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -20,15 +19,13 @@ namespace TRNMNT.Core.Services
         private readonly IPaidServiceFactory paidServiceFactory;
         private IParticipantService participantService;
         private ITeamService teamService;
-        private IUnitOfWork unitOfWork;
         private IOrderService orderService;
         private readonly ILogger logger;
 
-        public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IUnitOfWork unitOfWork, IOrderService orderService, ILogger logger)
+        public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IOrderService orderService, ILogger logger)
         {
             this.configuration = configuration;
             this.paidServiceFactory = paidServiceFactory;
-            this.unitOfWork = unitOfWork;
             this.orderService = orderService;
             this.logger = logger;
         }
