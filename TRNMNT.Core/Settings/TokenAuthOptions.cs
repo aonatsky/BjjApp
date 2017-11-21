@@ -11,9 +11,9 @@ namespace TRNMNT.Web.Core.Settings
         {
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes("supersecretkeyprostopizdec"));
         }
-        public const string AUDIENCE = "trnmntAudience";
-        public const string ISSUER = "trnmntIssuer";
-        public const int LIFETIME = 50; // время жизни токена - 1 минута
+        public const string Audience = "trnmntAudience";
+        public const string Issuer = "trnmntIssuer";
+        public const int Lifetime = 50; 
 
     }
 }

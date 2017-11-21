@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net.Http;
 using TRNMNT.Data.Context;
 using System.Net;
+using System.Security.Claims;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -48,7 +49,7 @@ namespace TRNMNT.Web.Controllers
         {
             if (user == null)
             {
-                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
                 if (userIdClaim != null)
                 {
                     user = await userService.GetUserAsync(userIdClaim.Value);

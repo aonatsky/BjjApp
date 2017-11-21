@@ -64,12 +64,12 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
 
         public async Task<UserRegistrationResult> CreateParticipantUserAsync(string email, string password)
         {
-            return await CreateUser(email, password, Roles.ROLE_PARTICIPANT);
+            return await CreateUserAsync(email, password, Roles.ROLE_PARTICIPANT);
         }
 
         public async Task<UserRegistrationResult> CreateOwnerUserAsync(string email, string password)
         {
-            return await CreateUser(email, password, Roles.ROLE_OWNER);
+            return await CreateUserAsync(email, password, Roles.ROLE_OWNER);
         }
 
 
@@ -77,7 +77,7 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
         #endregion
 
         #region Private Methods
-        private async Task<UserRegistrationResult> CreateUser(string email, string password, string roleClaim)
+        private async Task<UserRegistrationResult> CreateUserAsync(string email, string password, string roleClaim)
         {
             var user = new User()
             {
@@ -142,11 +142,11 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
                 GetTokenClaims(user).Union(await userManager.GetClaimsAsync(user))
             );
 
-            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.LIFETIME);
+            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.Lifetime);
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = TokenAuthOptions.ISSUER,
-                Audience = TokenAuthOptions.AUDIENCE,
+                Issuer = TokenAuthOptions.Issuer,
+                Audience = TokenAuthOptions.Audience,
                 SigningCredentials = new SigningCredentials(TokenAuthOptions.GetKey(), SecurityAlgorithms.HmacSha256),
                 Subject = identity,
                 Expires = expiresIn
@@ -158,9 +158,10 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
         private List<Claim> GetTokenClaims(User user)
         {
             return new List<Claim> {
-                    new Claim("UserId", user.Id.ToString()),
-                    new Claim(ClaimNames.FIRST_NAME, user.FirstName),
-                    new Claim(ClaimNames.LAST_NAME, user.LastName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),    
+                //new Claim("UserId", user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.FirstName),
+                    new Claim(ClaimTypes.Surname, user.LastName),
                     new Claim(ClaimTypes.Email, user.Email),
 
                 };

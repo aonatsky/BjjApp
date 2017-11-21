@@ -53,8 +53,8 @@ namespace TRNMNT.Web
                 {
                     o.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidIssuer = TokenAuthOptions.ISSUER,
-                        ValidAudience = TokenAuthOptions.AUDIENCE,
+                        ValidIssuer = TokenAuthOptions.Issuer,
+                        ValidAudience = TokenAuthOptions.Audience,
                         ValidateIssuer = true,
                         IssuerSigningKey = TokenAuthOptions.GetKey(),
                         ValidateIssuerSigningKey = true,
