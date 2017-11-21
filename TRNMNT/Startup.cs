@@ -23,6 +23,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 namespace TRNMNT.Web
 {
@@ -45,6 +47,36 @@ namespace TRNMNT.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Authorization
+            services.AddAuthentication(o => o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(o =>
+                {
+                    o.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = TokenAuthOptions.ISSUER,
+                        ValidAudience = TokenAuthOptions.AUDIENCE,
+                        ValidateIssuer = true,
+                        IssuerSigningKey = TokenAuthOptions.GetKey(),
+                        ValidateIssuerSigningKey = true,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+                    };
+                    o.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            return Task.FromResult(0);
+                        },
+                        OnChallenge = context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            context.HandleResponse();
+                            return Task.FromResult(0);
+                        }
+                    };
+                });
+
             // Add framework services.
             services.AddMvc();
 
@@ -77,16 +109,13 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IParticipantService), typeof(ParticipantService));
             services.AddScoped(typeof(ITeamService), typeof(TeamService));
             services.AddScoped(typeof(IWeightDivisionService), typeof(WeightDivisionService));
-            services.AddScoped(typeof(IUserService),typeof(UserService));
-            services.AddScoped(typeof(IFileService),typeof(LocalFileService));
-            services.AddScoped(typeof(IPaymentService),typeof(LiqPayService));
-            services.AddScoped(typeof(IOrderService),typeof(OrderService));
+            services.AddScoped(typeof(IUserService), typeof(UserService));
+            services.AddScoped(typeof(IFileService), typeof(LocalFileService));
+            services.AddScoped(typeof(IPaymentService), typeof(LiqPayService));
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
             services.AddScoped(typeof(IPromoCodeService), typeof(PromoCodeService));
-            services.AddScoped(typeof(IParticipantRegistrationService),typeof(ParticipantRegistrationService));
+            services.AddScoped(typeof(IParticipantRegistrationService), typeof(ParticipantRegistrationService));
             #endregion
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,53 +138,46 @@ namespace TRNMNT.Web
 
             app.UseStaticFiles();
 
-            var options = new JwtBearerOptions
-            {
+            //var options = new JwtBearerOptions
+            //{
 
-                TokenValidationParameters = {
-                   ValidIssuer = TokenAuthOptions.ISSUER,
-                   ValidAudience = TokenAuthOptions.AUDIENCE,
-                   ValidateIssuer = true,
-                   IssuerSigningKey = TokenAuthOptions.GetKey(),
-                   ValidateIssuerSigningKey = true,
-                   ValidateLifetime = true,
-                   ClockSkew = TimeSpan.Zero,
-                },
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = false,
-                Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        context.HandleResponse();
-                        return Task.FromResult(0);
-                    },
-                    OnChallenge = context =>
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        context.HandleResponse();
-                        return Task.FromResult(0);
-                    }
-                }
+            //    TokenValidationParameters = {
+            //       ValidIssuer = TokenAuthOptions.ISSUER,
+            //       ValidAudience = TokenAuthOptions.AUDIENCE,
+            //       ValidateIssuer = true,
+            //       IssuerSigningKey = TokenAuthOptions.GetKey(),
+            //       ValidateIssuerSigningKey = true,
+            //       ValidateLifetime = true,
+            //       ClockSkew = TimeSpan.Zero,
+            //    },
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = false,
+            //    Events = new JwtBearerEvents
+            //    {
+            //        OnAuthenticationFailed = context =>
+            //        {
+            //            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            //            context.HandleResponse();
+            //            return Task.FromResult(0);
+            //        },
+            //        OnChallenge = context =>
+            //        {
+            //            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            //            context.HandleResponse();
+            //            return Task.FromResult(0);
+            //        }
+            //    }
 
-            };
-            app.UseJwtBearerAuthentication(options);
-            app.UseIdentity();
+            //};
+            //app.UseJwtBearerAuthentication(options);
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{*all}",
-                    defaults: new { controller = "Home", action = "Index"}
+                    defaults: new { controller = "Home", action = "Index" }
                     );
-
-                //routes.MapRoute(
-                //   name: "api",
-                //   template: "api/{controller}/{action}/{id?}",
-                //   defaults: new { controller = "event" },
-                //   constraints: new { TenantAccess = new TenantRouteConstraint(app.ApplicationServices.GetRequiredService<IEventService>()) });
-
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
                     defaults: new { controller = "Home", action = "Index" });
