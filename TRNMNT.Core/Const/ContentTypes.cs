@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TRNMNT.Web.Core.Const
+﻿namespace TRNMNT.Web.Core.Const
 {
     public class ContentTypes
     {

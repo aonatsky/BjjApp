@@ -146,10 +146,15 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<T> action)
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<T> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
+                if (checkEventId && eventId == null)
+                {
+                    return NotFound();
+                }
+
                 var result = action();
                 await context.SaveAsync();
                 return Ok(result);
