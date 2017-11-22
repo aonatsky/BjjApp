@@ -69,7 +69,7 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
 
         public async Task<UserRegistrationResult> CreateOwnerUserAsync(string email, string password)
         {
-            return await CreateUserAsync(email, password, Roles.ROLE_OWNER);
+            return await CreateUserAsync(email, password, Roles.Owner);
         }
 
 
@@ -119,7 +119,7 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
                     Email = "Ivan.drago@trnmnt.com"
                 }, "1");
                 existUser = await userManager.FindByNameAsync("admin");
-                var result = await userManager.AddClaimAsync(existUser, new Claim(ClaimTypes.Role, Roles.ROLE_OWNER));
+                var result = await userManager.AddClaimAsync(existUser, new Claim(ClaimTypes.Role, Roles.Owner));
 
             }
 
@@ -127,9 +127,9 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
 
         private async Task AddSampleRolesAsync()
         {
-            if (!(await roleManager.RoleExistsAsync(Roles.ROLE_OWNER)))
+            if (!(await roleManager.RoleExistsAsync(Roles.Owner)))
             {
-                IdentityRole newRole = new IdentityRole(Roles.ROLE_OWNER);
+                IdentityRole newRole = new IdentityRole(Roles.Owner);
                 await roleManager.CreateAsync(newRole);
             }
         }
