@@ -10,10 +10,10 @@ using TRNMNT.Web.Core.Const;
 
 namespace TRNMNT.Web.Core.Services.impl
 {
-    public class FighterFileService : BaseFileService
+    public class ParticipantListFileService : BaseFileService
     {
         private IFighterService fighterService;
-        public FighterFileService(IHostingEnvironment env, IFighterService fighterService) :base(env)
+        public ParticipantListFileService(IHostingEnvironment env, IFighterService fighterService) :base(env)
         {
             this.fighterService = fighterService;
         }

@@ -137,7 +137,7 @@ namespace TRNMNT.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                if (await eventService.IsPrefixExistAsync(prefix))
+                if (await eventService.IsEventUrlPrefixExist(prefix))
                 {
                     Response.StatusCode = (int)HttpStatusCode.Found;
                 }
@@ -163,7 +163,7 @@ namespace TRNMNT.Web.Controllers
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.AddEventImageAsync(stream, id);
+                    await eventService.SaveEventImageAsync(stream, id);
                 }
                 return Ok();
 

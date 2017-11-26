@@ -101,7 +101,7 @@ namespace TRNMNT.Web
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(FighterFileService));
+            services.AddScoped(typeof(ParticipantListFileService));
             services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));

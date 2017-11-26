@@ -109,21 +109,7 @@ namespace TRNMNT.Core.Services
             await unitOfWork.SaveAsync();
         }
 
-        public async Task<EventModelFull> GetNewEventAsync(string userId)
-        {
-            var eventToAdd = new Event()
-            {
-                EventId = Guid.NewGuid(),
-                OwnerId = userId,
-                UpdateTS = DateTime.UtcNow,
-                IsActive = false,
-                StatusId = (int)EventStatusEnum.Init
-            };
-            eventRepository.Add(eventToAdd);
-            await unitOfWork.SaveAsync();
-            return GetEventModel(eventToAdd);
-        }
-
+        
         public async Task<EventModelFull> GetFullEventAsync(Guid id)
         {
             var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
@@ -142,25 +128,14 @@ namespace TRNMNT.Core.Services
             return models;
         }
 
-        public async Task<EventModelFull> GetEventByPrefixAsync(string prefix)
-        {
-            var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.UrlPrefix == prefix);
-            if (_event != null)
-            {
-                return GetEventModel(_event);
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
 
-        public async Task<bool> IsPrefixExistAsync(string prefix)
+        public async Task<bool> IsEventUrlPrefixExist(string prefix)
         {
             return await eventRepository.GetAll().AnyAsync();
         }
 
-        public async Task AddEventImageAsync(Stream stream, string eventId)
+        public async Task SaveEventImageAsync(Stream stream, string eventId)
         {
             var fileName = FilePath.EVENT_IMAGE_FILE;
             var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, FilePath.EVENT_IMAGE_FILE);

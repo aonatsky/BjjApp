@@ -64,7 +64,7 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
 
         public async Task<UserRegistrationResult> CreateParticipantUserAsync(string email, string password)
         {
-            return await CreateUserAsync(email, password, Roles.ROLE_PARTICIPANT);
+            return await CreateUserAsync(email, password, Roles.Participant);
         }
 
         public async Task<UserRegistrationResult> CreateOwnerUserAsync(string email, string password)
