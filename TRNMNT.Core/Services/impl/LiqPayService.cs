@@ -13,8 +13,8 @@ namespace TRNMNT.Core.Services
 {
     public class LiqPayService : IPaymentService
     {
-        private string publicKey = "i39927249084";
-        private string privateKey = "LRGmWbN29X05TT0M8j0sSbWgw2UoY1K9uWnp4Nqy";
+        private string publicKey = "";
+        private string privateKey = "";
         private IConfiguration configuration;
         private readonly IPaidServiceFactory paidServiceFactory;
         private IParticipantService participantService;
