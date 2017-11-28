@@ -15,7 +15,7 @@ namespace TRNMNT.Web.Helpers
                 .AddJsonFile("appsettings.json")
                 .Build();
             var builder = new DbContextOptionsBuilder<AppDbContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("DbConnection");
             builder.UseSqlServer(connectionString);
             return new AppDbContext(builder.Options);
         }

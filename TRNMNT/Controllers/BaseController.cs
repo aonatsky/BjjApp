@@ -125,12 +125,7 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        //protected async Task<IActionResult> HandleSuccessRequestAsync(Func<Task> action)
-        //{
-        //    await action();
-        //    return Request.CreateResponse(HttpStatusCode.OK);
-        //}
-
+      
         protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action)
         {
             try

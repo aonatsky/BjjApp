@@ -30,6 +30,31 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
         }
 
         #region Public methods
+        public async Task AddSampleUserAsync()
+        {
+            await AddSampleRolesAsync();
+            var existUser = await userManager.FindByNameAsync("admin");
+            if (existUser != null)
+            {
+                //await _userManager.DeleteAsync(existUser);
+            }
+
+            if (existUser == null)
+            {
+                var identity = await userManager.CreateAsync(new User
+                {
+                    UserName = "admin",
+                    FirstName = "Ivan",
+                    LastName = "Drago",
+                    Email = "Ivan.drago@trnmnt.com"
+                }, "1");
+                existUser = await userManager.FindByNameAsync("admin");
+                var result = await userManager.AddClaimAsync(existUser, new Claim(ClaimTypes.Role, Roles.Owner));
+
+            }
+
+        }
+
         public async Task<string> GetTokenAsync(string login, string password)
         {
             await AddSampleUserAsync();
@@ -100,30 +125,6 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
 
         }
 
-        private async Task AddSampleUserAsync()
-        {
-            await AddSampleRolesAsync();
-            var existUser = await userManager.FindByNameAsync("admin");
-            if (existUser != null)
-            {
-                //await _userManager.DeleteAsync(existUser);
-            }
-
-            if (existUser == null)
-            {
-                var identity = await userManager.CreateAsync(new User
-                {
-                    UserName = "admin",
-                    FirstName = "Ivan",
-                    LastName = "Drago",
-                    Email = "Ivan.drago@trnmnt.com"
-                }, "1");
-                existUser = await userManager.FindByNameAsync("admin");
-                var result = await userManager.AddClaimAsync(existUser, new Claim(ClaimTypes.Role, Roles.Owner));
-
-            }
-
-        }
 
         private async Task AddSampleRolesAsync()
         {
