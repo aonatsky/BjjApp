@@ -21,6 +21,9 @@
     <EmbeddedResource Remove="Core\**" />
     <None Remove="Core\**" />
     <Compile Remove="Controllers\FighterController.cs" />
+    <None Remove="ClientApp\assets\style\app.css" />
+    <None Remove="ClientApp\assets\style\app.min.css" />
+    <None Remove="ClientApp\assets\style\app.scss" />
     <None Update="ClientApp\dist\**\*;Views\**\*;wwwroot\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None> 
@@ -70,6 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="ClientApp\app\event-admin\topbar\topbar.component.scss" />
     <None Include="wwwroot\Config\log4net.config" />
   </ItemGroup>
 
@@ -81,5 +85,7 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.1" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties ClientApp_4dist_4vendor-manifest_1json__JSONSchema="http://json.schemastore.org/appsettings" /></VisualStudio></ProjectExtensions>
 
 </Project>

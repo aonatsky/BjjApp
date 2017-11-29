@@ -127,7 +127,8 @@ namespace TRNMNT.Web
                 app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
-                    HotModuleReplacement = true
+                    HotModuleReplacement = true,
+                    HotModuleReplacementEndpoint = "/dist/__webpack_hmr"
                 });
 
             }
@@ -137,39 +138,6 @@ namespace TRNMNT.Web
             }
 
             app.UseStaticFiles();
-
-            //var options = new JwtBearerOptions
-            //{
-
-            //    TokenValidationParameters = {
-            //       ValidIssuer = TokenAuthOptions.ISSUER,
-            //       ValidAudience = TokenAuthOptions.AUDIENCE,
-            //       ValidateIssuer = true,
-            //       IssuerSigningKey = TokenAuthOptions.GetKey(),
-            //       ValidateIssuerSigningKey = true,
-            //       ValidateLifetime = true,
-            //       ClockSkew = TimeSpan.Zero,
-            //    },
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = false,
-            //    Events = new JwtBearerEvents
-            //    {
-            //        OnAuthenticationFailed = context =>
-            //        {
-            //            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            //            context.HandleResponse();
-            //            return Task.FromResult(0);
-            //        },
-            //        OnChallenge = context =>
-            //        {
-            //            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-            //            context.HandleResponse();
-            //            return Task.FromResult(0);
-            //        }
-            //    }
-
-            //};
-            //app.UseJwtBearerAuthentication(options);
             app.UseAuthentication();
             app.UseMvc(routes =>
             {

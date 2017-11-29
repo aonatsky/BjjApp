@@ -1,0 +1,14 @@
+﻿@import '../../shared/styles/shared.scss';
+
+$topbar_height: 50px;
+.topbar {
+    background-color: $theme_black;
+    height: $topbar_height;
+
+    .logo {
+        background-color:$theme_orange;
+        width: 200px;
+        height: $topbar_height;
+    }
+    
+}
