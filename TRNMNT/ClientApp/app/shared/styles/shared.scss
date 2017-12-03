@@ -18,9 +18,11 @@ body {
     overflow: hidden;
 
 
-    .ui-button {
+    .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload {
         $bg_color: $theme_black;
         border-radius: 0;
+        background-color: $bg_color;
+
 
         &:enabled {
             background-color: $bg_color;
@@ -35,6 +37,9 @@ body {
         }
     }
 
+    .ui-fileupload:hover {
+        background-color: darken($theme_black,10%)
+    }
 
     .ui-steps {
         /*pointer-events: none;*/
@@ -58,7 +63,7 @@ body {
                     border-color: $bg_color;
                     border-width: 2px;
                     color: $theme_black;
-                    font-weight:bold;
+                    font-weight: bold;
                 }
             }
         }
@@ -73,13 +78,11 @@ body {
         }
     }
 
-    .ui-inputtext{
+    .ui-inputtext {
         border-radius: 0;
 
-        &:active, &:focus{
+        &:active, &:focus {
             border-color: $theme_orange;
         }
-
     }
-
 }

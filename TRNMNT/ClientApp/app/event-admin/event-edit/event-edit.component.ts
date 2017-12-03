@@ -28,7 +28,7 @@ export class EventEditComponent implements OnInit {
 
     private isNew: boolean = true;
 
-    private lastStep: number = 3;
+    private lastStep: number = 2;
 
     @ViewChildren(CategoryComponent) categoryComponents;
 
@@ -60,11 +60,9 @@ export class EventEditComponent implements OnInit {
             label: 'General Information',
         },
         {
-            label: 'Category Setup',
+            label: 'Rules/Categories',
         },
-        {
-            label: 'Additional information',
-        }
+        
         ];
     }
 
