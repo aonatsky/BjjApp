@@ -3,11 +3,11 @@ import { RouterService } from './../../core/services/router.service';
 import { AuthService } from './../../core/services/auth.service';
 import { UserModel } from './../../core/model/user.model';
 
+import './topbar.component.scss';
 
 @Component({
     selector: 'topbar',
     templateUrl: './topbar.component.html',
-    styleUrls: ['./topbar.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 export class TopbarComponent  implements OnInit {

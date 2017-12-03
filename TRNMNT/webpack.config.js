@@ -3,10 +3,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const extractSass = new ExtractTextPlugin({
-    filename: "[name].[contenthash].css",
-    //disable: process.env.NODE_ENV === "development"
-});
+const extractSass = new ExtractTextPlugin("[name].css");
 
 module.exports = (env) => {
     // Configuration in common to both client-side and server-side bundles
@@ -14,7 +11,7 @@ module.exports = (env) => {
     const sharedConfig = {
         stats: { modules: false },
         context: __dirname,
-        resolve: { extensions: [ '.js', '.ts','.css','.scss' ] },
+        resolve: { extensions: ['.js', '.ts', '.css', '.scss'] },
         output: {
             filename: '[name].js',
             publicPath: '/dist/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
@@ -25,21 +22,11 @@ module.exports = (env) => {
                 { test: /\.html$/, use: 'html-loader?minimize=false' },
                 { test: /\.css$/, use: ['to-string-loader', 'css-loader'] },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+                //{ test: /\.scss(\?|$)/, use: extractSass.extract({ use: 'css-loader!sass-loader' }) },
                 {
                     test: /\.scss$/,
-                    use: [{
-                        loader: "to-string-loader"
-                    }, {
-                        loader: "css-loader", options: {
-                            sourceMap: true
-                        }
-                    }, {
-                        loader: "sass-loader", options: {
-                            sourceMap: true
-                        }
-                    }]
-                },
-
+                    use: extractSass.extract({ fallback: 'style-loader', use: ['css-loader','sass-loader','postcss-loader'] })
+                }
             ]
         },
         plugins: [new CheckerPlugin(), extractSass]
@@ -62,12 +49,12 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(clientBundleOutputDir, '[resourcePath]') // Point sourcemap entries to the original file locations on disk
             })
         ] : [
-            // Plugins that apply in production builds only
-            new webpack.optimize.UglifyJsPlugin()
-        ])
+                // Plugins that apply in production builds only
+                new webpack.optimize.UglifyJsPlugin()
+            ])
     });
 
-    
+
 
     return [clientBundleConfig];
 };
