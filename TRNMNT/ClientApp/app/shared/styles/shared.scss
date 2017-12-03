@@ -2,12 +2,84 @@
 $theme_green: #66d33f;
 $theme_orange: #FE1600;
 $theme_black: #3c3c3c;
+$theme_body_color: #f8f8f8;
 
-body{
-    margin: 0px;
+$screen_width_vw: 100vw;
+$container_width: 750px;
+
+@function get-vw($target) {
+    $vw-context: (1000*.01) * 1px;
+    @return ($target/$vw-context) * 1vw;
 }
 
-.ui-button{
-   background-color : $theme_black;
+
+body {
+    margin: 0px;
+    overflow: hidden;
+
+
+    .ui-button {
+        $bg_color: $theme_black;
+        border-radius: 0;
+
+        &:enabled {
+            background-color: $bg_color;
+
+            &:hover {
+                background-color: darken($bg_color,10%)
+            }
+        }
+
+        :disabled {
+            background-color: grayscale($bg_color);
+        }
+    }
+
+
+    .ui-steps {
+        /*pointer-events: none;*/
+        &:before {
+            position: absolute;
+            border-color: $theme_orange;
+            border-width: 2px;
+            width: $screen_width_vw + 15vw;
+            //calculating shift
+            left: - 15vw;
+            top: 42%;
+        }
+
+        $bg_color: $theme_orange;
+
+        .ui-steps-item {
+            .ui-menuitem-link {
+                .ui-steps-number {
+                    width: 34px;
+                    background-color: $theme_body_color;
+                    border-color: $bg_color;
+                    border-width: 2px;
+                    color: $theme_black;
+                    font-weight:bold;
+                }
+            }
+        }
+
+        .ui-steps-item.ui-state-highlight {
+            .ui-menuitem-link {
+                .ui-steps-number {
+                    background-color: $bg_color;
+                    color: $theme_body_color;
+                }
+            }
+        }
+    }
+
+    .ui-inputtext{
+        border-radius: 0;
+
+        &:active, &:focus{
+            border-color: $theme_orange;
+        }
+
+    }
 
 }
