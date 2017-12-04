@@ -77,7 +77,7 @@ namespace TRNMNT.Web.Controllers
             }
 
             //hadrcoded federationid
-            federationId = new Guid("673ea3ce - 2530 - 48c0 - b84c - a3de492cab25");
+            federationId = new Guid("673ea3ce-2530-48c0-b84c-a3de492cab25");
 
         }
 
