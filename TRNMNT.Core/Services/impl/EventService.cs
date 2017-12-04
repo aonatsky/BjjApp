@@ -109,7 +109,7 @@ namespace TRNMNT.Core.Services
             await unitOfWork.SaveAsync();
         }
 
-        
+
         public async Task<EventModelFull> GetFullEventAsync(Guid id)
         {
             var _event = await eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
@@ -128,7 +128,7 @@ namespace TRNMNT.Core.Services
             return models;
         }
 
-        
+
 
         public async Task<bool> IsEventUrlPrefixExist(string prefix)
         {
@@ -277,7 +277,18 @@ namespace TRNMNT.Core.Services
             }
         }
 
+        public Guid CreateEvent(string userId, Guid federationId)
+        {
+            var _event = new Event()
+            {
+                EventId = Guid.NewGuid(),
+                OwnerId = userId,
+                FederationId = federationId
+            };
+            eventRepository.Add(_event);
 
+            return _event.EventId;
+        }
 
         #region Helpers
 
@@ -471,6 +482,8 @@ namespace TRNMNT.Core.Services
             weightDivisionRepository.DeleteRange(weightDivisionsToDelete);
             categoryRepository.DeleteRange(categoriesToDelete);
         }
+
+
 
         #endregion
 

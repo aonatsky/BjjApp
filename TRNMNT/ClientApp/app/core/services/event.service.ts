@@ -57,7 +57,7 @@ export class EventService {
     }
 
     public createEvent(): Observable<string> {
-        return this.httpService.get(ApiMethods.event.createEvent).map(res => this.httpService.getString(res));
+        return this.httpService.get(ApiMethods.event.createEvent).map(res => this.httpService.getJson(res));
     }
 
     //private methods

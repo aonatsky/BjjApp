@@ -1,6 +1,7 @@
 ﻿$theme_red: #d30101;
 $theme_green: #66d33f;
-$theme_orange: #FE1600;
+/*$theme_orange: #FE1600;*/
+$theme_orange: #ff5722;
 $theme_black: #3c3c3c;
 $theme_body_color: #f8f8f8;
 
@@ -47,9 +48,9 @@ body {
             position: absolute;
             border-color: $theme_orange;
             border-width: 2px;
-            width: $screen_width_vw + 15vw;
+            width: $screen_width_vw;
             //calculating shift
-            left: - 15vw;
+            left: - 32%;
             top: 42%;
         }
 
@@ -84,5 +85,10 @@ body {
         &:active, &:focus {
             border-color: $theme_orange;
         }
+    }
+
+    label {
+        float: left;
+        margin-top: 0.5em;
     }
 }

@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using TRNMNT.Web.Const;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net.Http;
 using TRNMNT.Data.Context;
 using System.Net;
 using System.Security.Claims;
@@ -26,6 +24,7 @@ namespace TRNMNT.Web.Controllers
         protected JsonSerializerSettings jsonSerializerSettings;
 
         private Guid? eventId;
+        private Guid? federationId;
         private User user;
 
         public BaseController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context)
@@ -76,6 +75,10 @@ namespace TRNMNT.Web.Controllers
                     HttpContext.Response.Redirect($"{HttpContext.Request.Scheme}://{host}/");
                 }
             }
+
+            //hadrcoded federationid
+            federationId = new Guid("673ea3ce - 2530 - 48c0 - b84c - a3de492cab25");
+
         }
 
         protected Guid? GetEventId()
@@ -146,11 +149,10 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                if (checkEventId && eventId == null)
+                if ((checkEventId && !eventId.HasValue) || (checkFederationId && !federationId.HasValue))
                 {
                     return NotFound();
                 }
-
                 var result = action();
                 await context.SaveAsync();
                 return Ok(result);

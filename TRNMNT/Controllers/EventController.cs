@@ -126,8 +126,8 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var jsonobj = JsonConvert.SerializeObject(await eventService.GetEventInfoAsync(GetEventId().Value), jsonSerializerSettings);
-                return Ok(jsonobj);
+                return JsonConvert.SerializeObject(await eventService.GetEventInfoAsync(GetEventId().Value), jsonSerializerSettings);
+                //return Ok(jsonobj);
             }, true);
         }
 
@@ -229,6 +229,16 @@ namespace TRNMNT.Web.Controllers
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
 
             }
+        }
+
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<IActionResult> CreateEvent()
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                return JsonConvert.SerializeObject(eventService.CreateEvent((await GetUserAsync()).Id), jsonSerializerSettings);
+            }, false, true);
         }
 
         #region helpers

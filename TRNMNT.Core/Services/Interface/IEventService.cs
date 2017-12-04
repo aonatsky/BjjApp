@@ -85,6 +85,11 @@ namespace TRNMNT.Core.Services
         /// <param name="isMember">Is special price</param>
         /// <returns></returns>
         Task<int> GetPrice(Guid eventId, bool specialPrice);
-
+        /// <summary>
+        /// Creates new event to edit.
+        /// </summary>
+        /// <param name="userId">Owner Id</param>
+        /// <returns>Event Id</returns>
+        Guid CreateEvent(string userId);
     }
 }
