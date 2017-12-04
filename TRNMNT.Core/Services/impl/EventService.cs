@@ -282,7 +282,8 @@ namespace TRNMNT.Core.Services
             {
                 EventId = Guid.NewGuid(),
                 OwnerId = userId,
-                FederationId = federationId
+                FederationId = federationId,
+                EventDate = DateTime.UtcNow.AddMonths(1).Date
             };
             eventRepository.Add(_event);
 
