@@ -86,6 +86,11 @@ namespace TRNMNT.Web.Controllers
             return eventId;
         }
 
+        protected Guid? GetFederationId()
+        {
+            return federationId;
+        }
+
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -111,7 +116,7 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        protected async Task<IActionResult> HandleRequestAsync(Action action)
+        protected async Task<IActionResult> HandleRequestAsync(Action action, bool checkEventId = false, bool checkFederationId = false)
         {
 
             try
@@ -129,10 +134,14 @@ namespace TRNMNT.Web.Controllers
         }
 
       
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action)
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
+                if ((checkEventId && !eventId.HasValue) || (checkFederationId && !federationId.HasValue))
+                {
+                    return NotFound();
+                }
                 var result = await action();
                 await context.SaveAsync();
                 return Ok(result);

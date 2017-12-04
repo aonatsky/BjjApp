@@ -7,7 +7,6 @@ using TRNMNT.Data.Repositories;
 using System.Linq;
 using System.IO;
 using TRNMNT.Web.Core.Const;
-using TRNMNT.Web.Core.Enum;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.WeightDivision;

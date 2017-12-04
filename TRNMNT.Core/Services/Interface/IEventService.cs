@@ -89,7 +89,8 @@ namespace TRNMNT.Core.Services
         /// Creates new event to edit.
         /// </summary>
         /// <param name="userId">Owner Id</param>
+        /// <param name="federationId">FederationId Id</param>
         /// <returns>Event Id</returns>
-        Guid CreateEvent(string userId);
+        Guid CreateEvent(string userId, Guid federationId);
     }
 }

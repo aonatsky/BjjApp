@@ -237,7 +237,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                return JsonConvert.SerializeObject(eventService.CreateEvent((await GetUserAsync()).Id), jsonSerializerSettings);
+            return JsonConvert.SerializeObject(eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value ), jsonSerializerSettings);
             }, false, true);
         }
 
