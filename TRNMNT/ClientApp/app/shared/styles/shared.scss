@@ -44,14 +44,14 @@ body {
 
     .ui-steps {
         /*pointer-events: none;*/
+        position:inherit;
         &:before {
             position: absolute;
             border-color: $theme_orange;
             border-width: 2px;
             width: $screen_width_vw;
             //calculating shift
-            left: - 32%;
-            top: 42%;
+            top: 94px;
         }
 
         $bg_color: $theme_orange;

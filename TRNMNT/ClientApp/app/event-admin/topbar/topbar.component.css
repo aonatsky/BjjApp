@@ -14,14 +14,14 @@ body {
   body .ui-fileupload:hover {
     background-color: #232323; }
   body .ui-steps {
-    /*pointer-events: none;*/ }
+    /*pointer-events: none;*/
+    position: inherit; }
     body .ui-steps:before {
       position: absolute;
       border-color: #ff5722;
       border-width: 2px;
       width: 100vw;
-      left: -32%;
-      top: 42%; }
+      top: 94px; }
     body .ui-steps .ui-steps-item .ui-menuitem-link .ui-steps-number {
       width: 34px;
       background-color: #f8f8f8;
