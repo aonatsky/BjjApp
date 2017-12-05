@@ -44,3 +44,5 @@ jspm_packages
 /TRNMNT.Data/obj/Debug
 /TRNMNT.Data/obj
 /TRNMNT.Core/obj
+/TRNMNT.Core/bin/Debug/netcoreapp2.0
+/TRNMNT.Data/bin/Debug/netcoreapp2.0

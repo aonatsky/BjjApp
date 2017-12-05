@@ -123,7 +123,7 @@ namespace TRNMNT.Core.Services.impl
         private List<FighterModel> Distribute(List<FighterModel> fightersList)
         {
 
-            var orderedbyTeam = fightersList.ToList().GroupBy(f => new { f.Team, f.Region }).OrderByDescending(g => g.Count())
+            var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
            .SelectMany(f => f).ToList();
             if (fightersList.Count() > 2)
             {
