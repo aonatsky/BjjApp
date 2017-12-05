@@ -1,7 +1,9 @@
 ﻿$theme_red: #d30101;
 $theme_green: #66d33f;
-/*$theme_orange: #FE1600;*/
-$theme_orange: #ff5722;
+$theme_orange: #FE1600;
+$theme_orange_light: #FFAEA3;
+$theme_grey: #F3F3F3;
+/*$theme_orange: #FFAEA3;*/
 $theme_black: #3c3c3c;
 $theme_body_color: #f8f8f8;
 
@@ -34,7 +36,7 @@ body {
         }
 
         :disabled {
-            background-color: grayscale($bg_color);
+            background-color: $theme_grey;
         }
     }
 
@@ -83,8 +85,9 @@ body {
         border-radius: 0;
 
         &:active, &:focus {
-            border-color: $theme_orange;
+            border-color: $theme_orange_light;
         }
+        
     }
 
     label {
