@@ -15,6 +15,5 @@
         public int LateRegistrationPrice { get; set; }
         public int EarlyRegistrationPriceForMembers { get; set; }
         public int LateRegistrationPriceForMembers { get; set; }
-
     }
 }

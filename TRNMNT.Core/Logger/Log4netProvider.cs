@@ -5,13 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace TRNMNT.Core.Logger
 {
-
-
     public class Log4NetProvider : ILoggerProvider
     {
         private readonly string _log4NetConfigFile;
-        private readonly ConcurrentDictionary<string, Log4NetLogger> _loggers =
-            new ConcurrentDictionary<string, Log4NetLogger>();
+        private readonly ConcurrentDictionary<string, Log4NetLogger> _loggers = new ConcurrentDictionary<string, Log4NetLogger>();
+
         public Log4NetProvider(string log4NetConfigFile)
         {
             _log4NetConfigFile = log4NetConfigFile;

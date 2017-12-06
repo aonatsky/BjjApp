@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using TRNMNT.Core.Logger;
-using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Impl;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Core.Settings;

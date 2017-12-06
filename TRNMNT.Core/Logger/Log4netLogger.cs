@@ -2,26 +2,40 @@ using System;
 using System.Reflection;
 using System.Xml;
 using log4net;
-using log4net.Repository;
 using Microsoft.Extensions.Logging;
 
 namespace TRNMNT.Core.Logger
 {
-    public class Log4NetLogger : Microsoft.Extensions.Logging.ILogger
+    public class Log4NetLogger : ILogger
     {
+        #region Dependencies
+
+        private readonly ILog _log;
+
+        #endregion
+
+        #region Properties
+
         private readonly string _name;
         private readonly XmlElement _xmlElement;
-        private readonly ILog _log;
-        private ILoggerRepository _loggerRepository;
+
+        #endregion
+
+        #region .ctor
+
         public Log4NetLogger(string name, XmlElement xmlElement)
         {
             _name = name;
             _xmlElement = xmlElement;
-            _loggerRepository = log4net.LogManager.CreateRepository(
-                Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
-            _log = LogManager.GetLogger(_loggerRepository.Name, name);
-            log4net.Config.XmlConfigurator.Configure(_loggerRepository, xmlElement);
+            var loggerRepository = LogManager.CreateRepository(Assembly.GetEntryAssembly(), typeof(log4net.Repository.Hierarchy.Hierarchy));
+            _log = LogManager.GetLogger(loggerRepository.Name, name);
+            log4net.Config.XmlConfigurator.Configure(loggerRepository, xmlElement);
         }
+
+        #endregion
+
+        #region Public Metods
+
         public IDisposable BeginScope<TState>(TState state)
         {
             return null;
@@ -59,11 +73,8 @@ namespace TRNMNT.Core.Logger
             {
                 throw new ArgumentNullException(nameof(formatter));
             }
-            string message = null;
-            if (null != formatter)
-            {
-                message = formatter(state, exception);
-            }
+            var message = formatter(state, exception);
+
             if (!string.IsNullOrEmpty(message) || exception != null)
             {
                 switch (logLevel)
@@ -91,5 +102,7 @@ namespace TRNMNT.Core.Logger
                 }
             }
         }
+
+        #endregion
     }
 }

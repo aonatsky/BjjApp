@@ -8,6 +8,5 @@ namespace TRNMNT.Core.Enum
         FileIsNull = 502,
         FileIsInvalid = 503,
         Error = 500
-        
     }
 }

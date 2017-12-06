@@ -4,6 +4,6 @@ namespace TRNMNT.Core.Enum
     {
         EventParticipation = 0,
         TeamRegistration = 1,
-        FederationMembership = 2,
+        FederationMembership = 2
     }
 }

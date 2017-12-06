@@ -6,14 +6,24 @@ namespace TRNMNT.Core.Helpers.Impl
 {
     public class PaidServiceFactory : IPaidServiceFactory
     {
-        private readonly ITeamService teamService;
-        private readonly IParticipantService participantService;
+        #region Dependencies
+
+        private readonly ITeamService _teamService;
+        private readonly IParticipantService _participantService;
+
+        #endregion
+
+        #region .ctor
 
         public PaidServiceFactory(ITeamService teamService, IParticipantService participantService)
         {
-            this.teamService = teamService;
-            this.participantService = participantService;
+            _teamService = teamService;
+            _participantService = participantService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public IPaidEntityService GetService(int orderTypeId)
         {
@@ -21,7 +31,7 @@ namespace TRNMNT.Core.Helpers.Impl
             {
                 case (int)OrderTypeEnum.EventParticipation:
                     {
-                        return participantService;
+                        return _participantService;
                     }
                 //case (int)OrderTypeEnum.FederationMembership:
                 //    {
@@ -29,14 +39,15 @@ namespace TRNMNT.Core.Helpers.Impl
                 //    }
                 case (int)OrderTypeEnum.TeamRegistration:
                     {
-                        return teamService;
+                        return _teamService;
                     }
                 default:
                     {
-                        return participantService;
+                        return _participantService;
                     }
-
             }
         }
+
+        #endregion
     }
 }

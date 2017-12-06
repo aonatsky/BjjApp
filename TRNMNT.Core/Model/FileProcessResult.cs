@@ -11,27 +11,25 @@ namespace TRNMNT.Core.Model
         }
         public FileProcessResult(FileProcessResultEnum code, string message = "")
         {
-            this.Code = code;
-            this.Message = message;
-            if (String.IsNullOrEmpty(message))
+            Code = code;
+            Message = message;
+            if (string.IsNullOrEmpty(message))
             {
-                if (code == FileProcessResultEnum.FileIsInvalid)
+                switch (code)
                 {
-                    message = "File is not valid";
+                    case FileProcessResultEnum.FileIsInvalid:
+                        message = "File is not valid";
+                        break;
+                    case FileProcessResultEnum.FileIsNull:
+                        message = "File is null";
+                        break;
+                    case FileProcessResultEnum.Error:
+                        message = "An error occured during processing";
+                        break;
+                    case FileProcessResultEnum.FileIsEmpty:
+                        message = "File is empty";
+                        break;
                 }
-                if (code == FileProcessResultEnum.FileIsNull)
-                {
-                    message = "File is null";
-                }
-                if (code == FileProcessResultEnum.Error)
-                {
-                    message = "An error occured during processing";
-                }
-                if (code == FileProcessResultEnum.FileIsEmpty)
-                {
-                    message = "File is empty";
-                }
-
             }
 
         }

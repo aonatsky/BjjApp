@@ -2,6 +2,6 @@
 {
     public class ContentTypes
     {
-        public const string EXCEL_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        public const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     }
 }
