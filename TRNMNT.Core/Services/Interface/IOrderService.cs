@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TRNMNT.Core.Enum;
 using TRNMNT.Data.Entities;
-using TRNMNT.Web.Core.Enum;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IOrderService
     {

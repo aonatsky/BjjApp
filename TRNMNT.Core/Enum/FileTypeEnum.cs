@@ -1,4 +1,4 @@
-namespace TRNMNT.Web.Core.Enum
+namespace TRNMNT.Core.Enum
 {
     public enum FileTypeEnum
     {

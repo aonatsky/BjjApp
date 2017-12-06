@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IParticipantRegistrationService
     {

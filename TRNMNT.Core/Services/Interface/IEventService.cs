@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model.Event;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IEventService
     {

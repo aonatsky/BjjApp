@@ -1,4 +1,4 @@
-﻿namespace TRNMNT.Web.Core.Const
+﻿namespace TRNMNT.Core.Const
 {
     public class ContentTypes
     {

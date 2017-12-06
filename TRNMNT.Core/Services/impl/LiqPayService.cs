@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using TRNMNT.Core.Helpers;
+using TRNMNT.Core.Helpers.Interface;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Impl
 {
     public class LiqPayService : IPaymentService
     {

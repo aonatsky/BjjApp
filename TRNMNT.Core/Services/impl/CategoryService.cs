@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model.Category;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 
-namespace TRNMNT.Core.Services.impl
+namespace TRNMNT.Core.Services.Impl
 {
     public class CategoryService : ICategoryService
     {

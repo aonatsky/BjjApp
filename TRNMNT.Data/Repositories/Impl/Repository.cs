@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Data.Context;
 
-namespace TRNMNT.Data.Repositories
+namespace TRNMNT.Data.Repositories.Impl
 {
 
     public class Repository<T> : IRepository<T> where T : class

@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using OfficeOpenXml;
-using TRNMNT.Web.Core.Const;
-using TRNMNT.Web.Core.Model;
+using TRNMNT.Core.Const;
+using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
 
-namespace TRNMNT.Web.Core.Services.impl
+namespace TRNMNT.Core.Services.Impl
 {
     public class BracketsFileService
     {

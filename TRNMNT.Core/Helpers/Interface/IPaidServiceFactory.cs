@@ -1,6 +1,6 @@
-﻿using TRNMNT.Core.Services;
+﻿using TRNMNT.Core.Services.Interface;
 
-namespace TRNMNT.Core.Helpers
+namespace TRNMNT.Core.Helpers.Interface
 {
     public interface IPaidServiceFactory
     {

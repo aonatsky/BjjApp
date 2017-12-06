@@ -1,10 +1,10 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using TRNMNT.Web.Core.Enum;
-using TRNMNT.Web.Core.Model;
+using TRNMNT.Core.Enum;
+using TRNMNT.Core.Model;
 
-namespace TRNMNT.Web.Core.Services.impl
+namespace TRNMNT.Core.Services.Impl
 {
     public abstract class BaseFileService
     {

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace TRNMNT.Web.Core.Settings
+namespace TRNMNT.Core.Settings
 {
     public static class TokenAuthOptions
     {

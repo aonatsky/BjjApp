@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TRNMNT.Core.Model.Result;
 
-namespace TRNMNT.Web.Core.Services.Authentication
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IAuthenticationService
     {

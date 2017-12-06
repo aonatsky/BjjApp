@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers

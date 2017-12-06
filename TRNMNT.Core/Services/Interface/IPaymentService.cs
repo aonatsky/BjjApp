@@ -2,7 +2,7 @@
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IPaymentService
     {

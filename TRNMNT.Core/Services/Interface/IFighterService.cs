@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using TRNMNT.Web.Core.Model;
+using TRNMNT.Core.Model;
 
-namespace TRNMNT.Web.Core.Services
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IFighterService
     {

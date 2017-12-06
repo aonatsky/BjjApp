@@ -1,4 +1,4 @@
-﻿namespace TRNMNT.Web.Core.Settings
+﻿namespace TRNMNT.Core.Settings
 {
     public class Roles
     {

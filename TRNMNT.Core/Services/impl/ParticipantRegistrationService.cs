@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TRNMNT.Core.Const;
+using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
-using TRNMNT.Web.Core.Const;
-using TRNMNT.Web.Core.Enum;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Impl
 {
     public class ParticipantRegistrationService : IParticipantRegistrationService
     {

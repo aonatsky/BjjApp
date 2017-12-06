@@ -13,17 +13,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using TRNMNT.Core.Logger;
 using TRNMNT.Core.Services;
-using TRNMNT.Core.Services.impl;
+using TRNMNT.Core.Services.Impl;
+using TRNMNT.Core.Services.Interface;
+using TRNMNT.Core.Settings;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Web.Core.Logger;
-using TRNMNT.Web.Core.Services;
-using TRNMNT.Web.Core.Services.Authentication;
-using TRNMNT.Web.Core.Services.Authentication.Impl;
-using TRNMNT.Web.Core.Services.impl;
-using TRNMNT.Web.Core.Settings;
+using TRNMNT.Data.Repositories.Impl;
 
 namespace TRNMNT.Web
 {

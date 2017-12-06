@@ -1,7 +1,8 @@
-﻿using TRNMNT.Core.Services;
-using TRNMNT.Web.Core.Enum;
+﻿using TRNMNT.Core.Enum;
+using TRNMNT.Core.Helpers.Interface;
+using TRNMNT.Core.Services.Interface;
 
-namespace TRNMNT.Core.Helpers
+namespace TRNMNT.Core.Helpers.Impl
 {
     public class PaidServiceFactory : IPaidServiceFactory
     {

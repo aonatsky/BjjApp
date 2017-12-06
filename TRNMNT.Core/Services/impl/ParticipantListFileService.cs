@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
-using TRNMNT.Web.Core.Const;
-using TRNMNT.Web.Core.Enum;
-using TRNMNT.Web.Core.Model;
+using TRNMNT.Core.Const;
+using TRNMNT.Core.Enum;
+using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
 
-namespace TRNMNT.Web.Core.Services.impl
+namespace TRNMNT.Core.Services.Impl
 {
     public class ParticipantListFileService : BaseFileService
     {

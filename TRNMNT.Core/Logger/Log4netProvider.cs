@@ -1,10 +1,9 @@
-
 using System.Collections.Concurrent;
 using System.IO;
 using System.Xml;
 using Microsoft.Extensions.Logging;
 
-namespace TRNMNT.Web.Core.Logger
+namespace TRNMNT.Core.Logger
 {
 
 

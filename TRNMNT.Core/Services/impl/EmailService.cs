@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 
-namespace TRNMNT.Core.Services.impl
+namespace TRNMNT.Core.Services.Impl
 {
     class EmailService : IEmailService
     {

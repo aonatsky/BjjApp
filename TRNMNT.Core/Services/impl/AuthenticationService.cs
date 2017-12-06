@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using TRNMNT.Core.Model.Result;
+using TRNMNT.Core.Services.Interface;
+using TRNMNT.Core.Settings;
 using TRNMNT.Data.Entities;
-using TRNMNT.Web.Core.Settings;
 
-namespace TRNMNT.Web.Core.Services.Authentication.Impl
+namespace TRNMNT.Core.Services.Impl
 {
     public class AuthenticationService : IAuthenticationService
     {

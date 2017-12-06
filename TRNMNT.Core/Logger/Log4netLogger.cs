@@ -5,7 +5,7 @@ using log4net;
 using log4net.Repository;
 using Microsoft.Extensions.Logging;
 
-namespace TRNMNT.Web.Core.Logger
+namespace TRNMNT.Core.Logger
 {
     public class Log4NetLogger : Microsoft.Extensions.Logging.ILogger
     {

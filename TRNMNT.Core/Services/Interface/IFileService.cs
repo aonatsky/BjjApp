@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IFileService
     {

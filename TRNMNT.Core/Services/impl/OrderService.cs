@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TRNMNT.Core.Enum;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Web.Core.Enum;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Impl
 {
     public class OrderService : IOrderService
     {

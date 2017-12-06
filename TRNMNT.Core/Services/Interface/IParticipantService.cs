@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Data.Entities;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Interface
 {
     public interface IParticipantService : IPaidEntityService
     {

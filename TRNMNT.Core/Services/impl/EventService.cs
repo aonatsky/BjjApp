@@ -4,15 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.WeightDivision;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Web.Core.Const;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Impl
 {
     public class EventService : IEventService
     {
