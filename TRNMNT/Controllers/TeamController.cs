@@ -15,18 +15,29 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class TeamController : BaseController
     {
-        ITeamService teamService;
+
+        #region Dependencies
+
+        private readonly ITeamService _teamService;
+
+        #endregion
+
+        #region .ctor
 
         public TeamController(
-            IEventService eventService, 
-            ILogger<TeamController> logger, 
-            IUserService userService, 
+            IEventService eventService,
+            ILogger<TeamController> logger,
+            IUserService userService,
             ITeamService teamService,
             IAppDbContext context
-            ): base(logger, userService, eventService, context)
+        ) : base(logger, userService, eventService, context)
         {
-            this.teamService = teamService;
+            _teamService = teamService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetTeams()
@@ -35,23 +46,19 @@ namespace TRNMNT.Web.Controllers
             {
                 if (GetEventId() != null)
                 {
-                    var data = await teamService.GetTeams();
-                    return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                    var data = await _teamService.GetTeams();
+                    return Ok(JsonConvert.SerializeObject(data, JsonSerializerSettings));
                 }
-                else
-                {
-                    return NotFound();
-                }
-
+                return NotFound();
             }
             catch (Exception e)
             {
                 HandleException(e);
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
             }
         }
 
+        #endregion
     }
 }
 

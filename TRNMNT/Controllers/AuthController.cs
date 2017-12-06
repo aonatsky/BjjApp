@@ -21,7 +21,13 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class AuthController : BaseController
     {
-        private readonly IAuthenticationService authenticationSerivce;
+        #region Dependencies
+
+        private readonly IAuthenticationService _authenticationSerivce;
+
+        #endregion
+
+        #region .ctor
 
         public AuthController(
             ILogger<AuthController> logger,
@@ -29,10 +35,12 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IEventService eventService,
             IAppDbContext context
-            ) : base(logger, userService, eventService, context)
+        ) : base(logger, userService, eventService, context)
         {
-            authenticationSerivce = authenticationService;
+            _authenticationSerivce = authenticationService;
         }
+
+        #endregion
 
 
         [AllowAnonymous, HttpPost("[action]")]
@@ -41,7 +49,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 //var token = await _authenticationSerivce.GetToken(credentials.Username, credentials.Password);
-                var token = await authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
+                var token = await _authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
                 if (!string.IsNullOrEmpty(token))
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
@@ -70,7 +78,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
+                await _authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
                 Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)

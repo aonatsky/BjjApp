@@ -15,20 +15,29 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class CategoryController : BaseController
     {
-        private ICategoryService categoryService;
+        #region Dependencies
+
+        private readonly ICategoryService _categoryService;
+
+        #endregion
+
+        #region .ctor
 
         public CategoryController(
-            ILogger<CategoryController> logger, 
-            ICategoryService categoryService, 
-            IRepository<Category> repository, 
-            IHttpContextAccessor httpContextAccessor, 
+            ILogger<CategoryController> logger,
+            ICategoryService categoryService,
+            IRepository<Category> repository,
+            IHttpContextAccessor httpContextAccessor,
             IEventService eventService,
             IUserService userService,
             IAppDbContext context) : base(logger, userService, eventService, context)
         {
-            this.categoryService = categoryService;
+            _categoryService = categoryService;
         }
 
+        #endregion
+
+        #region Public Methods
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetCategoriesForEvent()
@@ -38,14 +47,10 @@ namespace TRNMNT.Web.Controllers
                 var eventId = GetEventId();
                 if (eventId != null)
                 {
-                    var data = await categoryService.GetCategoriesByEventIdAsync(eventId.Value);
-                    return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                    var data = await _categoryService.GetCategoriesByEventIdAsync(eventId.Value);
+                    return Ok(JsonConvert.SerializeObject(data, JsonSerializerSettings));
                 }
-                else
-                {
-                    return NotFound();
-                }
-                
+                return NotFound();
             }
             catch (Exception e)
             {
@@ -54,6 +59,8 @@ namespace TRNMNT.Web.Controllers
 
             }
         }
+
+        #endregion
     }
 }
 

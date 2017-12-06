@@ -18,12 +18,22 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class EventController : BaseController 
     {
-        private IEventService eventService;
+        #region Dependencies
 
-        public EventController(IEventService eventService, ILogger<EventController> logger,  IUserService userService, IAppDbContext context ) : base(logger, userService, eventService, context)
+        private readonly IEventService _eventService;
+
+        #endregion
+
+        #region .ctor
+
+        public EventController(IEventService eventService, ILogger<EventController> logger, IUserService userService, IAppDbContext context) : base(logger, userService, eventService, context)
         {
-            this.eventService = eventService;
+            _eventService = eventService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModelFull eventModel)
@@ -33,13 +43,10 @@ namespace TRNMNT.Web.Controllers
             {
                 if (await CheckEventOwnerAsync(eventModel.EventId))
                 {
-                    await eventService.UpdateEventAsync(eventModel);
+                    await _eventService.UpdateEventAsync(eventModel);
                     return Ok();
                 }
-                else
-                {
-                    return Unauthorized();
-                }
+                return Unauthorized();
             }
             catch (Exception e)
             {
@@ -54,17 +61,13 @@ namespace TRNMNT.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                var eventModel = await eventService.GetFullEventAsync(id);
+                var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
                 {
-                    var jsonobj = JsonConvert.SerializeObject(eventModel, jsonSerializerSettings);
+                    var jsonobj = JsonConvert.SerializeObject(eventModel, JsonSerializerSettings);
                     return Ok(jsonobj);
                 }
-                else
-                {
-                    return new StatusCodeResult((int)HttpStatusCode.NotFound);
-                }
-                
+                return new StatusCodeResult((int)HttpStatusCode.NotFound);
             }
             catch (Exception e)
             {
@@ -79,17 +82,13 @@ namespace TRNMNT.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                var eventModel = await eventService.GetFullEventAsync(id);
+                var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
                 {
-                    var jsonobj = JsonConvert.SerializeObject(eventModel, jsonSerializerSettings);
+                    var jsonobj = JsonConvert.SerializeObject(eventModel, JsonSerializerSettings);
                     return Ok(jsonobj);
                 }
-                else
-                {
-                    return new StatusCodeResult((int)HttpStatusCode.NotFound);
-                }
-
+                return new StatusCodeResult((int)HttpStatusCode.NotFound);
             }
             catch (Exception e)
             {
@@ -106,7 +105,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
 
-                var events = await eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
+                var events = await _eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
                 return events.ToArray();
 
             }
@@ -123,7 +122,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                return JsonConvert.SerializeObject(await eventService.GetEventInfoAsync(GetEventId().Value), jsonSerializerSettings);
+                return JsonConvert.SerializeObject(await _eventService.GetEventInfoAsync(GetEventId().Value), JsonSerializerSettings);
                 //return Ok(jsonobj);
             }, true);
         }
@@ -134,7 +133,7 @@ namespace TRNMNT.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                if (await eventService.IsEventUrlPrefixExist(prefix))
+                if (await _eventService.IsEventUrlPrefixExist(prefix))
                 {
                     Response.StatusCode = (int)HttpStatusCode.Found;
                 }
@@ -160,7 +159,7 @@ namespace TRNMNT.Web.Controllers
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventImageAsync(stream, id);
+                    await _eventService.SaveEventImageAsync(stream, id);
                 }
                 return Ok();
 
@@ -179,8 +178,7 @@ namespace TRNMNT.Web.Controllers
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventTncAsync(stream, id, file.FileName);
-
+                    await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
                 return Ok();
             }
@@ -199,7 +197,7 @@ namespace TRNMNT.Web.Controllers
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventTncAsync(stream, id, file.FileName);
+                    await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
                 return Ok();
             }
@@ -217,14 +215,13 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 var user = await GetUserAsync();
-                var price = eventService.GetPrice(Guid.Parse(eventId), user.Id);
+                var price = _eventService.GetPrice(Guid.Parse(eventId), user.Id);
                 return Ok(price);
             }
             catch (Exception e)
             {
                 HandleException(e);
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
             }
         }
 
@@ -234,23 +231,24 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-            return JsonConvert.SerializeObject(eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value ), jsonSerializerSettings);
+                return JsonConvert.SerializeObject(_eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), JsonSerializerSettings);
             }, false, true);
         }
 
-        #region helpers
+
+        #endregion
+        
+        #region Private Methods
+
         private async Task<bool> CheckEventOwnerAsync(Guid eventId)
         {
             var user = await GetUserAsync();
-            var eventOwner = await eventService.GetEventOwnerIdAsync(eventId);
-            if (eventOwner != "" && user.Id == eventOwner)
+            var eventOwner = await _eventService.GetEventOwnerIdAsync(eventId);
+            if (!string.IsNullOrEmpty(eventOwner) && user.Id == eventOwner)
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         #endregion  

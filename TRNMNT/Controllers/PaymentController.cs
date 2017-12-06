@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
@@ -11,9 +10,14 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class PaymentController : BaseController
     {
-        IHttpContextAccessor httpContextAccessor;
-        IPaymentService paymentService;
-        IEventService eventService;
+        #region Dependencies
+
+        private readonly IPaymentService _paymentService;
+        private readonly IEventService _eventService;
+
+        #endregion
+
+        #region .ctor
 
         public PaymentController(
             IEventService eventService,
@@ -21,21 +25,26 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IPaymentService paymentService,
             IAppDbContext context)
-        : base(logger, userService, eventService, context)
+            : base(logger, userService, eventService, context)
         {
-            this.httpContextAccessor = httpContextAccessor;
-            this.paymentService = paymentService;
-            this.eventService = eventService;
+            _paymentService = paymentService;
+            _eventService = eventService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         [HttpPost("[action]/{eventId}")]
         public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
         {
-            return await HandleRequestAsync(async () => {
-                await paymentService.ConfirmPaymentAsync(model);
+            return await HandleRequestAsync(async () =>
+            {
+                await _paymentService.ConfirmPaymentAsync(model);
             });
         }
 
+        #endregion
     }
 }
 

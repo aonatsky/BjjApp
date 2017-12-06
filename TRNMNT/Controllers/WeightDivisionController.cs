@@ -35,7 +35,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 var data = await weightDivisionService.GetWeightDivisionsByCategoryIdAsync(Guid.Parse(categoryId));
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                return Ok(JsonConvert.SerializeObject(data, JsonSerializerSettings));
             }
             catch (Exception e)
             {

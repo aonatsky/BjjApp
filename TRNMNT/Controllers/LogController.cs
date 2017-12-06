@@ -6,13 +6,20 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class LogController : Controller
     {
+        #region Dependencies
 
-        private readonly ILogger logger;
+        private readonly ILogger _logger;
+
+        #endregion
+
+        #region .ctor
 
         public LogController(ILogger<LogController> logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
+
+        #endregion
 
         [HttpPost]
         public IActionResult Post([FromBody]LogModel log)
@@ -20,11 +27,11 @@ namespace TRNMNT.Web.Controllers
 
             if (log != null)
             {
-                logger.LogError(log.Message);
+                _logger.LogError(log.Message);
             }
             else
             {
-                logger.LogError("An Error Occured");
+                _logger.LogError("An Error Occured");
             }
             return Ok();
         }
@@ -32,9 +39,9 @@ namespace TRNMNT.Web.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-
             return Ok();
         }
+
         public class LogModel
         {
             public string Level { get; set; }

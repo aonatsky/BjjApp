@@ -7,7 +7,5 @@
         public const string RouteDataKeyHomePage = "homepage";
         public const string PageUrlEventInfo = "event/event-info/";
         public const string PageUrlDefault = "";
-        
-
     }
 }
