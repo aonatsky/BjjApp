@@ -9,6 +9,7 @@ $theme_body_color: #f8f8f8;
 
 $screen_width_vw: 100vw;
 $container_width: 750px;
+$container_padding_top: 40px;
 
 @function get-vw($target) {
     $vw-context: (1000*.01) * 1px;
@@ -19,8 +20,9 @@ $container_width: 750px;
 body {
     margin: 0px;
     overflow: hidden;
-
-
+    /*.content {
+        padding-top: $container_padding_top
+    }*/
     .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload {
         $bg_color: $theme_black;
         border-radius: 0;
@@ -46,7 +48,8 @@ body {
 
     .ui-steps {
         /*pointer-events: none;*/
-        position:inherit;
+        position: inherit;
+
         &:before {
             position: absolute;
             border-color: $theme_orange;
@@ -87,11 +90,30 @@ body {
         &:active, &:focus {
             border-color: $theme_orange_light;
         }
-        
     }
 
     label {
         float: left;
         margin-top: 0.5em;
+    }
+
+    .ui-tabview {
+        margin-top: 20px;
+
+        .ui-tabview-nav {
+            background-color: $theme_body_color !important;
+
+            .ui-tabview-selected {
+                background-color: $theme_body_color !important;
+                border: none !important;
+                height: 30px;
+
+                .ui-tabview-title {
+                    color: $theme_orange;
+                    border-bottom: 2px solid currentColor;
+                    border-radius:5px, 5px
+                }
+            }
+        }
     }
 }

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {LoggerService} from './../../core/services/logger.service'
-import {AuthService} from './../../core/services/auth.service'
+import { LoggerService } from './../../core/services/logger.service';
+import { AuthService } from './../../core/services/auth.service';
+import './event-admin.component.scss'
 
 
 @Component({
     selector: 'event-admin',
     templateUrl: './event-admin.component.html',
-    styleUrls:['./event-admin.component.css']
 })
 export class EventAdminComponent implements OnInit {
 

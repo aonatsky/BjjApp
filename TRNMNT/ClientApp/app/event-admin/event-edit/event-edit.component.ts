@@ -8,13 +8,12 @@ import { WeightDivisionModel } from './../../core/model/weight-division.models';
 import { AuthService } from './../../core/services/auth.service'
 import { EventService } from './../../core/services/event.service'
 import { CategoryComponent } from './category.component'
-
+import './event-edit.component.scss'
 
 @Component({
     selector: 'event-edit',
     templateUrl: './event-edit.component.html',
-    styleUrls: ['./event-edit.component.css'],
-    encapsulation: ViewEncapsulation.None
+    //encapsulation: ViewEncapsulation.None
 })
 export class EventEditComponent implements OnInit {
     constructor(private authService: AuthService, private eventService: EventService, private route: ActivatedRoute) {

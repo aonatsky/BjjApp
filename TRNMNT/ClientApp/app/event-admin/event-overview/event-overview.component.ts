@@ -27,7 +27,7 @@ export class EventOverviewComponent {
     }
 
     public openDetails(id: string) {
-        this.routerService.goToEventDetails(id);
+        this.routerService.goToEventManagement(id);
     }
 
     ngOnInit() {
