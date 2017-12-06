@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
@@ -108,26 +107,42 @@ namespace TRNMNT.Web.Controllers
 
         #region Protected Methods
 
-        protected async Task<IActionResult> HandleRequestAsync(Func<Task> action)
+        protected IActionResult HandleRequest(Action action)
         {
-            try
-            {
-                await action();
-                await _context.SaveAsync();
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
-        protected async Task<IActionResult> HandleRequestAsync(Action action, bool checkEventId = false, bool checkFederationId = false)
-        {
-            try
+            return HandleRequest(() =>
             {
                 action();
+                return HttpStatusCode.OK;
+            });
+        }
+
+        protected IActionResult HandleRequest(Func<HttpStatusCode> action)
+        {
+            try
+            {
+                var code = action();
+                return StatusCode((int)code);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        protected async Task<IActionResult> HandleRequestAsync(Func<Task<HttpStatusCode>> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if ((checkEventId && !_eventId.HasValue) || (checkFederationId && !_federationId.HasValue))
+                {
+                    return NotFound();
+                }
+                var code = await action();
+                if (code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)code);
+                }
                 await _context.SaveAsync();
                 return Ok();
             }
@@ -138,8 +153,47 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+        protected async Task<IActionResult> HandleRequestAsync(Func<Task> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await action();
+                return HttpStatusCode.OK;
+            }, checkEventId, checkFederationId);
+        }
 
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestAsync(Func<HttpStatusCode> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if ((checkEventId && !_eventId.HasValue) || (checkFederationId && !_federationId.HasValue))
+                {
+                    return NotFound();
+                }
+                var code = action();
+                if (code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)code);
+                }
+                await _context.SaveAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        protected async Task<IActionResult> HandleRequestAsync(Action action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestAsync(() =>
+            {
+                action();
+                return HttpStatusCode.OK;
+            }, checkEventId, checkFederationId);
+        }
+      
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<(T Response, HttpStatusCode Code)>> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
@@ -148,8 +202,12 @@ namespace TRNMNT.Web.Controllers
                     return NotFound();
                 }
                 var result = await action();
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
                 await _context.SaveAsync();
-                return Ok(result);
+                return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
             catch (Exception e)
             {
@@ -157,8 +215,13 @@ namespace TRNMNT.Web.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
+      
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestWithDataAsync(async () => (await action(), HttpStatusCode.OK), checkEventId, checkFederationId);
+        }
 
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<T> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<(T Response, HttpStatusCode Code)> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
@@ -167,15 +230,34 @@ namespace TRNMNT.Web.Controllers
                     return NotFound();
                 }
                 var result = action();
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
                 await _context.SaveAsync();
-                return Ok(result);
-
+                return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
             catch (Exception e)
             {
                 HandleException(e);
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
+        }
+
+
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<T> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestWithDataAsync(() => (action(), HttpStatusCode.OK), checkEventId, checkFederationId);
+        }
+
+        protected (object, HttpStatusCode) NotFoundResponse()
+        {
+            return (null, HttpStatusCode.NotFound);
+        }
+
+        protected (T, HttpStatusCode) Success<T>(T value)
+        {
+            return (value, HttpStatusCode.OK);
         }
 
         #endregion

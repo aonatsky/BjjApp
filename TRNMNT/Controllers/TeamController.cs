@@ -1,10 +1,6 @@
-using System;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -43,20 +39,15 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetTeams()
         {
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
                 if (GetEventId() != null)
                 {
                     var data = await _teamService.GetTeamsAsync();
-                    return Ok(JsonConvert.SerializeObject(data, JsonSerializerSettings));
+                    return Success(data);
                 }
-                return NotFound();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
+                return NotFoundResponse();
+            });
         }
 
         #endregion

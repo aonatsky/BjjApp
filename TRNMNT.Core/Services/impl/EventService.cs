@@ -252,8 +252,12 @@ namespace TRNMNT.Core.Services.Impl
             return model;
         }
 
-        public async Task<EventModelFull> GetEventInfoAsync(Guid id)
+        public async Task<EventModelFull> GetEventInfoAsync(Guid? id)
         {
+            if (!id.HasValue)
+            {
+                return null;
+            }
             var _event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
             if (_event != null)
             {

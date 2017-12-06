@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
-using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -39,10 +38,7 @@ namespace TRNMNT.Web.Controllers
         [HttpPost("[action]/{eventId}")]
         public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
         {
-            return await HandleRequestAsync(async () =>
-            {
-                await _paymentService.ConfirmPaymentAsync(model);
-            });
+            return await HandleRequestAsync(async () => await _paymentService.ConfirmPaymentAsync(model));
         }
 
         #endregion

@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using TRNMNT.Core.Model.Event;
-using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -39,63 +37,43 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModelFull eventModel)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestAsync(async () =>
             {
                 if (await CheckEventOwnerAsync(eventModel.EventId))
                 {
                     await _eventService.UpdateEventAsync(eventModel);
-                    return Ok();
+                    return HttpStatusCode.OK;
                 }
-                return Unauthorized();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
+                return HttpStatusCode.Unauthorized;
+            });
         }
 
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEvent(Guid id)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
                 var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
                 {
-                    var jsonobj = JsonConvert.SerializeObject(eventModel, JsonSerializerSettings);
-                    return Ok(jsonobj);
+                    return Success(eventModel);
                 }
-                return new StatusCodeResult((int)HttpStatusCode.NotFound);
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
+                return NotFoundResponse();
+            });
         }
 
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEventBaseInfo(Guid id)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
                 var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
                 {
-                    var jsonobj = JsonConvert.SerializeObject(eventModel, JsonSerializerSettings);
-                    return Ok(jsonobj);
+                    return Success(eventModel);
                 }
-                return new StatusCodeResult((int)HttpStatusCode.NotFound);
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
+                return NotFoundResponse();
+            });
         }
 
 
@@ -121,119 +99,75 @@ namespace TRNMNT.Web.Controllers
         [AllowAnonymous, HttpGet("[action]")]
         public async Task<IActionResult> GetEventInfo()
         {
-            return await HandleRequestWithDataAsync(async () =>
-            {
-                return JsonConvert.SerializeObject(await _eventService.GetEventInfoAsync(GetEventId().Value), JsonSerializerSettings);
-                //return Ok(jsonobj);
-            }, true);
+            return await HandleRequestWithDataAsync(async () => (await _eventService.GetEventInfoAsync(GetEventId()), HttpStatusCode.OK), true);
         }
 
         [Authorize, HttpGet("[action]")]
-        public async Task IsPrefixExists(string prefix)
+        public async Task<IActionResult> IsPrefixExists(string prefix)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestAsync(async () =>
             {
                 if (await _eventService.IsEventUrlPrefixExistAsync(prefix))
                 {
-                    Response.StatusCode = (int)HttpStatusCode.Found;
+                    return HttpStatusCode.Found;
                 }
-                else
-                {
-                    Response.StatusCode = (int)HttpStatusCode.OK;
-                }
-
-
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(e);
-            }
+                return HttpStatusCode.OK;
+            });
         }
 
 
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventImage(IFormFile file, string id)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 using (var stream = file.OpenReadStream())
                 {
                     await _eventService.SaveEventImageAsync(stream, id);
                 }
-                return Ok();
-
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            };
+            });
         }
 
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventTnc(IFormFile file, string id)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 using (var stream = file.OpenReadStream())
                 {
                     await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
-                return Ok();
-            }
-
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            };
+            });
         }
 
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadPromoCodeList(IFormFile file, string id)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 using (var stream = file.OpenReadStream())
                 {
                     await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
-                return Ok();
-            }
-
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            };
+            });
         }
 
         [Authorize, HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetPrice(string eventId)
         {
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
                 var user = await GetUserAsync();
                 var price = _eventService.GetPriceAsync(Guid.Parse(eventId), user.Id);
-                return Ok(price);
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
+                return price;
+            });
         }
 
 
         [Authorize, HttpGet("[action]")]
         public async Task<IActionResult> CreateEvent()
         {
-            return await HandleRequestWithDataAsync(async () =>
-            {
-                return JsonConvert.SerializeObject(_eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), JsonSerializerSettings);
-            }, false, true);
+            return await HandleRequestWithDataAsync(async () => _eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), false, true);
         }
 
 
@@ -245,11 +179,7 @@ namespace TRNMNT.Web.Controllers
         {
             var user = await GetUserAsync();
             var eventOwner = await _eventService.GetEventOwnerIdAsync(eventId);
-            if (!string.IsNullOrEmpty(eventOwner) && user.Id == eventOwner)
-            {
-                return true;
-            }
-            return false;
+            return !string.IsNullOrEmpty(eventOwner) && user.Id == eventOwner;
         }
 
         #endregion  

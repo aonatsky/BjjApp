@@ -27,7 +27,7 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        Task<EventModelFull> GetEventInfoAsync(Guid id);
+        Task<EventModelFull> GetEventInfoAsync(Guid? id);
 
         /// <summary>
         /// Gets the events for owner asynchronous.
@@ -35,6 +35,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
         Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId);
+
         /// <summary>
         /// Get base event information
         /// </summary>
