@@ -34,7 +34,7 @@ namespace TRNMNT.Web.Core.Logger
 
         private static XmlElement Parselog4NetConfigFile(string filename)
         {
-            XmlDocument log4netConfig = new XmlDocument();
+            var log4netConfig = new XmlDocument();
             log4netConfig.Load(File.OpenRead(filename));
             return log4netConfig["log4net"];
         }

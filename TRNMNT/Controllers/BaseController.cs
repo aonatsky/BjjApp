@@ -1,17 +1,16 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
-using TRNMNT.Core.Services;
-using TRNMNT.Data.Entities;
-using System.Threading.Tasks;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Mvc.Filters;
-using TRNMNT.Data.Context;
 using System.Net;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using TRNMNT.Core.Services;
+using TRNMNT.Data.Context;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -138,7 +137,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                if ((checkEventId && !eventId.HasValue) || (checkFederationId && !federationId.HasValue))
+                if (checkEventId && !eventId.HasValue || checkFederationId && !federationId.HasValue)
                 {
                     return NotFound();
                 }
@@ -158,7 +157,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                if ((checkEventId && !eventId.HasValue) || (checkFederationId && !federationId.HasValue))
+                if (checkEventId && !eventId.HasValue || checkFederationId && !federationId.HasValue)
                 {
                     return NotFound();
                 }
@@ -174,9 +173,6 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-
-
         #endregion
-
     }
 }

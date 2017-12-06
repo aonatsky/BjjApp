@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
 
 namespace TRNMNT.Web.Core.Settings
 {

@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using TRNMNT.Data.Repositories;
-using Microsoft.AspNetCore.Http;
-using TRNMNT.Core.Services;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using System.Net;
-using Microsoft.Extensions.Primitives;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Services;
 using TRNMNT.Data.Context;
+using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Web.Controllers
 {

@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using System;
 using System.Net;
-using Microsoft.AspNetCore.Http;
-using TRNMNT.Web.Core.Services.Authentication;
-using TRNMNT.Web.Core.Model;
-using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TRNMNT.Core.Services;
 using TRNMNT.Data.Context;
+using TRNMNT.Web.Core.Model;
+using TRNMNT.Web.Core.Services.Authentication;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -71,11 +71,11 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 await authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
-                Response.StatusCode = ((int)HttpStatusCode.OK);
+                Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
-                Response.StatusCode = ((int)HttpStatusCode.InternalServerError);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(ex);
             }
 

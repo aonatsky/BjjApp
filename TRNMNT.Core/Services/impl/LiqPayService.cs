@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using TRNMNT.Core.Helpers;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
-using TRNMNT.Core.Helpers;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace TRNMNT.Core.Services
 {
@@ -36,7 +36,7 @@ namespace TRNMNT.Core.Services
             {
                 try
                 {
-                    JObject jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
+                    var jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
                     var paymentReference = jsonData["payment_id"].ToString();
                     var orderId = jsonData["order_id"].ToString();
                     var status = jsonData["status"].ToString();

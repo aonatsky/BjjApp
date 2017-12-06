@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -35,13 +35,13 @@ namespace TRNMNT.Web.Core.Services.impl
 
         public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
         {
-            IQueryable<Fighter> fighters = GetFightersByFilter(filter);
+            var fighters = GetFightersByFilter(filter);
             return GetModels(fighters);
         }
 
         public string AddFightersByModels(List<FighterModel> fighterModels)
         {
-            string message = "";
+            var message = "";
             var existingTeams = this.teamRepository.GetAll().ToList();
             var existingFighters = this.fighterRepository.GetAll().ToList();
 
@@ -106,7 +106,7 @@ namespace TRNMNT.Web.Core.Services.impl
             var fighters = GetFighterModelsByFilter(filter);
             var count = fighters.Count;
             var bracketSize = GetBracketsSize(fighters.Count());
-            for (int i = 0; i < bracketSize - count; i++)
+            for (var i = 0; i < bracketSize - count; i++)
             {
                 fighters.Add(new FighterModel() {});
             }
@@ -131,9 +131,9 @@ namespace TRNMNT.Web.Core.Services.impl
            .SelectMany(f => f).ToList();
             if (fightersList.Count() > 2)
             {
-                List<FighterModel> sideA = new List<FighterModel>();
-                List<FighterModel> sideB = new List<FighterModel>();
-                for (int i = 0; i < orderedbyTeam.Count; i++)
+                var sideA = new List<FighterModel>();
+                var sideB = new List<FighterModel>();
+                for (var i = 0; i < orderedbyTeam.Count; i++)
                 {
                     var fighter = orderedbyTeam.ElementAtOrDefault(i);
                     if (i % 2 == 0)
@@ -196,7 +196,7 @@ namespace TRNMNT.Web.Core.Services.impl
         }
         private Team ProcessTeam(string name, List<Team> teams, ref List<Team> teamsToAdd)
         {
-            Team team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (team == null)
             {
                 team = teams.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -219,7 +219,7 @@ namespace TRNMNT.Web.Core.Services.impl
         }
         private WeightDivision GetCategory(string name)
         {
-            return (categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+            return categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
         }
 
@@ -236,7 +236,7 @@ namespace TRNMNT.Web.Core.Services.impl
             {
                 return 3;
             }
-            for (int i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT, 2); i++)
+            for (var i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT, 2); i++)
             {
                 var size = Math.Pow(2, i);
                 if (size >= fightersCount)
@@ -253,7 +253,7 @@ namespace TRNMNT.Web.Core.Services.impl
         {
             public bool Equals(Fighter x, Fighter y)
             {
-                return (x.FirstName == y.FirstName && x.LastName == y.LastName && x.DateOfBirth == y.DateOfBirth);
+                return x.FirstName == y.FirstName && x.LastName == y.LastName && x.DateOfBirth == y.DateOfBirth;
             }
 
             public int GetHashCode(Fighter fighter)

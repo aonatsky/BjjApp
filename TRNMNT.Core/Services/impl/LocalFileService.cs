@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 
@@ -46,7 +44,7 @@ namespace TRNMNT.Core.Services
         {
             var path = Path.Combine(rootPath, relativePath);
             CheckPath(path);
-            Image img = Image.FromStream(stream, true, true);
+            var img = Image.FromStream(stream, true, true);
             img.Save(path, ImageFormat.Jpeg);
         }
 

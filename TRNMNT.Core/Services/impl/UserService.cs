@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
-using TRNMNT.Core.Services;
+using Microsoft.AspNetCore.Identity;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services

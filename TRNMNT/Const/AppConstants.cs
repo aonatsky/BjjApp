@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TRNMNT.Web.Const
+﻿namespace TRNMNT.Web.Const
 {
     public class AppConstants
     {

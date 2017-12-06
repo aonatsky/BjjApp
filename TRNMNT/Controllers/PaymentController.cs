@@ -1,12 +1,9 @@
-using System;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Services;
-using System.Net;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Services;
 using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers

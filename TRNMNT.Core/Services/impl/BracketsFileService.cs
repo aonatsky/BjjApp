@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
 using System.IO;
-using TRNMNT.Web.Core.Model;
-using TRNMNT.Web.Core.Const;
-using Newtonsoft.Json;
 using System.Linq;
-using OfficeOpenXml;
-using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
+using OfficeOpenXml;
+using TRNMNT.Web.Core.Const;
+using TRNMNT.Web.Core.Model;
 
 namespace TRNMNT.Web.Core.Services.impl
 {
@@ -42,7 +42,7 @@ namespace TRNMNT.Web.Core.Services.impl
                     var sheet = excelPackage?.Workbook?.Worksheets[1];
                     if (sheet != null)
                     {
-                        for (int i = 0; i < settings.Count; i++)
+                        for (var i = 0; i < settings.Count; i++)
                         {
                             var fighter = models.ElementAtOrDefault(i);
                             sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(fighter.FirstName) ? $"{i+1}. {fighter.FirstName} {fighter.LastName}" : " - ";
@@ -82,7 +82,7 @@ namespace TRNMNT.Web.Core.Services.impl
 
         private BracketFileSettings GetSettings(int fightersCount)
         {
-            string stringJson = File.ReadAllText(Path.Combine(env.WebRootPath, "Config", "barcketsSettings.json"));
+            var stringJson = File.ReadAllText(Path.Combine(env.WebRootPath, "Config", "barcketsSettings.json"));
             var settingsList = JsonConvert.DeserializeObject<BracketFileSettings[]>(stringJson).ToList();
             return settingsList.FirstOrDefault(s => s.Count == fightersCount);
         }

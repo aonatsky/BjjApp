@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Model.Category;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using System.Linq;
-using TRNMNT.Core.Model;
-using TRNMNT.Core.Model.Category;
 
 namespace TRNMNT.Core.Services
 {

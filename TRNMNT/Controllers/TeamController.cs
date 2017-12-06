@@ -1,11 +1,10 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Services;
 using System.Net;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using TRNMNT.Core.Services;
 using TRNMNT.Data.Context;
 
 

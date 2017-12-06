@@ -1,14 +1,13 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Services;
 using System.Net;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Participant;
+using TRNMNT.Core.Services;
 using TRNMNT.Data.Context;
 
 

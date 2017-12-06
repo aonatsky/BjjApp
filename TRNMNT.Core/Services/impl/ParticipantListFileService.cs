@@ -1,12 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
-using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using Microsoft.AspNetCore.Hosting;
+using OfficeOpenXml;
+using TRNMNT.Web.Core.Const;
 using TRNMNT.Web.Core.Enum;
 using TRNMNT.Web.Core.Model;
-using TRNMNT.Web.Core.Const;
 
 namespace TRNMNT.Web.Core.Services.impl
 {
@@ -44,7 +43,7 @@ namespace TRNMNT.Web.Core.Services.impl
                     if (sheet != null)
                     {
                         var fighterModelList = new List<FighterModel>();
-                        for (int i = 2; i <= sheet.Dimension.Rows; i++)
+                        for (var i = 2; i <= sheet.Dimension.Rows; i++)
                         {
                             fighterModelList.Add(new FighterModel()
                             {

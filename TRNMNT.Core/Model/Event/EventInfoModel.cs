@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TRNMNT.Core.Model.Event
+﻿namespace TRNMNT.Core.Model.Event
 {
     public class EventModelInfo : EventModelBase
     {

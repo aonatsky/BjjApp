@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using TRNMNT.Data.Entities;
-using TRNMNT.Data.Repositories;
-using System.Linq;
 using System.IO;
-using TRNMNT.Web.Core.Const;
-using TRNMNT.Core.Model.Event;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model.Category;
+using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Data.Context;
+using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories;
+using TRNMNT.Web.Core.Const;
 
 namespace TRNMNT.Core.Services
 {
@@ -58,7 +58,7 @@ namespace TRNMNT.Core.Services
             foreach (var categoryModel in eventModel.CategoryModels)
             {
 
-                Category category = Guid.TryParse(categoryModel.CategoryId, out Guid categoryId) ? categoryRepository.GetByID(categoryId) : null;
+                var category = Guid.TryParse(categoryModel.CategoryId, out var categoryId) ? categoryRepository.GetByID(categoryId) : null;
                 if (category != null)
                 {
                     category.Name = categoryModel.Name;

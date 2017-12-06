@@ -1,6 +1,6 @@
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 using TRNMNT.Web.Core.Enum;
 using TRNMNT.Web.Core.Model;
 

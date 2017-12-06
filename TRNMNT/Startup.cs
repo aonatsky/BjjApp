@@ -1,30 +1,28 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.Webpack;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using TRNMNT.Data.Context;
-using TRNMNT.Web.Core.Services;
-using TRNMNT.Web.Core.Services.impl;
-using TRNMNT.Data.Repositories;
-using Microsoft.Extensions.Logging;
-using TRNMNT.Web.Core.Logger;
-using System.IO;
-using TRNMNT.Data.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
-using TRNMNT.Web.Core.Settings;
-using TRNMNT.Web.Core.Services.Authentication;
-using TRNMNT.Web.Core.Services.Authentication.Impl;
-using TRNMNT.Core.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using TRNMNT.Core.Services;
+using TRNMNT.Data.Context;
+using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories;
+using TRNMNT.Web.Core.Logger;
+using TRNMNT.Web.Core.Services;
+using TRNMNT.Web.Core.Services.Authentication;
+using TRNMNT.Web.Core.Services.Authentication.Impl;
+using TRNMNT.Web.Core.Services.impl;
+using TRNMNT.Web.Core.Settings;
 
 namespace TRNMNT.Web
 {
@@ -81,6 +79,7 @@ namespace TRNMNT.Web
             services.AddMvc();
 
             #region AppDBContext
+
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
@@ -94,9 +93,11 @@ namespace TRNMNT.Web
             }
                 )
                .AddEntityFrameworkStores<AppDbContext>();
+
             #endregion
 
             #region AppServices
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped(typeof(IFighterService), typeof(FighterService));
@@ -115,6 +116,7 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
             services.AddScoped(typeof(IPromoCodeService), typeof(PromoCodeService));
             services.AddScoped(typeof(IParticipantRegistrationService), typeof(ParticipantRegistrationService));
+
             #endregion
         }
 

@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using TRNMNT.Core.Services.Interface;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.impl

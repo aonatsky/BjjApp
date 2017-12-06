@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using TRNMNT.Core.Model.Result;
 using TRNMNT.Data.Entities;
 using TRNMNT.Web.Core.Settings;
-using TRNMNT.Core.Model.Result;
 
 namespace TRNMNT.Web.Core.Services.Authentication.Impl
 {
@@ -128,9 +126,9 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
 
         private async Task AddSampleRolesAsync()
         {
-            if (!(await roleManager.RoleExistsAsync(Roles.Owner)))
+            if (!await roleManager.RoleExistsAsync(Roles.Owner))
             {
-                IdentityRole newRole = new IdentityRole(Roles.Owner);
+                var newRole = new IdentityRole(Roles.Owner);
                 await roleManager.CreateAsync(newRole);
             }
         }
@@ -139,7 +137,7 @@ namespace TRNMNT.Web.Core.Services.Authentication.Impl
         {
 
             var handler = new JwtSecurityTokenHandler();
-            ClaimsIdentity identity = new ClaimsIdentity(
+            var identity = new ClaimsIdentity(
                 GetTokenClaims(user).Union(await userManager.GetClaimsAsync(user))
             );
 
