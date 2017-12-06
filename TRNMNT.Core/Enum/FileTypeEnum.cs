@@ -2,6 +2,6 @@ namespace TRNMNT.Core.Enum
 {
     public enum FileTypeEnum
     {
-        FighterList = 1,
+        FighterList = 1
     }
 }

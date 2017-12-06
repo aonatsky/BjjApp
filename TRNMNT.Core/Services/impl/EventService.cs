@@ -143,8 +143,8 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task SaveEventImageAsync(Stream stream, string eventId)
         {
-            var fileName = FilePath.EVENT_IMAGE_FILE;
-            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_IMAGE_FOLDER, FilePath.EVENT_IMAGE_FILE);
+            var fileName = FilePath.EventImageFile;
+            var path = Path.Combine(FilePath.EventDataFolder, eventId, FilePath.EventImageFolder, FilePath.EventImageFile);
             var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
             await _fileService.SaveImageAsync(path, stream, fileName);
             _event.ImgPath = path;
@@ -154,7 +154,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task SaveEventTncAsync(Stream stream, string eventId, string fileName)
         {
-            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, fileName);
+            var path = Path.Combine(FilePath.EventDataFolder, eventId, FilePath.EventTncFolder, fileName);
             await _fileService.SaveFileAsync(path, stream);
             var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
             _event.TNCFilePath = path;
@@ -164,7 +164,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task SavePromoCodeListAsync(Stream stream, string eventId)
         {
-            var path = Path.Combine(FilePath.EVENT_DATA_FOLDER, eventId, FilePath.EVENT_TNC_FOLDER, FilePath.EVENT_PROMOCODE_LIST_FILE);
+            var path = Path.Combine(FilePath.EventDataFolder, eventId, FilePath.EventTncFolder, FilePath.EventPromocodeListFile);
             await _fileService.SaveFileAsync(path, stream);
             var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
             _event.PromoCodeListPath = path;

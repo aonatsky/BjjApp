@@ -31,12 +31,12 @@ namespace TRNMNT.Core.Services.Impl
 
         protected override string GetFileUploadPath(string rootPath)
         {
-            var directoryPath = Path.Combine(rootPath, FilePath.FIGHTERLIST_FOLDER_NAME);
+            var directoryPath = Path.Combine(rootPath, FilePath.FighterlistFolderName);
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            return Path.Combine(directoryPath, $"{FilePath.FIGHTERLIST_FILE_NAME}_{DateTime.UtcNow:yyyy.mm.dd}.{FilePath.EXCEL_EXTENSION}");
+            return Path.Combine(directoryPath, $"{FilePath.FighterlistFileName}_{DateTime.UtcNow:yyyy.mm.dd}.{FilePath.ExcelExtension}");
         }
 
         protected override FileProcessResult ProcessInternal(Stream stream)
