@@ -12,6 +12,5 @@ namespace TRNMNT.Core.Settings
         public const string Audience = "trnmntAudience";
         public const string Issuer = "trnmntIssuer";
         public const int Lifetime = 50; 
-
     }
 }

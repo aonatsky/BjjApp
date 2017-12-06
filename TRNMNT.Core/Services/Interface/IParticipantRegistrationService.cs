@@ -7,8 +7,13 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IParticipantRegistrationService
     {
-         Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl);
+        /// <summary>
+        /// Processes the participant registration asynchronous.
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="callbackUrl">The callback URL.</param>
+        /// <returns></returns>
+        Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl);
     }
-
-
 }

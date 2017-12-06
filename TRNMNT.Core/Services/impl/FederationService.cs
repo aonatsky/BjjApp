@@ -6,11 +6,19 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class FederationService : IFederationService
     {
-        private readonly IRepository<Federation> repository;
+        #region Dependencies
+
+        private readonly IRepository<Federation> _repository;
+
+        #endregion
+
+        #region .ctor
 
         public FederationService(IRepository<Federation> federationRepository)
         {
-            this.repository = federationRepository;
+            _repository = federationRepository;
         }
+
+        #endregion
     }
 }

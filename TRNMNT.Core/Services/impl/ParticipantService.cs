@@ -11,40 +11,45 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class ParticipantService : IParticipantService
     {
-        private IRepository<Participant> repository;
-        private ITeamService teamService;
-        private IOrderService orderService;
-        private IPaymentService paymentService;
-        private IAppDbContext unitOfWork;
+        #region Dependencies
+
+        private readonly IRepository<Participant> _repository;
+        private readonly ITeamService _teamService;
+        private readonly IOrderService _orderService;
+        private readonly IPaymentService _paymentService;
+        private readonly IAppDbContext _unitOfWork;
+
+        #endregion
+
+        #region .ctor
 
         public ParticipantService(IRepository<Participant> repository, ITeamService teamService, IOrderService orderService, IPaymentService paymentService,
             IAppDbContext unitOfWork)
         {
-            this.repository = repository;
-            this.teamService = teamService;
-            this.orderService = orderService;
-            this.paymentService = paymentService;
-            this.unitOfWork = unitOfWork;
+            _repository = repository;
+            _teamService = teamService;
+            _orderService = orderService;
+            _paymentService = paymentService;
+            _unitOfWork = unitOfWork;
         }
 
+        #endregion
 
+        #region Public Methods
 
         public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model, Guid eventId)
         {
-            return await repository.GetAll().AnyAsync(p =>
+            return await _repository.GetAll().AnyAsync(p =>
              p.EventId == eventId
              && p.FirstName == model.FirstName
              && p.LastName == model.LastName
-             && p.DateOfBirth == model.DateOfBirth
-             );
+             && p.DateOfBirth == model.DateOfBirth);
         }
 
         public void AddParticipant(Participant participant)
         {
-            repository.Add(participant);
+            _repository.Add(participant);
         }
-
-
 
         public Participant CreatePaticipant(ParticipantRegistrationModel model, Guid eventId)
         {
@@ -67,24 +72,17 @@ namespace TRNMNT.Core.Services.Impl
             };
         }
 
-        public async  Task ApproveEntityAsync(Guid entityId, Guid orderId)
+        public async Task ApproveEntityAsync(Guid entityId, Guid orderId)
         {
-            var participant = await repository.GetByIDAsync(entityId);
+            var participant = await _repository.GetByIDAsync(entityId);
             if (participant != null)
             {
                 participant.IsApproved = true;
                 participant.OrderId = orderId;
-                repository.Update(participant);
+                _repository.Update(participant);
             }
         }
+
+        #endregion
     }
-
-
 }
-
-
-
-
-
-
-

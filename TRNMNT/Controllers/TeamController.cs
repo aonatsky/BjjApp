@@ -47,7 +47,7 @@ namespace TRNMNT.Web.Controllers
             {
                 if (GetEventId() != null)
                 {
-                    var data = await _teamService.GetTeams();
+                    var data = await _teamService.GetTeamsAsync();
                     return Ok(JsonConvert.SerializeObject(data, JsonSerializerSettings));
                 }
                 return NotFound();

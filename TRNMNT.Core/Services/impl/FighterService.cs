@@ -12,11 +12,18 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class FighterService : IFighterService
     {
-        private IRepository<Fighter> fighterRepository;
-        private IRepository<Team> teamRepository;
-        private IRepository<WeightDivision> categoryRepository;
-        private IRepository<WeightDivision> weightDivisionRepository;
-        private IAppDbContext unitOfWork;
+        #region Dependencies
+
+        private readonly IRepository<Fighter> _fighterRepository;
+        private readonly IRepository<Team> _teamRepository;
+        private readonly IRepository<WeightDivision> _categoryRepository;
+        private readonly IRepository<WeightDivision> _weightDivisionRepository;
+        private readonly IAppDbContext _unitOfWork;
+
+
+        #endregion
+
+        #region .ctor
 
         public FighterService(IRepository<Fighter> fighterRepository,
             IRepository<Team> teamRepository,
@@ -25,13 +32,15 @@ namespace TRNMNT.Core.Services.Impl
             IAppDbContext unitOfWork)
 
         {
-            this.fighterRepository = fighterRepository;
-            this.teamRepository = teamRepository;
-            this.categoryRepository = categoryRepository;
-            this.weightDivisionRepository = weightDivisionRepository;
-            this.unitOfWork = unitOfWork;
+            _fighterRepository = fighterRepository;
+            _teamRepository = teamRepository;
+            _categoryRepository = categoryRepository;
+            _weightDivisionRepository = weightDivisionRepository;
+            _unitOfWork = unitOfWork;
         }
 
+        #endregion
+        
         #region Public Methods
 
         public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
@@ -42,16 +51,16 @@ namespace TRNMNT.Core.Services.Impl
 
         public string AddFightersByModels(List<FighterModel> fighterModels)
         {
-            var message = "";
-            var existingTeams = this.teamRepository.GetAll().ToList();
-            var existingFighters = this.fighterRepository.GetAll().ToList();
+            var message = string.Empty;
+            var existingTeams = _teamRepository.GetAll().ToList();
+            var existingFighters = _fighterRepository.GetAll().ToList();
 
             var fightersToAdd = new List<Fighter>();
             var teamsToAdd = new List<Team>();
             var fighterComparer = new FighterComparer();
             foreach (var model in fighterModels)
             {
-                var fighter = new Fighter()
+                var fighter = new Fighter
                 {
                     FighterId = Guid.NewGuid(),
                     FirstName = model.FirstName,
@@ -68,7 +77,7 @@ namespace TRNMNT.Core.Services.Impl
                     continue;
                 }
 
-                fighter.Team = ProcessTeam(model.Team, existingTeams, ref teamsToAdd);
+                fighter.Team = ProcessTeam(model.Team, existingTeams, teamsToAdd);
 
                 var weightDivision = GetWeightDivision(model.WeightDivision);
                 if (weightDivision != null)
@@ -96,8 +105,8 @@ namespace TRNMNT.Core.Services.Impl
                     fightersToAdd.Add(fighter);
                 }
             }
-            fighterRepository.AddRange(fightersToAdd);
-            unitOfWork.Save();
+            _fighterRepository.AddRange(fightersToAdd);
+            _unitOfWork.Save();
             return message;
         }
 
@@ -106,23 +115,17 @@ namespace TRNMNT.Core.Services.Impl
         {
             var fighters = GetFighterModelsByFilter(filter);
             var count = fighters.Count;
-            var bracketSize = GetBracketsSize(fighters.Count());
+            var bracketSize = GetBracketsSize(fighters.Count);
             for (var i = 0; i < bracketSize - count; i++)
             {
-                fighters.Add(new FighterModel() {});
+                fighters.Add(new FighterModel());
             }
 
             return Distribute(fighters);
         }
-
-
-
-
-
-
+        
         #endregion
-
-
+        
         #region Private methods
 
         private List<FighterModel> Distribute(List<FighterModel> fightersList)
@@ -130,7 +133,7 @@ namespace TRNMNT.Core.Services.Impl
 
             var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
            .SelectMany(f => f).ToList();
-            if (fightersList.Count() > 2)
+            if (fightersList.Count > 2)
             {
                 var sideA = new List<FighterModel>();
                 var sideB = new List<FighterModel>();
@@ -149,7 +152,6 @@ namespace TRNMNT.Core.Services.Impl
                 return Distribute(sideA).Concat(Distribute(sideB)).ToList();
             }
             return fightersList;
-            
         } 
 
         private List<FighterModel> GetModels(IEnumerable<Fighter> fighters)
@@ -168,7 +170,7 @@ namespace TRNMNT.Core.Services.Impl
 
         private IQueryable<Fighter> GetFighters()
         {
-            return fighterRepository.GetAll()
+            return _fighterRepository.GetAll()
                 .Include(f => f.Team).Include(f => f.WeightDivision);
         }
 
@@ -178,9 +180,7 @@ namespace TRNMNT.Core.Services.Impl
                             && filter.WeightDivisionIds.Contains(f.WeightDivisionId));
         }
         #endregion
-
-
-
+        
         #region Models parsing
 
         private DateTime? GetDateOfBirth(string stringDob)
@@ -190,12 +190,10 @@ namespace TRNMNT.Core.Services.Impl
             {
                 return dob;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
-        private Team ProcessTeam(string name, List<Team> teams, ref List<Team> teamsToAdd)
+
+        private Team ProcessTeam(string name, List<Team> teams, List<Team> teamsToAdd)
         {
             var team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (team == null)
@@ -216,17 +214,16 @@ namespace TRNMNT.Core.Services.Impl
         }
         private WeightDivision GetWeightDivision(string name)
         {
-            return weightDivisionRepository.GetAll().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return _weightDivisionRepository.GetAll().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
         private WeightDivision GetCategory(string name)
         {
-            return categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return _categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
         }
 
         #endregion
-
-
+        
         #region Brackets
 
         private const int FIGHTERS_MAX_COUNT = 64;
@@ -242,7 +239,7 @@ namespace TRNMNT.Core.Services.Impl
                 var size = Math.Pow(2, i);
                 if (size >= fightersCount)
                 {
-                    return (Int32)size;
+                    return (int)size;
                 }
             }
             return 2;
@@ -261,12 +258,6 @@ namespace TRNMNT.Core.Services.Impl
             {
                 return fighter.FirstName.GetHashCode() ^ fighter.LastName.GetHashCode() ^ fighter.DateOfBirth.GetHashCode();
             }
-
-
         }
-
-
     }
-
-
 }

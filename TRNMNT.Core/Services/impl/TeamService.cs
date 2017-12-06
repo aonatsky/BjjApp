@@ -12,16 +12,26 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class TeamService : ITeamService
     {
-        private IRepository<Team> repository;
+        #region Dependencies
+
+        private readonly IRepository<Team> _repository;
+
+        #endregion
+
+        #region .ctor
 
         public TeamService(IRepository<Team> repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task ApproveEntityAsync(Guid entityId, Guid orderId)
         {
-            var team = await repository.GetByIDAsync(entityId);
+            var team = await _repository.GetByIDAsync(entityId);
             if (team != null)
             {
                 team.IsApproved = true;
@@ -31,12 +41,19 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<Team> GetTeamByNameAsync(string name)
         {
-            return await repository.GetAll().Where(t => t.Name == name).FirstOrDefaultAsync();
+            return await _repository.GetAll().Where(t => t.Name == name).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<TeamModel>> GetTeams()
+        public async Task<IEnumerable<TeamModel>> GetTeamsAsync()
         {
-            return (await repository.GetAll().ToListAsync()).Select(t => new TeamModel { TeamId = t.TeamId.ToString(), Name = t.Name, Description = t.Description });
+            return await _repository.GetAll().Select(t => new TeamModel
+            {
+                TeamId = t.TeamId.ToString(),
+                Name = t.Name,
+                Description = t.Description
+            }).ToListAsync();
         }
+
+        #endregion
     }
 }

@@ -7,7 +7,12 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IParticipantService : IPaidEntityService
     {
-
+        /// <summary>
+        /// Determines whether [is participant exists asynchronous].
+        /// </summary>
+        /// <param name="participant">The participant.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
         Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant, Guid eventId);
 
         /// <summary>

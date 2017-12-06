@@ -134,7 +134,7 @@ namespace TRNMNT.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.OK;
             try
             {
-                if (await _eventService.IsEventUrlPrefixExist(prefix))
+                if (await _eventService.IsEventUrlPrefixExistAsync(prefix))
                 {
                     Response.StatusCode = (int)HttpStatusCode.Found;
                 }
@@ -216,7 +216,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 var user = await GetUserAsync();
-                var price = _eventService.GetPrice(Guid.Parse(eventId), user.Id);
+                var price = _eventService.GetPriceAsync(Guid.Parse(eventId), user.Id);
                 return Ok(price);
             }
             catch (Exception e)

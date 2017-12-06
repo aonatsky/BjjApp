@@ -8,30 +8,28 @@ namespace TRNMNT.Core.Services.Impl
 {
     public abstract class BaseFileService
     {
-        protected abstract FileProcessResult ProcessInternal(Stream stream);
+        #region Dependencies
 
-        protected abstract string GetFileUploadPath(string rootPath);
+        private readonly IHostingEnvironment _env;
 
+        #endregion
 
-        private IHostingEnvironment env;
+        #region .ctor
 
-
-        public BaseFileService(IHostingEnvironment env)
+        protected BaseFileService(IHostingEnvironment env)
         {
-            this.env = env;
+            _env = env;
         }
 
-        protected string GetWebRootPath()
-        {
-            return this.env.WebRootPath;
-        }
+        #endregion
 
+        #region Public Methods
 
         public FileProcessResult ProcessFile(IFormFile file)
         {
             if (file == null)
             {
-               return new FileProcessResult(FileProcessResultEnum.FileIsNull);
+                return new FileProcessResult(FileProcessResultEnum.FileIsNull);
             }
             if (file.Length == 0)
             {
@@ -42,6 +40,27 @@ namespace TRNMNT.Core.Services.Impl
             return internalProcessResult;
         }
 
+        #endregion
+
+        #region Protected Abstract Methods
+
+        protected abstract FileProcessResult ProcessInternal(Stream stream);
+
+        protected abstract string GetFileUploadPath(string rootPath);
+
+        #endregion
+
+        #region Protected Methods
+
+        protected string GetWebRootPath()
+        {
+            return _env.WebRootPath;
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private void SaveFile(IFormFile file)
         {
             using (var fileStream = new FileStream(GetFileUploadPath(GetWebRootPath()), FileMode.Create))
@@ -50,5 +69,6 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
+        #endregion
     }
 }

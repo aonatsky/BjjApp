@@ -11,12 +11,18 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class ParticipantRegistrationService : IParticipantRegistrationService
     {
-        private IPaymentService paymentService;
-        private IParticipantService participantService;
-        private IOrderService orderService;
-        private IEventService eventService;
-        private IAppDbContext unitOfWork;
-        private IPromoCodeService promoCodeService;
+        #region Dependencies
+
+        private readonly IPaymentService _paymentService;
+        private readonly IParticipantService _participantService;
+        private readonly IOrderService _orderService;
+        private readonly IEventService _eventService;
+        private readonly IAppDbContext _unitOfWork;
+        private readonly IPromoCodeService _promoCodeService;
+
+        #endregion
+
+        #region .ctor
 
         public ParticipantRegistrationService(IOrderService orderService,
             IPaymentService paymentService,
@@ -25,45 +31,45 @@ namespace TRNMNT.Core.Services.Impl
             IPromoCodeService promoCodeService,
             IAppDbContext unitOfWork)
         {
-            this.orderService = orderService;
-            this.participantService = participantService;
-            this.paymentService = paymentService;
-            this.eventService = eventService;
-            this.unitOfWork = unitOfWork;
-            this.promoCodeService = promoCodeService;
+            _orderService = orderService;
+            _participantService = participantService;
+            _paymentService = paymentService;
+            _eventService = eventService;
+            _unitOfWork = unitOfWork;
+            _promoCodeService = promoCodeService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl)
         {
-            if (await participantService.IsParticipantExistsAsync(model, eventId))
+            if (await _participantService.IsParticipantExistsAsync(model, eventId))
             {
-                return new ParticipantRegistrationResult()
+                return new ParticipantRegistrationResult
                 {
                     Success = false,
                     Reason = DefaultMessage.ParticipantRegistrationParticipantIsAlreadyExists
                 };
             }
-            else
+            var participant = _participantService.CreatePaticipant(model, eventId);
+            var promoCodeUsed = await _promoCodeService.ValidateCodeAsync(eventId, model.PromoCode, participant.ParticipantId.ToString());
+            _participantService.AddParticipant(participant);
+            var price = await _eventService.GetPriceAsync(eventId, promoCodeUsed);
+            var order = _orderService.GetNewOrder(OrderTypeEnum.EventParticipation, price, "UAH", participant.ParticipantId.ToString());
+            _orderService.AddOrder(order);
+            var paymentData = _paymentService.GetPaymentDataModel(order, callbackUrl);
+            await _unitOfWork.SaveAsync();
+
+            return new ParticipantRegistrationResult
             {
-                var participant = participantService.CreatePaticipant(model, eventId);
-                var promoCodeUsed = await promoCodeService.ValidateCodeAsync(eventId, model.PromoCode, participant.ParticipantId.ToString());
-                participantService.AddParticipant(participant);
-                var price = await eventService.GetPrice(eventId, promoCodeUsed);
-                var order = orderService.GetNewOrder(OrderTypeEnum.EventParticipation, price, "UAH", participant.ParticipantId.ToString());
-                orderService.AddOrder(order);
-                var paymentData = paymentService.GetPaymentDataModel(order, callbackUrl);
-                await unitOfWork.SaveAsync();
-
-                return new ParticipantRegistrationResult()
-                {
-                    ParticipantId = participant.ParticipantId.ToString(),
-                    Success = true,
-                    PaymentData = paymentData
-                };
-            }
-
+                ParticipantId = participant.ParticipantId.ToString(),
+                Success = true,
+                PaymentData = paymentData
+            };
         }
+
+        #endregion
     }
-
-
 }

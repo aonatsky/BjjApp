@@ -10,29 +10,39 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class OrderService : IOrderService
     {
-        private IRepository<Order> repository;
-        private IAppDbContext unitOfWork;
+        #region Dependencies
+
+        private readonly IRepository<Order> _repository;
+        private readonly IAppDbContext _unitOfWork;
+
+        #endregion
+
+        #region .ctor
 
         public OrderService(IRepository<Order> orderRepository, IAppDbContext unitOfWork)
         {
-            this.repository = orderRepository;
-            this.unitOfWork = unitOfWork;
+            _repository = orderRepository;
+            _unitOfWork = unitOfWork;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public void AddOrder(Order order)
         {
-            repository.Add(order);
+            _repository.Add(order);
         }
 
         public async Task ApproveOrderAsync(Guid orderId, string paymentProviderReference)
         {
-            var order = await repository.GetByIDAsync(orderId);
+            var order = await _repository.GetByIDAsync(orderId);
             if (order != null)
             {
                 order.PaymentProviderReference = paymentProviderReference;
                 order.PaymentApproved = true;
-                repository.Update(order);
-            }            
+                _repository.Update(order);
+            }
         }
 
         public Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference)
@@ -49,9 +59,11 @@ namespace TRNMNT.Core.Services.Impl
             return order;
         }
 
-        public async Task<Order> GetOrder(Guid orderId)
+        public async Task<Order> GetOrderAsync(Guid orderId)
         {
-            return await repository.GetByIDAsync(orderId);
+            return await _repository.GetByIDAsync(orderId);
         }
+
+        #endregion
     }
 }

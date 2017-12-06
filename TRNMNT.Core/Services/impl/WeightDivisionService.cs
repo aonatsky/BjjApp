@@ -12,16 +12,33 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class WeightDivisionService : IWeightDivisionService
     {
-        private IRepository<WeightDivision> weightdevisionRepository;
+        #region Dependencies
 
-        public WeightDivisionService(IRepository<WeightDivision> weightdevisionRepository)
+        private readonly IRepository<WeightDivision> _weightDevisionRepository;
+
+        #endregion
+
+        #region .ctor
+
+        public WeightDivisionService(IRepository<WeightDivision> weightDevisionRepository)
         {
-            this.weightdevisionRepository = weightdevisionRepository;
+            _weightDevisionRepository = weightDevisionRepository;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
         {
-            return (await weightdevisionRepository.GetAll().Where(wd => wd.CategoryId == categoryId).ToListAsync()).Select(wd => new WeightDivisionModelBase {WeightDivisionId = wd.WeightDivisionId.ToString(), Name = wd.Name });
+            return await _weightDevisionRepository.GetAll().Where(wd => wd.CategoryId == categoryId).Select(wd => new WeightDivisionModelBase
+            {
+                WeightDivisionId = wd.WeightDivisionId.ToString(),
+                Name = wd.Name
+            }).ToListAsync();
         }
+
+        #endregion
+
     }
 }

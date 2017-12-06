@@ -8,21 +8,33 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class UserService : IUserService
     {
-        private UserManager<User> userManager;
+        #region Dependencies
+
+        private readonly UserManager<User> _userManager;
+
+        #endregion
+
+        #region .ctor
 
         public UserService(UserManager<User> userManager)
         {
-            this.userManager = userManager;
+            _userManager = userManager;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task<User> GetUserAsync(string userId)
         {
-            return await userManager.FindByIdAsync(userId);
+            return await _userManager.FindByIdAsync(userId);
         }
 
-        public async Task<User> GetUserAsync(ClaimsPrincipal claims )
+        public async Task<User> GetUserAsync(ClaimsPrincipal claims)
         {
-            return await userManager.GetUserAsync(claims);
+            return await _userManager.GetUserAsync(claims);
         }
+
+        #endregion
     }
 }
