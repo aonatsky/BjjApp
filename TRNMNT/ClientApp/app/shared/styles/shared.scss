@@ -3,13 +3,18 @@ $theme_green: #66d33f;
 $theme_orange: #FE1600;
 $theme_orange_light: #FFAEA3;
 $theme_grey: #F3F3F3;
-/*$theme_orange: #FFAEA3;*/
 $theme_black: #3c3c3c;
 $theme_body_color: #f8f8f8;
+$theme_font_family: x   'Proxima Nova', Georgia, sans-serif;
+
+
+
 
 $screen_width_vw: 100vw;
 $container_width: 750px;
-$container_padding_top: 40px;
+$content_padding_top: 30px;
+$header_height: 50px;
+
 
 @function get-vw($target) {
     $vw-context: (1000*.01) * 1px;
@@ -20,9 +25,9 @@ $container_padding_top: 40px;
 body {
     margin: 0px;
     overflow: hidden;
-    /*.content {
-        padding-top: $container_padding_top
-    }*/
+    .content {
+        padding-top: $content_padding_top
+    }
     .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload {
         $bg_color: $theme_black;
         border-radius: 0;
@@ -55,14 +60,15 @@ body {
             border-color: $theme_orange;
             border-width: 2px;
             width: $screen_width_vw;
-            //calculating shift
-            top: 94px;
+            top: $header_height + $content_padding_top + 15px;
         }
 
         $bg_color: $theme_orange;
 
         .ui-steps-item {
             .ui-menuitem-link {
+                padding: 0px;
+
                 .ui-steps-number {
                     width: 34px;
                     background-color: $theme_body_color;
@@ -70,6 +76,12 @@ body {
                     border-width: 2px;
                     color: $theme_black;
                     font-weight: bold;
+                    top: 0;
+                    margin-bottom: 0;
+                }
+
+                .ui-steps-title{
+                    display:none;
                 }
             }
         }
@@ -88,7 +100,7 @@ body {
         border-radius: 0;
 
         &:active, &:focus {
-            border-color: $theme_orange_light;
+            border-color: $theme_black;
         }
     }
 
@@ -111,7 +123,7 @@ body {
                 .ui-tabview-title {
                     color: $theme_orange;
                     border-bottom: 2px solid currentColor;
-                    border-radius:5px, 5px
+                    border-radius: 5px, 5px
                 }
             }
         }
