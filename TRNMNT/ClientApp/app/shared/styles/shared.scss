@@ -25,9 +25,11 @@ $header_height: 50px;
 body {
     margin: 0px;
     overflow: hidden;
+
     .content {
         padding-top: $content_padding_top
     }
+
     .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload {
         $bg_color: $theme_black;
         border-radius: 0;
@@ -80,8 +82,8 @@ body {
                     margin-bottom: 0;
                 }
 
-                .ui-steps-title{
-                    display:none;
+                .ui-steps-title {
+                    display: none;
                 }
             }
         }
@@ -115,10 +117,20 @@ body {
         .ui-tabview-nav {
             background-color: $theme_body_color !important;
 
-            .ui-tabview-selected {
+            li {
                 background-color: $theme_body_color !important;
                 border: none !important;
-                height: 30px;
+                height: 40px;
+            }
+
+            .ui-state-default{
+                .ui-tabview-title:hover{
+                    color:$theme_orange;
+                }
+            }
+            
+            .ui-tabview-selected {
+
 
                 .ui-tabview-title {
                     color: $theme_orange;
