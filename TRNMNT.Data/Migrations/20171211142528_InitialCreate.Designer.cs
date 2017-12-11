@@ -11,8 +11,8 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20171128123018_initial")]
-    partial class initial
+    [Migration("20171211142528_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,6 +137,8 @@ namespace TRNMNT.Data.Migrations
                     b.Property<Guid>("EventId");
 
                     b.Property<string>("Name");
+
+                    b.Property<int>("RoundTime");
 
                     b.HasKey("CategoryId");
 

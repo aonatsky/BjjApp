@@ -137,6 +137,8 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int>("RoundTime");
+
                     b.HasKey("CategoryId");
 
                     b.HasIndex("EventId");
