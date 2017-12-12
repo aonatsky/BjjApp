@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+using TRNMNT.Core.Helpers;
 
 namespace TRNMNT.Web
 {
@@ -115,6 +116,7 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
             services.AddScoped(typeof(IPromoCodeService), typeof(PromoCodeService));
             services.AddScoped(typeof(IParticipantRegistrationService), typeof(ParticipantRegistrationService));
+            services.AddScoped<IPaidServiceFactory, PaidServiceFactory>();
             #endregion
         }
 

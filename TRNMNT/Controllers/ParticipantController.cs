@@ -20,7 +20,6 @@ namespace TRNMNT.Web.Controllers
     public class ParticipantController : BaseController
     {
         private IParticipantService participantService;
-        private IEventService eventService;
         private IParticipantRegistrationService participantRegistrationService;
 
         public ParticipantController(IEventService eventService,
@@ -36,7 +35,6 @@ namespace TRNMNT.Web.Controllers
 
             this.participantService = participantService;
             this.participantRegistrationService = participantRegistrationService;
-            this.eventService = eventService;
         }
 
 
@@ -97,6 +95,22 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ParticipantsTable(Guid eventId)
+        {
+            try
+            {
+                // todo what event to use from GetEventId() or from method parameter 
+                var participants = await participantService.GetFilteredParticipantsAsync(GetFederationId().Value, eventId);
+                return Ok(participants);
             }
             catch (Exception e)
             {

@@ -1,0 +1,24 @@
+﻿<p-dataTable [value]="participantsModel"
+             [loading]="participantsLoading"
+             sortField="firstName"
+             [sortOrder]="1"
+             [rows]="rowsCount"
+             [paginator]="isPaginationEnabled"
+             [pageLinks]="pageLinks" #dt>
+    
+    <p-column field="firstName" header="First Name" sortable="true"></p-column>
+    <p-column field="lastName" header="Last Name" sortable="true"></p-column>
+    <p-column field="dateOfBirth" header="D.O.B" sortable="true">
+        <ng-template let-col let-participant="rowData" pTemplate="body">
+            <span>{{participant[col.field] | date:'MM.dd.yyyy'}}</span>
+        </ng-template>
+    </p-column>
+    <p-column field="teamName" header="Team" sortable="true"></p-column>
+    <p-column field="categoryName" header="Category" sortable="true"></p-column>
+    <p-column field="weightDivisionName" header="Weight division" sortable="true"></p-column>
+    <p-column field="isMember" header="Membership" sortable="true">
+        <ng-template let-col let-participant="rowData" pTemplate="body">
+            <span [ngClass]="{'fa': true ,'fa-check-square-o' : participant[col.field], 'fa-square-o' : !participant[col.field] }"></span>
+        </ng-template>
+    </p-column>
+</p-dataTable>

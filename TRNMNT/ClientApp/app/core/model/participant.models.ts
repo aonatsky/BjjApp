@@ -16,3 +16,11 @@ export class ParticipantRegistrationModel extends ParticipantModelBase {
     public promoCode: string;
 }
 
+export class ParticipantTableModel extends ParticipantModelBase {
+    public teamName: string;
+    public categoryName: string;
+    public weightDivisionName: string;
+    public userId: string;
+    public isMember: boolean;
+}
+

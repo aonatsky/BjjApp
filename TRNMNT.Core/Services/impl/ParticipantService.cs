@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model.Participant;
@@ -10,27 +12,18 @@ namespace TRNMNT.Core.Services
 {
     public class ParticipantService : IParticipantService
     {
-        private IRepository<Participant> repository;
-        private ITeamService teamService;
-        private IOrderService orderService;
-        private IPaymentService paymentService;
-        private IAppDbContext unitOfWork;
+        private readonly IRepository<Participant> _repository;
 
-        public ParticipantService(IRepository<Participant> repository, ITeamService teamService, IOrderService orderService, IPaymentService paymentService,
-            IAppDbContext unitOfWork)
+        public ParticipantService(IRepository<Participant> repository)
         {
-            this.repository = repository;
-            this.teamService = teamService;
-            this.orderService = orderService;
-            this.paymentService = paymentService;
-            this.unitOfWork = unitOfWork;
+            _repository = repository;
         }
 
 
 
         public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model, Guid eventId)
         {
-            return await repository.GetAll().AnyAsync(p =>
+            return await _repository.GetAll().AnyAsync(p =>
              p.EventId == eventId
              && p.FirstName == model.FirstName
              && p.LastName == model.LastName
@@ -40,7 +33,7 @@ namespace TRNMNT.Core.Services
 
         public void AddParticipant(Participant participant)
         {
-            repository.Add(participant);
+            _repository.Add(participant);
         }
 
 
@@ -68,13 +61,30 @@ namespace TRNMNT.Core.Services
 
         public async  Task ApproveEntityAsync(Guid entityId, Guid orderId)
         {
-            var participant = await repository.GetByIDAsync(entityId);
+            var participant = await _repository.GetByIDAsync(entityId);
             if (participant != null)
             {
                 participant.IsApproved = true;
                 participant.OrderId = orderId;
-                repository.Update(participant);
+                _repository.Update(participant);
             }
+        }
+
+        public async Task<List<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, Guid eventId)
+        {
+            var allParticipants = _repository.GetAll(p => p.EventId == eventId);
+
+            return await allParticipants.Select(p => new ParticipantTableModel
+            {
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                DateOfBirth = p.DateOfBirth,
+                UserId = p.UserId,
+                TeamName = p.Team.Name,
+                CategoryName = p.Category.Name,
+                WeightDivisionName = p.WeightDivision.Name,
+                IsMember = p.Team.FederationId == federationId
+            }).ToListAsync();
         }
     }
 

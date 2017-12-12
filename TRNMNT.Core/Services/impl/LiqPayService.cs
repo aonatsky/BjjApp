@@ -20,14 +20,15 @@ namespace TRNMNT.Core.Services
         private IParticipantService participantService;
         private ITeamService teamService;
         private IOrderService orderService;
-        private readonly ILogger logger;
+        //private readonly ILogger logger; // todo need to research Exception thrown during resolve
 
-        public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IOrderService orderService, ILogger logger)
+        public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IOrderService orderService)
         {
             this.configuration = configuration;
             this.paidServiceFactory = paidServiceFactory;
             this.orderService = orderService;
-            this.logger = logger;
+            //_logger = logger;
+                
         }
 
         public async Task ConfirmPaymentAsync(PaymentDataModel dataModel)
@@ -40,7 +41,7 @@ namespace TRNMNT.Core.Services
                     var paymentReference = jsonData["payment_id"].ToString();
                     var orderId = jsonData["order_id"].ToString();
                     var status = jsonData["status"].ToString();
-                    logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
+                    //logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
 
                     if (status == "success" || status == "sandbox")
                     {
@@ -55,11 +56,11 @@ namespace TRNMNT.Core.Services
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex.Message);
+                    //logger.LogError(ex.Message);
                 }
 
             }
-            logger.LogError("Signature declined");
+            //logger.LogError("Signature declined");
         }
 
         public PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl)

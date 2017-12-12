@@ -4,7 +4,6 @@ import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { RouterService } from '../../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
-import { ApiMethods } from "../consts/api-methods.consts";
 import * as FileSaver from 'file-saver';
 import { AuthHttp } from 'angular2-jwt';
 import 'rxjs/Rx';
@@ -16,7 +15,7 @@ export class HttpService {
 
 
     public get(name: string, params: SearchParams[] = []): Observable<any> {
-        let httpRequest = this.http.get(name);
+        let httpRequest: Observable<Response>;
 
         if (params && params.length > 0) {
             let urlSearchParams = new URLSearchParams();
@@ -24,6 +23,8 @@ export class HttpService {
                 urlSearchParams.set(params[i].name, params[i].value);
             }
             httpRequest = this.http.get(name, { search: urlSearchParams });
+        } else {
+            httpRequest = this.http.get(name);
         }
 
         this.loaderService.showLoader();

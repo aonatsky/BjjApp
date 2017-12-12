@@ -9,7 +9,7 @@ import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
 import { EventEditComponent } from './event-edit/event-edit.component'
 import { EventManagementComponent } from "./event-management/event-management.component";
-
+import { EventManagementParticipantsComponent } from "./event-management-participants/event-management-participants.component";
 
 
 export const eventAdminRoutes: Routes = [
@@ -22,7 +22,11 @@ export const eventAdminRoutes: Routes = [
                 path: "edit/:id", component: EventEditComponent
             },
             {
-                path: "management/:id", component: EventManagementComponent 
+                path: "management", component: EventManagementComponent, children: [
+                    {
+                        path: "participants/:id", component: EventManagementParticipantsComponent
+                    }
+                ]
             },
             {
                 path: "edit", component: EventEditComponent
