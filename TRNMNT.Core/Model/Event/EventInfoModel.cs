@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TRNMNT.Core.Model.Event
+﻿namespace TRNMNT.Core.Model.Event
 {
     public class EventModelInfo : EventModelBase
     {
@@ -19,6 +15,5 @@ namespace TRNMNT.Core.Model.Event
         public int LateRegistrationPrice { get; set; }
         public int EarlyRegistrationPriceForMembers { get; set; }
         public int LateRegistrationPriceForMembers { get; set; }
-
     }
 }

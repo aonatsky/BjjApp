@@ -1,4 +1,4 @@
-﻿namespace TRNMNT.Web.Core.Model
+﻿namespace TRNMNT.Core.Model
 {
     public class UserCredentialsModel
     {

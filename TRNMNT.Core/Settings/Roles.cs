@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TRNMNT.Web.Core.Settings
+﻿namespace TRNMNT.Core.Settings
 {
     public class Roles
     {
-        public const string Owner = "Owner";
-        public const string Participant = "Participant";
-        public const string Admin = "Admin";
-
+        public const string Owner = nameof(Owner);
+        public const string Participant = nameof(Participant);
+        public const string Admin = nameof(Admin);
     }
 }

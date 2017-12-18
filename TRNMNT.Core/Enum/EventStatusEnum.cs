@@ -1,10 +1,10 @@
-namespace TRNMNT.Web.Core.Enum
+namespace TRNMNT.Core.Enum
 {
-    public enum EventStatusEnum 
+    public enum EventStatusEnum
     {
         Init = 0,
         Draft = 1,
         Open = 2,
-        Passed =3
+        Passed = 3
     }
 }

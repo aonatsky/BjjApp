@@ -1,4 +1,4 @@
-namespace TRNMNT.Web.Core.Enum
+namespace TRNMNT.Core.Enum
 {
     public enum FileProcessResultEnum
     {
@@ -8,6 +8,5 @@ namespace TRNMNT.Web.Core.Enum
         FileIsNull = 502,
         FileIsInvalid = 503,
         Error = 500
-        
     }
 }

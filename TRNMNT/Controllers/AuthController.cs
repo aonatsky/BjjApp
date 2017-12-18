@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using System;
 using System.Net;
-using Microsoft.AspNetCore.Http;
-using TRNMNT.Web.Core.Services.Authentication;
-using TRNMNT.Web.Core.Model;
-using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Services;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,7 +21,13 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class AuthController : BaseController
     {
-        private readonly IAuthenticationService authenticationSerivce;
+        #region Dependencies
+
+        private readonly IAuthenticationService _authenticationSerivce;
+
+        #endregion
+
+        #region .ctor
 
         public AuthController(
             ILogger<AuthController> logger,
@@ -29,10 +35,12 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IEventService eventService,
             IAppDbContext context
-            ) : base(logger, userService, eventService, context)
+        ) : base(logger, userService, eventService, context)
         {
-            authenticationSerivce = authenticationService;
+            _authenticationSerivce = authenticationService;
         }
+
+        #endregion
 
 
         [AllowAnonymous, HttpPost("[action]")]
@@ -41,7 +49,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 //var token = await _authenticationSerivce.GetToken(credentials.Username, credentials.Password);
-                var token = await authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
+                var token = await _authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
                 if (!string.IsNullOrEmpty(token))
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
@@ -70,12 +78,12 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
-                Response.StatusCode = ((int)HttpStatusCode.OK);
+                await _authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
+                Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
-                Response.StatusCode = ((int)HttpStatusCode.InternalServerError);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(ex);
             }
 

@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
 
-namespace TRNMNT.Web.Core.Settings
+namespace TRNMNT.Core.Settings
 {
     public static class TokenAuthOptions
     {
@@ -14,6 +12,5 @@ namespace TRNMNT.Web.Core.Settings
         public const string Audience = "trnmntAudience";
         public const string Issuer = "trnmntIssuer";
         public const int Lifetime = 50; 
-
     }
 }

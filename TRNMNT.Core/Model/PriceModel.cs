@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TRNMNT.Core.Model
+﻿namespace TRNMNT.Core.Model
 {
     public class PriceModel
     {

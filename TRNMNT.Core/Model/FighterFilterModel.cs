@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TRNMNT.Web.Core.Model
+namespace TRNMNT.Core.Model
 {
     public class FighterFilterModel 
     {
