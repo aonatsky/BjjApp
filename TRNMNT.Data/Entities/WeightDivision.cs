@@ -21,5 +21,8 @@ namespace TRNMNT.Data.Entities
         public virtual ICollection<Fighter> Fighters {get;set;}
         [JsonIgnore]
         public virtual ICollection<Participant> Participants { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Bracket> Brackets { get; set; }
     }
 }

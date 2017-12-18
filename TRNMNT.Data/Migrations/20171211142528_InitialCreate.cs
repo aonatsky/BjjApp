@@ -454,6 +454,75 @@ namespace TRNMNT.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+
+            migrationBuilder.CreateTable(
+                name: "Bracket",
+                columns: table => new
+                {
+                    BracketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WeightDivisionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bracket", x => x.BracketId);
+                    table.ForeignKey(
+                        name: "FK_Bracket_WeightDivision_WeightDivisionId",
+                        column: x => x.WeightDivisionId,
+                        principalTable: "WeightDivision",
+                        principalColumn: "WeightDivisionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Round",
+                columns: table => new
+                {
+                    RoundId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BracketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SecondParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    WinnerParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    NextRoundId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Round", x => x.RoundId);
+                    table.ForeignKey(
+                        name: "FK_Round_Bracket_BracketId",
+                        column: x => x.BracketId,
+                        principalTable: "Bracket",
+                        principalColumn: "BracketId",
+                        onDelete: ReferentialAction.Restrict);
+
+                    table.ForeignKey(
+                        name: "FK_Round_Participant_FirstParticipantId",
+                        column: x => x.FirstParticipantId,
+                        principalTable: "Participant",
+                        principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Restrict);
+
+                    table.ForeignKey(
+                        name: "FK_Round_Participant_SecondParticipantId",
+                        column: x => x.SecondParticipantId,
+                        principalTable: "Participant",
+                        principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Restrict);
+
+                    table.ForeignKey(
+                        name: "FK_Round_Participant_WinnerParticipantId",
+                        column: x => x.WinnerParticipantId,
+                        principalTable: "Participant",
+                        principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Restrict);
+
+                    table.ForeignKey(
+                        name: "FK_Round_Round_NextRoundId",
+                        column: x => x.NextRoundId,
+                        principalTable: "Round",
+                        principalColumn: "RoundId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
