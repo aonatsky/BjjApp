@@ -1,8 +1,6 @@
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using TRNMNT.Data.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TRNMNT.Data.Context

@@ -1,23 +1,27 @@
 using System;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Services;
-using TRNMNT.Web.Core.Services;
-using TRNMNT.Web.Const;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
+using TRNMNT.Web.Const;
 
 namespace TRNMNT.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        public HomeController(ILogger<HomeController> logger, 
+        #region Public Methods
+
+        public HomeController(ILogger<HomeController> logger,
             IUserService userService,
             IEventService eventService,
             IAppDbContext context
-            ) : base(logger, userService, eventService, context)
-        {
-        }
+            ) : base(logger, userService, eventService, context) { }
+
+        #endregion
+
+        #region Public Methods
+
         public IActionResult Index()
         {
             try
@@ -42,7 +46,7 @@ namespace TRNMNT.Web.Controllers
             {
                 return AppConstants.PageUrlDefault;
             }
-            
+
         }
 
         public IActionResult Error()
@@ -57,5 +61,7 @@ namespace TRNMNT.Web.Controllers
                 return null;
             }
         }
+
+        #endregion
     }
 }

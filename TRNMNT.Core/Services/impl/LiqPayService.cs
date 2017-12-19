@@ -1,78 +1,97 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
-using TRNMNT.Core.Model;
-using TRNMNT.Data.Entities;
-using TRNMNT.Core.Helpers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using TRNMNT.Core.Helpers.Interface;
+using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
+using TRNMNT.Data.Entities;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Impl
 {
     public class LiqPayService : IPaymentService
     {
+        #region Dependencies
+
+        private readonly IConfiguration _configuration;
+        private readonly IPaidServiceFactory _paidServiceFactory;
+        private readonly IParticipantService _participantService;
+        private readonly ITeamService _teamService;
+        private readonly IOrderService _orderService;
+        private readonly ILogger _logger;
+
+        #endregion
+
+        #region Properties
+
         private string publicKey = "";
         private string privateKey = "";
-        private IConfiguration configuration;
-        private readonly IPaidServiceFactory paidServiceFactory;
-        private IParticipantService participantService;
-        private ITeamService teamService;
-        private IOrderService orderService;
-        private readonly ILogger logger;
+
+        #endregion
+
+        #region .ctor
 
         public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IOrderService orderService, ILogger logger)
         {
-            this.configuration = configuration;
-            this.paidServiceFactory = paidServiceFactory;
-            this.orderService = orderService;
-            this.logger = logger;
+            _configuration = configuration;
+            _paidServiceFactory = paidServiceFactory;
+            _orderService = orderService;
+            _logger = logger;
         }
 
+        #endregion
+
+        #region Public Methods
+        
         public async Task ConfirmPaymentAsync(PaymentDataModel dataModel)
         {
             if (dataModel.Signature == GetSignature(dataModel.Data))
             {
                 try
                 {
-                    JObject jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
+                    var jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
                     var paymentReference = jsonData["payment_id"].ToString();
                     var orderId = jsonData["order_id"].ToString();
                     var status = jsonData["status"].ToString();
-                    logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
+                    _logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
 
                     if (status == "success" || status == "sandbox")
                     {
-                        var order = await orderService.GetOrder(Guid.Parse(orderId));
+                        var order = await _orderService.GetOrderAsync(Guid.Parse(orderId));
                         if (order != null)
                         {
-                            await orderService.ApproveOrderAsync(order.OrderId, paymentReference);
-                            var service = paidServiceFactory.GetService(order.OrderTypeId);
+                            await _orderService.ApproveOrderAsync(order.OrderId, paymentReference);
+                            var service = _paidServiceFactory.GetService(order.OrderTypeId);
                             await service.ApproveEntityAsync(Guid.Parse(order.Reference), order.OrderId);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex.Message);
+                    _logger.LogError(ex.Message);
                 }
 
             }
-            logger.LogError("Signature declined");
+            _logger.LogError("Signature declined");
         }
 
         public PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl)
         {
             var encodedData = EncodeData(order, callbackUrl);
             var encodedsignature = GetSignature(encodedData);
-            return new PaymentDataModel()
+            return new PaymentDataModel
             {
                 Data = encodedData,
                 Signature = encodedsignature
             };
         }
 
+        #endregion
+
+        #region Private Methods
 
         private string GetSignature(string encodedData)
         {
@@ -82,17 +101,19 @@ namespace TRNMNT.Core.Services
 
         private string EncodeData(Order order, string callbackUrl)
         {
-            var jsonData = new JObject();
-            jsonData["version"] = 3;
-            jsonData["public_key"] = publicKey;
-            jsonData["action"] = "pay";
-            jsonData["amount"] = order.Amount;
-            jsonData["currency"] = order.Currency;
-            jsonData["description"] = "Sport Event Participation";
-            jsonData["order_id"] = order.OrderId.ToString();
-            jsonData["expired_date"] = "2017-10-24 00:00:00";
-            jsonData["sandbox"] = "1";
-            jsonData["result_url"] = callbackUrl;
+            var jsonData = new JObject
+            {
+                ["version"] = 3,
+                ["public_key"] = publicKey,
+                ["action"] = "pay",
+                ["amount"] = order.Amount,
+                ["currency"] = order.Currency,
+                ["description"] = "Sport Event Participation",
+                ["order_id"] = order.OrderId.ToString(),
+                ["expired_date"] = "2017-10-24 00:00:00",
+                ["sandbox"] = "1",
+                ["result_url"] = callbackUrl
+            };
             return GetBase64EncodedData(jsonData.ToString());
         }
 
@@ -106,5 +127,6 @@ namespace TRNMNT.Core.Services
             return Encoding.UTF8.GetString(Convert.FromBase64String(data));
         }
 
+        #endregion
     }
 }

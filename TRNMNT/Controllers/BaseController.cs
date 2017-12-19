@@ -1,39 +1,46 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
-using TRNMNT.Core.Services;
-using TRNMNT.Data.Entities;
-using System.Threading.Tasks;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Mvc.Filters;
-using TRNMNT.Data.Context;
 using System.Net;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using TRNMNT.Core.Services.Interface;
+using TRNMNT.Data.Context;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Web.Controllers
 {
     public class BaseController : Controller
     {
-        private ILogger logger;
-        private IUserService userService;
-        private IEventService eventService;
-        private readonly IAppDbContext context;
-        protected JsonSerializerSettings jsonSerializerSettings;
+        #region Dependencies
 
-        private Guid? eventId;
-        private Guid? federationId;
-        private User user;
+        private readonly ILogger _logger;
+        private readonly IUserService _userService;
+        private readonly IEventService _eventService;
+        private readonly IAppDbContext _context;
+        protected JsonSerializerSettings JsonSerializerSettings;
+
+        #endregion
+
+        #region Properties
+
+        private Guid? _eventId;
+        private Guid? _federationId;
+        private User _user;
+
+        #endregion
 
         public BaseController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context)
         {
-            this.logger = logger;
-            this.userService = userService;
-            this.eventService = eventService;
-            this.context = context;
-            jsonSerializerSettings = new JsonSerializerSettings
+            _logger = logger;
+            _userService = userService;
+            _eventService = eventService;
+            _context = context;
+            JsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore // ignore null values
@@ -41,21 +48,20 @@ namespace TRNMNT.Web.Controllers
         }
         protected void HandleException(Exception ex)
         {
-            logger.LogError(ex.Message);
+            _logger.LogError(ex.Message);
         }
 
         protected async Task<User> GetUserAsync()
         {
-            if (user == null)
+            if (_user == null)
             {
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
                 if (userIdClaim != null)
                 {
-                    user = await userService.GetUserAsync(userIdClaim.Value);
+                    _user = await _userService.GetUserAsync(userIdClaim.Value);
                 }
-
             }
-            return user;
+            return _user;
         }
 
         private async Task ParseEventSubdomain()
@@ -65,10 +71,10 @@ namespace TRNMNT.Web.Controllers
             {
                 var eventSubdomain = fullAddress[0];
                 var host = fullAddress[1];
-                var eventId = await eventService.GetEventIdAsync(eventSubdomain);
+                var eventId = await _eventService.GetEventIdAsync(eventSubdomain);
                 if (eventId != null)
                 {
-                    this.eventId = eventId;
+                    _eventId = eventId;
                 }
                 else
                 {
@@ -77,18 +83,18 @@ namespace TRNMNT.Web.Controllers
             }
 
             //hadrcoded federationid
-            federationId = new Guid("673ea3ce-2530-48c0-b84c-a3de492cab25");
+            _federationId = new Guid("673ea3ce-2530-48c0-b84c-a3de492cab25");
 
         }
 
         protected Guid? GetEventId()
         {
-            return eventId;
+            return _eventId;
         }
 
         protected Guid? GetFederationId()
         {
-            return federationId;
+            return _federationId;
         }
 
 
@@ -101,30 +107,21 @@ namespace TRNMNT.Web.Controllers
 
         #region Protected Methods
 
-        protected async Task<IActionResult> HandleRequestAsync(Func<Task> action)
+        protected IActionResult HandleRequest(Action action)
         {
-            try
-            {
-                await action();
-                await context.SaveAsync();
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
-        }
-
-        protected async Task<IActionResult> HandleRequestAsync(Action action, bool checkEventId = false, bool checkFederationId = false)
-        {
-
-            try
+            return HandleRequest(() =>
             {
                 action();
-                await context.SaveAsync();
-                return Ok();
+                return HttpStatusCode.OK;
+            });
+        }
 
+        protected IActionResult HandleRequest(Func<HttpStatusCode> action)
+        {
+            try
+            {
+                var code = action();
+                return StatusCode((int)code);
             }
             catch (Exception e)
             {
@@ -133,19 +130,84 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-      
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestAsync(Func<Task<HttpStatusCode>> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
-                if ((checkEventId && !eventId.HasValue) || (checkFederationId && !federationId.HasValue))
+                if ((checkEventId && !_eventId.HasValue) || (checkFederationId && !_federationId.HasValue))
+                {
+                    return NotFound();
+                }
+                var code = await action();
+                if (code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)code);
+                }
+                await _context.SaveAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        protected async Task<IActionResult> HandleRequestAsync(Func<Task> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await action();
+                return HttpStatusCode.OK;
+            }, checkEventId, checkFederationId);
+        }
+
+        protected async Task<IActionResult> HandleRequestAsync(Func<HttpStatusCode> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if ((checkEventId && !_eventId.HasValue) || (checkFederationId && !_federationId.HasValue))
+                {
+                    return NotFound();
+                }
+                var code = action();
+                if (code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)code);
+                }
+                await _context.SaveAsync();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        protected async Task<IActionResult> HandleRequestAsync(Action action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestAsync(() =>
+            {
+                action();
+                return HttpStatusCode.OK;
+            }, checkEventId, checkFederationId);
+        }
+      
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<(T Response, HttpStatusCode Code)>> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if (checkEventId && !_eventId.HasValue || checkFederationId && !_federationId.HasValue)
                 {
                     return NotFound();
                 }
                 var result = await action();
-                await context.SaveAsync();
-                return Ok(result);
-
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
+                await _context.SaveAsync();
+                return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
             catch (Exception e)
             {
@@ -153,19 +215,27 @@ namespace TRNMNT.Web.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
+      
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<T>> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestWithDataAsync(async () => (await action(), HttpStatusCode.OK), checkEventId, checkFederationId);
+        }
 
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<T> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<(T Response, HttpStatusCode Code)> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
-                if ((checkEventId && !eventId.HasValue) || (checkFederationId && !federationId.HasValue))
+                if (checkEventId && !_eventId.HasValue || checkFederationId && !_federationId.HasValue)
                 {
                     return NotFound();
                 }
                 var result = action();
-                await context.SaveAsync();
-                return Ok(result);
-
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
+                await _context.SaveAsync();
+                return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
             catch (Exception e)
             {
@@ -175,8 +245,21 @@ namespace TRNMNT.Web.Controllers
         }
 
 
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<T> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            return await HandleRequestWithDataAsync(() => (action(), HttpStatusCode.OK), checkEventId, checkFederationId);
+        }
+
+        protected (object, HttpStatusCode) NotFoundResponse()
+        {
+            return (null, HttpStatusCode.NotFound);
+        }
+
+        protected (T, HttpStatusCode) Success<T>(T value)
+        {
+            return (value, HttpStatusCode.OK);
+        }
 
         #endregion
-
     }
 }

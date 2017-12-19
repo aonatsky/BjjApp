@@ -1,43 +1,46 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 
-
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Impl
 {
     public class PromoCodeService : IPromoCodeService
     {
-        private IRepository<PromoCode> promoCodeRepository;
-        
+        #region Dependencies
+
+        private readonly IRepository<PromoCode> _promoCodeRepository;
+
+        #endregion
+
+        #region .ctor
 
         public PromoCodeService(IRepository<PromoCode> promoCodeRepository)
         {
-            this.promoCodeRepository = promoCodeRepository;
+            _promoCodeRepository = promoCodeRepository;
         }
 
+        #endregion
+
+        #region Public Methods
 
         public async Task<bool> ValidateCodeAsync(Guid eventId, string code, string burntBy)
         {
-            var promoCode = await promoCodeRepository.GetAll().Where(pc => pc.IsActive && pc.Code.Equals(code) && pc.EventId == eventId).FirstOrDefaultAsync();
+            var promoCode = await _promoCodeRepository.GetAll().Where(pc => pc.IsActive && pc.Code.Equals(code) && pc.EventId == eventId).FirstOrDefaultAsync();
             if (promoCode != null)
             {
                 promoCode.BurntBy = burntBy;
                 promoCode.IsActive = false;
                 promoCode.UpdateTs = DateTime.UtcNow;
-                promoCodeRepository.Update(promoCode);
+                _promoCodeRepository.Update(promoCode);
                 return true;
             }
-            else if (await promoCodeRepository.GetAll().Where(pc => !pc.IsActive && pc.Code.Equals(code) && pc.EventId == eventId && pc.BurntBy.Equals(burntBy)).AnyAsync())
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return await _promoCodeRepository.GetAll().Where(pc => !pc.IsActive && pc.Code.Equals(code) && pc.EventId == eventId && pc.BurntBy.Equals(burntBy)).AnyAsync();
         }
+
+        #endregion
     }
 }

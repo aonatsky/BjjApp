@@ -1,12 +1,12 @@
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Data.Context;
-using System;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
 
-namespace TRNMNT.Data.Repositories
+namespace TRNMNT.Data.Repositories.Impl
 {
 
     public class Repository<T> : IRepository<T> where T : class
@@ -91,8 +91,8 @@ namespace TRNMNT.Data.Repositories
         public IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties)
         {
 
-            IQueryable<T> queryable = GetAll();
-            foreach (Expression<Func<T, object>> includeProperty in includeProperties)
+            var queryable = GetAll();
+            foreach (var includeProperty in includeProperties)
             {
 
                 queryable = queryable.Include<T, object>(includeProperty);

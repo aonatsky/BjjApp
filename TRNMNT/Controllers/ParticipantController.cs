@@ -1,14 +1,14 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using TRNMNT.Core.Services;
 using System.Net;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Participant;
+using TRNMNT.Core.Services;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
 
@@ -19,10 +19,15 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class ParticipantController : BaseController
     {
-        private IParticipantService participantService;
-        private IEventService eventService;
-        private IParticipantRegistrationService participantRegistrationService;
+        #region Dependencies
 
+        private readonly IParticipantService _participantService;
+        private readonly IEventService _eventService;
+        private readonly IParticipantRegistrationService _participantRegistrationService;
+
+        #endregion
+
+        #region .ctor
         public ParticipantController(IEventService eventService,
             ILogger<TeamController> logger,
             IUserService userService,
@@ -34,12 +39,14 @@ namespace TRNMNT.Web.Controllers
             : base(logger, userService, eventService, context)
         {
 
-            this.participantService = participantService;
-            this.participantRegistrationService = participantRegistrationService;
-            this.eventService = eventService;
+            _participantService = participantService;
+            _participantRegistrationService = participantRegistrationService;
+            _eventService = eventService;
         }
 
-
+        #endregion
+        
+        #region Public Methods
 
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> IsParticipantExist([FromBody]ParticipantRegistrationModel model)
@@ -48,13 +55,10 @@ namespace TRNMNT.Web.Controllers
             {
                 if (GetEventId() != null)
                 {
-                    var result = await participantService.IsParticipantExistsAsync(model, GetEventId().Value);
-                    return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                    var result = await _participantService.IsParticipantExistsAsync(model, GetEventId().Value);
+                    return Ok(JsonConvert.SerializeObject(result, JsonSerializerSettings));
                 }
-                else
-                {
-                    return NotFound();
-                }
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -72,16 +76,11 @@ namespace TRNMNT.Web.Controllers
                 if (eventId != null)
                 {
                     var user = await GetUserAsync();
-                    var callbackUrl = $"{Request.Host.ToString()}{Url.Action("ConfirmPayment","Payment")}";
-                    var result = await participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl);
-                    return Ok(JsonConvert.SerializeObject(result, jsonSerializerSettings));
+                    var callbackUrl = $"{Request.Host}{Url.Action("ConfirmPayment", "Payment")}";
+                    var result = await _participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl);
+                    return Ok(JsonConvert.SerializeObject(result, JsonSerializerSettings));
                 }
-                else
-                {
-                    return NotFound();
-                }
-
-
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -105,6 +104,7 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+        #endregion
     }
 }
 

@@ -1,16 +1,12 @@
 using System;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using TRNMNT.Data.Entities;
-using TRNMNT.Core.Services;
 using System.Net;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
-using System.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model.Event;
-using Microsoft.AspNetCore.Mvc.Filters;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
 
@@ -21,84 +17,63 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class EventController : BaseController 
     {
-        private IEventService eventService;
+        #region Dependencies
 
-        public EventController(IEventService eventService, ILogger<EventController> logger,  IUserService userService, IAppDbContext context ) : base(logger, userService, eventService, context)
+        private readonly IEventService _eventService;
+
+        #endregion
+
+        #region .ctor
+
+        public EventController(IEventService eventService, ILogger<EventController> logger, IUserService userService, IAppDbContext context) : base(logger, userService, eventService, context)
         {
-            this.eventService = eventService;
+            _eventService = eventService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModelFull eventModel)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestAsync(async () =>
             {
                 if (await CheckEventOwnerAsync(eventModel.EventId))
                 {
-                    await eventService.UpdateEventAsync(eventModel);
-                    return Ok();
+                    await _eventService.UpdateEventAsync(eventModel);
+                    return HttpStatusCode.OK;
                 }
-                else
-                {
-                    return Unauthorized();
-                }
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
+                return HttpStatusCode.Unauthorized;
+            });
         }
 
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEvent(Guid id)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
-                var eventModel = await eventService.GetFullEventAsync(id);
+                var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
                 {
-                    var jsonobj = JsonConvert.SerializeObject(eventModel, jsonSerializerSettings);
-                    return Ok(jsonobj);
+                    return Success(eventModel);
                 }
-                else
-                {
-                    return new StatusCodeResult((int)HttpStatusCode.NotFound);
-                }
-                
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
+                return NotFoundResponse();
+            });
         }
 
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEventBaseInfo(Guid id)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
-                var eventModel = await eventService.GetFullEventAsync(id);
+                var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
                 {
-                    var jsonobj = JsonConvert.SerializeObject(eventModel, jsonSerializerSettings);
-                    return Ok(jsonobj);
+                    return Success(eventModel);
                 }
-                else
-                {
-                    return new StatusCodeResult((int)HttpStatusCode.NotFound);
-                }
-
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
+                return NotFoundResponse();
+            });
         }
 
 
@@ -109,7 +84,7 @@ namespace TRNMNT.Web.Controllers
             try
             {
 
-                var events = await eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
+                var events = await _eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
                 return events.ToArray();
 
             }
@@ -124,136 +99,87 @@ namespace TRNMNT.Web.Controllers
         [AllowAnonymous, HttpGet("[action]")]
         public async Task<IActionResult> GetEventInfo()
         {
-            return await HandleRequestWithDataAsync(async () =>
-            {
-                return JsonConvert.SerializeObject(await eventService.GetEventInfoAsync(GetEventId().Value), jsonSerializerSettings);
-                //return Ok(jsonobj);
-            }, true);
+            return await HandleRequestWithDataAsync(async () => (await _eventService.GetEventInfoAsync(GetEventId()), HttpStatusCode.OK), true);
         }
 
         [Authorize, HttpGet("[action]")]
-        public async Task IsPrefixExists(string prefix)
+        public async Task<IActionResult> IsPrefixExists(string prefix)
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
-            try
+            return await HandleRequestAsync(async () =>
             {
-                if (await eventService.IsEventUrlPrefixExist(prefix))
+                if (await _eventService.IsEventUrlPrefixExistAsync(prefix))
                 {
-                    Response.StatusCode = (int)HttpStatusCode.Found;
+                    return HttpStatusCode.Found;
                 }
-                else
-                {
-                    Response.StatusCode = (int)HttpStatusCode.OK;
-                }
-
-
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(e);
-            }
+                return HttpStatusCode.OK;
+            });
         }
 
 
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventImage(IFormFile file, string id)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventImageAsync(stream, id);
+                    await _eventService.SaveEventImageAsync(stream, id);
                 }
-                return Ok();
-
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            };
+            });
         }
 
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventTnc(IFormFile file, string id)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventTncAsync(stream, id, file.FileName);
-
+                    await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
-                return Ok();
-            }
-
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            };
+            });
         }
 
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadPromoCodeList(IFormFile file, string id)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 using (var stream = file.OpenReadStream())
                 {
-                    await eventService.SaveEventTncAsync(stream, id, file.FileName);
+                    await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
-                return Ok();
-            }
-
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            };
+            });
         }
 
         [Authorize, HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetPrice(string eventId)
         {
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
                 var user = await GetUserAsync();
-                var price = eventService.GetPrice(Guid.Parse(eventId), user.Id);
-                return Ok(price);
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
+                var price = _eventService.GetPriceAsync(Guid.Parse(eventId), user.Id);
+                return price;
+            });
         }
 
 
         [Authorize, HttpGet("[action]")]
         public async Task<IActionResult> CreateEvent()
         {
-            return await HandleRequestWithDataAsync(async () =>
-            {
-            return JsonConvert.SerializeObject(eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value ), jsonSerializerSettings);
-            }, false, true);
+            return await HandleRequestWithDataAsync(async () => _eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), false, true);
         }
 
-        #region helpers
+
+        #endregion
+        
+        #region Private Methods
+
         private async Task<bool> CheckEventOwnerAsync(Guid eventId)
         {
             var user = await GetUserAsync();
-            var eventOwner = await eventService.GetEventOwnerIdAsync(eventId);
-            if (eventOwner != "" && user.Id == eventOwner)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var eventOwner = await _eventService.GetEventOwnerIdAsync(eventId);
+            return !string.IsNullOrEmpty(eventOwner) && user.Id == eventOwner;
         }
 
         #endregion  
