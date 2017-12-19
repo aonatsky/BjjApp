@@ -5,7 +5,7 @@ $theme_orange_light: #FFAEA3;
 $theme_grey: #F3F3F3;
 $theme_black: #3c3c3c;
 $theme_body_color: #f8f8f8;
-$theme_font_family: x   'Proxima Nova', Georgia, sans-serif;
+$theme_font_family: x 'Proxima Nova', Georgia, sans-serif;
 
 
 
@@ -16,15 +16,9 @@ $content_padding_top: 30px;
 $header_height: 50px;
 
 
-@function get-vw($target) {
-    $vw-context: (1000*.01) * 1px;
-    @return ($target/$vw-context) * 1vw;
-}
-
 
 body {
     margin: 0px;
-    overflow: hidden;
 
     .content {
         padding-top: $content_padding_top
@@ -123,12 +117,12 @@ body {
                 height: 40px;
             }
 
-            .ui-state-default{
-                .ui-tabview-title:hover{
-                    color:$theme_orange;
+            .ui-state-default {
+                .ui-tabview-title:hover {
+                    color: $theme_orange;
                 }
             }
-            
+
             .ui-tabview-selected {
 
 
@@ -138,6 +132,38 @@ body {
                     border-radius: 5px, 5px
                 }
             }
+        }
+    }
+
+    .disabled {
+        position: relative;
+
+        .modal {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 100;
+            background-color: white;
+            opacity: 0.8;
+            line-height: 45%;
+
+            span {
+                position: absolute;
+                top: 45%;
+                left: 45%;
+                color: lighten(black,50%);
+            }
+        }
+    }
+
+    .step-title {
+        padding: 20px;
+
+
+        span {
+            text-align: center;
+            font-weight: bold;
+            margin:auto;
         }
     }
 }

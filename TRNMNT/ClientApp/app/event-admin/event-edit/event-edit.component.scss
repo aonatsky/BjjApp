@@ -1,16 +1,26 @@
 ﻿
 
 .ui-steps .ui-steps-item {
-    width: 33.3%
+    width: 25%
 }
 
 
-body {
-    event-edit {
-        .content {
-            padding-top: 0px;
-            height: 73vh;
-            overflow: auto;
-        }
+.price-column {
+    border-right: 1px solid grey;
+
+    &:last-child {
+        border-right: 0px;
+    }
+
+    .ui-inputtext {
+        margin: 0 10%;
+        width: 80%;
+    }
+
+
+    label {
+        margin: 10% 0;
+        width: 100%;
+        text-align: center;
     }
 }
