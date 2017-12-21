@@ -10,6 +10,7 @@ import { EventEditComponent } from './event-edit/event-edit.component'
 import { CategoryComponent } from './event-edit/category.component'
 import { eventAdminRoutes } from './event-admin.routing'
 import { EventManagementComponent } from "./event-management/event-management.component";
+import { CategoryEditComponent } from "./event-edit/category-edit/category-edit.component";
 
 
 @NgModule({
@@ -24,13 +25,14 @@ import { EventManagementComponent } from "./event-management/event-management.co
         EventOverviewComponent,
         EventEditComponent,
         CategoryComponent,
-        EventManagementComponent
+        EventManagementComponent,
+        CategoryEditComponent
     ],
 
     providers: [],
 
     exports: [
-       
+
     ]
 })
 

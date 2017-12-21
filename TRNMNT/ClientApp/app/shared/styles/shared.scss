@@ -1,19 +1,4 @@
-﻿$theme_red: #d30101;
-$theme_green: #66d33f;
-$theme_orange: #FE1600;
-$theme_orange_light: #FFAEA3;
-$theme_grey: #F3F3F3;
-$theme_black: #3c3c3c;
-$theme_body_color: #f8f8f8;
-$theme_font_family: x 'Proxima Nova', Georgia, sans-serif;
-
-
-
-
-$screen_width_vw: 100vw;
-$container_width: 750px;
-$content_padding_top: 30px;
-$header_height: 50px;
+﻿@import "variables.scss";
 
 
 
@@ -55,7 +40,8 @@ body {
             position: absolute;
             border-color: $theme_orange;
             border-width: 2px;
-            width: $screen_width_vw;
+            width: 100%;
+            box-sizing: border-box;
             top: $header_height + $content_padding_top + 15px;
         }
 
@@ -163,7 +149,8 @@ body {
         span {
             text-align: center;
             font-weight: bold;
-            margin:auto;
+            margin: auto;
+            font-size: 1.5em;
         }
     }
 }

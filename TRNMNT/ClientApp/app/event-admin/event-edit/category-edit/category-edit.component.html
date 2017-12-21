@@ -1,0 +1,34 @@
+﻿<div class="ui-g">
+    <div class="ui-g-3">
+        <button pButton type="button" (click)="addCategory()" label="Add Category"></button>
+    </div>
+</div>
+<div class="ui-g category" *ngFor="let category of categories;">
+    <label class="category-name">{{category.name}}</label>
+    <div class="ui-g">
+        
+        <!--<i class="fa fa-clock-o" aria-hidden="true"></i>-->
+        <div class="ui-g-4"><label>test</label></div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="display"
+          [modal]="true"
+          [draggable] ="false"
+          [resizable]="false"
+          [showHeader] ="true"
+          [width] = "500"
+          >
+    <div class="ui-g">
+        <div class="ui-g-3">
+            <label>Round Time</label>
+        </div>
+        <div class="ui-g-3">
+            <input pInputText />
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-offset-4 ui-g-4 ui-fluid"><button pButton type="button" label="Save" (disabled)="true"></button></div>
+        <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Delete" [disabled]="true"></button></div>
+    </div>
+</p-dialog>

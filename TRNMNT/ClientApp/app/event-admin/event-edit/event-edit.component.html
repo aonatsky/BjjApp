@@ -139,12 +139,17 @@
         </div>-->
 
         <div *ngIf="currentStep==2">
-            <div class="category-list">
+            <div class="ui-g step-title">
+                <span>Categories</span>
+            </div>
+            <category-edit [categories]="eventModel.categoryModels">
+            </category-edit>
+            <!--<div class="category-list">
                 <div class="ui-g">
                     <category #categoryList *ngFor="let category of eventModel.categoryModels;" [category]="category" (onCategoryDelete)="categoryDelete($event)" class="ui-g-12"></category>
                 </div>
                 <div class="ui-g"><button pButton type="button" class="ui-button-icon-left" icon="fa-plus" label="Add category" (click)="categoryCreate()"></button></div>
-            </div>
+            </div>-->
         </div>
 
         <div *ngIf="currentStep==3" class="">
