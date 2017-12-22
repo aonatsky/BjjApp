@@ -44,12 +44,12 @@ export class EventEditComponent implements OnInit {
 
     private initData() {
         this.route.params.subscribe(p => {
-            let id = p["id"];
-            if (id && id != "") {
+            let id = p['id'];
+            if (id && id != '') {
                 this.eventService.getEvent(id).subscribe(r => { this.eventModel = r });
                 this.isNew = false;
             } else {
-                alert("No data to display")
+                alert('No data to display');
             }
         })
     }
@@ -59,9 +59,14 @@ export class EventEditComponent implements OnInit {
             label: 'General Information',
         },
         {
-            label: 'Rules/Categories',
+            label: 'Prices',
         },
-        
+        {
+            label: 'Categories'
+        },
+        {
+            label: 'Additional Information'
+        }
         ];
     }
 

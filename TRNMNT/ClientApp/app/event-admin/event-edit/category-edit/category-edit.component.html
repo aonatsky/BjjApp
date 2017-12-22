@@ -4,21 +4,36 @@
     </div>
 </div>
 <div class="ui-g category" *ngFor="let category of categories;">
-    <label class="category-name">{{category.name}}</label>
-    <div class="ui-g">
-        
-        <!--<i class="fa fa-clock-o" aria-hidden="true"></i>-->
-        <div class="ui-g-4"><label>test</label></div>
+    <div class="ui-g-12 category-name">
+        {{category.name}}
+    </div>
+    <div class="ui-g-12 ui-g-nopad">
+        <div class="ui-g-3"><label class="field-title"><b>Round Time:</b></label></div>
+        <div class="ui-g-2"><label >{{category.roundTime | minuteSeconds}}</label></div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad">
+        <div class="ui-g-3">
+            <label class="field-title"><b>Wight Divisons:</b></label>
+        </div>
+        <div class="ui-g-9 ">
+            <div class="ui-g-4 ui-g-nopad" *ngFor="let wd of category.weightDivisionModels">
+                <label>{{wd.name}}</label>
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="float-right">
+            <button pButton type="button" iconPos="left" icon="fa-pencil" (click)="addCategory()" label="Edit"></button>
+        </div>
     </div>
 </div>
 
 <p-dialog [(visible)]="display"
           [modal]="true"
-          [draggable] ="false"
+          [draggable]="false"
           [resizable]="false"
-          [showHeader] ="true"
-          [width] = "500"
-          >
+          [showHeader]="true"
+          [width]="500">
     <div class="ui-g">
         <div class="ui-g-3">
             <label>Round Time</label>

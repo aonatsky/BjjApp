@@ -349,6 +349,7 @@ namespace TRNMNT.Core.Services.Impl
                 {
                     CategoryId = category.CategoryId.ToString(),
                     Name = category.Name,
+                    RoundTime = category.RoundTime,
                     WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions),
                     EventId = category.EventId
                 }));

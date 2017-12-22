@@ -39,6 +39,8 @@ import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, Aut
 
 import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
+import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
+
 
 @NgModule({
     imports: [
@@ -58,10 +60,10 @@ import { RedirectGuard } from './routing/redirect.guard';
         CalendarModule,
         InputTextareaModule,
         AutoCompleteModule,
-        CheckboxModule
+        CheckboxModule,
     ],
     declarations: [
-
+        MinuteSecondsPipe
     ],
 
     providers: [
@@ -104,7 +106,8 @@ import { RedirectGuard } from './routing/redirect.guard';
         FileUploadModule,
         AutoCompleteModule,
         CheckboxModule,
-        TabViewModule
+        TabViewModule,
+        MinuteSecondsPipe
     ]
 })
 export class CoreModule { }

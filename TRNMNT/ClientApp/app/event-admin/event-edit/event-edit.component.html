@@ -2,9 +2,6 @@
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
     <div class="ui-g-8 ui-g-offset-2" *ngIf="eventModel">
         <div *ngIf="currentStep==0" class="">
-            <div class="ui-g step-title">
-                <span>General Information</span>
-            </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Title</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>
@@ -75,10 +72,6 @@
 
         </div>
         <div *ngIf="currentStep==1">
-            <div class="ui-g step-title">
-                <span>Prices</span>
-            </div>
-
             <div class="ui-g">
                 <div class="ui-g-3 ui-g-offset-3 price-column"><label>Standard</label></div>
                 <div class="ui-g-3 price-column"><label>Members</label></div>
@@ -139,9 +132,6 @@
         </div>-->
 
         <div *ngIf="currentStep==2">
-            <div class="ui-g step-title">
-                <span>Categories</span>
-            </div>
             <category-edit [categories]="eventModel.categoryModels">
             </category-edit>
             <!--<div class="category-list">
