@@ -13,7 +13,7 @@ export class CategoryService {
     }
 
     public getCategories(eventId: string): Observable<CategoryModel[]> {
-        let params: SearchParams[] = [{ name: "eventId", value: eventId }];
+        let params = { eventId: eventId };
         return this.httpService.get(ApiMethods.category.category, params).map(res => this.httpService.getArray<CategoryModel>(res));
     }
 

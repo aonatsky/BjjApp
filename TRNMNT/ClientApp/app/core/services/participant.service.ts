@@ -22,7 +22,7 @@ export class ParticipantService {
     }
 
     public getParticipantsTableModel(id: string): Observable<any> {
-        let params: SearchParams[] = [{ name: "eventId", value: id }];
+        let params = { eventId: id };
         return this.httpService.get(ApiMethods.participant.participantsTable, params).map(r => this.httpService.getJson(r));
     }
 
