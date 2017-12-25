@@ -15,11 +15,16 @@ body {
         background-color: $bg_color;
 
 
+
+        .fa {
+            background-color: transparent;
+        }
+
         &:enabled {
             background-color: $bg_color;
 
             &:hover {
-                background-color: darken($bg_color,10%)
+                background-color: darken($bg_color,10%);
             }
         }
 
@@ -31,6 +36,7 @@ body {
     .ui-fileupload:hover {
         background-color: darken($theme_black,10%)
     }
+
 
     .ui-steps {
         /*pointer-events: none;*/
@@ -61,7 +67,6 @@ body {
                     top: 0;
                     margin-bottom: 0;
                 }
-
             }
         }
 
@@ -87,8 +92,18 @@ body {
         float: left;
         margin-top: 0.5em;
 
-        &.field-title{
-            float:right;
+        &.field-title {
+            float: right;
+        }
+    }
+
+
+    .ui-dialog {
+        border-radius: 0;
+
+        .ui-dialog-titlebar {
+            padding: 0.5em;
+            border: 0px;
         }
     }
 
@@ -149,6 +164,17 @@ body {
             font-weight: bold;
             margin: auto;
             font-size: 1.5em;
+        }
+    }
+
+    .ui-chkbox {
+        margin-top: 0.5em;
+
+        .ui-chkbox-box {
+            &.ui-state-active {
+                border-color: $theme_black;
+                background-color: $theme_black;
+            }
         }
     }
 }

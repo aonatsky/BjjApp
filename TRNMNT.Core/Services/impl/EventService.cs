@@ -79,7 +79,8 @@ namespace TRNMNT.Core.Services.Impl
                     category = new Category
                     {
                         Name = categoryModel.Name,
-                        EventId = categoryModel.EventId,
+                        EventId = _event.EventId,
+                        RoundTime = categoryModel.RoundTime,
                         CategoryId = Guid.NewGuid()
                     };
                     _categoryRepository.Add(category);
@@ -115,8 +116,8 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<EventModelFull> GetFullEventAsync(Guid id)
         {
-            var _event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
-            return _event != null ? GetEventModel(_event) : null;
+            var @event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
+            return @event != null ? GetEventModel(@event) : null;
         }
 
         public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId)
@@ -284,33 +285,33 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Helpers
 
-        private EventModelFull GetEventModel(Event _event)
+        private EventModelFull GetEventModel(Event @event)
         {
             return new EventModelFull
             {
-                EventId = _event.EventId,
-                EventDate = _event.EventDate,
-                AdditionalData = _event.AdditionalData,
-                Address = _event.Address,
-                ContactEmail = _event.ContactEmail,
-                Description = _event.Description,
-                ImgPath = _event.ImgPath,
-                TNCFilePath = _event.TNCFilePath,
-                ContactPhone = _event.ContactPhone,
-                Title = _event.Title,
-                FBLink = _event.FBLink,
-                RegistrationEndTS = _event.RegistrationEndTS,
-                RegistrationStartTS = _event.RegistrationStartTS,
-                UrlPrefix = _event.UrlPrefix,
-                VKLink = _event.VKLink,
-                EarlyRegistrationEndTS = _event.EarlyRegistrationEndTS,
-                EarlyRegistrationPrice = _event.EarlyRegistrationPrice,
-                EarlyRegistrationPriceForMembers = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPrice = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPriceForMembers = _event.LateRegistrationPriceForMembers,
-                PromoCodeEnabled = _event.PromoCodeEnabled,
-                PromoCodeListPath = _event.PromoCodeListPath,
-                CategoryModels = GetCategoryModels(_event.Categories)
+                EventId = @event.EventId,
+                EventDate = @event.EventDate,
+                AdditionalData = @event.AdditionalData,
+                Address = @event.Address,
+                ContactEmail = @event.ContactEmail,
+                Description = @event.Description,
+                ImgPath = @event.ImgPath,
+                TNCFilePath = @event.TNCFilePath,
+                ContactPhone = @event.ContactPhone,
+                Title = @event.Title,
+                FBLink = @event.FBLink,
+                RegistrationEndTS = @event.RegistrationEndTS,
+                RegistrationStartTS = @event.RegistrationStartTS,
+                UrlPrefix = @event.UrlPrefix,
+                VKLink = @event.VKLink,
+                EarlyRegistrationEndTS = @event.EarlyRegistrationEndTS,
+                EarlyRegistrationPrice = @event.EarlyRegistrationPrice,
+                EarlyRegistrationPriceForMembers = @event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPrice = @event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPriceForMembers = @event.LateRegistrationPriceForMembers,
+                PromoCodeEnabled = @event.PromoCodeEnabled,
+                PromoCodeListPath = @event.PromoCodeListPath,
+                CategoryModels = GetCategoryModels(@event.Categories)
             };
         }
 
