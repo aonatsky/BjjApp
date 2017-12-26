@@ -8,7 +8,7 @@ import { EventAdminComponent } from './event-admin/event-admin.component'
 import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
 import { EventEditComponent } from './event-edit/event-edit.component'
-import { EventManagementComponent } from "./event-management/event-management.component";
+import { EventManagementComponent } from './event-management/event-management.component';
 
 
 
@@ -16,19 +16,19 @@ export const eventAdminRoutes: Routes = [
     {
         path: 'event-admin', component: EventAdminComponent, children: [
             {
-                path: "", component: EventOverviewComponent
+                path: '', component: EventOverviewComponent
             },
             {
-                path: "edit/:id", component: EventEditComponent
+                path: 'edit/:id', component: EventEditComponent
             },
             {
-                path: "management/:id", component: EventManagementComponent 
+                path: 'management/:id', component: EventManagementComponent 
             },
             {
-                path: "edit", component: EventEditComponent
+                path: 'edit', component: EventEditComponent
             },
             {
-                path: "", outlet: "topmenu", component: TopbarComponent
+                path: '', outlet: 'topmenu', component: TopbarComponent
             },
         ]
         , canActivate: [RedirectGuard]

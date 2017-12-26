@@ -9,6 +9,7 @@ using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Interface;
+using TRNMNT.Core.Utils;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -56,9 +57,9 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task UpdateEventAsync(EventModelFull eventModel)
         {
-            var _event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();// GetByIDAsync<Guid>(eventModel.EventId);
+            var _event = await _eventRepository.GetAll(e => e.EventId == eventModel.EventId).Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();// GetByIDAsync<Guid>(eventModel.EventId);
 
-            _event = UpdateFromModel(_event, eventModel);
+            _event.UpdateFromModel(eventModel);
             _event.UpdateTS = DateTime.UtcNow;
             _event.IsActive = true;
             _eventRepository.Update(_event);
@@ -274,7 +275,8 @@ namespace TRNMNT.Core.Services.Impl
                 EventId = Guid.NewGuid(),
                 OwnerId = userId,
                 FederationId = federationId,
-                EventDate = DateTime.UtcNow.AddMonths(1).Date
+                EventDate = DateTime.UtcNow.AddMonths(1).Date,
+                IsActive = false
             };
             _eventRepository.Add(_event);
 
@@ -285,7 +287,7 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Helpers
 
-        private EventModelFull GetEventModel(Event @event)
+        private static EventModelFull GetEventModel(Event @event)
         {
             return new EventModelFull
             {
@@ -315,33 +317,33 @@ namespace TRNMNT.Core.Services.Impl
             };
         }
 
-        private EventModelInfo GetEventModelInfo(Event _event)
+        private static EventModelInfo GetEventModelInfo(Event @event)
         {
             return new EventModelInfo
             {
-                EventId = _event.EventId,
-                EventDate = _event.EventDate,
-                AdditionalData = _event.AdditionalData,
-                Address = _event.Address,
-                ContactEmail = _event.ContactEmail,
-                Description = _event.Description,
-                ImgPath = _event.ImgPath,
-                TNCFilePath = _event.TNCFilePath,
-                ContactPhone = _event.ContactPhone,
-                Title = _event.Title,
-                FBLink = _event.FBLink,
-                RegistrationEndTS = _event.RegistrationEndTS,
-                RegistrationStartTS = _event.RegistrationStartTS,
-                VKLink = _event.VKLink,
-                EarlyRegistrationEndTS = _event.EarlyRegistrationEndTS,
-                EarlyRegistrationPrice = _event.EarlyRegistrationPrice,
-                EarlyRegistrationPriceForMembers = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPrice = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPriceForMembers = _event.LateRegistrationPriceForMembers,
+                EventId = @event.EventId,
+                EventDate = @event.EventDate,
+                AdditionalData = @event.AdditionalData,
+                Address = @event.Address,
+                ContactEmail = @event.ContactEmail,
+                Description = @event.Description,
+                ImgPath = @event.ImgPath,
+                TNCFilePath = @event.TNCFilePath,
+                ContactPhone = @event.ContactPhone,
+                Title = @event.Title,
+                FBLink = @event.FBLink,
+                RegistrationEndTS = @event.RegistrationEndTS,
+                RegistrationStartTS = @event.RegistrationStartTS,
+                VKLink = @event.VKLink,
+                EarlyRegistrationEndTS = @event.EarlyRegistrationEndTS,
+                EarlyRegistrationPrice = @event.EarlyRegistrationPrice,
+                EarlyRegistrationPriceForMembers = @event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPrice = @event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPriceForMembers = @event.LateRegistrationPriceForMembers,
             };
         }
 
-        private ICollection<CategoryModel> GetCategoryModels(ICollection<Category> categories)
+        private static ICollection<CategoryModel> GetCategoryModels(ICollection<Category> categories)
         {
             var categoryModels = new List<CategoryModel>();
             if (categories != null)
@@ -358,7 +360,7 @@ namespace TRNMNT.Core.Services.Impl
             return categoryModels;
         }
 
-        private ICollection<WeightDivisionModel> GetWeightDeivisionsModels(ICollection<WeightDivision> weightDivisions)
+        private static ICollection<WeightDivisionModel> GetWeightDeivisionsModels(ICollection<WeightDivision> weightDivisions)
         {
             var weightDivisionModels = new List<WeightDivisionModel>();
             if (weightDivisions != null)
@@ -399,11 +401,11 @@ namespace TRNMNT.Core.Services.Impl
                 EarlyRegistrationPriceForMembers = eventModel.EarlyRegistrationPriceForMembers,
                 EarlyRegistrationPrice = eventModel.EarlyRegistrationPriceForMembers,
                 EarlyRegistrationEndTS = eventModel.EarlyRegistrationEndTS,
-                Categories = GetCategoriesFromModels(eventModel.CategoryModels)
+                Categories = GetCategoriesFromModels(eventModel.CategoryModels, eventModel.EventId)
             };
         }
 
-        private ICollection<Category> GetCategoriesFromModels(ICollection<CategoryModel> models)
+        private static ICollection<Category> GetCategoriesFromModels(ICollection<CategoryModel> models, Guid eventId)
         {
             return models.Select(model => new Category
             {
@@ -414,7 +416,7 @@ namespace TRNMNT.Core.Services.Impl
             }).ToList();
         }
 
-        private ICollection<WeightDivision> GetWeightDeivisionsFromModels(ICollection<WeightDivisionModel> models)
+        private static ICollection<WeightDivision> GetWeightDeivisionsFromModels(ICollection<WeightDivisionModel> models)
         {
             return models.Select(model => new WeightDivision
             {
@@ -460,6 +462,27 @@ namespace TRNMNT.Core.Services.Impl
             _weightDivisionRepository.DeleteRange(weightDivisionsToDelete);
             _categoryRepository.DeleteRange(categoriesToDelete);
         }
+
+        private async Task ProcessCategories(Guid eventId, IEnumerable<CategoryModel> categoryModels)
+        {
+            var oldCategoryIds = await _categoryRepository.GetAll(c => c.EventId == eventId).Select(c => c.CategoryId)
+                .ToListAsync();
+            var currentCategories = categoryModels.GetCategoriesFromModels();
+            
+            var categoriesToAdd = currentCategories.Where(c => oldCategoryIds.Contains(c.CategoryId));
+            
+            var categoriesToDelete = await _categoryRepository.GetAll(c => c.EventId == eventId && !currentCategories.Select(cm => cm.CategoryId).Contains(c.CategoryId)).ToListAsync();
+            
+            var weightDivisionsToDelete = await _weightDivisionRepository.GetAll(wd =>categoriesToDelete.Select(c => c.CategoryId).Contains(wd.CategoryId)).ToListAsync();
+            
+            _weightDivisionRepository.DeleteRange(weightDivisionsToDelete);
+            _categoryRepository.DeleteRange(categoriesToDelete);
+            //_categoryRepository.AddRange();
+
+        }
+
+
+    
 
         #endregion
     }

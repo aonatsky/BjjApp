@@ -48,7 +48,7 @@
             <label class="field-title">Round Time</label>
         </div>
         <div class="ui-g-3">
-            <input pInputText [(ngModel)]="categoryToEdit.roundTime" />
+            <p-inputMask class="round-time-picker" [(ngModel)]="roundTimeFormatted" mask="99:99" placeholder="mm:ss"></p-inputMask>
         </div>
     </div>
     <div class="ui-g">
@@ -59,7 +59,7 @@
             <input pInputText [(ngModel)]="wd.name" />
         </div>
         <div class="ui-g-2">
-            <button class="float-left" pButton type="button" iconPos="left" icon="fa-times" (click)="deleteWeightDivision(j)"></button>
+            <button class="float-right" pButton type="button" iconPos="left" icon="fa-times" (click)="deleteWeightDivision(j)"></button>
         </div>
     </div>
     <div class="ui-g">
