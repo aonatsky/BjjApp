@@ -37,7 +37,8 @@ export const ApiMethods = Object.freeze({
     },
     category: {
         category: "api/category",
-        getCategoriesForEvent: "api/category/getCategoriesForEvent"
+        getCategoriesForCurrentEvent: "api/category/getCategoriesForCurrentEvent",
+        getCategoriesByEventId: "api/category/getCategoriesByEventId"
     },
      participant: {
          participant: "api/participant/",

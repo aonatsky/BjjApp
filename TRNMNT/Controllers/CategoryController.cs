@@ -32,7 +32,7 @@ namespace TRNMNT.Web.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetCategoriesForEvent()
+        public async Task<IActionResult> GetCategoriesForCurrentEvent()
         {
             try
             {
@@ -46,12 +46,29 @@ namespace TRNMNT.Web.Controllers
                 {
                     return NotFound();
                 }
-                
+
             }
             catch (Exception e)
             {
                 HandleException(e);
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            }
+        }
+
+
+        [HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetCategoriesByEventId(Guid eventId)
+        {
+            try
+            {
+                var data = await categoryService.GetCategoriesByEventIdAsync(eventId);
+                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
 
             }
         }

@@ -11,12 +11,14 @@ import { CategoryComponent } from './event-edit/category.component'
 import { eventAdminRoutes } from './event-admin.routing'
 import { EventManagementComponent } from "./event-management/event-management.component";
 import { EventManagementParticipantsComponent } from "./event-management-participants/event-management-participants.component";
+import { SharedModule } from "../shared/shared.module";
 
 
 @NgModule({
 
     imports: [
         CoreModule,
+        SharedModule,
         RouterModule.forChild(eventAdminRoutes)
     ],
     declarations: [

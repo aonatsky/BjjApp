@@ -1,10 +1,15 @@
-﻿<p-dataTable [value]="participantsModel"
+﻿<category-with-division-filter [eventId]="eventId">
+</category-with-division-filter>
+
+<p-dataTable [value]="participantsModel"
              [loading]="participantsLoading"
              sortField="firstName"
              [sortOrder]="1"
              [rows]="rowsCount"
              [paginator]="isPaginationEnabled"
-             [pageLinks]="pageLinks" #dt>
+             [pageLinks]="pageLinks"
+             [lazy]="true" (onLazyLoad)="loadData($event)"
+             #dt>
     
     <p-column field="firstName" header="First Name" sortable="true"></p-column>
     <p-column field="lastName" header="Last Name" sortable="true"></p-column>

@@ -1,5 +1,5 @@
 
-import { FighterFilterModel } from '../../model/fighter-filter.model';
+import { CategoryWithDivisionFilterModel as FighterFilterModel } from '../../model/category-with-division-filter.model';
 
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';

@@ -33,11 +33,11 @@ namespace TRNMNT.Web.Controllers
 
 
         [HttpGet("[action]/{categoryId}")]
-        public async Task<IActionResult> GetWeightDivisionsByCategory(string categoryId)
+        public async Task<IActionResult> GetWeightDivisionsByCategory(Guid categoryId)
         {
             try
             {
-                var data = await weightDivisionService.GetWeightDivisionsByCategoryIdAsync(Guid.Parse(categoryId));
+                var data = await weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId);
                 return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
             }
             catch (Exception e)

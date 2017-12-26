@@ -1,0 +1,19 @@
+
+.category-with-division-filter {
+    margin: auto;
+    max-width: 1000px;
+}
+
+p-dropdown {
+    display: inline-block;
+    float: right;
+}
+
+.filter-section
+{
+    display: inline-block;
+}
+
+button {
+    width: 200px !important;
+}

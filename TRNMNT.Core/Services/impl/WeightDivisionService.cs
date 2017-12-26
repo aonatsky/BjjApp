@@ -20,7 +20,12 @@ namespace TRNMNT.Core.Services
 
         public async Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
         {
-            return (await weightdevisionRepository.GetAll().Where(wd => wd.CategoryId == categoryId).ToListAsync()).Select(wd => new WeightDivisionModelBase {WeightDivisionId = wd.WeightDivisionId.ToString(), Name = wd.Name });
+            return await weightdevisionRepository.GetAll().Where(wd => wd.CategoryId == categoryId).Select(wd =>
+                    new WeightDivisionModelBase
+                    {
+                        WeightDivisionId = wd.WeightDivisionId.ToString(),
+                        Name = wd.Name
+                    }).ToListAsync();
         }
     }
 }

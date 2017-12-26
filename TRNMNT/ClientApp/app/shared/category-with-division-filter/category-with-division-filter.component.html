@@ -1,0 +1,17 @@
+<div class="category-with-division-filter">
+    <div class="filter-section" *ngIf="categories">
+        <p-dropdown [options]="categorySelectItems" 
+                    [(ngModel)]="currentFilterValue.categoryId" 
+                    [autoWidth]="false" 
+                    placeholder="Select Category" 
+                    (onChange)="onSelect($event)"></p-dropdown>
+    </div>
+    <div class="filter-section" *ngIf="weightDivisions != null">
+        <p-dropdown [options]="weightDivisionsSelectItems" 
+                    [(ngModel)]="currentFilterValue.weightDivisionId" 
+                    [autoWidth]="false" 
+                    [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0"
+                    (onChange)="onSelect($event)"
+                    placeholder="Select Weight Division"></p-dropdown>
+    </div>
+</div>

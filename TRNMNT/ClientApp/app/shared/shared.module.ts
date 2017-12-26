@@ -1,13 +1,9 @@
 ﻿import { NgModule } from "@angular/core"
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'
-
-
 import { CoreModule } from "./../core/core.module"
-import { RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component'
 import { RegisterComponent } from './register/register.component'
+import { CategoryWithDivisionFilter } from "./category-with-division-filter/category-with-division-filter.component";
 
 
 
@@ -17,13 +13,14 @@ import { RegisterComponent } from './register/register.component'
     ],
     declarations: [
         LoginComponent,
-        RegisterComponent
+        RegisterComponent,
+        CategoryWithDivisionFilter
     ],
 
     providers: [],
 
     exports: [
-       
+        CategoryWithDivisionFilter
     ]
 })
 
