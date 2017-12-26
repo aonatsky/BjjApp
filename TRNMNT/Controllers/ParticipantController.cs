@@ -104,12 +104,11 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> ParticipantsTable(Guid eventId)
+        public async Task<IActionResult> ParticipantsTable(ParticipantFilterModel filter)
         {
             try
             {
-                // todo what event to use from GetEventId() or from method parameter 
-                var participants = await participantService.GetFilteredParticipantsAsync(GetFederationId().Value, eventId);
+                var participants = await participantService.GetFilteredParticipantsAsync(GetFederationId().Value, filter);
                 return Ok(participants);
             }
             catch (Exception e)

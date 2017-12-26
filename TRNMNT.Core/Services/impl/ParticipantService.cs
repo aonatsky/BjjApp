@@ -7,6 +7,9 @@ using TRNMNT.Core.Model.Participant;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 using TRNMNT.Data.Context;
+using TRNMNT.Core.Const;
+using TRNMNT.Core.Model.Interface;
+using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services
 {
@@ -18,8 +21,6 @@ namespace TRNMNT.Core.Services
         {
             _repository = repository;
         }
-
-
 
         public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model, Guid eventId)
         {
@@ -35,8 +36,6 @@ namespace TRNMNT.Core.Services
         {
             _repository.Add(participant);
         }
-
-
 
         public Participant CreatePaticipant(ParticipantRegistrationModel model, Guid eventId)
         {
@@ -70,11 +69,24 @@ namespace TRNMNT.Core.Services
             }
         }
 
-        public async Task<List<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, Guid eventId)
+        public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel filter)
         {
-            var allParticipants = _repository.GetAll(p => p.EventId == eventId);
-
-            return await allParticipants.Select(p => new ParticipantTableModel
+            var size = DefaultValues.DefaultPageSize;
+            var allParticipants = _repository.GetAll(p => p.EventId == filter.EventId);
+            if (filter.Filter != null)
+            {
+                if (filter.Filter.CategoryId != null)
+                {
+                    allParticipants.Where(p => p.CategoryId == filter.Filter.CategoryId);
+                }
+                if (filter.Filter.WeightDivisionId != null)
+                {
+                    allParticipants.Where(p => p.WeightDivisionId == filter.Filter.WeightDivisionId);
+                }
+            }
+            var totalCount = await allParticipants.CountAsync();
+            allParticipants = allParticipants.Skip(size * filter.PageIndex).Take(size);
+            var list = await allParticipants.Select(p => new ParticipantTableModel
             {
                 FirstName = p.FirstName,
                 LastName = p.LastName,
@@ -85,6 +97,8 @@ namespace TRNMNT.Core.Services
                 WeightDivisionName = p.WeightDivision.Name,
                 IsMember = p.Team.FederationId == federationId
             }).ToListAsync();
+
+            return new PagedList<ParticipantTableModel>(list, filter.PageIndex, size, totalCount);
         }
     }
 

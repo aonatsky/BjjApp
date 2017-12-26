@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TRNMNT.Core.Model.Interface;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Data.Entities;
 
@@ -32,6 +33,6 @@ namespace TRNMNT.Core.Services
         /// <param name="federationId">dependent federation id</param>
         /// <param name="eventId">evetId participants selected for</param>
         /// <returns>filtered ParticipantTableModel list</returns>
-        Task<List<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, Guid eventId);
+        Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel eventId);
     }
 }
