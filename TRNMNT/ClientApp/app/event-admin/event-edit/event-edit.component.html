@@ -101,7 +101,7 @@
             </div>
         </div>
         <div *ngIf="currentStep==2" class="steps-content">
-            <category-edit [categories]="eventModel.categoryModels">
+            <category-edit [categories]="eventModel.categoryModels" [eventId]="eventModel.eventId">
             </category-edit>
         </div>
         <div *ngIf="currentStep==3" class="steps-content">

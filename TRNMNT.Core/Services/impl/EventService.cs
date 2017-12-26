@@ -64,53 +64,53 @@ namespace TRNMNT.Core.Services.Impl
             _event.IsActive = true;
             _eventRepository.Update(_event);
 
-            await DeleteCategoriesAsync(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
+            //await DeleteCategoriesAsync(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
 
-            foreach (var categoryModel in eventModel.CategoryModels)
-            {
+            //foreach (var categoryModel in eventModel.CategoryModels)
+            //{
 
-                var category = Guid.TryParse(categoryModel.CategoryId, out var categoryId) ? _categoryRepository.GetByID(categoryId) : null;
-                if (category != null)
-                {
-                    category.Name = categoryModel.Name;
-                    _categoryRepository.Update(category);
-                }
-                else
-                {
-                    category = new Category
-                    {
-                        Name = categoryModel.Name,
-                        EventId = _event.EventId,
-                        RoundTime = categoryModel.RoundTime,
-                        CategoryId = Guid.NewGuid()
-                    };
-                    _categoryRepository.Add(category);
-                }
+            //    var category = Guid.TryParse(categoryModel.CategoryId, out var categoryId) ? _categoryRepository.GetByID(categoryId) : null;
+            //    if (category != null)
+            //    {
+            //        category.Name = categoryModel.Name;
+            //        _categoryRepository.Update(category);
+            //    }
+            //    else
+            //    {
+            //        category = new Category
+            //        {
+            //            Name = categoryModel.Name,
+            //            EventId = _event.EventId,
+            //            RoundTime = categoryModel.RoundTime,
+            //            CategoryId = Guid.NewGuid()
+            //        };
+            //        _categoryRepository.Add(category);
+            //    }
 
-                var actualWeightDivisionIds = categoryModel.WeightDivisionModels.Where(wdm => !String.IsNullOrEmpty(wdm.WeightDivisionId)).Select(wdm => new Guid(wdm.WeightDivisionId));
-                var wdToDelete = _weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !actualWeightDivisionIds.Contains(wd.WeightDivisionId));
-                _weightDivisionRepository.DeleteRange(wdToDelete);
+            //    var actualWeightDivisionIds = categoryModel.WeightDivisionModels.Where(wdm => !String.IsNullOrEmpty(wdm.WeightDivisionId)).Select(wdm => new Guid(wdm.WeightDivisionId));
+            //    var wdToDelete = _weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !actualWeightDivisionIds.Contains(wd.WeightDivisionId));
+            //    _weightDivisionRepository.DeleteRange(wdToDelete);
 
-                foreach (var wdModel in categoryModel.WeightDivisionModels)
-                {
-                    var wd = Guid.TryParse(wdModel.WeightDivisionId, out var weightDivisionId) ? _weightDivisionRepository.GetByID(weightDivisionId) : null;
-                    if (wd != null)
-                    {
-                        wd.Name = wdModel.Name;
-                        _weightDivisionRepository.Update(wd);
-                    }
-                    else
-                    {
-                        wd = new WeightDivision
-                        {
-                            WeightDivisionId = Guid.NewGuid(),
-                            Name = wdModel.Name,
-                            CategoryId = category.CategoryId
-                        };
-                        _weightDivisionRepository.Add(wd);
-                    }
-                }
-            }
+            //    foreach (var wdModel in categoryModel.WeightDivisionModels)
+            //    {
+            //        var wd = Guid.TryParse(wdModel.WeightDivisionId, out var weightDivisionId) ? _weightDivisionRepository.GetByID(weightDivisionId) : null;
+            //        if (wd != null)
+            //        {
+            //            wd.Name = wdModel.Name;
+            //            _weightDivisionRepository.Update(wd);
+            //        }
+            //        else
+            //        {
+            //            wd = new WeightDivision
+            //            {
+            //                WeightDivisionId = Guid.NewGuid(),
+            //                Name = wdModel.Name,
+            //                CategoryId = category.CategoryId
+            //            };
+            //            _weightDivisionRepository.Add(wd);
+            //        }
+            //    }
+            //}
 
             await _unitOfWork.SaveAsync();
         }

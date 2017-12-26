@@ -23,10 +23,11 @@ export class CategoryEditComponent {
 
 
     @Input() categories: CategoryModel[];
+    @Input() eventId: string;
 
     private addCategory() {
-
         this.categoryToEdit = new CategoryModel();
+        this.categoryToEdit.eventId = this.eventId;
         this.isNewCategory = true;
         this.displayPopup = true;
         this.roundTimeFormatted = '';

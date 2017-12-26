@@ -35,34 +35,72 @@ namespace TRNMNT.Core.Utils
             @event.LateRegistrationPriceForMembers = eventModel.LateRegistrationPriceForMembers;
             @event.PromoCodeEnabled = eventModel.PromoCodeEnabled;
             @event.PromoCodeListPath = eventModel.PromoCodeListPath;
+            //@event.Categories = eventModel.CategoryModels.GetCategoriesFromModels();
+            @event.Categories.UpdateCategories(eventModel.CategoryModels);
             return @event;
         }
-        
-        
+
+
         public static ICollection<Category> GetCategoriesFromModels(this IEnumerable<CategoryModel> models)
         {
-            return models.Select(model => new Category
+            var categories = new List<Category>();
+            foreach (var model in models)
             {
-                EventId = model.EventId,
-                CategoryId = string.IsNullOrEmpty(model.CategoryId) ? Guid.NewGuid() : Guid.Parse(model.CategoryId),
-                Name = model.Name,
-                WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels)
-            }).ToList();
+                var category = new Category
+                {
+                    EventId = model.EventId,
+                    CategoryId = string.IsNullOrEmpty(model.CategoryId) ? Guid.NewGuid() : Guid.Parse(model.CategoryId),
+                    Name = model.Name
+                };
+                category.WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels, category.CategoryId);
+                categories.Add(category);
+            }
+
+            return categories;
         }
 
-        private static ICollection<WeightDivision> GetWeightDeivisionsFromModels(this IEnumerable<WeightDivisionModel> models)
+        private static ICollection<Category> UpdateCategories(this ICollection<Category> categories,
+            ICollection<CategoryModel> models)
+        {
+            var newCategories = models.Where(m => string.IsNullOrEmpty(m.CategoryId)).Select(model => new Category()
+            {
+                EventId = model.EventId,
+                RoundTime = model.RoundTime,
+                CategoryId = Guid.NewGuid(),
+                Name = model.Name
+            });
+            foreach (var category in categories)
+            {
+                var model = models.FirstOrDefault(m => m.CategoryId == category.CategoryId.ToString());
+                if (model != null)
+                {
+                    category.Name = model.Name;
+                    category.RoundTime = model.RoundTime;
+                }
+
+            }
+
+            foreach (var newCategory in newCategories)
+            {
+                categories.Add(newCategory);
+            }
+            return categories;
+
+        }
+
+        private static ICollection<WeightDivision> GetWeightDeivisionsFromModels(this IEnumerable<WeightDivisionModel> models, Guid categoryId)
         {
             return models.Select(model => new WeightDivision
             {
-                WeightDivisionId = Guid.Parse(model.WeightDivisionId),
+                WeightDivisionId = string.IsNullOrEmpty(model.WeightDivisionId) ? Guid.NewGuid() : Guid.Parse(model.WeightDivisionId),
                 Weight = model.Weight,
                 Descritpion = model.Descritpion,
                 Name = model.Name,
-                CategoryId = Guid.Parse(model.CategoryId)
+                CategoryId = categoryId
             }).ToList();
         }
     }
 
 
-   
+
 }
