@@ -8,7 +8,9 @@ namespace TRNMNT.Core.Model.Participant
 
         public int PageIndex { get; set; }
 
-        public CategoryDivisionFilter Filter { get; set; }
+        public Guid? CategoryId { get; set; }
+
+        public Guid? WeightDivisionId { get; set; }
 
     }
 }

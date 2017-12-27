@@ -1,20 +1,21 @@
-﻿<category-with-division-filter [eventId]="eventId"></category-with-division-filter>
+﻿<category-with-division-filter [eventId]="eventId" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
 <crud [entities]="participantsModel"
       [columns]="columns"
       [showRowNumbers]="false"
       [addEnabled]="false"
-      [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords">
+      [lazy]="true" 
+      (onLazyLoad)="loadData($event)"
+      [totalRecords]="totalCount">
 </crud>
 
-<p-dataTable [value]="participantsModel"
+<!--<p-dataTable [value]="participantsModel"
              [loading]="participantsLoading"
              sortField="firstName"
              [sortOrder]="1"
              [rows]="rowsCount"
-             [paginator]="isPaginationEnabled"
+             [paginator]="totalRecords > rowsCount"
              [pageLinks]="pageLinks"
-             
-             #dt>
+             [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords">
     
     <p-column field="firstName" header="First Name" sortable="true"></p-column>
     <p-column field="lastName" header="Last Name" sortable="true"></p-column>
@@ -31,4 +32,4 @@
             <span [ngClass]="{'fa': true ,'fa-check-square-o' : participant[col.field], 'fa-square-o' : !participant[col.field] }"></span>
         </ng-template>
     </p-column>
-</p-dataTable>
+</p-dataTable>-->

@@ -73,16 +73,13 @@ namespace TRNMNT.Core.Services
         {
             var size = DefaultValues.DefaultPageSize;
             var allParticipants = _repository.GetAll(p => p.EventId == filter.EventId);
-            if (filter.Filter != null)
+            if (filter.CategoryId != null)
             {
-                if (filter.Filter.CategoryId != null)
-                {
-                    allParticipants.Where(p => p.CategoryId == filter.Filter.CategoryId);
-                }
-                if (filter.Filter.WeightDivisionId != null)
-                {
-                    allParticipants.Where(p => p.WeightDivisionId == filter.Filter.WeightDivisionId);
-                }
+                allParticipants = allParticipants.Where(p => p.CategoryId == filter.CategoryId);
+            }
+            if (filter.WeightDivisionId != null)
+            {
+                allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
             }
             var totalCount = await allParticipants.CountAsync();
             allParticipants = allParticipants.Skip(size * filter.PageIndex).Take(size);

@@ -1,6 +1,6 @@
 import { OnInit, Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { LoaderService } from '../../core/services/loader.service'
-
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 
 @Component({
     selector: 'crud',
@@ -12,8 +12,12 @@ import { LoaderService } from '../../core/services/loader.service'
 export class CrudComponent implements OnInit, OnChanges {
 
     constructor(private loaderService: LoaderService) {
-
+        this.onAdd = new EventEmitter<any>();
+        this.onUpdate = new EventEmitter<any>();
+        this.onDelete = new EventEmitter<any>();
+        this.onLazyLoad = new EventEmitter<LazyLoadEvent>();
     }
+
     ngOnInit(): void {
         this.entities = [];
         this.loaderService.showLoader();
@@ -30,10 +34,14 @@ export class CrudComponent implements OnInit, OnChanges {
     @Input() addEnabled: boolean = true;
     @Input() deleteEnabled: boolean = true;
     @Input() showRowNumbers: boolean = true;
+    @Input() lazy: boolean = false;
+    @Input() pageSize: number = 10;
+    @Input() totalRecords: number = 0;
 
-    @Output() onAdd: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onUpdate: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onAdd: EventEmitter<any>;
+    @Output() onUpdate: EventEmitter<any>;
+    @Output() onDelete: EventEmitter<any>;
+    @Output() onLazyLoad: EventEmitter<LazyLoadEvent>;
     
 
 
@@ -75,6 +83,10 @@ export class CrudComponent implements OnInit, OnChanges {
         if (this.editEnabled || this.deleteEnabled) {
             this.showDialogToEdit(event.data);
         }
+    }
+
+    lazyLoadData($event: LazyLoadEvent) {
+        this.onLazyLoad.emit($event);
     }
 
     isIdColumn(column: CrudColumn): boolean {

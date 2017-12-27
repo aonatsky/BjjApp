@@ -2,9 +2,9 @@
 
 namespace TRNMNT.Core.Model.Interface
 {
-    public class IPagedList<T>
+    public interface IPagedList<T>
     {
-        public List<T> InnerList { get; }
+        List<T> InnerList { get; }
         int PageIndex { get; }
         int PageSize { get; }
         int TotalCount { get; }

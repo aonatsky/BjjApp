@@ -1,7 +1,16 @@
 <div class='datatable'>
     <h3 class="first">{{title}}</h3>
-    <p-dataTable [value]="entities" [rows]="10" [paginator]="entities.length > 10" [pageLinks]="3" [(selection)]="selectedEntity" selectionMode="single" (onRowSelect)="onRowSelect($event)"
-        [responsive]="true">
+    <p-dataTable [value]="entities" 
+                 [rows]="pageSize" 
+                 [pageLinks]="3" 
+                 [paginator]="totalRecords > pageSize"
+                 [(selection)]="selectedEntity" 
+                 selectionMode="single" 
+                 (onRowSelect)="onRowSelect($event)"
+                 [totalRecords]="totalRecords"
+                 [lazy]="lazy"
+                 (onLazyLoad)="lazyLoadData($event)"
+                 [responsive]="true">
         <p-column *ngIf="showRowNumbers" header="#"  [style]="{'width':'4%','text-align':'center'}">
             <ng-template let-ri="rowIndex+1" pTemplate type="body">
                 <span>{{ri}}</span>
