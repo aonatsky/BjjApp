@@ -1,9 +1,4 @@
-﻿<div class="ui-g">
-    <div class="ui-g-3">
-        <button pButton type="button" (click)="addCategory()" label="Add Category"></button>
-    </div>
-</div>
-<div class="ui-g category" *ngFor="let category of categories; let i = index">
+﻿<div class="ui-g category" *ngFor="let category of categories; let i = index">
     <div class="ui-g-12 category-name">
         {{category.name}}
     </div>
@@ -25,6 +20,11 @@
         <div class="float-right">
             <button pButton type="button" iconPos="left" icon="fa-pencil" (click)="editCategory(i)" label="Edit"></button>
         </div>
+    </div>
+</div>
+<div class="ui-g">
+    <div class="ui-g-3">
+        <button pButton type="button" (click)="addCategory()" label="Add Category"></button>
     </div>
 </div>
 
