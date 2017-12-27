@@ -4,7 +4,8 @@
                     [(ngModel)]="currentFilterValue.categoryId" 
                     [autoWidth]="false" 
                     placeholder="Select Category" 
-                    (onChange)="onSelect($event)"></p-dropdown>
+                    [style]="{'min-width':'200px'}"
+                    (onChange)="onCategorySelect($event)"></p-dropdown>
     </div>
     <div class="filter-section" *ngIf="weightDivisions != null">
         <p-dropdown [options]="weightDivisionsSelectItems" 
@@ -12,6 +13,7 @@
                     [autoWidth]="false" 
                     [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0"
                     (onChange)="onSelect($event)"
+                    [style]="{'min-width':'200px'}"
                     placeholder="Select Weight Division"></p-dropdown>
     </div>
 </div>

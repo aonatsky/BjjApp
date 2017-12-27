@@ -33,7 +33,8 @@ export const ApiMethods = Object.freeze({
     },
     weightDivision: {
         weightDivision: "api/weightdivision",
-        getWeightDivisionsByCategory: "api/weightdivision/getWeightDivisionsByCategory"
+        getWeightDivisionsByCategory: "api/weightdivision/getWeightDivisionsByCategory",
+        getWeightDivisionsByEvent: "api/weightdivision/getWeightDivisionsByEvent"
     },
     category: {
         category: "api/category",

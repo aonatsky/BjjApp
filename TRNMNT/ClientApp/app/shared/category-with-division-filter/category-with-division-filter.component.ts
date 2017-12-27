@@ -41,7 +41,7 @@ export class CategoryWithDivisionFilter implements OnInit {
     ngOnInit() {
         Observable.forkJoin(
                 this.categoryService.getCategoriesByEventId(this.eventId),
-                this.weightDivisionService.getWeightDivisions(this.eventId))
+                this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
             .subscribe(data => this.initFilter(data));
     }
 
@@ -51,6 +51,11 @@ export class CategoryWithDivisionFilter implements OnInit {
         this.onFilterChanged.emit(this.currentFilterValue);
     }
 
+    onCategorySelect(event) {
+        this.refreshWeightDivisionFilter(event.value);
+        this.onSelect(event);
+    }
+
     //#region Private methods
 
     private initFilter(data: [CategorySimpleModel[], WeightDivisionModel[]]) {
@@ -58,6 +63,7 @@ export class CategoryWithDivisionFilter implements OnInit {
         const weightDivisions = data[1];
         this.initCategoryFilter(categories);
         this.initWeightDivisionFilter(weightDivisions);
+        this.onFilterLoaded.emit(true);
     }
 
     private initWeightDivisionFilter(weightDivisions: WeightDivisionModel[]) {
@@ -65,10 +71,14 @@ export class CategoryWithDivisionFilter implements OnInit {
     }
 
     private refreshWeightDivisionFilter(categoryId: string) {
-        var weightDiwisions = this.weightDivisions.filter(wd => wd.categoryId == categoryId);
-        this.weightDivisionsSelectItems = [];
-        this.weightDivisionsSelectItems.push(this.defaultOption);
-        weightDiwisions.map(wd => this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId }));
+        var weightDivisions = this.weightDivisions.filter(wd => wd.categoryId.toLowerCase() == categoryId.toLowerCase());
+        if (weightDivisions.length > 0) {
+            this.weightDivisionsSelectItems = [];
+            this.weightDivisionsSelectItems.push(this.defaultOption);
+            weightDivisions.map(wd => this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId }));
+        } else {
+            this.weightDivisionsSelectItems = null;
+        }
     }
 
     private initCategoryFilter(categories: CategorySimpleModel[]) {

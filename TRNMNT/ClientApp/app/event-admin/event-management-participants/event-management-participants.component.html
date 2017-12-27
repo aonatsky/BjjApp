@@ -1,5 +1,10 @@
-﻿<category-with-division-filter [eventId]="eventId">
-</category-with-division-filter>
+﻿<category-with-division-filter [eventId]="eventId"></category-with-division-filter>
+<crud [entities]="participantsModel"
+      [columns]="columns"
+      [showRowNumbers]="false"
+      [addEnabled]="false"
+      [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords">
+</crud>
 
 <p-dataTable [value]="participantsModel"
              [loading]="participantsLoading"
@@ -8,7 +13,7 @@
              [rows]="rowsCount"
              [paginator]="isPaginationEnabled"
              [pageLinks]="pageLinks"
-             [lazy]="true" (onLazyLoad)="loadData($event)"
+             
              #dt>
     
     <p-column field="firstName" header="First Name" sortable="true"></p-column>

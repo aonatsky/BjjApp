@@ -48,6 +48,22 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+        [HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetWeightDivisionsByEvent(Guid eventId)
+        {
+            try
+            {
+                var data = await weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId);
+                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+
+            }
+        }
+
 
 
         public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
