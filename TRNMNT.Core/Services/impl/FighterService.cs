@@ -1,21 +1,29 @@
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Web.Core.Model;
 
-namespace TRNMNT.Web.Core.Services.impl
+namespace TRNMNT.Core.Services.Impl
 {
     public class FighterService : IFighterService
     {
-        private IRepository<Fighter> fighterRepository;
-        private IRepository<Team> teamRepository;
-        private IRepository<WeightDivision> categoryRepository;
-        private IRepository<WeightDivision> weightDivisionRepository;
-        private IAppDbContext unitOfWork;
+        #region Dependencies
+
+        private readonly IRepository<Fighter> _fighterRepository;
+        private readonly IRepository<Team> _teamRepository;
+        private readonly IRepository<WeightDivision> _categoryRepository;
+        private readonly IRepository<WeightDivision> _weightDivisionRepository;
+        private readonly IAppDbContext _unitOfWork;
+
+
+        #endregion
+
+        #region .ctor
 
         public FighterService(IRepository<Fighter> fighterRepository,
             IRepository<Team> teamRepository,
@@ -24,33 +32,35 @@ namespace TRNMNT.Web.Core.Services.impl
             IAppDbContext unitOfWork)
 
         {
-            this.fighterRepository = fighterRepository;
-            this.teamRepository = teamRepository;
-            this.categoryRepository = categoryRepository;
-            this.weightDivisionRepository = weightDivisionRepository;
-            this.unitOfWork = unitOfWork;
+            _fighterRepository = fighterRepository;
+            _teamRepository = teamRepository;
+            _categoryRepository = categoryRepository;
+            _weightDivisionRepository = weightDivisionRepository;
+            _unitOfWork = unitOfWork;
         }
 
+        #endregion
+        
         #region Public Methods
 
         public List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter)
         {
-            IQueryable<Fighter> fighters = GetFightersByFilter(filter);
+            var fighters = GetFightersByFilter(filter);
             return GetModels(fighters);
         }
 
         public string AddFightersByModels(List<FighterModel> fighterModels)
         {
-            string message = "";
-            var existingTeams = this.teamRepository.GetAll().ToList();
-            var existingFighters = this.fighterRepository.GetAll().ToList();
+            var message = string.Empty;
+            var existingTeams = _teamRepository.GetAll().ToList();
+            var existingFighters = _fighterRepository.GetAll().ToList();
 
             var fightersToAdd = new List<Fighter>();
             var teamsToAdd = new List<Team>();
             var fighterComparer = new FighterComparer();
             foreach (var model in fighterModels)
             {
-                var fighter = new Fighter()
+                var fighter = new Fighter
                 {
                     FighterId = Guid.NewGuid(),
                     FirstName = model.FirstName,
@@ -67,7 +77,7 @@ namespace TRNMNT.Web.Core.Services.impl
                     continue;
                 }
 
-                fighter.Team = ProcessTeam(model.Team, existingTeams, ref teamsToAdd);
+                fighter.Team = ProcessTeam(model.Team, existingTeams, teamsToAdd);
 
                 var weightDivision = GetWeightDivision(model.WeightDivision);
                 if (weightDivision != null)
@@ -95,8 +105,8 @@ namespace TRNMNT.Web.Core.Services.impl
                     fightersToAdd.Add(fighter);
                 }
             }
-            fighterRepository.AddRange(fightersToAdd);
-            unitOfWork.Save();
+            _fighterRepository.AddRange(fightersToAdd);
+            _unitOfWork.Save();
             return message;
         }
 
@@ -105,23 +115,17 @@ namespace TRNMNT.Web.Core.Services.impl
         {
             var fighters = GetFighterModelsByFilter(filter);
             var count = fighters.Count;
-            var bracketSize = GetBracketsSize(fighters.Count());
-            for (int i = 0; i < bracketSize - count; i++)
+            var bracketSize = GetBracketsSize(fighters.Count);
+            for (var i = 0; i < bracketSize - count; i++)
             {
-                fighters.Add(new FighterModel() {});
+                fighters.Add(new FighterModel());
             }
 
             return Distribute(fighters);
         }
-
-
-
-
-
-
+        
         #endregion
-
-
+        
         #region Private methods
 
         private List<FighterModel> Distribute(List<FighterModel> fightersList)
@@ -129,11 +133,11 @@ namespace TRNMNT.Web.Core.Services.impl
 
             var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
            .SelectMany(f => f).ToList();
-            if (fightersList.Count() > 2)
+            if (fightersList.Count > 2)
             {
-                List<FighterModel> sideA = new List<FighterModel>();
-                List<FighterModel> sideB = new List<FighterModel>();
-                for (int i = 0; i < orderedbyTeam.Count; i++)
+                var sideA = new List<FighterModel>();
+                var sideB = new List<FighterModel>();
+                for (var i = 0; i < orderedbyTeam.Count; i++)
                 {
                     var fighter = orderedbyTeam.ElementAtOrDefault(i);
                     if (i % 2 == 0)
@@ -148,7 +152,6 @@ namespace TRNMNT.Web.Core.Services.impl
                 return Distribute(sideA).Concat(Distribute(sideB)).ToList();
             }
             return fightersList;
-            
         } 
 
         private List<FighterModel> GetModels(IEnumerable<Fighter> fighters)
@@ -167,7 +170,7 @@ namespace TRNMNT.Web.Core.Services.impl
 
         private IQueryable<Fighter> GetFighters()
         {
-            return fighterRepository.GetAll()
+            return _fighterRepository.GetAll()
                 .Include(f => f.Team).Include(f => f.WeightDivision);
         }
 
@@ -177,9 +180,7 @@ namespace TRNMNT.Web.Core.Services.impl
                             && filter.WeightDivisionIds.Contains(f.WeightDivisionId));
         }
         #endregion
-
-
-
+        
         #region Models parsing
 
         private DateTime? GetDateOfBirth(string stringDob)
@@ -189,14 +190,12 @@ namespace TRNMNT.Web.Core.Services.impl
             {
                 return dob;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
-        private Team ProcessTeam(string name, List<Team> teams, ref List<Team> teamsToAdd)
+
+        private Team ProcessTeam(string name, List<Team> teams, List<Team> teamsToAdd)
         {
-            Team team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (team == null)
             {
                 team = teams.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -215,17 +214,16 @@ namespace TRNMNT.Web.Core.Services.impl
         }
         private WeightDivision GetWeightDivision(string name)
         {
-            return weightDivisionRepository.GetAll().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return _weightDivisionRepository.GetAll().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
         private WeightDivision GetCategory(string name)
         {
-            return (categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)));
+            return _categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
 
         }
 
         #endregion
-
-
+        
         #region Brackets
 
         private const int FIGHTERS_MAX_COUNT = 64;
@@ -236,12 +234,12 @@ namespace TRNMNT.Web.Core.Services.impl
             {
                 return 3;
             }
-            for (int i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT, 2); i++)
+            for (var i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT, 2); i++)
             {
                 var size = Math.Pow(2, i);
                 if (size >= fightersCount)
                 {
-                    return (Int32)size;
+                    return (int)size;
                 }
             }
             return 2;
@@ -253,19 +251,13 @@ namespace TRNMNT.Web.Core.Services.impl
         {
             public bool Equals(Fighter x, Fighter y)
             {
-                return (x.FirstName == y.FirstName && x.LastName == y.LastName && x.DateOfBirth == y.DateOfBirth);
+                return x.FirstName == y.FirstName && x.LastName == y.LastName && x.DateOfBirth == y.DateOfBirth;
             }
 
             public int GetHashCode(Fighter fighter)
             {
                 return fighter.FirstName.GetHashCode() ^ fighter.LastName.GetHashCode() ^ fighter.DateOfBirth.GetHashCode();
             }
-
-
         }
-
-
     }
-
-
 }

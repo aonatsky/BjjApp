@@ -1,26 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using TRNMNT.Core.Services;
+using TRNMNT.Core.Services.Interface;
+using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
     public class WeightDivisionController : CRUDController<WeightDivision>
     {
-        private IWeightDivisionService weightDivisionService;
+        private readonly IWeightDivisionService _weightDivisionService;
 
-        public WeightDivisionController(ILogger<WeightDivisionController> logger,
+        public WeightDivisionController(
+            ILogger<WeightDivisionController> logger,
             IWeightDivisionService weightDivisionService,
             IRepository<WeightDivision> repository,
             IUserService userService,
@@ -28,43 +24,21 @@ namespace TRNMNT.Web.Controllers
             IAppDbContext context)
             : base(logger, repository, userService, eventService, context)
         {
-            this.weightDivisionService = weightDivisionService;
+            _weightDivisionService = weightDivisionService;
         }
 
 
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetWeightDivisionsByCategory(Guid categoryId)
         {
-            try
-            {
-                var data = await weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId);
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
+            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId));
         }
 
         [HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetWeightDivisionsByEvent(Guid eventId)
         {
-            try
-            {
-                var data = await weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId);
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
+			return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId));
         }
-
-
 
         public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
         {

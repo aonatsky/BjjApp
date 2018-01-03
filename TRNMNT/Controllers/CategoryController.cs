@@ -1,63 +1,57 @@
-using System;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using TRNMNT.Core.Services;
+using TRNMNT.Core.Services.Interface;
+using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
     public class CategoryController : BaseController
     {
-        private ICategoryService categoryService;
+        #region Dependencies
+
+        private readonly ICategoryService _categoryService;
+
+        #endregion
+
+        #region .ctor
 
         public CategoryController(
-            ILogger<CategoryController> logger, 
-            ICategoryService categoryService, 
-            IRepository<Category> repository, 
-            IHttpContextAccessor httpContextAccessor, 
+            ILogger<CategoryController> logger,
+            ICategoryService categoryService,
+            IRepository<Category> repository,
+            IHttpContextAccessor httpContextAccessor,
             IEventService eventService,
             IUserService userService,
             IAppDbContext context) : base(logger, userService, eventService, context)
         {
-            this.categoryService = categoryService;
+            _categoryService = categoryService;
         }
 
+        #endregion
+
+        #region Public Methods
 
         [HttpGet("[action]")]
         public async Task<IActionResult> GetCategoriesForCurrentEvent()
         {
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
                 var eventId = GetEventId();
                 if (eventId != null)
                 {
-                    var data = await categoryService.GetCategoriesByEventIdAsync(eventId.Value);
-                    return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
+                    var data = await _categoryService.GetCategoriesByEventIdAsync(eventId.Value);
+                    return Success(data);
                 }
-                else
-                {
-                    return NotFound();
-                }
-
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-
-            }
+                return NotFoundResponse();
+            });
         }
-
-
-        [HttpGet("[action]/{eventId}")]
+		
+		[HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetCategoriesByEventId(Guid eventId)
         {
             try
@@ -72,6 +66,8 @@ namespace TRNMNT.Web.Controllers
 
             }
         }
+
+        #endregion
     }
 }
 

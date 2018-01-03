@@ -2,67 +2,65 @@
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
     <div class="ui-g-8 ui-g-offset-2" *ngIf="eventModel">
         <div *ngIf="currentStep==0" class="">
+            <div class="ui-g step-title">
+                <span>General Information</span>
+            </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Title</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>
             </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Date</label></div>
-                <div class="ui-g-9 ui-fluid">
-                    <p-calendar [(ngModel)]="eventModel.eventDate" [showIcon]="true"></p-calendar>
+            <div class="disabled">
+                <div class="modal">
+                    <span>COMING SOON</span>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Domain</label></div>
+                    <div class="ui-g-6 ui-fluid"><input pInputText [(ngModel)]="eventModel.url" /></div>
+                    <div class="ui-g-3 ui-fluid"><label>uabjjf.trnmnt.pro</label></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Date</label></div>
+                    <div class="ui-g-9 ui-fluid">
+                        <p-calendar [(ngModel)]="eventModel.eventDate" [showIcon]="true"></p-calendar>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Registration Start</label></div>
+                    <div class="ui-g-9 ui-fluid">
+                        <p-calendar [(ngModel)]="eventModel.registrationStartTS" [showIcon]="true"></p-calendar>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Early Registration End</label></div>
+                    <div class="ui-g-9 ui-fluid">
+                        <p-calendar [(ngModel)]="eventModel.earlyRegistrationEndTS" [showIcon]="true"></p-calendar>
+                    </div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Registration End</label></div>
+                    <div class="ui-g-9 ui-fluid"><p-calendar [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true"></p-calendar></div>
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Location</label></div>
+                    <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:5em"></textarea></div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Image</label></div>
+                    <div class="ui-g-9 ui-fluid">
+                        <p-fileUpload #fubauto mode="basic" accept="image/*" maxFileSize="1000000" (onUpload)="onImageUpload($event)" auto="true" chooseLabel="Choose Image"></p-fileUpload>
+                    </div>
+                    <img *ngIf="eventModel.imgPath" src={{eventModel.imgPath}} class="ui-g-9 ui-g-offset-3" />
+                </div>
+                <div class="ui-g">
+                    <div class="ui-g-3 ui-fluid"><label>Terms and Conditions</label></div>
+                    <div class="ui-g-4 ui-fluid">
+                        <p-fileUpload #fubauto mode="basic" maxFileSize="1000000" (onUpload)="onTncUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
+                    </div>
+                    <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Download" (click)="downloadTnc()" [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button></div>
                 </div>
             </div>
             <!--<div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Registration Start</label></div>
-                <div class="ui-g-9 ui-fluid">
-                    <p-calendar [(ngModel)]="eventModel.registrationStartTS" [showIcon]="true"></p-calendar>
-                </div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Early Registration End</label></div>
-                <div class="ui-g-9 ui-fluid">
-                    <p-calendar [(ngModel)]="eventModel.earlyRegistrationEndTS" [showIcon]="true"></p-calendar>
-                </div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Registration End</label></div>
-                <div class="ui-g-9 ui-fluid"><p-calendar [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true"></p-calendar></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Location</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:5em"></textarea></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid o"><label>Early Registration Price</label></div>
-                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" type="number" /></div>
-                <div class="ui-g-3 ui-fluid o"><label>For Members</label></div>
-                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers" type="number" /></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid o"><label>Late Registration Price </label></div>
-                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPrice" type="number" /></div>
-                <div class="ui-g-3 ui-fluid o"><label>For Members</label></div>
-                <div class="ui-g-3 ui-fluid"><input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers" type="number" /></div>
-            </div>
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid o"><label>Description</label></div>
-                <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.description" style="resize:none; height:20em"></textarea></div>
-            </div>-->
-            <div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Image</label></div>
-                <div class="ui-g-9 ui-fluid">
-                    <p-fileUpload #fubauto mode="basic" accept="image/*" maxFileSize="1000000" (onUpload)="onImageUpload($event)" auto="true" chooseLabel="Choose Image"></p-fileUpload>
-                </div>
-                <img src={{eventModel.imgPath}} class="ui-g-9 ui-g-offset-3" />
-            </div>
-            <!--<div class="ui-g">
-                <div class="ui-g-3 ui-fluid"><label>Terms and Conditions</label></div>
-                <div class="ui-g-4 ui-fluid">
-                    <p-fileUpload #fubauto mode="basic" maxFileSize="1000000" (onUpload)="onTncUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
-                </div>
-                <div class="ui-g-offset-1 ui-g-4 ui-fluid" ><button  pButton type="button" label="Download" (click)="downloadTnc()" [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button></div>
-            </div>
-            <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label>Promo Code Enabled</label></div>
                 <div class="ui-g-9 ui-fluid">
                     <p-checkbox [(ngModel)]="eventModel.promoCodeEnabled" binary="true"></p-checkbox>
@@ -75,6 +73,45 @@
                 </div>
             </div>-->
 
+        </div>
+        <div *ngIf="currentStep==1">
+            <div class="ui-g step-title">
+                <span>Prices</span>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-3 ui-g-offset-3 price-column"><label>Standard</label></div>
+                <div class="ui-g-3 price-column"><label>Members</label></div>
+                <div class="ui-g-3 price-column"><label>Promo</label></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3"><label>Early Registration</label></div>
+                <div class="ui-g-3 price-column"><input pInputText /></div>
+                <div class="ui-g-3 price-column"><input pInputText /></div>
+                <div class="ui-g-3 price-column"><input pInputText /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3"><label>Late Registration</label></div>
+                <div class="ui-g-3 price-column"><input pInputText /></div>
+                <div class="ui-g-3 price-column"><input pInputText /></div>
+                <div class="ui-g-3 price-column"><input pInputText /></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-g-offset-3 price-column"></div>
+                <div class="ui-g-3 price-column"></div>
+                <div class="ui-g-3 price-column"></div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Enable Promocode</label></div>
+                <div class="ui-g-3 ui-fluid">
+                    <p-checkbox [(ngModel)]="eventModel.promoCodeEnabled" binary="true"></p-checkbox>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-3 ui-fluid"><label>Promocode List</label></div>
+                <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Upload" (disabled)="true"></button></div>
+                <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Remove" [disabled]="true"></button></div>
+            </div>
         </div>
         <!--<div *ngIf="currentStep==2">
 
@@ -101,7 +138,7 @@
 
         </div>-->
 
-        <div *ngIf="currentStep==1">
+        <div *ngIf="currentStep==2">
             <div class="category-list">
                 <div class="ui-g">
                     <category #categoryList *ngFor="let category of eventModel.categoryModels;" [category]="category" (onCategoryDelete)="categoryDelete($event)" class="ui-g-12"></category>
@@ -144,10 +181,7 @@
                     <div class="ui-g-3 ui-fluid"><label>Image</label></div>
                     <div class="ui-g-9 ui-fluid">todo</div>
                 </div>
-                <div class="ui-g">
-                    <div class="ui-g-3 ui-fluid"><label>URL</label></div>
-                    <div class="ui-g-9 ui-fluid">{{eventModel.urlPrefix}}.trnmnt.pro</div>
-                </div>
+
 
             </div>
         </div>

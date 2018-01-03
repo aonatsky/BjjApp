@@ -1,18 +1,15 @@
-
 using System.Collections.Concurrent;
 using System.IO;
 using System.Xml;
 using Microsoft.Extensions.Logging;
 
-namespace TRNMNT.Web.Core.Logger
+namespace TRNMNT.Core.Logger
 {
-
-
     public class Log4NetProvider : ILoggerProvider
     {
         private readonly string _log4NetConfigFile;
-        private readonly ConcurrentDictionary<string, Log4NetLogger> _loggers =
-            new ConcurrentDictionary<string, Log4NetLogger>();
+        private readonly ConcurrentDictionary<string, Log4NetLogger> _loggers = new ConcurrentDictionary<string, Log4NetLogger>();
+
         public Log4NetProvider(string log4NetConfigFile)
         {
             _log4NetConfigFile = log4NetConfigFile;
@@ -34,7 +31,7 @@ namespace TRNMNT.Web.Core.Logger
 
         private static XmlElement Parselog4NetConfigFile(string filename)
         {
-            XmlDocument log4netConfig = new XmlDocument();
+            var log4netConfig = new XmlDocument();
             log4netConfig.Load(File.OpenRead(filename));
             return log4netConfig["log4net"];
         }

@@ -1,22 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using TRNMNT.Core.Services.Interface;
 
-namespace TRNMNT.Core.Services
+namespace TRNMNT.Core.Services.Impl
 {
     public class LocalFileService : IFileService
     {
-        private string rootPath;
+        #region Properties
+
+        private readonly string _rootPath;
+
+        #endregion
+
+        #region .ctor
 
         public LocalFileService(IHostingEnvironment env)
         {
-            rootPath = env.WebRootPath;
+            _rootPath = env.WebRootPath;
         }
+
+        #endregion
+
+        #region Public Methods
+
         public Task<bool> IsFileExistAsync(string path)
         {
             throw new NotImplementedException();
@@ -24,7 +34,7 @@ namespace TRNMNT.Core.Services
 
         public async Task SaveFileAsync(string relativePath, Stream stream)
         {
-            var path = Path.Combine(rootPath, relativePath);
+            var path = Path.Combine(_rootPath, relativePath);
             CheckPath(path);
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
@@ -44,16 +54,22 @@ namespace TRNMNT.Core.Services
 
         public async Task SaveImageAsync(string relativePath, Stream stream, string fileName)
         {
-            var path = Path.Combine(rootPath, relativePath);
+            var path = Path.Combine(_rootPath, relativePath);
             CheckPath(path);
-            Image img = Image.FromStream(stream, true, true);
+            var img = Image.FromStream(stream, true, true);
             img.Save(path, ImageFormat.Jpeg);
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void CheckPath(string path)
         {
             var pathInfo = new FileInfo(path);
             pathInfo.Directory.Create();
         }
+
+        #endregion
     }
 }

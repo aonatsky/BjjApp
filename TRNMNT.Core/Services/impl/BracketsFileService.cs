@@ -1,77 +1,84 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
 using System.IO;
-using TRNMNT.Web.Core.Model;
-using TRNMNT.Web.Core.Const;
-using Newtonsoft.Json;
 using System.Linq;
-using OfficeOpenXml;
-using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
+using OfficeOpenXml;
+using TRNMNT.Core.Const;
+using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
 
-namespace TRNMNT.Web.Core.Services.impl
+namespace TRNMNT.Core.Services.Impl
 {
     public class BracketsFileService
     {
-        IFighterService fighterService;
-        IHostingEnvironment env;
+        #region Dependencies
+
+        private readonly IFighterService _fighterService;
+        private readonly IHostingEnvironment _env;
+
+        #endregion
+
+        #region .ctor
 
         public BracketsFileService(IFighterService fighterService, IHostingEnvironment env)
         {
-            this.env = env;
-            this.fighterService = fighterService;
+            _env = env;
+            _fighterService = fighterService;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public async Task<CustomFile> GetBracketsFileAsync(FighterFilterModel filter)
         {
-            var models = fighterService.GetOrderedListForBrackets(filter);
+            var models = _fighterService.GetOrderedListForBrackets(filter);
             var settings = GetSettings(models.Count);
-
 
             if (settings != null)
             {
-                var templateFilepath = Path.Combine(env.WebRootPath, FilePath.BRACKETS_FILE_FOLDER_NAME, FilePath.BRACKETS_FILE_NAME_MASK + settings.Count.ToString() + FilePath.EXCEL_EXTENSION);
-                if (!File.Exists(templateFilepath))
+                var templateFilePath = Path.Combine(_env.WebRootPath, FilePath.BracketsFileFolderName, string.Concat(FilePath.BracketsFileNameMask, settings.Count, FilePath.ExcelExtension));
+                if (!File.Exists(templateFilePath))
                 {
-                    throw new Exception($"Bracket file {templateFilepath} does not exist");
+                    throw new Exception($"Bracket file {templateFilePath} does not exist");
                 }
 
                 byte[] byteArray;
-                var stream = new FileStream(templateFilepath, FileMode.Open);
-                using (var excelPackage = new ExcelPackage(stream))
+                using (var stream = new FileStream(templateFilePath, FileMode.Open))
                 {
-                    var sheet = excelPackage?.Workbook?.Worksheets[1];
-                    if (sheet != null)
+                    using (var excelPackage = new ExcelPackage(stream))
                     {
-                        for (int i = 0; i < settings.Count; i++)
+                        var sheet = excelPackage.Workbook?.Worksheets[1];
+                        if (sheet != null)
                         {
-                            var fighter = models.ElementAtOrDefault(i);
-                            sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(fighter.FirstName) ? $"{i+1}. {fighter.FirstName} {fighter.LastName}" : " - ";
+                            for (var i = 0; i < settings.Count; i++)
+                            {
+                                var fighter = models.ElementAtOrDefault(i);
+                                sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(fighter?.FirstName)
+                                    ? $"{i + 1}. {fighter.FirstName} {fighter.LastName}"
+                                    : " - ";
+                            }
                         }
-                    }
 
-                    byteArray = excelPackage.GetAsByteArray();
-                    excelPackage.Dispose();
+                        byteArray = excelPackage.GetAsByteArray();
+                    }
                 }
-                stream.Dispose();
 
                 return new CustomFile
                 {
                     ByteArray = byteArray,
-                    ContentType = ContentTypes.EXCEL_CONTENT_TYPE
+                    ContentType = ContentTypes.ExcelContentType
                 };
-
-            }
-            else
-            {
-                throw new Exception($"Brackets settings are not found for count {models.Count}");
             }
 
-
+            throw new Exception($"Brackets settings are not found for count {models.Count}");
         }
 
+        #endregion
 
-        #region settings
-
+        #region Settings
 
         private class BracketFileSettings
         {
@@ -82,11 +89,11 @@ namespace TRNMNT.Web.Core.Services.impl
 
         private BracketFileSettings GetSettings(int fightersCount)
         {
-            string stringJson = File.ReadAllText(Path.Combine(env.WebRootPath, "Config", "barcketsSettings.json"));
+            var stringJson = File.ReadAllText(Path.Combine(_env.WebRootPath, "Config", "barcketsSettings.json"));
             var settingsList = JsonConvert.DeserializeObject<BracketFileSettings[]>(stringJson).ToList();
             return settingsList.FirstOrDefault(s => s.Count == fightersCount);
         }
-        #endregion
 
+        #endregion
     }
 }

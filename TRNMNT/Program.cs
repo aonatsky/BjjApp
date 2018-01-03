@@ -1,6 +1,5 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using TRNMNT;
 
 namespace TRNMNT.Web
 {

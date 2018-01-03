@@ -1,7 +1,7 @@
-﻿namespace TRNMNT.Web.Core.Const
+﻿namespace TRNMNT.Core.Const
 {
     public class ContentTypes
     {
-        public const string EXCEL_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        public const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     }
 }
