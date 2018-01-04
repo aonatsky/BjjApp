@@ -3,6 +3,8 @@
       [columns]="columns"
       [showRowNumbers]="false"
       [addEnabled]="false"
+      sortField="sortField"
+      [sortOrder]="sortDirection"
       [lazy]="true" 
       (onLazyLoad)="loadData($event)"
       [totalRecords]="totalCount">

@@ -1,7 +1,10 @@
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
@@ -53,18 +56,12 @@ namespace TRNMNT.Web.Controllers
 		
 		[HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetCategoriesByEventId(Guid eventId)
-        {
-            try
-            {
-                var data = await categoryService.GetCategoriesByEventIdAsync(eventId);
-                return Ok(JsonConvert.SerializeObject(data, jsonSerializerSettings));
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int) HttpStatusCode.InternalServerError);
-
-            }
+		{
+		    return await HandleRequestWithDataAsync(async () =>
+		    {
+		        var data = await _categoryService.GetCategoriesByEventIdAsync(eventId);
+		        return Success(data);
+		    });
         }
 
         #endregion

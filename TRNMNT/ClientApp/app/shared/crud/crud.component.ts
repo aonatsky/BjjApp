@@ -37,6 +37,8 @@ export class CrudComponent implements OnInit, OnChanges {
     @Input() lazy: boolean = false;
     @Input() pageSize: number = 10;
     @Input() totalRecords: number = 0;
+    @Input() sortField: string;
+    @Input() sortOrder: number = 1;
 
     @Output() onAdd: EventEmitter<any>;
     @Output() onUpdate: EventEmitter<any>;

@@ -3,6 +3,8 @@
     <p-dataTable [value]="entities" 
                  [rows]="pageSize" 
                  [pageLinks]="3" 
+                 sortField="sortField"
+                 [sortOrder]="sortOrder"
                  [paginator]="totalRecords > pageSize"
                  [(selection)]="selectedEntity" 
                  selectionMode="single" 

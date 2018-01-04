@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 import { PagedList } from '../../core/model/paged-list.model';
 import { ParticipantFilterModel } from '../../core/model/participant-filter.model';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
+import { ParticpantSortField } from '../../core/consts/participant-sort-field.const';
 
 @Component({
     selector: 'event-management-participants',
@@ -23,6 +24,8 @@ export class EventManagementParticipantsComponent implements OnInit {
     private filter: CategoryWithDivisionFilterModel;
     private participantsLoading: boolean = true;
     private readonly pageLinks: number = 3;
+    private sortDirection: number = 1;
+    private sortField: string = "firstName";
 
     public get isPaginationEnabled(): boolean {
         return this.participantsModel.length > this.rowsCount;
@@ -59,10 +62,6 @@ export class EventManagementParticipantsComponent implements OnInit {
             let id = p["id"];
             if (!!id) {
                 this.eventId = id;
-                let model = new ParticipantFilterModel();
-                model.eventId = this.eventId;
-                model.pageIndex = 0;
-                this.loadParticipants(model);
             } else {
                 alert("No data to display");
             }
@@ -71,6 +70,8 @@ export class EventManagementParticipantsComponent implements OnInit {
     }
 
     loadData($event: LazyLoadEvent) {
+        this.sortField = $event.sortField;
+        this.sortDirection = $event.sortOrder;
         this.loadParticipants(this.getFilterModel($event));
     }
 
@@ -81,8 +82,10 @@ export class EventManagementParticipantsComponent implements OnInit {
         { propertyName: "teamName", displayName: "Team", isEditable: true, isSortable: true},
         { propertyName: "categoryName", displayName: "Category", isEditable: true, isSortable: true,  },
         { propertyName: "weightDivisionName", displayName: "Weight division", isEditable: true, isSortable: true,   },
-        { propertyName: "isMember", displayName: "Membership", isEditable: true, isSortable: true, useClass : this.getClassCallback  }
+        { propertyName: "isMember", displayName: "Membership", isEditable: true, isSortable: true, useClass: this.getClassCallback }
     ];
+
+    
 
     getClassCallback(value: boolean): string {
         let classes = "fa-square-o";
@@ -111,12 +114,17 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     private getFilterModel($event?: LazyLoadEvent): ParticipantFilterModel {
         let model = new ParticipantFilterModel();
+
+        model.sortField = ParticpantSortField[this.sortField];
+        model.sortDirection = this.sortDirection;
         model.eventId = this.eventId;
+
         if ($event != null) {
             model.pageIndex = $event.first / $event.rows;
         } else {
             model.pageIndex = 0;
         }
+        
         if (this.filter != null) {
             model.categoryId = this.filter.categoryId;
             model.weightDivisionId = this.filter.weightDivisionId;

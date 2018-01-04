@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Services.Interface;
-using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Data.Context;
+using TRNMNT.Core.Helpers;
 using TRNMNT.Core.Const;
+using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model.Interface;
 using TRNMNT.Core.Model;
 
@@ -93,7 +92,11 @@ namespace TRNMNT.Core.Services.Impl
                 allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
             }
             var totalCount = await allParticipants.CountAsync();
+
+            allParticipants = SortParticipants(allParticipants, filter.SortField, filter.SortDirection, federationId);
+
             allParticipants = allParticipants.Skip(size * filter.PageIndex).Take(size);
+
             var list = await allParticipants.Select(p => new ParticipantTableModel
             {
                 FirstName = p.FirstName,
@@ -108,7 +111,39 @@ namespace TRNMNT.Core.Services.Impl
 
             return new PagedList<ParticipantTableModel>(list, filter.PageIndex, size, totalCount);
         }
-		
+
+        private IQueryable<Participant> SortParticipants(IQueryable<Participant> allParticipants, ParticpantSortField filterSortField, SortDirectionEnum sortDirection, Guid federationId)
+        {
+            switch (filterSortField)
+            {
+                case ParticpantSortField.FirstName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.FirstName);
+                    break;
+                case ParticpantSortField.LastName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.LastName);
+                    break;
+                case ParticpantSortField.DateOfBirth:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.DateOfBirth);
+                    break;
+                case ParticpantSortField.TeamName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Team.Name);
+                    break;
+                case ParticpantSortField.CategoryName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Category.Name);
+                    break;
+                case ParticpantSortField.WeightDivisionName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.WeightDivision.Name);
+                    break;
+                case ParticpantSortField.IsMember:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Team.FederationId == federationId);
+                    break;
+                default:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.FirstName);
+                    break;
+            }
+            return allParticipants;
+        }
+
         #endregion
     }
 }
