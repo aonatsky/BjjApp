@@ -18,13 +18,14 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 
 export class CategoryWithDivisionFilter implements OnInit {
 
-    private categories: CategorySimpleModel[] = [];
-    private weightDivisions: WeightDivisionModel[] = [];
     private categorySelectItems: SelectItem[];
     private weightDivisionsSelectItems: SelectItem[];
     private defaultOption: SelectItem;
 
     @Input() eventId: string;
+    @Input() useDataFromInput: boolean = false;
+    @Input() categories: CategorySimpleModel[] = [];
+    @Input() weightDivisions: WeightDivisionModel[] = [];
 
     @Output() onFilterChanged: EventEmitter<CategoryWithDivisionFilterModel>;
     @Output() onFilterLoaded: EventEmitter<boolean>;
@@ -39,10 +40,14 @@ export class CategoryWithDivisionFilter implements OnInit {
     }
 
     ngOnInit() {
-        Observable.forkJoin(
-                this.categoryService.getCategoriesByEventId(this.eventId),
-                this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
-            .subscribe(data => this.initFilter(data));
+        if (this.useDataFromInput) {
+            this.initFilter([this.categories, this.weightDivisions]);
+        } else {
+            Observable.forkJoin(
+                    this.categoryService.getCategoriesByEventId(this.eventId),
+                    this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
+                .subscribe(data => this.initFilter(data));
+        }
     }
 
     //Events

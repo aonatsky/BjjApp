@@ -23,6 +23,9 @@ namespace TRNMNT.Web.Controllers
 
         private readonly IParticipantService _participantService;
         private readonly IParticipantRegistrationService _participantRegistrationService;
+        private readonly ITeamService _teamService;
+        private readonly IWeightDivisionService _weightDivisionService;
+        private readonly ICategoryService _categoryService;
 
         #endregion
 
@@ -34,12 +37,18 @@ namespace TRNMNT.Web.Controllers
             IPaymentService paymentService,
             IOrderService orderService,
             IParticipantRegistrationService participantRegistrationService,
+            ITeamService teamService,
+            IWeightDivisionService weightDivisionService,
+            ICategoryService categoryService,
             IAppDbContext context)
             : base(logger, userService, eventService, context)
         {
 
             _participantService = participantService;
             _participantRegistrationService = participantRegistrationService;
+            _teamService = teamService;
+            _weightDivisionService = weightDivisionService;
+            _categoryService = categoryService;
         }
 
         #endregion
@@ -115,6 +124,24 @@ namespace TRNMNT.Web.Controllers
                 HandleException(e);
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ParticipantsDropdownData(Guid eventId)
+        {
+
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var teams = await _teamService.GetTeamsAsync(eventId);
+                var categories = await _categoryService.GetCategoriesByEventIdAsync(eventId);
+                var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId);
+                return Success(new ParticipantDdlModel
+                {
+                    Teams = teams,
+                    Categories = categories,
+                    WeightDivisions = weightDivisions
+                });
+            });
         }
 
         #endregion

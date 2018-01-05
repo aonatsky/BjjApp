@@ -2,10 +2,10 @@
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { Component, OnInit } from '@angular/core';
-import { ParticipantTableModel } from './../../core/model/participant.models';
+import { ParticipantTableModel, ParticipantDdlModel } from './../../core/model/participant.models';
 import { ParticipantService } from "./../../core/services/participant.service";
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
-import { CrudColumn, ColumnType } from '../../shared/crud/crud.component';
+import { CrudColumn, ColumnType, IColumnOptions, IDdlCrudColumn } from '../../shared/crud/crud.component';
 import { DatePipe } from '@angular/common';
 import { PagedList } from '../../core/model/paged-list.model';
 import { ParticipantFilterModel } from '../../core/model/participant-filter.model';
@@ -21,7 +21,9 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 export class EventManagementParticipantsComponent implements OnInit {
 
     private participantsListModel: PagedList<ParticipantTableModel>;
+    private participantDdlModel: ParticipantDdlModel;
     private filter: CategoryWithDivisionFilterModel;
+
     private teamSelectItems: SelectItem[];
     private categorySelectItems: SelectItem[];
     private weightDivisionSelectItems: SelectItem[];
@@ -29,11 +31,16 @@ export class EventManagementParticipantsComponent implements OnInit {
     private readonly pageLinks: number = 3;
     private eventId: string = "";
     private participantsLoading: boolean = true;
+    private ddlDataLoading: boolean = true;
     private sortDirection: number = 1;
     private sortField: string = "firstName";
 
     public get isPaginationEnabled(): boolean {
         return this.participantsModel.length > this.rowsCount;
+    }
+
+    public get isDataLoading(): boolean {
+        return this.participantsLoading || this.ddlDataLoading;
     }
 
     public get participantsModel(): ParticipantTableModel[] {
@@ -57,16 +64,27 @@ export class EventManagementParticipantsComponent implements OnInit {
         return 0;
     }
 
-    constructor(private loggerService: LoggerService, private routerService: RouterService, private participantService: ParticipantService, private route: ActivatedRoute, private datePipe: DatePipe) {
+
+    constructor(private loggerService: LoggerService,
+        private routerService: RouterService,
+        private participantService: ParticipantService,
+        private route: ActivatedRoute,
+        private datePipe: DatePipe) {
 
     }
 
     ngOnInit() {
-        this.participantsLoading = true;
+        this.ddlDataLoading = true;
         this.route.params.subscribe(p => {
             let id = p["id"];
             if (!!id) {
                 this.eventId = id;
+                this.participantService.getParticipantsDropdownData(this.eventId).subscribe(result => {
+                    this.ddlDataLoading = false;
+                    this.participantDdlModel = result;
+                    this.mapDdlModel(result);
+                });
+                this.loadParticipants(this.getFilterModel());
             } else {
                 alert("No data to display");
             }
@@ -74,24 +92,57 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     }
 
-    loadData($event: LazyLoadEvent) {
-        this.sortField = $event.sortField;
-        this.sortDirection = $event.sortOrder;
-        this.loadParticipants(this.getFilterModel($event));
-    }
-
     columns: CrudColumn[] = [
         { propertyName: "firstName", displayName: "First Name", isEditable: true, isSortable: true },
         { propertyName: "lastName", displayName: "Last Name", isEditable: true, isSortable: true },
-        { propertyName: "dateOfBirth", displayName: "D.O.B", isEditable: true, isSortable: true, transform: (value) => this.dateTransform(value, this), columnType: ColumnType.Date },
-        { propertyName: "teamName", displayName: "Team", isEditable: true, isSortable: true, columnType: ColumnType.Dropdown, options: this.teamSelectItems },
-        { propertyName: "categoryName", displayName: "Category", isEditable: true, isSortable: true, columnType: ColumnType.Dropdown, options: this.categorySelectItems },
-        { propertyName: "weightDivisionName", displayName: "Weight division", isEditable: true, isSortable: true, columnType: ColumnType.Dropdown, options: this.weightDivisionSelectItems },
-
-        { propertyName: "isMember", displayName: "Membership", isEditable: true, isSortable: true, useClass: this.getClassCallback, columnType: ColumnType.Boolean }
+        {
+            propertyName: "dateOfBirth",
+            displayName: "D.O.B",
+            isEditable: true,
+            isSortable: true,
+            transform: (value) => this.dateTransform.call(this, value),
+            columnType: ColumnType.Date
+        },
+        <CrudColumn>{
+            propertyName: "teamName",
+            displayName: "Team",
+            isEditable: true,
+            isSortable: true,
+            columnType: ColumnType.Dropdown,
+            keyPropertyName: "teamId",
+            onChange: (event) => this.onChange.call(this, event)
+        },
+        <CrudColumn>{
+            propertyName: "categoryName",
+            displayName: "Category",
+            isEditable: true,
+            isSortable: true,
+            columnType: ColumnType.Dropdown,
+            keyPropertyName: "categoryId",
+            onChange: (event) => this.onCategoryChange.call(this, event)
+        },
+        <CrudColumn>{
+            propertyName: "weightDivisionName",
+            displayName: "Weight division",
+            isEditable: true,
+            isSortable: true,
+            columnType: ColumnType.Dropdown,
+            keyPropertyName: "weightDivisionId",
+            onChange: (event) => this.onChange.call(this, event)
+        },
+        {
+            propertyName: "isMember",
+            displayName: "Membership",
+            isEditable: true,
+            isSortable: true,
+            useClass: (value) => this.getClassCallback.call(this, value),
+            columnType: ColumnType.Boolean
+        }
     ];
 
-    getClassCallback(value: boolean): string {
+    columnOptions: IColumnOptions = {};
+
+    public getClassCallback(value: boolean): string {
         let classes = "fa-square-o";
         if (value) {
             classes = 'fa-check-square-o';
@@ -99,8 +150,35 @@ export class EventManagementParticipantsComponent implements OnInit {
         return `fa ${classes}`;
     }
 
-    dateTransform(value: Date, context): string {
-        return context.datePipe.transform(value, 'MM.dd.yyyy');
+    public dateTransform(value: Date): string {
+        return this.datePipe.transform(value, 'MM.dd.yyyy');
+    }
+
+    public onChange($event) {
+        let id = $event.event.value;
+        let options = $event.options;
+    }
+
+    public onCategoryChange($event) {
+        let categoryId = $event.event.value;
+        this.weightDivisionSelectItems = this.getWeightDivisionsForCategory(categoryId);
+        this.refreshDdlModel();
+    }
+
+    public filterParticipants($event: CategoryWithDivisionFilterModel) {
+        this.filter = $event;
+        this.loadParticipants(this.getFilterModel());
+    }
+
+    public onEntitySelected(participant: ParticipantTableModel) {
+        this.weightDivisionSelectItems = this.getWeightDivisionsForCategory(participant.categoryId);
+        this.refreshDdlModel();
+    }
+
+    private loadData($event: LazyLoadEvent) {
+        this.sortField = $event.sortField;
+        this.sortDirection = $event.sortOrder;
+        this.loadParticipants(this.getFilterModel($event));
     }
 
     private loadParticipants(filterModel: ParticipantFilterModel) {
@@ -109,11 +187,6 @@ export class EventManagementParticipantsComponent implements OnInit {
             this.participantsLoading = false;
             this.participantsListModel = this.mapParticipants(r);
         });
-    }
-
-    public filterParticipants($event: CategoryWithDivisionFilterModel) {
-        this.filter = $event;
-        this.loadParticipants(this.getFilterModel());
     }
 
     private getFilterModel($event?: LazyLoadEvent): ParticipantFilterModel {
@@ -139,9 +212,39 @@ export class EventManagementParticipantsComponent implements OnInit {
     private mapParticipants(jsonData: PagedList<ParticipantTableModel>) {
         jsonData.innerList = jsonData.innerList.map(p => {
             p.dateOfBirth = new Date(p.dateOfBirth);
+            p.categoryId = p.categoryId.toUpperCase();
+            p.teamId = p.teamId.toUpperCase();
+            p.weightDivisionId = p.weightDivisionId.toUpperCase();
             return p;
         });
         return jsonData;
+    }
+
+    private getWeightDivisionsForCategory(categoryId: string) {
+        let weightDivisions = this.participantDdlModel.weightDivisions.filter(wd => wd.categoryId.toUpperCase() == categoryId.toUpperCase());
+        if (weightDivisions.length > 0) {
+            return this.mapDdls(weightDivisions, "weightDivisionId");
+        }
+        return [];
+    }
+
+    private mapDdlModel(model: ParticipantDdlModel) {
+        this.teamSelectItems = this.mapDdls(model.teams, "teamId");
+        this.categorySelectItems = this.mapDdls(model.categories, "categoryId");
+        this.weightDivisionSelectItems = this.mapDdls(model.weightDivisions, "weightDivisionId");
+        this.refreshDdlModel();
+    }
+    private refreshDdlModel() {
+        this.columnOptions = {
+            "weightDivisionName": this.weightDivisionSelectItems,
+            "categoryName": this.categorySelectItems,
+            "teamName": this.teamSelectItems
+        };
+    }
+    private mapDdls(array: any[], idPropName: string): SelectItem[] {
+        return array.map(t => {
+            return { label: t.name, value: t[idPropName] };
+        });
     }
 
     goToOverview() {

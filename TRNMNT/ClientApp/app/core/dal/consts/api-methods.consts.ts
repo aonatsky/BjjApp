@@ -46,6 +46,7 @@ export const ApiMethods = Object.freeze({
          processParticipantRegistration: "api/participant/processParticipantRegistration/",
          isParticipantExist: "api/participant/isParticipantExist/",
          participantsTable: "api/participant/participantsTable/",
+         participantsDropdownData: "api/participant/participantsDropdownData/",
     },
      payment: {
          payment: "api/payment",

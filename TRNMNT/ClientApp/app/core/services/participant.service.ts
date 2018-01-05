@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core"
 import { LoggerService } from "./logger.service"
 import { HttpService } from "./../dal/http/http.service"
-import { ParticipantRegistrationModel, ParticipantModelBase, ParticipantTableModel } from "./../model/participant.models"
+import { ParticipantRegistrationModel, ParticipantModelBase, ParticipantTableModel, ParticipantDdlModel } from "./../model/participant.models"
 import { ParticipantRegistrationResultModel } from "./../model/result/participant-registration-result.model"
 import { ApiMethods } from "./../dal/consts/api-methods.consts"
 import { Observable } from 'rxjs/Rx';
@@ -26,6 +26,10 @@ export class ParticipantService {
 
     public getParticipantsTableModel(filterModel: ParticipantFilterModel): Observable<PagedList<ParticipantTableModel>> {
         return this.httpService.get(ApiMethods.participant.participantsTable, filterModel).map(r => this.httpService.getJson(r));
+    }
+
+    public getParticipantsDropdownData(eventId: string): Observable<ParticipantDdlModel> {
+        return this.httpService.get(ApiMethods.participant.participantsDropdownData, { eventId: eventId }).map(r => this.httpService.getJson(r));
     }
 
 }
