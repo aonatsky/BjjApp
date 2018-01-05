@@ -5,12 +5,13 @@ import { Component, OnInit } from '@angular/core';
 import { ParticipantTableModel } from './../../core/model/participant.models';
 import { ParticipantService } from "./../../core/services/participant.service";
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
-import { CrudColumn } from '../../shared/crud/crud.component';
+import { CrudColumn, ColumnType } from '../../shared/crud/crud.component';
 import { DatePipe } from '@angular/common';
 import { PagedList } from '../../core/model/paged-list.model';
 import { ParticipantFilterModel } from '../../core/model/participant-filter.model';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 import { ParticpantSortField } from '../../core/consts/participant-sort-field.const';
+import { SelectItem } from 'primeng/components/common/selectitem';
 
 @Component({
     selector: 'event-management-participants',
@@ -19,11 +20,15 @@ import { ParticpantSortField } from '../../core/consts/participant-sort-field.co
 })
 export class EventManagementParticipantsComponent implements OnInit {
 
-    public eventId: string = "";
     private participantsListModel: PagedList<ParticipantTableModel>;
     private filter: CategoryWithDivisionFilterModel;
-    private participantsLoading: boolean = true;
+    private teamSelectItems: SelectItem[];
+    private categorySelectItems: SelectItem[];
+    private weightDivisionSelectItems: SelectItem[];
+
     private readonly pageLinks: number = 3;
+    private eventId: string = "";
+    private participantsLoading: boolean = true;
     private sortDirection: number = 1;
     private sortField: string = "firstName";
 
@@ -76,16 +81,15 @@ export class EventManagementParticipantsComponent implements OnInit {
     }
 
     columns: CrudColumn[] = [
-        { propertyName: "firstName", displayName: "First Name", isEditable: true, isSortable : true},
+        { propertyName: "firstName", displayName: "First Name", isEditable: true, isSortable: true },
         { propertyName: "lastName", displayName: "Last Name", isEditable: true, isSortable: true },
-        { propertyName: "dateOfBirth", displayName: "D.O.B", isEditable: true, isSortable: true, transform: (value) => this.dateTransform(value, this)  },
-        { propertyName: "teamName", displayName: "Team", isEditable: true, isSortable: true},
-        { propertyName: "categoryName", displayName: "Category", isEditable: true, isSortable: true,  },
-        { propertyName: "weightDivisionName", displayName: "Weight division", isEditable: true, isSortable: true,   },
-        { propertyName: "isMember", displayName: "Membership", isEditable: true, isSortable: true, useClass: this.getClassCallback }
-    ];
+        { propertyName: "dateOfBirth", displayName: "D.O.B", isEditable: true, isSortable: true, transform: (value) => this.dateTransform(value, this), columnType: ColumnType.Date },
+        { propertyName: "teamName", displayName: "Team", isEditable: true, isSortable: true, columnType: ColumnType.Dropdown, options: this.teamSelectItems },
+        { propertyName: "categoryName", displayName: "Category", isEditable: true, isSortable: true, columnType: ColumnType.Dropdown, options: this.categorySelectItems },
+        { propertyName: "weightDivisionName", displayName: "Weight division", isEditable: true, isSortable: true, columnType: ColumnType.Dropdown, options: this.weightDivisionSelectItems },
 
-    
+        { propertyName: "isMember", displayName: "Membership", isEditable: true, isSortable: true, useClass: this.getClassCallback, columnType: ColumnType.Boolean }
+    ];
 
     getClassCallback(value: boolean): string {
         let classes = "fa-square-o";
@@ -95,7 +99,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         return `fa ${classes}`;
     }
 
-    dateTransform(value: any, context): string {
+    dateTransform(value: Date, context): string {
         return context.datePipe.transform(value, 'MM.dd.yyyy');
     }
 
@@ -103,11 +107,11 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.participantsLoading = true;
         this.participantService.getParticipantsTableModel(filterModel).subscribe(r => {
             this.participantsLoading = false;
-            this.participantsListModel = r;
+            this.participantsListModel = this.mapParticipants(r);
         });
     }
 
-    filterParticipants($event: CategoryWithDivisionFilterModel) {
+    public filterParticipants($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
         this.loadParticipants(this.getFilterModel());
     }
@@ -124,12 +128,20 @@ export class EventManagementParticipantsComponent implements OnInit {
         } else {
             model.pageIndex = 0;
         }
-        
+
         if (this.filter != null) {
             model.categoryId = this.filter.categoryId;
             model.weightDivisionId = this.filter.weightDivisionId;
         }
         return model;
+    }
+
+    private mapParticipants(jsonData: PagedList<ParticipantTableModel>) {
+        jsonData.innerList = jsonData.innerList.map(p => {
+            p.dateOfBirth = new Date(p.dateOfBirth);
+            return p;
+        });
+        return jsonData;
     }
 
     goToOverview() {

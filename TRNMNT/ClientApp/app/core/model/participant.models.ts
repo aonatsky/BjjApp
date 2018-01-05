@@ -20,6 +20,9 @@ export class ParticipantTableModel extends ParticipantModelBase {
     public teamName: string;
     public categoryName: string;
     public weightDivisionName: string;
+    public teamId: string;
+    public categoryId: string;
+    public weightDivisionId: string;
     public userId: string;
     public isMember: boolean;
 }

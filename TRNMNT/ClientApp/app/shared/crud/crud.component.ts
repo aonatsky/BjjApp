@@ -1,6 +1,7 @@
 import { OnInit, Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { LoaderService } from '../../core/services/loader.service'
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
+import { SelectItem } from 'primeng/components/common/selectitem';
 
 @Component({
     selector: 'crud',
@@ -39,6 +40,12 @@ export class CrudComponent implements OnInit, OnChanges {
     @Input() totalRecords: number = 0;
     @Input() sortField: string;
     @Input() sortOrder: number = 1;
+
+    @Input() dialogWidth?: number;
+    @Input() dialogHeight?: number;
+    @Input() dialogMinWidth: number = 200;
+    @Input() dialogMinHeight: number = 350;
+    @Input() gridMinHeight: number = 250;
 
     @Output() onAdd: EventEmitter<any>;
     @Output() onUpdate: EventEmitter<any>;
@@ -92,7 +99,23 @@ export class CrudComponent implements OnInit, OnChanges {
     }
 
     isIdColumn(column: CrudColumn): boolean {
-        return column.propertyName.endsWith('Id');
+        return column.columnType === ColumnType.Id;
+    }
+
+    isStringColumn(column: CrudColumn): boolean {
+        return column.columnType == null || column.columnType === ColumnType.String;
+    }
+
+    isBooleanColumn(column: CrudColumn): boolean {
+        return column.columnType === ColumnType.Boolean;
+    }
+
+    isDateColumn(column: CrudColumn): boolean {
+        return column.columnType === ColumnType.Date;
+    }
+
+    isDropdownColumn(column: CrudColumn): boolean {
+        return column.columnType === ColumnType.Dropdown;
     }
 }
 
@@ -103,4 +126,14 @@ export interface CrudColumn {
     isSortable: boolean;
     useClass?: (value: any) => string;
     transform?: (value: any) => string;
+    columnType?: ColumnType;
+    options?: SelectItem[];
+}
+
+export enum ColumnType {
+    Boolean = 1,
+    Date,
+    String,
+    Dropdown,
+    Id
 }

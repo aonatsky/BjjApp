@@ -5,7 +5,7 @@
 }
 
 p-dropdown {
-    display: inline-block;
+    display: block;
     float: right;
 }
 

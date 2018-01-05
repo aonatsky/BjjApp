@@ -34,7 +34,7 @@ import { InputTextModule } from "primeng/components/inputtext/inputtext";
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputMaskModule } from 'primeng/primeng';
-import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule } from 'primeng/primeng';
+import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, ToggleButtonModule } from 'primeng/primeng';
 
 
 import { AuthGuard } from './routing/auth.guard';
@@ -58,7 +58,8 @@ import { RedirectGuard } from './routing/redirect.guard';
         CalendarModule,
         InputTextareaModule,
         AutoCompleteModule,
-        CheckboxModule
+        CheckboxModule,
+        ToggleButtonModule
     ],
     declarations: [
 
@@ -104,7 +105,8 @@ import { RedirectGuard } from './routing/redirect.guard';
         FileUploadModule,
         AutoCompleteModule,
         CheckboxModule,
-        TabViewModule
+        TabViewModule,
+        ToggleButtonModule
     ]
 })
 export class CoreModule { }
