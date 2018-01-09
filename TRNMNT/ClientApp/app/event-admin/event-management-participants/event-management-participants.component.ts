@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { ParticipantTableModel, ParticipantDdlModel } from './../../core/model/participant.models';
 import { ParticipantService } from "./../../core/services/participant.service";
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
-import { CrudColumn, ColumnType, IColumnOptions, IDdlCrudColumn } from '../../shared/crud/crud.component';
+import { CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent } from '../../shared/crud/crud.component';
 import { DatePipe } from '@angular/common';
 import { PagedList } from '../../core/model/paged-list.model';
 import { ParticipantFilterModel } from '../../core/model/participant-filter.model';
@@ -109,8 +109,7 @@ export class EventManagementParticipantsComponent implements OnInit {
             isEditable: true,
             isSortable: true,
             columnType: ColumnType.Dropdown,
-            keyPropertyName: "teamId",
-            onChange: (event) => this.onChange.call(this, event)
+            keyPropertyName: "teamId"
         },
         <CrudColumn>{
             propertyName: "categoryName",
@@ -127,8 +126,7 @@ export class EventManagementParticipantsComponent implements OnInit {
             isEditable: true,
             isSortable: true,
             columnType: ColumnType.Dropdown,
-            keyPropertyName: "weightDivisionId",
-            onChange: (event) => this.onChange.call(this, event)
+            keyPropertyName: "weightDivisionId"
         },
         {
             propertyName: "isMember",
@@ -154,13 +152,8 @@ export class EventManagementParticipantsComponent implements OnInit {
         return this.datePipe.transform(value, 'MM.dd.yyyy');
     }
 
-    public onChange($event) {
-        let id = $event.event.value;
-        let options = $event.options;
-    }
-
-    public onCategoryChange($event) {
-        let categoryId = $event.event.value;
+    public onCategoryChange($event: IDdlColumnChangeEvent) {
+        let categoryId = $event.value;
         this.weightDivisionSelectItems = this.getWeightDivisionsForCategory(categoryId);
         this.refreshDdlModel();
     }
@@ -175,7 +168,16 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.refreshDdlModel();
     }
 
-    private loadData($event: LazyLoadEvent) {
+    public onEntityUpdate($event) {
+        
+    }
+
+    public onEntityDelete($event) {
+        
+    }
+
+
+    private onLoadData($event: LazyLoadEvent) {
         this.sortField = $event.sortField;
         this.sortDirection = $event.sortOrder;
         this.loadParticipants(this.getFilterModel($event));

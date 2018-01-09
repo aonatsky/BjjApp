@@ -104,8 +104,11 @@ namespace TRNMNT.Core.Services.Impl
                 DateOfBirth = p.DateOfBirth,
                 UserId = p.UserId,
                 TeamName = p.Team.Name,
+                TeamId  = p.TeamId,
                 CategoryName = p.Category.Name,
+                CategoryId = p.CategoryId,
                 WeightDivisionName = p.WeightDivision.Name,
+                WeightDivisionId = p.WeightDivisionId,
                 IsMember = p.Team.FederationId == federationId
             }).ToListAsync();
 

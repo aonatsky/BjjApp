@@ -1,14 +1,19 @@
-﻿<category-with-division-filter [eventId]="eventId" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
+﻿<!--<ng-template >-->
+<category-with-division-filter [eventId]="eventId" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
 <crud [entities]="participantsModel"
       [columns]="columns"
+      [columnOptions]="columnOptions"
       [showRowNumbers]="false"
       [addEnabled]="false"
       [sortField]="sortField"
       [sortOrder]="sortDirection"
-      [lazy]="true" 
-      (onLazyLoad)="loadData($event)"
+      [lazy]="true"
+      (onLazyLoad)="onLoadData($event)"
       [totalRecords]="totalCount"
+      (onEntitySelected)="onEntitySelected($event)"
+      (onUpdate)="onEntityUpdate($event)"
+      (onDelete)="onEntityDelete($event)"
       [dialogMinWidth]="500"
-      gridMinHeight="415"
-      >
+      gridMinHeight="415">
 </crud>
+<!--</ng-template>-->

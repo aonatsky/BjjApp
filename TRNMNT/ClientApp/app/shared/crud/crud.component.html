@@ -51,7 +51,6 @@
           [minWidth]="dialogMinWidth"
           [height]="dialogHeight"
           [minHeight]="dialogMinHeight"
-
           [resizable]="false">
     <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="entityToEdit" [ngStyle]="{'min-height': gridMinHeight + 'px'}">
         <div class="ui-grid-row" *ngFor="let column of columns">
@@ -66,9 +65,10 @@
                                 offIcon="fa-square-o"></p-toggleButton>
 
                 <p-dropdown *ngIf="isDropdownColumn(column)"
-                            [options]="column.options"
+                            [options]="columnOptions[column.propertyName]"
                             [disabled]="!column.isEditable"
-                            [(ngModel)]="entityToEdit[column.propertyName]"
+                            [(ngModel)]="entityToEdit[column.keyPropertyName]"
+                            (onChange)="ddlChange($event, column)"
                             [style]="{'width':'100%'}"></p-dropdown>
                 <p-calendar *ngIf="isDateColumn(column)" 
                             dateFormat="dd.mm.yy"

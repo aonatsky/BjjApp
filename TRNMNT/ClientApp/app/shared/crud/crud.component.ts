@@ -16,6 +16,7 @@ export class CrudComponent implements OnInit, OnChanges {
         this.onAdd = new EventEmitter<any>();
         this.onUpdate = new EventEmitter<any>();
         this.onDelete = new EventEmitter<any>();
+        this.onEntitySelected = new EventEmitter<any>();
         this.onLazyLoad = new EventEmitter<LazyLoadEvent>();
     }
 
@@ -31,6 +32,7 @@ export class CrudComponent implements OnInit, OnChanges {
     @Input() entities: any[] = [];
     @Input() title: string = "";
     @Input() columns: CrudColumn[] = [];
+    @Input() columnOptions: IColumnOptions;
     @Input() editEnabled: boolean = true;
     @Input() addEnabled: boolean = true;
     @Input() deleteEnabled: boolean = true;
@@ -50,10 +52,11 @@ export class CrudComponent implements OnInit, OnChanges {
     @Output() onAdd: EventEmitter<any>;
     @Output() onUpdate: EventEmitter<any>;
     @Output() onDelete: EventEmitter<any>;
+    @Output() onEntitySelected: EventEmitter<any>;
     @Output() onLazyLoad: EventEmitter<LazyLoadEvent>;
     
 
-
+    differ: any;
     displayDialog: boolean;
     newEntity: boolean;
     selectedEntity: any;
@@ -61,15 +64,17 @@ export class CrudComponent implements OnInit, OnChanges {
 
 
     showDialogToAdd() {
-            this.newEntity = true;
-            this.entityToEdit = new Object();
-            this.displayDialog = true;
+        this.newEntity = true;
+        this.entityToEdit = new Object();
+        this.displayDialog = true;
+        this.onEntitySelected.emit(this.entityToEdit);
     }
 
     showDialogToEdit(entity: any) {
         this.newEntity = false;
         this.entityToEdit = entity;
         this.displayDialog = true;
+        this.onEntitySelected.emit(this.entityToEdit);
     }
 
     save() {
@@ -91,11 +96,26 @@ export class CrudComponent implements OnInit, OnChanges {
     onRowSelect(event) {
         if (this.editEnabled || this.deleteEnabled) {
             this.showDialogToEdit(event.data);
+
         }
     }
 
     lazyLoadData($event: LazyLoadEvent) {
         this.onLazyLoad.emit($event);
+    }
+
+    ddlChange($event, column: IDdlCrudColumn) {
+        let value = this.columnOptions[column.propertyName].find(x => x.value.toUpperCase() === this.entityToEdit[column.keyPropertyName]);
+        this.entityToEdit[column.propertyName] = value.label;
+        if (column.onChange != null) {
+            column.onChange({
+                value: $event.value,
+                originalEvent: $event.originalEvent,
+                options: this.columnOptions[column.propertyName],
+                column: column,
+                entity: this.entityToEdit,
+            });
+        }
     }
 
     isIdColumn(column: CrudColumn): boolean {
@@ -124,11 +144,30 @@ export interface CrudColumn {
     propertyName: string;
     isEditable: boolean;
     isSortable: boolean;
+    columnType?: ColumnType;
     useClass?: (value: any) => string;
     transform?: (value: any) => string;
-    columnType?: ColumnType;
-    options?: SelectItem[];
 }
+
+export interface IDdlCrudColumn extends CrudColumn {
+    keyPropertyName: string;
+    onChange?: (event: IDdlColumnChangeEvent) => any;
+}
+
+export interface IColumnOptions {
+    [key: string]: SelectItem[];
+}
+
+export interface IDdlColumnChangeEvent {
+    value: string;
+    originalEvent: any;
+    options: SelectItem[];
+    column: IDdlCrudColumn;
+    entity: any;
+}
+
+
+
 
 export enum ColumnType {
     Boolean = 1,
