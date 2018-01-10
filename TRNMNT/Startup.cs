@@ -13,8 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Identity;
-using TRNMNT.Core.Helpers;
 using TRNMNT.Core.Helpers.Impl;
 using TRNMNT.Core.Helpers.Interface;
 using TRNMNT.Core.Logger;
@@ -102,9 +100,9 @@ namespace TRNMNT.Web
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddScoped(typeof(IFighterService), typeof(FighterService));
+            services.AddScoped(typeof(IParticipantProcessingService), typeof(ParticipantProcessingService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(ParticipantListFileService));
+            services.AddScoped<IParticipantListFileService, ParticipantListFileService>();
             services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));

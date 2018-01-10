@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
 
 namespace TRNMNT.Core.Services.Impl
 {
-    public abstract class BaseFileService
+    public abstract class BaseFileProcessiongService : IFileProcessiongService
     {
         #region Dependencies
 
@@ -16,7 +17,7 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        protected BaseFileService(IHostingEnvironment env)
+        protected BaseFileProcessiongService(IHostingEnvironment env)
         {
             _env = env;
         }

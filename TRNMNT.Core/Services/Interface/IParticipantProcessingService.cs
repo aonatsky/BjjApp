@@ -3,27 +3,27 @@ using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services.Interface
 {
-    public interface IFighterService
+    public interface IParticipantProcessingService
     {
         /// <summary>
         /// Gets the fighter models by filter.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        List<FighterModel> GetFighterModelsByFilter(FighterFilterModel filter);
+        List<ParticitantModel> GetParticitantModelsByFilter(ParticitantFilterModel filter);
 
         /// <summary>
         /// Gets the ordered list for brackets.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        List<FighterModel> GetOrderedListForBrackets(FighterFilterModel filter);
+        List<ParticitantModel> GetOrderedListForBrackets(ParticitantFilterModel filter);
 
         /// <summary>
         /// Adds the fighters by models.
         /// </summary>
         /// <param name="fighterModels">The fighter models.</param>
         /// <returns></returns>
-        string AddFightersByModels(List<FighterModel> fighterModels);
+        string AddParticipantsByModels(List<ParticitantModel> fighterModels);
     }
 }

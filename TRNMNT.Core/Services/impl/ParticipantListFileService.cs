@@ -10,19 +10,19 @@ using TRNMNT.Core.Services.Interface;
 
 namespace TRNMNT.Core.Services.Impl
 {
-    public class ParticipantListFileService : BaseFileService
+    public class ParticipantListFileService : BaseFileProcessiongService, IParticipantListFileService
     {
         #region Dependencies
 
-        private readonly IFighterService _fighterService;
+        private readonly IParticipantProcessingService _participantProcessingService;
 
         #endregion
 
         #region .ctor
 
-        public ParticipantListFileService(IHostingEnvironment env, IFighterService fighterService) : base(env)
+        public ParticipantListFileService(IHostingEnvironment env, IParticipantProcessingService participantProcessingService) : base(env)
         {
-            _fighterService = fighterService;
+            _participantProcessingService = participantProcessingService;
         }
 
         #endregion
@@ -46,10 +46,10 @@ namespace TRNMNT.Core.Services.Impl
                 var sheet = excelPackage.Workbook?.Worksheets[1];
                 if (sheet != null)
                 {
-                    var fighterModelList = new List<FighterModel>();
+                    var fighterModelList = new List<ParticitantModel>(sheet.Dimension.Rows);
                     for (var i = 2; i <= sheet.Dimension.Rows; i++)
                     {
-                        fighterModelList.Add(new FighterModel
+                        fighterModelList.Add(new ParticitantModel
                         {
                             FighterId = Guid.NewGuid(),
                             FirstName = sheet.Cells[i, 1].GetValue<string>(),
@@ -60,7 +60,7 @@ namespace TRNMNT.Core.Services.Impl
                             Category = sheet.Cells[i, 6].GetValue<string>()
                         });
                     }
-                    var message = _fighterService.AddFightersByModels(fighterModelList);
+                    var message = _participantProcessingService.AddParticipantsByModels(fighterModelList);
                     if (string.IsNullOrEmpty(message))
                     {
                         return new FileProcessResult(FileProcessResultEnum.Success);
