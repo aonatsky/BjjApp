@@ -7,6 +7,7 @@ import { ApiMethods } from "./../dal/consts/api-methods.consts"
 import { Observable } from 'rxjs/Rx';
 import { PagedList } from "../model/paged-list.model";
 import { ParticipantFilterModel } from "../model/participant-filter.model";
+import { IUploadResult } from "../model/result/upload-result.model";
 
 
 
@@ -30,6 +31,10 @@ export class ParticipantService {
 
     public getParticipantsDropdownData(eventId: string): Observable<ParticipantDdlModel> {
         return this.httpService.get(ApiMethods.participant.participantsDropdownData, { eventId: eventId }).map(r => this.httpService.getJson(r));
+    }
+
+    public uploadParticipantsFromFile(file: any, eventId: string): Observable<IUploadResult> {
+        return this.httpService.postFile(`${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`, file).map(r => this.httpService.getJson(r));
     }
 
 }

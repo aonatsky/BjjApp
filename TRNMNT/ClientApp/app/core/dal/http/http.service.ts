@@ -82,7 +82,7 @@ export class HttpService {
     public postFile(name: string, file: any): Observable<any> {
         this.loaderService.showLoader();
         let formData = new FormData();
-        formData.append("file", file)
+        formData.append("file", file);
         return this.http.post(name, formData)
             .map((r: Response) => this.processResponse(r))
             .catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;

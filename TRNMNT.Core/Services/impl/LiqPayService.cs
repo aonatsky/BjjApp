@@ -16,10 +16,7 @@ namespace TRNMNT.Core.Services.Impl
     {
         #region Dependencies
 
-        private readonly IConfiguration _configuration;
         private readonly IPaidServiceFactory _paidServiceFactory;
-        private readonly IParticipantService _participantService;
-        private readonly ITeamService _teamService;
         private readonly IOrderService _orderService;
         //private readonly ILogger _logger; // todo need to research Exception thrown during resolve
 
@@ -34,9 +31,8 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IOrderService orderService)
+        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService)
         {
-            _configuration = configuration;
             _paidServiceFactory = paidServiceFactory;
             _orderService = orderService;
             // _logger = logger;

@@ -151,7 +151,8 @@ namespace TRNMNT.Web.Controllers
             {
                 var options = new ParticipantListProcessingOptions
                 {
-                    EventId = eventId
+                    EventId = eventId,
+                    FederationId = GetFederationId().Value
                 };
                 return await _fileProcessiongService.ProcessFileAsync(file, options);
             });

@@ -1,6 +1,7 @@
 <div class='datatable'>
     <h3 class="first">{{title}}</h3>
-    <p-dataTable [value]="entities" 
+    <p-dataTable #dataTable
+                 [value]="entities" 
                  [rows]="pageSize" 
                  [pageLinks]="3" 
                  [sortField]="sortField"
@@ -11,6 +12,7 @@
                  (onRowSelect)="onRowSelect($event)"
                  [totalRecords]="totalRecords"
                  [lazy]="lazy"
+                 [(first)]="firstIndex"
                  (onLazyLoad)="lazyLoadData($event)"
                  [responsive]="true">
         <p-column *ngIf="showRowNumbers" header="#"  [style]="{'width':'4%','text-align':'center'}">
@@ -68,7 +70,7 @@
                             [options]="columnOptions[column.propertyName]"
                             [disabled]="!column.isEditable"
                             [(ngModel)]="entityToEdit[column.keyPropertyName]"
-                            (onChange)="ddlChange($event, column)"
+                            (onChange)="onDdlChange($event, column)"
                             [style]="{'width':'100%'}"></p-dropdown>
                 <p-calendar *ngIf="isDateColumn(column)" 
                             dateFormat="dd.mm.yy"

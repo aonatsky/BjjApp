@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Team;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -48,10 +49,10 @@ namespace TRNMNT.Core.Services.Impl
             return GetModels(fighters);
         }
 
-        public async Task<string> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId)
+        public async Task<string> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId, Guid federationId)
         {
             var messageBuilder = new StringBuilder();
-            var existingTeamsNames = await _teamRepository.GetAll().Select(x => x.Name).ToListAsync();
+            var existingTeamsBase = await GetExistingTeams(federationId);
             var eventCategories = await _categoryRepository.GetAll(w => w.EventId == eventId).ToDictionaryAsync(x => x.CategoryId, x => x.Name);
             var eventWeightDivisions = await _weightDivisionRepository.GetAll(w => w.Category.EventId == eventId).ToDictionaryAsync(x => x.WeightDivisionId, x => x.Name);
             var existingParticipants = await _participantRepository.GetAll().ToListAsync();
@@ -73,7 +74,8 @@ namespace TRNMNT.Core.Services.Impl
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     DateOfBirth = DateTime.Parse(model.DateOfBirth),
-                    Team = ProcessTeam(model.Team, existingTeamsNames, teamsToAdd),
+                    EventId = eventId,
+                    TeamId = ProcessTeam(model.Team, existingTeamsBase, teamsToAdd),
                     WeightDivisionId = eventWeightDivisions.First(x => x.Value.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase)).Key,
                     CategoryId = eventCategories.First(x => x.Value.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).Key,
                 };
@@ -83,6 +85,8 @@ namespace TRNMNT.Core.Services.Impl
                     participantsToAdd.Add(participant);
                 }
             }
+            teamsToAdd.ForEach(t => t.FederationId = federationId);
+            _teamRepository.AddRange(teamsToAdd);
             _participantRepository.AddRange(participantsToAdd);
             return messageBuilder.ToString();
         }
@@ -197,8 +201,18 @@ namespace TRNMNT.Core.Services.Impl
             return GetParticitants().Where(f => filter.CategoryIds.Contains(f.CategoryId)
                             && filter.WeightDivisionIds.Contains(f.WeightDivisionId));
         }
+
+        private async Task<List<TeamModelBase>> GetExistingTeams(Guid federationId)
+        {
+            return await _teamRepository.GetAll(t => t.FederationId == federationId).Select(t => new TeamModelBase
+            {
+                Name = t.Name,
+                TeamId = t.TeamId.ToString()
+            }).ToListAsync();
+        }
+
         #endregion
-        
+
         #region Models parsing
 
         private DateTime? GetDateOfBirth(string stringDob)
@@ -211,13 +225,13 @@ namespace TRNMNT.Core.Services.Impl
             return null;
         }
 
-        private Team ProcessTeam(string name, IEnumerable<string> existingTeamNames, List<Team> teamsToAdd)
+        private Guid ProcessTeam(string name, IEnumerable<TeamModelBase> existingTeamNames, List<Team> teamsToAdd)
         {
             var team = teamsToAdd.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (team == null)
             {
-                var teamName = existingTeamNames.FirstOrDefault(tn => tn.Equals(name, StringComparison.OrdinalIgnoreCase));
-                if (teamName == null)
+                var teamBase = existingTeamNames.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (teamBase == null)
                 {
                     team = new Team
                     {
@@ -228,10 +242,10 @@ namespace TRNMNT.Core.Services.Impl
                 }
                 else
                 {
-                    return _teamRepository.GetAll(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).First();
+                    return new Guid(teamBase.TeamId);
                 }
             }
-            return team;
+            return team.TeamId;
 
         }
         private WeightDivision GetWeightDivision(string name)

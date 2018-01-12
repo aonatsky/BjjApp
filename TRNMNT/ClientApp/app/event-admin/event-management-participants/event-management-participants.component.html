@@ -1,6 +1,7 @@
 ﻿<!--<ng-template >-->
 <category-with-division-filter [eventId]="eventId" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
-<crud [entities]="participantsModel"
+<crud #crudComponent
+      [entities]="participantsModel"
       [columns]="columns"
       [columnOptions]="columnOptions"
       [showRowNumbers]="false"
@@ -10,10 +11,12 @@
       [lazy]="true"
       (onLazyLoad)="onLoadData($event)"
       [totalRecords]="totalCount"
+      [(firstIndex)]="firstIndex"
       (onEntitySelected)="onEntitySelected($event)"
       (onUpdate)="onEntityUpdate($event)"
       (onDelete)="onEntityDelete($event)"
       [dialogMinWidth]="500"
       gridMinHeight="415">
 </crud>
+<file-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)"></file-upload>
 <!--</ng-template>-->

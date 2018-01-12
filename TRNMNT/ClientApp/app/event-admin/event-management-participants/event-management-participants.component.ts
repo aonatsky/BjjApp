@@ -5,13 +5,15 @@ import { Component, OnInit } from '@angular/core';
 import { ParticipantTableModel, ParticipantDdlModel } from './../../core/model/participant.models';
 import { ParticipantService } from "./../../core/services/participant.service";
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
-import { CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent } from '../../shared/crud/crud.component';
+import { ICrudColumn as CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent, CrudComponent } from '../../shared/crud/crud.component';
 import { DatePipe } from '@angular/common';
 import { PagedList } from '../../core/model/paged-list.model';
 import { ParticipantFilterModel } from '../../core/model/participant-filter.model';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 import { ParticpantSortField } from '../../core/consts/participant-sort-field.const';
 import { SelectItem } from 'primeng/components/common/selectitem';
+import { UploadResultCode } from '../../core/model/enum/upload-result-code.enum';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
     selector: 'event-management-participants',
@@ -30,6 +32,7 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     private readonly pageLinks: number = 3;
     private eventId: string = "";
+    private firstIndex: number = 0;
     private participantsLoading: boolean = true;
     private ddlDataLoading: boolean = true;
     private sortDirection: number = 1;
@@ -69,6 +72,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         private routerService: RouterService,
         private participantService: ParticipantService,
         private route: ActivatedRoute,
+        private notificationService: NotificationService,
         private datePipe: DatePipe) {
 
     }
@@ -84,9 +88,8 @@ export class EventManagementParticipantsComponent implements OnInit {
                     this.participantDdlModel = result;
                     this.mapDdlModel(result);
                 });
-                this.loadParticipants(this.getFilterModel());
             } else {
-                alert("No data to display");
+                this.notificationService.showError("Somethig went wrong", "No data to display");
             }
         });
 
@@ -160,6 +163,7 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     public filterParticipants($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
+        this.firstIndex = 0;
         this.loadParticipants(this.getFilterModel());
     }
 
@@ -176,6 +180,12 @@ export class EventManagementParticipantsComponent implements OnInit {
         
     }
 
+    public onFileUploaded($event) {
+        if ($event.code == UploadResultCode.Success || $event.code == UploadResultCode.SuccessWithErrors) {
+            this.firstIndex = 0;
+            this.loadParticipants(this.getFilterModel());
+        }
+    }
 
     private onLoadData($event: LazyLoadEvent) {
         this.sortField = $event.sortField;
@@ -185,6 +195,7 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     private loadParticipants(filterModel: ParticipantFilterModel) {
         this.participantsLoading = true;
+        this.participantsListModel = null;
         this.participantService.getParticipantsTableModel(filterModel).subscribe(r => {
             this.participantsLoading = false;
             this.participantsListModel = this.mapParticipants(r);

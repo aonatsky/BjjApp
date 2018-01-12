@@ -13,7 +13,7 @@ namespace TRNMNT.Data.Context
         void Remove<T>(T entity) where T : class;
         bool Save(bool suppressExceptions = true);
         void AddRange(IEnumerable<object> entities);
-        Task<int> SaveAsync(bool suppressExceptions = true);
+        Task<int> SaveAsync(bool suppressExceptions = false);
         EntityEntry<T> Entry<T>(T entity) where T : class;
 
 

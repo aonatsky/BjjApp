@@ -62,7 +62,7 @@ namespace TRNMNT.Core.Services.Impl
                             Category = sheet.Cells[i, 6].GetValue<string>()
                         });
                     }
-                    var message = await _participantProcessingService.AddParticipantsByModelsAsync(fighterModelList, options.EventId);
+                    var message = await _participantProcessingService.AddParticipantsByModelsAsync(fighterModelList, options.EventId, options.FederationId);
                     if (string.IsNullOrEmpty(message))
                     {
                         return new FileProcessResult(FileProcessResultEnum.Success);

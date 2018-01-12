@@ -1,7 +1,8 @@
-import { OnInit, Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { OnInit, Component, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
 import { LoaderService } from '../../core/services/loader.service'
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { SelectItem } from 'primeng/components/common/selectitem';
+import { DataTable } from 'primeng/primeng';
 
 @Component({
     selector: 'crud',
@@ -18,10 +19,10 @@ export class CrudComponent implements OnInit, OnChanges {
         this.onDelete = new EventEmitter<any>();
         this.onEntitySelected = new EventEmitter<any>();
         this.onLazyLoad = new EventEmitter<LazyLoadEvent>();
+        this.firstIndexChange = new EventEmitter<number>();
     }
 
     ngOnInit(): void {
-        this.entities = [];
         this.loaderService.showLoader();
     }
 
@@ -29,57 +30,70 @@ export class CrudComponent implements OnInit, OnChanges {
         this.loaderService.hideLoader();
     }
 
-    @Input() entities: any[] = [];
-    @Input() title: string = "";
-    @Input() columns: CrudColumn[] = [];
-    @Input() columnOptions: IColumnOptions;
-    @Input() editEnabled: boolean = true;
-    @Input() addEnabled: boolean = true;
-    @Input() deleteEnabled: boolean = true;
-    @Input() showRowNumbers: boolean = true;
-    @Input() lazy: boolean = false;
-    @Input() pageSize: number = 10;
-    @Input() totalRecords: number = 0;
-    @Input() sortField: string;
-    @Input() sortOrder: number = 1;
+    @ViewChild('dataTable') dataTable: DataTable;
 
-    @Input() dialogWidth?: number;
-    @Input() dialogHeight?: number;
-    @Input() dialogMinWidth: number = 200;
-    @Input() dialogMinHeight: number = 350;
-    @Input() gridMinHeight: number = 250;
+    @Input() readonly entities: any[] = [];
+    @Input() readonly title: string = "";
+    @Input() readonly columns: ICrudColumn[] = [];
+    @Input() readonly columnOptions: IColumnOptions;
+    @Input() readonly editEnabled: boolean = true;
+    @Input() readonly addEnabled: boolean = true;
+    @Input() readonly deleteEnabled: boolean = true;
+    @Input() readonly showRowNumbers: boolean = true;
+    @Input() readonly lazy: boolean = false;
+    @Input() readonly pageSize: number = 10;
+    @Input() readonly totalRecords: number = 0;
+    @Input() readonly sortField: string;
+    @Input() readonly sortOrder: number = 1;
 
-    @Output() onAdd: EventEmitter<any>;
-    @Output() onUpdate: EventEmitter<any>;
-    @Output() onDelete: EventEmitter<any>;
-    @Output() onEntitySelected: EventEmitter<any>;
-    @Output() onLazyLoad: EventEmitter<LazyLoadEvent>;
+    private _firstIndex: number = 0;
+    @Input() 
+    get firstIndex(): number {
+        return this._firstIndex;
+    } 
+    set firstIndex(value: number) {
+        this._firstIndex = value;
+        this.firstIndexChange.emit(value);
+    }
+    @Output() firstIndexChange: EventEmitter<number>;
+
+    @Input() readonly dialogWidth?: number;
+    @Input() readonly dialogHeight?: number;
+    @Input() readonly dialogMinWidth: number = 200;
+    @Input() readonly dialogMinHeight: number = 350;
+    @Input() readonly gridMinHeight: number = 250;
+
+    @Output() readonly onAdd: EventEmitter<any>;
+    @Output() readonly onUpdate: EventEmitter<any>;
+    @Output() readonly onDelete: EventEmitter<any>;
+    @Output() readonly onEntitySelected: EventEmitter<any>;
+    @Output() readonly onLazyLoad: EventEmitter<LazyLoadEvent>;
     
+    private displayDialog: boolean;
+    private isNewEntity: boolean;
+    private entityToEdit: any = new Object();
 
-    differ: any;
-    displayDialog: boolean;
-    newEntity: boolean;
-    selectedEntity: any;
-    entityToEdit: any = new Object();
+    refreshPage() {
+        this.firstIndex = 0;
+    }
 
-
-    showDialogToAdd() {
-        this.newEntity = true;
+    private showDialogToAdd() {
+        this.isNewEntity = true;
         this.entityToEdit = new Object();
         this.displayDialog = true;
         this.onEntitySelected.emit(this.entityToEdit);
     }
 
-    showDialogToEdit(entity: any) {
-        this.newEntity = false;
+    private showDialogToEdit(entity: any) {
+        this.isNewEntity = false;
         this.entityToEdit = entity;
         this.displayDialog = true;
         this.onEntitySelected.emit(this.entityToEdit);
     }
 
-    save() {
+    private save() {
         this.loaderService.showLoader();
-        if (this.newEntity) {
+        if (this.isNewEntity) {
             this.onAdd.emit(this.entityToEdit);
         } else {
             this.onUpdate.emit(this.entityToEdit);
@@ -87,24 +101,24 @@ export class CrudComponent implements OnInit, OnChanges {
         this.displayDialog = false;
     }
 
-    delete() {
+    private delete() {
         this.loaderService.showLoader();
         this.onDelete.emit(this.entityToEdit);
         this.displayDialog = false;
     }
 
-    onRowSelect(event) {
+    private onRowSelect(event) {
         if (this.editEnabled || this.deleteEnabled) {
             this.showDialogToEdit(event.data);
 
         }
     }
 
-    lazyLoadData($event: LazyLoadEvent) {
+    private lazyLoadData($event: LazyLoadEvent) {
         this.onLazyLoad.emit($event);
     }
 
-    ddlChange($event, column: IDdlCrudColumn) {
+    private onDdlChange($event, column: IDdlCrudColumn) {
         let value = this.columnOptions[column.propertyName].find(x => x.value.toUpperCase() === this.entityToEdit[column.keyPropertyName]);
         this.entityToEdit[column.propertyName] = value.label;
         if (column.onChange != null) {
@@ -118,28 +132,28 @@ export class CrudComponent implements OnInit, OnChanges {
         }
     }
 
-    isIdColumn(column: CrudColumn): boolean {
+    private isIdColumn(column: ICrudColumn): boolean {
         return column.columnType === ColumnType.Id;
     }
 
-    isStringColumn(column: CrudColumn): boolean {
+    private isStringColumn(column: ICrudColumn): boolean {
         return column.columnType == null || column.columnType === ColumnType.String;
     }
 
-    isBooleanColumn(column: CrudColumn): boolean {
+    private isBooleanColumn(column: ICrudColumn): boolean {
         return column.columnType === ColumnType.Boolean;
     }
 
-    isDateColumn(column: CrudColumn): boolean {
+    private isDateColumn(column: ICrudColumn): boolean {
         return column.columnType === ColumnType.Date;
     }
 
-    isDropdownColumn(column: CrudColumn): boolean {
+    private isDropdownColumn(column: ICrudColumn): boolean {
         return column.columnType === ColumnType.Dropdown;
     }
 }
 
-export interface CrudColumn {
+export interface ICrudColumn {
     displayName: string;
     propertyName: string;
     isEditable: boolean;
@@ -149,7 +163,7 @@ export interface CrudColumn {
     transform?: (value: any) => string;
 }
 
-export interface IDdlCrudColumn extends CrudColumn {
+export interface IDdlCrudColumn extends ICrudColumn {
     keyPropertyName: string;
     onChange?: (event: IDdlColumnChangeEvent) => any;
 }
@@ -165,9 +179,6 @@ export interface IDdlColumnChangeEvent {
     column: IDdlCrudColumn;
     entity: any;
 }
-
-
-
 
 export enum ColumnType {
     Boolean = 1,
