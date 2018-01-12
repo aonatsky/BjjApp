@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services.Interface
 {
-    public interface IFileProcessiongService
+    public interface IFileProcessiongService<in T>
     {
-        FileProcessResult ProcessFile(IFormFile file);
+        Task<FileProcessResult> ProcessFileAsync(IFormFile file, T options);
     }
 }

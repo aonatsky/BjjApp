@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services.Interface
@@ -22,8 +24,9 @@ namespace TRNMNT.Core.Services.Interface
         /// <summary>
         /// Adds the fighters by models.
         /// </summary>
-        /// <param name="fighterModels">The fighter models.</param>
+        /// <param name="particitantModels">The fighter models.</param>
+        /// <param name="eventId">event participants uploaded for.</param>
         /// <returns></returns>
-        string AddParticipantsByModels(List<ParticitantModel> fighterModels);
+        Task<string> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId);
     }
 }

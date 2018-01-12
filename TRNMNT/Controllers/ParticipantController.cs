@@ -2,10 +2,12 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
@@ -26,6 +28,7 @@ namespace TRNMNT.Web.Controllers
         private readonly ITeamService _teamService;
         private readonly IWeightDivisionService _weightDivisionService;
         private readonly ICategoryService _categoryService;
+        private readonly IFileProcessiongService<ParticipantListProcessingOptions> _fileProcessiongService;
 
         #endregion
 
@@ -40,6 +43,7 @@ namespace TRNMNT.Web.Controllers
             ITeamService teamService,
             IWeightDivisionService weightDivisionService,
             ICategoryService categoryService,
+            IFileProcessiongService<ParticipantListProcessingOptions> fileProcessiongService,
             IAppDbContext context)
             : base(logger, userService, eventService, context)
         {
@@ -49,6 +53,7 @@ namespace TRNMNT.Web.Controllers
             _teamService = teamService;
             _weightDivisionService = weightDivisionService;
             _categoryService = categoryService;
+            _fileProcessiongService = fileProcessiongService;
         }
 
         #endregion
@@ -114,16 +119,11 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> ParticipantsTable(ParticipantFilterModel filter)
         {
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
                 var participants = await _participantService.GetFilteredParticipantsAsync(GetFederationId().Value, filter);
-                return Ok(participants);
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
+                return Success(participants);
+            });
         }
 
         [HttpGet("[action]")]
@@ -141,6 +141,19 @@ namespace TRNMNT.Web.Controllers
                     Categories = categories,
                     WeightDivisions = weightDivisions
                 });
+            });
+        }
+
+        [Authorize, HttpPost("[action]/{eventId}")]
+        public async Task<IActionResult> UploadParticipantsFromFile(IFormFile file, Guid eventId)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var options = new ParticipantListProcessingOptions
+                {
+                    EventId = eventId
+                };
+                return await _fileProcessiongService.ProcessFileAsync(file, options);
             });
         }
 

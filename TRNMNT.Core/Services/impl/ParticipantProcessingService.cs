@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
@@ -46,64 +48,43 @@ namespace TRNMNT.Core.Services.Impl
             return GetModels(fighters);
         }
 
-        public string AddParticipantsByModels(List<ParticitantModel> fighterModels)
+        public async Task<string> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId)
         {
-            var message = string.Empty;
-            var existingTeamsNames = _teamRepository.GetAll().Select(x => x.Name).ToList();
-            var existingParticipants = _participantRepository.GetAll().ToList();
+            var messageBuilder = new StringBuilder();
+            var existingTeamsNames = await _teamRepository.GetAll().Select(x => x.Name).ToListAsync();
+            var eventCategories = await _categoryRepository.GetAll(w => w.EventId == eventId).ToDictionaryAsync(x => x.CategoryId, x => x.Name);
+            var eventWeightDivisions = await _weightDivisionRepository.GetAll(w => w.Category.EventId == eventId).ToDictionaryAsync(x => x.WeightDivisionId, x => x.Name);
+            var existingParticipants = await _participantRepository.GetAll().ToListAsync();
 
             var participantsToAdd = new List<Participant>();
             var teamsToAdd = new List<Team>();
             var comparer = new ParticipantComparer();
-            foreach (var model in fighterModels)
+            var index = 0;
+            foreach (var model in particitantModels)
             {
+                index++;
+                if (!IsParticipantModelValid(model, messageBuilder, index, eventCategories, eventWeightDivisions))
+                {
+                    continue;
+                }
                 var participant = new Participant
                 {
                     ParticipantId = Guid.NewGuid(),
                     FirstName = model.FirstName,
-                    LastName = model.LastName
+                    LastName = model.LastName,
+                    DateOfBirth = DateTime.Parse(model.DateOfBirth),
+                    Team = ProcessTeam(model.Team, existingTeamsNames, teamsToAdd),
+                    WeightDivisionId = eventWeightDivisions.First(x => x.Value.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase)).Key,
+                    CategoryId = eventCategories.First(x => x.Value.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).Key,
                 };
 
-                if (DateTime.TryParse(model.DateOfBirth, out var dob))
-                {
-                    participant.DateOfBirth = dob;
-                }
-                else
-                {
-                    message += $"Date of birth for {participant.FirstName} {participant.LastName} is invalid";
-                    continue;
-                }
-
-                participant.Team = ProcessTeam(model.Team, existingTeamsNames, teamsToAdd);
-
-                var weightDivision = GetWeightDivision(model.WeightDivision);
-                if (weightDivision != null)
-                {
-                    participant.WeightDivisionId = weightDivision.WeightDivisionId;
-                }
-                else
-                {
-                    message += $"Weight division {model.WeightDivision} is invalid";
-                    continue;
-                }
-
-                var category = GetCategory(model.Category);
-                if (category != null)
-                {
-                    participant.CategoryId = category.CategoryId;
-                }
-                else
-                {
-                    message += $"Category {model.Category} is invalid ";
-                    continue;
-                }
                 if (!existingParticipants.Contains(participant, comparer) && !participantsToAdd.Contains(participant, comparer))
                 {
                     participantsToAdd.Add(participant);
                 }
             }
             _participantRepository.AddRange(participantsToAdd);
-            return message;
+            return messageBuilder.ToString();
         }
 
 
@@ -123,6 +104,47 @@ namespace TRNMNT.Core.Services.Impl
         #endregion
         
         #region Private methods
+
+        private bool IsParticipantModelValid(ParticitantModel model, StringBuilder messageBuilder, int modelIndex, IDictionary<Guid,string> categories, IDictionary<Guid, string> weightDivisions)
+        {
+            var isValid = true;
+            if (string.IsNullOrEmpty(model.FirstName))
+            {
+                messageBuilder.AppendLine($"First Name for Particitant with index {modelIndex} is invalid");
+                isValid = false;
+            }
+            if (string.IsNullOrEmpty(model.LastName))
+            {
+                messageBuilder.AppendLine($"Last Name for Particitant with index {modelIndex}  is invalid");
+                isValid = false;
+            }
+            var nValid = !string.IsNullOrEmpty(model.FirstName) && !string.IsNullOrEmpty(model.LastName);
+            var identifier = nValid ? $"{model.FirstName} {model.LastName}" : $"Particitant with index {modelIndex}";
+
+            if (!DateTime.TryParse(model.DateOfBirth, out _))
+            {
+                messageBuilder.AppendLine($"Date of birth for '{identifier}' is invalid");
+                isValid = false;
+            }
+            if (string.IsNullOrEmpty(model.Team))
+            {
+                messageBuilder.AppendLine($"Team name for '{identifier}'  is invalid");
+                isValid = false;
+            }
+            var weightDivision = weightDivisions.Values.FirstOrDefault(w => w.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase));
+            if (weightDivision == null)
+            {
+                messageBuilder.AppendLine($"Weight division '{model.WeightDivision}' for '{identifier}' is invalid");
+                isValid = false;
+            }
+            var category = categories.Values.FirstOrDefault(w => w.Equals(model.Category, StringComparison.OrdinalIgnoreCase));
+            if (category == null)
+            {
+                messageBuilder.AppendLine($"Category '{model.Category}' for '{identifier}' is invalid");
+                isValid = false;
+            }
+            return isValid;
+        }
 
         private List<ParticitantModel> Distribute(List<ParticitantModel> fightersList)
         {

@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Services.Interface;
 
 namespace TRNMNT.Core.Services.Impl
 {
-    public class ParticipantListFileService : BaseFileProcessiongService, IParticipantListFileService
+    public class ParticipantListFileService : BaseFileProcessiongService<ParticipantListProcessingOptions>
     {
         #region Dependencies
 
@@ -39,7 +41,7 @@ namespace TRNMNT.Core.Services.Impl
             return Path.Combine(directoryPath, $"{FilePath.FighterlistFileName}_{DateTime.UtcNow:yyyy.mm.dd}.{FilePath.ExcelExtension}");
         }
 
-        protected override FileProcessResult ProcessInternal(Stream stream)
+        protected override async Task<FileProcessResult> ProcessInternalAsync(Stream stream, ParticipantListProcessingOptions options)
         {
             using (var excelPackage = new ExcelPackage(stream))
             {
@@ -51,7 +53,7 @@ namespace TRNMNT.Core.Services.Impl
                     {
                         fighterModelList.Add(new ParticitantModel
                         {
-                            FighterId = Guid.NewGuid(),
+                            ParticipantId = Guid.NewGuid(),
                             FirstName = sheet.Cells[i, 1].GetValue<string>(),
                             LastName = sheet.Cells[i, 2].GetValue<string>(),
                             DateOfBirth = sheet.Cells[i, 3].GetValue<string>(),
@@ -60,7 +62,7 @@ namespace TRNMNT.Core.Services.Impl
                             Category = sheet.Cells[i, 6].GetValue<string>()
                         });
                     }
-                    var message = _participantProcessingService.AddParticipantsByModels(fighterModelList);
+                    var message = await _participantProcessingService.AddParticipantsByModelsAsync(fighterModelList, options.EventId);
                     if (string.IsNullOrEmpty(message))
                     {
                         return new FileProcessResult(FileProcessResultEnum.Success);

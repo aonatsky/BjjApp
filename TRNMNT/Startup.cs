@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using TRNMNT.Core.Helpers.Impl;
 using TRNMNT.Core.Helpers.Interface;
 using TRNMNT.Core.Logger;
+using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Services.Impl;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Core.Settings;
@@ -102,7 +103,7 @@ namespace TRNMNT.Web
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped(typeof(IParticipantProcessingService), typeof(ParticipantProcessingService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IParticipantListFileService, ParticipantListFileService>();
+            services.AddScoped<IFileProcessiongService<ParticipantListProcessingOptions>, ParticipantListFileService>();
             services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));
