@@ -7,28 +7,28 @@ import { DragDropModule } from 'primeng/primeng';
     styleUrls: ['./tournament-bracket-creation.component.css']
 })
 
-export class TournamentBracketCreation {
-    public user: any;
+export class TournamentBracketCreationComponent {
+    user: any;
 
     constructor() {
         this.user = {
-            name: "First Name Last Name",
+            name: 'First Name Last Name',
             score: 1
         }
     }
 
     dragStart(even: any, value: any) {
         debugger;
-        console.log("drag started");
+        console.log('drag started');
     }
 
     dragEnd(even: any) {
         debugger;
-        console.log("drag ended");
+        console.log('drag ended');
     }
 
     drop(even: any) {
         debugger;
-        console.log("drop");
+        console.log('drop');
     }
 }

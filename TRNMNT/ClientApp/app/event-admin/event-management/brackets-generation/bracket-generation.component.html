@@ -1,0 +1,19 @@
+﻿<div class="ui-g-10 ui-g-offset-1">
+    <div class="ui-g-4" *ngFor="let col of getColumns();">
+        <div *ngIf="col % 2 == 0">
+            <div *ngFor="let row of getRows();" class="ui-g-12 bracket-block ui-g-nopad">
+                <div *ngIf="row % 2 == 0">
+                    <div class="bracket">
+                        <div class="bracket-participant-plate ui-g-12">
+                            {{getParticipant(col,row).name}}
+                        </div> 
+                        <div class="bracket-participant-plate ui-g-12">
+                            {{getParticipant(col,row+1).name}}
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

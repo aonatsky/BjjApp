@@ -21,8 +21,9 @@
     <EmbeddedResource Remove="Core\**" />
     <None Remove="Core\**" />
     <Compile Remove="Controllers\FighterController.cs" />
+    <None Remove="ClientApp\app\core\services\bracket.service.ts" />
     <None Remove="ClientApp\app\shared\bracket\bracket.component.ts" />
-    <None Remove="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.ts" />
+    <None Remove="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.component.ts" />
     <None Remove="ClientApp\app\shared\tournament-user-plate\tournament-user-plate.component.ts" />
     <None Remove="ClientApp\assets\style\app.css" />
     <None Remove="ClientApp\assets\style\app.min.css" />
@@ -90,8 +91,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\core\services\bracket.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\bracket\bracket.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\tournament-user-plate\tournament-user-plate.component.ts" />
   </ItemGroup>
 

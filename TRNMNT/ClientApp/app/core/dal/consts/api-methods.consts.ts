@@ -48,5 +48,8 @@ export const ApiMethods = Object.freeze({
          payment: "api/payment",
          getPaymentData: "api/payment/GetPaymentDataForParticipant"
 
-     }
+     },
+    bracket: {
+        createBracket: "api/bracket/createBracket"
+    }
 });

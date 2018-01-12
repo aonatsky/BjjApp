@@ -11,9 +11,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180109150531_RoundBracketAdded")]
+    partial class RoundBracketAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,11 +420,9 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<Guid>("FirstParticipantId");
 
-                    b.Property<Guid?>("NextRoundId");
+                    b.Property<Guid>("NextRoundId");
 
                     b.Property<Guid>("SecondParticipantId");
-
-                    b.Property<int>("Stage");
 
                     b.Property<Guid>("WinnerParticipantId");
 

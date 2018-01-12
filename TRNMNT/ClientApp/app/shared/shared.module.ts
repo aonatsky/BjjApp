@@ -1,16 +1,16 @@
-﻿import { NgModule } from "@angular/core"
+﻿import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'
 
 
-import { CoreModule } from "./../core/core.module"
+import { CoreModule } from './../core/core.module'
 import { RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component'
 import { RegisterComponent } from './register/register.component'
 import { BracketComponent } from './bracket/bracket.component'
 import { TournamentUserPlate } from './tournament-user-plate/tournament-user-plate.component'
-import { TournamentBracketCreation } from './tournament-bracket-creation/tournament-bracket-creation'
+import { TournamentBracketCreationComponent } from './tournament-bracket-creation/tournament-bracket-creation.component'
 
 
 @NgModule({
@@ -22,13 +22,14 @@ import { TournamentBracketCreation } from './tournament-bracket-creation/tournam
         RegisterComponent,
         BracketComponent,
         TournamentUserPlate,
-        TournamentBracketCreation
+        TournamentBracketCreationComponent
     ],
 
     providers: [],
 
     exports: [
-       
+        TournamentBracketCreationComponent,
+        TournamentUserPlate
     ]
 })
 

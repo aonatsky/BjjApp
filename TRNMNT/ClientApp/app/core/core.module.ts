@@ -39,8 +39,10 @@ import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, Aut
 
 import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
+import {BracketService} from './services/bracket.service';
 
-@NgModule({
+@
+NgModule({
     imports: [
         FormsModule,
         HttpModule,
@@ -61,7 +63,6 @@ import { RedirectGuard } from './routing/redirect.guard';
         CheckboxModule
     ],
     declarations: [
-
     ],
 
     providers: [
@@ -76,6 +77,7 @@ import { RedirectGuard } from './routing/redirect.guard';
         CategoryService,
         WeightDivisionService,
         ParticipantService,
+        BracketService,
         provideAuth({
             headerName: 'Authorization',
             headerPrefix: 'bearer',

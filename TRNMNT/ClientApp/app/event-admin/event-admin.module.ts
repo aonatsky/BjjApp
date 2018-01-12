@@ -1,7 +1,7 @@
-﻿import { NgModule } from "@angular/core"
+﻿import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'
-import { CoreModule } from "./../core/core.module"
+import { CoreModule } from './../core/core.module'
 import { RouterModule, Routes } from '@angular/router';
 import { EventAdminComponent } from './event-admin/event-admin.component'
 import { TopbarComponent } from './topbar/topbar.component'
@@ -9,13 +9,17 @@ import { EventOverviewComponent } from './event-overview/event-overview.componen
 import { EventEditComponent } from './event-edit/event-edit.component'
 import { CategoryComponent } from './event-edit/category.component'
 import { eventAdminRoutes } from './event-admin.routing'
-import { EventManagementComponent } from "./event-management/event-management.component";
+import { EventManagementComponent } from './event-management/event-management.component';
+import { BracketGenerationComponent } from './event-management/brackets-generation/bracket-generation.component';
+import Sharedmodule = require('../shared/shared.module');
+import SharedModule = Sharedmodule.SharedModule;
 
 
 @NgModule({
 
     imports: [
         CoreModule,
+        SharedModule,
         RouterModule.forChild(eventAdminRoutes)
     ],
     declarations: [
@@ -24,13 +28,14 @@ import { EventManagementComponent } from "./event-management/event-management.co
         EventOverviewComponent,
         EventEditComponent,
         CategoryComponent,
-        EventManagementComponent
+        EventManagementComponent,
+        BracketGenerationComponent
     ],
 
     providers: [],
 
     exports: [
-       
+
     ]
 })
 

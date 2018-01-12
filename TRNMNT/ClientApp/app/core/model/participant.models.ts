@@ -16,3 +16,5 @@ export class ParticipantRegistrationModel extends ParticipantModelBase {
     public promoCode: string;
 }
 
+
+

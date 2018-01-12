@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using TRNMNT.Core.Logger;
+using TRNMNT.Core.Services.impl;
 using TRNMNT.Core.Services.Impl;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Core.Settings;
@@ -113,6 +114,8 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IPaymentService), typeof(LiqPayService));
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
             services.AddScoped(typeof(IPromoCodeService), typeof(PromoCodeService));
+            services.AddScoped(typeof(IRoundService), typeof(RoundService));
+            services.AddScoped(typeof(IBracketService), typeof(BracketService));
             services.AddScoped(typeof(IParticipantRegistrationService), typeof(ParticipantRegistrationService));
 
             #endregion

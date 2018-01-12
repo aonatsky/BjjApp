@@ -1,0 +1,23 @@
+﻿@import '../../../shared/styles/shared.scss';
+
+.bracket-block {
+    height: 80px;
+
+    .bracket {
+        box-shadow: 2px 2px 4px 0 rgba(154, 154, 154, 0.5);
+        background-color: #ffffff;
+        height: 80px;
+
+        .bracket-participant-plate {
+            height: 40px;
+
+            &:first-child{
+                border-bottom: 1px solid $theme_orange;
+            }
+
+        }
+    }
+}
+
+
+
