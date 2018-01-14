@@ -10,5 +10,6 @@ namespace TRNMNT.Core.Model.Round
         public Guid FirstParticipantId { get; set; }
         public Guid SecondParticipantId { get; set; }
         public Guid? NextRoundId { get; set; }
+        public int Stage { get; set; }
     }
 }

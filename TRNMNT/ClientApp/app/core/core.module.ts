@@ -26,15 +26,15 @@ import { PaymentService } from './services/payment.service';
 import { UserModel } from './model/user.model'
 
 //PrimeNG
-import { DataTableModule } from "primeng/components/datatable/datatable";
-import { DialogModule } from "primeng/components/dialog/dialog";
-import { SharedModule } from "primeng/components/common/shared";
-import { ButtonModule } from "primeng/components/button/button";
-import { InputTextModule } from "primeng/components/inputtext/inputtext";
+import { DataTableModule } from 'primeng/components/datatable/datatable';
+import { DialogModule } from 'primeng/components/dialog/dialog';
+import { SharedModule } from 'primeng/components/common/shared';
+import { ButtonModule } from 'primeng/components/button/button';
+import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputMaskModule } from 'primeng/primeng';
-import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule } from 'primeng/primeng';
+import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, DragDropModule } from 'primeng/primeng';
 
 
 import { AuthGuard } from './routing/auth.guard';
@@ -60,7 +60,8 @@ NgModule({
         CalendarModule,
         InputTextareaModule,
         AutoCompleteModule,
-        CheckboxModule
+        CheckboxModule,
+        DragDropModule
     ],
     declarations: [
     ],
@@ -106,7 +107,8 @@ NgModule({
         FileUploadModule,
         AutoCompleteModule,
         CheckboxModule,
-        TabViewModule
+        TabViewModule,
+        DragDropModule
     ]
 })
 export class CoreModule { }

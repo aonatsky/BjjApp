@@ -7,7 +7,7 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IBracketService
     {
-        Task<BracketModel> CreateBracket(Guid weightDivisionId);
+        Task<BracketModel> CreateBracketAsync(Guid weightDivisionId);
         Task<BracketModel> GetBracket(Guid bracketId);
         Task UpdateBracket(BracketModel model);
     }

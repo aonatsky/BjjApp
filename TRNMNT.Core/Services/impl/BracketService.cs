@@ -7,6 +7,7 @@ using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
+using TRNMNT.Data.Migrations;
 using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Core.Services.impl
@@ -23,7 +24,7 @@ namespace TRNMNT.Core.Services.impl
             _roundService = roundService;
         }
         
-        public async Task<BracketModel> CreateBracket(Guid weightDivisionId)
+        public async Task<BracketModel> CreateBracketAsync(Guid weightDivisionId)
         {
             var participants = GetParticipants();
             var bracketModel = new BracketModel();
@@ -35,7 +36,8 @@ namespace TRNMNT.Core.Services.impl
                 SecondParticipantId = r.SecondParticipantId,
                 FirstParticipantId = r.FirstParticipantId,
                 FirstParticipantName = r.FirstParticipant == null ? "" : r.FirstParticipant.FirstName,
-                SecondParticipantName = r.SecondParticipant == null ? "" : r.SecondParticipant.FirstName
+                SecondParticipantName = r.SecondParticipant == null ? "" : r.SecondParticipant.FirstName,
+                Stage = r.Stage
             });
             return bracketModel;
         }

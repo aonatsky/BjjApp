@@ -5,4 +5,5 @@
     nextRoundId: AAGUID;
     firstParticipantId: AAGUID;
     secondParticipantId: AAGUID;
+    stage: number;
 }

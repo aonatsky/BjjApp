@@ -4,12 +4,12 @@
 export class EventModelBase {
     constructor() {
     }
-    public eventId: AAGUID;
-    public title: string;
-    public eventDate: Date;
-    public registrationStartTS: Date;
-    public earlyRegistrationEndTS: Date;
-    public registrationEndTS: Date;
+    eventId: AAGUID;
+    title: string;
+    eventDate: Date;
+    registrationStartTS: Date;
+    earlyRegistrationEndTS: Date;
+    registrationEndTS: Date;
 
 };
 
@@ -19,26 +19,26 @@ export class EventModel extends EventModelBase {
         this.categoryModels = [];
     }
 
-    public description: string;
-    public address: string;
-    public imagePath: any;
-    public urlPrefix: string;
-    public descritpion : string;
-    public tncFilePath: string;
-    public cardNumber: string;
-    public contactEmail : string;
-    public contactPhone : string;
-    public fbLink : string;
-    public vkLink : string;
-    public additionalData: string;
-    public promoCodeEnabled: boolean;
-    public promoCodeListPath: string
-    public earlyRegistrationPrice: number;
-    public lateRegistrationPrice: number;
-    public earlyRegistrationPriceForMembers: number;
-    public lateRegistrationPriceForMembers: number;
+    description: string;
+    address: string;
+    imagePath: any;
+    urlPrefix: string;
+    descritpion : string;
+    tncFilePath: string;
+    cardNumber: string;
+    contactEmail : string;
+    contactPhone : string;
+    fbLink : string;
+    vkLink : string;
+    additionalData: string;
+    promoCodeEnabled: boolean;
+    promoCodeListPath: string
+    earlyRegistrationPrice: number;
+    lateRegistrationPrice: number;
+    earlyRegistrationPriceForMembers: number;
+    lateRegistrationPriceForMembers: number;
 
-    public categoryModels: CategoryModel[]
+    categoryModels: CategoryModel[]
 
 };
 

@@ -123,7 +123,7 @@ export class HttpService {
     }
 
     public getJson(response: Response) {
-        return response.json();
+        return JSON.parse(response.json());
     }
 
     public getString(response: Response) {
