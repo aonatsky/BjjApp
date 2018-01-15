@@ -160,12 +160,15 @@ export class EventManagementParticipantsComponent implements OnInit {
     public onCategoryChange($event: IDdlColumnChangeEvent) {
         let categoryId = $event.value;
         this.weightDivisionSelectItems = this.getWeightDivisionsForCategory(categoryId);
+        if (this.weightDivisionSelectItems.length > 0) {
+            $event.entity.weightDivisionName = this.weightDivisionSelectItems[0].label;
+            $event.entity.weightDivisionId = this.weightDivisionSelectItems[0].value;
+        }
         this.refreshDdlModel();
     }
 
     public filterParticipants($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
-        this.firstIndex = 0;
         this.loadParticipants(this.getFilterModel());
     }
 
@@ -174,12 +177,22 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.refreshDdlModel();
     }
 
-    public onEntityUpdate($event) {
-        
+    public onEntityUpdate(participant: ParticipantTableModel) {
+        this.participantService.updateParticipant(participant).subscribe(
+            () => {
+                this.loadParticipants(this.getFilterModel(null, false))
+                this.notificationService.showSuccess("Update Info", "Participant successfully updated");
+            },
+            () => this.showError("Could not update participant"));
     }
 
-    public onEntityDelete($event) {
-        
+    public onEntityDelete(participant: ParticipantTableModel) {
+        this.participantService.deleteParticipant(participant.participantId).subscribe(
+            () => {
+                this.loadParticipants(this.getFilterModel())
+                this.notificationService.showInfo("Delete Info", "Participant successfully deleted");
+            },
+            () => this.showError("Could not delete participant"));
     }
 
     public onFileUploaded($event) {
@@ -204,18 +217,20 @@ export class EventManagementParticipantsComponent implements OnInit {
         }, (err) => this.showError("Could not load participants data"));
     }
 
-    private getFilterModel($event?: LazyLoadEvent): ParticipantFilterModel {
+    private getFilterModel($event?: LazyLoadEvent, refreshPages: boolean = true): ParticipantFilterModel {
         let model = new ParticipantFilterModel();
-
-        model.sortField = ParticpantSortField[this.sortField];
-        model.sortDirection = this.sortDirection;
-        model.eventId = this.eventId;
 
         if ($event != null) {
             model.pageIndex = $event.first / $event.rows;
+        } else if (!refreshPages) {
+            model.pageIndex = this.firstIndex / this.rowsCount;
         } else {
+            this.firstIndex = 0;
             model.pageIndex = 0;
         }
+        model.sortField = ParticpantSortField[this.sortField];
+        model.sortDirection = this.sortDirection;
+        model.eventId = this.eventId;
 
         if (this.filter != null) {
             model.categoryId = this.filter.categoryId;

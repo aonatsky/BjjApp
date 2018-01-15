@@ -48,6 +48,8 @@ export const ApiMethods = Object.freeze({
          participantsTable: "api/participant/participantsTable/",
          participantsDropdownData: "api/participant/participantsDropdownData/",
          uploadParticipantsFromFile: "api/participant/uploadParticipantsFromFile/",
+         update: "api/participant/update/",
+         delete: "api/participant/delete/",
     },
      payment: {
          payment: "api/payment",

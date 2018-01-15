@@ -21,6 +21,7 @@ export class ParticipantRegistrationModel extends ParticipantModelBase {
 }
 
 export class ParticipantTableModel extends ParticipantModelBase {
+    public participantId: string;
     public teamName: string;
     public categoryName: string;
     public weightDivisionName: string;

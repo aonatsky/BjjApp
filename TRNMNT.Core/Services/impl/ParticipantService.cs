@@ -79,6 +79,42 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
+        public async Task<Participant> UpdateParticipantAsync(ParticipantTableModel participantModel)
+        {
+            if (participantModel == null)
+            {
+                throw new ArgumentNullException(nameof(participantModel));
+            }
+            var participant = await _repository.GetByIDAsync(participantModel.ParticipantId);
+            if (participant == null)
+            {
+                // todo change to custom exception
+                throw new Exception($"Participant with id {participantModel.ParticipantId} not found");
+            }
+            participant.FirstName = participantModel.FirstName;
+            participant.LastName = participantModel.LastName;
+            participant.TeamId = participantModel.TeamId;
+            participant.DateOfBirth = participantModel.DateOfBirth;
+            participant.CategoryId = participantModel.CategoryId;
+            participant.WeightDivisionId = participantModel.WeightDivisionId;
+            participant.IsActive = true;
+            participant.UpdateTS = DateTime.UtcNow;
+
+            _repository.Update(participant);
+            return participant;
+        }
+
+        public async Task DeleteParticipantAsync(Guid participantId)
+        {
+            var participant = await _repository.GetByIDAsync(participantId);
+            if (participant == null)
+            {
+                // todo change to custom exception
+                throw new Exception($"Participant with id {participantId} not found");
+            }
+            _repository.Delete(participant);
+        }
+
         public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel filter)
         {
             var size = DefaultValues.DefaultPageSize;
@@ -99,6 +135,7 @@ namespace TRNMNT.Core.Services.Impl
 
             var list = await allParticipants.Select(p => new ParticipantTableModel
             {
+                ParticipantId = p.ParticipantId,
                 FirstName = p.FirstName,
                 LastName = p.LastName,
                 DateOfBirth = p.DateOfBirth,

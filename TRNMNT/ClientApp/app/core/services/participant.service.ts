@@ -37,4 +37,12 @@ export class ParticipantService {
         return this.httpService.postFile(`${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`, file).map(r => this.httpService.getJson(r));
     }
 
+    public updateParticipant(participant: ParticipantTableModel): Observable<any> {
+        return this.httpService.put(ApiMethods.participant.update, participant);
+    }
+
+    public deleteParticipant(participantId: string): Observable<any> {
+        return this.httpService.deleteById(ApiMethods.participant.delete, participantId);
+    }
+
 }

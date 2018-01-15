@@ -132,7 +132,7 @@ namespace TRNMNT.Core.Services.Impl
             }
             if (string.IsNullOrEmpty(model.Team))
             {
-                messageBuilder.Add($"Team name for '{identifier}'  is invalid");
+                messageBuilder.Add($"Team name for '{identifier}' is invalid");
                 isValid = false;
             }
             var weightDivision = weightDivisions.Values.FirstOrDefault(w => w.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase));

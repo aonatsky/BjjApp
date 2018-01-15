@@ -35,7 +35,7 @@ export class CategoryWithDivisionFilter implements OnInit {
     constructor(private categoryService: CategoryService, private weightDivisionService: WeightDivisionService) {
         this.onFilterChanged = new EventEmitter<CategoryWithDivisionFilterModel>();
         this.onFilterLoaded = new EventEmitter<boolean>();
-        this.defaultOption = { label: DefaultValues.DROPDOWN_NAME_ANY, value: "-1" };
+        this.defaultOption = { label: DefaultValues.DROPDOWN_NAME_ANY, value: "" };
         this.currentFilterValue = new CategoryWithDivisionFilterModel("", "");
     }
 
@@ -81,6 +81,7 @@ export class CategoryWithDivisionFilter implements OnInit {
             this.weightDivisionsSelectItems = [];
             this.weightDivisionsSelectItems.push(this.defaultOption);
             weightDivisions.map(wd => this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId }));
+            this.currentFilterValue.weightDivisionId = "";
         } else {
             this.weightDivisionsSelectItems = null;
         }

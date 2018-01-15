@@ -57,7 +57,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         #endregion
-        
+
         #region Public Methods
 
         [Authorize, HttpPost("[action]")]
@@ -116,7 +116,7 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        [HttpGet("[action]")]
+        [Authorize, HttpGet("[action]")]
         public async Task<IActionResult> ParticipantsTable(ParticipantFilterModel filter)
         {
             return await HandleRequestWithDataAsync(async () =>
@@ -126,7 +126,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [HttpGet("[action]")]
+        [Authorize, HttpGet("[action]")]
         public async Task<IActionResult> ParticipantsDropdownData(Guid eventId)
         {
 
@@ -155,6 +155,24 @@ namespace TRNMNT.Web.Controllers
                     FederationId = GetFederationId().Value
                 };
                 return await _fileProcessiongService.ProcessFileAsync(file, options);
+            });
+        }
+
+        [Authorize, HttpPut("[action]")]
+        public async Task<IActionResult> Update([FromBody] ParticipantTableModel participantModel)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                return await _participantService.UpdateParticipantAsync(participantModel);
+            });
+        }
+
+        [Authorize, HttpDelete("[action]/{participantId}")]
+        public async Task<IActionResult> Delete(Guid participantId)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await _participantService.DeleteParticipantAsync(participantId);
             });
         }
 

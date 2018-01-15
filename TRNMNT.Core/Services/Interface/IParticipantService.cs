@@ -39,5 +39,10 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="eventId">evetId participants selected for</param>
         /// <returns>filtered ParticipantTableModel list</returns>
         Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel eventId);
+
+        Task DeleteParticipantAsync(Guid participantId);
+
+        Task<Participant> UpdateParticipantAsync(ParticipantTableModel participantModel);
+
     }
 }

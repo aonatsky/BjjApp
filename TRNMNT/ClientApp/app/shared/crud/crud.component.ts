@@ -3,17 +3,19 @@ import { LoaderService } from '../../core/services/loader.service'
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { SelectItem } from 'primeng/components/common/selectitem';
 import { DataTable } from 'primeng/primeng';
+import { ConfirmationService } from 'primeng/components/common/confirmationservice';
 
 @Component({
     selector: 'crud',
     templateUrl: "./crud.component.html",
-    styleUrls: ['./crud.component.css']
+    styleUrls: ['./crud.component.css'],
+    providers: [ConfirmationService]
 })
 
 
 export class CrudComponent implements OnInit, OnChanges {
 
-    constructor(private loaderService: LoaderService) {
+    constructor(private loaderService: LoaderService, private confirmationService: ConfirmationService) {
         this.onAdd = new EventEmitter<any>();
         this.onUpdate = new EventEmitter<any>();
         this.onDelete = new EventEmitter<any>();
@@ -109,9 +111,22 @@ export class CrudComponent implements OnInit, OnChanges {
 
     private onRowSelect(event) {
         if (this.editEnabled || this.deleteEnabled) {
-            this.showDialogToEdit(event.data);
+            var clone = Object.assign({}, event.data);
+            this.showDialogToEdit(clone);
 
         }
+    }
+
+    private showConfirm() {
+        this.confirmationService.confirm({
+            header : "Confirmation",
+            icon : "fa fa-trash",
+            message : "Do you want to delete this record?",
+            accept: () => this.delete(),
+            reject: () => {
+                this.displayDialog = false;
+            }
+        });
     }
 
     private lazyLoadData($event: LazyLoadEvent) {
