@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
@@ -62,12 +63,16 @@ namespace TRNMNT.Core.Services.Impl
                             Category = sheet.Cells[i, 6].GetValue<string>()
                         });
                     }
-                    var message = await _participantProcessingService.AddParticipantsByModelsAsync(fighterModelList, options.EventId, options.FederationId);
-                    if (string.IsNullOrEmpty(message))
+                    if (!fighterModelList.Any())
                     {
-                        return new FileProcessResult(FileProcessResultEnum.Success);
+                        return new FileProcessResult(FileProcessResultEnum.FileIsInvalid);
                     }
-                    return new FileProcessResult(FileProcessResultEnum.SuccessWithErrors, message);
+                    var messages = await _participantProcessingService.AddParticipantsByModelsAsync(fighterModelList, options.EventId, options.FederationId);
+                    if (!messages.Any())
+                    {
+                        return new FileProcessResult(FileProcessResultEnum.Success, "Participants list uploaded successfully");
+                    }
+                    return new FileProcessResult(FileProcessResultEnum.SuccessWithErrors, messages);
                 }
                 return new FileProcessResult(FileProcessResultEnum.FileIsInvalid);
             }

@@ -5,7 +5,6 @@ import { LoginComponent } from './login/login.component'
 import { RegisterComponent } from './register/register.component'
 import { CategoryWithDivisionFilter } from "./category-with-division-filter/category-with-division-filter.component";
 import { CrudComponent } from "./crud/crud.component";
-import { FileUploadComponent } from "./file-upload/file-upload.component";
 
 
 
@@ -17,7 +16,6 @@ import { FileUploadComponent } from "./file-upload/file-upload.component";
         LoginComponent,
         RegisterComponent,
         CrudComponent,
-        FileUploadComponent,
         CategoryWithDivisionFilter
     ],
 
@@ -25,7 +23,6 @@ import { FileUploadComponent } from "./file-upload/file-upload.component";
 
     exports: [
         CrudComponent,
-        FileUploadComponent,
         CategoryWithDivisionFilter
     ]
 })

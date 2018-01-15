@@ -2,11 +2,11 @@
 
 export interface IUploadResult {
     code: UploadResultCode;
-    message: string;
+    messages: string[];
 }
 
 export class UploadResult implements IUploadResult {
     public code: UploadResultCode;
-    public message: string;
+    public messages: string[];
 }
 

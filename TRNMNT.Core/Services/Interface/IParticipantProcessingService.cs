@@ -28,6 +28,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="eventId">event participants uploaded for.</param>
         /// <param name="federationId">federation participants uploaded for.</param>
         /// <returns></returns>
-        Task<string> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId, Guid federationId);
+        Task<List<string>> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId, Guid federationId);
     }
 }

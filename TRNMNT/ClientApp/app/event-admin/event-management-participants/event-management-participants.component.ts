@@ -87,9 +87,9 @@ export class EventManagementParticipantsComponent implements OnInit {
                     this.ddlDataLoading = false;
                     this.participantDdlModel = result;
                     this.mapDdlModel(result);
-                });
+                }, (err) => this.showError("Could not load categories and weight divisions data"));
             } else {
-                this.notificationService.showError("Somethig went wrong", "No data to display");
+                this.showError("No data to display");
             }
         });
 
@@ -150,7 +150,9 @@ export class EventManagementParticipantsComponent implements OnInit {
         }
         return `fa ${classes}`;
     }
-
+    showError(message: string = "Somethig went wrong", title: string = "Somethig went wrong") {
+        this.notificationService.showError(title, message);
+    }
     public dateTransform(value: Date): string {
         return this.datePipe.transform(value, 'MM.dd.yyyy');
     }
@@ -199,7 +201,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.participantService.getParticipantsTableModel(filterModel).subscribe(r => {
             this.participantsLoading = false;
             this.participantsListModel = this.mapParticipants(r);
-        });
+        }, (err) => this.showError("Could not load participants data"));
     }
 
     private getFilterModel($event?: LazyLoadEvent): ParticipantFilterModel {
