@@ -1,16 +1,13 @@
-﻿import { CategoryModel } from "./category.models"
+﻿import { CategoryModel } from './category.models'
 
 
 export class EventModelBase {
-    constructor() {
-    }
     eventId: AAGUID;
     title: string;
     eventDate: Date;
     registrationStartTS: Date;
     earlyRegistrationEndTS: Date;
     registrationEndTS: Date;
-
 };
 
 export class EventModel extends EventModelBase {
@@ -37,9 +34,7 @@ export class EventModel extends EventModelBase {
     lateRegistrationPrice: number;
     earlyRegistrationPriceForMembers: number;
     lateRegistrationPriceForMembers: number;
-
-    categoryModels: CategoryModel[]
-
+    categoryModels: CategoryModel[];
 };
 
 export class EventPreviewModel extends EventModelBase {
@@ -47,6 +42,4 @@ export class EventPreviewModel extends EventModelBase {
         super();
     }
 };
-
-
 

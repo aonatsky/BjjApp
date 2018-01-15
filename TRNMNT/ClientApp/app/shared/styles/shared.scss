@@ -1,30 +1,9 @@
-﻿$theme_red: #d30101;
-$theme_green: #66d33f;
-$theme_orange: #FE1600;
-$theme_orange_light: #FFAEA3;
-$theme_grey: #F3F3F3;
-$theme_black: #3c3c3c;
-$theme_body_color: #f8f8f8;
-$theme_font_family: x   'Proxima Nova', Georgia, sans-serif;
+﻿@import "variables.scss";
 
-
-
-
-$screen_width_vw: 100vw;
-$container_width: 750px;
-$content_padding_top: 30px;
-$header_height: 50px;
-
-
-@function get-vw($target) {
-    $vw-context: (1000*.01) * 1px;
-    @return ($target/$vw-context) * 1vw;
-}
 
 
 body {
     margin: 0px;
-    overflow: hidden;
 
     .content {
         padding-top: $content_padding_top
@@ -36,11 +15,16 @@ body {
         background-color: $bg_color;
 
 
+
+        .fa {
+            background-color: transparent;
+        }
+
         &:enabled {
             background-color: $bg_color;
 
             &:hover {
-                background-color: darken($bg_color,10%)
+                background-color: darken($bg_color,10%);
             }
         }
 
@@ -53,6 +37,7 @@ body {
         background-color: darken($theme_black,10%)
     }
 
+
     .ui-steps {
         /*pointer-events: none;*/
         position: inherit;
@@ -61,7 +46,8 @@ body {
             position: absolute;
             border-color: $theme_orange;
             border-width: 2px;
-            width: $screen_width_vw;
+            width: 100%;
+            box-sizing: border-box;
             top: $header_height + $content_padding_top + 15px;
         }
 
@@ -80,10 +66,6 @@ body {
                     font-weight: bold;
                     top: 0;
                     margin-bottom: 0;
-                }
-
-                .ui-steps-title {
-                    display: none;
                 }
             }
         }
@@ -109,6 +91,20 @@ body {
     label {
         float: left;
         margin-top: 0.5em;
+
+        &.field-title {
+            float: right;
+        }
+    }
+
+
+    .ui-dialog {
+        border-radius: 0;
+
+        .ui-dialog-titlebar {
+            padding: 0.5em;
+            border: 0px;
+        }
     }
 
     .ui-tabview {
@@ -123,15 +119,13 @@ body {
                 height: 40px;
             }
 
-            .ui-state-default{
-                .ui-tabview-title:hover{
-                    color:$theme_orange;
+            .ui-state-default {
+                .ui-tabview-title:hover {
+                    color: $theme_orange;
                 }
             }
-            
+
             .ui-tabview-selected {
-
-
                 .ui-tabview-title {
                     color: $theme_orange;
                     border-bottom: 2px solid currentColor;
@@ -139,5 +133,52 @@ body {
                 }
             }
         }
+    }
+
+    .disabled {
+        position: relative;
+
+        .modal {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            z-index: 100;
+            background-color: white;
+            opacity: 0.8;
+            line-height: 45%;
+
+            span {
+                position: absolute;
+                top: 45%;
+                left: 45%;
+                color: lighten(black,50%);
+            }
+        }
+    }
+
+    .step-title {
+        padding: 20px;
+
+        span {
+            text-align: center;
+            font-weight: bold;
+            margin: auto;
+            font-size: 1.5em;
+        }
+    }
+
+    .ui-chkbox {
+        margin-top: 0.5em;
+
+        .ui-chkbox-box {
+            &.ui-state-active {
+                border-color: $theme_black;
+                background-color: $theme_black;
+            }
+        }
+    }
+
+    a {
+        text-decoration: none;
     }
 }

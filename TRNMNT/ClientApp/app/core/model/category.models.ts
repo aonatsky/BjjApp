@@ -1,24 +1,22 @@
-import { WeightDivisionModel } from "./weight-division.models"
+import { WeightDivisionModel } from './weight-division.models'
 
 
 export class CategoryModelBase {
-    constructor() {
-
-    }
-    public name: string
-    public categoryId?: AAGUID;
+    name: string;
+    categoryId?: AAGUID;
 }
 
 
 export class CategoryModel extends CategoryModelBase {
 
+
     constructor() {
         super();
-        this.weightDivisionModels = []
+        this.weightDivisionModels = [];
     }
-
-    public eventId: string;
-    public weightDivisionModels: WeightDivisionModel[];
+    eventId: string;
+    roundTime: number;
+    weightDivisionModels: WeightDivisionModel[];
 }
 
 

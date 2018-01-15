@@ -134,7 +134,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                if ((checkEventId && !_eventId.HasValue) || (checkFederationId && !_federationId.HasValue))
+                if (checkEventId && !_eventId.HasValue || checkFederationId && !_federationId.HasValue)
                 {
                     return NotFound();
                 }

@@ -35,11 +35,12 @@ import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputMaskModule } from 'primeng/primeng';
 import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, DragDropModule } from 'primeng/primeng';
-
-
 import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
 import {BracketService} from './services/bracket.service';
+import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
+
+
 
 @
 NgModule({
@@ -64,8 +65,8 @@ NgModule({
         DragDropModule
     ],
     declarations: [
+        MinuteSecondsPipe
     ],
-
     providers: [
         HttpService,
         LoggerService,
@@ -108,7 +109,9 @@ NgModule({
         AutoCompleteModule,
         CheckboxModule,
         TabViewModule,
-        DragDropModule
+        DragDropModule,
+        MinuteSecondsPipe
+
     ]
 })
 export class CoreModule { }

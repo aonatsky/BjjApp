@@ -12,9 +12,7 @@ export class WeightDivisionModel extends WeightDivisionModelBase {
     description: string;
     categoryId: string;
         
-    constructor(name: string, id?: AAGUID) {
-        super(); 
-        this.weightDivisionId = id;
-        this.name = name;
+    constructor() {
+        super();
     }
 }
