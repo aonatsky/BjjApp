@@ -29,12 +29,16 @@ namespace TRNMNT.Web.Controllers
 
 
         [HttpGet("[action]/{categoryId}")]
-        public async Task<IActionResult> GetWeightDivisionsByCategory(string categoryId)
+        public async Task<IActionResult> GetWeightDivisionsByCategory(Guid categoryId)
         {
-            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(Guid.Parse(categoryId)));
+            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId));
         }
 
-
+        [HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetWeightDivisionsByEvent(Guid eventId)
+        {
+			return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId));
+        }
 
         public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
         {

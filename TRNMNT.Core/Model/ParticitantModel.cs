@@ -3,9 +3,9 @@ using System;
 
 namespace TRNMNT.Core.Model
 {
-    public class FighterModel
+    public class ParticitantModel
     {
-        public Guid FighterId { get; set; }
+        public Guid ParticipantId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DateOfBirth { get; set; }

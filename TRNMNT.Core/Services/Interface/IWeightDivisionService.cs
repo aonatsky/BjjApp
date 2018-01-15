@@ -13,5 +13,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="categoryId">The category identifier.</param>
         /// <returns></returns>
         Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId);
+        Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionsByEventIdAsync(Guid eventId);
     }
 }

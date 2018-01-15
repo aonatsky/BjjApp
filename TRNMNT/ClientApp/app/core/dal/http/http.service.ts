@@ -4,7 +4,6 @@ import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { RouterService } from '../../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
-import { ApiMethods } from "../consts/api-methods.consts";
 import * as FileSaver from 'file-saver';
 import { AuthHttp } from 'angular2-jwt';
 import 'rxjs/Rx';
@@ -15,15 +14,18 @@ export class HttpService {
     }
 
 
-    get(name: string, params: SearchParams[] = []): Observable<any> {
-        let httpRequest = this.http.get(name);
+    public get(name: string, paramsHolder?: object): Observable<any> {
+        let httpRequest: Observable<Response>;
 
-        if (params && params.length > 0) {
+        if (paramsHolder != null) {
+            var keys = Reflect.ownKeys(paramsHolder);
             let urlSearchParams = new URLSearchParams();
-            for (var i = 0; i < params.length; i++) {
-                urlSearchParams.set(params[i].name, params[i].value);
+            for (var i = 0; i < keys.length; i++) {
+                urlSearchParams.set(keys[i].toString(), paramsHolder[keys[i]]);
             }
             httpRequest = this.http.get(name, { search: urlSearchParams });
+        } else {
+            httpRequest = this.http.get(name);
         }
 
         this.loaderService.showLoader();
@@ -33,12 +35,12 @@ export class HttpService {
             .finally(() => this.loaderService.hideLoader());
     }
 
-    getById(name: string, id: string): Observable<any> {
+    public getById(name: string, id: string): Observable<any> {
         this.loaderService.showLoader();
         return this.http.get(name).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());
     }
 
-    post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
+    public post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' })
@@ -50,7 +52,7 @@ export class HttpService {
         return this.http.post(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    put(name: string, model: any): Observable<any> {
+    public put(name: string, model: any): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' })
@@ -59,7 +61,7 @@ export class HttpService {
         return this.http.put(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    delete(name: string, model: any): Observable<any> {
+    public delete(name: string, model: any): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -68,7 +70,7 @@ export class HttpService {
         return this.http.delete(name, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    deleteById(name: string, id: any): Observable<any> {
+    public deleteById(name: string, id: any): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -77,16 +79,16 @@ export class HttpService {
         return this.http.delete(url, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    postFile(name: string, file: any): Observable<any> {
+    public postFile(name: string, file: any): Observable<any> {
         this.loaderService.showLoader();
         let formData = new FormData();
-        formData.append("file", file)
+        formData.append("file", file);
         return this.http.post(name, formData)
             .map((r: Response) => this.processResponse(r))
             .catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    getPdf(url, fileName): Observable<any> {
+    public getPdf(url, fileName): Observable<any> {
         return this.http.get(url, { responseType: ResponseContentType.Blob }).map((res) => {
             FileSaver.saveAs(new Blob([res.blob()], { type: 'application/pdf' }), fileName);
         });
@@ -114,7 +116,7 @@ export class HttpService {
         return Observable.throw(errMsg);
     }
 
-    getArray<T>(response: any): T[] {
+    public getArray<T>(response: any): T[] {
         let result = response.json();
         if (result.length == 0) {
             return [];
@@ -122,15 +124,15 @@ export class HttpService {
         return result;
     }
 
-    getJson(response: Response) {
+    public getJson(response: Response) {
         return response.json();
     }
 
-    getString(response: Response) {
+    public getString(response: Response) {
         return response.text();
     }
 
-    getExcelFile(response: Response, fileName: string): void {
+    public getExcelFile(response: Response, fileName: string): void {
         FileSaver.saveAs(response.blob(), fileName);
     }
 
@@ -140,7 +142,6 @@ export class HttpService {
     private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
 
     convertDate(input) {
-        debugger;
         if (typeof input !== "object") {
             return input
         };

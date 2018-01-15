@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
     selector: 'event-overview',
     templateUrl: './event-overview.component.html'
 })
-export class EventOverviewComponent {
+export class EventOverviewComponent implements OnInit {
 
     private events: EventPreviewModel[] = [];
 
@@ -27,7 +27,7 @@ export class EventOverviewComponent {
     }
 
     public openDetails(id: string) {
-        this.routerService.goToEventManagement(id);
+        this.routerService.goToEventManagementParticipants(id);
     }
 
     ngOnInit() {

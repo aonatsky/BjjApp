@@ -13,8 +13,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using TRNMNT.Core.Helpers.Impl;
+using TRNMNT.Core.Helpers.Interface;
 using TRNMNT.Core.Logger;
 using TRNMNT.Core.Services.impl;
+using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Services.Impl;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Core.Settings;
@@ -99,9 +102,9 @@ namespace TRNMNT.Web
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddScoped(typeof(IFighterService), typeof(FighterService));
+            services.AddScoped(typeof(IParticipantProcessingService), typeof(ParticipantProcessingService));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(ParticipantListFileService));
+            services.AddScoped<IFileProcessiongService<ParticipantListProcessingOptions>, ParticipantListFileService>();
             services.AddScoped(typeof(BracketsFileService));
             services.AddScoped(typeof(IAuthenticationService), typeof(AuthenticationService));
             services.AddScoped(typeof(IEventService), typeof(EventService));
@@ -117,7 +120,8 @@ namespace TRNMNT.Web
             services.AddScoped(typeof(IRoundService), typeof(RoundService));
             services.AddScoped(typeof(IBracketService), typeof(BracketService));
             services.AddScoped(typeof(IParticipantRegistrationService), typeof(ParticipantRegistrationService));
-
+            services.AddScoped<IPaidServiceFactory, PaidServiceFactory>();
+			
             #endregion
         }
 

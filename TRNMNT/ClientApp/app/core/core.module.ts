@@ -34,7 +34,7 @@ import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputMaskModule } from 'primeng/primeng';
-import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, DragDropModule } from 'primeng/primeng';
+import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, ToggleButtonModule, ConfirmDialogModule, DragDropModule } from 'primeng/primeng';
 import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
 import {BracketService} from './services/bracket.service';
@@ -62,7 +62,9 @@ NgModule({
         InputTextareaModule,
         AutoCompleteModule,
         CheckboxModule,
-        DragDropModule
+        DragDropModule,
+        ToggleButtonModule,
+        ConfirmDialogModule
     ],
     declarations: [
         MinuteSecondsPipe
@@ -110,8 +112,9 @@ NgModule({
         CheckboxModule,
         TabViewModule,
         DragDropModule,
-        MinuteSecondsPipe
-
+        MinuteSecondsPipe,
+        ToggleButtonModule,
+        ConfirmDialogModule
     ]
 })
 export class CoreModule { }

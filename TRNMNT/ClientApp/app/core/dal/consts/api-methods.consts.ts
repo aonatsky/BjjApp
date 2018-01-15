@@ -33,16 +33,23 @@ export const ApiMethods = Object.freeze({
     },
     weightDivision: {
         weightDivision: 'api/weightdivision',
-        getWeightDivisionsByCategory: 'api/weightdivision/getWeightDivisionsByCategory'
+        getWeightDivisionsByCategory: 'api/weightdivision/getWeightDivisionsByCategory',
+        getWeightDivisionsByEvent: 'api/weightdivision/getWeightDivisionsByEvent'
     },
     category: {
         category: 'api/category',
-        getCategoriesForEvent: 'api/category/getCategoriesForEvent'
+        getCategoriesForCurrentEvent: 'api/category/getCategoriesForCurrentEvent',
+        getCategoriesByEventId: 'api/category/getCategoriesByEventId'
     },
      participant: {
          participant: 'api/participant/',
          processParticipantRegistration: 'api/participant/processParticipantRegistration/',
          isParticipantExist: 'api/participant/isParticipantExist/',
+         participantsTable: 'api/participant/participantsTable/',
+         participantsDropdownData: 'api/participant/participantsDropdownData/',
+         uploadParticipantsFromFile: 'api/participant/uploadParticipantsFromFile/',
+         update: 'api/participant/update/',
+         delete: 'api/participant/delete/',
     },
      payment: {
          payment: 'api/payment',

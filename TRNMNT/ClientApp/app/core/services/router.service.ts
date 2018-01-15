@@ -45,6 +45,10 @@ export class RouterService {
         this.router.navigateByUrl("/event-admin/management/" + id);
     }
 
+    public goToEventManagementParticipants(id: string) {
+        this.router.navigateByUrl("/event-admin/management/participants/" + id);
+    }
+
     public goToEventInfo() {
         this.router.navigateByUrl("event/event-info/");    
     }

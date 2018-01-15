@@ -1,7 +1,10 @@
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
@@ -37,7 +40,7 @@ namespace TRNMNT.Web.Controllers
         #region Public Methods
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetCategoriesForEvent()
+        public async Task<IActionResult> GetCategoriesForCurrentEvent()
         {
             return await HandleRequestWithDataAsync(async () =>
             {
@@ -49,6 +52,16 @@ namespace TRNMNT.Web.Controllers
                 }
                 return NotFoundResponse();
             });
+        }
+		
+		[HttpGet("[action]/{eventId}")]
+        public async Task<IActionResult> GetCategoriesByEventId(Guid eventId)
+		{
+		    return await HandleRequestWithDataAsync(async () =>
+		    {
+		        var data = await _categoryService.GetCategoriesByEventIdAsync(eventId);
+		        return Success(data);
+		    });
         }
 
         #endregion

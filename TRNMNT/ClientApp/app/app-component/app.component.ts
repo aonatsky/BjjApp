@@ -17,13 +17,14 @@ export class AppComponent implements OnInit {
     private notifications: Message[] = [];
     private isLoaderShown: boolean = false;
 
-    constructor(private notificationservice: NotificationService, private loaderService: LoaderService, private routerService: RouterService, private eventService: EventService) {
+    constructor(private notificationservice: NotificationService,
+        private loaderService: LoaderService,
+        private routerService: RouterService,
+        private eventService: EventService) {
     }
-
     
 
     ngOnInit() {
-        //this.loaderService.isLoaderShown.subscribe(data => this.isLoaderShown = data);
+        this.notificationservice.notifications.subscribe((msgs) => msgs.map(m => this.notifications.push(m)));
     }
-
 }

@@ -1,28 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Services.Interface;
 
 namespace TRNMNT.Core.Services.Impl
 {
-    public class ParticipantListFileService : BaseFileService
+    public class ParticipantListFileService : BaseFileProcessiongService<ParticipantListProcessingOptions>
     {
         #region Dependencies
 
-        private readonly IFighterService _fighterService;
+        private readonly IParticipantProcessingService _participantProcessingService;
 
         #endregion
 
         #region .ctor
 
-        public ParticipantListFileService(IHostingEnvironment env, IFighterService fighterService) : base(env)
+        public ParticipantListFileService(IHostingEnvironment env, IParticipantProcessingService participantProcessingService) : base(env)
         {
-            _fighterService = fighterService;
+            _participantProcessingService = participantProcessingService;
         }
 
         #endregion
@@ -39,19 +42,19 @@ namespace TRNMNT.Core.Services.Impl
             return Path.Combine(directoryPath, $"{FilePath.FighterlistFileName}_{DateTime.UtcNow:yyyy.mm.dd}.{FilePath.ExcelExtension}");
         }
 
-        protected override FileProcessResult ProcessInternal(Stream stream)
+        protected override async Task<FileProcessResult> ProcessInternalAsync(Stream stream, ParticipantListProcessingOptions options)
         {
             using (var excelPackage = new ExcelPackage(stream))
             {
                 var sheet = excelPackage.Workbook?.Worksheets[1];
                 if (sheet != null)
                 {
-                    var fighterModelList = new List<FighterModel>();
+                    var fighterModelList = new List<ParticitantModel>(sheet.Dimension.Rows);
                     for (var i = 2; i <= sheet.Dimension.Rows; i++)
                     {
-                        fighterModelList.Add(new FighterModel
+                        fighterModelList.Add(new ParticitantModel
                         {
-                            FighterId = Guid.NewGuid(),
+                            ParticipantId = Guid.NewGuid(),
                             FirstName = sheet.Cells[i, 1].GetValue<string>(),
                             LastName = sheet.Cells[i, 2].GetValue<string>(),
                             DateOfBirth = sheet.Cells[i, 3].GetValue<string>(),
@@ -60,12 +63,16 @@ namespace TRNMNT.Core.Services.Impl
                             Category = sheet.Cells[i, 6].GetValue<string>()
                         });
                     }
-                    var message = _fighterService.AddFightersByModels(fighterModelList);
-                    if (string.IsNullOrEmpty(message))
+                    if (!fighterModelList.Any())
                     {
-                        return new FileProcessResult(FileProcessResultEnum.Success);
+                        return new FileProcessResult(FileProcessResultEnum.FileIsInvalid);
                     }
-                    return new FileProcessResult(FileProcessResultEnum.SuccessWithErrors, message);
+                    var messages = await _participantProcessingService.AddParticipantsByModelsAsync(fighterModelList, options.EventId, options.FederationId);
+                    if (!messages.Any())
+                    {
+                        return new FileProcessResult(FileProcessResultEnum.Success, "Participants list uploaded successfully");
+                    }
+                    return new FileProcessResult(FileProcessResultEnum.SuccessWithErrors, messages);
                 }
                 return new FileProcessResult(FileProcessResultEnum.FileIsInvalid);
             }

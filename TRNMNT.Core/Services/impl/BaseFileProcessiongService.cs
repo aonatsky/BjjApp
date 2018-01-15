@@ -1,12 +1,14 @@
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Services.Interface;
 
 namespace TRNMNT.Core.Services.Impl
 {
-    public abstract class BaseFileService
+    public abstract class BaseFileProcessiongService<T> : IFileProcessiongService<T>
     {
         #region Dependencies
 
@@ -16,7 +18,7 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        protected BaseFileService(IHostingEnvironment env)
+        protected BaseFileProcessiongService(IHostingEnvironment env)
         {
             _env = env;
         }
@@ -25,7 +27,7 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
-        public FileProcessResult ProcessFile(IFormFile file)
+        public async Task<FileProcessResult> ProcessFileAsync(IFormFile file, T processingOptions)
         {
             if (file == null)
             {
@@ -36,7 +38,7 @@ namespace TRNMNT.Core.Services.Impl
                 return new FileProcessResult(FileProcessResultEnum.FileIsEmpty);
             }
 
-            var internalProcessResult = ProcessInternal(file.OpenReadStream());
+            var internalProcessResult = await ProcessInternalAsync(file.OpenReadStream(), processingOptions);
             return internalProcessResult;
         }
 
@@ -44,7 +46,7 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Protected Abstract Methods
 
-        protected abstract FileProcessResult ProcessInternal(Stream stream);
+        protected abstract Task<FileProcessResult> ProcessInternalAsync(Stream stream, T processingOptions);
 
         protected abstract string GetFileUploadPath(string rootPath);
 
