@@ -11,13 +11,13 @@
         .bracket-participant-plate {
             height: 40px;
 
-            &:first-child{
-                border-bottom: 1px solid $theme_orange;
+            &.droppable {
+                color: $theme_grey;
             }
 
+            &:first-child {
+                border-bottom: 1px solid $theme_orange;
+            }
         }
     }
 }
-
-
-

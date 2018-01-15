@@ -22,6 +22,7 @@ export class BracketGenerationComponent {
     }
 
     ngOnInit() {
+        debugger;
         this.bracketService.createBracket('83CA0F48-1BF7-4441-E54A-08D4C85DC99E').subscribe(res => {
             this.rounds = res.roundModels.filter(r => r.stage == this.getMaxStage(res.roundModels.length));
             console.log(this.rounds.length);
@@ -59,8 +60,12 @@ export class BracketGenerationComponent {
         }
     }
 
-    private logDrag() {
-        console.log('drag started');
+    private dragStart() {
+        this.dragMode = true;
+    }
+
+    private dragEnd() {
+        this.dragMode = false;
     }
 
 }

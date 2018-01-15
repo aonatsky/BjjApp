@@ -1,5 +1,5 @@
 ﻿
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 import { EventModel } from './../../core/model/event.models';
@@ -10,7 +10,7 @@ import './event-edit.component.scss'
 @Component({
     selector: 'event-edit',
     templateUrl: './event-edit.component.html',
-    //encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None
 })
 export class EventEditComponent implements OnInit {
     constructor(private authService: AuthService, private eventService: EventService, private route: ActivatedRoute) {
@@ -72,12 +72,11 @@ export class EventEditComponent implements OnInit {
     }
 
     private save() {
-        debugger;
         this.eventService.updateEvent(this.eventModel).subscribe();
     }
 
-    
-    
+
+
     private onImageUpload(event) {
         this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
     }

@@ -15,7 +15,7 @@ export class HttpService {
     }
 
 
-    public get(name: string, params: SearchParams[] = []): Observable<any> {
+    get(name: string, params: SearchParams[] = []): Observable<any> {
         let httpRequest = this.http.get(name);
 
         if (params && params.length > 0) {
@@ -33,12 +33,12 @@ export class HttpService {
             .finally(() => this.loaderService.hideLoader());
     }
 
-    public getById(name: string, id: string): Observable<any> {
+    getById(name: string, id: string): Observable<any> {
         this.loaderService.showLoader();
         return this.http.get(name).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());
     }
 
-    public post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
+    post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' })
@@ -50,7 +50,7 @@ export class HttpService {
         return this.http.post(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    public put(name: string, model: any): Observable<any> {
+    put(name: string, model: any): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' })
@@ -59,7 +59,7 @@ export class HttpService {
         return this.http.put(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    public delete(name: string, model: any): Observable<any> {
+    delete(name: string, model: any): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -68,7 +68,7 @@ export class HttpService {
         return this.http.delete(name, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    public deleteById(name: string, id: any): Observable<any> {
+    deleteById(name: string, id: any): Observable<any> {
         this.loaderService.showLoader();
         let options = new RequestOptions({
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -77,7 +77,7 @@ export class HttpService {
         return this.http.delete(url, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    public postFile(name: string, file: any): Observable<any> {
+    postFile(name: string, file: any): Observable<any> {
         this.loaderService.showLoader();
         let formData = new FormData();
         formData.append("file", file)
@@ -86,7 +86,7 @@ export class HttpService {
             .catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
 
-    public getPdf(url, fileName): Observable<any> {
+    getPdf(url, fileName): Observable<any> {
         return this.http.get(url, { responseType: ResponseContentType.Blob }).map((res) => {
             FileSaver.saveAs(new Blob([res.blob()], { type: 'application/pdf' }), fileName);
         });
@@ -114,7 +114,7 @@ export class HttpService {
         return Observable.throw(errMsg);
     }
 
-    public getArray<T>(response: any): T[] {
+    getArray<T>(response: any): T[] {
         let result = response.json();
         if (result.length == 0) {
             return [];
@@ -122,15 +122,15 @@ export class HttpService {
         return result;
     }
 
-    public getJson(response: Response) {
-        return JSON.parse(response.json());
+    getJson(response: Response) {
+        return response.json();
     }
 
-    public getString(response: Response) {
+    getString(response: Response) {
         return response.text();
     }
 
-    public getExcelFile(response: Response, fileName: string): void {
+    getExcelFile(response: Response, fileName: string): void {
         FileSaver.saveAs(response.blob(), fileName);
     }
 
@@ -140,6 +140,7 @@ export class HttpService {
     private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
 
     convertDate(input) {
+        debugger;
         if (typeof input !== "object") {
             return input
         };

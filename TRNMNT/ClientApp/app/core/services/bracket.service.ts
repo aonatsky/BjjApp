@@ -11,7 +11,7 @@ export class BracketService {
 
     }
 
-    public createBracket(weightDivisionId: AAGUID): Observable<BracketModel> {
+    createBracket(weightDivisionId): Observable<BracketModel> {
         return this.httpService.get(ApiMethods.bracket.createBracket + '/' + weightDivisionId)
             .map(res => this.httpService.getJson(res));
     }

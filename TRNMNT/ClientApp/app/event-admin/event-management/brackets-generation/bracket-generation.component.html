@@ -4,14 +4,13 @@
             <div *ngFor="let row of getRows();" class="ui-g-12 bracket-block ui-g-nopad">
                 <div *ngIf="row % 2 == 0">
                     <div class="bracket">
-                        <div class="bracket-participant-plate ui-g-12" pDraggable="participantPlate" (onDragStart)="logDrag()">
+                        <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
                             {{getRound(col,row).firstParticipantName}}
                         </div>
-                        <div class="bracket-participant-plate ui-g-12" pDraggable="participantPlate" (onDragStart)="logDrag()">
+                        <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
                             {{getRound(col,row).secondParticipantName}}
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
