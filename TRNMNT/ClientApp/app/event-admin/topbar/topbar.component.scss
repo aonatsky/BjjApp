@@ -1,4 +1,4 @@
-﻿@import '../../shared/styles/shared.scss';
+﻿@import '../../shared/styles/variables.scss';
 
 
 .topbar {
@@ -11,5 +11,6 @@
         height: $header_height;
         text-align: right;
         line-height: 2;
+        color: white;
     }
 }

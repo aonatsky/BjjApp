@@ -113,6 +113,8 @@ namespace TRNMNT.Data.Context
         public DbSet<Order> Order { get; set; }
         public DbSet<Federation> Federation { get; set; }
         public DbSet<PromoCode> PromoCode { get; set; }
+        public DbSet<Bracket> Bracket { get; set; }
+        public DbSet<Round> Round { get; set; }
 
         #endregion
     }

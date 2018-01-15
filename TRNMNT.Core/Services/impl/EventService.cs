@@ -56,67 +56,76 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task UpdateEventAsync(EventModelFull eventModel)
         {
-            var _event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();// GetByIDAsync<Guid>(eventModel.EventId);
-
-            _event = UpdateFromModel(_event, eventModel);
-            _event.UpdateTS = DateTime.UtcNow;
-            _event.IsActive = true;
-            _eventRepository.Update(_event);
-
-            await DeleteCategoriesAsync(_event.EventId, eventModel.CategoryModels.Where(cm => !String.IsNullOrEmpty(cm.CategoryId)).Select(cm => Guid.Parse(cm.CategoryId)));
-
-            foreach (var categoryModel in eventModel.CategoryModels)
-            {
-
-                var category = Guid.TryParse(categoryModel.CategoryId, out var categoryId) ? _categoryRepository.GetByID(categoryId) : null;
-                if (category != null)
-                {
-                    category.Name = categoryModel.Name;
-                    _categoryRepository.Update(category);
-                }
-                else
-                {
-                    category = new Category
-                    {
-                        Name = categoryModel.Name,
-                        EventId = categoryModel.EventId,
-                        CategoryId = Guid.NewGuid()
-                    };
-                    _categoryRepository.Add(category);
-                }
-
-                var actualWeightDivisionIds = categoryModel.WeightDivisionModels.Where(wdm => !String.IsNullOrEmpty(wdm.WeightDivisionId)).Select(wdm => new Guid(wdm.WeightDivisionId));
-                var wdToDelete = _weightDivisionRepository.GetAll().Where(wd => wd.CategoryId == category.CategoryId && !actualWeightDivisionIds.Contains(wd.WeightDivisionId));
-                _weightDivisionRepository.DeleteRange(wdToDelete);
-
-                foreach (var wdModel in categoryModel.WeightDivisionModels)
-                {
-                    var wd = Guid.TryParse(wdModel.WeightDivisionId, out var weightDivisionId) ? _weightDivisionRepository.GetByID(weightDivisionId) : null;
-                    if (wd != null)
-                    {
-                        wd.Name = wdModel.Name;
-                        _weightDivisionRepository.Update(wd);
-                    }
-                    else
-                    {
-                        wd = new WeightDivision
-                        {
-                            WeightDivisionId = Guid.NewGuid(),
-                            Name = wdModel.Name,
-                            CategoryId = category.CategoryId
-                        };
-                        _weightDivisionRepository.Add(wd);
-                    }
-                }
-            }
-
+            var existingEvent = await _eventRepository.GetAll(e => e.EventId == eventModel.EventId).Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();// GetByIDAsync<Guid>(eventModel.EventId);
+            var updatedEvent = GetEventFromModel(eventModel);
+            updatedEvent.UpdateTS = DateTime.UtcNow;
+            updatedEvent.IsActive = true;
+            updatedEvent.FederationId = existingEvent.FederationId;
+            updatedEvent.OwnerId = existingEvent.OwnerId;
+            _eventRepository.UpdateValues(existingEvent, updatedEvent);
+            UpdateCategories(existingEvent.Categories, updatedEvent.Categories);
             await _unitOfWork.SaveAsync();
         }
 
+        public void UpdateCategories(IEnumerable<Category> existingCategories, IEnumerable<Category> updatedCategories)
+        {
+            foreach (var category in existingCategories)
+            {
+                if (updatedCategories.All(c => c.CategoryId != category.CategoryId))
+                {
+                    _weightDivisionRepository.DeleteRange(category.WeightDivisions);
+                    _categoryRepository.Delete(category);
+                }
+            }
+            foreach (var updatedCategory in updatedCategories)
+            {
+                var existingCategory = existingCategories.FirstOrDefault(c => c.CategoryId == updatedCategory.CategoryId);
+                if (existingCategory != null)
+                {
+                    _categoryRepository.UpdateValues(existingCategory, updatedCategory);
+                    UpdateWeightDivisions(existingCategory.WeightDivisions, updatedCategory.WeightDivisions);
+                }
+                else
+                {
+                    _categoryRepository.Add(updatedCategory);
+                    _weightDivisionRepository.AddRange(updatedCategory.WeightDivisions);
+                }
+                
+            }
+
+        }
+
+        public void UpdateWeightDivisions(IEnumerable<WeightDivision> existingDivisions,
+            IEnumerable<WeightDivision> updatedDivisions)
+        {
+            //deleting
+            foreach (var existingDivision in existingDivisions)
+            {
+                if (updatedDivisions.All(c => c.WeightDivisionId != existingDivision.WeightDivisionId))
+                {
+                    _weightDivisionRepository.Delete(existingDivision);
+                }
+            }
+
+            //updating
+            foreach (var updatedDivision in updatedDivisions)
+            {
+                var exsistingDivision = existingDivisions.FirstOrDefault(c => c.WeightDivisionId == updatedDivision.WeightDivisionId);
+                if (exsistingDivision != null)
+                {
+                    _weightDivisionRepository.UpdateValues(exsistingDivision, updatedDivision);
+                }
+                else
+                {
+                    _weightDivisionRepository.Add(updatedDivision);
+                }
+            }
+
+        }
         public async Task<EventModelFull> GetFullEventAsync(Guid id)
         {
-            var _event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
-            return _event != null ? GetEventModel(_event) : null;
+            var @event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
+            return @event != null ? GetEventModel(@event) : null;
         }
 
         public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId)
@@ -273,7 +282,8 @@ namespace TRNMNT.Core.Services.Impl
                 EventId = Guid.NewGuid(),
                 OwnerId = userId,
                 FederationId = federationId,
-                EventDate = DateTime.UtcNow.AddMonths(1).Date
+                EventDate = DateTime.UtcNow.AddMonths(1).Date,
+                IsActive = false
             };
             _eventRepository.Add(_event);
 
@@ -284,63 +294,39 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Helpers
 
-        private EventModelFull GetEventModel(Event _event)
+        private static EventModelFull GetEventModel(Event @event)
         {
             return new EventModelFull
             {
-                EventId = _event.EventId,
-                EventDate = _event.EventDate,
-                AdditionalData = _event.AdditionalData,
-                Address = _event.Address,
-                ContactEmail = _event.ContactEmail,
-                Description = _event.Description,
-                ImgPath = _event.ImgPath,
-                TNCFilePath = _event.TNCFilePath,
-                ContactPhone = _event.ContactPhone,
-                Title = _event.Title,
-                FBLink = _event.FBLink,
-                RegistrationEndTS = _event.RegistrationEndTS,
-                RegistrationStartTS = _event.RegistrationStartTS,
-                UrlPrefix = _event.UrlPrefix,
-                VKLink = _event.VKLink,
-                EarlyRegistrationEndTS = _event.EarlyRegistrationEndTS,
-                EarlyRegistrationPrice = _event.EarlyRegistrationPrice,
-                EarlyRegistrationPriceForMembers = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPrice = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPriceForMembers = _event.LateRegistrationPriceForMembers,
-                PromoCodeEnabled = _event.PromoCodeEnabled,
-                PromoCodeListPath = _event.PromoCodeListPath,
-                CategoryModels = GetCategoryModels(_event.Categories)
+                EventId = @event.EventId,
+                EventDate = @event.EventDate,
+                AdditionalData = @event.AdditionalData,
+                Address = @event.Address,
+                ContactEmail = @event.ContactEmail,
+                Description = @event.Description,
+                ImgPath = @event.ImgPath,
+                TNCFilePath = @event.TNCFilePath,
+                ContactPhone = @event.ContactPhone,
+                Title = @event.Title,
+                FBLink = @event.FBLink,
+                RegistrationEndTS = @event.RegistrationEndTS,
+                RegistrationStartTS = @event.RegistrationStartTS,
+                UrlPrefix = @event.UrlPrefix,
+                VKLink = @event.VKLink,
+                EarlyRegistrationEndTS = @event.EarlyRegistrationEndTS,
+                EarlyRegistrationPrice = @event.EarlyRegistrationPrice,
+                EarlyRegistrationPriceForMembers = @event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPrice = @event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPriceForMembers = @event.LateRegistrationPriceForMembers,
+                PromoCodeEnabled = @event.PromoCodeEnabled,
+                PromoCodeListPath = @event.PromoCodeListPath,
+                CategoryModels = GetCategoryModels(@event.Categories)
             };
         }
 
-        private EventModelInfo GetEventModelInfo(Event _event)
-        {
-            return new EventModelInfo
-            {
-                EventId = _event.EventId,
-                EventDate = _event.EventDate,
-                AdditionalData = _event.AdditionalData,
-                Address = _event.Address,
-                ContactEmail = _event.ContactEmail,
-                Description = _event.Description,
-                ImgPath = _event.ImgPath,
-                TNCFilePath = _event.TNCFilePath,
-                ContactPhone = _event.ContactPhone,
-                Title = _event.Title,
-                FBLink = _event.FBLink,
-                RegistrationEndTS = _event.RegistrationEndTS,
-                RegistrationStartTS = _event.RegistrationStartTS,
-                VKLink = _event.VKLink,
-                EarlyRegistrationEndTS = _event.EarlyRegistrationEndTS,
-                EarlyRegistrationPrice = _event.EarlyRegistrationPrice,
-                EarlyRegistrationPriceForMembers = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPrice = _event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPriceForMembers = _event.LateRegistrationPriceForMembers,
-            };
-        }
+       
 
-        private ICollection<CategoryModel> GetCategoryModels(ICollection<Category> categories)
+        private static ICollection<CategoryModel> GetCategoryModels(ICollection<Category> categories)
         {
             var categoryModels = new List<CategoryModel>();
             if (categories != null)
@@ -349,6 +335,7 @@ namespace TRNMNT.Core.Services.Impl
                 {
                     CategoryId = category.CategoryId.ToString(),
                     Name = category.Name,
+                    RoundTime = category.RoundTime,
                     WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions),
                     EventId = category.EventId
                 }));
@@ -356,7 +343,7 @@ namespace TRNMNT.Core.Services.Impl
             return categoryModels;
         }
 
-        private ICollection<WeightDivisionModel> GetWeightDeivisionsModels(ICollection<WeightDivision> weightDivisions)
+        private static ICollection<WeightDivisionModel> GetWeightDeivisionsModels(ICollection<WeightDivision> weightDivisions)
         {
             var weightDivisionModels = new List<WeightDivisionModel>();
             if (weightDivisions != null)
@@ -401,64 +388,34 @@ namespace TRNMNT.Core.Services.Impl
             };
         }
 
-        private ICollection<Category> GetCategoriesFromModels(ICollection<CategoryModel> models)
+        private static ICollection<Category> GetCategoriesFromModels(ICollection<CategoryModel> models)
         {
-            return models.Select(model => new Category
+            return models.Select(model =>
             {
-                EventId = model.EventId,
-                CategoryId = Guid.Parse(model.CategoryId),
-                Name = model.Name,
-                WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels)
+                var category = new Category
+                {
+                    EventId = model.EventId,
+                    CategoryId = string.IsNullOrEmpty(model.CategoryId) ? Guid.NewGuid() : Guid.Parse(model.CategoryId),
+                    RoundTime = model.RoundTime,
+                    Name = model.Name
+                };
+                category.WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels, category.CategoryId);
+                return category;
             }).ToList();
         }
 
-        private ICollection<WeightDivision> GetWeightDeivisionsFromModels(ICollection<WeightDivisionModel> models)
+        private static ICollection<WeightDivision> GetWeightDeivisionsFromModels(ICollection<WeightDivisionModel> models, Guid categoryId)
         {
             return models.Select(model => new WeightDivision
             {
-                WeightDivisionId = Guid.Parse(model.WeightDivisionId),
+                WeightDivisionId = string.IsNullOrEmpty(model.WeightDivisionId)? Guid.NewGuid() : Guid.Parse(model.WeightDivisionId),
                 Weight = model.Weight,
                 Descritpion = model.Descritpion,
                 Name = model.Name,
-                CategoryId = Guid.Parse(model.CategoryId)
+                CategoryId = categoryId
             }).ToList();
         }
-
-        private Event UpdateFromModel(Event @event, EventModelFull eventModel)
-        {
-            @event.EventDate = eventModel.EventDate;
-            @event.AdditionalData = eventModel.AdditionalData;
-            @event.Address = eventModel.Address;
-            @event.ContactEmail = eventModel.ContactEmail;
-            @event.Description = eventModel.Description;
-            @event.ImgPath = eventModel.ImgPath;
-            @event.TNCFilePath = eventModel.TNCFilePath;
-            @event.ContactPhone = eventModel.ContactPhone;
-            @event.Title = eventModel.Title;
-            @event.FBLink = eventModel.FBLink;
-            @event.RegistrationEndTS = eventModel.RegistrationEndTS;
-            @event.RegistrationStartTS = eventModel.RegistrationStartTS;
-            @event.UrlPrefix = eventModel.UrlPrefix;
-            @event.VKLink = eventModel.VKLink;
-            @event.EarlyRegistrationEndTS = eventModel.EarlyRegistrationEndTS;
-            @event.EarlyRegistrationPrice = eventModel.EarlyRegistrationPrice;
-            @event.EarlyRegistrationPriceForMembers = eventModel.EarlyRegistrationPriceForMembers;
-            @event.LateRegistrationPrice = eventModel.EarlyRegistrationPriceForMembers;
-            @event.LateRegistrationPriceForMembers = eventModel.LateRegistrationPriceForMembers;
-            @event.PromoCodeEnabled = eventModel.PromoCodeEnabled;
-            @event.PromoCodeListPath = eventModel.PromoCodeListPath;
-            return @event;
-        }
-
-
-        private async Task DeleteCategoriesAsync(Guid eventId, IEnumerable<Guid> eventCategoryIds)
-        {
-            var categoriesToDelete = await _categoryRepository.GetAll().Where(c => c.EventId == eventId && !eventCategoryIds.Contains(c.CategoryId)).ToListAsync();
-            var weightDivisionsToDelete = await _weightDivisionRepository.GetAll().Where(wd => categoriesToDelete.Select(c => c.CategoryId).Contains(wd.CategoryId)).ToListAsync();
-            _weightDivisionRepository.DeleteRange(weightDivisionsToDelete);
-            _categoryRepository.DeleteRange(categoriesToDelete);
-        }
-
+        
         #endregion
     }
 

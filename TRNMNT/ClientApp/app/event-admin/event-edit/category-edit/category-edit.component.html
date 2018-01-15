@@ -1,0 +1,74 @@
+﻿<div class="ui-g category" *ngFor="let category of categories; let i = index">
+    <div class="ui-g-12 category-name">
+        {{category.name}}
+    </div>
+    <div class="ui-g-12 ui-g-nopad">
+        <div class="ui-g-3"><label class="field-title"><b>Round Time:</b></label></div>
+        <div class="ui-g-2"><label>{{category.roundTime | minuteSeconds}}</label></div>
+    </div>
+    <div class="ui-g-12 ui-g-nopad">
+        <div class="ui-g-3">
+            <label class="field-title"><b>Wight Divisons:</b></label>
+        </div>
+        <div class="ui-g-9 ">
+            <div class="ui-g-4 ui-g-nopad" *ngFor="let wd of category.weightDivisionModels">
+                <label>{{wd.name}}</label>
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="float-right">
+            <button pButton type="button" iconPos="left" icon="fa-pencil" (click)="editCategory(i)" label="Edit"></button>
+        </div>
+    </div>
+</div>
+<div class="ui-g">
+    <div class="ui-g-3">
+        <button pButton type="button" (click)="addCategory()" label="Add Category"></button>
+    </div>
+</div>
+
+<p-dialog header="Edit Category"
+          [(visible)]="displayPopup"
+          [modal]="true"
+          [draggable]="false"
+          [resizable]="false"
+          [showHeader]="true"
+          [width]="500">
+    <div class="ui-g">
+        <div class="ui-g-3">
+            <label class="field-title">Name</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+            <input pInputText [(ngModel)]="categoryToEdit.name" />
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-3">
+            <label class="field-title">Round Time</label>
+        </div>
+        <div class="ui-g-3">
+            <p-inputMask class="round-time-picker" [(ngModel)]="roundTimeFormatted" mask="99:99" placeholder="mm:ss"></p-inputMask>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-12 title">Weight Divisions</div>
+    </div>
+    <div *ngFor="let wd of categoryToEdit.weightDivisionModels; let j = index" class="ui-g">
+        <div class="ui-g-10 ui-fluid">
+            <input pInputText [(ngModel)]="wd.name" />
+        </div>
+        <div class="ui-g-2">
+            <button class="float-right" pButton type="button" iconPos="left" icon="fa-times" (click)="deleteWeightDivision(j)"></button>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="float-left ui-g-1">
+            <button pButton type="button" iconPos="left" icon="fa-plus" (click)="addWeightDivision()" label="Add"></button>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-offset-4 ui-g-4 ui-fluid"><button pButton type="button" label="Save" (click)="saveCategory()"></button></div>
+        <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Delete" [disabled]="isNewCategory" (click)="deleteCategory()"></button></div>
+    </div>
+</p-dialog>

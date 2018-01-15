@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Team;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -51,6 +52,15 @@ namespace TRNMNT.Core.Services.Impl
                 TeamId = t.TeamId.ToString(),
                 Name = t.Name,
                 Description = t.Description
+            }).ToListAsync();
+        }
+
+        public async Task<IEnumerable<TeamModelBase>> GetTeamsAsync(Guid eventId)
+        {
+            return await _repository.GetAll().Where(t => t.Participants.Any(p => p.EventId == eventId)).Select(t => new TeamModelBase
+            {
+                TeamId = t.TeamId.ToString(),
+                Name = t.Name
             }).ToListAsync();
         }
 

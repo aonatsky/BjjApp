@@ -4,7 +4,6 @@ import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { RouterService } from '../../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
-import { ApiMethods } from "../consts/api-methods.consts";
 import * as FileSaver from 'file-saver';
 import { AuthHttp } from 'angular2-jwt';
 import 'rxjs/Rx';
@@ -15,15 +14,18 @@ export class HttpService {
     }
 
 
-    public get(name: string, params: SearchParams[] = []): Observable<any> {
-        let httpRequest = this.http.get(name);
+    public get(name: string, paramsHolder?: object): Observable<any> {
+        let httpRequest: Observable<Response>;
 
-        if (params && params.length > 0) {
+        if (paramsHolder != null) {
+            var keys = Reflect.ownKeys(paramsHolder);
             let urlSearchParams = new URLSearchParams();
-            for (var i = 0; i < params.length; i++) {
-                urlSearchParams.set(params[i].name, params[i].value);
+            for (var i = 0; i < keys.length; i++) {
+                urlSearchParams.set(keys[i].toString(), paramsHolder[keys[i]]);
             }
             httpRequest = this.http.get(name, { search: urlSearchParams });
+        } else {
+            httpRequest = this.http.get(name);
         }
 
         this.loaderService.showLoader();
@@ -80,7 +82,7 @@ export class HttpService {
     public postFile(name: string, file: any): Observable<any> {
         this.loaderService.showLoader();
         let formData = new FormData();
-        formData.append("file", file)
+        formData.append("file", file);
         return this.http.post(name, formData)
             .map((r: Response) => this.processResponse(r))
             .catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;

@@ -15,26 +15,26 @@ namespace TRNMNT.Core.Services.Impl
     {
         #region Dependencies
 
-        private readonly IFighterService _fighterService;
+        private readonly IParticipantProcessingService _participantProcessingService;
         private readonly IHostingEnvironment _env;
 
         #endregion
 
         #region .ctor
 
-        public BracketsFileService(IFighterService fighterService, IHostingEnvironment env)
+        public BracketsFileService(IParticipantProcessingService participantProcessingService, IHostingEnvironment env)
         {
             _env = env;
-            _fighterService = fighterService;
+            _participantProcessingService = participantProcessingService;
         }
 
         #endregion
 
         #region Public Methods
 
-        public async Task<CustomFile> GetBracketsFileAsync(FighterFilterModel filter)
+        public async Task<CustomFile> GetBracketsFileAsync(ParticitantFilterModel filter)
         {
-            var models = _fighterService.GetOrderedListForBrackets(filter);
+            var models = _participantProcessingService.GetOrderedListForBrackets(filter);
             var settings = GetSettings(models.Count);
 
             if (settings != null)

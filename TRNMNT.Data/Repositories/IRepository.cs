@@ -14,7 +14,7 @@ namespace TRNMNT.Data.Repositories
         IQueryable<T> GetAll();
         IQueryable<T> GetAll(Expression<Func<T, bool>> predicate);
         IQueryable<T> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);
-
+        void UpdateValues(T entity, T model);
         void Add(T entity);
         void Update(T entity);
         void AddRange(IEnumerable<T> entities);

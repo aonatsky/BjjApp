@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core"
 import { LoggerService } from "./logger.service"
-import { HttpService, SearchParams } from "./../dal/http/http.service"
-import { CategoryModel, CategorySimpleModel } from "./../model/category.models"
+import { HttpService } from "./../dal/http/http.service"
+import { CategorySimpleModel } from "./../model/category.models"
 import { ApiMethods } from "./../dal/consts/api-methods.consts"
 import { Observable } from 'rxjs/Rx';
 
@@ -12,13 +12,12 @@ export class CategoryService {
 
     }
 
-    public getCategories(eventId: string): Observable<CategoryModel[]> {
-        let params: SearchParams[] = [{ name: "eventId", value: eventId }];
-        return this.httpService.get(ApiMethods.category.category, params).map(res => this.httpService.getArray<CategoryModel>(res));
+    public getCategoriesByEventId(eventId: string): Observable<CategorySimpleModel[]> {
+        return this.httpService.get(ApiMethods.category.getCategoriesByEventId + "/" + eventId).map(res => this.httpService.getArray<CategorySimpleModel>(res));
     }
 
-    public getCategoriesForEvent(): Observable<CategorySimpleModel[]> {
-        return this.httpService.get(ApiMethods.category.getCategoriesForEvent).map(res => this.httpService.getArray<CategorySimpleModel>(res));
+    public getCategoriesForCurrentEvent(): Observable<CategorySimpleModel[]> {
+        return this.httpService.get(ApiMethods.category.getCategoriesForCurrentEvent).map(res => this.httpService.getArray<CategorySimpleModel>(res));
     }
    
 }

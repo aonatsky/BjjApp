@@ -1,4 +1,4 @@
-﻿
+﻿@import '../../shared/styles/variables.scss';
 
 .ui-steps .ui-steps-item {
     width: 25%
@@ -6,7 +6,7 @@
 
 
 .price-column {
-    border-right: 1px solid grey;
+    border-right: 1px solid $theme_grey;
 
     &:last-child {
         border-right: 0px;
@@ -23,4 +23,10 @@
         width: 100%;
         text-align: center;
     }
+}
+
+.navigation-buttons{
+    padding-left:0;
+    padding-right:0;
+    margin-top: 1em;
 }

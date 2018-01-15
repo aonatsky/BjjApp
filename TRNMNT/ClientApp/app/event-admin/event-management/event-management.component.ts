@@ -20,14 +20,6 @@ export class EventManagementComponent implements OnInit{
 
     
     ngOnInit() {
-        this.route.params.subscribe(p => {
-            let id = p["id"];
-            if (id && id != "") {
-                this.eventService.getEventBaseInfo(id).subscribe(r => { this.eventModel = r });
-            } else {
-                alert("No data to display")
-            }
-        });
     }
 
     goToOverview() {

@@ -16,12 +16,9 @@ namespace TRNMNT.Core.Services.Impl
     {
         #region Dependencies
 
-        private readonly IConfiguration _configuration;
         private readonly IPaidServiceFactory _paidServiceFactory;
-        private readonly IParticipantService _participantService;
-        private readonly ITeamService _teamService;
         private readonly IOrderService _orderService;
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger; // todo need to research Exception thrown during resolve
 
         #endregion
 
@@ -34,12 +31,11 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        public LiqPayService(IConfiguration configuration, IPaidServiceFactory paidServiceFactory, IOrderService orderService, ILogger logger)
+        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService)
         {
-            _configuration = configuration;
             _paidServiceFactory = paidServiceFactory;
             _orderService = orderService;
-            _logger = logger;
+            // _logger = logger;
         }
 
         #endregion
@@ -56,7 +52,7 @@ namespace TRNMNT.Core.Services.Impl
                     var paymentReference = jsonData["payment_id"].ToString();
                     var orderId = jsonData["order_id"].ToString();
                     var status = jsonData["status"].ToString();
-                    _logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
+                    //_logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
 
                     if (status == "success" || status == "sandbox")
                     {
@@ -71,11 +67,11 @@ namespace TRNMNT.Core.Services.Impl
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex.Message);
+                    //_logger.LogError(ex.Message);
                 }
 
             }
-            _logger.LogError("Signature declined");
+            //_logger.LogError("Signature declined");
         }
 
         public PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl)

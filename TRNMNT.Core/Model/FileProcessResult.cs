@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TRNMNT.Core.Enum;
 
 namespace TRNMNT.Core.Model
@@ -9,12 +10,12 @@ namespace TRNMNT.Core.Model
         {
 
         }
-        public FileProcessResult(FileProcessResultEnum code, string message = "")
+        public FileProcessResult(FileProcessResultEnum code, List<string> messages = null)
         {
             Code = code;
-            Message = message;
-            if (string.IsNullOrEmpty(message))
+            if (messages == null)
             {
+                var message = string.Empty;
                 switch (code)
                 {
                     case FileProcessResultEnum.FileIsInvalid:
@@ -30,11 +31,20 @@ namespace TRNMNT.Core.Model
                         message = "File is empty";
                         break;
                 }
+                Messages = new List<string> {message};
             }
-
+            else
+            {
+                Messages = messages;
+            }
         }
+
+        public FileProcessResult(FileProcessResultEnum code, string message) : this(code, new List<string> {message})
+        {
+        }
+
         public FileProcessResultEnum Code { get; set; }
-        public string Message { get; set; }
+        public List<string> Messages { get; set; }
     }
 
 }

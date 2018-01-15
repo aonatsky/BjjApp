@@ -64,7 +64,7 @@ export class EventRegistrationComponent implements OnInit {
 
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForEvent())
+        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForCurrentEvent())
             .subscribe(data => this.initData(data));
     }
 

@@ -2,10 +2,12 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
@@ -22,8 +24,11 @@ namespace TRNMNT.Web.Controllers
         #region Dependencies
 
         private readonly IParticipantService _participantService;
-        private readonly IEventService _eventService;
         private readonly IParticipantRegistrationService _participantRegistrationService;
+        private readonly ITeamService _teamService;
+        private readonly IWeightDivisionService _weightDivisionService;
+        private readonly ICategoryService _categoryService;
+        private readonly IFileProcessiongService<ParticipantListProcessingOptions> _fileProcessiongService;
 
         #endregion
 
@@ -35,17 +40,24 @@ namespace TRNMNT.Web.Controllers
             IPaymentService paymentService,
             IOrderService orderService,
             IParticipantRegistrationService participantRegistrationService,
+            ITeamService teamService,
+            IWeightDivisionService weightDivisionService,
+            ICategoryService categoryService,
+            IFileProcessiongService<ParticipantListProcessingOptions> fileProcessiongService,
             IAppDbContext context)
             : base(logger, userService, eventService, context)
         {
 
             _participantService = participantService;
             _participantRegistrationService = participantRegistrationService;
-            _eventService = eventService;
+            _teamService = teamService;
+            _weightDivisionService = weightDivisionService;
+            _categoryService = categoryService;
+            _fileProcessiongService = fileProcessiongService;
         }
 
         #endregion
-        
+
         #region Public Methods
 
         [Authorize, HttpPost("[action]")]
@@ -102,6 +114,66 @@ namespace TRNMNT.Web.Controllers
                 HandleException(e);
                 return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
             }
+        }
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<IActionResult> ParticipantsTable(ParticipantFilterModel filter)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var participants = await _participantService.GetFilteredParticipantsAsync(GetFederationId().Value, filter);
+                return Success(participants);
+            });
+        }
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<IActionResult> ParticipantsDropdownData(Guid eventId)
+        {
+
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var teams = await _teamService.GetTeamsAsync(eventId);
+                var categories = await _categoryService.GetCategoriesByEventIdAsync(eventId);
+                var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId);
+                return Success(new ParticipantDdlModel
+                {
+                    Teams = teams,
+                    Categories = categories,
+                    WeightDivisions = weightDivisions
+                });
+            });
+        }
+
+        [Authorize, HttpPost("[action]/{eventId}")]
+        public async Task<IActionResult> UploadParticipantsFromFile(IFormFile file, Guid eventId)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var options = new ParticipantListProcessingOptions
+                {
+                    EventId = eventId,
+                    FederationId = GetFederationId().Value
+                };
+                return await _fileProcessiongService.ProcessFileAsync(file, options);
+            });
+        }
+
+        [Authorize, HttpPut("[action]")]
+        public async Task<IActionResult> Update([FromBody] ParticipantTableModel participantModel)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                return await _participantService.UpdateParticipantAsync(participantModel);
+            });
+        }
+
+        [Authorize, HttpDelete("[action]/{participantId}")]
+        public async Task<IActionResult> Delete(Guid participantId)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await _participantService.DeleteParticipantAsync(participantId);
+            });
         }
 
         #endregion

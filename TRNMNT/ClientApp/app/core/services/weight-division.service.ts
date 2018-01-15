@@ -13,8 +13,12 @@ export class WeightDivisionService {
     }
 
     public getWeightDivisions(categoryId: string): Observable<WeightDivisionModel[]> {
-        let params: SearchParams[] = [{ name: "categoryId", value: categoryId }];
+        let params = { categoryId: categoryId };
         return this.httpService.get(ApiMethods.weightDivision.weightDivision, params).map(res => this.httpService.getArray<WeightDivisionModel>(res));
+    }
+
+    public getWeightDivisionsByEvent(eventId: string): Observable<WeightDivisionModel[]> {
+        return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByEvent + "/" + eventId).map(res => this.httpService.getArray<WeightDivisionModel>(res));
     }
 
     public getWeightDivisionsByCategory(categoryId: string): Observable<WeightDivisionSimpleModel[]> {

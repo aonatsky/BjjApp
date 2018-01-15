@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Services.Interface;
-using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
+using TRNMNT.Core.Helpers;
+using TRNMNT.Core.Const;
+using TRNMNT.Core.Enum;
+using TRNMNT.Core.Model.Interface;
+using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services.Impl
 {
@@ -14,23 +19,14 @@ namespace TRNMNT.Core.Services.Impl
         #region Dependencies
 
         private readonly IRepository<Participant> _repository;
-        private readonly ITeamService _teamService;
-        private readonly IOrderService _orderService;
-        private readonly IPaymentService _paymentService;
-        private readonly IAppDbContext _unitOfWork;
 
         #endregion
 
         #region .ctor
 
-        public ParticipantService(IRepository<Participant> repository, ITeamService teamService, IOrderService orderService, IPaymentService paymentService,
-            IAppDbContext unitOfWork)
+        public ParticipantService(IRepository<Participant> repository)
         {
             _repository = repository;
-            _teamService = teamService;
-            _orderService = orderService;
-            _paymentService = paymentService;
-            _unitOfWork = unitOfWork;
         }
 
         #endregion
@@ -81,6 +77,111 @@ namespace TRNMNT.Core.Services.Impl
                 participant.OrderId = orderId;
                 _repository.Update(participant);
             }
+        }
+
+        public async Task<Participant> UpdateParticipantAsync(ParticipantTableModel participantModel)
+        {
+            if (participantModel == null)
+            {
+                throw new ArgumentNullException(nameof(participantModel));
+            }
+            var participant = await _repository.GetByIDAsync(participantModel.ParticipantId);
+            if (participant == null)
+            {
+                // todo change to custom exception
+                throw new Exception($"Participant with id {participantModel.ParticipantId} not found");
+            }
+            participant.FirstName = participantModel.FirstName;
+            participant.LastName = participantModel.LastName;
+            participant.TeamId = participantModel.TeamId;
+            participant.DateOfBirth = participantModel.DateOfBirth;
+            participant.CategoryId = participantModel.CategoryId;
+            participant.WeightDivisionId = participantModel.WeightDivisionId;
+            participant.IsActive = true;
+            participant.UpdateTS = DateTime.UtcNow;
+
+            _repository.Update(participant);
+            return participant;
+        }
+
+        public async Task DeleteParticipantAsync(Guid participantId)
+        {
+            var participant = await _repository.GetByIDAsync(participantId);
+            if (participant == null)
+            {
+                // todo change to custom exception
+                throw new Exception($"Participant with id {participantId} not found");
+            }
+            _repository.Delete(participant);
+        }
+
+        public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel filter)
+        {
+            var size = DefaultValues.DefaultPageSize;
+            var allParticipants = _repository.GetAll(p => p.EventId == filter.EventId);
+            if (filter.CategoryId != null)
+            {
+                allParticipants = allParticipants.Where(p => p.CategoryId == filter.CategoryId);
+            }
+            if (filter.WeightDivisionId != null)
+            {
+                allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
+            }
+            var totalCount = await allParticipants.CountAsync();
+
+            allParticipants = SortParticipants(allParticipants, filter.SortField, filter.SortDirection, federationId);
+
+            allParticipants = allParticipants.Skip(size * filter.PageIndex).Take(size);
+
+            var list = await allParticipants.Select(p => new ParticipantTableModel
+            {
+                ParticipantId = p.ParticipantId,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                DateOfBirth = p.DateOfBirth,
+                UserId = p.UserId,
+                TeamName = p.Team.Name,
+                TeamId  = p.TeamId,
+                CategoryName = p.Category.Name,
+                CategoryId = p.CategoryId,
+                WeightDivisionName = p.WeightDivision.Name,
+                WeightDivisionId = p.WeightDivisionId,
+                IsMember = p.Team.FederationId == federationId
+            }).ToListAsync();
+
+            return new PagedList<ParticipantTableModel>(list, filter.PageIndex, size, totalCount);
+        }
+
+        private IQueryable<Participant> SortParticipants(IQueryable<Participant> allParticipants, ParticpantSortField filterSortField, SortDirectionEnum sortDirection, Guid federationId)
+        {
+            switch (filterSortField)
+            {
+                case ParticpantSortField.FirstName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.FirstName);
+                    break;
+                case ParticpantSortField.LastName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.LastName);
+                    break;
+                case ParticpantSortField.DateOfBirth:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.DateOfBirth);
+                    break;
+                case ParticpantSortField.TeamName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Team.Name);
+                    break;
+                case ParticpantSortField.CategoryName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Category.Name);
+                    break;
+                case ParticpantSortField.WeightDivisionName:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.WeightDivision.Name);
+                    break;
+                case ParticpantSortField.IsMember:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Team.FederationId == federationId);
+                    break;
+                default:
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.FirstName);
+                    break;
+            }
+            return allParticipants;
         }
 
         #endregion
