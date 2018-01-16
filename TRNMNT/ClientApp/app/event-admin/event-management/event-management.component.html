@@ -1,11 +1,12 @@
 ﻿<p-tabView>
     <p-tabPanel header="Participants">
-        <router-outlet>
-        </router-outlet>
+        <event-management-participants [eventId]="eventId"></event-management-participants>
     </p-tabPanel>
     <p-tabPanel header="Brackets">
-        <bracket-generation></bracket-generation>
-</p-tabPanel>
+        
+        <bracket-generation [eventId]="eventId"></bracket-generation>
+        
+    </p-tabPanel>
     <p-tabPanel header="Results">
         Content 3
     </p-tabPanel>

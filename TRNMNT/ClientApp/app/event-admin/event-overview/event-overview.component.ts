@@ -27,7 +27,7 @@ export class EventOverviewComponent implements OnInit {
     }
 
     public openDetails(id: string) {
-        this.routerService.goToEventManagementParticipants(id);
+        this.routerService.goToEventManagement(id);
     }
 
     ngOnInit() {

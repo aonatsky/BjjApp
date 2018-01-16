@@ -18,7 +18,7 @@ export class EventEditComponent implements OnInit {
     }
 
     private menuItems: MenuItem[];
-    private currentStep: number = 2;
+    private currentStep: number = 0;
     private eventModel: EventModel;
     private categoryCount: number = 0;
 
