@@ -11,6 +11,7 @@ import {BracketService} from '../../../core/services/bracket.service';
 })
 export class BracketGenerationComponent {
     @Input() users: any[];
+    @Input() eventId: string;
     rounds : RoundModel[];
     
     coumnsCount: number = 3;
@@ -22,7 +23,6 @@ export class BracketGenerationComponent {
     }
 
     ngOnInit() {
-        debugger;
         this.bracketService.createBracket('83CA0F48-1BF7-4441-E54A-08D4C85DC99E').subscribe(res => {
             this.rounds = res.roundModels.filter(r => r.stage == this.getMaxStage(res.roundModels.length));
             console.log(this.rounds.length);

@@ -1,7 +1,7 @@
 ﻿import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ParticipantTableModel, ParticipantDdlModel } from './../../core/model/participant.models';
 import { ParticipantService } from "./../../core/services/participant.service";
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
@@ -22,6 +22,7 @@ import { NotificationService } from '../../core/services/notification.service';
 })
 export class EventManagementParticipantsComponent implements OnInit {
 
+    @Input() eventId: string;
     private participantsListModel: PagedList<ParticipantTableModel>;
     private participantDdlModel: ParticipantDdlModel;
     private filter: CategoryWithDivisionFilterModel;
@@ -31,7 +32,6 @@ export class EventManagementParticipantsComponent implements OnInit {
     private weightDivisionSelectItems: SelectItem[];
 
     private readonly pageLinks: number = 3;
-    private eventId: string = "";
     private firstIndex: number = 0;
     private participantsLoading: boolean = true;
     private ddlDataLoading: boolean = true;
@@ -79,20 +79,11 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     ngOnInit() {
         this.ddlDataLoading = true;
-        this.route.params.subscribe(p => {
-            let id = p["id"];
-            if (!!id) {
-                this.eventId = id;
-                this.participantService.getParticipantsDropdownData(this.eventId).subscribe(result => {
-                    this.ddlDataLoading = false;
-                    this.participantDdlModel = result;
-                    this.mapDdlModel(result);
-                }, (err) => this.showError("Could not load categories and weight divisions data"));
-            } else {
-                this.showError("No data to display");
-            }
-        });
-
+        this.participantService.getParticipantsDropdownData(this.eventId).subscribe(result => {
+            this.ddlDataLoading = false;
+            this.participantDdlModel = result;
+            this.mapDdlModel(result);
+        }, (err) => this.showError("Could not load categories and weight divisions data"));
     }
 
     columns: CrudColumn[] = [
