@@ -22,5 +22,8 @@ export class TopbarComponent  implements OnInit {
         this.user = this.authService.getUser();
     }
 
+    private goHome() {
+        this.routerService.goHome();
+    }
 
 }

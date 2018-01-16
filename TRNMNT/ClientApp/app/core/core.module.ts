@@ -26,21 +26,24 @@ import { PaymentService } from './services/payment.service';
 import { UserModel } from './model/user.model'
 
 //PrimeNG
-import { DataTableModule } from "primeng/components/datatable/datatable";
-import { DialogModule } from "primeng/components/dialog/dialog";
-import { SharedModule } from "primeng/components/common/shared";
-import { ButtonModule } from "primeng/components/button/button";
-import { InputTextModule } from "primeng/components/inputtext/inputtext";
+import { DataTableModule } from 'primeng/components/datatable/datatable';
+import { DialogModule } from 'primeng/components/dialog/dialog';
+import { SharedModule } from 'primeng/components/common/shared';
+import { ButtonModule } from 'primeng/components/button/button';
+import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputMaskModule } from 'primeng/primeng';
-import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, ToggleButtonModule, ConfirmDialogModule } from 'primeng/primeng';
-
-
+import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, ToggleButtonModule, ConfirmDialogModule, DragDropModule } from 'primeng/primeng';
 import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
+import {BracketService} from './services/bracket.service';
+import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
 
-@NgModule({
+
+
+@
+NgModule({
     imports: [
         FormsModule,
         HttpModule,
@@ -59,13 +62,13 @@ import { RedirectGuard } from './routing/redirect.guard';
         InputTextareaModule,
         AutoCompleteModule,
         CheckboxModule,
+        DragDropModule,
         ToggleButtonModule,
         ConfirmDialogModule
     ],
     declarations: [
-
+        MinuteSecondsPipe
     ],
-
     providers: [
         HttpService,
         LoggerService,
@@ -78,6 +81,7 @@ import { RedirectGuard } from './routing/redirect.guard';
         CategoryService,
         WeightDivisionService,
         ParticipantService,
+        BracketService,
         provideAuth({
             headerName: 'Authorization',
             headerPrefix: 'bearer',
@@ -107,6 +111,8 @@ import { RedirectGuard } from './routing/redirect.guard';
         AutoCompleteModule,
         CheckboxModule,
         TabViewModule,
+        DragDropModule,
+        MinuteSecondsPipe,
         ToggleButtonModule,
         ConfirmDialogModule
     ]

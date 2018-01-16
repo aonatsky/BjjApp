@@ -1,11 +1,8 @@
-﻿import { Injectable } from "@angular/core"
-
-import { LoggerService } from "./logger.service"
-import { AuthService } from "./auth.service"
-import { HttpService } from "./../dal/http/http.service"
-import { EventModel, EventPreviewModel } from "./../model/event.models"
-import { ApiMethods } from "./../dal/consts/api-methods.consts"
-import { EventStatus } from "./../consts/event-status.consts"
+﻿import { Injectable } from '@angular/core'
+import { LoggerService } from './logger.service'
+import { HttpService } from './../dal/http/http.service'
+import { EventModel, EventPreviewModel } from './../model/event.models'
+import { ApiMethods } from './../dal/consts/api-methods.consts'
 import { Observable } from 'rxjs/Rx';
 
 
@@ -25,7 +22,7 @@ export class EventService {
     }
 
     public getEventsForOwner(): Observable<EventPreviewModel[]> {
-        return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventModel>(res));
+        return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventPreviewModel>(res));
     }
 
     public getEvent(id): Observable<EventModel> {
@@ -35,25 +32,25 @@ export class EventService {
     public getEventBaseInfo(id): Observable<EventPreviewModel> {
         return this.httpService.get(ApiMethods.event.getEventBaseInfo + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
-        
+
     public uploadEventImage(file, id) {
         return this.httpService.postFile(ApiMethods.event.uploadImage + "/" + id, file);
     }
 
     public uploadEventTncFile(file, id) {
-        return this.httpService.postFile(ApiMethods.event.uploadTnc + "/" + id, file);
+        return this.httpService.postFile(ApiMethods.event.uploadTnc + '/' + id, file);
     }
 
     public downloadEventTncFile(tncPath: string): Observable<any> {
-        return this.httpService.getPdf(tncPath, "TNC");
+        return this.httpService.getPdf(tncPath, 'TNC');
     }
 
     public uploadPromoCodeList(file, id) {
-        return this.httpService.postFile(ApiMethods.event.uploadPromoCodeList + "/" + id, file);
+        return this.httpService.postFile(ApiMethods.event.uploadPromoCodeList + '/' + id, file);
     }
 
     public getEventInfo() {
-        return this.httpService.get(ApiMethods.event.getEventInfo + "/").map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+        return this.httpService.get(ApiMethods.event.getEventInfo + '/').map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
     public createEvent(): Observable<string> {
@@ -61,9 +58,9 @@ export class EventService {
     }
 
     //private methods
-   
 
-  
 
-    
+
+
+
 }

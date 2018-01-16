@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRNMNT.Web", "TRNMNT.Web.csproj", "{47FD88B1-984B-473B-98E5-277D79E3F35D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRNMNT.Data", "..\TRNMNT.Data\TRNMNT.Data.csproj", "{ADE68249-D27B-42D3-BA50-1845A1CC79E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRNMNT.Data", "..\TRNMNT.Data\TRNMNT.Data.csproj", "{ADE68249-D27B-42D3-BA50-1845A1CC79E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRNMNT.Core", "..\TRNMNT.Core\TRNMNT.Core.csproj", "{C4D3C628-6EF9-47C7-AB86-4EF775B21957}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TRNMNT.Core", "..\TRNMNT.Core\TRNMNT.Core.csproj", "{C4D3C628-6EF9-47C7-AB86-4EF775B21957}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRNMNT.Core.Tests", "..\TRNMNT.Core.Tests\TRNMNT.Core.Tests.csproj", "{BB3B8F7E-A479-4533-9C73-8FA2AAF62B1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +29,15 @@ Global
 		{C4D3C628-6EF9-47C7-AB86-4EF775B21957}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4D3C628-6EF9-47C7-AB86-4EF775B21957}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4D3C628-6EF9-47C7-AB86-4EF775B21957}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3B8F7E-A479-4533-9C73-8FA2AAF62B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3B8F7E-A479-4533-9C73-8FA2AAF62B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3B8F7E-A479-4533-9C73-8FA2AAF62B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3B8F7E-A479-4533-9C73-8FA2AAF62B1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18110CB9-829C-4D7D-9640-478361B22ED9}
 	EndGlobalSection
 EndGlobal
