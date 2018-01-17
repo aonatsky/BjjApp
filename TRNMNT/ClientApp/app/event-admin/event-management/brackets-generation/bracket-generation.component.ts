@@ -4,8 +4,8 @@ import './bracket-generation.component.scss';
 import { ViewEncapsulation } from '@angular/core';
 import { BracketService } from '../../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../../core/model/category-with-division-filter.model';
-import {RoundModel} from '../../../core/model/round.models';
-import {BracketModel} from '../../../core/model/bracket.models';
+import { RoundModel } from '../../../core/model/round.models';
+import { BracketModel } from '../../../core/model/bracket.models';
 
 @Component({
     selector: 'bracket-generation',
@@ -29,7 +29,6 @@ export class BracketGenerationComponent {
 
     private createBracket() {
         this.bracketService.createBracket(this.filter.weightDivisionId).subscribe(r => {
-            debugger;
             this.bracket = r;
             this.rounds =
                 this.bracket.roundModels.filter(r => r.stage == this.getMaxStage(this.bracket.roundModels.length));
@@ -67,6 +66,31 @@ export class BracketGenerationComponent {
             return this.rounds[this.rounds.length / 2 + row / 2];
         }
     }
+
+    private getRoundIndex(col, row): number {
+        if (col == 0) {
+            return row / 2;
+        } else {
+            return this.rounds.length / 2 + row / 2;
+        }
+    }
+
+    private displayParticipantInfo(round: RoundModel, participantNumber: number) {
+        let participant;
+        if (participantNumber == 1) {
+            participant = round.firstParticipant;
+        } else if (participantNumber == 2) {
+            participant = round.secondParticipant;
+        }
+        if (participant == undefined) {
+            return '';
+        } else {
+            return participant.firstName + ' ' + participant.lastName;
+        }
+
+
+    }
+
 
     private dragStart() {
         this.dragMode = true;

@@ -4,9 +4,10 @@
     height: 80px;
 
     .bracket {
-        box-shadow: 2px 2px 4px 0 rgba(154, 154, 154, 0.5);
-        background-color: #ffffff;
-        height: 80px;
+        //box-shadow: 2px 2px 4px 0 rgba(154, 154, 154, 0.5);
+        //background-color: #ffffff;
+        height: 82px;
+        border: 2px solid $theme_black;
 
         .bracket-participant-plate {
             height: 40px;
@@ -17,6 +18,10 @@
 
             &:first-child {
                 border-bottom: 1px solid $theme_orange;
+            }
+
+            &:nth-child(2) {
+                border-top: 1px solid $theme_orange;
             }
         }
     }

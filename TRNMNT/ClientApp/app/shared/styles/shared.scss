@@ -118,13 +118,15 @@ body {
             .ui-tabview-nav {
                 background-color: $theme_body_color !important;
                 border: none;
+
+                li {
+                    background-color: $theme_body_color !important;
+                    border: none;
+                    height: 40px;
+                }
             }
 
-            li {
-                background-color: $theme_body_color !important;
-                border: none !important;
-                height: 40px;
-            }
+
 
             .ui-state-default {
                 .ui-tabview-title:hover {
@@ -190,9 +192,30 @@ body {
     }
 
     .ui-dropdown {
+
+
         &.ui-corner-all {
             border-radius: 0;
         }
+
+        .ui-dropdown-panel {
+            .ui-dropdown-items {
+                .ui-dropdown-item {
+                    &.ui-state-highlight {
+                        background-color: $theme_orange;
+                    }
+                }
+            }
+        }
     }
 
+
+    .ui-datepicker {
+
+        a {
+            &.ui-state-active {
+                background-color: $theme_orange !important;
+            }
+        }
+    }
 }
