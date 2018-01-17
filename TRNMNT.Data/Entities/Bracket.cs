@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
@@ -12,5 +13,7 @@ namespace TRNMNT.Data.Entities
 
         [JsonIgnore]
         public virtual WeightDivision WeightDivision { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Round> Rounds { get; set; }
     }
 }

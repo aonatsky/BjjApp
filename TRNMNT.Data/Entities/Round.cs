@@ -10,9 +10,9 @@ namespace TRNMNT.Data.Entities
         [Key]
         public Guid RoundId { get; set; }
         public Guid BracketId { get; set; }
-        public Guid FirstParticipantId { get; set; }
-        public Guid SecondParticipantId { get; set; }
-        public Guid WinnerParticipantId { get; set; }
+        public Guid? FirstParticipantId { get; set; }
+        public Guid? SecondParticipantId { get; set; }
+        public Guid? WinnerParticipantId { get; set; }
         public Guid? NextRoundId { get; set; }
         public int Stage { get; set; }
 

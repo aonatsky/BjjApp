@@ -1,15 +1,24 @@
-﻿<category-with-division-filter [eventId]="eventId"><category-with-division-filter>
-<div *ngIf="rounds" class="ui-g-10 ui-g-offset-1">
-    <div class="ui-g-4" *ngFor="let col of getColumns();">
-        <div *ngIf="col % 2 == 0">
-            <div *ngFor="let row of getRows();" class="ui-g-12 bracket-block ui-g-nopad">
-                <div *ngIf="row % 2 == 0">
-                    <div class="bracket">
-                        <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
-                            {{getRound(col,row).firstParticipantName}}
-                        </div>
-                        <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
-                            {{getRound(col,row).secondParticipantName}}
+﻿<category-with-division-filter [eventId]="eventId" (onFilterChanged)="setFilter($event)"></category-with-division-filter>
+<div class="ui-g-12">
+    <button pButton type="button" iconPos="left" icon="fa-plus" label="Generate Bracket" [disabled]="filter.weightDivisionId == ''" (click)="createBracket();"></button>
+</div>
+<div *ngIf="bracket">
+    <div class="ui-g-12">
+        <button pButton type="button" iconPos="left" icon="fa-save" label="Save"></button>
+        <button pButton type="button" iconPos="left" icon="fa-download" label="Download"></button>
+    </div>
+    <div class="ui-g-10 ui-g-offset-1">
+        <div class="ui-g-4" *ngFor="let col of getColumns();">
+            <div *ngIf="col % 2 == 0">
+                <div *ngFor="let row of getRows();" class="ui-g-12 bracket-block ui-g-nopad">
+                    <div *ngIf="row % 2 == 0">
+                        <div class="bracket">
+                            <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
+                                {{getRound(col,row).firstParticipant.lastName}}
+                            </div>
+                            <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
+                                {{getRound(col,row).secondParticipant.lastName}}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Core.Services.impl
 {
     public class RoundService: IRoundService
     {
-        public IEnumerable<Round> GetRoundStructure(Participant[] participants, Guid bracketId)
+        private readonly IRepository<Round> _roundRepository;
+
+        public RoundService(IRepository<Round> roundRepository)
+        {
+            _roundRepository = roundRepository;
+        }
+        
+        public ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId)
         {
             var rounds = new List<Round>();
             var lastStage = (int)Math.Log(participants.Count(), 2)-1;
@@ -27,18 +35,22 @@ namespace TRNMNT.Core.Services.impl
                     var j = 0;
                     foreach (var round in roundsToAdd)
                     {
-                        round.FirstParticipant = participants[j];
-                        round.FirstParticipantId = participants[j].ParticipantId;
-                        round.SecondParticipant = participants[j + 1];
-                        round.SecondParticipantId = participants[j+1].ParticipantId;
+                        if (participants[j].ParticipantId != Guid.Empty)
+                        {
+                            round.FirstParticipant = participants[j];
+                            round.FirstParticipantId = participants[j].ParticipantId;    
+                        }
+                        if (participants[j + 1].ParticipantId != Guid.Empty)
+                        {
+                            round.SecondParticipant = participants[j + 1];
+                            round.SecondParticipantId = participants[j + 1].ParticipantId;
+                        }
                         j = j + 2;
                     }        
                 }
                 rounds.AddRange(roundsToAdd);
             }
-
-            
-
+            _roundRepository.AddRange(rounds);
             return rounds;
         }
 

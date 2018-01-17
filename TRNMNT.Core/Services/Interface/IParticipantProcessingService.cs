@@ -12,14 +12,14 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        List<ParticitantModel> GetParticitantModelsByFilter(ParticitantFilterModel filter);
+        List<ParticipantModel> GetParticitantModelsByFilter(ParticitantFilterModel filter);
 
         /// <summary>
         /// Gets the ordered list for brackets.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns></returns>
-        List<ParticitantModel> GetOrderedListForBrackets(ParticitantFilterModel filter);
+        List<ParticipantModel> GetOrderedListForBrackets(ParticitantFilterModel filter);
 
         /// <summary>
         /// Adds the fighters by models.
@@ -28,6 +28,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="eventId">event participants uploaded for.</param>
         /// <param name="federationId">federation participants uploaded for.</param>
         /// <returns></returns>
-        Task<List<string>> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId, Guid federationId);
+        Task<List<string>> AddParticipantsByModelsAsync(List<ParticipantModel> particitantModels, Guid eventId, Guid federationId);
     }
 }

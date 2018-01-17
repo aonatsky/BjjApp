@@ -11,7 +11,7 @@ using TRNMNT.Data.Repositories;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class WeightDivisionController : CRUDController<WeightDivision>
+    public class WeightDivisionController : BaseController
     {
         private readonly IWeightDivisionService _weightDivisionService;
 
@@ -22,7 +22,7 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IEventService eventService,
             IAppDbContext context)
-            : base(logger, repository, userService, eventService, context)
+            : base(logger, userService, eventService, context)
         {
             _weightDivisionService = weightDivisionService;
         }
@@ -37,22 +37,22 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetWeightDivisionsByEvent(Guid eventId)
         {
-			return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId));
+            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId));
         }
 
-        public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
-        {
-            switch (key)
-            {
-                case "categoryId":
-                    {
-                        query = query.Where(w => w.CategoryId == Guid.Parse(value));
-                        break;
-                    }
-            }
+        //public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
+        //{
+        //    switch (key)
+        //    {
+        //        case "categoryId":
+        //            {
+        //                query = query.Where(w => w.CategoryId == Guid.Parse(value));
+        //                break;
+        //            }
+        //    }
 
-            return query;
-        }
+        //    return query;
+        //}
     }
 
 }

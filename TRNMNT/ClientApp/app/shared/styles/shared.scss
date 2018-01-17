@@ -110,8 +110,15 @@ body {
     .ui-tabview {
         margin-top: 20px;
 
-        .ui-tabview-nav {
-            background-color: $theme_body_color !important;
+        .ui-tabview-panel {
+            padding: 0px;
+        }
+
+        &.ui-tabview-top {
+            .ui-tabview-nav {
+                background-color: $theme_body_color !important;
+                border: none;
+            }
 
             li {
                 background-color: $theme_body_color !important;

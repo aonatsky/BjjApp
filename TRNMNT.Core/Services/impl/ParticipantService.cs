@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -104,6 +105,11 @@ namespace TRNMNT.Core.Services.Impl
             return participant;
         }
 
+        public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId)
+        {
+            return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId).ToListAsync();
+        }
+
         public async Task DeleteParticipantAsync(Guid participantId)
         {
             var participant = await _repository.GetByIDAsync(participantId);
@@ -182,6 +188,17 @@ namespace TRNMNT.Core.Services.Impl
                     break;
             }
             return allParticipants;
+        }
+
+        public Participant GetEmptyParticipant()
+        {
+            return new Participant()
+            {
+                ParticipantId = Guid.Empty,
+                TeamId = Guid.Empty,
+                FirstName = "EMPTY",
+                LastName = "EMPTY"
+            };
         }
 
         #endregion

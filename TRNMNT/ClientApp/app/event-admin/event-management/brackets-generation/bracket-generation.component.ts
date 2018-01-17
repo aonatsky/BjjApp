@@ -2,7 +2,10 @@
 import '../../../shared/styles/brackets.scss';
 import './bracket-generation.component.scss';
 import { ViewEncapsulation } from '@angular/core';
-import {BracketService} from '../../../core/services/bracket.service';
+import { BracketService } from '../../../core/services/bracket.service';
+import { CategoryWithDivisionFilterModel } from '../../../core/model/category-with-division-filter.model';
+import {RoundModel} from '../../../core/model/round.models';
+import {BracketModel} from '../../../core/model/bracket.models';
 
 @Component({
     selector: 'bracket-generation',
@@ -10,26 +13,30 @@ import {BracketService} from '../../../core/services/bracket.service';
     encapsulation: ViewEncapsulation.None
 })
 export class BracketGenerationComponent {
-    @Input() users: any[];
     @Input() eventId: string;
-    rounds : RoundModel[];
-    
-    coumnsCount: number = 3;
+    rounds: RoundModel[] = [];
     bracket: BracketModel;
+    coumnsCount: number = 3;
     dragMode: boolean = false;
-
+    private filter: CategoryWithDivisionFilterModel = new CategoryWithDivisionFilterModel('', '');
 
     constructor(private bracketService: BracketService) {
     }
 
     ngOnInit() {
-        this.bracketService.createBracket('83CA0F48-1BF7-4441-E54A-08D4C85DC99E').subscribe(res => {
-            this.rounds = res.roundModels.filter(r => r.stage == this.getMaxStage(res.roundModels.length));
-            console.log(this.rounds.length);
+
+    }
+
+    private createBracket() {
+        this.bracketService.createBracket(this.filter.weightDivisionId).subscribe(r => {
+            debugger;
+            this.bracket = r;
+            this.rounds =
+                this.bracket.roundModels.filter(r => r.stage == this.getMaxStage(this.bracket.roundModels.length));
         });
     }
 
-    
+
     private getRows() {
         var rows = [];
         for (var i = 0; i < this.rounds.length - 1; i++) {
@@ -43,7 +50,7 @@ export class BracketGenerationComponent {
     }
 
 
-    private getMaxStage(roundsCount: number) : number {
+    private getMaxStage(roundsCount: number): number {
         for (var i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
             if (roundsCount == 0) {
@@ -53,10 +60,11 @@ export class BracketGenerationComponent {
     }
 
     private getRound(col, row): RoundModel {
+        debugger;
         if (col == 0) {
-            return this.rounds[row/2];
+            return this.rounds[row / 2];
         } else {
-            return this.rounds[this.rounds.length / 2 + row/2];
+            return this.rounds[this.rounds.length / 2 + row / 2];
         }
     }
 
@@ -66,6 +74,10 @@ export class BracketGenerationComponent {
 
     private dragEnd() {
         this.dragMode = false;
+    }
+
+    private setFilter($event) {
+        this.filter = $event;
     }
 
 }

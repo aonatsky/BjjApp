@@ -4,6 +4,7 @@ import { HttpService } from '../dal/http/http.service';
 import { Observable } from 'rxjs';
 
 import { ApiMethods } from '../dal/consts/api-methods.consts';
+import {BracketModel} from '../model/bracket.models';
 
 @Injectable()
 export class BracketService {

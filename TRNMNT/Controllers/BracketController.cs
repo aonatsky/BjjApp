@@ -30,17 +30,17 @@ namespace TRNMNT.Web.Controllers
 
         [HttpGet("[action]/{weightDivisionId}")]
         [Authorize]
-        public async Task<IActionResult> CreateBracket([FromQuery] Guid weightDivisionId)
+        public async Task<IActionResult> CreateBracket(Guid weightDivisionId)
         {
             return await HandleRequestWithDataAsync(async () =>
                 {
-                    var bracketModel = await _bracketService.CreateBracketAsync(weightDivisionId);
+                    var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
                     if (bracketModel != null)
                     {
                         return Success(bracketModel);
                     }
                     return NotFoundResponse();
-                }, false, false);
+                });
         }
 
         #endregion

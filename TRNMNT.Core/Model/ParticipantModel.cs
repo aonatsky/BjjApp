@@ -3,7 +3,7 @@ using System;
 
 namespace TRNMNT.Core.Model
 {
-    public class ParticitantModel
+    public class ParticipantModel
     {
         public Guid ParticipantId { get; set; }
         public string FirstName { get; set; }

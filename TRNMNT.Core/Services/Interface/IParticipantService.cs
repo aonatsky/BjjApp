@@ -9,6 +9,8 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IParticipantService : IPaidEntityService
     {
+        Participant GetEmptyParticipant();
+    
         /// <summary>
         /// Determines whether [is participant exists asynchronous].
         /// </summary>
@@ -40,9 +42,26 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns>filtered ParticipantTableModel list</returns>
         Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel eventId);
 
+        /// <summary>
+        /// Deletes paraticipant by id
+        /// </summary>
+        /// <param name="participantId"></param>
+        /// <returns></returns>
         Task DeleteParticipantAsync(Guid participantId);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="participantModel"></param>
+        /// <returns></returns>
         Task<Participant> UpdateParticipantAsync(ParticipantTableModel participantModel);
+
+        /// <summary>
+        /// Returns participants for particular weightdivision
+        /// </summary>
+        /// <param name="weightDivisionId"></param>
+        /// <returns>List of participants</returns>
+        Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId);
 
     }
 }
