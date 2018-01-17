@@ -18,6 +18,7 @@
       [dialogMinWidth]="500"
       gridMinHeight="415">
 </crud>
-<participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)"></participant-list-upload>
+<div class="ui-g">
+    <participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)" class="ui-g-3"></participant-list-upload>
+</div>
 
-<!--</ng-template>-->

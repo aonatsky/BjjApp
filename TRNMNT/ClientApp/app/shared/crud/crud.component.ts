@@ -4,12 +4,13 @@ import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { SelectItem } from 'primeng/components/common/selectitem';
 import { DataTable } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
+import './crud.component.scss'
 
 @Component({
     selector: 'crud',
     templateUrl: "./crud.component.html",
-    styleUrls: ['./crud.component.css'],
-    providers: [ConfirmationService]
+    styleUrls: ['./crud.component.own.css'],
+    providers: [ConfirmationService],
 })
 
 
