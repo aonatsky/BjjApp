@@ -1,11 +1,11 @@
 ﻿import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ParticipantTableModel, ParticipantDdlModel } from './../../core/model/participant.models';
 import { ParticipantService } from "./../../core/services/participant.service";
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
-import { ICrudColumn as CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent, CrudComponent } from '../../shared/crud/crud.component';
+import { ICrudColumn as CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent } from '../../shared/crud/crud.component';
 import { DatePipe } from '@angular/common';
 import { PagedList } from '../../core/model/paged-list.model';
 import { ParticipantFilterModel } from '../../core/model/participant-filter.model';
@@ -18,10 +18,11 @@ import { NotificationService } from '../../core/services/notification.service';
 @Component({
     selector: 'event-management-participants',
     templateUrl: './event-management-participants.component.html',
-    providers: [DatePipe]
+    providers: [DatePipe],
 })
 export class EventManagementParticipantsComponent implements OnInit {
 
+    @Input() eventId: string;
     private participantsListModel: PagedList<ParticipantTableModel>;
     private participantDdlModel: ParticipantDdlModel;
     private filter: CategoryWithDivisionFilterModel;
@@ -31,7 +32,6 @@ export class EventManagementParticipantsComponent implements OnInit {
     private weightDivisionSelectItems: SelectItem[];
 
     private readonly pageLinks: number = 3;
-    private eventId: string = "";
     private firstIndex: number = 0;
     private participantsLoading: boolean = true;
     private ddlDataLoading: boolean = true;
@@ -79,20 +79,11 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     ngOnInit() {
         this.ddlDataLoading = true;
-        this.route.params.subscribe(p => {
-            let id = p["id"];
-            if (!!id) {
-                this.eventId = id;
-                this.participantService.getParticipantsDropdownData(this.eventId).subscribe(result => {
-                    this.ddlDataLoading = false;
-                    this.participantDdlModel = result;
-                    this.mapDdlModel(result);
-                }, (err) => this.showError("Could not load categories and weight divisions data"));
-            } else {
-                this.showError("No data to display");
-            }
-        });
-
+        this.participantService.getParticipantsDropdownData(this.eventId).subscribe(result => {
+            this.ddlDataLoading = false;
+            this.participantDdlModel = result;
+            this.mapDdlModel(result);
+        }, (err) => this.showError("Could not load categories and weight divisions data"));
     }
 
     columns: CrudColumn[] = [
@@ -180,7 +171,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     public onEntityUpdate(participant: ParticipantTableModel) {
         this.participantService.updateParticipant(participant).subscribe(
             () => {
-                this.loadParticipants(this.getFilterModel(null, false))
+                this.loadParticipants(this.getFilterModel(null, false));
                 this.notificationService.showSuccess("Update Info", "Participant successfully updated");
             },
             () => this.showError("Could not update participant"));
@@ -189,7 +180,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     public onEntityDelete(participant: ParticipantTableModel) {
         this.participantService.deleteParticipant(participant.participantId).subscribe(
             () => {
-                this.loadParticipants(this.getFilterModel())
+                this.loadParticipants(this.getFilterModel());
                 this.notificationService.showInfo("Delete Info", "Participant successfully deleted");
             },
             () => this.showError("Could not delete participant"));

@@ -13,7 +13,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 @Component({
     selector: 'category-with-division-filter',
     templateUrl: 'category-with-division-filter.component.html',
-    styleUrls: ['category-with-division-filter.component.css']
+    styleUrls: ['category-with-division-filter.component.css'],
 })
 
 export class CategoryWithDivisionFilter implements OnInit {
