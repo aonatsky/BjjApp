@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TRNMNT.Core.Model;
-using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -42,6 +41,7 @@ namespace TRNMNT.Web.Controllers
 
         #endregion
 
+        #region Public Methods
 
         [AllowAnonymous, HttpPost("[action]")]
         public async Task GetToken([FromBody] UserCredentialsModel credentials)
@@ -49,13 +49,14 @@ namespace TRNMNT.Web.Controllers
             try
             {
                 //var token = await _authenticationSerivce.GetToken(credentials.Username, credentials.Password);
-                var token = await _authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
-                if (!string.IsNullOrEmpty(token))
+                var tokenResult = await _authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
+                if (tokenResult != null)
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
                     var response = new
                     {
-                        id_token = token,
+                        id_token = tokenResult.AccessToken,
+                        refresh_token = tokenResult.RefreshToken
                     };
                     await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 
@@ -74,6 +75,33 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpPost("[action]")]
+        public async Task UpdateToken([FromBody] TokenModel tokenModel)
+        {
+            try
+            {
+                var tokenResult = await _authenticationSerivce.UpdateTokenAsync(tokenModel.RefreshToken);
+                if (tokenResult != null)
+                {
+                    var response = new
+                    {
+                        id_token = tokenResult.AccessToken,
+                        refresh_token = tokenResult.RefreshToken
+                    };
+                    await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+                }
+                else
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+        }
+
+        [AllowAnonymous, HttpPost("[action]")]
         public async Task Register([FromBody] UserCredentialsModel credentials)
         {
             try
@@ -86,12 +114,8 @@ namespace TRNMNT.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 HandleException(ex);
             }
-
         }
 
-
-
+        #endregion
     }
-
-
 }
