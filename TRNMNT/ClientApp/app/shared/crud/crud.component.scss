@@ -1,0 +1,53 @@
+﻿@import '../../shared/styles/variables.scss';
+
+body {
+    div.trnmnt-crud {
+        .ui-datatable {
+            .ui-datatable-thead > tr > th {
+                padding: .25em;
+            }
+
+            .ui-datatable-data tr.ui-state-highlight, 
+            thead th.ui-state-active {
+                background-color: #ffffff;
+                border-color: #c7c7c7;
+                color: #373a3c;
+            }
+        }
+
+        .ui-paginator {
+            .ui-paginator-first,
+            .ui-paginator-prev,
+            .ui-paginator-next,
+            .ui-paginator-last {
+                color: $theme_black;
+
+                &:hover {
+                    &:not(.ui-state-disabled) {
+                        color: $theme_orange;
+                    }
+                }
+            }
+
+            .ui-paginator-pages {
+                .ui-paginator-page {
+                    &:not(.ui-state-active) {
+                        color: $theme_black;
+
+                        &:hover {
+                            color: $theme_orange;
+                        }
+                    }
+
+                    &.ui-state-active {
+                        background-color: $theme_orange;
+
+                        &:hover {
+                            background-color: $theme_orange;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

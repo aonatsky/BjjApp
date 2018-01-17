@@ -188,4 +188,11 @@ body {
     a {
         text-decoration: none;
     }
+
+    .ui-dropdown {
+        &.ui-corner-all {
+            border-radius: 0;
+        }
+    }
+
 }
