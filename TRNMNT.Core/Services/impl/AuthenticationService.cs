@@ -61,20 +61,33 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public async Task<string> GetTokenAsync(string login, string password)
+        public async Task<AuthTokenResult> GetTokenAsync(string login, string password)
         {
             await AddSampleUserAsync();
             var loginResult = await _signInManager.PasswordSignInAsync(login, password, false, false);
             if (loginResult.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(login);
-                var token = GenerateTokenAsync(user);
-                return await token;
+                return await GetTokens(user);
             }
-            return string.Empty;
+            return null;
         }
 
-        public async Task<string> GetTokenAsync()
+        public async Task<AuthTokenResult> UpdateTokenAsync(string refreshToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var data = handler.ReadJwtToken(refreshToken);
+            var userIdClaim = data.Payload.FirstOrDefault(x => x.Key.Equals("nameid", StringComparison.CurrentCulture));
+            if (userIdClaim.Value != null)
+            {
+                var user = await _userManager.FindByIdAsync(userIdClaim.Value.ToString());
+                return await GetTokens(user);
+            }
+
+            return null;
+        }
+
+        public async Task<AuthTokenResult> GetTokenAsync()
         {
             await AddSampleUserAsync();
             var user = await _userManager.FindByNameAsync("admin");
@@ -85,9 +98,9 @@ namespace TRNMNT.Core.Services.Impl
                 var requestAt = DateTime.Now;
 
                 var token = GenerateTokenAsync(user);
-                return await token;
+                return await GetTokens(user);
             }
-            return string.Empty;
+            return null;
         }
 
         public async Task<UserRegistrationResult> CreateParticipantUserAsync(string email, string password)
@@ -151,6 +164,21 @@ namespace TRNMNT.Core.Services.Impl
             return handler.WriteToken(securityToken);
         }
 
+        private string GenerateRefreshToken(User user)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var identity = new ClaimsIdentity(GetRefreshTokenClaims(user));
+
+            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = TokenAuthOptions.Issuer,
+                Audience = TokenAuthOptions.Audience,
+                SigningCredentials = new SigningCredentials(TokenAuthOptions.GetKey(), SecurityAlgorithms.HmacSha256),
+                Subject = identity
+            });
+            return handler.WriteToken(securityToken);
+        }
+
         private List<Claim> GetTokenClaims(User user)
         {
             return new List<Claim> {
@@ -161,6 +189,22 @@ namespace TRNMNT.Core.Services.Impl
                     new Claim(ClaimTypes.Email, user.Email),
 
                 };
+        }
+
+        private List<Claim> GetRefreshTokenClaims(User user)
+        {
+            return new List<Claim> {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
+        }
+
+        private async Task<AuthTokenResult> GetTokens(User user)
+        {
+            return new AuthTokenResult
+            {
+                AccessToken = await GenerateTokenAsync(user),
+                RefreshToken = GenerateRefreshToken(user)
+            };
         }
 
         #endregion
