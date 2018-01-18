@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
+using TRNMNT.Core.Settings;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Impl
@@ -50,8 +51,11 @@ namespace TRNMNT.Core.Services.Impl
                 LastName = secretUserCreationModel.LastName,
                 Email = secretUserCreationModel.Email
             }, secretUserCreationModel.Password);
+            
+            var createdUser = await _userManager.FindByNameAsync(secretUserCreationModel.UserName);
+            await _userManager.AddClaimAsync(createdUser, new Claim(ClaimTypes.Role, Roles.Owner));
 
-            _logger.LogDebug($"User '{secretUserCreationModel.UserName}' is created.");
+            _logger.LogDebug($"User '{secretUserCreationModel.UserName}' is created with role Owner.");
         }
 
         #endregion
