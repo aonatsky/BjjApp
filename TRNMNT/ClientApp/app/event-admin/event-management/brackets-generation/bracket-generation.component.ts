@@ -6,6 +6,8 @@ import { BracketService } from '../../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../../core/model/category-with-division-filter.model';
 import { RoundModel } from '../../../core/model/round.models';
 import { BracketModel } from '../../../core/model/bracket.models';
+import Participantmodels = require('../../../core/model/participant.models');
+import ParticipantModelBase = Participantmodels.ParticipantModelBase;
 
 @Component({
     selector: 'bracket-generation',
@@ -18,6 +20,7 @@ export class BracketGenerationComponent {
     bracket: BracketModel;
     coumnsCount: number = 3;
     dragMode: boolean = false;
+    dragModel: DragModel;
     private filter: CategoryWithDivisionFilterModel = new CategoryWithDivisionFilterModel('', '');
 
     constructor(private bracketService: BracketService) {
@@ -92,16 +95,63 @@ export class BracketGenerationComponent {
     }
 
 
-    private dragStart() {
+    private dragStart(roundIndex: number, participantNumber: number) {
         this.dragMode = true;
+        this.dragModel = new DragModel(roundIndex, participantNumber);
+
     }
 
     private dragEnd() {
+        debugger;
         this.dragMode = false;
+        console.log(this.dragModel);
     }
+
+    private dragEnter($event) {
+        $event.target.style.backgroundColor = 'coral';
+    }
+
+    private dragLeave($event) {
+        $event.target.style.backgroundColor = 'white';
+    }
+
+
+    private onDrop(roundIndex: number, participantNumber: number) {
+        debugger;
+        let targetParticipant = this.getParticipant(this.rounds[roundIndex], participantNumber);
+        let sourceParticipant = this.getParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber);
+        this.setParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber, targetParticipant);
+        this.setParticipant(this.rounds[roundIndex], participantNumber, sourceParticipant);
+    }
+
 
     private setFilter($event) {
         this.filter = $event;
     }
 
+    private getParticipant(round: RoundModel, pNumber: number) {
+        if (pNumber == 1) {
+            return round.firstParticipant;
+        } else {
+            return round.secondParticipant;
+        }
+    }
+
+    setParticipant(round: RoundModel, pNumber: number, value: ParticipantModelBase) {
+        if (pNumber == 1) {
+            round.firstParticipant = value;
+        } else {
+            round.secondParticipant = value;
+        }
+    }
+
+}
+
+class DragModel {
+    constructor(rIndex: number, pNumber: number) {
+        this.participantNumber = pNumber;
+        this.roundIndex = rIndex;
+    }
+    participantNumber: number;
+    roundIndex: number;
 }

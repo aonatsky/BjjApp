@@ -6,4 +6,9 @@ export class RoundModel {
     secondParticipant: ParticipantModelBase;
     nextRoundId: AAGUID;
     stage: number;
+
+
+     
+
+
 }

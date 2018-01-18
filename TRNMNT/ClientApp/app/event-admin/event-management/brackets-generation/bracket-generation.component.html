@@ -9,18 +9,26 @@
     </div>
 </div>
 <div class="ui-g" *ngIf="bracket">
-    
+
     <div class="ui-g-10 ui-g-offset-1">
         <div class="ui-g-4" *ngFor="let col of getColumns();">
             <div *ngIf="col % 2 == 0">
                 <div *ngFor="let row of getRows();" class="ui-g-12 bracket-block ui-g-nopad">
                     <div *ngIf="row % 2 == 0">
                         <div class="bracket">
-                            <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
-                                {{displayParticipantInfo(rounds[getRoundIndex(col,row)],1)}}
-                            </div>
-                            <div class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" pDraggable="participantPlate" pDroppable="participantPlate" (onDragStart)="dragStart()" (onDragEnd)="dragEnd()">
-                                {{displayParticipantInfo(rounds[getRoundIndex(col,row)],2)}}
+                            <div *ngFor="let num of [1,2]"
+                                 class="bracket-participant-plate ui-g-12"
+                                 [class.droppable]="dragMode"
+                                 [dragEffect]="'move'"
+                                 pDraggable="participantPlate" 
+                                 pDroppable="participantPlate" 
+                                 (onDragStart)="dragStart(getRoundIndex(col,row),num)" 
+                                 (onDrop)="onDrop(getRoundIndex(col,row),num)" 
+                                 (onDragEnd)="dragEnd()"
+                                 (onDragEnter)="dragEnter($event)"
+                                 (onDragLeave)="dragLeave($event);"
+                                 >
+                                {{displayParticipantInfo(rounds[getRoundIndex(col,row)],num)}}
                             </div>
                         </div>
                     </div>
