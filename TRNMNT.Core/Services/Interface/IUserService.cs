@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using TRNMNT.Core.Model.User;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
@@ -19,5 +20,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="claims">The claims.</param>
         /// <returns></returns>
         Task<User> GetUserAsync(ClaimsPrincipal claims);
+
+        /// <summary>
+        /// Backdoors the user creation.
+        /// </summary>
+        /// <param name="secretUserCreationModel">The secret user creation model.</param>
+        /// <returns></returns>
+        Task BackdoorUserCreation(SecretUserCreationModel secretUserCreationModel);
     }
 }
