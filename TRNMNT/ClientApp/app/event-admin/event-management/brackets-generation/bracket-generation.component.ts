@@ -102,9 +102,7 @@ export class BracketGenerationComponent {
     }
 
     private dragEnd() {
-        debugger;
         this.dragMode = false;
-        console.log(this.dragModel);
     }
 
     private dragEnter($event) {
@@ -116,8 +114,11 @@ export class BracketGenerationComponent {
     }
 
 
-    private onDrop(roundIndex: number, participantNumber: number) {
-        debugger;
+    private onDrop(roundIndex: number, participantNumber: number, $event) {
+        this.dragEnd();
+        this.dragLeave($event);
+
+
         let targetParticipant = this.getParticipant(this.rounds[roundIndex], participantNumber);
         let sourceParticipant = this.getParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber);
         this.setParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber, targetParticipant);

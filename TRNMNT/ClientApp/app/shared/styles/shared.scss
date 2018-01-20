@@ -4,9 +4,14 @@
 
 body {
     margin: 0px;
+    font-family: $theme_font_family !important;
+
+    .ui-corner-all {
+        border-radius: 0 !important;
+    }
 
     .content {
-        padding-top: $content_padding_top
+        padding-top: 0px;
     }
 
     .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload {
@@ -37,6 +42,9 @@ body {
         background-color: darken($theme_black,10%)
     }
 
+    .steps-content {
+        margin-top: 20px;
+    }
 
     .ui-steps {
         /*pointer-events: none;*/
@@ -48,7 +56,7 @@ body {
             border-width: 2px;
             width: 100%;
             box-sizing: border-box;
-            top: $header_height + $content_padding_top + 15px;
+            top: 164px;
         }
 
         $bg_color: $theme_orange;
@@ -108,10 +116,10 @@ body {
     }
 
     .ui-tabview {
-        margin-top: 20px;
 
         .ui-tabview-panel {
             padding: 0px;
+            box-shadow: $theme_box_shadow;
         }
 
         &.ui-tabview-top {
@@ -123,6 +131,7 @@ body {
                     background-color: $theme_body_color !important;
                     border: none;
                     height: 40px;
+                    margin-bottom: 10px;
                 }
             }
 
@@ -194,9 +203,7 @@ body {
     .ui-dropdown {
 
 
-        &.ui-corner-all {
-            border-radius: 0;
-        }
+
 
         .ui-dropdown-panel {
             .ui-dropdown-items {
@@ -217,5 +224,15 @@ body {
                 background-color: $theme_orange !important;
             }
         }
+    }
+
+    .box-shadow {
+        box-shadow: $theme_box_shadow;
+    }
+
+    .page-title {
+        font-size: 2em;
+        font-weight: bold;
+        padding: 30px 0px
     }
 }

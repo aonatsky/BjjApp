@@ -1,10 +1,15 @@
-﻿<div class="ui-g-6 ui-g-offset-3">
-    <div class="ui-widget-content ui-g-12" *ngFor="let event of events">
+﻿<div class="ui-g">
+    <div class="ui-g-12 ui-g-nopad page-title">
+        Event Overview
+    </div>
+</div>
+<div class="ui-g-6 ui-g-offset-3 ui-g-nopad">
+    <div class="ui-widget-content ui-g-12 box-shadow event-plate" *ngFor="let event of events">
         <div class="ui-g-6"><b>{{event.title}}</b></div>
         <div class="ui-g-4"><b>{{event.eventDate | date}}</b></div>
         <div class="float-right">
             <button pButton type="button" class="ui-button-icon-only" icon="fa-pencil" (click)="editEvent(event.eventId)"></button>
-            <button pButton type="button" class="ui-button-icon-only" icon="fa-eye" (click)="openDetails(event.eventId)"></button>
+            <button pButton type="button" class="ui-button-icon-only" icon="fa-cog" (click)="openDetails(event.eventId)"></button>
         </div>
     </div>
     <div class="ui-g-12"><button pButton type="button" label="Create Event" (click)="createEvent()"></button></div>

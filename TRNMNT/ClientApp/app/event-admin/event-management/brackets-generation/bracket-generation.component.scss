@@ -1,27 +1,29 @@
 ﻿@import '../../../shared/styles/shared.scss';
 
-.bracket-block {
-    height: 80px;
+.brackets {
+    margin-top:20px;
 
-    .bracket {
-        //box-shadow: 2px 2px 4px 0 rgba(154, 154, 154, 0.5);
-        //background-color: #ffffff;
-        height: 82px;
-        border: 2px solid $theme_black;
+    .table-block {
+        height: 80px;
 
-        .bracket-participant-plate {
-            height: 40px;
+        .bracket {
+            height: 85px;
+            border: 2px solid $theme_black;
 
-            &.droppable {
-                color: $theme_grey;
-            }
+            .bracket-participant-plate {
+                height: 40px;
 
-            &:first-child {
-                border-bottom: 1px solid $theme_orange;
-            }
+                &.droppable {
+                    color: $theme_grey;
+                }
 
-            &:nth-child(2) {
-                border-top: 1px solid $theme_orange;
+                &:first-child {
+                    border-bottom: 1px solid $theme_orange;
+                }
+
+                &:nth-child(2) {
+                    border-top: 1px solid $theme_orange;
+                }
             }
         }
     }

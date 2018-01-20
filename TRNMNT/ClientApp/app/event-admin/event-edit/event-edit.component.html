@@ -1,7 +1,12 @@
-﻿<div class="ui-widget">
+﻿<div class="ui-g">
+    <div class="ui-g-12 ui-g-nopad page-title">
+        Event Edit
+    </div>
+</div>
+<div class="ui-widget">
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
     <div class="ui-g-8 ui-g-offset-2 steps-content" *ngIf="eventModel">
-        <div *ngIf="currentStep==0" class="steps-content">
+        <div *ngIf="currentStep==0" class="">
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label class="field-title">Title</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>

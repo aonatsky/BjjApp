@@ -8,26 +8,25 @@
         <button pButton type="button" iconPos="left" icon="fa-download" label="Download" [disabled]="!bracket"></button>
     </div>
 </div>
-<div class="ui-g" *ngIf="bracket">
+<div class="ui-g brackets" *ngIf="bracket">
 
     <div class="ui-g-10 ui-g-offset-1">
         <div class="ui-g-4" *ngFor="let col of getColumns();">
             <div *ngIf="col % 2 == 0">
-                <div *ngFor="let row of getRows();" class="ui-g-12 bracket-block ui-g-nopad">
+                <div *ngFor="let row of getRows();" class="ui-g-12 table-block ui-g-nopad">
                     <div *ngIf="row % 2 == 0">
                         <div class="bracket">
                             <div *ngFor="let num of [1,2]"
                                  class="bracket-participant-plate ui-g-12"
                                  [class.droppable]="dragMode"
                                  [dragEffect]="'move'"
-                                 pDraggable="participantPlate" 
-                                 pDroppable="participantPlate" 
-                                 (onDragStart)="dragStart(getRoundIndex(col,row),num)" 
-                                 (onDrop)="onDrop(getRoundIndex(col,row),num)" 
+                                 pDraggable="participantPlate"
+                                 pDroppable="participantPlate"
+                                 (onDragStart)="dragStart(getRoundIndex(col,row),num)"
+                                 (onDrop)="onDrop(getRoundIndex(col,row),num,$event)"
                                  (onDragEnd)="dragEnd()"
                                  (onDragEnter)="dragEnter($event)"
-                                 (onDragLeave)="dragLeave($event);"
-                                 >
+                                 (onDragLeave)="dragLeave($event);">
                                 {{displayParticipantInfo(rounds[getRoundIndex(col,row)],num)}}
                             </div>
                         </div>
