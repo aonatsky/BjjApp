@@ -54,6 +54,11 @@ namespace TRNMNT.Core.Services.impl
             return rounds;
         }
 
+        public void UpdateRound(Round round)
+        {
+            _roundRepository.Update(round);
+        }
+
         private IEnumerable<Round> GetStageRounds(IEnumerable<Round> parentRounds, int stage)
         {
             var childRounds = new List<Round>();

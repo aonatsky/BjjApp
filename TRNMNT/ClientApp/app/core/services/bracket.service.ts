@@ -23,4 +23,8 @@ export class BracketService {
         return this.httpService.get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId, null, ResponseContentType.Blob)
             .map(r => this.httpService.getExcelFile(r, fileName));
     }
+
+    updateBracket(model: BracketModel): Observable<void> {
+        return this.httpService.post(ApiMethods.bracket.updateBracket, model);
+    }
 }

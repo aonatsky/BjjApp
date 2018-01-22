@@ -13,5 +13,10 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="bracketId">Bracket id</param>
         /// <returns></returns>
         ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId);
+        /// <summary>
+        /// Updates round
+        /// </summary>
+        /// <param name="round"></param>
+        void UpdateRound(Round round);
     }
 }

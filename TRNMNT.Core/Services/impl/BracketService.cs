@@ -56,8 +56,14 @@ namespace TRNMNT.Core.Services.impl
         }
 
 
-        public Task UpdateBracket(BracketModel model)
+        public async Task UpdateBracket(BracketModel model)
         {
+
+            var bracket = await _bracketRepository.FirstOrDefaultAsync(b => b.BracketId == model.BracketId);
+            if (bracket != null)
+            {
+                UpdateBracketRoundsFromModel(bracket.Rounds, model.RoundModels);
+            }
             throw new NotImplementedException();
         }
 
@@ -180,6 +186,19 @@ namespace TRNMNT.Core.Services.impl
                 DateOfBirth = participant.DateOfBirth
             };
         }
+
+        private void UpdateBracketRoundsFromModel(IEnumerable<Round> rounds, IEnumerable<RoundModel> roundModels)
+        {
+
+            foreach (var round in rounds)
+            {
+                var roundModel = roundModels.First(m => m.RoundId == round.RoundId);
+                round.FirstParticipantId = roundModel.FirstParticipant.ParticipantId;
+                round.SecondParticipantId = roundModel.SecondParticipant.ParticipantId;
+                _roundService.UpdateRound(round);
+            }
+        }
+
 
         #endregion
     }

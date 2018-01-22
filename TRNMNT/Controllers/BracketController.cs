@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -14,7 +15,9 @@ namespace TRNMNT.Web.Controllers
     public class BracketController : BaseController
     {
         #region dependencies
+
         private readonly IBracketService _bracketService;
+
         #endregion
 
         public BracketController(
@@ -35,14 +38,15 @@ namespace TRNMNT.Web.Controllers
         public async Task<IActionResult> CreateBracket(Guid weightDivisionId)
         {
             return await HandleRequestWithDataAsync(async () =>
+            {
+                var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
+                if (bracketModel != null)
                 {
-                    var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
-                    if (bracketModel != null)
-                    {
-                        return Success(bracketModel);
-                    }
-                    return NotFoundResponse();
-                });
+                    return Success(bracketModel);
+                }
+
+                return NotFoundResponse();
+            });
         }
 
         [HttpGet("[action]/{weightDivisionId}")]
@@ -56,6 +60,17 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        #endregion
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<IActionResult> UpdateBracket([FromBody] BracketModel bracketModel)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await _bracketService.UpdateBracket(bracketModel);
+                return HttpStatusCode.OK;
+            });
+
+            #endregion
+        }
     }
 }

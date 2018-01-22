@@ -157,6 +157,12 @@ export class BracketGenerationComponent {
         return 'bracket.xlsx';
     }
 
+    private updateBracket() {
+        this.bracketService.updateBracket(this.bracket).subscribe();
+        this.isEdited = false;
+    }
+
+
 }
 
 class DragModel {
