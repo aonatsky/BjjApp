@@ -18,17 +18,15 @@ namespace TRNMNT.Core.Services.Impl
     {
         #region Dependencies
 
-        private readonly IParticipantProcessingService _participantProcessingService;
         private readonly IHostingEnvironment _env;
 
         #endregion
 
         #region .ctor
 
-        public BracketsFileService(IParticipantProcessingService participantProcessingService, IHostingEnvironment env)
+        public BracketsFileService(IHostingEnvironment env)
         {
             _env = env;
-            _participantProcessingService = participantProcessingService;
         }
 
         #endregion

@@ -4,7 +4,9 @@ import { HttpService } from '../dal/http/http.service';
 import { Observable } from 'rxjs';
 
 import { ApiMethods } from '../dal/consts/api-methods.consts';
-import {BracketModel} from '../model/bracket.models';
+import { BracketModel } from '../model/bracket.models';
+import { ResponseContentType } from '@angular/http';
+
 
 @Injectable()
 export class BracketService {
@@ -18,7 +20,7 @@ export class BracketService {
     }
 
     downloadBracket(weightDivisionId: string, fileName: string) {
-        return this.httpService.get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId)
+        return this.httpService.get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId, null, ResponseContentType.Blob)
             .map(r => this.httpService.getExcelFile(r, fileName));
     }
 }
