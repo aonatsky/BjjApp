@@ -1,5 +1,10 @@
 ﻿<div class="ui-g">
-    <category-with-division-filter class="ui-g-12" [eventId]="eventId" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
+    <category-with-division-filter *ngIf="!ddlDataLoading"
+                               [eventId]="eventId" 
+                               useDataFromInput="true"
+                               [categories]="participantDdlModel.categories"
+                               [weightDivisions]="participantDdlModel.weightDivisions"
+                               (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
 </div>
 <div class="ui-g">
     <crud #crudComponent
@@ -23,6 +28,6 @@
     </crud>
 </div>
 <div class="ui-g">
-    <participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)" class="ui-g-3"></participant-list-upload>
+    <participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)" class="ui-g-12"></participant-list-upload>
 </div>
 

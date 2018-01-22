@@ -4,17 +4,21 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class LoaderService {
-    public isLoaderShown = new BehaviorSubject<boolean>(false);
+    public loaderCounter: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     public showLoader(): void {
-        this.showHideLoader(true);
+        this.displayLoader(true);
     }
 
     public hideLoader(): void {
-        this.showHideLoader(false);
+        this.displayLoader(false);
     }
 
-    private showHideLoader(value: boolean) {
-        this.isLoaderShown.next(value);
+    public displayLoader(value: boolean) {
+        let counter = value ? this.loaderCounter.value + 1 : this.loaderCounter.value - 1;
+        if (counter < 0) {
+            counter = 0;
+        }
+        this.loaderCounter.next(counter);
     }
 }

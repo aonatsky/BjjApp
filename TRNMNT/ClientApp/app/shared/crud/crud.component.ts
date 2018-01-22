@@ -26,11 +26,11 @@ export class CrudComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this.loaderService.showLoader();
+        
     }
 
     ngOnChanges(): void {
-        this.loaderService.hideLoader();
+        
     }
 
     @ViewChild('dataTable') dataTable: DataTable;
@@ -95,7 +95,6 @@ export class CrudComponent implements OnInit, OnChanges {
     }
 
     private save() {
-        this.loaderService.showLoader();
         if (this.isNewEntity) {
             this.onAdd.emit(this.entityToEdit);
         } else {
@@ -105,7 +104,6 @@ export class CrudComponent implements OnInit, OnChanges {
     }
 
     private delete() {
-        this.loaderService.showLoader();
         this.onDelete.emit(this.entityToEdit);
         this.displayDialog = false;
     }

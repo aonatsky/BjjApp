@@ -1,10 +1,6 @@
 <p-growl [(value)]="notifications" [immutable]="true" [life]="5000" ></p-growl>
+<loader [isVisible]="isLoaderShown"></loader>
 <router-outlet>
-    <div *ngIf="isLoaderShown" class="loader-modal">
-        <div class="loader">
-            <div class="cssload-ball"></div>
-        </div>
-    </div>
 </router-outlet>
 
 

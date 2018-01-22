@@ -9,6 +9,7 @@ import 'rxjs/add/observable/throw';
 import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 import { UserModel } from './../model/user.model'
+import { LoaderService } from './loader.service';
 
 
 /** 
@@ -29,7 +30,7 @@ import { UserModel } from './../model/user.model'
     private headers: Headers;
     private options: RequestOptions;
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private loaderService: LoaderService) {
 
         // On bootstrap or refresh, tries to get the user's data.  
         this.decodeToken();
@@ -47,14 +48,15 @@ import { UserModel } from './../model/user.model'
             username: username,
             password: password
         };
+        this.loaderService.showLoader();
         this.http.post(ApiMethods.auth.getToken, params)
             .map(res => res.json())
             .subscribe(
             // We're assuming the response will be an object
             // with the JWT on an id_token key
             data => localStorage.setItem('id_token', data.id_token),
-            error => console.log(error)
-            );
+            error => console.log(error),
+            () => this.loaderService.hideLoader());
     }
 
 
@@ -81,7 +83,7 @@ import { UserModel } from './../model/user.model'
 
         // Encodes the parameters.  
         let body = JSON.stringify(params);
-
+        this.loaderService.showLoader();
         return this.http.post(tokenEndpoint, body, this.options)
             .map((res: Response) => {
 
@@ -108,7 +110,7 @@ import { UserModel } from './../model/user.model'
                 }
 
 
-            });
+            }).finally(() => this.loaderService.hideLoader());
 
     }
 
@@ -121,7 +123,7 @@ import { UserModel } from './../model/user.model'
         };
 
         let body = JSON.stringify(params);
-
+        this.loaderService.showLoader();
        return this.http.post(ApiMethods.auth.register, body, this.options)
             .map((res: Response) => {
 
@@ -137,9 +139,7 @@ import { UserModel } from './../model/user.model'
                 } else {
                     return Observable.throw(data);
                 }
-
-
-            });
+           }).finally(() => this.loaderService.hideLoader());
     }
 
     /** 
@@ -161,7 +161,7 @@ import { UserModel } from './../model/user.model'
 
             // Encodes the parameters.  
             let body: string = this.encodeParams(params);
-
+            this.loaderService.showLoader();
             this.http.post(tokenEndpoint, body, this.options)
                 .subscribe(
                 (res: Response) => {
@@ -176,7 +176,7 @@ import { UserModel } from './../model/user.model'
 
                     }
 
-                });
+                }, null, () => this.loaderService.hideLoader());
 
         }
 
@@ -210,14 +210,14 @@ import { UserModel } from './../model/user.model'
 
             // Encodes the parameters.  
             let body: string = this.encodeParams(params);
-
+            this.loaderService.showLoader();
             this.http.post(revocationEndpoint, body, this.options)
                 .subscribe(
                 () => {
 
                     localStorage.removeItem('id_token');
-
-                });
+                    
+                }, null, () => this.loaderService.hideLoader());
 
         }
 
@@ -242,14 +242,14 @@ import { UserModel } from './../model/user.model'
 
             // Encodes the parameters.  
             let body: string = this.encodeParams(params);
-
+            this.loaderService.showLoader();
             this.http.post(revocationEndpoint, body, this.options)
                 .subscribe(
                 () => {
 
                     localStorage.removeItem('refresh_token');
 
-                });
+                }, null, () => this.loaderService.hideLoader());
 
         }
 
