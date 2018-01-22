@@ -14,12 +14,10 @@ body {
         padding-top: 0px;
     }
 
-    .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload {
+    .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload, .ui-fileupload-choose {
         $bg_color: $theme_black;
         border-radius: 0;
         background-color: $bg_color;
-
-
 
         .fa {
             background-color: transparent;
@@ -29,8 +27,12 @@ body {
             background-color: $bg_color;
 
             &:hover {
-                background-color: darken($bg_color,10%);
+                background-color: darken($bg_color,10%) !important;
             }
+        }
+
+        &:not(.ui-state-disabled):hover {
+            background-color: darken($bg_color,10%) !important;
         }
 
         :disabled {
@@ -120,6 +122,8 @@ body {
         .ui-tabview-panel {
             padding: 0px;
             box-shadow: $theme_box_shadow;
+            min-height: 75vh;
+            overflow: auto;
         }
 
         &.ui-tabview-top {

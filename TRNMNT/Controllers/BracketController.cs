@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -41,6 +43,17 @@ namespace TRNMNT.Web.Controllers
                     }
                     return NotFoundResponse();
                 });
+        }
+
+        [HttpGet("[action]/{weightDivisionId}")]
+        [Authorize]
+        public async Task<IActionResult> DownloadFile(Guid weightDivisionId)
+        {
+            return await HandleRequestWithFileAsync(async () =>
+            {
+                var file = await _bracketService.GetBracketFileAsync(weightDivisionId);
+                return Success<CustomFile>(file);
+            });
         }
 
         #endregion

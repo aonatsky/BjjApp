@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
@@ -8,6 +10,7 @@ using OfficeOpenXml;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Impl
 {
@@ -32,10 +35,9 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
-        public async Task<CustomFile> GetBracketsFileAsync(ParticitantFilterModel filter)
+        public async Task<CustomFile> GetBracketsFileAsync(List<Participant> participants)
         {
-            var models = _participantProcessingService.GetOrderedListForBrackets(filter);
-            var settings = GetSettings(models.Count);
+            var settings = GetSettings(participants.Count);
 
             if (settings != null)
             {
@@ -55,9 +57,9 @@ namespace TRNMNT.Core.Services.Impl
                         {
                             for (var i = 0; i < settings.Count; i++)
                             {
-                                var fighter = models.ElementAtOrDefault(i);
-                                sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(fighter?.FirstName)
-                                    ? $"{i + 1}. {fighter.FirstName} {fighter.LastName}"
+                                var participant = participants.ElementAtOrDefault(i);
+                                sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(participant?.FirstName)
+                                    ? $"{i + 1}. {participant.FirstName} {participant.LastName}"
                                     : " - ";
                             }
                         }
@@ -73,7 +75,7 @@ namespace TRNMNT.Core.Services.Impl
                 };
             }
 
-            throw new Exception($"Brackets settings are not found for count {models.Count}");
+            throw new Exception($"Brackets settings are not found for count {participants.Count}");
         }
 
         #endregion

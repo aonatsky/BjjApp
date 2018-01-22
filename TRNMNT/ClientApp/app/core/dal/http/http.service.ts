@@ -14,19 +14,25 @@ export class HttpService {
     }
 
 
-    public get(name: string, paramsHolder?: object): Observable<any> {
+    public get(name: string, paramsHolder?: object, responseType?: ResponseContentType): Observable<any> {
         let httpRequest: Observable<Response>;
+        let options = new RequestOptions({
+            headers: new Headers({ 'Content-Type': 'application/json' })
+        });
 
+        if (responseType) {
+            options.responseType = responseType;
+        }
         if (paramsHolder != null) {
             var keys = Reflect.ownKeys(paramsHolder);
             let urlSearchParams = new URLSearchParams();
             for (var i = 0; i < keys.length; i++) {
                 urlSearchParams.set(keys[i].toString(), paramsHolder[keys[i]]);
             }
-            httpRequest = this.http.get(name, { search: urlSearchParams });
-        } else {
-            httpRequest = this.http.get(name);
-        }
+            options.search = urlSearchParams;
+        } 
+
+        httpRequest = this.http.get(name,options);
 
         this.loaderService.showLoader();
         return httpRequest
@@ -133,6 +139,7 @@ export class HttpService {
     }
 
     public getExcelFile(response: Response, fileName: string): void {
+        debugger;
         FileSaver.saveAs(response.blob(), fileName);
     }
 

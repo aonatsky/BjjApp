@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Round;
+using TRNMNT.Core.Services.Impl;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -18,23 +20,25 @@ namespace TRNMNT.Core.Services.impl
         private readonly IRepository<Bracket> _bracketRepository;
         private readonly IRoundService _roundService;
         private readonly IParticipantService _participantService;
+        private readonly BracketsFileService _bracketsFileService;
 
         #endregion
 
         #region .ctor
-        public BracketService(IRepository<Bracket> bracketRepository, IRoundService roundService, IParticipantService participantService)
+        public BracketService(IRepository<Bracket> bracketRepository, IRoundService roundService, IParticipantService participantService, BracketsFileService bracketsFileService)
         {
             _bracketRepository = bracketRepository;
             _roundService = roundService;
             _participantService = participantService;
+            _bracketsFileService = bracketsFileService;
         }
         #endregion
 
         public async Task<BracketModel> GetBracketAsync(Guid weightDivisionId)
         {
-            var  bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
-                .Include(b=>b.Rounds).ThenInclude(r=>r.FirstParticipant)
-                .Include(b=>b.Rounds).ThenInclude(r=>r.SecondParticipant)
+            var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
+                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant)
+                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant)
                 .FirstOrDefaultAsync();
             if (bracket == null)
             {
@@ -45,22 +49,30 @@ namespace TRNMNT.Core.Services.impl
                 };
                 _bracketRepository.Add(bracket);
 
-                var participants = await GetOrderedListForBracketsAsync(weightDivisionId);
-                bracket.Rounds = _roundService.CreateRoundStructure(participants.ToArray(), bracket.BracketId);  
+                var participants = await GetOrderedListForNewBracketAsync(weightDivisionId);
+                bracket.Rounds = _roundService.CreateRoundStructure(participants.ToArray(), bracket.BracketId);
             }
             return GetBracketModel(bracket);
         }
 
-       
+
         public Task UpdateBracket(BracketModel model)
         {
             throw new NotImplementedException();
         }
 
+        public async Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId)
+        {
+            var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
+                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant)
+                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant)
+                .FirstOrDefaultAsync();
+            return await _bracketsFileService.GetBracketsFileAsync(GetOrderedParticipantListFromBracket(bracket));
+        }
 
 
         #region private methods
-        private async Task<List<Participant>> GetOrderedListForBracketsAsync(Guid weightDivisionId)
+        private async Task<List<Participant>> GetOrderedListForNewBracketAsync(Guid weightDivisionId)
         {
             var participants = (await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId)).ToList();
             var count = participants.Count();
@@ -73,6 +85,20 @@ namespace TRNMNT.Core.Services.impl
             return Distribute(participants);
         }
 
+
+        private List<Participant> GetOrderedParticipantListFromBracket(Bracket bracket)
+        {
+            var participantList = new List<Participant>();
+            var maxStage = bracket.Rounds.Max(r => r.Stage);
+            var firstRounds = bracket.Rounds.Where(r => r.Stage == maxStage);
+            foreach (var firstRound in firstRounds)
+            {
+                participantList.Add(firstRound.FirstParticipant);
+                participantList.Add(firstRound.SecondParticipant);
+            }
+            return participantList;
+
+        }
 
         private const int FightersMaxCount = 64;
 
@@ -124,7 +150,7 @@ namespace TRNMNT.Core.Services.impl
 
             var model = new BracketModel();
             model.BracketId = bracket.BracketId;
-                model.RoundModels = new List<RoundModel>();
+            model.RoundModels = new List<RoundModel>();
             foreach (var round in bracket.Rounds)
             {
                 model.RoundModels.Add(GetRoundModel(round));
@@ -140,7 +166,7 @@ namespace TRNMNT.Core.Services.impl
                 NextRoundId = round.NextRoundId,
                 Stage = round.Stage,
                 FirstParticipant = round.FirstParticipant == null ? null : GetParticipantModel(round.FirstParticipant),
-                SecondParticipant = round.SecondParticipant == null ? null :  GetParticipantModel(round.SecondParticipant)
+                SecondParticipant = round.SecondParticipant == null ? null : GetParticipantModel(round.SecondParticipant)
             };
         }
 

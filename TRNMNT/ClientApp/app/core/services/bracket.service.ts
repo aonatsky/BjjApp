@@ -16,4 +16,9 @@ export class BracketService {
         return this.httpService.get(ApiMethods.bracket.createBracket + '/' + weightDivisionId)
             .map(res => this.httpService.getJson(res));
     }
+
+    downloadBracket(weightDivisionId: string, fileName: string) {
+        return this.httpService.get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId)
+            .map(r => this.httpService.getExcelFile(r, fileName));
+    }
 }

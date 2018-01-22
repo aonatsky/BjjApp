@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
@@ -250,6 +251,58 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(() => (action(), HttpStatusCode.OK), checkEventId, checkFederationId);
         }
 
+        protected async Task<IActionResult> HandleRequestWithFileAsync(Func<(CustomFile Response, HttpStatusCode Code)> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if (checkEventId && !_eventId.HasValue || checkFederationId && !_federationId.HasValue)
+                {
+                    return NotFound();
+                }
+                var result = action();
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
+                await _context.SaveAsync();
+                return new FileContentResult(result.Response.ByteArray,result.Response.ContentType);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        
+        protected async Task<IActionResult> HandleRequestWithFileAsync(Func<Task<(CustomFile Response, HttpStatusCode Code)>> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if (checkEventId && !_eventId.HasValue || checkFederationId && !_federationId.HasValue)
+                {
+                    return NotFound();
+                }
+                var result = await action();
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
+                await _context.SaveAsync();
+                if (result.Response.ByteArray == null)
+                {
+                    return NotFound();
+                }
+                return new FileContentResult(result.Response.ByteArray, result.Response.ContentType);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        
+        
+        
         protected (object, HttpStatusCode) NotFoundResponse()
         {
             return (null, HttpStatusCode.NotFound);

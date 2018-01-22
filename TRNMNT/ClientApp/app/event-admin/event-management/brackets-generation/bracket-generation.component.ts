@@ -21,6 +21,8 @@ export class BracketGenerationComponent {
     coumnsCount: number = 3;
     dragMode: boolean = false;
     dragModel: DragModel;
+    isEdited: boolean = false;
+
     private filter: CategoryWithDivisionFilterModel = new CategoryWithDivisionFilterModel('', '');
 
     constructor(private bracketService: BracketService) {
@@ -106,7 +108,7 @@ export class BracketGenerationComponent {
     }
 
     private dragEnter($event) {
-        $event.target.style.backgroundColor = 'coral';
+        $event.target.style.backgroundColor = '#b5e8b1';
     }
 
     private dragLeave($event) {
@@ -123,6 +125,7 @@ export class BracketGenerationComponent {
         let sourceParticipant = this.getParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber);
         this.setParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber, targetParticipant);
         this.setParticipant(this.rounds[roundIndex], participantNumber, sourceParticipant);
+        this.isEdited = true;
     }
 
 
@@ -144,6 +147,14 @@ export class BracketGenerationComponent {
         } else {
             round.secondParticipant = value;
         }
+    }
+
+    private downloadBracket() {
+        this.bracketService.downloadBracket(this.filter.weightDivisionId, this.getBracketsFileName()).subscribe();
+    }
+
+    private getBracketsFileName(): string {
+        return 'bracket.xlsx';
     }
 
 }

@@ -5,6 +5,7 @@ import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { EventPreviewModel } from './../../core/model/event.models';
 import { Component, OnInit } from '@angular/core';
+import './event-overview.component.scss'
 
 @Component({
     selector: 'event-overview',

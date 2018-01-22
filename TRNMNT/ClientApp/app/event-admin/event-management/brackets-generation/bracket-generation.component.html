@@ -4,8 +4,8 @@
 <div class="ui-g">
     <div class="ui-g-12">
         <button pButton type="button" iconPos="left" icon="fa-plus" label="Create Bracket" [disabled]="filter.weightDivisionId == ''" (click)="createBracket();"></button>
-        <button pButton type="button" iconPos="left" icon="fa-save" label="Update" [disabled]="!bracket"></button>
-        <button pButton type="button" iconPos="left" icon="fa-download" label="Download" [disabled]="!bracket"></button>
+        <button pButton type="button" iconPos="left" icon="fa-save" label="Update" [disabled]="!bracket || !isEdited"></button>
+        <button pButton type="button" iconPos="left" icon="fa-download" label="Download" [disabled]="!bracket || isEdited" (click)="downloadBracket();"></button>
     </div>
 </div>
 <div class="ui-g brackets" *ngIf="bracket">
