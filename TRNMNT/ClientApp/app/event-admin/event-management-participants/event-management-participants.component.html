@@ -1,5 +1,10 @@
 ﻿<!--<ng-template >-->
-<category-with-division-filter [eventId]="eventId" useDataFromInput="true" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
+<category-with-division-filter *ngIf="!ddlDataLoading"
+                               [eventId]="eventId" 
+                               useDataFromInput="true"
+                               [categories]="participantDdlModel.categories"
+                               [weightDivisions]="participantDdlModel.weightDivisions"
+                               (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
 <crud #crudComponent
       [entities]="participantsModel"
       [columns]="columns"

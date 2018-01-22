@@ -8,8 +8,7 @@ import './loader.scss';
         trigger('visibilityChanged', [
             state('true', style({ opacity: 0.9 })),
             state('false', style({ opacity: 0, display: 'none' })),
-            transition('1 => 0', animate('0.01s')),
-            transition('0 => 1', animate('0.5s'))
+            transition('1 => 0', animate('0.5s'))
         ])
     ],
     templateUrl: './loader.html'
