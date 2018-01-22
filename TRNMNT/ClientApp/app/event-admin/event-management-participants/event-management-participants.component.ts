@@ -2,7 +2,8 @@
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { Component, OnInit, Input } from '@angular/core';
-import { ParticipantTableModel, ParticipantDdlModel } from './../../core/model/participant.models';
+import { ParticipantTableModel } from './../../core/model/participant.models';
+import { ParticipantDdlModel } from './../../core/model/participant-ddl.model';
 import { ParticipantService } from "./../../core/services/participant.service";
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { ICrudColumn as CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent } from '../../shared/crud/crud.component';
@@ -201,7 +202,6 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     private loadParticipants(filterModel: ParticipantFilterModel) {
         this.participantsLoading = true;
-        this.participantsListModel = null;
         this.participantService.getParticipantsTableModel(filterModel).subscribe(r => {
             this.participantsLoading = false;
             this.participantsListModel = this.mapParticipants(r);

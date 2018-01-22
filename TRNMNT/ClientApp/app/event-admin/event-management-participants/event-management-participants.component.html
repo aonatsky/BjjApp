@@ -1,5 +1,5 @@
 ﻿<!--<ng-template >-->
-<category-with-division-filter [eventId]="eventId" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
+<category-with-division-filter [eventId]="eventId" useDataFromInput="true" (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
 <crud #crudComponent
       [entities]="participantsModel"
       [columns]="columns"
@@ -19,6 +19,6 @@
       gridMinHeight="415">
 </crud>
 <div class="ui-g">
-    <participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)" class="ui-g-3"></participant-list-upload>
+    <participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)" class="ui-g-12"></participant-list-upload>
 </div>
 
