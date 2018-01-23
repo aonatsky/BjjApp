@@ -21,42 +21,43 @@ export class ConnectorComponent {
     ngOnInit() {
         let centerStage = this.maxStage / 2;
         let isRightSide = this.stage > centerStage;
-        let freq = Math.pow(2,2)
+        let k = isRightSide ? this.maxStage - this.stage : this.stage;
+        let freq = Math.pow(2, 2 + k);
         if (this.stage == 0 || this.stage == this.maxStage) {
-            if (this.row % 4 == 0) {
+            if (this.row % freq == 0) {
                 this.lowCorner(isRightSide);
             }
             //1
-            if ((this.row - 1) % 4 == 0) {
+            if ((this.row - Math.pow(2,k)) % freq == 0) {
                 this.vertLine(isRightSide);
             }
-            if ((this.row - 2) % 4 == 0) {
+            if ((this.row - 2) % freq == 0) {
                 this.highCorner(isRightSide);
             }
 
         } else if ((this.stage == 1 || this.stage == this.maxStage - 1)) {
-            if ((this.row - 1) % 8 == 0) {
+            if ((this.row - 1) % freq == 0) {
                 this.lowCorner(isRightSide);
             }
             //3
-            if ((this.row - 2) % 8 == 0 || (this.row - 3) % 8 == 0 || (this.row - 4) % 8 == 0 ) {
+            if ((this.row - Math.pow(2, k)) % freq == 0 || (this.row - Math.pow(2, k) - 1) % 8 == 0 || (this.row - Math.pow(2, k) -2) % 8 == 0 ) {
                 this.vertLine(isRightSide);
             }
-            if ((this.row - 5) % 8 == 0) {
+            if ((this.row - 5) % freq == 0) {
                 this.highCorner(isRightSide);
             }
         } else if ((this.stage == 2 || this.stage == this.maxStage - 2)) {
 
-            if ((this.row - 3) % 16 == 0) {
+            if ((this.row - 3) % freq == 0) {
                 this.lowCorner(isRightSide);
             }
             //6
             for (var i = 0; i < 7; i++) {
-                if ((this.row - 4 - i) % 16 == 0) {
+                if ((this.row - 4 - i) % freq == 0) {
                     this.vertLine(isRightSide);
                 }
             }
-            if ((this.row - 11) % 16 == 0) {
+            if ((this.row - 11) % freq == 0) {
                 this.highCorner(isRightSide);
             }
         }
