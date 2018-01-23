@@ -22,6 +22,7 @@
     <None Remove="Core\**" />
     <Compile Remove="Controllers\FighterController.cs" />
     <None Remove="ClientApp\app\core\services\bracket.service.ts" />
+    <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
     <None Remove="ClientApp\app\shared\bracket\bracket.component.ts" />
     <None Remove="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.component.ts" />
@@ -93,6 +94,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\core\services\bracket.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\bracket\bracket.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.component.ts" />

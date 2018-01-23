@@ -23,41 +23,52 @@ export class ConnectorComponent {
         let isRightSide = this.stage > centerStage;
         let k = isRightSide ? this.maxStage - this.stage : this.stage;
         let freq = Math.pow(2, 2 + k);
+        let startIndex = (this.row - (Math.pow(2, k) - 1));
+        let endIndex = (this.row - (Math.pow(2, k) - 1) - Math.pow(2, k + 1));
+        let middleRange = (startIndex + endIndex) / 2;
         if (this.stage == 0 || this.stage == this.maxStage) {
-            if (this.row % freq == 0) {
+           
+            //0
+            if (startIndex % freq == 0) {
                 this.lowCorner(isRightSide);
             }
             //1
+            
             if ((this.row - Math.pow(2,k)) % freq == 0) {
                 this.vertLine(isRightSide);
             }
-            if ((this.row - 2) % freq == 0) {
+            //2
+            if ( endIndex % freq == 0) {
                 this.highCorner(isRightSide);
             }
 
         } else if ((this.stage == 1 || this.stage == this.maxStage - 1)) {
-            if ((this.row - 1) % freq == 0) {
+            //1
+            if (startIndex % freq == 0) {
                 this.lowCorner(isRightSide);
             }
             //3
             if ((this.row - Math.pow(2, k)) % freq == 0 || (this.row - Math.pow(2, k) - 1) % 8 == 0 || (this.row - Math.pow(2, k) -2) % 8 == 0 ) {
                 this.vertLine(isRightSide);
             }
-            if ((this.row - 5) % freq == 0) {
+            //5
+            if (endIndex % freq == 0) {
                 this.highCorner(isRightSide);
             }
         } else if ((this.stage == 2 || this.stage == this.maxStage - 2)) {
-
-            if ((this.row - 3) % freq == 0) {
+            
+            //3
+            if (startIndex % freq == 0) {
                 this.lowCorner(isRightSide);
             }
-            //6
+            //7
             for (var i = 0; i < 7; i++) {
                 if ((this.row - 4 - i) % freq == 0) {
                     this.vertLine(isRightSide);
                 }
             }
-            if ((this.row - 11) % freq == 0) {
+            //11
+            if (endIndex % freq == 0) {
                 this.highCorner(isRightSide);
             }
         }
