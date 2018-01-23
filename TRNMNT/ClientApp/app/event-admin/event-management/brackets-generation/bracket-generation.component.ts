@@ -31,12 +31,12 @@ export class BracketGenerationComponent {
     }
 
     ngOnInit() {
-        this.bracketService.createBracket('73757302-31C9-448B-A8D2-43997CCBD32C').subscribe(r => {
+        this.bracketService.createBracket('55C3F11D-EA09-4628-A49B-209AA35C4DB5').subscribe(r => {
             this.bracket = r;
-            let maxStage = this.getMaxStage(this.bracket.roundModels.length);
+            this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
             this.rounds =
-                this.bracket.roundModels.filter(r => r.stage == maxStage);
-            this.initStages(maxStage);
+                this.bracket.roundModels.filter(r => r.stage == this.maxStage);
+            this.initStages(this.maxStage);
         });
     }
 
@@ -46,6 +46,7 @@ export class BracketGenerationComponent {
             this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
             this.rounds =
                 this.bracket.roundModels.filter(r => r.stage == this.maxStage);
+            this.initStages(this.maxStage);
         });
     }
 
@@ -163,7 +164,8 @@ export class BracketGenerationComponent {
     }
 
     private initStages(maxStage:number) {
-        for (var i = 0; i < maxStage; i++) {
+        this.stages = [];
+        for (var i = 0; i < 2 * maxStage; i++) {
             this.stages.push(i);
         }
     }

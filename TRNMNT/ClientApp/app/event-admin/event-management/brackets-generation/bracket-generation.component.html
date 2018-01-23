@@ -33,9 +33,9 @@
                 </div>
             </div>
             <div *ngIf="col % 2 != 0">
-                <div *ngFor="let stage of stages">
+                <div class="ui-g-1 inline-block ui-g-nopad" *ngFor="let stage of stages">
                     <div *ngFor="let row of getRows();" class="ui-g-12 ui-g-nopad">
-                        <connector *ngIf="row % 2 == 0"></connector>
+                        <connector [row]="row" [stage]="stage" [maxStage]="2 * maxStage -1"></connector>
                     </div>
                 </div>
             </div>
