@@ -61,8 +61,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize]
-        public async Task<IActionResult> UpdateBracket([FromBody] BracketModel bracketModel)
+        public async Task<IActionResult> UpdateBracket([FromBody]BracketModel bracketModel)
         {
             return await HandleRequestAsync(async () =>
             {

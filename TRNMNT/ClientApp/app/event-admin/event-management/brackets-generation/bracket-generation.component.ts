@@ -22,6 +22,8 @@ export class BracketGenerationComponent {
     dragMode: boolean = false;
     dragModel: DragModel;
     isEdited: boolean = false;
+    maxStage: number;
+    stages: number[] = [];
 
     private filter: CategoryWithDivisionFilterModel = new CategoryWithDivisionFilterModel('', '');
 
@@ -29,14 +31,21 @@ export class BracketGenerationComponent {
     }
 
     ngOnInit() {
-
+        this.bracketService.createBracket('73757302-31C9-448B-A8D2-43997CCBD32C').subscribe(r => {
+            this.bracket = r;
+            let maxStage = this.getMaxStage(this.bracket.roundModels.length);
+            this.rounds =
+                this.bracket.roundModels.filter(r => r.stage == maxStage);
+            this.initStages(maxStage);
+        });
     }
 
     private createBracket() {
         this.bracketService.createBracket(this.filter.weightDivisionId).subscribe(r => {
             this.bracket = r;
+            this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
             this.rounds =
-                this.bracket.roundModels.filter(r => r.stage == this.getMaxStage(this.bracket.roundModels.length));
+                this.bracket.roundModels.filter(r => r.stage == this.maxStage);
         });
     }
 
@@ -60,15 +69,6 @@ export class BracketGenerationComponent {
             if (roundsCount == 0) {
                 return i;
             }
-        }
-    }
-
-    private getRound(col, row): RoundModel {
-        debugger;
-        if (col == 0) {
-            return this.rounds[row / 2];
-        } else {
-            return this.rounds[this.rounds.length / 2 + row / 2];
         }
     }
 
@@ -162,6 +162,11 @@ export class BracketGenerationComponent {
         this.isEdited = false;
     }
 
+    private initStages(maxStage:number) {
+        for (var i = 0; i < maxStage; i++) {
+            this.stages.push(i);
+        }
+    }
 
 }
 

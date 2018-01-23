@@ -1,29 +1,47 @@
 ﻿@import '../../../shared/styles/shared.scss';
 
 .brackets {
-    margin-top:20px;
+    margin-top: 20px;
+
+
+
+    .bracket {
+        height: 84px;
+        border: 2px solid $theme_black;
+
+        .bracket-participant-plate {
+            height: 40px;
+
+            &.droppable {
+                color: $theme_grey;
+            }
+
+            &:first-child {
+                border-bottom: 2px solid $theme_orange;
+            }
+
+            &:nth-child(2) {
+                border-top: 0;
+            }
+        }
+    }
 
     .table-block {
         height: 80px;
+    }
 
-        .bracket {
-            height: 85px;
-            border: 2px solid $theme_black;
+    connector {
+        padding:0;
+        padding-top: 2px;
+        display:block;
+        width:10%;
+        float:left;
 
-            .bracket-participant-plate {
-                height: 40px;
+        div {
+            height: 40px;
 
-                &.droppable {
-                    color: $theme_grey;
-                }
-
-                &:first-child {
-                    border-bottom: 1px solid $theme_orange;
-                }
-
-                &:nth-child(2) {
-                    border-top: 1px solid $theme_orange;
-                }
+            &:first-child {
+                border-bottom: 2px solid $theme_orange;
             }
         }
     }

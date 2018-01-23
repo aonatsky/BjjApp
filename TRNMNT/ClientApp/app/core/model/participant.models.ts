@@ -1,4 +1,5 @@
 ﻿export class ParticipantModelBase {
+    public participantId: string;
     public firstName: string;
     public lastName: string;
     public dateOfBirth: Date;

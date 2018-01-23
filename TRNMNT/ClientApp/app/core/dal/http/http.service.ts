@@ -54,6 +54,7 @@ export class HttpService {
         if (responseType) {
             options.responseType = responseType;
         }
+        debugger;
         let body = JSON.stringify(model);
         return this.http.post(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
     }
@@ -139,7 +140,6 @@ export class HttpService {
     }
 
     public getExcelFile(response: Response, fileName: string): void {
-        debugger;
         FileSaver.saveAs(response.blob(), fileName);
     }
 

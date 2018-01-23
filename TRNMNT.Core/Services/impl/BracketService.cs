@@ -59,12 +59,11 @@ namespace TRNMNT.Core.Services.impl
         public async Task UpdateBracket(BracketModel model)
         {
 
-            var bracket = await _bracketRepository.FirstOrDefaultAsync(b => b.BracketId == model.BracketId);
+            var bracket = await _bracketRepository.GetAll(b => b.BracketId == model.BracketId).Include(b=>b.Rounds).FirstOrDefaultAsync();
             if (bracket != null)
             {
                 UpdateBracketRoundsFromModel(bracket.Rounds, model.RoundModels);
             }
-            throw new NotImplementedException();
         }
 
         public async Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId)
@@ -193,8 +192,22 @@ namespace TRNMNT.Core.Services.impl
             foreach (var round in rounds)
             {
                 var roundModel = roundModels.First(m => m.RoundId == round.RoundId);
-                round.FirstParticipantId = roundModel.FirstParticipant.ParticipantId;
-                round.SecondParticipantId = roundModel.SecondParticipant.ParticipantId;
+                if (roundModel.FirstParticipant != null)
+                {
+                    round.FirstParticipantId = roundModel.FirstParticipant.ParticipantId;
+                }
+                else
+                {
+                    round.FirstParticipantId = null;
+                }
+                if (roundModel.SecondParticipant != null)
+                {
+                    round.SecondParticipantId = roundModel.SecondParticipant.ParticipantId;
+                }
+                else
+                {
+                    round.SecondParticipantId = null;
+                }
                 _roundService.UpdateRound(round);
             }
         }

@@ -6,8 +6,8 @@ namespace TRNMNT.Core.Model.Round
     public class RoundModel
     {
         public Guid RoundId { get; set; }
-        public ParticipantModelBase FirstParticipant { get; set; }
-        public ParticipantModelBase SecondParticipant { get; set; }
+        public ParticipantSimpleModel FirstParticipant { get; set; }
+        public ParticipantSimpleModel SecondParticipant { get; set; }
         public Guid? NextRoundId { get; set; }
         public int Stage { get; set; }
     }

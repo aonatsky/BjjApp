@@ -29,7 +29,6 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         this.notificationservice.notifications.subscribe((msgs) => msgs.map(m => this.notifications.push(m)));
         this.loaderSubscription = this.loaderService.loaderCounter.subscribe((counter: number) => {
-            debugger;
             setTimeout(() => this.isLoaderShown = counter != 0, 0);
         });
     }

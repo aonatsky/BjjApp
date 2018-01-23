@@ -134,7 +134,6 @@ export class EventRegistrationComponent implements OnInit {
         // todo click payment form
 
         this.participantService.processParticipantRegistration(this.participant).subscribe((r: ParticipantRegistrationResultModel) => {
-            debugger;
             if (!r.success) {
                 this.showMessage(r.reason);
             } else {

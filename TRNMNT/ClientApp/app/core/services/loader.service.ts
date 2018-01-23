@@ -7,7 +7,6 @@ export class LoaderService {
     public loaderCounter: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
     public showLoader(): void {
-        debugger;
         this.displayLoader(true);
     }
 

@@ -12,6 +12,7 @@ import { EventManagementParticipantsComponent } from './event-management-partici
 import { SharedModule } from '../shared/shared.module';
 import { PrticipantsListUploadComponent } from './participant-list-upload/participant-list-upload.component';
 import { CategoryEditComponent } from './event-edit/category-edit/category-edit.component';
+import {ConnectorComponent} from './event-management/brackets-generation/connector.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { CategoryEditComponent } from './event-edit/category-edit/category-edit.
         EventManagementComponent,
         CategoryEditComponent,
         EventManagementParticipantsComponent,
-        PrticipantsListUploadComponent
+        PrticipantsListUploadComponent,
+        ConnectorComponent
     ],
 
     providers: [],

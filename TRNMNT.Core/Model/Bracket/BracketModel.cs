@@ -7,6 +7,6 @@ namespace TRNMNT.Core.Model.Bracket
     public class BracketModel
     {
         public Guid BracketId { get; set; }
-        public List<RoundModel> RoundModels { get; set; }
+        public ICollection<RoundModel> RoundModels { get; set; }
     }
 }
