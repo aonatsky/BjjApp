@@ -23,53 +23,26 @@ export class ConnectorComponent {
         let isRightSide = this.stage > centerStage;
         let k = isRightSide ? this.maxStage - this.stage : this.stage;
         let freq = Math.pow(2, 2 + k);
-        let startIndex = (this.row - (Math.pow(2, k) - 1));
-        let endIndex = (this.row - (Math.pow(2, k) - 1) - Math.pow(2, k + 1));
-        let middleRange = (startIndex + endIndex) / 2;
-        if (this.stage == 0 || this.stage == this.maxStage) {
-           
-            //0
+        let startShift = (Math.pow(2, k) - 1);
+        let endShift = ((Math.pow(2, k) - 1) + Math.pow(2, k + 1));
+        let startIndex = (this.row - startShift);
+        let endIndex = (this.row - endShift);
+        let middleRange = (startShift + endShift) / 2;
+        if (this.stage != centerStage + 0.5 && this.stage != centerStage - 0.5) {
             if (startIndex % freq == 0) {
                 this.lowCorner(isRightSide);
             }
-            //1
-            
-            if ((this.row - Math.pow(2,k)) % freq == 0) {
-                this.vertLine(isRightSide);
-            }
-            //2
-            if ( endIndex % freq == 0) {
-                this.highCorner(isRightSide);
-            }
-
-        } else if ((this.stage == 1 || this.stage == this.maxStage - 1)) {
-            //1
-            if (startIndex % freq == 0) {
-                this.lowCorner(isRightSide);
-            }
-            //3
-            if ((this.row - Math.pow(2, k)) % freq == 0 || (this.row - Math.pow(2, k) - 1) % 8 == 0 || (this.row - Math.pow(2, k) -2) % 8 == 0 ) {
-                this.vertLine(isRightSide);
-            }
-            //5
-            if (endIndex % freq == 0) {
-                this.highCorner(isRightSide);
-            }
-        } else if ((this.stage == 2 || this.stage == this.maxStage - 2)) {
-            
-            //3
-            if (startIndex % freq == 0) {
-                this.lowCorner(isRightSide);
-            }
-            //7
-            for (var i = 0; i < 7; i++) {
-                if ((this.row - 4 - i) % freq == 0) {
+            for (let j = 0; j < middleRange; j++) {
+                if ((this.row - Math.pow(2, k) - j) % freq == 0) {
                     this.vertLine(isRightSide);
                 }
             }
-            //11
             if (endIndex % freq == 0) {
                 this.highCorner(isRightSide);
+            }
+        } else {
+            if (startIndex % freq == 0) {
+                this.straightLine();
             }
         }
     }
@@ -87,6 +60,10 @@ export class ConnectorComponent {
     private vertLine(isRightSide: boolean) {
         this.bottomClass += isRightSide ? ' border-left' : ' border-right';
         this.topClass += isRightSide ? ' border-left' : ' border-right';
+    }
+
+    private straightLine() {
+        this.topClass += ' border-bottom';
     }
 
 

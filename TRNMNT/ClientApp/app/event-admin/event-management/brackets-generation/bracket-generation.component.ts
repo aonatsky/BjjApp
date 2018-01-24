@@ -31,16 +31,10 @@ export class BracketGenerationComponent {
     }
 
     ngOnInit() {
-        this.bracketService.createBracket('55C3F11D-EA09-4628-A49B-209AA35C4DB5').subscribe(r => {
-            this.bracket = r;
-            this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
-            this.rounds =
-                this.bracket.roundModels.filter(r => r.stage == this.maxStage);
-            this.initStages(this.maxStage);
-        });
     }
 
     private createBracket() {
+        this.bracket = undefined;
         this.bracketService.createBracket(this.filter.weightDivisionId).subscribe(r => {
             this.bracket = r;
             this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
