@@ -3,12 +3,12 @@ import { AuthService } from './../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-
+import './login.component.scss';
 
 @Component({
     selector: 'login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    
 })
 
 export class LoginComponent {

@@ -1,8 +1,7 @@
 ﻿<div class="login-body">
-    <div class="login-panel ui-fluid">
+    <div class="login-panel ui-fluid ui-widget-content">
         <div class="ui-g login-container">
-            <div class="ui-g-12 center-block">
-                <span>TRNMNT</span>
+            <div class="ui-g-12 center-block federation-logo">
             </div>
             <div class="ui-g-12">
                 <input type="text" pInputText [(ngModel)]="username" placeholder="Username" />
@@ -14,6 +13,9 @@
             </div>
             <div class="ui-g-12">
                 <button pButton type="button" (click)="login()" label="Login" cornerStyleClass="none"></button>
+            </div>
+            <div class="ui-g-12">
+                <span class="float-right">trnmnt.pro</span>
             </div>
         </div>
     </div>

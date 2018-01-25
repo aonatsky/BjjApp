@@ -2,11 +2,7 @@
 
 .category {
 
-    &:first-child {
-        margin-top: 0px;
-    }
-
-    margin-top: 20px;
+    margin-bottom: 20px;
     border: 1px solid;
     border-color: $theme_grey;
     background-color: white;
@@ -15,6 +11,13 @@
     .category-name {
         text-align: center;
         font-weight: bold;
+    }
+
+    .weight-division{
+        float:left;
+        border: 1px solid $theme_grey;
+        margin-right: 10px;
+        padding: 0.5em;
     }
 }
 
@@ -27,9 +30,4 @@
     input {
         width: 5em;
     }
-}
-
-.steps-content{
-    float:none;
-    min-height:75vh;
 }
