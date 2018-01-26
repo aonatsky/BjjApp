@@ -1,6 +1,9 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +28,7 @@ using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 using TRNMNT.Data.Repositories.Impl;
+using TRNMNT.Web.WebSockets;
 
 namespace TRNMNT.Web
 {
@@ -79,6 +83,7 @@ namespace TRNMNT.Web
 
             // Add framework services.
             services.AddMvc();
+            services.AddWebSocketManager();
 
             #region AppDBContext
 
@@ -126,7 +131,7 @@ namespace TRNMNT.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
             if (env.IsDevelopment())
@@ -143,7 +148,9 @@ namespace TRNMNT.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseWebSockets();
+            app.MapWebSocketHandlers(serviceProvider);
+            
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>
@@ -161,4 +168,3 @@ namespace TRNMNT.Web
         }
     }
 }
-;

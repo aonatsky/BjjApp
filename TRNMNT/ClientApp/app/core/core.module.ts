@@ -39,6 +39,8 @@ import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
 import {BracketService} from './services/bracket.service';
 import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
+import { WebsocketService } from './dal/websocket/websocket.service';
+import { TestWebsocketService } from './services/test-websocket.service';
 
 
 
@@ -71,6 +73,7 @@ NgModule({
     ],
     providers: [
         HttpService,
+        WebsocketService,
         LoggerService,
         LoaderService,
         NotificationService,
@@ -78,6 +81,7 @@ NgModule({
         AuthHttp,
         EventService,
         TeamService,
+        TestWebsocketService,
         CategoryService,
         WeightDivisionService,
         ParticipantService,
