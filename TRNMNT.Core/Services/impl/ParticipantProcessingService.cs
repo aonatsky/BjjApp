@@ -68,6 +68,7 @@ namespace TRNMNT.Core.Services.Impl
                 {
                     continue;
                 }
+                bool.TryParse(model.IsMember, out var isMember);
                 var participant = new Participant
                 {
                     ParticipantId = Guid.NewGuid(),
@@ -78,6 +79,7 @@ namespace TRNMNT.Core.Services.Impl
                     TeamId = ProcessTeam(model.Team, existingTeamsBase, teamsToAdd),
                     WeightDivisionId = eventWeightDivisions.First(x => x.Value.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase)).Key,
                     CategoryId = eventCategories.First(x => x.Value.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).Key,
+                    IsMember = isMember
                 };
 
                 if (!existingParticipants.Contains(participant, comparer) && !participantsToAdd.Contains(participant, comparer))

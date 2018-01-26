@@ -146,7 +146,7 @@ namespace TRNMNT.Core.Services.Impl
                 CategoryId = p.CategoryId,
                 WeightDivisionName = p.WeightDivision.Name,
                 WeightDivisionId = p.WeightDivisionId,
-                IsMember = p.Team.FederationId == federationId
+                IsMember = p.IsMember
             }).ToListAsync();
 
             return new PagedList<ParticipantTableModel>(list, filter.PageIndex, size, totalCount);

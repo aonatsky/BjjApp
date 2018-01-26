@@ -12,6 +12,7 @@ namespace TRNMNT.Core.Model
         public string WeightDivision { get; set; }
         public string Team { get; set; }
         public string Category { get; set; }
+        public string IsMember { get; set; }
     }
 
 }
