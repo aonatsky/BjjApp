@@ -6,11 +6,12 @@ import { RouterService } from '../../../core/services/router.service';
 import { Observable } from "rxjs/Observable";
 import * as FileSaver from 'file-saver';
 import { AuthHttp } from 'angular2-jwt';
+import { AuthService } from '../../services/auth.service';
 import 'rxjs/Rx';
 
 @Injectable()
 export class HttpService {
-    constructor(private loggerService: LoggerService, private http: AuthHttp, private loaderService: LoaderService, private routerService: RouterService) {
+    constructor(private loggerService: LoggerService, private http: AuthHttp, private loaderService: LoaderService, private routerService: RouterService, private authService: AuthService) {
     }
 
 
@@ -37,13 +38,15 @@ export class HttpService {
         this.loaderService.showLoader();
         return httpRequest
             .map((r: Response) => this.processResponse(r))
-            .catch((error: Response | any) => this.handleError(error))
+            .catch((error: Response | any) => this.handleError(error, () => this.get(name, paramsHolder)))
             .finally(() => this.loaderService.hideLoader());
     }
 
     public getById(name: string, id: string): Observable<any> {
         this.loaderService.showLoader();
-        return this.http.get(name).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());
+        return this.http.get(name).map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleError(error, () => this.getById(name, id)))
+            .finally(() => this.loaderService.hideLoader());
     }
 
     public post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
@@ -56,7 +59,9 @@ export class HttpService {
         }
         debugger;
         let body = JSON.stringify(model);
-        return this.http.post(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
+        return this.http.post(name, body, options).map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleError(error, () => this.post(name, model, responseType)))
+            .finally(() => this.loaderService.hideLoader());;
     }
 
     public put(name: string, model: any): Observable<any> {
@@ -65,7 +70,9 @@ export class HttpService {
             headers: new Headers({ 'Content-Type': 'application/json' })
         });
         let body = JSON.stringify(model);
-        return this.http.put(name, body, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
+        return this.http.put(name, body, options).map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleError(error, () => this.put(name, model)))
+            .finally(() => this.loaderService.hideLoader());;
     }
 
     public delete(name: string, model: any): Observable<any> {
@@ -74,7 +81,9 @@ export class HttpService {
             headers: new Headers({ 'Content-Type': 'application/json' }),
             body: JSON.stringify(model)
         });
-        return this.http.delete(name, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
+        return this.http.delete(name, options).map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleError(error, () => this.delete(name, model)))
+            .finally(() => this.loaderService.hideLoader());;
     }
 
     public deleteById(name: string, id: any): Observable<any> {
@@ -83,7 +92,9 @@ export class HttpService {
             headers: new Headers({ 'Content-Type': 'application/json' }),
         });
         let url = name + "/" + id;
-        return this.http.delete(url, options).map((r: Response) => this.processResponse(r)).catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
+        return this.http.delete(url, options).map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleError(error, () => this.deleteById(name, id)))
+            .finally(() => this.loaderService.hideLoader());;
     }
 
     public postFile(name: string, file: any): Observable<any> {
@@ -92,7 +103,8 @@ export class HttpService {
         formData.append("file", file);
         return this.http.post(name, formData)
             .map((r: Response) => this.processResponse(r))
-            .catch((error: Response | any) => this.handleError(error)).finally(() => this.loaderService.hideLoader());;
+            .catch((error: Response | any) => this.handleError(error, () => this.postFile(name, file)))
+            .finally(() => this.loaderService.hideLoader());;
     }
 
     public getPdf(url, fileName): Observable<any> {
@@ -107,19 +119,22 @@ export class HttpService {
         return response;
     }
 
-    private handleError(error: Response | any) {
+    private handleError(error: Response | any, repeatRequest: Function) {
         // In a real world app, you might use a remote logging infrastructure
         let errMsg: string;
         if (error instanceof Response) {
             if (error.status == 401) {
-                this.routerService.goToLogin();
+                return this.authService.getNewToken().map(() => {
+                    return repeatRequest();
+                });
+
             }
             errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
         console.error(errMsg);
-        this.loggerService.logError(errMsg)
+        this.loggerService.logError(errMsg);
         return Observable.throw(errMsg);
     }
 

@@ -152,7 +152,7 @@ namespace TRNMNT.Core.Services.Impl
                 GetTokenClaims(user).Union(await _userManager.GetClaimsAsync(user))
             );
 
-            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.Lifetime);
+            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.AccessTokenLifetime);
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = TokenAuthOptions.Issuer,
@@ -168,13 +168,15 @@ namespace TRNMNT.Core.Services.Impl
         {
             var handler = new JwtSecurityTokenHandler();
             var identity = new ClaimsIdentity(GetRefreshTokenClaims(user));
+            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.RefreshTokenLifetime);
 
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = TokenAuthOptions.Issuer,
                 Audience = TokenAuthOptions.Audience,
                 SigningCredentials = new SigningCredentials(TokenAuthOptions.GetKey(), SecurityAlgorithms.HmacSha256),
-                Subject = identity
+                Subject = identity,
+                Expires = expiresIn
             });
             return handler.WriteToken(securityToken);
         }

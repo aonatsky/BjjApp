@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Subject, Observable } from 'rxjs';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -10,6 +10,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 import { UserModel } from './../model/user.model'
 import { LoaderService } from './loader.service';
+import { RouterService } from './router.service'
 
 
 /** 
@@ -29,8 +30,9 @@ import { LoaderService } from './loader.service';
 
     private headers: Headers;
     private options: RequestOptions;
+    private jwtHelper: JwtHelper = new JwtHelper();
 
-    constructor(private http: Http, private loaderService: LoaderService) {
+    constructor(private http: Http, private routerService: RouterService, private loaderService: LoaderService) {
 
         // On bootstrap or refresh, tries to get the user's data.  
         this.decodeToken();
@@ -38,9 +40,7 @@ import { LoaderService } from './loader.service';
         // Creates header for post requests.  
         this.headers = new Headers({ 'Content-Type': 'application/json' });
         this.options = new RequestOptions({ headers: this.headers });
-
     }
-
 
     login(username: string, password: string) {
 
@@ -58,11 +58,6 @@ import { LoaderService } from './loader.service';
             error => console.log(error),
             () => this.loaderService.hideLoader());
     }
-
-
-
-
-
 
     /**
      * Tries to sign in the user. 
@@ -108,10 +103,7 @@ import { LoaderService } from './loader.service';
                 } else {
                     return Observable.throw(data);
                 }
-
-
             }).finally(() => this.loaderService.hideLoader());
-
     }
 
 
@@ -139,13 +131,14 @@ import { LoaderService } from './loader.service';
                 } else {
                     return Observable.throw(data);
                 }
-           }).finally(() => this.loaderService.hideLoader());
+
+            });
     }
 
     /** 
      * Tries to get a new token using refresh token. 
      */
-    public getNewToken(): void {
+    public getNewToken(): Observable<boolean> {
 
         let refreshToken: string = localStorage.getItem('refresh_token');
 
@@ -162,8 +155,7 @@ import { LoaderService } from './loader.service';
             // Encodes the parameters.  
             let body: string = this.encodeParams(params);
             this.loaderService.showLoader();
-            this.http.post(tokenEndpoint, body, this.options)
-                .subscribe(
+            return  this.http.post(tokenEndpoint, body, this.options).map(
                 (res: Response) => {
 
                     let body: any = res.json();
@@ -173,13 +165,11 @@ import { LoaderService } from './loader.service';
 
                         // Stores access token & refresh token.  
                         this.store(body);
-
+                        return true;
                     }
-
+                    return false;
                 }, null, () => this.loaderService.hideLoader());
-
         }
-
     }
 
     /** 
@@ -219,9 +209,10 @@ import { LoaderService } from './loader.service';
                     
                 }, null, () => this.loaderService.hideLoader());
 
+                });
         }
-
     }
+    
 
     /** 
      * Revokes refresh token. 
@@ -278,9 +269,7 @@ import { LoaderService } from './loader.service';
      * @return The user's data 
      */
     public getUser(): UserModel {
-
-        return new UserModel(this.user.UserId, this.user.first_name, this.user.last_name, this.user.email, this.user.role)                
-
+        return new UserModel(this.user.UserId, this.user.first_name, this.user.last_name, this.user.email, this.user.role);
     }
 
     /** 
@@ -333,7 +322,6 @@ import { LoaderService } from './loader.service';
 
         // Decodes the token.  
         this.decodeToken();
-
     }
 
 }  
