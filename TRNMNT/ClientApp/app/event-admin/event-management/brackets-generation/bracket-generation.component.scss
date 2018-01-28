@@ -21,12 +21,15 @@
             &:nth-child(2) {
                 border-top: 0;
             }
+
+            &.buffer {
+                pointer-events: none;
+                color: $theme_grey;
+            }
         }
     }
 
     .table-block {
         height: 84px;
     }
-
-    
 }

@@ -83,12 +83,14 @@
             </div>
             <div *ngIf="isIdColumn(column) && !newEntity" class="ui-grid-col-12"><label class="id-label" for="{{column.propertyName}}">{{entityToEdit[column.propertyName]}}</label></div>
         </div>
+       
     </div>
-    <p-footer>
-        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-            <button type="button" pButton icon="fa-close" (click)="showConfirm()" label="Delete"></button>
+    <div class="ui-g-12">
+        <div class="float-right">
             <button type="button" pButton icon="fa-check" (click)="save()" label="Save"></button>
+            <button type="button" pButton icon="fa-close" (click)="showConfirm()" class="ui-button-danger" label="Delete"></button>
         </div>
-    </p-footer>
+
+    </div>
 </p-dialog>
 <p-confirmDialog width="425"> </p-confirmDialog>

@@ -31,6 +31,10 @@ export class EventOverviewComponent implements OnInit {
         this.routerService.goToEventManagement(id);
     }
 
+    public runEvent(id: string) {
+        this.routerService.goToEventManagement(id);
+    }
+
     ngOnInit() {
         this.eventService.getEventsForOwner().subscribe(res => this.events = res);
     }

@@ -3,14 +3,14 @@
 </div>
 <div class="ui-g">
     <div class="ui-g-12">
-        <button pButton type="button" iconPos="left" icon="fa-plus" label="Create Bracket" [disabled]="filter.weightDivisionId == ''" (click)="createBracket();"></button>
+        <button pButton type="button" iconPos="left" icon="fa-bars" label="Get Bracket" [disabled]="filter.weightDivisionId == ''" (click)="createBracket();"></button>
         <button pButton type="button" iconPos="left" icon="fa-save" label="Update" [disabled]="!bracket || !isEdited" (click)="updateBracket();"></button>
-        <button pButton type="button" iconPos="left" icon="fa-download" label="Download" [disabled]="!bracket || isEdited" (click)="downloadBracket();"></button>
+        <button pButton type="button" iconPos="left" icon="fa-file-excel-o" label="Download" [disabled]="!bracket || isEdited" (click)="downloadBracket();"></button>
     </div>
 </div>
 <div class="ui-g brackets" *ngIf="bracket">
 
-    <div class="ui-g-10 ui-g-offset-1">
+    <div *ngIf="rounds.length > 1" class="ui-g-10 ui-g-offset-1">
         <div class="ui-g-4 ui-g-nopad" *ngFor="let col of getColumns();">
             <div *ngIf="col % 2 == 0">
                 <div *ngFor="let row of getRows();">
@@ -18,15 +18,16 @@
                         <div *ngFor="let num of [1,2]"
                              class="bracket-participant-plate ui-g-12"
                              [class.droppable]="dragMode"
+                             [class.buffer]="getDraggable(getRound(col,row),num) === ''"
                              [dragEffect]="'move'"
-                             pDraggable="participantPlate"
-                             pDroppable="participantPlate"
+                             [pDraggable]="getDraggable(getRound(col,row),num)"
+                             [pDroppable]="getDraggable(getRound(col,row),num)"
                              (onDragStart)="dragStart(getRoundIndex(col,row),num)"
                              (onDrop)="onDrop(getRoundIndex(col,row),num,$event)"
                              (onDragEnd)="dragEnd()"
                              (onDragEnter)="dragEnter($event)"
                              (onDragLeave)="dragLeave($event);">
-                            {{displayParticipantInfo(rounds[getRoundIndex(col,row)],num)}}
+                            {{displayParticipantInfo(getRound(col,row),num)}}
                         </div>
                     </div>
                     <div *ngIf="row %2 != 0" class="ui-g-12 table-block ui-g-nopad"></div>
@@ -38,6 +39,14 @@
                         <connector [row]="row" [stage]="stage" [maxStage]="2 * maxStage -1"></connector>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="rounds.length == 1" class="ui-g-10 ui-g-offset-1">
+        <div class="bracket ui-g-4 ui-g-offset-4 ui-g-nopad">
+            <div *ngFor="let num of [1,2]"
+                 class="bracket-participant-plate ui-g-12">
+                {{displayParticipantInfo(getRound(0,0),num)}}
             </div>
         </div>
     </div>

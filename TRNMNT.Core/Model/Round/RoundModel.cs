@@ -10,5 +10,7 @@ namespace TRNMNT.Core.Model.Round
         public ParticipantSimpleModel SecondParticipant { get; set; }
         public Guid? NextRoundId { get; set; }
         public int Stage { get; set; }
+        public bool HasBooferParticipant { get; set; }
     }
+
 }

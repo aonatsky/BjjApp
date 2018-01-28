@@ -15,6 +15,7 @@ namespace TRNMNT.Data.Entities
         public Guid? WinnerParticipantId { get; set; }
         public Guid? NextRoundId { get; set; }
         public int Stage { get; set; }
+        public bool HasBooferParticipant { get; set; }
 
         [JsonIgnore, ForeignKey(nameof(FirstParticipantId))]
         public virtual Participant FirstParticipant { get; set; }

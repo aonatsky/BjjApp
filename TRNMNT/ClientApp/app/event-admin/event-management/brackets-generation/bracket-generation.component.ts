@@ -75,11 +75,19 @@ export class BracketGenerationComponent {
         }
     }
 
+    private getRound(col, row): RoundModel {
+        return this.rounds[this.getRoundIndex(col, row)];
+
+    }
+
     private displayParticipantInfo(round: RoundModel, participantNumber: number) {
         let participant;
         if (participantNumber == 1) {
             participant = round.firstParticipant;
         } else if (participantNumber == 2) {
+            if (round.hasBooferParticipant) {
+                return 'Lost in previous round';
+            }
             participant = round.secondParticipant;
         }
         if (participant == undefined) {
@@ -87,6 +95,7 @@ export class BracketGenerationComponent {
         } else {
             return participant.firstName + ' ' + participant.lastName;
         }
+
 
 
     }
@@ -136,6 +145,15 @@ export class BracketGenerationComponent {
         }
     }
 
+    private getDraggable(round: RoundModel, num: number): string {
+        if (round.hasBooferParticipant && num == 2) {
+            return '';
+        }
+        else {
+            return 'participnatPlate';
+        }
+    }
+
     setParticipant(round: RoundModel, pNumber: number, value: ParticipantModelBase) {
         if (pNumber == 1) {
             round.firstParticipant = value;
@@ -157,7 +175,7 @@ export class BracketGenerationComponent {
         this.isEdited = false;
     }
 
-    private initStages(maxStage:number) {
+    private initStages(maxStage: number) {
         this.stages = [];
         for (var i = 0; i < 2 * maxStage; i++) {
             this.stages.push(i);

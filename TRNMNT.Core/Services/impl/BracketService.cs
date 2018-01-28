@@ -81,7 +81,7 @@ namespace TRNMNT.Core.Services.impl
         {
             var participants = (await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId)).ToList();
             var count = participants.Count();
-            var bracketSize = GetBracketsSize(participants.Count());
+            var bracketSize = GetBracketsSize(count);
             for (var i = 0; i < bracketSize - count; i++)
             {
                 participants.Add(_participantService.GetEmptyParticipant());
@@ -171,7 +171,10 @@ namespace TRNMNT.Core.Services.impl
                 NextRoundId = round.NextRoundId,
                 Stage = round.Stage,
                 FirstParticipant = round.FirstParticipant == null ? null : GetParticipantModel(round.FirstParticipant),
-                SecondParticipant = round.SecondParticipant == null ? null : GetParticipantModel(round.SecondParticipant)
+                SecondParticipant = round.SecondParticipant == null ? null : GetParticipantModel(round.SecondParticipant),
+                HasBooferParticipant = round.HasBooferParticipant
+
+                
             };
         }
 

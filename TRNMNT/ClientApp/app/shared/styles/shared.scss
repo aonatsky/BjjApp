@@ -19,6 +19,18 @@ body {
         border-radius: 0;
         background-color: $bg_color;
 
+        &.ui-button-danger.ui-state-default {
+            background-color: transparent;
+            color: $theme_red;
+            border-color: $theme_red;
+
+            &:hover {
+                background-color: transparent !important; 
+                color: darken($theme_red,10%);
+                border-color: darken($theme_red,10%);
+            }
+        }
+
         .fa {
             background-color: transparent;
         }
@@ -243,6 +255,6 @@ body {
     }
 }
 
-.inline-block{
-    display:inline-block;
+.inline-block {
+    display: inline-block;
 }
