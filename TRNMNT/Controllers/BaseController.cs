@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
@@ -18,10 +19,10 @@ namespace TRNMNT.Web.Controllers
     {
         #region Dependencies
 
-        private readonly ILogger _logger;
-        private readonly IUserService _userService;
-        private readonly IEventService _eventService;
-        private readonly IAppDbContext _context;
+        protected readonly ILogger Logger;
+        protected readonly IUserService UserService;
+        protected readonly IEventService EventService;
+        protected readonly IAppDbContext Context;
         protected JsonSerializerSettings JsonSerializerSettings;
 
         #endregion
@@ -36,10 +37,10 @@ namespace TRNMNT.Web.Controllers
 
         public BaseController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context)
         {
-            _logger = logger;
-            _userService = userService;
-            _eventService = eventService;
-            _context = context;
+            Logger = logger;
+            UserService = userService;
+            EventService = eventService;
+            Context = context;
             JsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
@@ -48,7 +49,7 @@ namespace TRNMNT.Web.Controllers
         }
         protected void HandleException(Exception ex)
         {
-            _logger.LogError(ex.Message);
+            Logger.LogError(ex.Message);
         }
 
         protected async Task<User> GetUserAsync()
@@ -58,7 +59,7 @@ namespace TRNMNT.Web.Controllers
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
                 if (userIdClaim != null)
                 {
-                    _user = await _userService.GetUserAsync(userIdClaim.Value);
+                    _user = await UserService.GetUserAsync(userIdClaim.Value);
                 }
             }
             return _user;
@@ -71,7 +72,7 @@ namespace TRNMNT.Web.Controllers
             {
                 var eventSubdomain = fullAddress[0];
                 var host = fullAddress[1];
-                var eventId = await _eventService.GetEventIdAsync(eventSubdomain);
+                var eventId = await EventService.GetEventIdAsync(eventSubdomain);
                 if (eventId != null)
                 {
                     _eventId = eventId;
@@ -143,7 +144,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     return StatusCode((int)code);
                 }
-                await _context.SaveAsync();
+                await Context.SaveAsync();
                 return Ok();
             }
             catch (Exception e)
@@ -175,7 +176,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     return StatusCode((int)code);
                 }
-                await _context.SaveAsync();
+                await Context.SaveAsync();
                 return Ok();
             }
             catch (Exception e)
@@ -206,7 +207,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     return StatusCode((int)result.Code);
                 }
-                await _context.SaveAsync();
+                await Context.SaveAsync();
                 return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
             catch (Exception e)
@@ -234,7 +235,7 @@ namespace TRNMNT.Web.Controllers
                 {
                     return StatusCode((int)result.Code);
                 }
-                await _context.SaveAsync();
+                await Context.SaveAsync();
                 return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
             catch (Exception e)
@@ -250,6 +251,58 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(() => (action(), HttpStatusCode.OK), checkEventId, checkFederationId);
         }
 
+        protected async Task<IActionResult> HandleRequestWithFileAsync(Func<(CustomFile Response, HttpStatusCode Code)> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if (checkEventId && !_eventId.HasValue || checkFederationId && !_federationId.HasValue)
+                {
+                    return NotFound();
+                }
+                var result = action();
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
+                await Context.SaveAsync();
+                return new FileContentResult(result.Response.ByteArray,result.Response.ContentType);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        
+        protected async Task<IActionResult> HandleRequestWithFileAsync(Func<Task<(CustomFile Response, HttpStatusCode Code)>> action, bool checkEventId = false, bool checkFederationId = false)
+        {
+            try
+            {
+                if (checkEventId && !_eventId.HasValue || checkFederationId && !_federationId.HasValue)
+                {
+                    return NotFound();
+                }
+                var result = await action();
+                if (result.Code != HttpStatusCode.OK)
+                {
+                    return StatusCode((int)result.Code);
+                }
+                await Context.SaveAsync();
+                if (result.Response.ByteArray == null)
+                {
+                    return NotFound();
+                }
+                return new FileContentResult(result.Response.ByteArray, result.Response.ContentType);
+            }
+            catch (Exception e)
+            {
+                HandleException(e);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        
+        
+        
         protected (object, HttpStatusCode) NotFoundResponse()
         {
             return (null, HttpStatusCode.NotFound);

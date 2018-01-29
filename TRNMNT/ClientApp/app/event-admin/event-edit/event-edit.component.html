@@ -1,7 +1,12 @@
-﻿<div class="ui-widget">
+﻿<div class="ui-g">
+    <div class="ui-g-12 ui-g-nopad page-title">
+        Event Edit
+    </div>
+</div>
+<div class="ui-widget">
     <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
     <div class="ui-g-8 ui-g-offset-2 steps-content" *ngIf="eventModel">
-        <div *ngIf="currentStep==0" class="steps-content">
+        <div *ngIf="currentStep==0" class="">
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid"><label class="field-title">Title</label></div>
                 <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>
@@ -60,7 +65,7 @@
 
 
         </div>
-        <div *ngIf="currentStep==1" class="steps-content">
+        <div *ngIf="currentStep==1" class="">
             <div class="disabled">
                 <div class="modal">
                     <span>COMING SOON</span>
@@ -100,11 +105,11 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="currentStep==2" class="steps-content">
+        <div *ngIf="currentStep==2" class="">
             <category-edit [categories]="eventModel.categoryModels" [eventId]="eventModel.eventId">
             </category-edit>
         </div>
-        <div *ngIf="currentStep==3" class="steps-content">
+        <div *ngIf="currentStep==3" >
             <div class="disabled">
                 <div class="modal">
                     <span>COMING SOON</span>
@@ -132,11 +137,12 @@
                 </div>
             </div>
         </div>
-        <div class="ui-g-12 navigation-buttons">
-            <div class="float-left"><button pButton type="button" iconPos="left" icon="fa-arrow-left" label="Back" (click)="previousStep()" *ngIf="currentStep != 0"></button></div>
-            <div class="float-right"><button pButton type="button" iconPos="right" icon="fa-arrow-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep"></button></div>
-            <div class="float-right"><button pButton type="button" iconPos="left" icon="fa-save" label="Save" (click)="save()"></button></div>
-        </div>
+        
+    </div>
+    <div class="ui-g-12 navigation-buttons">
+        <div class="float-left"><button pButton type="button" iconPos="left" icon="fa-arrow-left" label="Back" (click)="previousStep()" *ngIf="currentStep != 0"></button></div>
+        <div class="float-right"><button pButton type="button" iconPos="right" icon="fa-arrow-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep"></button></div>
+        <div class="float-right"><button pButton type="button" iconPos="left" icon="fa-save" label="Save" (click)="save()"></button></div>
     </div>
 
 </div>

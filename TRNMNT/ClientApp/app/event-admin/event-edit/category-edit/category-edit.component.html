@@ -2,17 +2,17 @@
     <div class="ui-g-12 category-name">
         {{category.name}}
     </div>
-    <div class="ui-g-12 ui-g-nopad">
+    <div class="ui-g-12">
         <div class="ui-g-3"><label class="field-title"><b>Round Time:</b></label></div>
         <div class="ui-g-2"><label>{{category.roundTime | minuteSeconds}}</label></div>
     </div>
-    <div class="ui-g-12 ui-g-nopad">
+    <div class="ui-g-12">
         <div class="ui-g-3">
             <label class="field-title"><b>Wight Divisons:</b></label>
         </div>
         <div class="ui-g-9 ">
-            <div class="ui-g-4 ui-g-nopad" *ngFor="let wd of category.weightDivisionModels">
-                <label>{{wd.name}}</label>
+            <div class="weight-division " *ngFor="let wd of category.weightDivisionModels">
+                {{wd.name}}
             </div>
         </div>
     </div>
@@ -23,7 +23,7 @@
     </div>
 </div>
 <div class="ui-g">
-    <div class="ui-g-3">
+    <div class="ui-g-3 ui-g-nopad">
         <button pButton type="button" (click)="addCategory()" label="Add Category"></button>
     </div>
 </div>
@@ -31,7 +31,6 @@
 <p-dialog header="Edit Category"
           [(visible)]="displayPopup"
           [modal]="true"
-          [draggable]="false"
           [resizable]="false"
           [showHeader]="true"
           [width]="500">
@@ -67,8 +66,10 @@
             <button pButton type="button" iconPos="left" icon="fa-plus" (click)="addWeightDivision()" label="Add"></button>
         </div>
     </div>
-    <div class="ui-g">
-        <div class="ui-g-offset-4 ui-g-4 ui-fluid"><button pButton type="button" label="Save" (click)="saveCategory()"></button></div>
-        <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Delete" [disabled]="isNewCategory" (click)="deleteCategory()"></button></div>
+    <div class="ui-g-12">
+        <div class="float-right">
+            <button pButton type="button" label="Save" (click)="saveCategory()"></button>
+            <button pButton type="button" class="ui-button-danger" label="Delete" [disabled]="isNewCategory" (click)="deleteCategory()"></button>
+        </div>
     </div>
 </p-dialog>

@@ -14,5 +14,5 @@ import './loader.scss';
     templateUrl: './loader.html'
 })
 export class LoaderComponent {
-    @Input() isVisible: boolean = true;
+    @Input() isVisible: boolean = false;
 }

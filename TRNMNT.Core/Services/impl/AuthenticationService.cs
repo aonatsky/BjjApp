@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using TRNMNT.Core.Configurations;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Core.Settings;
@@ -21,17 +22,19 @@ namespace TRNMNT.Core.Services.Impl
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IdentityErrorDescriber _identityErrorDescriber;
+        private readonly IAuthConfiguration _authConfiguration;
 
         #endregion
 
         #region .ctor
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _identityErrorDescriber = new IdentityErrorDescriber();
+            _authConfiguration = authConfiguration;
         }
 
         #endregion
@@ -61,20 +64,33 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public async Task<string> GetTokenAsync(string login, string password)
+        public async Task<AuthTokenResult> GetTokenAsync(string login, string password)
         {
             await AddSampleUserAsync();
             var loginResult = await _signInManager.PasswordSignInAsync(login, password, false, false);
             if (loginResult.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(login);
-                var token = GenerateTokenAsync(user);
-                return await token;
+                return await GetTokens(user);
             }
-            return string.Empty;
+            return null;
         }
 
-        public async Task<string> GetTokenAsync()
+        public async Task<AuthTokenResult> UpdateTokenAsync(string refreshToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var data = handler.ReadJwtToken(refreshToken);
+            var userIdClaim = data.Payload.FirstOrDefault(x => x.Key.Equals("nameid", StringComparison.CurrentCulture));
+            if (userIdClaim.Value != null)
+            {
+                var user = await _userManager.FindByIdAsync(userIdClaim.Value.ToString());
+                return await GetTokens(user);
+            }
+
+            return null;
+        }
+
+        public async Task<AuthTokenResult> GetTokenAsync()
         {
             await AddSampleUserAsync();
             var user = await _userManager.FindByNameAsync("admin");
@@ -85,9 +101,9 @@ namespace TRNMNT.Core.Services.Impl
                 var requestAt = DateTime.Now;
 
                 var token = GenerateTokenAsync(user);
-                return await token;
+                return await GetTokens(user);
             }
-            return string.Empty;
+            return null;
         }
 
         public async Task<UserRegistrationResult> CreateParticipantUserAsync(string email, string password)
@@ -120,8 +136,7 @@ namespace TRNMNT.Core.Services.Impl
             }
             return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
         }
-
-
+        
         private async Task AddSampleRolesAsync()
         {
             if (!await _roleManager.RoleExistsAsync(Roles.Owner))
@@ -133,18 +148,34 @@ namespace TRNMNT.Core.Services.Impl
 
         private async Task<string> GenerateTokenAsync(User user)
         {
-
             var handler = new JwtSecurityTokenHandler();
             var identity = new ClaimsIdentity(
                 GetTokenClaims(user).Union(await _userManager.GetClaimsAsync(user))
             );
 
-            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.Lifetime);
+            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(_authConfiguration.AccessTokenLifetime);
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = TokenAuthOptions.Issuer,
-                Audience = TokenAuthOptions.Audience,
-                SigningCredentials = new SigningCredentials(TokenAuthOptions.GetKey(), SecurityAlgorithms.HmacSha256),
+                Issuer = _authConfiguration.Issuer,
+                Audience = _authConfiguration.Audience,
+                SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
+                Subject = identity,
+                Expires = expiresIn
+            });
+            return handler.WriteToken(securityToken);
+        }
+
+        private string GenerateRefreshToken(User user)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var identity = new ClaimsIdentity(GetRefreshTokenClaims(user));
+            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(_authConfiguration.RefreshTokenLifetime);
+
+            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
+            {
+                Issuer = _authConfiguration.Issuer,
+                Audience = _authConfiguration.Audience,
+                SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
                 Subject = identity,
                 Expires = expiresIn
             });
@@ -161,6 +192,22 @@ namespace TRNMNT.Core.Services.Impl
                     new Claim(ClaimTypes.Email, user.Email),
 
                 };
+        }
+
+        private List<Claim> GetRefreshTokenClaims(User user)
+        {
+            return new List<Claim> {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
+        }
+
+        private async Task<AuthTokenResult> GetTokens(User user)
+        {
+            return new AuthTokenResult
+            {
+                AccessToken = await GenerateTokenAsync(user),
+                RefreshToken = GenerateRefreshToken(user)
+            };
         }
 
         #endregion

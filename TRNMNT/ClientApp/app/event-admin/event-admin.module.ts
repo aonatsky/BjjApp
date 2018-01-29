@@ -33,6 +33,7 @@ import { WebsocketInteractionComponent } from './websocket-interaction/websocket
         EventManagementParticipantsComponent,
         PrticipantsListUploadComponent,
         WebsocketInteractionComponent
+        ConnectorComponent
     ],
 
     providers: [],

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TRNMNT.Core.Services.impl;
+using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories.Impl;
 
 namespace TRNMNT.Core.Tests
 {
@@ -13,9 +15,9 @@ namespace TRNMNT.Core.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            var roundService = new RoundService();
-            var participants = getParticipants();
-            var rounds = roundService.GetRoundStructure(participants.ToArray(), Guid.NewGuid());
+            //var roundService = new RoundService(new Repository<Round>(new AppDbContext()));
+            //var participants = getParticipants();
+            //var rounds = roundService.CreateRoundStructure(participants.ToArray(), Guid.NewGuid());
         }
 
         private IEnumerable<Participant> getParticipants()

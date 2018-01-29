@@ -3,14 +3,12 @@ import { CategoryWithDivisionFilterModel as FighterFilterModel } from '../../mod
 
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
-import { Fighter } from '../../model/fighter.model'
+
 import { WeightDivisionModel } from '../../model/weight-division.models'
 import { CategoryModel } from "../../model/category.models";
 
 @Injectable()
 export abstract class DataService {
-    public abstract getFigters(filter: FighterFilterModel): Observable<Fighter[]>
-    public abstract getFigtersByFilter(filter: FighterFilterModel): Observable<Fighter[]>
     public abstract deleteFighter(fighterId: string): Observable<any>;
     public abstract getWeightDivisions(): Observable<WeightDivisionModel[]>;
     public abstract uploadFighterList(file: any): Observable<any>;

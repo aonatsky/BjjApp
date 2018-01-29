@@ -1,12 +1,11 @@
-﻿@import '../../../shared/styles/shared.scss';
+﻿@import '../../../shared/styles/variables.scss';
 
-.bracket-block {
-    height: 80px;
+.brackets {
+    margin-top: 20px;
 
     .bracket {
-        box-shadow: 2px 2px 4px 0 rgba(154, 154, 154, 0.5);
-        background-color: #ffffff;
-        height: 80px;
+        height: 84px;
+        border: 2px solid $theme_black;
 
         .bracket-participant-plate {
             height: 40px;
@@ -16,8 +15,21 @@
             }
 
             &:first-child {
-                border-bottom: 1px solid $theme_orange;
+                border-bottom: 2px solid $theme_orange;
+            }
+
+            &:nth-child(2) {
+                border-top: 0;
+            }
+
+            &.buffer {
+                pointer-events: none;
+                color: $theme_grey;
             }
         }
+    }
+
+    .table-block {
+        height: 84px;
     }
 }

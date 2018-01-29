@@ -49,10 +49,10 @@ namespace TRNMNT.Core.Services.Impl
                 var sheet = excelPackage.Workbook?.Worksheets[1];
                 if (sheet != null)
                 {
-                    var fighterModelList = new List<ParticitantModel>(sheet.Dimension.Rows);
+                    var fighterModelList = new List<ParticipantModel>(sheet.Dimension.Rows);
                     for (var i = 2; i <= sheet.Dimension.Rows; i++)
                     {
-                        fighterModelList.Add(new ParticitantModel
+                        fighterModelList.Add(new ParticipantModel
                         {
                             ParticipantId = Guid.NewGuid(),
                             FirstName = sheet.Cells[i, 1].GetValue<string>(),

@@ -6,6 +6,17 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IRoundService
     {
-        IEnumerable<Round> GetRoundStructure(Participant[] participants, Guid bracketId);
+        /// <summary>
+        /// Creates round structure for round.
+        /// </summary>
+        /// <param name="participants">Array of participnats</param>
+        /// <param name="bracketId">Bracket id</param>
+        /// <returns></returns>
+        ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId);
+        /// <summary>
+        /// Updates round
+        /// </summary>
+        /// <param name="round"></param>
+        void UpdateRound(Round round);
     }
 }

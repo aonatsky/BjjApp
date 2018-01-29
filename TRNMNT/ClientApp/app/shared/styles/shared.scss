@@ -4,17 +4,32 @@
 
 body {
     margin: 0px;
+    font-family: $theme_font_family !important;
 
-    .content {
-        padding-top: $content_padding_top
+    .ui-corner-all {
+        border-radius: 0 !important;
     }
 
-    .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload {
+    .content {
+        padding-top: 0px;
+    }
+
+    .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload, .ui-fileupload-choose {
         $bg_color: $theme_black;
         border-radius: 0;
         background-color: $bg_color;
 
+        &.ui-button-danger.ui-state-default {
+            background-color: transparent;
+            color: $theme_red;
+            border-color: $theme_red;
 
+            &:hover {
+                background-color: transparent !important;
+                color: darken($theme_red,10%);
+                border-color: darken($theme_red,10%);
+            }
+        }
 
         .fa {
             background-color: transparent;
@@ -24,7 +39,15 @@ body {
             background-color: $bg_color;
 
             &:hover {
-                background-color: darken($bg_color,10%);
+                background-color: darken($bg_color,10%) !important;
+            }
+        }
+
+        &:not(.ui-state-disabled):hover {
+            background-color: darken($bg_color,10%);
+
+            &.fa {
+                background-color: transparent;
             }
         }
 
@@ -37,6 +60,11 @@ body {
         background-color: darken($theme_black,10%)
     }
 
+    .steps-content {
+        float: none;
+        min-height: 65vh;
+        margin-top: 20px;
+    }
 
     .ui-steps {
         /*pointer-events: none;*/
@@ -48,7 +76,7 @@ body {
             border-width: 2px;
             width: 100%;
             box-sizing: border-box;
-            top: $header_height + $content_padding_top + 15px;
+            top: 164px;
         }
 
         $bg_color: $theme_orange;
@@ -108,16 +136,28 @@ body {
     }
 
     .ui-tabview {
-        margin-top: 20px;
 
-        .ui-tabview-nav {
-            background-color: $theme_body_color !important;
+        .ui-tabview-panel {
+            padding: 0px;
+            box-shadow: $theme_box_shadow;
+            min-height: 75vh;
+            overflow: auto;
+        }
 
-            li {
+        &.ui-tabview-top {
+            .ui-tabview-nav {
                 background-color: $theme_body_color !important;
-                border: none !important;
-                height: 40px;
+                border: none;
+
+                li {
+                    background-color: $theme_body_color !important;
+                    border: none;
+                    height: 40px;
+                    margin-bottom: 10px;
+                }
             }
+
+
 
             .ui-state-default {
                 .ui-tabview-title:hover {
@@ -183,9 +223,42 @@ body {
     }
 
     .ui-dropdown {
-        &.ui-corner-all {
-            border-radius: 0;
+
+
+
+
+        .ui-dropdown-panel {
+            .ui-dropdown-items {
+                .ui-dropdown-item {
+                    &.ui-state-highlight {
+                        background-color: $theme_orange;
+                    }
+                }
+            }
         }
     }
 
+
+    .ui-datepicker {
+
+        a {
+            &.ui-state-active {
+                background-color: $theme_orange !important;
+            }
+        }
+    }
+
+    .box-shadow {
+        box-shadow: $theme_box_shadow;
+    }
+
+    .page-title {
+        font-size: 2em;
+        font-weight: bold;
+        padding: 30px 0px
+    }
+}
+
+.inline-block {
+    display: inline-block;
 }

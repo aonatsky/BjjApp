@@ -1,9 +1,14 @@
-﻿class RoundModel {
+﻿import {ParticipantModelBase} from './participant.models';
+
+export class RoundModel {
     roundId: AAGUID;
-    firstParticipantName : string;
-    secondParticipantName: string;
+    firstParticipant: ParticipantModelBase;
+    secondParticipant: ParticipantModelBase;
     nextRoundId: AAGUID;
-    firstParticipantId: AAGUID;
-    secondParticipantId: AAGUID;
     stage: number;
+    hasBooferParticipant : boolean;
+
+     
+
+
 }

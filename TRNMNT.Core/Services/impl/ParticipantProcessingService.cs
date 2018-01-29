@@ -43,13 +43,13 @@ namespace TRNMNT.Core.Services.Impl
         
         #region Public Methods
 
-        public List<ParticitantModel> GetParticitantModelsByFilter(ParticitantFilterModel filter)
+        public List<ParticipantModel> GetParticitantModelsByFilter(ParticitantFilterModel filter)
         {
             var fighters = GetParticitantByFilter(filter);
             return GetModels(fighters);
         }
 
-        public async Task<List<string>> AddParticipantsByModelsAsync(List<ParticitantModel> particitantModels, Guid eventId, Guid federationId)
+        public async Task<List<string>> AddParticipantsByModelsAsync(List<ParticipantModel> particitantModels, Guid eventId, Guid federationId)
         {
             var messageList = new List<string>();
             var existingTeamsBase = await GetExistingTeams(federationId);
@@ -94,14 +94,14 @@ namespace TRNMNT.Core.Services.Impl
         }
 
 
-        public List<ParticitantModel> GetOrderedListForBrackets(ParticitantFilterModel filter)
+        public List<ParticipantModel> GetOrderedListForBrackets(ParticitantFilterModel filter)
         {
             var fighters = GetParticitantModelsByFilter(filter);
             var count = fighters.Count;
             var bracketSize = GetBracketsSize(fighters.Count);
             for (var i = 0; i < bracketSize - count; i++)
             {
-                fighters.Add(new ParticitantModel());
+                fighters.Add(new ParticipantModel());
             }
 
             return Distribute(fighters);
@@ -111,7 +111,7 @@ namespace TRNMNT.Core.Services.Impl
         
         #region Private methods
 
-        private bool IsParticipantModelValid(ParticitantModel model, List<string> messageBuilder, int modelIndex, IDictionary<Guid,string> categories, IDictionary<Guid, string> weightDivisions)
+        private bool IsParticipantModelValid(ParticipantModel model, List<string> messageBuilder, int modelIndex, IDictionary<Guid,string> categories, IDictionary<Guid, string> weightDivisions)
         {
             var isValid = true;
             if (string.IsNullOrEmpty(model.FirstName))
@@ -152,15 +152,15 @@ namespace TRNMNT.Core.Services.Impl
             return isValid;
         }
 
-        private List<ParticitantModel> Distribute(List<ParticitantModel> fightersList)
+        private List<ParticipantModel> Distribute(List<ParticipantModel> fightersList)
         {
 
             var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
            .SelectMany(f => f).ToList();
             if (fightersList.Count > 2)
             {
-                var sideA = new List<ParticitantModel>();
-                var sideB = new List<ParticitantModel>();
+                var sideA = new List<ParticipantModel>();
+                var sideB = new List<ParticipantModel>();
                 for (var i = 0; i < orderedbyTeam.Count; i++)
                 {
                     var fighter = orderedbyTeam.ElementAtOrDefault(i);
@@ -178,9 +178,9 @@ namespace TRNMNT.Core.Services.Impl
             return fightersList;
         } 
 
-        private List<ParticitantModel> GetModels(IEnumerable<Participant> fighters)
+        private List<ParticipantModel> GetModels(IEnumerable<Participant> fighters)
         {
-            return fighters.Select(f => new ParticitantModel()
+            return fighters.Select(f => new ParticipantModel()
             {
                 ParticipantId = f.ParticipantId,
                 FirstName = f.FirstName,

@@ -1,0 +1,29 @@
+﻿@import '../../../shared/styles/variables.scss';
+
+
+
+connector {
+    padding: 0;
+    display: block;
+    width: 100%;
+
+    div {
+        height: 42px;
+    }
+
+    .border-bottom {
+        border-bottom: 2px solid $theme_orange
+    }
+
+    .border-top {
+        border-top: 2px solid $theme_orange
+    }
+
+    .border-right {
+        border-right: 2px solid $theme_orange
+    }
+
+    .border-left{
+        border-left: 2px solid $theme_orange
+    }
+}

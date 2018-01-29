@@ -101,7 +101,7 @@ namespace TRNMNT.Data.Repositories.Impl
             return queryable;
         }
 
-        public void UpdateValues(T entity, T model)
+        public void UpdateValues(T entity, object model)
         {
             context.Entry(entity).CurrentValues.SetValues(model);
         }

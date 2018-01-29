@@ -9,7 +9,7 @@ namespace TRNMNT.Core.Services.Interface
         /// Gets the token asynchronous.
         /// </summary>
         /// <returns></returns>
-        Task<string> GetTokenAsync();
+        Task<AuthTokenResult> GetTokenAsync();
 
         /// <summary>
         /// Gets the token asynchronous.
@@ -17,7 +17,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        Task<string> GetTokenAsync(string login, string password);
+        Task<AuthTokenResult> GetTokenAsync(string login, string password);
 
         /// <summary>
         /// Creates the participant user asynchronous.
@@ -34,5 +34,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="password">The password.</param>
         /// <returns></returns>
         Task<UserRegistrationResult> CreateOwnerUserAsync(string login, string password);
+
+        /// <summary>
+        /// Updates the token asynchronous.
+        /// </summary>
+        /// <param name="refreshToken">The refresh token.</param>
+        /// <returns></returns>
+        Task<AuthTokenResult> UpdateTokenAsync(string refreshToken);
     }
 }

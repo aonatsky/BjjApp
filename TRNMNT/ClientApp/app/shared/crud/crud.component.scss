@@ -2,8 +2,13 @@
 
 body {
     div.trnmnt-crud {
-        .ui-datatable thead {
-            th.ui-state-active {
+        .ui-datatable {
+            .ui-datatable-thead > tr > th {
+                padding: .25em;
+            }
+
+            .ui-datatable-data tr.ui-state-highlight, 
+            thead th.ui-state-active {
                 background-color: #ffffff;
                 border-color: #c7c7c7;
                 color: #373a3c;
