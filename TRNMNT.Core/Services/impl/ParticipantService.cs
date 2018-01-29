@@ -97,6 +97,7 @@ namespace TRNMNT.Core.Services.Impl
             participant.DateOfBirth = participantModel.DateOfBirth;
             participant.CategoryId = participantModel.CategoryId;
             participant.WeightDivisionId = participantModel.WeightDivisionId;
+            participant.IsMember = participantModel.IsMember;
             participant.IsActive = true;
             participant.UpdateTS = DateTime.UtcNow;
 
