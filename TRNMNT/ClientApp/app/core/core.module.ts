@@ -36,6 +36,7 @@ import { RedirectGuard } from './routing/redirect.guard';
 import {BracketService} from './services/bracket.service';
 import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
+import { TestSocketService } from './services/test-socket.service';
 
 
 
@@ -76,6 +77,7 @@ NgModule({
         EventService,
         TeamService,
         SignalRHubService,
+        TestSocketService,
         CategoryService,
         WeightDivisionService,
         ParticipantService,

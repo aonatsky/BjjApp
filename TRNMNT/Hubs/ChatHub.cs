@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace TRNMNT.Web.Hubs
 {
@@ -7,12 +6,14 @@ namespace TRNMNT.Web.Hubs
     {
         public async Task Send(string message)
         {
-            await Clients.All.SendAsync(message);
+            await Clients.All.Send(message);
+            await AllExeptCurrent.Send("Hidden message FROM OWNER ");
+            await Current.Send("FROM OTHERS Hidden message");
         }
     }
 
-    public interface IChatHubClient : IHubClient
+    public interface IChatHubClient
     {
-        Task SendAsync(string message);
+        Task Send(string message);
     }
 }

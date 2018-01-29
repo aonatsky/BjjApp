@@ -5,9 +5,8 @@ using TRNMNT.Core.Model.Result;
 
 namespace TRNMNT.Web.Hubs
 {
-    public abstract class BaseHub<T> : Hub<T> where T : class, IHubClient
+    public abstract class BaseHub<T> : Hub<T> where T : class
     {
-
         protected WebSocketResponse<TResponse> Response<TResponse>(TResponse response)
         {
             return new WebSocketResponse<TResponse>
@@ -17,15 +16,36 @@ namespace TRNMNT.Web.Hubs
             };
         }
 
+        public virtual async Task JoinGroupAsync(string groupName)
+        {
+            await Groups.AddAsync(Context.ConnectionId, groupName);
+        }
+
+        protected T AllExeptCurrent => Clients.AllExcept(new[] {Context.ConnectionId});
+
+        protected T Current => Clients.Client(Context.ConnectionId);
+
+        protected T ToGroup(string groupName)
+        {
+            return Clients.Group(groupName);
+        }
+
         public override async Task OnConnectedAsync()
         {
-            await Clients.AllExcept(new[] { Context.ConnectionId }).ClientConnectedAsync(Context.ConnectionId);
+            if (this is Hub hub)
+            {
+                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("ClientConnected", Context.ConnectionId);
+            }
+            
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await Clients.AllExcept(new[] { Context.ConnectionId }).ClientDisconnectedAsync(Context.ConnectionId, exception);
+            if (this is Hub hub)
+            {
+                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("ClientDisconnected", Context.ConnectionId, exception);
+            }
             await base.OnDisconnectedAsync(exception);
         }
     }
