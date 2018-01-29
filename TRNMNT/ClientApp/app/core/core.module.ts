@@ -8,8 +8,6 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { BrowserModule } from '@angular/platform-browser'
 
-
-import { DataService } from './dal/contracts/data.service';
 import { HttpService } from './dal/http/http.service';
 import { AuthService } from './services/auth.service';
 import { LoggerService } from './services/logger.service';
@@ -22,8 +20,6 @@ import { ParticipantService } from './services/participant.service';
 import { WeightDivisionService } from './services/weight-division.service';
 import { CategoryService } from './services/category.service';
 import { PaymentService } from './services/payment.service';
-
-import { UserModel } from './model/user.model'
 
 //PrimeNG
 import { DataTableModule } from 'primeng/components/datatable/datatable';
@@ -39,6 +35,8 @@ import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
 import {BracketService} from './services/bracket.service';
 import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
+import { SignalRHubService } from './dal/signalr/signalr-hub.service';
+import { TestSocketService } from './services/test-socket.service';
 
 
 
@@ -78,6 +76,8 @@ NgModule({
         AuthHttp,
         EventService,
         TeamService,
+        SignalRHubService,
+        TestSocketService,
         CategoryService,
         WeightDivisionService,
         ParticipantService,

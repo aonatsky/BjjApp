@@ -98,6 +98,7 @@ namespace TRNMNT.Core.Services.Impl
             participant.DateOfBirth = participantModel.DateOfBirth;
             participant.CategoryId = participantModel.CategoryId;
             participant.WeightDivisionId = participantModel.WeightDivisionId;
+            participant.IsMember = participantModel.IsMember;
             participant.IsActive = true;
             participant.UpdateTS = DateTime.UtcNow;
 
@@ -152,7 +153,7 @@ namespace TRNMNT.Core.Services.Impl
                 CategoryId = p.CategoryId,
                 WeightDivisionName = p.WeightDivision.Name,
                 WeightDivisionId = p.WeightDivisionId,
-                IsMember = p.Team.FederationId == federationId
+                IsMember = p.IsMember
             }).ToListAsync();
 
             return new PagedList<ParticipantTableModel>(list, filter.PageIndex, size, totalCount);

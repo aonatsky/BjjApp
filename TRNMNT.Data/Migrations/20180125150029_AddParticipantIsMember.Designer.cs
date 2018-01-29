@@ -11,9 +11,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180125150029_AddParticipantIsMember")]
+    partial class AddParticipantIsMember
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -419,17 +420,15 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<Guid>("BracketId");
 
-                    b.Property<Guid?>("FirstParticipantId");
-
-                    b.Property<bool>("HasBooferParticipant");
+                    b.Property<Guid>("FirstParticipantId");
 
                     b.Property<Guid?>("NextRoundId");
 
-                    b.Property<Guid?>("SecondParticipantId");
+                    b.Property<Guid>("SecondParticipantId");
 
                     b.Property<int>("Stage");
 
-                    b.Property<Guid?>("WinnerParticipantId");
+                    b.Property<Guid>("WinnerParticipantId");
 
                     b.HasKey("RoundId");
 
@@ -699,7 +698,7 @@ namespace TRNMNT.Data.Migrations
             modelBuilder.Entity("TRNMNT.Data.Entities.Round", b =>
                 {
                     b.HasOne("TRNMNT.Data.Entities.Bracket", "Bracket")
-                        .WithMany("Rounds")
+                        .WithMany()
                         .HasForeignKey("BracketId")
                         .OnDelete(DeleteBehavior.Restrict);
 

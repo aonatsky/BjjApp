@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.WebSockets;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -27,6 +30,7 @@ using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 using TRNMNT.Data.Repositories.Impl;
+using TRNMNT.Web.Hubs;
 
 namespace TRNMNT.Web
 {
@@ -108,6 +112,7 @@ namespace TRNMNT.Web
                 });
 
             // Add framework services.
+            services.AddSignalR();
             services.AddMvc();
 
             #region AppDBContext
@@ -148,6 +153,11 @@ namespace TRNMNT.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("chat");
+            });
+            
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>
@@ -165,4 +175,3 @@ namespace TRNMNT.Web
         }
     }
 }
-;
