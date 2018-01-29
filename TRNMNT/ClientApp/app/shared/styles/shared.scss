@@ -25,7 +25,7 @@ body {
             border-color: $theme_red;
 
             &:hover {
-                background-color: transparent !important; 
+                background-color: transparent !important;
                 color: darken($theme_red,10%);
                 border-color: darken($theme_red,10%);
             }
@@ -44,7 +44,11 @@ body {
         }
 
         &:not(.ui-state-disabled):hover {
-            background-color: darken($bg_color,10%) !important;
+            background-color: darken($bg_color,10%);
+
+            &.fa {
+                background-color: transparent;
+            }
         }
 
         :disabled {
