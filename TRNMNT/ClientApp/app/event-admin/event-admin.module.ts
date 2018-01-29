@@ -13,6 +13,7 @@ import { SharedModule } from '../shared/shared.module';
 import { PrticipantsListUploadComponent } from './participant-list-upload/participant-list-upload.component';
 import { CategoryEditComponent } from './event-edit/category-edit/category-edit.component';
 import { WebsocketInteractionComponent } from './websocket-interaction/websocket-interaction.component';
+import { ConnectorComponent } from './event-management/brackets-generation/connector.component';
 
 
 @NgModule({
@@ -32,7 +33,7 @@ import { WebsocketInteractionComponent } from './websocket-interaction/websocket
         CategoryEditComponent,
         EventManagementParticipantsComponent,
         PrticipantsListUploadComponent,
-        WebsocketInteractionComponent
+        WebsocketInteractionComponent,
         ConnectorComponent
     ],
 
