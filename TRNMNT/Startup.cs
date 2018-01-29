@@ -28,7 +28,7 @@ using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
 using TRNMNT.Data.Repositories.Impl;
-using TRNMNT.Web.WebSockets;
+using TRNMNT.Web.Hubs;
 
 namespace TRNMNT.Web
 {
@@ -82,8 +82,8 @@ namespace TRNMNT.Web
                 });
 
             // Add framework services.
+            services.AddSignalR();
             services.AddMvc();
-            services.AddWebSocketManager();
 
             #region AppDBContext
 
@@ -131,7 +131,7 @@ namespace TRNMNT.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
             if (env.IsDevelopment())
@@ -148,8 +148,11 @@ namespace TRNMNT.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseWebSockets();
-            app.MapWebSocketHandlers(serviceProvider);
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("chat");
+            });
             
             app.UseStaticFiles();
             app.UseAuthentication();

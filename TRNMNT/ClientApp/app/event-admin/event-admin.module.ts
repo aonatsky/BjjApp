@@ -12,7 +12,7 @@ import { EventManagementParticipantsComponent } from './event-management-partici
 import { SharedModule } from '../shared/shared.module';
 import { PrticipantsListUploadComponent } from './participant-list-upload/participant-list-upload.component';
 import { CategoryEditComponent } from './event-edit/category-edit/category-edit.component';
-import { WebsocketInteractionComponent } from './event-websocket-interaction/websocket-interactiion.component';
+import { WebsocketInteractionComponent } from './websocket-interaction/websocket-interaction.component';
 
 
 @NgModule({
