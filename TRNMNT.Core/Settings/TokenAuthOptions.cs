@@ -11,6 +11,7 @@ namespace TRNMNT.Core.Settings
         }
         public const string Audience = "trnmntAudience";
         public const string Issuer = "trnmntIssuer";
-        public const int Lifetime = 50; 
+        public const int AccessTokenLifetime = 50;
+        public const int RefreshTokenLifetime = 100;
     }
 }
