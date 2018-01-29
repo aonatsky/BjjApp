@@ -10,7 +10,7 @@ export class TestSocketService {
     private hubConnection: HubConnection;
 
     constructor(private loggerService: LoggerService, private signalRService: SignalRHubService) {
-        this.hubConnection = this.signalRService.createConnection("/chat", TransportType.LongPolling);
+        this.hubConnection = this.signalRService.createConnection("/chat");
     }
 
     public recieveMessage(): Observable<string> {
