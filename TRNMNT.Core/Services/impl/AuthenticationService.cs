@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using TRNMNT.Core.Configurations;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Core.Settings;
@@ -21,17 +22,19 @@ namespace TRNMNT.Core.Services.Impl
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IdentityErrorDescriber _identityErrorDescriber;
+        private readonly IAuthConfiguration _authConfiguration;
 
         #endregion
 
         #region .ctor
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _identityErrorDescriber = new IdentityErrorDescriber();
+            _authConfiguration = authConfiguration;
         }
 
         #endregion
@@ -133,8 +136,7 @@ namespace TRNMNT.Core.Services.Impl
             }
             return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
         }
-
-
+        
         private async Task AddSampleRolesAsync()
         {
             if (!await _roleManager.RoleExistsAsync(Roles.Owner))
@@ -146,18 +148,17 @@ namespace TRNMNT.Core.Services.Impl
 
         private async Task<string> GenerateTokenAsync(User user)
         {
-
             var handler = new JwtSecurityTokenHandler();
             var identity = new ClaimsIdentity(
                 GetTokenClaims(user).Union(await _userManager.GetClaimsAsync(user))
             );
 
-            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.AccessTokenLifetime);
+            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(_authConfiguration.AccessTokenLifetime);
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = TokenAuthOptions.Issuer,
-                Audience = TokenAuthOptions.Audience,
-                SigningCredentials = new SigningCredentials(TokenAuthOptions.GetKey(), SecurityAlgorithms.HmacSha256),
+                Issuer = _authConfiguration.Issuer,
+                Audience = _authConfiguration.Audience,
+                SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
                 Subject = identity,
                 Expires = expiresIn
             });
@@ -168,13 +169,13 @@ namespace TRNMNT.Core.Services.Impl
         {
             var handler = new JwtSecurityTokenHandler();
             var identity = new ClaimsIdentity(GetRefreshTokenClaims(user));
-            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(TokenAuthOptions.RefreshTokenLifetime);
+            var expiresIn = DateTime.Now + TimeSpan.FromMinutes(_authConfiguration.RefreshTokenLifetime);
 
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = TokenAuthOptions.Issuer,
-                Audience = TokenAuthOptions.Audience,
-                SigningCredentials = new SigningCredentials(TokenAuthOptions.GetKey(), SecurityAlgorithms.HmacSha256),
+                Issuer = _authConfiguration.Issuer,
+                Audience = _authConfiguration.Audience,
+                SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
                 Subject = identity,
                 Expires = expiresIn
             });

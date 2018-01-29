@@ -9,9 +9,8 @@ import 'rxjs/add/observable/throw';
 import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 import { UserModel } from './../model/user.model'
-import { LoaderService } from './loader.service';
 import { RouterService } from './router.service'
-
+import { LoaderService } from './loader.service'
 
 /** 
  * Authentication service. 
@@ -48,15 +47,14 @@ import { RouterService } from './router.service'
             username: username,
             password: password
         };
-        this.loaderService.showLoader();
         this.http.post(ApiMethods.auth.getToken, params)
             .map(res => res.json())
             .subscribe(
             // We're assuming the response will be an object
             // with the JWT on an id_token key
             data => localStorage.setItem('id_token', data.id_token),
-            error => console.log(error),
-            () => this.loaderService.hideLoader());
+            error => console.log(error)
+            );
     }
 
     /**
@@ -78,7 +76,7 @@ import { RouterService } from './router.service'
 
         // Encodes the parameters.  
         let body = JSON.stringify(params);
-        this.loaderService.showLoader();
+
         return this.http.post(tokenEndpoint, body, this.options)
             .map((res: Response) => {
 
@@ -103,7 +101,7 @@ import { RouterService } from './router.service'
                 } else {
                     return Observable.throw(data);
                 }
-            }).finally(() => this.loaderService.hideLoader());
+            });
     }
 
 
@@ -115,7 +113,7 @@ import { RouterService } from './router.service'
         };
 
         let body = JSON.stringify(params);
-        this.loaderService.showLoader();
+
        return this.http.post(ApiMethods.auth.register, body, this.options)
             .map((res: Response) => {
 
@@ -168,7 +166,7 @@ import { RouterService } from './router.service'
                         return true;
                     }
                     return false;
-                }, null, () => this.loaderService.hideLoader());
+                });
         }
     }
 
@@ -200,14 +198,12 @@ import { RouterService } from './router.service'
 
             // Encodes the parameters.  
             let body: string = this.encodeParams(params);
-            this.loaderService.showLoader();
+
             this.http.post(revocationEndpoint, body, this.options)
                 .subscribe(
                 () => {
 
                     localStorage.removeItem('id_token');
-                    
-                }, null, () => this.loaderService.hideLoader());
 
                 });
         }
@@ -233,14 +229,14 @@ import { RouterService } from './router.service'
 
             // Encodes the parameters.  
             let body: string = this.encodeParams(params);
-            this.loaderService.showLoader();
+
             this.http.post(revocationEndpoint, body, this.options)
                 .subscribe(
                 () => {
 
                     localStorage.removeItem('refresh_token');
 
-                }, null, () => this.loaderService.hideLoader());
+                });
 
         }
 
