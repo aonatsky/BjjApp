@@ -1,0 +1,20 @@
+﻿.ui-container{
+    width:100% !important;
+}
+
+.brackets {
+    .bracket {
+        width: 230px !important;
+        font-size: 13px !important;
+    }
+
+    .brackets-column {
+        width: 250px;
+        display: inline-block;
+    }
+
+    .connector-column {
+        width: 100px;
+        display: inline-block;
+    }
+}

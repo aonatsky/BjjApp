@@ -32,7 +32,7 @@ export class EventOverviewComponent implements OnInit {
     }
 
     public runEvent(id: string) {
-        this.routerService.goToEventManagement(id);
+        this.routerService.goToEventRun(id);
     }
 
     ngOnInit() {

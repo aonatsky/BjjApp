@@ -10,51 +10,55 @@ export class RouterService {
 
     }
 
-    public navigateByUrl(url: string) {
+    navigateByUrl(url: string) {
         this.router.navigateByUrl(url);
     } 
 
-    public goHome(subdomain: string = "") {
-        if (subdomain != "") {
-            let path = location.host.replace(subdomain + ".", "");
-            location.href = location.protocol + "//" + path;
+    goHome(subdomain: string = '') {
+        if (subdomain != '') {
+            let path = location.host.replace(subdomain + '.', '');
+            location.href = location.protocol + '//' + path;
         }
 
     }
 
-    public goToLogin(returnUrl? : string) {
+    goToLogin(returnUrl? : string) {
         this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl } });
     }
 
 
-    public goToOrganizerScreen() {
-        this.router.navigateByUrl("/administration/home");
+    goToOrganizerScreen() {
+        this.router.navigateByUrl('/administration/home');
     }
 
 
-    public goToEventAdmin() {
-        this.router.navigateByUrl("/event-admin");
+    goToEventAdmin() {
+        this.router.navigateByUrl('/event-admin');
     }
 
 
-    public goToEditEvent(id: string) {
-        this.router.navigateByUrl("/event-admin/edit/" + id);
+    goToEditEvent(id: string) {
+        this.router.navigateByUrl('/event-admin/edit/' + id);
     }
 
-    public goToEventManagement(id: string) {
-        this.router.navigateByUrl("/event-admin/management/" + id);
+    goToEventManagement(id: string) {
+        this.router.navigateByUrl('/event-admin/management/' + id);
     }
 
-    public goToEventManagementParticipants(id: string) {
-        this.router.navigateByUrl("/event-admin/management/participants/" + id);
+    goToEventRun(id: string) {
+        this.router.navigateByUrl('/event-admin/run/' + id);
     }
 
-    public goToEventInfo() {
-        this.router.navigateByUrl("event/event-info/");    
+    goToEventManagementParticipants(id: string) {
+        this.router.navigateByUrl('/event-admin/management/participants/' + id);
     }
 
-    public goToRegistration(id: string) {
-        this.router.navigateByUrl("event/event-registration/");
+    goToEventInfo() {
+        this.router.navigateByUrl('event/event-info/');    
+    }
+
+    goToRegistration(id: string) {
+        this.router.navigateByUrl('event/event-registration/');
     }
 }
 
