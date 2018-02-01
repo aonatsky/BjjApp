@@ -13,21 +13,30 @@ import { RoundModel } from '../../core/model/round.models';
 
 export class BracketComponent {
     @Input() bracket: BracketModel;
-    rounds: RoundModel[] = [];
+    roundGroups: RoundModel[][] = [][];
     maxStage: number = 0;
     rows: number[];
     columns: number[];
+    
     constructor() {
 
     }
 
     ngOnInit() {
-        this.rounds = this.bracket.roundModels;
-        this.maxStage = this.getMaxStage(this.rounds.length);
-        console.log(this.rounds.length);
-        console.log(this.maxStage);
+        
+        this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
+        
         this.rows = this.getRows();
+        this.roundGroups = this.getRoundsForStage();
         this.columns = this.getColumns();
+    }
+
+    private getRoundsForStage(): RoundModel[][] {
+        let roundGroups:RoundModel[][] = [][];
+        for (var i = 0; i <= this.maxStage; i++) {
+            roundGroups.push(this.bracket.roundModels.filter(r => r.stage == i));
+        }
+        return roundGroups;
     }
 
     private getMaxStage(roundsCount: number): number {
@@ -50,26 +59,24 @@ export class BracketComponent {
 
     private getRows(): number[] {
         let rows = [];
-        for (let i = 0; i < this.rounds.filter(r => r.stage === this.maxStage).length - 1; i++) {
+        for (let i = 0; i < this.bracket.roundModels.filter(r => r.stage === this.maxStage).length - 1; i++) {
             rows.push(i);
         }
         return rows;
     }
 
-    private getRound(col, row) {
-        if (col % 2 === 0 && row % 2 === 0) {
-            return this.rounds[1];
-        }
-    }
 
     displayData(col, row) {
         let maxCol = this.columns.length - 1;
+        let centralCol = maxCol / 2;
+        let isRightSide = col > centralCol;
         
         
         if (col % 2 == 0) {
+            let stage = (isRightSide ? maxCol - col : col) / 2
             let round: RoundModel;
             if (row % 2 == 0) {
-                round = this.rounds[1];
+                round = this.bracket.roundModels[1];
                 return this.getRoundTemplate(round);
             } else {
                 return `<div class="ui-g-12 table-block ui-g-nopad"></div>`;
