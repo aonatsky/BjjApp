@@ -13,29 +13,30 @@ import { RoundModel } from '../../core/model/round.models';
 
 export class BracketComponent {
     @Input() bracket: BracketModel;
-    roundGroups: RoundModel[][] = [][];
+    roundGroups: RoundModel[][];
     maxStage: number = 0;
     rows: number[];
     columns: number[];
-    
+
     constructor() {
 
     }
 
     ngOnInit() {
-        
+
         this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
-        
+
         this.rows = this.getRows();
         this.roundGroups = this.getRoundsForStage();
         this.columns = this.getColumns();
     }
 
     private getRoundsForStage(): RoundModel[][] {
-        let roundGroups:RoundModel[][] = [][];
+        let roundGroups: RoundModel[][] = [];
         for (var i = 0; i <= this.maxStage; i++) {
             roundGroups.push(this.bracket.roundModels.filter(r => r.stage == i));
         }
+        console.log(roundGroups);
         return roundGroups;
     }
 
@@ -70,12 +71,15 @@ export class BracketComponent {
         let maxCol = this.columns.length - 1;
         let centralCol = maxCol / 2;
         let isRightSide = col > centralCol;
-        
-        
+
+
         if (col % 2 == 0) {
-            let stage = (isRightSide ? maxCol - col : col) / 2
+            let stage = (isRightSide ? maxCol - col : col) / 2;
             let round: RoundModel;
-            if (row % 2 == 0) {
+            let startShift = (Math.pow(2, stage) - 1);
+            debugger;
+            let freq = Math.pow(2, stage)+1;
+            if ((row - startShift) % freq == 0) {
                 round = this.bracket.roundModels[1];
                 return this.getRoundTemplate(round);
             } else {
@@ -83,7 +87,7 @@ export class BracketComponent {
             }
 
         } else {
-            return `<div class="ui-g-1 inline-block" style=""></div>`
+            return `<div class="ui-g-1 inline-block" style=""></div>`;
         }
 
     }
