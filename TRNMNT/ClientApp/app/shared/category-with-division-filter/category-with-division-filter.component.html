@@ -18,6 +18,7 @@
     </div>
     <div class="filter-section is-member-chbox">
         <p-checkbox *ngIf="isMemberFilterEnabled"
+                    (onChange)="onSelect($event)"
                     [(ngModel)]="currentFilterValue.isMembersOnly"
                     binary="true">
         </p-checkbox>
