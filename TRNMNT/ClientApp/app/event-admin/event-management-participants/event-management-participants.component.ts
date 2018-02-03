@@ -226,6 +226,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         if (this.filter != null) {
             model.categoryId = this.filter.categoryId;
             model.weightDivisionId = this.filter.weightDivisionId;
+            model.isMembersOnly = this.filter.isMembersOnly;
         }
         return model;
     }

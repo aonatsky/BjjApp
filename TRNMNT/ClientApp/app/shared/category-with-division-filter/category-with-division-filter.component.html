@@ -16,4 +16,11 @@
                     [style]="{'min-width':'200px'}"
                     placeholder="Select Weight Division"></p-dropdown>
     </div>
+    <div class="filter-section is-member-chbox">
+        <p-checkbox *ngIf="isMemberFilterEnabled"
+                    [(ngModel)]="currentFilterValue.isMembersOnly"
+                    binary="true">
+        </p-checkbox>
+        <span>Federation Members Only</span>
+    </div>
 </div>
