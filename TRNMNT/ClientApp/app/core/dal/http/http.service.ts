@@ -8,10 +8,18 @@ import * as FileSaver from 'file-saver';
 import { AuthHttp } from 'angular2-jwt';
 import { AuthService } from '../../services/auth.service';
 import 'rxjs/Rx';
+import { NotificationService } from '../../services/notification.service';
 
 @Injectable()
 export class HttpService {
-    constructor(private loggerService: LoggerService, private http: AuthHttp, private loaderService: LoaderService, private routerService: RouterService, private authService: AuthService) {
+    constructor(
+        private loggerService: LoggerService,
+        private http: AuthHttp,
+        private loaderService: LoaderService,
+        private routerService: RouterService,
+        private notificationService: NotificationService,
+        private authService: AuthService
+    ) {
     }
 
 
@@ -40,7 +48,7 @@ export class HttpService {
     public getById(name: string, id: string): Observable<any> {
         this.loaderService.showLoader();
         
-        return this.handleRequest(() => this.http.get(name));
+        return this.handleRequest(() => this.http.get(name)); 
     }
 
     public post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
@@ -109,14 +117,18 @@ export class HttpService {
         let errMsg: string;
         if (error instanceof Response) {
             if (error.status == 401) {
+                this.loaderService.showLoader();
                 return this.authService.getNewToken().map(() => {
+
+                    this.loaderService.showLoader();
                     return repeatRequest()
                         .map((r: Response) => this.processResponse(r))
-                        .catch((error: Response | any) => this.handleError(error));
-                });
+                        .catch((error: Response | any) => this.handleError(error))
+                        .finally(() => this.loaderService.hideLoader());
 
+                }).finally(() => this.loaderService.hideLoader());
             }
-            errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
+            errMsg = this.getErrorMessage(error);
         } else {
             errMsg = error.message ? error.message : error.toString();
         }
@@ -126,9 +138,9 @@ export class HttpService {
     }
 
     private handleError(error: Response | any) {
-        let errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
-
+        let errMsg = this.getErrorMessage(error);
         console.error(errMsg);
+        this.notificationService.showGenericError();
         this.loggerService.logError(errMsg);
         return Observable.throw(errMsg);
     }
@@ -156,6 +168,9 @@ export class HttpService {
         return response.text();
     }
 
+    private getErrorMessage(error: Response) {
+        return `Error during request. Status: '${error.statusText}', code: '${error.status || ''}' url: '${error.url}'`;
+    }
     public getExcelFile(response: Response, fileName: string): void {
         FileSaver.saveAs(response.blob(), fileName);
     }
