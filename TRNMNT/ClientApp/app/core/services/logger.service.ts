@@ -14,31 +14,31 @@ export class LoggerService {
     logs: string[] = [];
 
     logInfo(msg: any) {
-        this.log(msg, LogLevel.Info, arguments);
+        this.log(msg, LogLevel.Info, this.getArgs(arguments));
     }
 
     logDebug(msg: any) {
-        this.log(msg, LogLevel.Debug, arguments);
+        this.log(msg, LogLevel.Debug, this.getArgs(arguments));
     }
 
     logError(msg: any) {
-        this.log(msg, LogLevel.Error, arguments);
+        this.log(msg, LogLevel.Error, this.getArgs(arguments));
     }
 
     logWarn(msg: any) {
-        
-        this.log(msg, LogLevel.Warn, arguments);
+        this.log(msg, LogLevel.Warn, this.getArgs(arguments));
     }
 
-    private log(msg: any, level: LogLevel, params: IArguments) {
+    private log(msg: any, level: LogLevel, params: any[]) {
 
         this.postLog(new LogModel(level, msg));
 
         if (isDevMode()) {
             let message = `${this.getLogPrefix(level)} ${msg}`;
 
+            params.unshift(message);
             this.logs.push(message);
-            this.getLogFunction(level).apply(console, this.getArgs(message, arguments));
+            this.getLogFunction(level).apply(console, params);
 
             let isNeedTrace = level !== LogLevel.Info;
             if (isNeedTrace) {
@@ -49,9 +49,9 @@ export class LoggerService {
         }
     }
 
-    private getArgs(msg: string, params: IArguments): any[] {
+    private getArgs(params: any): any[] {
         var args = Array.prototype.slice.call(params, 1);
-        args.unshift(msg);
+        
         return args;
     }
 
