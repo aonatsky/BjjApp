@@ -27,11 +27,12 @@ export class ParticipantService {
     }
 
     public getParticipantsTableModel(filterModel: ParticipantFilterModel): Observable<PagedList<ParticipantTableModel>> {
-        return this.httpService.get(ApiMethods.participant.participantsTable, filterModel).map(r => this.httpService.getJson(r));
+        return this.httpService.get(ApiMethods.participant.participantsTable, filterModel, null, "Could not load participants data").map(r => this.httpService.getJson(r));
     }
 
     public getParticipantsDropdownData(eventId: string): Observable<ParticipantDdlModel> {
-        return this.httpService.get(ApiMethods.participant.participantsDropdownData, { eventId: eventId }).map(r => this.httpService.getJson(r));
+        return this.httpService.get(ApiMethods.participant.participantsDropdownData, { eventId: eventId }, null, "Could not load categories and weight divisions data")
+            .map(r => this.httpService.getJson(r));
     }
 
     public uploadParticipantsFromFile(file: any, eventId: string): Observable<IUploadResult> {
@@ -39,11 +40,11 @@ export class ParticipantService {
     }
 
     public updateParticipant(participant: ParticipantTableModel): Observable<any> {
-        return this.httpService.put(ApiMethods.participant.update, participant);
+        return this.httpService.put(ApiMethods.participant.update, participant, "Could not update participant");
     }
 
     public deleteParticipant(participantId: string): Observable<any> {
-        return this.httpService.deleteById(ApiMethods.participant.delete, participantId);
+        return this.httpService.deleteById(ApiMethods.participant.delete, participantId, "Could not delete participant");
     }
 
 }
