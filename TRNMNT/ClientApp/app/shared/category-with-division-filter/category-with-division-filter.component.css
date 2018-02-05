@@ -10,9 +10,3 @@ button {
 .is-member-chbox {
     padding-left: 15px;
 }
-
-.is-member-chbox > span {
-    display: inline-block;
-    vertical-align: bottom;
-    color: #55595c;
-}

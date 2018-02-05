@@ -20,8 +20,8 @@
         <p-checkbox *ngIf="isMemberFilterEnabled"
                     (onChange)="onSelect($event)"
                     [(ngModel)]="currentFilterValue.isMembersOnly"
+                    label="Federation Members Only"
                     binary="true">
         </p-checkbox>
-        <span>Federation Members Only</span>
     </div>
 </div>

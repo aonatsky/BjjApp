@@ -87,11 +87,12 @@ namespace TRNMNT.Web
                 {
                     o.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidIssuer = authConfig.Issuer,
-                        ValidAudience = authConfig.Audience,
                         ValidateIssuer = true,
-                        IssuerSigningKey = authConfig.Key,
+                        ValidIssuer = authConfig.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = authConfig.Audience,
                         ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = authConfig.Key,
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
                     };
@@ -127,10 +128,8 @@ namespace TRNMNT.Web
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 1;
-            }
-                )
-               .AddEntityFrameworkStores<AppDbContext>();
-
+            })
+           .AddEntityFrameworkStores<AppDbContext>();
             #endregion
         }
 
