@@ -35,7 +35,7 @@ export class PrticipantsListUploadComponent {
             this.participantService.uploadParticipantsFromFile(fileToUpload, this.eventId).subscribe(result => this.processUploadResult(result),
                 () => {
                     this.uploadResultMessages = [];
-                    this.uploadResultMessages.push(NotificationService.genericErrorMessage);
+                    this.uploadResultMessages.push(this.notificationService.genericErrorMessage);
                 });
         }
     }
@@ -50,12 +50,11 @@ export class PrticipantsListUploadComponent {
         }
         //Observable.interval(this.hideMessageDelay).take(1).subscribe(() => this.uploadResultMessages = []);
         this.onUpload.emit(result);
-
     }
 
     showMessage(result: IUploadResult, level: string, title: string) {
         this.uploadResultMessages = [];
-        result.messages.map(m => this.uploadResultMessages.push(NotificationService.getMessage(level, title, m)));
+        result.messages.map(m => this.uploadResultMessages.push(this.notificationService.getMessage(level, title, m)));
     }
 
 }

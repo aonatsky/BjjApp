@@ -1,8 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
-import { tokenNotExpired } from 'angular2-jwt';
-
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { RouterService } from '../services/router.service'
 
@@ -11,17 +8,17 @@ import { RouterService } from '../services/router.service'
  */
 @Injectable() export class AuthGuard implements CanActivate {
 
-    constructor(public AuthService: AuthService, private routerService: RouterService) { }
+    constructor(public authService: AuthService, private routerService: RouterService) { }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-        if (this.AuthService.isLoggedIn()) {
+        if (this.authService.isLoggedIn()) {
             // Signed in.  
             return true;
         }
         // Stores the attempted URL for redirecting.  
         let url: string = state.url;
-        this.AuthService.redirectUrl = url;
+        this.authService.redirectUrl = url;
         // Not signed in so redirects to signin page.  
         this.routerService.goToLogin(url);
         return false;

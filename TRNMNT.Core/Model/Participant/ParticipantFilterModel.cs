@@ -13,6 +13,8 @@ namespace TRNMNT.Core.Model.Participant
 
         public Guid? WeightDivisionId { get; set; }
 
+        public bool IsMembersOnly { get; set; }
+
         public ParticpantSortField SortField { get; set; }
 
         public SortDirectionEnum SortDirection { get; set; }

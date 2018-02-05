@@ -26,6 +26,7 @@ export class CategoryWithDivisionFilter implements OnInit {
     @Input() useDataFromInput: boolean = false;
     @Input() categories: CategorySimpleModel[] = [];
     @Input() weightDivisions: WeightDivisionModel[] = [];
+    @Input() isMemberFilterEnabled: boolean = false;
 
     @Output() onFilterChanged: EventEmitter<CategoryWithDivisionFilterModel>;
     @Output() onFilterLoaded: EventEmitter<boolean>;
@@ -36,7 +37,7 @@ export class CategoryWithDivisionFilter implements OnInit {
         this.onFilterChanged = new EventEmitter<CategoryWithDivisionFilterModel>();
         this.onFilterLoaded = new EventEmitter<boolean>();
         this.defaultOption = { label: DefaultValues.DROPDOWN_NAME_ANY, value: "" };
-        this.currentFilterValue = new CategoryWithDivisionFilterModel("", "");
+        this.currentFilterValue = new CategoryWithDivisionFilterModel("", "", false);
     }
 
     ngOnInit() {
