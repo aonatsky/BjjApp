@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RequestOptions, Http, Response, Headers, ResponseContentType, URLSearchParams } from '@angular/http';
+import { RequestOptions, Response, Headers, ResponseContentType, URLSearchParams } from '@angular/http';
 import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { RouterService } from '../../../core/services/router.service';
@@ -8,21 +8,24 @@ import * as FileSaver from 'file-saver';
 import { AuthHttp } from 'angular2-jwt';
 import { AuthService } from '../../services/auth.service';
 import 'rxjs/Rx';
+import { NotificationService } from '../../services/notification.service';
 
 @Injectable()
 export class HttpService {
-    constructor(private loggerService: LoggerService, private http: AuthHttp, private loaderService: LoaderService, private routerService: RouterService, private authService: AuthService) {
+    constructor(
+        private loggerService: LoggerService,
+        private http: AuthHttp,
+        private loaderService: LoaderService,
+        private routerService: RouterService,
+        private notificationService: NotificationService,
+        private authService: AuthService
+    ) {
     }
 
+    //#region Public Methods
 
-    public get(name: string, paramsHolder?: object, responseType?: ResponseContentType): Observable<any> {
-        let options = new RequestOptions({
-            headers: new Headers({ 'Content-Type': 'application/json' })
-        });
-
-        if (responseType) {
-            options.responseType = responseType;
-        }
+    public get(name: string, paramsHolder?: object, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
+        let options = this.jsonRequestOptions(responseType);
         if (paramsHolder != null) {
             var keys = Reflect.ownKeys(paramsHolder);
             let urlSearchParams = new URLSearchParams();
@@ -31,65 +34,39 @@ export class HttpService {
             }
             options.search = urlSearchParams;
         }
-
-        this.loaderService.showLoader();
-
-        return this.handleRequest(() => this.http.get(name, options));
+        return this.handleRequest(() => this.http.get(name, options), notifyMessage);
     }
 
-    public getById(name: string, id: string): Observable<any> {
-        this.loaderService.showLoader();
-        
-        return this.handleRequest(() => this.http.get(name));
+    public getById(name: string, id: string, notifyMessage?: string): Observable<any> {
+        return this.handleRequest(() => this.http.get(name), notifyMessage); 
     }
 
-    public post(name: string, model?: any, responseType?: ResponseContentType): Observable<any> {
-        this.loaderService.showLoader();
-        let options = new RequestOptions({
-            headers: new Headers({ 'Content-Type': 'application/json' })
-        });
-        if (responseType) {
-            options.responseType = responseType;
-        }
-        debugger;
+    public post(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
+        let options = this.jsonRequestOptions(responseType);
         let body = JSON.stringify(model);
-
-        return this.handleRequest(() => this.http.post(name, body, options));
+        return this.handleRequest(() => this.http.post(name, body, options), notifyMessage);
     }
 
-    public put(name: string, model: any): Observable<any> {
-        this.loaderService.showLoader();
-        let options = new RequestOptions({
-            headers: new Headers({ 'Content-Type': 'application/json' })
-        });
+    public put(name: string, model: any, notifyMessage?: string): Observable<any> {
         let body = JSON.stringify(model);
-
-        return this.handleRequest(() => this.http.put(name, body, options));
+        return this.handleRequest(() => this.http.put(name, body, this.jsonRequestOptions()), notifyMessage);
     }
 
-    public delete(name: string, model: any): Observable<any> {
-        this.loaderService.showLoader();
-        let options = new RequestOptions({
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-            body: JSON.stringify(model)
-        });
-        return this.handleRequest(() => this.http.delete(name, options));
+    public delete(name: string, model: any, notifyMessage?: string): Observable<any> {
+        let options = this.jsonRequestOptions();
+        options.body = JSON.stringify(model);
+        return this.handleRequest(() => this.http.delete(name, options), notifyMessage);
     }
 
-    public deleteById(name: string, id: any): Observable<any> {
-        this.loaderService.showLoader();
-        let options = new RequestOptions({
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-        });
+    public deleteById(name: string, id: any, notifyMessage?: string): Observable<any> {
         let url = name + "/" + id;
-        return this.handleRequest(() => this.http.delete(url, options));
+        return this.handleRequest(() => this.http.delete(url, this.jsonRequestOptions()), notifyMessage);
     }
 
-    public postFile(name: string, file: any): Observable<any> {
-        this.loaderService.showLoader();
+    public postFile(name: string, file: any, notifyMessage?: string): Observable<any> {
         let formData = new FormData();
         formData.append("file", file);
-        return this.handleRequest(() => this.http.post(name, formData));
+        return this.handleRequest(() => this.http.post(name, formData), notifyMessage);
     }
 
     public getPdf(url, fileName): Observable<any> {
@@ -98,46 +75,8 @@ export class HttpService {
         });
     }
 
-
-    //PRIVATE
-    private processResponse(response: any): Observable<any> {
-        return response;
-    }
-
-    private handleErrorRepeater(error: Response | any, repeatRequest: Function) {
-        // In a real world app, you might use a remote logging infrastructure
-        let errMsg: string;
-        if (error instanceof Response) {
-            if (error.status == 401) {
-                return this.authService.getNewToken().map(() => {
-                    return repeatRequest()
-                        .map((r: Response) => this.processResponse(r))
-                        .catch((error: Response | any) => this.handleError(error));
-                });
-
-            }
-            errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
-        } else {
-            errMsg = error.message ? error.message : error.toString();
-        }
-        console.error(errMsg);
-        this.loggerService.logError(errMsg);
-        return Observable.throw(errMsg);
-    }
-
-    private handleError(error: Response | any) {
-        let errMsg = `${error.status} - ${error.statusText || ''} url: ${error.url}`;
-
-        console.error(errMsg);
-        this.loggerService.logError(errMsg);
-        return Observable.throw(errMsg);
-    }
-
-    private handleRequest(httpHandler: () => Observable<Response>): Observable<any> {
-        return httpHandler()
-            .map((r: Response) => this.processResponse(r))
-            .catch((error: Response | any) => this.handleErrorRepeater(error, () => httpHandler()))
-            .finally(() => this.loaderService.hideLoader());;
+    public getExcelFile(response: Response, fileName: string): void {
+        FileSaver.saveAs(response.blob(), fileName);
     }
 
     public getArray<T>(response: any): T[] {
@@ -156,15 +95,9 @@ export class HttpService {
         return response.text();
     }
 
-    public getExcelFile(response: Response, fileName: string): void {
-        FileSaver.saveAs(response.blob(), fileName);
-    }
-
-    private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
-
-    convertDate(input) {
+    public convertDate(input) {
         if (typeof input !== "object") {
-            return input
+            return input;
         };
 
         for (var key in input) {
@@ -182,7 +115,74 @@ export class HttpService {
         }
         return input;
     }
+
+    //#endregion
+
+    //#region Private Methods
+
+    private processResponse(response: any): Observable<any> {
+        return response;
+    }
+
+    private handleRequest(httpHandler: () => Observable<Response>, notifyMessage?: string): Observable<any> {
+        this.loaderService.showLoader();
+        return httpHandler()
+            .map((r: Response) => this.processResponse(r))
+            .catch((error: Response | any) => this.handleErrorRepeater(error, () => httpHandler(), notifyMessage))
+            .finally(() => this.loaderService.hideLoader());
+    }
+
+    private handleErrorRepeater(error: Response | any, repeatRequest: Function, notifyMessage?: string) {
+        // In a real world app, you might use a remote logging infrastructure
+        if (error instanceof Response && error.status == 401) {
+            this.loaderService.showLoader();
+            return this.authService.getNewToken().map(() => {
+
+                this.loaderService.showLoader();
+                return repeatRequest()
+                    .map((r: Response) => this.processResponse(r))
+                    .catch((error: Response | any) => this.handleError(error, notifyMessage))
+                    .finally(() => this.loaderService.hideLoader());
+
+            }).finally(() => this.loaderService.hideLoader());
+        }
+        return this.handleError(error, notifyMessage);
+    }
+
+    private handleError(error: Response | any, notifyMessage?: string) {
+        let errMsg = this.getErrorMessage(error);
+        this.notificationService.showErrorOrGeneric(notifyMessage);
+        this.loggerService.logError(errMsg);
+        return Observable.throw(errMsg);
+    }
+
+    private getErrorMessage(error: Response | any) : string {
+        let message = "Error during request";
+        if (error instanceof Response) {
+            return `${message}. Status: '${error.statusText}', code: '${error.status || ''}' url: '${error.url}'`;
+        }
+        if (!!error) {
+            return `${message}. Message: '${error.message ? error.message : error.toString()}'`;
+        }
+        return message;
+    }
+
+    private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
+
+    private jsonRequestOptions(responseType?: ResponseContentType): RequestOptions {
+        let options =  new RequestOptions({
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+        });
+        if (responseType) {
+            options.responseType = responseType;
+        }
+        return options;
+    }
+
+    //#endregion
 }
+
+    
 
 export interface SearchParams {
     name: string;

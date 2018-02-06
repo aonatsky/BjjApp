@@ -134,6 +134,10 @@ namespace TRNMNT.Core.Services.Impl
             {
                 allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
             }
+            if (filter.IsMembersOnly)
+            {
+                allParticipants = allParticipants.Where(p => p.IsMember);
+            }
             var totalCount = await allParticipants.CountAsync();
 
             allParticipants = SortParticipants(allParticipants, filter.SortField, filter.SortDirection, federationId);

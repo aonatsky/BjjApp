@@ -18,8 +18,10 @@ export class AppComponent implements OnInit {
     private notifications: Message[] = [];
     private isLoaderShown: boolean = false;
     private loaderSubscription: Subscription;
+    private notificationSubscription: Subscription;
+    private clearNotificationSubscription: Subscription;
 
-    constructor(private notificationservice: NotificationService,
+    constructor(private notificationService: NotificationService,
         private loaderService: LoaderService,
         private routerService: RouterService,
         private eventService: EventService) {
@@ -27,7 +29,8 @@ export class AppComponent implements OnInit {
     
 
     ngOnInit() {
-        this.notificationservice.notifications.subscribe((msgs) => msgs.map(m => this.notifications.push(m)));
+        this.notificationSubscription = this.notificationService.notificationSubject.subscribe((msg) => this.notifications.push(msg));
+        this.clearNotificationSubscription = this.notificationService.clearNotifications.subscribe(() => this.notifications = []);
         this.loaderSubscription = this.loaderService.loaderCounter.subscribe((counter: number) => {
             setTimeout(() => this.isLoaderShown = counter != 0, 0);
         });
@@ -35,5 +38,7 @@ export class AppComponent implements OnInit {
 
     ngOnDestroy() {
         this.loaderSubscription.unsubscribe();
+        this.notificationSubscription.unsubscribe();
+        this.clearNotificationSubscription.unsubscribe();
     }
 }

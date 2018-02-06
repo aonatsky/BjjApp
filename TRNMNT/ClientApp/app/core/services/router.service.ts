@@ -1,13 +1,18 @@
 ﻿
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class RouterService {
 
     constructor(private router: Router, private location: Location) {
+    }
 
+    public navigationStartEvents(): Observable<NavigationStart> {
+        return <Observable<NavigationStart>>this.router.events.filter(event => event instanceof NavigationStart);
     }
 
     navigateByUrl(url: string) {

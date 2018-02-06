@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TRNMNT.Web.Helpers;
 
 namespace TRNMNT.Web.Controllers
 {
@@ -27,7 +28,7 @@ namespace TRNMNT.Web.Controllers
 
             if (log != null)
             {
-                _logger.LogError(log.Message);
+                _logger.Log(log.Level, log.Message);
             }
             else
             {
@@ -44,7 +45,7 @@ namespace TRNMNT.Web.Controllers
 
         public class LogModel
         {
-            public string Level { get; set; }
+            public LogLevel Level { get; set; }
             public string Message { get; set; }
         }
     }

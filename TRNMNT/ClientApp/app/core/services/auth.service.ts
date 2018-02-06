@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Subject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
@@ -10,7 +10,6 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 import { UserModel } from './../model/user.model'
 import { RouterService } from './router.service'
-import { LoaderService } from './loader.service'
 
 /** 
  * Authentication service. 
@@ -31,7 +30,7 @@ import { LoaderService } from './loader.service'
     private options: RequestOptions;
     private jwtHelper: JwtHelper = new JwtHelper();
 
-    constructor(private http: Http, private routerService: RouterService, private loaderService: LoaderService) {
+    constructor(private http: Http, private routerService: RouterService) {
 
         // On bootstrap or refresh, tries to get the user's data.  
         this.decodeToken();
@@ -152,8 +151,7 @@ import { LoaderService } from './loader.service'
 
             // Encodes the parameters.  
             let body: string = this.encodeParams(params);
-            this.loaderService.showLoader();
-            return  this.http.post(tokenEndpoint, body, this.options).map(
+            return this.http.post(tokenEndpoint, body, this.options).map(
                 (res: Response) => {
 
                     let body: any = res.json();

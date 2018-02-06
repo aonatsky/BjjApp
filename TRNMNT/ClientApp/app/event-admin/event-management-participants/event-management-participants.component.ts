@@ -84,7 +84,7 @@ export class EventManagementParticipantsComponent implements OnInit {
             this.ddlDataLoading = false;
             this.participantDdlModel = result;
             this.mapDdlModel(result);
-        }, (err) => this.showError("Could not load categories and weight divisions data"));
+        });
     }
 
     columns: CrudColumn[] = [
@@ -174,8 +174,7 @@ export class EventManagementParticipantsComponent implements OnInit {
             () => {
                 this.loadParticipants(this.getFilterModel(null, false));
                 this.notificationService.showSuccess("Update Info", "Participant successfully updated");
-            },
-            () => this.showError("Could not update participant"));
+            });
     }
 
     public onEntityDelete(participant: ParticipantTableModel) {
@@ -183,8 +182,7 @@ export class EventManagementParticipantsComponent implements OnInit {
             () => {
                 this.loadParticipants(this.getFilterModel());
                 this.notificationService.showInfo("Delete Info", "Participant successfully deleted");
-            },
-            () => this.showError("Could not delete participant"));
+            });
     }
 
     public onFileUploaded($event) {
@@ -205,7 +203,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.participantService.getParticipantsTableModel(filterModel).subscribe(r => {
             this.participantsLoading = false;
             this.participantsListModel = this.mapParticipants(r);
-        }, (err) => this.showError("Could not load participants data"));
+        });
     }
 
     private getFilterModel($event?: LazyLoadEvent, refreshPages: boolean = true): ParticipantFilterModel {
@@ -226,6 +224,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         if (this.filter != null) {
             model.categoryId = this.filter.categoryId;
             model.weightDivisionId = this.filter.weightDivisionId;
+            model.isMembersOnly = this.filter.isMembersOnly;
         }
         return model;
     }

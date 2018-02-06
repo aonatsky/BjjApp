@@ -13,6 +13,8 @@ import { EventManagementParticipantsComponent } from './event-management-partici
 import {EventRunComponent} from './event-run/event-run.component';
 
 
+
+
 export const eventAdminRoutes: Routes = [
     {
         path: 'event-admin', component: EventAdminComponent, children: [
