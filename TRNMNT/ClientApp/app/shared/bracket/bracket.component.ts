@@ -71,16 +71,21 @@ export class BracketComponent {
         let maxCol = this.columns.length - 1;
         let centralCol = maxCol / 2;
         let isRightSide = col > centralCol;
+        let depth = (isRightSide ? maxCol - col : col) / 2;
+        let roundStage = this.maxStage - depth;
+        let round: RoundModel;
 
-
+        if (col === centralCol) {
+            depth = depth - 1;
+            roundStage = 0;
+        }
         if (col % 2 == 0) {
-            let stage = (isRightSide ? maxCol - col : col) / 2;
-            let round: RoundModel;
-            let startShift = (Math.pow(2, stage) - 1);
-            debugger;
-            let freq = Math.pow(2, stage)+1;
-            if ((row - startShift) % freq == 0) {
-                round = this.bracket.roundModels[1];
+            let shift = (Math.pow(2, depth) - 1);
+            let freq = Math.pow(2, depth) + 1;
+            let roundIndex = 0;
+            if ((row - shift) % freq == 0) {
+                roundIndex = (isRightSide ? this.roundGroups[roundStage].length/2 : 0) + ((row - shift) / freq);
+                round = this.roundGroups[roundStage][roundIndex];
                 return this.getRoundTemplate(round);
             } else {
                 return `<div class="ui-g-12 table-block ui-g-nopad"></div>`;
@@ -95,10 +100,10 @@ export class BracketComponent {
     getRoundTemplate(round: RoundModel) {
         return `<div class="bracket ui-g-1 ui-g-nopad">
             <div class="bracket-participant-plate ui-g-12">
-            ${round.roundId}
+            ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
             </div>
             <div class="bracket-participant-plate ui-g-12">
-            ${round.nextRoundId}
+            ${round.secondParticipant ? round.secondParticipant.firstName + ' ' + round.secondParticipant.lastName : ''}
             </div>
             </div>`;
     }
