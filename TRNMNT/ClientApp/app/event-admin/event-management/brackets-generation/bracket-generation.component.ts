@@ -1,5 +1,4 @@
 ﻿import { Component, Input } from '@angular/core';
-import '../../../shared/styles/brackets.scss';
 import './bracket-generation.component.scss';
 import { ViewEncapsulation } from '@angular/core';
 import { BracketService } from '../../../core/services/bracket.service';
@@ -35,7 +34,7 @@ export class BracketGenerationComponent {
 
     private createBracket() {
         this.bracket = undefined;
-        this.bracketService.createBracket(this.filter.weightDivisionId).subscribe(r => {
+        this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(r => {
             this.bracket = r;
             this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
             this.rounds =
@@ -46,8 +45,8 @@ export class BracketGenerationComponent {
 
 
     private getRows() {
-        var rows = [];
-        for (var i = 0; i < this.rounds.length - 1; i++) {
+        let rows = [];
+        for (let i = 0; i < this.rounds.length - 1; i++) {
             rows.push(i);
         }
         return rows;
@@ -59,7 +58,7 @@ export class BracketGenerationComponent {
 
 
     private getMaxStage(roundsCount: number): number {
-        for (var i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
             if (roundsCount == 0) {
                 return i;
@@ -177,7 +176,7 @@ export class BracketGenerationComponent {
 
     private initStages(maxStage: number) {
         this.stages = [];
-        for (var i = 0; i < 2 * maxStage; i++) {
+        for (let i = 0; i < 2 * maxStage; i++) {
             this.stages.push(i);
         }
     }

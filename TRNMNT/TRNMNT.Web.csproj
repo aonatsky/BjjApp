@@ -25,8 +25,6 @@
     <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
     <None Remove="ClientApp\app\shared\bracket\bracket.component.ts" />
-    <None Remove="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.component.ts" />
-    <None Remove="ClientApp\app\shared\tournament-user-plate\tournament-user-plate.component.ts" />
     <None Remove="ClientApp\assets\style\app.css" />
     <None Remove="ClientApp\assets\style\app.min.css" />
     <None Remove="ClientApp\assets\style\app.scss" />
@@ -98,8 +96,6 @@
     <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\bracket\bracket.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\shared\tournament-bracket-creation\tournament-bracket-creation.component.ts" />
-    <TypeScriptCompile Include="ClientApp\app\shared\tournament-user-plate\tournament-user-plate.component.ts" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>

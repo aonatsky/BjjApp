@@ -14,35 +14,37 @@ import { PrticipantsListUploadComponent } from './participant-list-upload/partic
 import { CategoryEditComponent } from './event-edit/category-edit/category-edit.component';
 import { WebsocketInteractionComponent } from './websocket-interaction/websocket-interaction.component';
 import { ConnectorComponent } from './event-management/brackets-generation/connector.component';
+import { EventRunComponent } from './event-run/event-run.component';
 
 
-@NgModule({
+@
+    NgModule({
+        imports: [
+            CoreModule,
+            SharedModule,
+            RouterModule.forChild(eventAdminRoutes)
+        ],
+        declarations: [
+            EventAdminComponent,
+            TopbarComponent,
+            EventOverviewComponent,
+            EventEditComponent,
+            BracketGenerationComponent,
+            EventManagementComponent,
+            CategoryEditComponent,
+            EventManagementParticipantsComponent,
+            PrticipantsListUploadComponent,
+            WebsocketInteractionComponent,
+            EventRunComponent,
+            ConnectorComponent
+        ],
 
-    imports: [
-        CoreModule,
-        SharedModule,
-        RouterModule.forChild(eventAdminRoutes)
-    ],
-    declarations: [
-        EventAdminComponent,
-        TopbarComponent,
-        EventOverviewComponent,
-        EventEditComponent,
-        BracketGenerationComponent,
-        EventManagementComponent,
-        CategoryEditComponent,
-        EventManagementParticipantsComponent,
-        PrticipantsListUploadComponent,
-        WebsocketInteractionComponent,
-        ConnectorComponent
-    ],
+        providers: [],
 
-    providers: [],
+        exports: [
 
-    exports: [
-
-    ]
-})
+        ]
+    })
 
 export class EventAdminModule {
 }
