@@ -1,14 +1,16 @@
 ﻿.brackets {
-    position:absolute;
+    position: absolute;
+    left:10px;
 
-    .bracket {
-        width: 230px !important;
-        font-size: 16px !important;
-    }
 
     .brackets-column {
-        width: 230px;
+        width: 170px;
         display: inline-block;
+
+        .bracket {
+            width: 100%;
+            font-size: 16px;
+        }
     }
 
     .connector-column {
