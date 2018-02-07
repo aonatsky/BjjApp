@@ -1,6 +1,8 @@
-﻿.brackets {
+﻿@import '../../shared/styles/variables.scss';
+
+.brackets {
     position: absolute;
-    left:10px;
+    left: 10px;
 
 
     .brackets-column {
@@ -16,5 +18,31 @@
     .connector-column {
         width: 50px;
         display: inline-block;
+    }
+
+    .border-bottom {
+        border-bottom: 2px solid $theme_orange
+    }
+
+    .border-top {
+        border-top: 2px solid $theme_orange
+    }
+
+    .border-right {
+        border-right: 2px solid $theme_orange
+    }
+
+    .border-left {
+        border-left: 2px solid $theme_orange
+    }
+
+    .connector {
+        padding: 0;
+        display: block;
+        width: 100%;
+
+        div {
+            height: 42px
+        }
     }
 }

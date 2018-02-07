@@ -71,28 +71,29 @@ export class BracketComponent {
         let maxCol = this.columns.length - 1;
         let centralCol = maxCol / 2;
         let isRightSide = col > centralCol;
-        let depth = (isRightSide ? maxCol - col : col) / 2;
-        let roundStage = this.maxStage - depth;
-        let round: RoundModel;
-
-        if (col === centralCol) {
-            depth = depth - 1;
-            roundStage = 0;
-        }
+        
         if (col % 2 == 0) {
+            let depth = (isRightSide ? maxCol - col : col) / 2;
+            let roundStage = this.maxStage - depth;
+
+            if (col === centralCol) {
+                depth = depth - 1;
+                roundStage = 0;
+            }
+
             let shift = (Math.pow(2, depth) - 1);
             let freq = Math.pow(2, depth) + 1;
-            let roundIndex = 0;
             if ((row - shift) % freq == 0) {
-                roundIndex = (isRightSide ? this.roundGroups[roundStage].length/2 : 0) + ((row - shift) / freq);
-                round = this.roundGroups[roundStage][roundIndex];
+                let roundIndex = (isRightSide ? this.roundGroups[roundStage].length / 2 : 0) + ((row - shift) / freq);;
+                let round: RoundModel = this.roundGroups[roundStage][roundIndex];
                 return this.getRoundTemplate(round);
             } else {
                 return `<div class="ui-g-12 table-block ui-g-nopad"></div>`;
             }
 
         } else {
-            return `<div class="ui-g-1 inline-block" style=""></div>`;
+            let depth = (isRightSide ? maxCol - (col-1) : col-1) / 2;
+            return this.getConnectorTemplate(row,depth, isRightSide);
         }
 
     }
@@ -106,6 +107,26 @@ export class BracketComponent {
             ${round.secondParticipant ? round.secondParticipant.firstName + ' ' + round.secondParticipant.lastName : ''}
             </div>
             </div>`;
+    }
+
+    getConnectorTemplate(row:number, depth: number, isRightSide: boolean) {
+        let topLeftClass = '';
+        let topRightClass = '';
+        let bottomLeftClass = '';
+        let bottomRightClass = '';
+
+        let shift = (Math.pow(2, depth) - 1);
+        let freq = Math.pow(2, depth) + 1;
+        debugger;
+        if ((row - shift) % freq == 0) {
+            topLeftClass = 'border-bottom';
+            bottomLeftClass = 'border-right';
+        }
+        
+        return`<div class="connector"><div class="ui-g-6 ui-g-nopad ${topLeftClass}"></div>
+                <div class="ui-g-6 ui-g-nopad ${topRightClass}"></div>
+                <div class="ui-g-6 ui-g-nopad ${bottomLeftClass}"></div>
+                <div class="ui-g-6 ui-g-nopad ${bottomRightClass}"></div></div>`;
     }
 
     getColumnClass(col) {
