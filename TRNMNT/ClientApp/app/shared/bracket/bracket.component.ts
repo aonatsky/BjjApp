@@ -71,18 +71,18 @@ export class BracketComponent {
         let maxCol = this.columns.length - 1;
         let centralCol = maxCol / 2;
         let isRightSide = col > centralCol;
-        
+        let depth = (isRightSide ? maxCol - col : col) / 2;
         if (col % 2 == 0) {
-            let depth = (isRightSide ? maxCol - col : col) / 2;
+            
             let roundStage = this.maxStage - depth;
 
-            if (col === centralCol) {
+            if (depth === this.maxStage) {
                 depth = depth - 1;
                 roundStage = 0;
             }
 
             let shift = (Math.pow(2, depth) - 1);
-            let freq = Math.pow(2, depth) + 1;
+            let freq = Math.pow(2, 1 + depth);
             if ((row - shift) % freq == 0) {
                 let roundIndex = (isRightSide ? this.roundGroups[roundStage].length / 2 : 0) + ((row - shift) / freq);;
                 let round: RoundModel = this.roundGroups[roundStage][roundIndex];
@@ -92,8 +92,7 @@ export class BracketComponent {
             }
 
         } else {
-            let depth = (isRightSide ? maxCol - (col-1) : col-1) / 2;
-            return this.getConnectorTemplate(row,depth, isRightSide);
+            return this.getConnectorTemplate(row, depth-0.5, isRightSide);
         }
 
     }
@@ -109,24 +108,63 @@ export class BracketComponent {
             </div>`;
     }
 
-    getConnectorTemplate(row:number, depth: number, isRightSide: boolean) {
-        let topLeftClass = '';
-        let topRightClass = '';
-        let bottomLeftClass = '';
-        let bottomRightClass = '';
-
-        let shift = (Math.pow(2, depth) - 1);
-        let freq = Math.pow(2, depth) + 1;
-        debugger;
-        if ((row - shift) % freq == 0) {
-            topLeftClass = 'border-bottom';
-            bottomLeftClass = 'border-right';
+    getConnectorTemplate(row: number, depth: number, isRightSide: boolean) {
+        let startShift = (Math.pow(2, depth) - 1);
+        let endShift = ((Math.pow(2, depth) - 1) + Math.pow(2, depth + 1));
+        let freq = Math.pow(2, 2 + depth);
+        let style: ConnectorStyle = new ConnectorStyle();
+        if ((row - startShift) % freq == 0) {
+            style = this.lowCorner(isRightSide);
         }
-        
-        return`<div class="connector"><div class="ui-g-6 ui-g-nopad ${topLeftClass}"></div>
-                <div class="ui-g-6 ui-g-nopad ${topRightClass}"></div>
-                <div class="ui-g-6 ui-g-nopad ${bottomLeftClass}"></div>
-                <div class="ui-g-6 ui-g-nopad ${bottomRightClass}"></div></div>`;
+        if ((row - endShift) % freq == 0) {
+            style = this.highCorner(isRightSide);
+        }
+
+        if ((row - (startShift + endShift)/2) % freq == 0) {
+            style = this.tConnector(isRightSide);
+        }
+
+        if (depth == this.maxStage-1 && (row - startShift) % freq == 0) {
+            style = this.horLine();
+        }
+
+
+
+
+        return `<div class="connector"><div class="ui-g-6 ui-g-nopad ${style.topLeftClass}"></div>
+                <div class="ui-g-6 ui-g-nopad ${style.topRightClass}"></div>
+                <div class="ui-g-6 ui-g-nopad ${style.bottomLeftClass}"></div>
+                <div class="ui-g-6 ui-g-nopad ${style.bottomRightClass}"></div></div>`;
+    }
+
+    private lowCorner(isRightSide: boolean): ConnectorStyle {
+        return isRightSide
+            ? new ConnectorStyle('', 'border-bottom', '', 'border-left')
+            : new ConnectorStyle('border-bottom', '', 'border-right', '');
+
+    }
+
+    private highCorner(isRightSide: boolean) {
+        return isRightSide
+            ? new ConnectorStyle('', 'border-bottom border-left', '', '')
+            : new ConnectorStyle('border-bottom border-right', '', '', '');
+    }
+
+    private vertLine(isRightSide: boolean) {
+//        this.bottomClass += isRightSide ? ' border-left' : ' border-right';
+//        this.topClass += isRightSide ? ' border-left' : ' border-right';
+    }
+
+    private tConnector(isRightSide: boolean) {
+        return isRightSide
+            ? new ConnectorStyle('border-bottom ', 'border-left', '', 'border-left')
+            : new ConnectorStyle('border-right', 'border-bottom', 'border-right', '');
+    }
+
+
+    private horLine() {
+        return new ConnectorStyle('border-bottom ', 'border-bottom', '', '');
+
     }
 
     getColumnClass(col) {
@@ -137,4 +175,9 @@ export class BracketComponent {
         }
 
     }
+}
+
+class ConnectorStyle {
+    constructor(public topLeftClass: string = '', public topRightClass: string = '', public bottomLeftClass: string = '', public bottomRightClass: string = '') { }
+
 }
