@@ -27,4 +27,8 @@ export class BracketService {
     updateBracket(model: BracketModel): Observable<void> {
         return this.httpService.post(ApiMethods.bracket.updateBracket, model);
     }
+
+    finishRound(weightDivisionId: string): Observable<void> {
+        return this.httpService.post(ApiMethods.bracket.finishRound, weightDivisionId);
+    }
 }

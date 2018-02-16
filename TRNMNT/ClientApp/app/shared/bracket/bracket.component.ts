@@ -1,8 +1,8 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { BracketModel } from '../../core/model/bracket.models';
 import './../../event-admin/event-management/brackets-generation/bracket-generation.component.scss';
 import './bracket.component.scss';
-import { ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation, OnChanges } from '@angular/core';
 import { RoundModel } from '../../core/model/round.models';
 
 @Component({
@@ -11,7 +11,8 @@ import { RoundModel } from '../../core/model/round.models';
     encapsulation: ViewEncapsulation.None
 })
 
-export class BracketComponent {
+export class BracketComponent implements OnChanges {
+
     @Input() bracket: BracketModel;
     roundGroups: RoundModel[][];
     maxStage: number = 0;
@@ -22,10 +23,12 @@ export class BracketComponent {
 
     }
 
-    ngOnInit() {
+    ngOnChanges(changes: SimpleChanges): void {
+        this.refreshBracketData();
+    }
 
+    private refreshBracketData() {
         this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
-
         this.rows = this.getRows();
         this.roundGroups = this.getRoundsForStage();
         this.columns = this.getColumns();

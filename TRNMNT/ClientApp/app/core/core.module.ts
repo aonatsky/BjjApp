@@ -37,6 +37,7 @@ import {BracketService} from './services/bracket.service';
 import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
 import { TestSocketService } from './services/test-socket.service';
+import { RunEventHubService } from './hubservices/run-event.hub.serive';
 
 
 
@@ -78,6 +79,7 @@ NgModule({
         TeamService,
         SignalRHubService,
         TestSocketService,
+        RunEventHubService,
         CategoryService,
         WeightDivisionService,
         ParticipantService,
