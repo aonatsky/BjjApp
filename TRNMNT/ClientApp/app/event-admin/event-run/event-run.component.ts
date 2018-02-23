@@ -20,6 +20,8 @@ export class EventRunComponent implements OnInit {
     private filter: CategoryWithDivisionFilterModel;
     private previousWeightDivisionId: string;
 
+	
+	
     private get isFilterSelected(): boolean {
         return !!this.filter && !!this.filter.weightDivisionId;
     }
