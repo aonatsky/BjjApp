@@ -6,5 +6,11 @@ export class BracketModel {
 }
 
 export class BracketArrayModel {
-    [key: string]: BracketModel
+    [key: string]: BracketModel;
 }
+
+export class RefreshBracketModel {
+    bracket: BracketModel;
+    weightDivisionId: string;
+}
+

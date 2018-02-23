@@ -25,7 +25,7 @@ namespace TRNMNT.Web.Controllers
 
         public BracketController(
             IEventService eventService,
-            ILogger<PaymentController> logger,
+            ILogger<BracketController> logger,
             IUserService userService,
             IAppDbContext context,
             IHubContext<RunEventHub> hubContext,
@@ -86,10 +86,20 @@ namespace TRNMNT.Web.Controllers
                     var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
                     if (bracketModel != null)
                         await clients.Group(weightDivisionId.ToString())
-                            .InvokeAsync("BracketRoundsUpdated", bracketModel);
+                            .InvokeAsync("BracketRoundsUpdated", new RefreshBracketModel
+                            {
+                                WeightDivisionId = weightDivisionId.ToString().ToUpperInvariant(),
+                                Bracket = bracketModel
+                            });
                 }
                 return HttpStatusCode.OK;
             });
+        }
+
+        [HttpGet("[action]/{categoryId}")]
+        public async Task<IActionResult> GetBracketsByCategory(Guid categoryId)
+        {
+            return await HandleRequestWithDataAsync(async () => Success(await _bracketService.GetBracketsByCategoryAsync(categoryId)));
         }
 
         #endregion

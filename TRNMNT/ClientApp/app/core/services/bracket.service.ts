@@ -4,7 +4,7 @@ import { HttpService } from '../dal/http/http.service';
 import { Observable } from 'rxjs';
 
 import { ApiMethods } from '../dal/consts/api-methods.consts';
-import { BracketModel } from '../model/bracket.models';
+import { BracketModel, BracketArrayModel } from '../model/bracket.models';
 import { ResponseContentType } from '@angular/http';
 
 
@@ -30,5 +30,10 @@ export class BracketService {
 
     finishRound(weightDivisionId: string): Observable<void> {
         return this.httpService.post(ApiMethods.bracket.finishRound, weightDivisionId);
+    }
+
+    getBracketsByCategory(categoryId): Observable<BracketArrayModel> {
+        return this.httpService.get(ApiMethods.bracket.getBracketsByCategory + '/' + categoryId)
+            .map(res => this.httpService.getJson(res));
     }
 }

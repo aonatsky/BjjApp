@@ -1,7 +1,7 @@
-
-<div *ngFor="let weightDivisionId of weightDivisions">
-    <event-run-wd-view [weightDivisionId]="weightDivisionId" ></event-run-wd-view>
+<div *ngIf="bracketsList">
+    <div *ngFor="let item of bracketsList | toDictionary">
+        <bracket *ngIf="item.value" [bracket]="item.value"></bracket>
+    </div>
 </div>
-
 
 

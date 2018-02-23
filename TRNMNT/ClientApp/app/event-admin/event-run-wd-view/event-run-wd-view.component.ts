@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import {BracketModel} from '../../core/model/bracket.models';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
 import { BracketService } from '../../core/services/bracket.service';
+import { SignalRHubService } from '../../core/dal/signalr/signalr-hub.service';
 
 
 @Component({
     selector: 'event-run-wd-view',
     templateUrl: './event-run-wd-view.component.html',
-    providers: [RunEventHubService]
+    //providers: [RunEventHubService, SignalRHubService]
 })
 export class EventRunWeightDivisionViewComponent implements OnInit {
 
@@ -24,7 +25,7 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.runEventHubService.onRefreshRound().subscribe((model) => this.bracket = model);
+        this.runEventHubService.onRefreshRound().subscribe((model) => this.bracket = model.bracket);
         if (this.useDataFromInput) {
             this.startSubscription();
         } else {

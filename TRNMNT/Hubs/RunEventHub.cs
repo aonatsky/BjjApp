@@ -14,15 +14,6 @@ namespace TRNMNT.Web.Hubs
         {
             _bracketService = bracketService;
         }
-
-        //public async Task UpdateBracketRounds(Guid weightDivisionId)
-        //{
-        //    var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
-        //    if (bracketModel != null)
-        //    {
-        //        await ToGroup(weightDivisionId).RefreshRound(bracketModel);
-        //    }
-        //}
     }
 
     public interface IRunEventHubContract

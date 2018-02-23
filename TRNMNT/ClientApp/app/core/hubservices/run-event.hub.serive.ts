@@ -2,7 +2,7 @@
 import { Observable } from 'rxjs/Rx';
 import { SignalRHubService } from "../dal/signalr/signalr-hub.service";
 import { TransportType, HubConnection } from "@aspnet/signalr-client";
-import { BracketModel } from "../model/bracket.models";
+import { RefreshBracketModel } from "../model/bracket.models";
 
 
 @Injectable()
@@ -16,19 +16,42 @@ export class RunEventHubService {
     }
 
     public joinWeightDivisionGroup(weightDivisionId: string, previousWeightDivisionId?: string) {
+        let id = weightDivisionId.toUpperCase();
         if (this.isConnected) {
             if (!!previousWeightDivisionId) {
-                this.signalRService.leaveGroup(previousWeightDivisionId);
+                this.signalRService.leaveGroup(previousWeightDivisionId.toLowerCase());
             }
-            this.signalRService.joinGroup(weightDivisionId);
+            this.signalRService.joinGroup(id);
         } else {
-            this.signalRService.onConnected().subscribe(() => this.signalRService.joinGroup(weightDivisionId));
-            this.signalRService.onDisconnected().subscribe(() => this.signalRService.leaveGroup(weightDivisionId));
+            this.signalRService.onConnected().subscribe(() => this.signalRService.joinGroup(id));
+            this.signalRService.onDisconnected().subscribe(() => this.signalRService.leaveGroup(id));
             this.connect();
         }
     }
 
-    public onRefreshRound(): Observable<BracketModel> {
+    public joinMultipleWeightDivisionGroups(weightDivisionIds: string[]) {
+        if (!this.isConnected) {
+            this.signalRService.onConnected().subscribe(() => this.joinGroups(weightDivisionIds));
+            this.signalRService.onDisconnected().subscribe(() => this.leaveGroups(weightDivisionIds));
+            this.connect();
+        }
+    }
+
+    joinGroups(groupNames: string[]) {
+        for (var groupName of groupNames) {
+            let id = groupName.toUpperCase();
+            this.signalRService.joinGroup(id);
+        }
+    }
+
+    leaveGroups(groupNames: string[]) {
+        for (var groupName of groupNames) {
+            let id = groupName.toUpperCase();
+            this.signalRService.leaveGroup(id);
+        }
+    }
+
+    public onRefreshRound(): Observable<RefreshBracketModel> {
         return this.signalRService.subscribeOnEvent("BracketRoundsUpdated");
     }
 

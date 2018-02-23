@@ -41,7 +41,7 @@ export class EventRunComponent implements OnInit {
         this.route.params.subscribe(p => {
             this.eventId = p['id'];
         });
-        this.runEventHubService.onRefreshRound().subscribe(m => this.refreshModel(m));
+        this.runEventHubService.onRefreshRound().subscribe(m => this.refreshModel(m.bracket));
     }
 
     private filterSelected($event: CategoryWithDivisionFilterModel) {
@@ -67,8 +67,9 @@ export class EventRunComponent implements OnInit {
         this.bracketService.finishRound(this.filter.weightDivisionId).subscribe();
     }
 
-    private refreshModel(model) {
+    private refreshModel(model: BracketModel) {
         this.bracket = model;
+        console.log("RECIEVED", model);
     }
 
 }
