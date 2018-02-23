@@ -21,9 +21,12 @@
     <EmbeddedResource Remove="Core\**" />
     <None Remove="Core\**" />
     <Compile Remove="Controllers\FighterController.cs" />
+    <None Remove="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <None Remove="ClientApp\app\core\services\bracket.service.ts" />
     <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
+    <None Remove="ClientApp\app\round\round-panel\round-panel.component.ts" />
+    <None Remove="ClientApp\app\round\round.module.ts" />
     <None Remove="ClientApp\app\shared\bracket\bracket.component.ts" />
     <None Remove="ClientApp\assets\style\app.css" />
     <None Remove="ClientApp\assets\style\app.min.css" />
@@ -92,9 +95,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\bracket.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\round\round-panel\round-panel.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\round\round.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\bracket\bracket.component.ts" />
   </ItemGroup>
 

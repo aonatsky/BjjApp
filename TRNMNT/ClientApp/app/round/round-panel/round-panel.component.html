@@ -1,0 +1,32 @@
+﻿<div class="round-panel-wrapper">
+    <div class="round-panel-timer-wrapper round-panel-inner-container">
+        <div class="round-panel-center-wrapper">
+            <button pButton [disabled]="isRoundCompleted || timerSubscription" (click)="startTimer()"></button>
+            <button pButton [disabled]="isRoundCompleted || !timerSubscription" (click)="pauseTimer()"></button>
+            <button pButton [disabled]="isRoundCompleted" (click)="stopTimer()"></button>
+            <span>{{countdown | formatTimer}}</span>
+        </div>
+    </div>
+    <div class="round-panel-inner-container round-panel-score-wrapper">
+        <div class="round-panel-point-wrapper round-panel-point-advantage">
+            <button pButton (click)="increaseFirstPlayerPenalty()">+</button>
+            <button pButton (click)="decreaseFirstPlayerPenalty()">-</button>
+            <span>{{firstPlayerPenalty}}</span>
+        </div>
+        <div class="round-panel-point-wrapper round-panel-point-penalty">
+            <button pButton (click)="increaseFirstPlayerAdvantage()">+</button>
+            <button pButton (click)="decreaseFirstPlayerAdvantage()">-</button>
+            <span>{{firstPlayerAdvantage}}</span>
+        </div>
+        <div class="round-panel-point-wrapper round-panel-point-advantage">
+            <button pButton (click)="increaseSecondPlayerPenalty()">+</button>
+            <button pButton (click)="decreaseSecondPlayerPenalty()">-</button>
+            <span>{{secondPlayerPenalty}}</span>
+        </div>
+        <div class="round-panel-point-wrapper round-panel-point-penalty">
+            <button pButton (click)="increaseSecondPlayerAdvantage()">+</button>
+            <button pButton (click)="decreaseSecondPlayerAdvantage()">-</button>
+            <span>{{secondPlayerAdvantage}}</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+﻿.round-panel-wrapper {
+    clear: both;
+    height: 300px;
+    width: 600px;
+}
+
+.round-panel-inner-container {
+    height: 38px;
+}
+
+.round-panel-timer-wrapper {
+    background-color: antiquewhite;
+}
+
+.round-panel-center-wrapper {
+    margin: 0 auto;
+}
+
+.round-panel-score-wrapper {
+    background-color: #FFFFFF;
+    display:flex;
+}
+
+.round-panel-point-wrapper {
+    flex-grow: 1;
+}
+
+.round-panel-point-advantage {
+    background-color: yellow;
+}
+
+.round-panel-point-penalty {
+    background-color: red;
+}

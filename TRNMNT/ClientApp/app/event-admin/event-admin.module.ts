@@ -15,6 +15,7 @@ import { CategoryEditComponent } from './event-edit/category-edit/category-edit.
 import { WebsocketInteractionComponent } from './websocket-interaction/websocket-interaction.component';
 import { ConnectorComponent } from './event-management/brackets-generation/connector.component';
 import { EventRunComponent } from './event-run/event-run.component';
+import { RoundModule } from '../round/round.module';
 
 
 @
@@ -22,6 +23,7 @@ import { EventRunComponent } from './event-run/event-run.component';
         imports: [
             CoreModule,
             SharedModule,
+            RoundModule,
             RouterModule.forChild(eventAdminRoutes)
         ],
         declarations: [
