@@ -91,6 +91,7 @@ NgModule({
             tokenGetter: (() => localStorage.getItem('id_token')),
             noJwtError: true
         }),
+        { provide: Window, useValue: window },
         AuthGuard, RedirectGuard, RouterService, PaymentService],
 
     exports: [

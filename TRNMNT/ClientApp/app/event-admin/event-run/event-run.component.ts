@@ -60,7 +60,7 @@ export class EventRunComponent implements OnInit {
     }
 
     private runCategorySpectatorView() {
-        
+        this.routerService.openEventCategorySpactatorView(this.filter.categoryId);
     }
 
     private finishRound() {
