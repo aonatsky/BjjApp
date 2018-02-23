@@ -73,7 +73,7 @@ export class BracketComponent {
         let isRightSide = col > centralCol;
         let depth = (isRightSide ? maxCol - col : col) / 2;
         if (col % 2 == 0) {
-            
+
             let roundStage = this.maxStage - depth;
 
             if (depth === this.maxStage) {
@@ -92,7 +92,7 @@ export class BracketComponent {
             }
 
         } else {
-            return this.getConnectorTemplate(row, depth-0.5, isRightSide);
+            return this.getConnectorTemplate(row, depth - 0.5, isRightSide);
         }
 
     }
@@ -111,21 +111,29 @@ export class BracketComponent {
     getConnectorTemplate(row: number, depth: number, isRightSide: boolean) {
         let startShift = (Math.pow(2, depth) - 1);
         let endShift = ((Math.pow(2, depth) - 1) + Math.pow(2, depth + 1));
+        let centerShift = (startShift + endShift) / 2;
         let freq = Math.pow(2, 2 + depth);
         let style: ConnectorStyle = new ConnectorStyle();
-        if ((row - startShift) % freq == 0) {
-            style = this.lowCorner(isRightSide);
-        }
-        if ((row - endShift) % freq == 0) {
-            style = this.highCorner(isRightSide);
-        }
 
-        if ((row - (startShift + endShift)/2) % freq == 0) {
-            style = this.tConnector(isRightSide);
-        }
-
-        if (depth == this.maxStage-1 && (row - startShift) % freq == 0) {
-            style = this.horLine();
+        if (depth == this.maxStage - 1) {
+            if ((row - startShift) % freq == 0) {
+                 style = this.horLine();
+            }
+        } else {
+            if ((row - startShift) % freq == 0) {
+                style = this.lowCorner(isRightSide);
+            }
+            if ((row - endShift) % freq == 0) {
+                style = this.highCorner(isRightSide);
+            }
+            for (let j = 0; j < centerShift; j++) {
+                if ((row - Math.pow(2, depth) - j) % freq == 0) {
+                    style = this.vertLine(isRightSide);
+                }
+            }
+            if ((row - centerShift) % freq == 0) {
+                style = this.tConnector(isRightSide);
+            }
         }
 
 
@@ -151,8 +159,9 @@ export class BracketComponent {
     }
 
     private vertLine(isRightSide: boolean) {
-//        this.bottomClass += isRightSide ? ' border-left' : ' border-right';
-//        this.topClass += isRightSide ? ' border-left' : ' border-right';
+        return isRightSide
+            ? new ConnectorStyle('', 'border-left', '', 'border-left')
+            : new ConnectorStyle('border-right', '', 'border-right', '');
     }
 
     private tConnector(isRightSide: boolean) {
