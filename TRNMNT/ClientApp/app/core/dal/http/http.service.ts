@@ -136,15 +136,18 @@ export class HttpService {
         // In a real world app, you might use a remote logging infrastructure
         if (error instanceof Response && error.status == 401) {
             this.loaderService.showLoader();
-            return this.authService.getNewToken().map(() => {
-
-                this.loaderService.showLoader();
-                return repeatRequest()
-                    .map((r: Response) => this.processResponse(r))
-                    .catch((error: Response | any) => this.handleError(error, notifyMessage))
-                    .finally(() => this.loaderService.hideLoader());
-
-            }).finally(() => this.loaderService.hideLoader());
+            return this.authService.revokeRefreshToken().flatMap((isSucceed) => {
+                    if (!isSucceed) {
+                        Observable.throw(error);
+                    }
+                    this.loaderService.showLoader();
+                    return repeatRequest()
+                        .map((r: Response) => this.processResponse(r))
+                        .catch((error: Response | any) => this.handleError(error, notifyMessage))
+                        .finally(() => this.loaderService.hideLoader());
+                })
+                .catch((error: Response | any) => this.goToLogin(error))
+                .finally(() => this.loaderService.hideLoader());
         }
         return this.handleError(error, notifyMessage);
     }
@@ -154,6 +157,11 @@ export class HttpService {
         this.notificationService.showErrorOrGeneric(notifyMessage);
         this.loggerService.logError(errMsg);
         return Observable.throw(errMsg);
+    }
+
+    private goToLogin(error?: Response | any) {
+        this.routerService.goToLogin();
+        return this.handleError(error, "Please autentificate");
     }
 
     private getErrorMessage(error: Response | any) : string {

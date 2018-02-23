@@ -150,7 +150,7 @@ import { RouterService } from './router.service'
             };
 
             // Encodes the parameters.  
-            let body: string = this.encodeParams(params);
+            let body: string = this.encodeParams(params); 
             return this.http.post(tokenEndpoint, body, this.options).map(
                 (res: Response) => {
 
@@ -191,11 +191,11 @@ import { RouterService } from './router.service'
 
             let params: any = {
                 token_type_hint: "id_token",
-                token: token
+                refreshToken: token
             };
 
             // Encodes the parameters.  
-            let body: string = this.encodeParams(params);
+            let body = JSON.stringify(params);
 
             this.http.post(revocationEndpoint, body, this.options)
                 .subscribe(
@@ -211,33 +211,35 @@ import { RouterService } from './router.service'
     /** 
      * Revokes refresh token. 
      */
-    public revokeRefreshToken(): void {
+    public revokeRefreshToken(): Observable<boolean> {
 
         let refreshToken: string = localStorage.getItem('refresh_token');
 
-        if (refreshToken != null) {
-
-            // Revocation endpoint & params.  
-            let revocationEndpoint: string = ApiMethods.auth.refreshToken;
-
-            let params: any = {
-                token_type_hint: "refresh_token",
-                token: refreshToken
-            };
-
-            // Encodes the parameters.  
-            let body: string = this.encodeParams(params);
-
-            this.http.post(revocationEndpoint, body, this.options)
-                .subscribe(
-                () => {
-
-                    localStorage.removeItem('refresh_token');
-
-                });
-
+        if (refreshToken == null) {
+            return Observable.of(false);
         }
 
+        // Revocation endpoint & params.  
+        let revocationEndpoint: string = ApiMethods.auth.refreshToken;
+
+        let params: any = {
+            RefreshToken: refreshToken
+        };
+
+        // Encodes the parameters.  
+        let body = JSON.stringify(params);
+
+        return this.http.post(revocationEndpoint, body, this.options).map(
+            (res: Response) => {
+                let body: any = this.getResponseBody(res);
+                // Successful if there's an access token in the response.  
+                if (typeof body.id_token !== 'undefined') {
+                    // Stores access token & refresh token.  
+                    this.store(body);
+                    return true;
+                }
+                return false;
+            });
     }
 
     /** 
@@ -280,6 +282,16 @@ import { RouterService } from './router.service'
 
         }
 
+    }
+
+    private getResponseBody(res: Response) {
+        let body: any;
+        try {
+            body = res.json();
+        } catch (e) {
+            return {};
+        }
+        return body;
     }
 
     /** 
