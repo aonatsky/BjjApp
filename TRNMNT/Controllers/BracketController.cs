@@ -85,12 +85,15 @@ namespace TRNMNT.Web.Controllers
                 {
                     var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
                     if (bracketModel != null)
-                        await clients.Group(weightDivisionId.ToString())
-                            .InvokeAsync("BracketRoundsUpdated", new RefreshBracketModel
-                            {
-                                WeightDivisionId = weightDivisionId.ToString().ToUpperInvariant(),
-                                Bracket = bracketModel
-                            });
+                    {
+                        var divisionId = weightDivisionId.ToString().ToUpperInvariant();
+                        var refreshModel = new RefreshBracketModel
+                        {
+                            WeightDivisionId = divisionId,
+                            Bracket = bracketModel
+                        };
+                        await clients.Group(divisionId).InvokeAsync("BracketRoundsUpdated", refreshModel);
+                    }
                 }
                 return HttpStatusCode.OK;
             });

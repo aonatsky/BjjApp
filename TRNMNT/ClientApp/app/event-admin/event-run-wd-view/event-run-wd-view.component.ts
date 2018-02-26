@@ -1,15 +1,13 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {BracketModel} from '../../core/model/bracket.models';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
 import { BracketService } from '../../core/services/bracket.service';
-import { SignalRHubService } from '../../core/dal/signalr/signalr-hub.service';
 
 
 @Component({
     selector: 'event-run-wd-view',
     templateUrl: './event-run-wd-view.component.html',
-    //providers: [RunEventHubService, SignalRHubService]
 })
 export class EventRunWeightDivisionViewComponent implements OnInit {
 

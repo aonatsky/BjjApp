@@ -2,8 +2,11 @@
     <category-with-division-filter [eventId]="eventId"
                                    (onFilterChanged)="filterSelected($event)"></category-with-division-filter>
 </div>
-<button pButton type="button" label="Finish Round" (click)="finishRound()"></button>
-
+<div class="ui-g">
+    <div class="ui-g-12">
+        <button pButton type="button" label="Update Round" (click)="finishRound()" [disabled]="!isFilterSelected"></button>
+    </div>
+</div>
 <div class="ui-g">
     <div class="ui-g-12">
         <button pButton type="button" label="Run Weight Division" (click)="runWeightDivision()" [disabled]="!isFilterSelected"></button>
