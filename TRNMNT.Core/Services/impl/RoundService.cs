@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TRNMNT.Core.Enum;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -34,7 +35,7 @@ namespace TRNMNT.Core.Services.impl
                         roundsToAdd.ToArray()[0].SecondParticipantId = participants[1].ParticipantId;
                         roundsToAdd.ToArray()[1].FirstParticipant = participants[2];
                         roundsToAdd.ToArray()[1].FirstParticipantId = participants[2].ParticipantId;
-                        roundsToAdd.ToArray()[1].HasBooferParticipant = true;
+                        roundsToAdd.ToArray()[1].RoundType = (int)RoundTypeEnum.Buffer;
 
                     }
                     else
@@ -78,7 +79,8 @@ namespace TRNMNT.Core.Services.impl
                 {
                     RoundId = Guid.NewGuid(),
                     BracketId = bracketId,
-                    Stage = stage
+                    Stage = stage,
+                    RoundType = (int)RoundTypeEnum.Standard
                 });
             }
             else

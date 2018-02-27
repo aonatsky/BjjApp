@@ -84,7 +84,7 @@ export class BracketGenerationComponent {
         if (participantNumber == 1) {
             participant = round.firstParticipant;
         } else if (participantNumber == 2) {
-            if (round.hasBooferParticipant) {
+            if (round.roundType) {
                 return 'Lost in previous round';
             }
             participant = round.secondParticipant;
@@ -145,7 +145,7 @@ export class BracketGenerationComponent {
     }
 
     private getDraggable(round: RoundModel, num: number): string {
-        if (round.hasBooferParticipant && num == 2) {
+        if (round.roundType == 2 && num == 2) {
             return '';
         }
         else {
