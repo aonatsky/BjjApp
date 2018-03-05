@@ -88,6 +88,7 @@ namespace TRNMNT.Web
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("chat");
+                routes.MapHub<RunEventHub>("runevent");
             });
             
             app.UseStaticFiles();

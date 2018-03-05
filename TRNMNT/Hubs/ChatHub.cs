@@ -2,7 +2,7 @@
 
 namespace TRNMNT.Web.Hubs
 {
-    public class ChatHub : BaseHub<IChatHubClient>
+    public class ChatHub : BaseHub<IChatHubContract>
     {
         public async Task Send(string message)
         {
@@ -12,7 +12,7 @@ namespace TRNMNT.Web.Hubs
         }
     }
 
-    public interface IChatHubClient
+    public interface IChatHubContract
     {
         Task Send(string message);
     }

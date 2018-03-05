@@ -16,25 +16,59 @@ namespace TRNMNT.Web.Hubs
             };
         }
 
-        public virtual async Task JoinGroupAsync(string groupName)
+        public async Task<bool> JoinGroup(string groupName)
+        {
+            try
+            {
+                await JoinGroupAsync(groupName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
+
+        public async Task<bool> LeaveGroup(string groupName)
+        {
+            try
+            {
+                await LeaveGroupAsync(groupName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
+
+        protected virtual async Task JoinGroupAsync(string groupName)
         {
             await Groups.AddAsync(Context.ConnectionId, groupName);
+        }
+
+        protected virtual async Task LeaveGroupAsync(string groupName)
+        {
+            await Groups.RemoveAsync(Context.ConnectionId, groupName);
         }
 
         protected T AllExeptCurrent => Clients.AllExcept(new[] {Context.ConnectionId});
 
         protected T Current => Clients.Client(Context.ConnectionId);
 
-        protected T ToGroup(string groupName)
+        protected T ToGroup(object groupName)
         {
-            return Clients.Group(groupName);
+            return Clients.Group(groupName.ToString());
         }
 
         public override async Task OnConnectedAsync()
         {
             if (this is Hub hub)
             {
-                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("ClientConnected", Context.ConnectionId);
+                await hub.Clients.Client(Context.ConnectionId).InvokeAsync("Connected", Context.ConnectionId);
+                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("OtherClientConnected", Context.ConnectionId);
             }
             
             await base.OnConnectedAsync();
@@ -44,7 +78,8 @@ namespace TRNMNT.Web.Hubs
         {
             if (this is Hub hub)
             {
-                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("ClientDisconnected", Context.ConnectionId, exception);
+                await hub.Clients.Client(Context.ConnectionId).InvokeAsync("Disconnected", Context.ConnectionId);
+                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("OtherClientDisconnected", Context.ConnectionId, exception);
             }
             await base.OnDisconnectedAsync(exception);
         }

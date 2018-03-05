@@ -1,3 +1,19 @@
+<div class="ui-g">
+    <category-with-division-filter [eventId]="eventId"
+                                   (onFilterChanged)="filterSelected($event)"></category-with-division-filter>
+</div>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <button pButton type="button" label="Update Round" (click)="finishRound()" [disabled]="!isFilterSelected"></button>
+    </div>
+</div>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <button pButton type="button" label="Run Weight Division" (click)="runWeightDivision()" [disabled]="!isFilterSelected"></button>
+        <button pButton type="button" label="Open Weight Division Spectator View" (click)="runWeightDivisionSpectatorView()" [disabled]="!isFilterSelected"></button>
+        <button pButton type="button" label="Open Category Spectator View" (click)="runCategorySpectatorView()" [disabled]="!isCategorySelected"></button>
+    </div>
+</div>
 <bracket *ngIf="bracket" [bracket]="bracket"></bracket>
 
 

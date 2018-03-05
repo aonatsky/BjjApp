@@ -1,0 +1,8 @@
+<div *ngIf="!!bracketsList && !!weightDivisions">
+    <div *ngFor="let item of bracketsList | toDictionary">
+        <span>{{getDivisionNameById(item.key)}}</span>
+        <bracket *ngIf="item.value" [bracket]="item.value"></bracket>
+    </div>
+</div>
+
+
