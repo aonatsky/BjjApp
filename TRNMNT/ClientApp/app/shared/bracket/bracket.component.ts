@@ -25,7 +25,6 @@ export class BracketComponent {
     ngOnInit() {
 
         this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
-
         this.rows = this.getRows();
         this.roundGroups = this.getRoundsForStage();
         this.columns = this.getColumns();
