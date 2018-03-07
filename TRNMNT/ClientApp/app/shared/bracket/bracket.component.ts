@@ -35,8 +35,25 @@ export class BracketComponent {
         for (var i = 0; i <= this.maxStage; i++) {
             roundGroups.push(this.bracket.roundModels.filter(r => r.stage == i));
         }
-        console.log(roundGroups);
         return roundGroups;
+    }
+
+    private getRoundModelsForStage(stage: number, isRightSide: boolean): RoundModel[] {
+        let roundModels: RoundModel[] = [];
+        let roundGroup = this.roundGroups[stage];
+        if (roundGroup.length == 1) {
+            roundModels.push(roundGroup[0]);
+        }
+        else {
+            let index = isRightSide ? this.roundGroups[stage].length / 2 : 0;
+            let endIndex = isRightSide ? this.roundGroups[stage].length : this.roundGroups[stage].length / 2;
+
+            while (index < endIndex) {
+                roundModels.push(this.roundGroups[stage][index]);
+                index++;
+            }
+        }
+        return roundModels;
     }
 
     private getMaxStage(roundsCount: number): number {
@@ -50,7 +67,7 @@ export class BracketComponent {
 
     private getColumns(): number[] {
         let cols = [];
-        let colsCount = this.maxStage * 2 * 2;
+        let colsCount = this.maxStage * 2 + 1;
         for (let i = 0; i <= colsCount; i++) {
             cols.push(i);
         }
@@ -97,14 +114,14 @@ export class BracketComponent {
     }
 
     getRoundTemplate(round: RoundModel) {
-        return `<div class="bracket ui-g-1 ui-g-nopad">
-            <div class="bracket-participant-plate ui-g-12">
+        return `<div class="match"><div class="match-content ui-g-1 ui-g-nopad">
+            <div class="participant-plate ui-g-12">
             ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
             </div>
-            <div class="bracket-participant-plate ui-g-12">
+            <div class="participant-plate ui-g-12">
             ${round.secondParticipant ? round.secondParticipant.firstName + ' ' + round.secondParticipant.lastName : ''}
             </div>
-            </div>`;
+            </div></div>`;
     }
 
     getConnectorTemplate(row: number, depth: number, isRightSide: boolean) {
@@ -116,7 +133,7 @@ export class BracketComponent {
 
         if (depth == this.maxStage - 1) {
             if ((row - startShift) % freq == 0) {
-                 style = this.horLine();
+                style = this.horLine();
             }
         } else {
             if ((row - startShift) % freq == 0) {
@@ -183,6 +200,19 @@ export class BracketComponent {
         }
 
     }
+
+    private getMatches(col: number) {
+        debugger;
+        let lastColumnIndex = this.columns.length - 1;
+        let isRightSide = col > lastColumnIndex / 2;
+        let depth = isRightSide ? lastColumnIndex - col : col;
+        let stage = this.maxStage - depth;
+        let htmlData = '';
+        let roundModels = this.getRoundModelsForStage(stage, isRightSide);
+        roundModels.forEach((roundModel: RoundModel) => { htmlData += this.getRoundTemplate(roundModel) });
+        return htmlData;
+    }
+
 }
 
 class ConnectorStyle {

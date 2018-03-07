@@ -6,68 +6,6 @@
 <!--    </div>-->
 <!--</div>-->
 <div class="brackets">
-    <div class="round">
-        <div class="match">
-            <div class="match-content ui-g-1 ui-g-nopad">
-                <div class="participant-plate ui-g-12">
-                    Marcelo Garcia
-                </div>
-                <div class="participant-plate ui-g-12">
-                    Xande Ribeiro
-                </div>
-            </div>
-        </div>
-        <div class="match">
-            <div class="match-content ui-g-1 ui-g-nopad">
-                <div class="participant-plate ui-g-12">
-                    Marcelo Garcia
-                </div>
-                <div class="participant-plate ui-g-12">
-                    Xande Ribeiro
-                </div>
-            </div>
-        </div> <div class="match">
-            <div class="match-content ui-g-1 ui-g-nopad">
-                <div class="participant-plate ui-g-12">
-                    Marcelo Garcia
-                </div>
-                <div class="participant-plate ui-g-12">
-                    Xande Ribeiro
-                </div>
-            </div>
-        </div>
-        <div class="match">
-            <div class="match-content ui-g-1 ui-g-nopad">
-                <div class="participant-plate ui-g-12">
-                    Marcelo Garcia
-                </div>
-                <div class="participant-plate ui-g-12">
-                    Xande Ribeiro
-                </div>
-            </div>
-        </div>
+    <div class="round" *ngFor="let col of columns" [innerHtml]="getMatches(col)">
     </div>
-    <div class="round">
-        <div class="match">
-            <div class="match-content ui-g-1 ui-g-nopad">
-                <div class="participant-plate ui-g-12">
-                    Marcelo Garcia
-                </div>
-                <div class="participant-plate ui-g-12">
-                    Xande Ribeiro
-                </div>
-            </div>
-        </div>
-        <div class="match">
-            <div class="match-content ui-g-1 ui-g-nopad">
-                <div class="participant-plate ui-g-12">
-                    Marcelo Garcia
-                </div>
-                <div class="participant-plate ui-g-12">
-                    Xande Ribeiro
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
