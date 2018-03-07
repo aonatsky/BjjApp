@@ -11,8 +11,7 @@ import { BracketService } from '../../core/services/bracket.service';
 })
 export class EventRunWeightDivisionViewComponent implements OnInit {
 
-    @Input() weightDivisionId: string;
-    @Input() useDataFromInput: boolean = false;
+    private weightDivisionId: string;
     private bracket: BracketModel;
 
     constructor(
@@ -24,11 +23,7 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
 
     ngOnInit() {
         this.runEventHubService.onRefreshRound().subscribe((model) => this.bracket = model.bracket);
-        if (this.useDataFromInput) {
-            this.startSubscription();
-        } else {
-            this.startSubscriptionFromRouteId(); 
-        }
+        this.startSubscriptionFromRouteId(); 
     }
 
     private startSubscriptionFromRouteId() {
