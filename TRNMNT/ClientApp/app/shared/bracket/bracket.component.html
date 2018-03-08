@@ -1,11 +1,4 @@
-﻿<!--<div class="brackets" *ngIf="bracket">-->
-<!--    <div *ngFor="let col of columns" class="{{getColumnClass(col)}}">-->
-<!--        <div *ngFor="let row of rows">-->
-<!--            <div [innerHTML]="displayData(col,row)"></div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<div class="brackets">
-    <div class="round" *ngFor="let col of columns" [innerHtml]="getMatches(col)">
+﻿<div class="brackets" *ngIf="bracket">
+    <div class="round" *ngFor="let col of columns" [innerHtml]="getRounds(col)">
     </div>
 </div>

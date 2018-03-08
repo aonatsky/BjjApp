@@ -22,7 +22,7 @@ export class EventRunComponent implements OnInit {
     ngOnInit() {
         this.route.params.subscribe(p => {
             this.eventId = p['id'];
-            this.bracketService.getBracket('F31D47EC-CEE0-4A6B-B988-FA0F49FC9ED3').subscribe(r => {
+            this.bracketService.getBracket('52034630-2D0B-4F0F-837C-C0BA8CC6ACD5').subscribe(r => {
                 this.bracket = r;
             });
         });

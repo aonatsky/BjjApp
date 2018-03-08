@@ -25,36 +25,10 @@ export class BracketComponent {
     ngOnInit() {
 
         this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
-        this.rows = this.getRows();
-        this.roundGroups = this.getRoundsForStage();
         this.columns = this.getColumns();
     }
 
-    private getRoundsForStage(): RoundModel[][] {
-        let roundGroups: RoundModel[][] = [];
-        for (var i = 0; i <= this.maxStage; i++) {
-            roundGroups.push(this.bracket.roundModels.filter(r => r.stage == i));
-        }
-        return roundGroups;
-    }
 
-    private getRoundModelsForStage(stage: number, isRightSide: boolean): RoundModel[] {
-        let roundModels: RoundModel[] = [];
-        let roundGroup = this.roundGroups[stage];
-        if (roundGroup.length == 1) {
-            roundModels.push(roundGroup[0]);
-        }
-        else {
-            let index = isRightSide ? this.roundGroups[stage].length / 2 : 0;
-            let endIndex = isRightSide ? this.roundGroups[stage].length : this.roundGroups[stage].length / 2;
-
-            while (index < endIndex) {
-                roundModels.push(this.roundGroups[stage][index]);
-                index++;
-            }
-        }
-        return roundModels;
-    }
 
     private getMaxStage(roundsCount: number): number {
         for (let i = 0; i < 5; i++) {
@@ -67,53 +41,16 @@ export class BracketComponent {
 
     private getColumns(): number[] {
         let cols = [];
-        let colsCount = this.maxStage * 2 + 1;
-        for (let i = 0; i <= colsCount; i++) {
+        let maxColumn = this.maxStage * 2;
+        for (let i = 0; i <= maxColumn; i++) {
             cols.push(i);
         }
         return cols;
     }
 
-    private getRows(): number[] {
-        let rows = [];
-        for (let i = 0; i < this.bracket.roundModels.filter(r => r.stage === this.maxStage).length - 1; i++) {
-            rows.push(i);
-        }
-        return rows;
-    }
 
 
-    displayData(col, row) {
-        let maxCol = this.columns.length - 1;
-        let centralCol = maxCol / 2;
-        let isRightSide = col > centralCol;
-        let depth = (isRightSide ? maxCol - col : col) / 2;
-        if (col % 2 == 0) {
-
-            let roundStage = this.maxStage - depth;
-
-            if (depth === this.maxStage) {
-                depth = depth - 1;
-                roundStage = 0;
-            }
-
-            let shift = (Math.pow(2, depth) - 1);
-            let freq = Math.pow(2, 1 + depth);
-            if ((row - shift) % freq == 0) {
-                let roundIndex = (isRightSide ? this.roundGroups[roundStage].length / 2 : 0) + ((row - shift) / freq);;
-                let round: RoundModel = this.roundGroups[roundStage][roundIndex];
-                return this.getRoundTemplate(round);
-            } else {
-                return `<div class="ui-g-12 table-block ui-g-nopad"></div>`;
-            }
-
-        } else {
-            return this.getConnectorTemplate(row, depth - 0.5, isRightSide);
-        }
-
-    }
-
-    getRoundTemplate(round: RoundModel) {
+    private getRoundTemplate(round: RoundModel) {
         return `<div class="match"><div class="match-content ui-g-1 ui-g-nopad">
             <div class="participant-plate ui-g-12">
             ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
@@ -124,98 +61,32 @@ export class BracketComponent {
             </div></div>`;
     }
 
-    getConnectorTemplate(row: number, depth: number, isRightSide: boolean) {
-        let startShift = (Math.pow(2, depth) - 1);
-        let endShift = ((Math.pow(2, depth) - 1) + Math.pow(2, depth + 1));
-        let centerShift = (startShift + endShift) / 2;
-        let freq = Math.pow(2, 2 + depth);
-        let style: ConnectorStyle = new ConnectorStyle();
 
-        if (depth == this.maxStage - 1) {
-            if ((row - startShift) % freq == 0) {
-                style = this.horLine();
-            }
-        } else {
-            if ((row - startShift) % freq == 0) {
-                style = this.lowCorner(isRightSide);
-            }
-            if ((row - endShift) % freq == 0) {
-                style = this.highCorner(isRightSide);
-            }
-            for (let j = 0; j < centerShift; j++) {
-                if ((row - Math.pow(2, depth) - j) % freq == 0) {
-                    style = this.vertLine(isRightSide);
+
+
+
+    private getRounds(colNumber: number) {
+        let htmlData = '';
+        let maxCol = this.columns.length - 1;
+        let isRightSide = colNumber > maxCol / 2;
+        let depth = (isRightSide ? maxCol - colNumber : colNumber);
+        let stage = this.maxStage - depth;
+        let count = this.bracket.roundModels.filter(r => r.stage == stage).length;
+        this.bracket.roundModels.filter(r => r.stage == stage).forEach((r, j) => {
+            if (isRightSide) {
+                if (j >= count / 2) {
+                    htmlData += this.getRoundTemplate(r);
+                }
+            } else {
+                if (j < count / 2) {
+                    htmlData += this.getRoundTemplate(r);
                 }
             }
-            if ((row - centerShift) % freq == 0) {
-                style = this.tConnector(isRightSide);
-            }
-        }
-
-
-
-
-        return `<div class="connector"><div class="ui-g-6 ui-g-nopad ${style.topLeftClass}"></div>
-                <div class="ui-g-6 ui-g-nopad ${style.topRightClass}"></div>
-                <div class="ui-g-6 ui-g-nopad ${style.bottomLeftClass}"></div>
-                <div class="ui-g-6 ui-g-nopad ${style.bottomRightClass}"></div></div>`;
-    }
-
-    private lowCorner(isRightSide: boolean): ConnectorStyle {
-        return isRightSide
-            ? new ConnectorStyle('', 'border-bottom', '', 'border-left')
-            : new ConnectorStyle('border-bottom', '', 'border-right', '');
-
-    }
-
-    private highCorner(isRightSide: boolean) {
-        return isRightSide
-            ? new ConnectorStyle('', 'border-bottom border-left', '', '')
-            : new ConnectorStyle('border-bottom border-right', '', '', '');
-    }
-
-    private vertLine(isRightSide: boolean) {
-        return isRightSide
-            ? new ConnectorStyle('', 'border-left', '', 'border-left')
-            : new ConnectorStyle('border-right', '', 'border-right', '');
-    }
-
-    private tConnector(isRightSide: boolean) {
-        return isRightSide
-            ? new ConnectorStyle('border-bottom ', 'border-left', '', 'border-left')
-            : new ConnectorStyle('border-right', 'border-bottom', 'border-right', '');
-    }
-
-
-    private horLine() {
-        return new ConnectorStyle('border-bottom ', 'border-bottom', '', '');
-
-    }
-
-    getColumnClass(col) {
-        if (col % 2 == 0) {
-            return 'brackets-column';
-        } else {
-            return 'connector-column';
-        }
-
-    }
-
-    private getMatches(col: number) {
-        debugger;
-        let lastColumnIndex = this.columns.length - 1;
-        let isRightSide = col > lastColumnIndex / 2;
-        let depth = isRightSide ? lastColumnIndex - col : col;
-        let stage = this.maxStage - depth;
-        let htmlData = '';
-        let roundModels = this.getRoundModelsForStage(stage, isRightSide);
-        roundModels.forEach((roundModel: RoundModel) => { htmlData += this.getRoundTemplate(roundModel) });
+        });
         return htmlData;
+
+
     }
 
 }
 
-class ConnectorStyle {
-    constructor(public topLeftClass: string = '', public topRightClass: string = '', public bottomLeftClass: string = '', public bottomRightClass: string = '') { }
-
-}
