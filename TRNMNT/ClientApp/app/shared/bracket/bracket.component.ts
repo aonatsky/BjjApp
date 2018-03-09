@@ -13,9 +13,7 @@ import { RoundModel } from '../../core/model/round.models';
 
 export class BracketComponent {
     @Input() bracket: BracketModel;
-    roundGroups: RoundModel[][];
     maxStage: number = 0;
-    rows: number[];
     columns: number[];
 
     constructor() {
@@ -23,7 +21,6 @@ export class BracketComponent {
     }
 
     ngOnInit() {
-
         this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
         this.columns = this.getColumns();
     }
@@ -50,8 +47,9 @@ export class BracketComponent {
 
 
 
-    private getRoundTemplate(round: RoundModel) {
-        return `<div class="match"><div class="match-content ui-g-1 ui-g-nopad">
+    private getRoundTemplate(round: RoundModel, isRightSide: boolean): string {
+        let matchClass = isRightSide ? 'right-side' : '';
+        return `<div class="match ${matchClass} "><div class="match-content ui-g-1 ui-g-nopad">
             <div class="participant-plate ui-g-12">
             ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
             </div>
@@ -72,17 +70,23 @@ export class BracketComponent {
         let depth = (isRightSide ? maxCol - colNumber : colNumber);
         let stage = this.maxStage - depth;
         let count = this.bracket.roundModels.filter(r => r.stage == stage).length;
-        this.bracket.roundModels.filter(r => r.stage == stage).forEach((r, j) => {
-            if (isRightSide) {
-                if (j >= count / 2) {
-                    htmlData += this.getRoundTemplate(r);
+        if (stage == 0) {
+            htmlData += '<div class="match"></div>';
+            htmlData += this.getRoundTemplate(this.bracket.roundModels.filter(r => r.stage == stage)[0], false);
+            htmlData += '<div class="match"></div>';
+        } else {
+            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r, j) => {
+                if (isRightSide) {
+                    if (j >= count / 2) {
+                        htmlData += this.getRoundTemplate(r, isRightSide);
+                    }
+                } else {
+                    if (j < count / 2) {
+                        htmlData += this.getRoundTemplate(r, isRightSide);
+                    }
                 }
-            } else {
-                if (j < count / 2) {
-                    htmlData += this.getRoundTemplate(r);
-                }
-            }
-        });
+            });
+        }
         return htmlData;
 
 

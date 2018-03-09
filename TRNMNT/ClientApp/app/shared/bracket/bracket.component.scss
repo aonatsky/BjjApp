@@ -1,52 +1,5 @@
 ﻿@import '../../shared/styles/variables.scss';
 
-.brackets {
-    position: absolute;
-    left: 10px;
-
-
-    .brackets-column {
-        width: 170px;
-        display: inline-block;
-
-        .bracket {
-            width: 100%;
-            font-size: 16px;
-        }
-    }
-
-    .connector-column {
-        width: 40px;
-        display: inline-block;
-    }
-
-    .border-bottom {
-        border-bottom: 2px solid $theme_orange
-    }
-
-    .border-top {
-        border-top: 2px solid $theme_orange
-    }
-
-    .border-right {
-        border-right: 2px solid $theme_orange
-    }
-
-    .border-left {
-        border-left: 2px solid $theme_orange
-    }
-
-    .connector {
-        padding: 0;
-        display: block;
-        width: 100%;
-
-        div {
-            height: 42px
-        }
-    }
-}
-
 *,
 *::after,
 *::before {
@@ -54,6 +7,8 @@
 }
 
 .brackets {
+    position: absolute;
+    left: 10px;
     display: flex;
 }
 
@@ -61,22 +16,20 @@
     display: flex;
     flex-grow: 1;
     flex-direction: column;
+    width: 200px;
 
 
-    %match-after {
+    %connector {
         content: "";
         display: block;
-        height: 50%;
+        height: calc(50% + 1px);
         position: absolute;
-        right: -10px;
         width: 10px;
     }
 
 
     .match {
         $border_style: 2px solid $theme_orange;
-
-
 
         display: flex;
         flex-direction: column;
@@ -86,43 +39,92 @@
         flex-grow: 1;
         position: relative;
 
-        &::before {
-            content: "";
-            display: block;
-            height: 30px;
-            border-left: $border_style;
-            position: absolute;
-            left: -10px;
-            top: 50%;
-            margin-top: -15px;
-            margin-left: -2px;
-        }
 
-        &:not(:only-child) {
-            &:nth-child(odd) {
-                &::after {
-                    @extend %match-after;
-                    border-top: $border_style;
-                    border-right: $border_style;
-                    top: calc(50% - 1px);
+
+
+        &:not(.right-side) {
+
+            &::before {
+                @extend %connector;
+                border-bottom: $border_style;
+                bottom: calc(50% - 1px);
+                left: -10px;
+            }
+
+
+            &::after {
+                right: -10px;
+            }
+
+            &:not(:only-child) {
+                &:nth-child(odd) {
+                    &::after {
+                        @extend %connector;
+                        border-top: $border_style;
+                        border-right: $border_style;
+                        top: calc(50% - 1px);
+                    }
+                }
+
+                &:nth-child(even) {
+                    &::after {
+                        @extend %connector;
+                        border-bottom: $border_style;
+                        border-right: $border_style;
+                        bottom: calc(50% - 1px);
+                    }
                 }
             }
 
-            &:nth-child(even) {
+            &:only-child {
                 &::after {
-                    @extend %match-after;
+                    @extend %connector;
                     border-bottom: $border_style;
-                    border-right: $border_style;
                     bottom: calc(50% - 1px);
                 }
             }
         }
 
-        &:only-child {
+        &.right-side {
+
             &::after {
-                @extend %match-after;
+                @extend %connector;
                 border-bottom: $border_style;
                 bottom: calc(50% - 1px);
+                right: -10px;
+            }
+
+            &::before {
+                left: -10px;
+            }
+
+
+            &:not(:only-child) {
+                &:nth-child(odd) {
+                    &::before {
+                        @extend %connector;
+                        border-top: $border_style;
+                        border-left: $border_style;
+                        top: calc(50% - 1px);
+                    }
+                }
+
+                &:nth-child(even) {
+                    &::before {
+                        @extend %connector;
+                        border-bottom: $border_style;
+                        border-left: $border_style;
+                        bottom: calc(50% - 1px);
+                    }
+                }
+            }
+
+            &:only-child {
+                &::before {
+                    @extend %connector;
+                    border-bottom: $border_style;
+                    bottom: calc(50% - 1px);
+                }
             }
         }
 
@@ -151,17 +153,6 @@
                     pointer-events: none;
                     color: $theme_grey;
                 }
-            }
-
-            &::before {
-                content: "";
-                display: block;
-                width: 10px;
-                border-bottom: $border_style;
-                margin-left: -2px;
-                position: absolute;
-                top: calc(50% - 1px);
-                left: -10px;
             }
         }
     }
