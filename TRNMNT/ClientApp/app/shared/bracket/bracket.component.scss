@@ -35,11 +35,21 @@
         flex-direction: column;
         justify-content: center;
         margin: 0px 10px;
-        padding: 30px 0;
+        padding: 10px 0;
         flex-grow: 1;
         position: relative;
 
-
+        &.final {
+            &::before, &::after {
+                border-left: none !important;
+                border-right: none !important;
+                border-bottom: $border_style;
+                bottom: calc(50% - 1px);
+            }
+            .match-content{
+                border-color: $theme_orange;
+            }
+        }
 
 
         &:not(.right-side) {
@@ -79,6 +89,7 @@
             &:only-child {
                 &::after {
                     @extend %connector;
+                    border: none;
                     border-bottom: $border_style;
                     bottom: calc(50% - 1px);
                 }
@@ -125,6 +136,18 @@
                     border-bottom: $border_style;
                     bottom: calc(50% - 1px);
                 }
+            }
+        }
+
+        &.empty {
+            .match-content {
+                border: none !important;
+            }
+        }
+
+        &.third-place, &.empty {
+            &::before, &::after {
+                border: none !important;
             }
         }
 

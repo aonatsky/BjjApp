@@ -21,7 +21,7 @@ export class BracketComponent {
     }
 
     ngOnInit() {
-        this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
+        this.maxStage = this.getMaxStage(this.bracket.roundModels.filter(r=>r.roundType == 0).length);
         this.columns = this.getColumns();
     }
 
@@ -48,8 +48,13 @@ export class BracketComponent {
 
 
     private getRoundTemplate(round: RoundModel, isRightSide: boolean): string {
-        let matchClass = isRightSide ? 'right-side' : '';
-        return `<div class="match ${matchClass} "><div class="match-content ui-g-1 ui-g-nopad">
+        let matchSide = isRightSide ? 'right-side' : '';
+        let matchType = '';
+        if (round.stage == 0) {
+            matchType = round.roundType == 1 ? 'third-place' : 'final';
+        }
+        
+        return `<div class="match ${matchSide} ${matchType} "><div class="match-content ui-g-1 ui-g-nopad">
             <div class="participant-plate ui-g-12">
             ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
             </div>
@@ -59,8 +64,9 @@ export class BracketComponent {
             </div></div>`;
     }
 
-
-
+    private getEmptyMatch(): string {
+        return '<div class="match empty"><div class="match-content"></div></div>';
+    }
 
 
     private getRounds(colNumber: number) {
@@ -71,9 +77,10 @@ export class BracketComponent {
         let stage = this.maxStage - depth;
         let count = this.bracket.roundModels.filter(r => r.stage == stage).length;
         if (stage == 0) {
-            htmlData += '<div class="match"></div>';
-            htmlData += this.getRoundTemplate(this.bracket.roundModels.filter(r => r.stage == stage)[0], false);
-            htmlData += '<div class="match"></div>';
+            htmlData += this.getEmptyMatch();
+            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r) => {
+                htmlData += this.getRoundTemplate(r, false);
+            });
         } else {
             this.bracket.roundModels.filter(r => r.stage == stage).forEach((r, j) => {
                 if (isRightSide) {

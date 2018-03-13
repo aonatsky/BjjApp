@@ -70,10 +70,10 @@ namespace TRNMNT.Core.Services.impl
             _roundRepository.Update(round);
         }
 
-        private IEnumerable<Round> GetStageRounds(IEnumerable<Round> parentRounds, int stage, Guid bracketId)
+        private IEnumerable<Round> GetStageRounds(IEnumerable<Round> stageRounds, int stage, Guid bracketId)
         {
             var childRounds = new List<Round>();
-            if (!parentRounds.Any())
+            if (stage == 0)
             {
                 childRounds.Add(new Round()
                 {
@@ -82,20 +82,30 @@ namespace TRNMNT.Core.Services.impl
                     Stage = stage,
                     RoundType = (int)RoundTypeEnum.Standard
                 });
+                childRounds.Add(new Round()
+                {
+                    RoundId = Guid.NewGuid(),
+                    BracketId = bracketId,
+                    Stage = stage,
+                    RoundType = (int)RoundTypeEnum.ThirdPlace
+                });
             }
             else
             {
-                foreach (var parentRound in parentRounds)
+                foreach (var parentRound in stageRounds)
                 {
-                    for (int i = 0; i < 2; i++)
+                    if (parentRound.RoundType == (int)RoundTypeEnum.Standard)
                     {
-                        childRounds.Add(new Round()
+                        for (int i = 0; i < 2; i++)
                         {
-                            RoundId = Guid.NewGuid(),
-                            BracketId = bracketId,
-                            NextRoundId = parentRound.RoundId,
-                            Stage = stage
-                        });
+                            childRounds.Add(new Round()
+                            {
+                                RoundId = Guid.NewGuid(),
+                                BracketId = bracketId,
+                                NextRoundId = parentRound.RoundId,
+                                Stage = stage
+                            });
+                        }    
                     }
                 }
             }
