@@ -21,13 +21,14 @@ export class BracketComponent {
     }
 
     ngOnInit() {
-        this.maxStage = this.getMaxStage(this.bracket.roundModels.filter(r=>r.roundType == 0).length);
+        this.maxStage = this.getMaxStage();
         this.columns = this.getColumns();
     }
 
 
 
-    private getMaxStage(roundsCount: number): number {
+    private getMaxStage(): number {
+        let roundsCount = this.bracket.roundModels.filter(r => r.roundType == 0).length;
         for (let i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
             if (roundsCount == 0) {

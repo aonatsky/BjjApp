@@ -19,23 +19,28 @@ namespace TRNMNT.Core.Services.impl
 
         public ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId)
         {
-            var is3Participants = participants.Length == 3;
+            
+            
             var rounds = new List<Round>();
-            var lastStage = is3Participants ? 1 : (int)Math.Log(participants.Count(), 2) - 1;
+            var lastStage = participants.Length == 3 ? 1 : (int)Math.Log(participants.Count(), 2) - 1;
             for (int i = 0; i <= lastStage; i++)
             {
                 var roundsToAdd = GetStageRounds(rounds.Where(r => r.Stage == i - 1), i, bracketId);
                 if (i == lastStage)
                 {
-                    if (is3Participants)
+                    if (participants.Length == 2)
                     {
-                        roundsToAdd.ToArray()[0].FirstParticipant = participants[0];
-                        roundsToAdd.ToArray()[0].FirstParticipantId = participants[0].ParticipantId;
-                        roundsToAdd.ToArray()[0].SecondParticipant = participants[1];
-                        roundsToAdd.ToArray()[0].SecondParticipantId = participants[1].ParticipantId;
-                        roundsToAdd.ToArray()[1].FirstParticipant = participants[2];
-                        roundsToAdd.ToArray()[1].FirstParticipantId = participants[2].ParticipantId;
-                        roundsToAdd.ToArray()[1].RoundType = (int)RoundTypeEnum.Buffer;
+                        roundsToAdd.Remove(roundsToAdd.First(r => r.RoundType == (int) RoundTypeEnum.ThirdPlace));
+                    }
+                    if (participants.Length == 3)
+                    {
+                        roundsToAdd[0].FirstParticipant = participants[0];
+                        roundsToAdd[0].FirstParticipantId = participants[0].ParticipantId;
+                        roundsToAdd[0].SecondParticipant = participants[1];
+                        roundsToAdd[0].SecondParticipantId = participants[1].ParticipantId;
+                        roundsToAdd[1].FirstParticipant = participants[2];
+                        roundsToAdd[1].FirstParticipantId = participants[2].ParticipantId;
+                        roundsToAdd[1].RoundType = (int)RoundTypeEnum.Buffer;
 
                     }
                     else
@@ -70,7 +75,7 @@ namespace TRNMNT.Core.Services.impl
             _roundRepository.Update(round);
         }
 
-        private IEnumerable<Round> GetStageRounds(IEnumerable<Round> stageRounds, int stage, Guid bracketId)
+        private List<Round> GetStageRounds(IEnumerable<Round> stageRounds, int stage, Guid bracketId)
         {
             var childRounds = new List<Round>();
             if (stage == 0)
