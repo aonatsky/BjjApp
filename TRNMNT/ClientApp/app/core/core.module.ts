@@ -37,6 +37,8 @@ import {BracketService} from './services/bracket.service';
 import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
 import { TestSocketService } from './services/test-socket.service';
+import { RunEventHubService } from './hubservices/run-event.hub.serive';
+import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
 
 
 
@@ -65,7 +67,8 @@ NgModule({
         ConfirmDialogModule
     ],
     declarations: [
-        MinuteSecondsPipe
+        MinuteSecondsPipe,
+        ToDictionaryPipe
     ],
     providers: [
         HttpService,
@@ -78,6 +81,9 @@ NgModule({
         TeamService,
         SignalRHubService,
         TestSocketService,
+        RunEventHubService,
+        { provide: RunEventHubService, useFactory: (l: LoggerService) => new RunEventHubService(new SignalRHubService(l)), deps: [LoggerService] },
+
         CategoryService,
         WeightDivisionService,
         ParticipantService,
@@ -89,6 +95,7 @@ NgModule({
             tokenGetter: (() => localStorage.getItem('id_token')),
             noJwtError: true
         }),
+        { provide: Window, useValue: window },
         AuthGuard, RedirectGuard, RouterService, PaymentService],
 
     exports: [
@@ -113,6 +120,7 @@ NgModule({
         TabViewModule,
         DragDropModule,
         MinuteSecondsPipe,
+        ToDictionaryPipe,
         ToggleButtonModule,
         ConfirmDialogModule
     ]

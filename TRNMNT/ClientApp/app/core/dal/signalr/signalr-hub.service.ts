@@ -23,8 +23,8 @@ export class SignalRHubService {
         let transportType = transport || this.detectSupportedTransport();
         this.hubConnection = new HubConnection(url, { transport: transportType });
 
-        this.hubConnection.on('ClientDisconnected', this.logDisconnectionDelegate);
-        this.hubConnection.on('ClientConnected', this.logConnectionDelegate);
+        this.hubConnection.on('OtherClientDisconnected', this.logDisconnectionDelegate);
+        this.hubConnection.on('OtherClientConnected', this.logConnectionDelegate);
         this.hubConnection.onclose((exc) => {
             this.loggerService.logDebug(`Connection closed : ${exc}`);
         });
@@ -43,20 +43,36 @@ export class SignalRHubService {
     }
 
     public stop(): void {
-        this.hubConnection.off('ClientDisconnected', this.logDisconnectionDelegate);
-        this.hubConnection.off('ClientConnected', this.logConnectionDelegate);
+        this.hubConnection.off('OtherClientDisconnected', this.logDisconnectionDelegate);
+        this.hubConnection.off('OtherClientConnected', this.logConnectionDelegate);
         this.hubConnection.stop();
     }
 
-    private logConnection(id: string): void {
-        this.loggerService.logDebug(`ClientConnected: ${id}`);
+    public onConnected(): Observable<string> {
+        return this.subscribeOnEvent('Connected');
     }
 
-    private logDisconnection(id: string, exception: any): void {
+    public onDisconnected(): Observable<string> {
+        return this.subscribeOnEvent('Disconnected');
+    }
+
+    public joinGroup(groupName: string) {
+        this.hubConnection.invoke("JoinGroup", groupName);
+    }
+
+    public leaveGroup(groupName: string) {
+        this.hubConnection.invoke("LeaveGroup", groupName);
+    }
+
+    private logConnection(connectionId: string): void {
+        this.loggerService.logDebug(`ClientConnected: ${connectionId}`);
+    }
+
+    private logDisconnection(connectionId: string, exception: any): void {
         if (!!exception) {
-            this.loggerService.logError(`ClientDisconnected: ${id}, exception: ${exception}`);
+            this.loggerService.logError(`ClientDisconnected: ${connectionId}, exception: ${exception}`);
         } else {
-            this.loggerService.logDebug(`ClientDisconnected: ${id}`);
+            this.loggerService.logDebug(`ClientDisconnected: ${connectionId}`);
         }
     }
 

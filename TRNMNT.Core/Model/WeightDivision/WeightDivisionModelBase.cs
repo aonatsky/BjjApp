@@ -1,4 +1,6 @@
-﻿namespace TRNMNT.Core.Model.WeightDivision
+﻿using System;
+
+namespace TRNMNT.Core.Model.WeightDivision
 {
     public class WeightDivisionModelBase
     {

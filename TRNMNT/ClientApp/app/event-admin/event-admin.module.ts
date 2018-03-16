@@ -15,6 +15,8 @@ import { CategoryEditComponent } from './event-edit/category-edit/category-edit.
 import { WebsocketInteractionComponent } from './websocket-interaction/websocket-interaction.component';
 import { ConnectorComponent } from './event-management/brackets-generation/connector.component';
 import { EventRunComponent } from './event-run/event-run.component';
+import { EventRunWeightDivisionViewComponent } from './event-run-wd-view/event-run-wd-view.component';
+import { EventRunCategoryViewComponent } from './event-run-category-view/event-run-category-view.component';
 
 
 @
@@ -36,6 +38,8 @@ import { EventRunComponent } from './event-run/event-run.component';
             PrticipantsListUploadComponent,
             WebsocketInteractionComponent,
             EventRunComponent,
+            EventRunWeightDivisionViewComponent,
+            EventRunCategoryViewComponent,
             ConnectorComponent
         ],
 
