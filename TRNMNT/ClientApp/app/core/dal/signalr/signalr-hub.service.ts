@@ -8,6 +8,8 @@ import { Observable } from 'rxjs/Observable';
 export class SignalRHubService {
 
     private hubConnection: HubConnection;
+    private readonly reconnectionLimit: number = 10;
+    private reconnectionCounter: number = 0;
     private logConnectionDelegate: (id: string) => void;
     private logDisconnectionDelegate: (id: string, exception: any) => void;
 
@@ -54,6 +56,29 @@ export class SignalRHubService {
 
     public onDisconnected(): Observable<string> {
         return this.subscribeOnEvent('Disconnected');
+    }
+
+    public onConnectionClosed(): Observable<string> {
+        return Observable.fromEventPattern(
+            (handler: (e: Error) => void) => this.hubConnection.onclose(handler)
+        );
+    }
+
+    public bindReconnection() {
+        this.onConnectionClosed().subscribe((e) => {
+            if (this.reconnectionCounter >= this.reconnectionLimit) {
+                return;
+            }
+            // huck to start reconnection
+            let hubHttpConnection = this.hubConnection["connection"];
+            hubHttpConnection.connectionState = 0;
+            let url = hubHttpConnection.url;
+            hubHttpConnection.url = url
+                .replace(`?id=${hubHttpConnection.connectionId}`, "")
+                .replace(`&id=${hubHttpConnection.connectionId}`, "");
+            this.reconnectionCounter++;
+            this.hubConnection.start();
+        });
     }
 
     public joinGroup(groupName: string) {
