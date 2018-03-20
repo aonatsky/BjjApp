@@ -1,0 +1,5 @@
+﻿<div class="ui-g-12">
+    <div class="ui-g-12" *ngFor="let category of categories">
+        <p-checkbox name="categories" [value]="category.categoryId" [label]="category.name" [(ngModel)]="selectedCategories" inputId="ny"></p-checkbox>
+        </div>
+</div>
