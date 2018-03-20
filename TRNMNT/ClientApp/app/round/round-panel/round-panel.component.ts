@@ -1,6 +1,9 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { RoundModel} from '../../core/model/round.models';
+import { RoundModel } from '../../core/model/round.models';
+import { SignalRHubService } from '../../core/dal/signalr/signalr-hub.service';
+import { HubConnection } from "@aspnet/signalr-client";
+import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
 import './round-panel.component.scss';
 
 @Component({
@@ -8,86 +11,107 @@ import './round-panel.component.scss';
     templateUrl: './round-panel.component.html',
 })
 export class RoundPanelComponent implements OnInit {
-
     @Input() roundModel: RoundModel;
-    
+
+    private hubConnection: HubConnection;
+    private roundDetails: RoundDetailsModel;
+
     private readonly tick: number;
-    private readonly penaltyStep: number;
-    private readonly advantageStep: number;
-    private countdown: number;
     private timerSubscription: any;
-    private isRoundCompleted: boolean;
 
-    private firstPlayerPenalty: number;
-    private secondPlayerPenalty: number;
-    private firstPlayerAdvantage: number;
-    private secondPlayerAdvantage: number;
+    constructor(private signalRService: SignalRHubService) {
+        this.roundDetails = new RoundDetailsModel();
 
-    constructor() {
-        this.firstPlayerPenalty = 0;
-        this.secondPlayerPenalty = 0;
-        this.firstPlayerAdvantage = 0;
-        this.secondPlayerAdvantage = 0;
+        this.roundDetails.firstPlayerPenalty = 0;
+        this.roundDetails.secondPlayerPenalty = 0;
+        this.roundDetails.firstPlayerAdvantage = 0;
+        this.roundDetails.secondPlayerAdvantage = 0;
 
-        this.countdown = 2 * 60;
+        this.roundDetails.countdown = 2 * 60;
+        this.roundDetails.isStarted = false;
+        this.roundDetails.isPaused = false;
+        this.roundDetails.isCompleted = false;
+
         this.tick = 1000;
-        this.penaltyStep = 1;
-        this.advantageStep = 2;
-
-        this.isRoundCompleted = false;
     }
 
     ngOnInit() {
-
+        this.hubConnection = new HubConnection("/round-hub");
+        this.subscribeOnRecieveMessage();
+        this.hubConnection.start().then(() => console.log("connected"), x=>console.log(x));
     }
 
-    public startTimer(): void {
-        this.timerSubscription = Observable.timer(0, this.tick)
-            .subscribe(() => --this.countdown);
+    public start(): void {
+        this.startTimer();
+        this.roundDetails.isStarted = true;
+        this.roundDetails.isPaused = false;
+        this.roundDetails.isCompleted = false;
+        this.send();
     }
 
-    public pauseTimer(): void {
-        this.timerSubscription.unsubscribe();
-        this.timerSubscription = null;
+    public pause(): void {
+        this.stopTimer();
+        this.roundDetails.isStarted = false;
+        this.roundDetails.isPaused = true;
+        this.roundDetails.isCompleted = false;
+        this.send();
     }
 
-    public stopTimer(): void {
+    public stop(): void {
+        this.stopTimer();
+        this.roundDetails.isStarted = false;
+        this.roundDetails.isPaused = false;
+        this.roundDetails.isCompleted = true;
+        this.send();
+    }
+
+    public changeFirstPlayerAdvantage(advantageStep: number): void {
+        this.roundDetails.firstPlayerAdvantage = this.roundDetails.firstPlayerAdvantage + advantageStep < 0 ? 0 : this.roundDetails.firstPlayerAdvantage + advantageStep;
+        this.send();
+    }
+
+    public changeSecondPlayerAdvantage(advantageStep: number): void {
+        this.roundDetails.secondPlayerAdvantage = this.roundDetails.secondPlayerAdvantage + advantageStep < 0 ? 0 : this.roundDetails.secondPlayerAdvantage + advantageStep;
+        this.send();
+    }
+
+    public changeFirstPlayerPenalty(penaltyStep: number): void {
+        this.roundDetails.firstPlayerPenalty = this.roundDetails.firstPlayerPenalty + penaltyStep < 0 ? 0 : this.roundDetails.firstPlayerPenalty + penaltyStep;
+        this.send();
+    }
+
+    public changeSecondPlayerPenalty(penaltyStep: number): void {
+        this.roundDetails.secondPlayerPenalty = this.roundDetails.secondPlayerPenalty + penaltyStep < 0 ? 0 : this.roundDetails.secondPlayerPenalty + penaltyStep;
+        this.send();
+    }
+
+    public subscribeOnRecieveMessage(): void {
+        this.hubConnection.on("Send", x => {
+            this.roundDetails = JSON.parse(x);
+
+            if (this.roundDetails.isStarted) {
+                this.startTimer();
+            }
+            if (this.roundDetails.isPaused || this.roundDetails.isCompleted) {
+                this.stopTimer();
+            }
+        });
+    }
+
+    public send(): void {
+        this.hubConnection.invoke("Send", JSON.stringify(this.roundDetails));
+    }
+
+    private startTimer(): void {
+        if (!this.timerSubscription) {
+            this.timerSubscription = Observable.timer(0, this.tick).subscribe(() => --this.roundDetails.countdown);
+        }
+    }
+
+    private stopTimer(): void {
         if (this.timerSubscription) {
             this.timerSubscription.unsubscribe();
         }
         this.timerSubscription = null;
-        this.isRoundCompleted = true;
-    }
-
-    public increaseFirstPlayerAdvantage(): void {
-        this.firstPlayerAdvantage = this.firstPlayerAdvantage + this.advantageStep;
-    }
-
-    public decreaseFirstPlayerAdvantage(): void {
-        this.firstPlayerAdvantage = this.firstPlayerAdvantage - this.advantageStep < 0 ? 0 : this.firstPlayerAdvantage - this.advantageStep;
-    }
-
-    public increaseSecondPlayerAdvantage(): void {
-        this.secondPlayerAdvantage = this.secondPlayerAdvantage + this.advantageStep;
-    }
-
-    public decreaseSecondPlayerAdvantage(): void {
-        this.secondPlayerAdvantage = this.secondPlayerAdvantage - this.advantageStep < 0 ? 0 : this.secondPlayerAdvantage - this.advantageStep;
-    }
-
-    public increaseFirstPlayerPenalty(): void {
-        this.firstPlayerPenalty = this.firstPlayerPenalty + this.penaltyStep;
-    }
-
-    public decreaseFirstPlayerPenalty(): void {
-        this.firstPlayerPenalty = this.firstPlayerPenalty - this.penaltyStep < 0 ? 0 : this.firstPlayerPenalty - this.penaltyStep;
-    }
-
-    public increaseSecondPlayerPenalty(): void {
-        this.secondPlayerPenalty = this.secondPlayerPenalty + this.penaltyStep;
-    }
-
-    public decreaseSecondPlayerPenalty(): void {
-        this.secondPlayerPenalty = this.secondPlayerPenalty - this.penaltyStep < 0 ? 0 : this.secondPlayerPenalty - this.penaltyStep;
     }
 }
