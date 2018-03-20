@@ -1,14 +1,14 @@
 ﻿
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class RouterService {
 
-    constructor(private router: Router, private location: Location) {
+    constructor(private router: Router, private location: Location, @Inject(Window) private win: Window) {
     }
 
     public navigationStartEvents(): Observable<NavigationStart> {
@@ -17,6 +17,10 @@ export class RouterService {
 
     navigateByUrl(url: string) {
         this.router.navigateByUrl(url);
+    } 
+
+    openNewWindow(url: string) {
+        this.win.open(url);
     } 
 
     goHome(subdomain: string = '') {
@@ -54,16 +58,20 @@ export class RouterService {
         this.router.navigateByUrl('/event-admin/run/' + id);
     }
 
-    goToEventManagementParticipants(id: string) {
-        this.router.navigateByUrl('/event-admin/management/participants/' + id);
-    }
-
     goToEventInfo() {
         this.router.navigateByUrl('event/event-info/');    
     }
 
     goToRegistration(id: string) {
         this.router.navigateByUrl('event/event-registration/');
+    }
+
+    openEventWeightDivisionSpactatorView(weightDivisionId: string) {
+        this.openNewWindow('/event-admin/run-wd-spectator-view/' + weightDivisionId);
+    }
+
+    openEventCategorySpactatorView(categoryId: string) {
+        this.openNewWindow('/event-admin/run-category-spectator-view/' + categoryId);
     }
 }
 

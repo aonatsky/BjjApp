@@ -89,6 +89,7 @@ namespace TRNMNT.Web
             {
                 routes.MapHub<ChatHub>("chat");
                 routes.MapHub<RoundHub>("round-hub");
+                routes.MapHub<RunEventHub>("runevent");
             });
             
             app.UseStaticFiles();

@@ -16,22 +16,30 @@ namespace TRNMNT.Core.Services.impl
 {
     public class BracketService : IBracketService
     {
-        #region dependencies
+        #region Dependencies
+
         private readonly IRepository<Bracket> _bracketRepository;
         private readonly IRoundService _roundService;
         private readonly IParticipantService _participantService;
         private readonly BracketsFileService _bracketsFileService;
+        private readonly IWeightDivisionService _weightDivisionService;
 
         #endregion
 
         #region .ctor
-        public BracketService(IRepository<Bracket> bracketRepository, IRoundService roundService, IParticipantService participantService, BracketsFileService bracketsFileService)
+
+        public BracketService(IRepository<Bracket> bracketRepository, IRoundService roundService, 
+            IParticipantService participantService, 
+            BracketsFileService bracketsFileService,
+            IWeightDivisionService weightDivisionService)
         {
             _bracketRepository = bracketRepository;
             _roundService = roundService;
             _participantService = participantService;
             _bracketsFileService = bracketsFileService;
+            _weightDivisionService = weightDivisionService;
         }
+        
         #endregion
 
         public async Task<BracketModel> GetBracketAsync(Guid weightDivisionId)
@@ -55,7 +63,6 @@ namespace TRNMNT.Core.Services.impl
             return GetBracketModel(bracket);
         }
 
-
         public async Task UpdateBracket(BracketModel model)
         {
 
@@ -75,6 +82,16 @@ namespace TRNMNT.Core.Services.impl
             return await _bracketsFileService.GetBracketsFileAsync(GetOrderedParticipantListFromBracket(bracket));
         }
 
+        public async Task<Dictionary<string, BracketModel>> GetBracketsByCategoryAsync(Guid categoryId)
+        {
+            var weightDivisions = await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId);
+            var result = new Dictionary<string, BracketModel>();
+            foreach (var division in weightDivisions)
+            {
+                result.Add(division.WeightDivisionId.ToUpperInvariant(), await GetBracketAsync(new Guid(division.WeightDivisionId)));
+            }
+            return result;
+        }
 
         #region private methods
         private async Task<List<Participant>> GetOrderedListForNewBracketAsync(Guid weightDivisionId)
@@ -153,9 +170,11 @@ namespace TRNMNT.Core.Services.impl
         private BracketModel GetBracketModel(Bracket bracket)
         {
 
-            var model = new BracketModel();
-            model.BracketId = bracket.BracketId;
-            model.RoundModels = new List<RoundModel>();
+            var model = new BracketModel
+            {
+                BracketId = bracket.BracketId,
+                RoundModels = new List<RoundModel>()
+            };
             foreach (var round in bracket.Rounds)
             {
                 model.RoundModels.Add(GetRoundModel(round));
@@ -172,9 +191,7 @@ namespace TRNMNT.Core.Services.impl
                 Stage = round.Stage,
                 FirstParticipant = round.FirstParticipant == null ? null : GetParticipantModel(round.FirstParticipant),
                 SecondParticipant = round.SecondParticipant == null ? null : GetParticipantModel(round.SecondParticipant),
-                HasBooferParticipant = round.HasBooferParticipant
-
-                
+                RoundType = round.RoundType
             };
         }
 

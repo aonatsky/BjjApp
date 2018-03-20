@@ -16,6 +16,8 @@ import { WebsocketInteractionComponent } from './websocket-interaction/websocket
 import { ConnectorComponent } from './event-management/brackets-generation/connector.component';
 import { EventRunComponent } from './event-run/event-run.component';
 import { RoundModule } from '../round/round.module';
+import { EventRunWeightDivisionViewComponent } from './event-run-wd-view/event-run-wd-view.component';
+import { EventRunCategoryViewComponent } from './event-run-category-view/event-run-category-view.component';
 
 
 @
@@ -38,6 +40,8 @@ import { RoundModule } from '../round/round.module';
             PrticipantsListUploadComponent,
             WebsocketInteractionComponent,
             EventRunComponent,
+            EventRunWeightDivisionViewComponent,
+            EventRunCategoryViewComponent,
             ConnectorComponent
         ],
 
