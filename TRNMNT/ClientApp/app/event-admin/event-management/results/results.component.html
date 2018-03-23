@@ -1,5 +1,13 @@
-﻿<div class="ui-g-12">
+﻿<div class="ui-g-5">
     <div class="ui-g-12" *ngFor="let category of categories">
         <p-checkbox name="categories" [value]="category.categoryId" [label]="category.name" [(ngModel)]="selectedCategories" inputId="ny"></p-checkbox>
-        </div>
+    </div>
+</div>
+<div class="ui-g-7">
+    <div class="ui-g-12">
+        
+    </div>
+</div>
+<div class="ui-g-12">
+    <button pButton label="Get Results"></button>
 </div>
