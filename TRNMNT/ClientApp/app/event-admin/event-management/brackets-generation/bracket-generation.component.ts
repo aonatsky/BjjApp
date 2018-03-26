@@ -36,7 +36,7 @@ export class BracketGenerationComponent {
         this.bracket = undefined;
         this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(r => {
             this.bracket = r;
-            this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
+            this.maxStage = this.getMaxStage(this.bracket.roundModels.filter(r => r.roundType == 0).length);
             this.rounds =
                 this.bracket.roundModels.filter(r => r.stage == this.maxStage);
             this.initStages(this.maxStage);
@@ -84,7 +84,7 @@ export class BracketGenerationComponent {
         if (participantNumber == 1) {
             participant = round.firstParticipant;
         } else if (participantNumber == 2) {
-            if (round.hasBooferParticipant) {
+            if (round.roundType) {
                 return 'Lost in previous round';
             }
             participant = round.secondParticipant;
@@ -145,7 +145,7 @@ export class BracketGenerationComponent {
     }
 
     private getDraggable(round: RoundModel, num: number): string {
-        if (round.hasBooferParticipant && num == 2) {
+        if (round.roundType == 2 && num == 2) {
             return '';
         }
         else {

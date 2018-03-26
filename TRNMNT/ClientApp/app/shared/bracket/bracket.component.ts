@@ -1,8 +1,8 @@
-﻿import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+﻿import { Component, OnInit, Input } from '@angular/core';
 import { BracketModel } from '../../core/model/bracket.models';
 import './../../event-admin/event-management/brackets-generation/bracket-generation.component.scss';
 import './bracket.component.scss';
-import { ViewEncapsulation, OnChanges } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 import { RoundModel } from '../../core/model/round.models';
 
 @Component({
@@ -11,39 +11,24 @@ import { RoundModel } from '../../core/model/round.models';
     encapsulation: ViewEncapsulation.None
 })
 
-export class BracketComponent implements OnChanges {
-
+export class BracketComponent {
     @Input() bracket: BracketModel;
-    roundGroups: RoundModel[][];
     maxStage: number = 0;
-    rows: number[];
     columns: number[];
 
     constructor() {
 
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        this.refreshBracketData();
-    }
-
-    private refreshBracketData() {
-        this.maxStage = this.getMaxStage(this.bracket.roundModels.length);
-        this.rows = this.getRows();
-        this.roundGroups = this.getRoundsForStage();
+    ngOnInit() {
+        this.maxStage = this.getMaxStage();
         this.columns = this.getColumns();
     }
 
-    private getRoundsForStage(): RoundModel[][] {
-        let roundGroups: RoundModel[][] = [];
-        for (var i = 0; i <= this.maxStage; i++) {
-            roundGroups.push(this.bracket.roundModels.filter(r => r.stage == i));
-        }
-        console.log(roundGroups);
-        return roundGroups;
-    }
 
-    private getMaxStage(roundsCount: number): number {
+
+    private getMaxStage(): number {
+        let roundsCount = this.bracket.roundModels.filter(r => r.roundType == 0).length;
         for (let i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
             if (roundsCount == 0) {
@@ -54,69 +39,66 @@ export class BracketComponent implements OnChanges {
 
     private getColumns(): number[] {
         let cols = [];
-        let colsCount = this.maxStage * 2 * 2;
-        for (let i = 0; i <= colsCount; i++) {
+        let maxColumn = this.maxStage * 2;
+        for (let i = 0; i <= maxColumn; i++) {
             cols.push(i);
         }
         return cols;
     }
 
-    private getRows(): number[] {
-        let rows = [];
-        for (let i = 0; i < this.bracket.roundModels.filter(r => r.stage === this.maxStage).length - 1; i++) {
-            rows.push(i);
+
+
+    private getRoundTemplate(round: RoundModel, isRightSide: boolean): string {
+        let matchSide = isRightSide ? 'right-side' : '';
+        let matchType = '';
+        if (round.stage == 0) {
+            matchType = round.roundType == 1 ? 'third-place' : 'final';
         }
-        return rows;
-    }
-
-
-    displayData(col, row) {
-        let maxCol = this.columns.length - 1;
-        let centralCol = maxCol / 2;
-        let isRightSide = col > centralCol;
-        let depth = (isRightSide ? maxCol - col : col) / 2;
-        let roundStage = this.maxStage - depth;
-        let round: RoundModel;
-
-        if (col === centralCol) {
-            depth = depth - 1;
-            roundStage = 0;
-        }
-        if (col % 2 == 0) {
-            let shift = (Math.pow(2, depth) - 1);
-            let freq = Math.pow(2, depth) + 1;
-            let roundIndex = 0;
-            if ((row - shift) % freq == 0) {
-                roundIndex = (isRightSide ? this.roundGroups[roundStage].length/2 : 0) + ((row - shift) / freq);
-                round = this.roundGroups[roundStage][roundIndex];
-                return this.getRoundTemplate(round);
-            } else {
-                return `<div class="ui-g-12 table-block ui-g-nopad"></div>`;
-            }
-
-        } else {
-            return `<div class="ui-g-1 inline-block" style=""></div>`;
-        }
-
-    }
-
-    getRoundTemplate(round: RoundModel) {
-        return `<div class="bracket ui-g-1 ui-g-nopad">
-            <div class="bracket-participant-plate ui-g-12">
+        
+        return `<div class="match ${matchSide} ${matchType} "><div class="match-content ui-g-1 ui-g-nopad">
+            <div class="participant-plate ui-g-12">
             ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
             </div>
-            <div class="bracket-participant-plate ui-g-12">
+            <div class="participant-plate ui-g-12">
             ${round.secondParticipant ? round.secondParticipant.firstName + ' ' + round.secondParticipant.lastName : ''}
             </div>
-            </div>`;
+            </div></div>`;
     }
 
-    getColumnClass(col) {
-        if (col % 2 == 0) {
-            return 'brackets-column';
+    private getEmptyMatch(): string {
+        return '<div class="match empty"><div class="match-content"></div></div>';
+    }
+
+
+    private getRounds(colNumber: number) {
+        let htmlData = '';
+        let maxCol = this.columns.length - 1;
+        let isRightSide = colNumber > maxCol / 2;
+        let depth = (isRightSide ? maxCol - colNumber : colNumber);
+        let stage = this.maxStage - depth;
+        let count = this.bracket.roundModels.filter(r => r.stage == stage).length;
+        if (stage == 0) {
+            htmlData += this.getEmptyMatch();
+            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r) => {
+                htmlData += this.getRoundTemplate(r, false);
+            });
         } else {
-            return 'connector-column';
+            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r, j) => {
+                if (isRightSide) {
+                    if (j >= count / 2) {
+                        htmlData += this.getRoundTemplate(r, isRightSide);
+                    }
+                } else {
+                    if (j < count / 2) {
+                        htmlData += this.getRoundTemplate(r, isRightSide);
+                    }
+                }
+            });
         }
+        return htmlData;
+
 
     }
+
 }
+

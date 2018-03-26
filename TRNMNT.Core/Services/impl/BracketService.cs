@@ -191,9 +191,7 @@ namespace TRNMNT.Core.Services.impl
                 Stage = round.Stage,
                 FirstParticipant = round.FirstParticipant == null ? null : GetParticipantModel(round.FirstParticipant),
                 SecondParticipant = round.SecondParticipant == null ? null : GetParticipantModel(round.SecondParticipant),
-                HasBooferParticipant = round.HasBooferParticipant
-
-                
+                RoundType = round.RoundType
             };
         }
 

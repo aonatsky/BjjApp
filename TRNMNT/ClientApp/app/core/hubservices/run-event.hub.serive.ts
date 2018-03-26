@@ -12,7 +12,7 @@ export class RunEventHubService {
     public isConnected: boolean = false;
 
     constructor(private signalRService: SignalRHubService) {
-        this.hubConnection = this.signalRService.createConnection("/runevent");
+        this.hubConnection = this.signalRService.createConnection("/runevent", TransportType.ServerSentEvents);
     }
 
     public joinWeightDivisionGroup(weightDivisionId: string, previousWeightDivisionId?: string) {
@@ -59,6 +59,7 @@ export class RunEventHubService {
         if (this.isConnected) {
             return;
         }
+        this.signalRService.bindReconnection();
         this.signalRService.start();
         this.isConnected = true;
     }
