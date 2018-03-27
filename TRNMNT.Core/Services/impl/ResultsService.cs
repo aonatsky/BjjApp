@@ -11,23 +11,18 @@ using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Core.Services.impl
 {
-    class ResultsService : IResultsService
+    public class ResultsService : IResultsService
     {
-        private readonly IRepository<BracketService> _bracketRepository;
-        private readonly IRepository<Category> _categoryRepository;
         private readonly IRepository<Team> _teamRepository;
         private readonly IRepository<WeightDivision> _weightDivisionRepository;
         private readonly IRepository<Round> _roundRepository;
 
 
-        public ResultsService(IRepository<BracketService> bracketRepository,
-            IRepository<Category> categoryRepository,
+        public ResultsService(
             IRepository<Team> teamRepository,
             IRepository<WeightDivision> weightDivisionRepository,
             IRepository<Round> roundRepository)
         {
-            _bracketRepository = bracketRepository;
-            _categoryRepository = categoryRepository;
             _teamRepository = teamRepository;
             _weightDivisionRepository = weightDivisionRepository;
             _roundRepository = roundRepository;
@@ -47,11 +42,7 @@ namespace TRNMNT.Core.Services.impl
                 });
             }
 
-            //            return results;
-
-            var firstPlaceParticipantIds = new List<Guid>();
-            var secondPlaceParticipantIds = new List<Guid>();
-            var thirdPlaceParticipantIds = new List<Guid>();
+            var medalists = new List<(Guid, int)>();
 
             foreach (var categoryId in categoryIds)
             {
@@ -60,27 +51,29 @@ namespace TRNMNT.Core.Services.impl
 
                 foreach (var bracketId in bracketIds)
                 {
-                    var rounds =  await _roundRepository.GetAll(r => r.BracketId == bracketId && r.Stage == 0).ToListAsync();
+                    var rounds = await _roundRepository.GetAll(r => r.BracketId == bracketId && r.Stage == 0).ToListAsync();
                     foreach (var round in rounds)
                     {
                         if (round.WinnerParticipantId.HasValue)
                         {
-                            if (round.RoundType == (int) RoundTypeEnum.Standard)
+                            if (round.RoundType == (int)RoundTypeEnum.Standard)
                             {
-                                firstPlaceParticipantIds.Add(round.WinnerParticipantId.Value);
-                                secondPlaceParticipantIds.Add(
+                                medalists.Add((round.WinnerParticipantId.Value, 1));
+                                medalists.Add(
                                     round.FirstParticipantId.Value == round.WinnerParticipantId.Value
-                                        ? round.SecondParticipantId.Value
-                                        : round.FirstParticipantId.Value);
+                                        ? (round.SecondParticipantId.Value, 2)
+                                        : (round.FirstParticipantId.Value, 2));
                             }
                             else
                             {
-                                thirdPlaceParticipantIds.Add(round.WinnerParticipantId.Value);
+                                medalists.Add((round.WinnerParticipantId.Value, 3));
                             }
                         }
                     }
                 }
             }
+
+            return new List<TeamResultModel>();
         }
     }
 }

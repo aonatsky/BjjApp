@@ -6,7 +6,7 @@ namespace TRNMNT.Web.Helpers
 {
     public static class LogExtensions
     {
-        public static void Log(this ILogger logger, LogLevel level, string message, params object[] args)
+        public static void LogCustom(this ILogger logger, LogLevel level, string message, params object[] args)
         {
             if (logger == null)
             {

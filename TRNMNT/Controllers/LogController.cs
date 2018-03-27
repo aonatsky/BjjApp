@@ -28,7 +28,7 @@ namespace TRNMNT.Web.Controllers
 
             if (log != null)
             {
-                _logger.Log(log.Level, log.Message);
+                _logger.LogCustom(log.Level, log.Message);
             }
             else
             {

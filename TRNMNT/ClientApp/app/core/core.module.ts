@@ -39,7 +39,7 @@ import { SignalRHubService } from './dal/signalr/signalr-hub.service';
 import { TestSocketService } from './services/test-socket.service';
 import { RunEventHubService } from './hubservices/run-event.hub.serive';
 import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
-
+import {ResultsService} from './services/results.service';
 
 
 @
@@ -88,6 +88,7 @@ NgModule({
         WeightDivisionService,
         ParticipantService,
         BracketService,
+        ResultsService,
         provideAuth({
             headerName: 'Authorization',
             headerPrefix: 'bearer',

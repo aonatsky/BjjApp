@@ -1,8 +1,10 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { Input } from '@angular/core';
-import {CategorySimpleModel} from '../../../core/model/category.models';
-import {CategoryService} from '../../../core/services/category.service';
+import { CategorySimpleModel } from '../../../core/model/category.models';
+import { CategoryService } from '../../../core/services/category.service';
+import { TeamResultModel } from '../../../core/model/team-result.model';
+import {ResultsService} from '../../../core/services/results.service';
 
 @Component({
     selector: 'results',
@@ -13,9 +15,10 @@ import {CategoryService} from '../../../core/services/category.service';
 export class ResultsComponent {
     @Input() eventId: string;
     private categories: CategorySimpleModel[] = [];
-    private selectedCategories: CategorySimpleModel[] = [];
-
-    constructor(private categoryService: CategoryService) {
+    private selectedCategories: string[] = [];
+    private teamResults: TeamResultModel[];
+    
+    constructor(private categoryService: CategoryService, private resultsService: ResultsService) {
 
     }
 
@@ -23,9 +26,12 @@ export class ResultsComponent {
         this.categoryService.getCategoriesByEventId(this.eventId).subscribe(r => {
             this.categories = r;
         });
-
     }
-
+    
+    getResults() {
+        debugger;
+        this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => { this.teamResults = r; });
+    }
 
 }
 
