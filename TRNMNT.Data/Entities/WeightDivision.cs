@@ -14,13 +14,14 @@ namespace TRNMNT.Data.Entities
         public int Weight { get; set; }
         public string Descritpion { get; set; }
         public Guid CategoryId { get; set; }
+        public bool IsAbsolute { get; set; }
 
         [JsonIgnore]
         public virtual Category Category { get; set; }
         [JsonIgnore]
         public virtual ICollection<Fighter> Fighters {get;set;}
         [JsonIgnore]
-        public virtual ICollection<Participant> Participants { get; set; }
+        public virtual ICollection<ParticipantWeightDivision> ParticipantWeightDivisions { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Bracket> Brackets { get; set; }

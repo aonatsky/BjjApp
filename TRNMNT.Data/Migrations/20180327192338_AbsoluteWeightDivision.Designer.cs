@@ -11,9 +11,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180327192338_AbsoluteWeightDivision")]
+    partial class AbsoluteWeightDivision
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -50,9 +50,10 @@ namespace TRNMNT.Core.Services.Impl
 
         public Participant CreatePaticipant(ParticipantRegistrationModel model, Guid eventId)
         {
+            var id = Guid.NewGuid();
             return new Participant()
             {
-                ParticipantId = Guid.NewGuid(),
+                ParticipantId = id,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 TeamId = Guid.Parse(model.TeamId),
@@ -60,7 +61,7 @@ namespace TRNMNT.Core.Services.Impl
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 CategoryId = Guid.Parse(model.CategoryId),
-                WeightDivisionId = Guid.Parse(model.WeightDivisionId),
+                ParticipantWeightDivisions = CreateParticipantWeightDivisions(id, Guid.Parse(model.WeightDivisionId)),
                 EventId = eventId,
                 UserId = model.UserId,
                 IsActive = true,
@@ -86,7 +87,8 @@ namespace TRNMNT.Core.Services.Impl
             {
                 throw new ArgumentNullException(nameof(participantModel));
             }
-            var participant = await _repository.GetByIDAsync(participantModel.ParticipantId);
+            var participant = await _repository.GetAllIncluding(p => p.ParticipantWeightDivisions)
+                .FirstOrDefaultAsync(p => p.ParticipantId == participantModel.ParticipantId);
             if (participant == null)
             {
                 // todo change to custom exception
@@ -97,7 +99,12 @@ namespace TRNMNT.Core.Services.Impl
             participant.TeamId = participantModel.TeamId;
             participant.DateOfBirth = participantModel.DateOfBirth;
             participant.CategoryId = participantModel.CategoryId;
-            participant.WeightDivisionId = participantModel.WeightDivisionId;
+            if (participant.ParticipantWeightDivisions.All(w => w.WeightDivisionId != participantModel.WeightDivisionId))
+            {
+                //participant.ParticipantWeightDivisions = participantModel.WeightDivisionId;
+            }
+           
+
             participant.IsMember = participantModel.IsMember;
             participant.IsActive = true;
             participant.UpdateTS = DateTime.UtcNow;
@@ -108,7 +115,9 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId)
         {
-            return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId).ToListAsync();
+            //return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId).ToListAsync();
+
+            return await _repository.GetAll(p => p.ParticipantWeightDivisions.Any(w => w.WeightDivisionId == weightDivisionId)).ToListAsync();
         }
 
         public async Task DeleteParticipantAsync(Guid participantId)
@@ -125,14 +134,16 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel filter)
         {
             var size = DefaultValues.DefaultPageSize;
-            var allParticipants = _repository.GetAll(p => p.EventId == filter.EventId);
+            var allParticipants = _repository.GetAllIncluding(p => p.ParticipantWeightDivisions).Where(p => p.EventId == filter.EventId);
             if (filter.CategoryId != null)
             {
                 allParticipants = allParticipants.Where(p => p.CategoryId == filter.CategoryId);
             }
             if (filter.WeightDivisionId != null)
             {
-                allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
+                //allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
+
+                allParticipants = allParticipants.Where(p => p.ParticipantWeightDivisions.Any(w => w.WeightDivisionId == filter.WeightDivisionId));
             }
             if (filter.IsMembersOnly)
             {
@@ -155,8 +166,10 @@ namespace TRNMNT.Core.Services.Impl
                 TeamId  = p.TeamId,
                 CategoryName = p.Category.Name,
                 CategoryId = p.CategoryId,
-                WeightDivisionName = p.WeightDivision.Name,
-                WeightDivisionId = p.WeightDivisionId,
+                //WeightDivisionName = p.WeightDivision.Name,
+                //WeightDivisionId = p.WeightDivisionId,
+                WeightDivisionName = p.ParticipantWeightDivisions.Select(w => w.WeightDivision).First(w => !w.IsAbsolute).Name,
+                WeightDivisionId = p.ParticipantWeightDivisions.Select(w => w.WeightDivision).First(w => !w.IsAbsolute).WeightDivisionId,
                 IsMember = p.IsMember
             }).ToListAsync();
 
@@ -183,10 +196,10 @@ namespace TRNMNT.Core.Services.Impl
                     allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Category.Name);
                     break;
                 case ParticpantSortField.WeightDivisionName:
-                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.WeightDivision.Name);
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.ParticipantWeightDivisions.Select(w => w.WeightDivision).First(w => !w.IsAbsolute).Name);
                     break;
                 case ParticpantSortField.IsMember:
-                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Team.FederationId == federationId);
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.IsMember);
                     break;
                 default:
                     allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.FirstName);
@@ -203,6 +216,27 @@ namespace TRNMNT.Core.Services.Impl
                 TeamId = Guid.Empty,
                 FirstName = "EMPTY",
                 LastName = "EMPTY"
+            };
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private List<ParticipantWeightDivision> CreateParticipantWeightDivisions(Guid participantId, Guid weightDivisionId)
+        {
+            return new List<ParticipantWeightDivision>
+            {
+                CreateParticipantWeightDivision(participantId, weightDivisionId)
+            };
+        }
+
+        private static ParticipantWeightDivision CreateParticipantWeightDivision(Guid participantId, Guid weightDivisionId)
+        {
+            return new ParticipantWeightDivision
+            {
+                ParticipantId = participantId,
+                WeightDivisionId = weightDivisionId
             };
         }
 

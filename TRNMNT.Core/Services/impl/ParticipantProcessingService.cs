@@ -43,12 +43,6 @@ namespace TRNMNT.Core.Services.Impl
         
         #region Public Methods
 
-        public List<ParticipantModel> GetParticitantModelsByFilter(ParticitantFilterModel filter)
-        {
-            var fighters = GetParticitantByFilter(filter);
-            return GetModels(fighters);
-        }
-
         public async Task<List<string>> AddParticipantsByModelsAsync(List<ParticipantModel> particitantModels, Guid eventId, Guid federationId)
         {
             var messageList = new List<string>();
@@ -69,15 +63,16 @@ namespace TRNMNT.Core.Services.Impl
                     continue;
                 }
                 bool.TryParse(model.IsMember, out var isMember);
+                var participantId = Guid.NewGuid();
                 var participant = new Participant
                 {
-                    ParticipantId = Guid.NewGuid(),
+                    ParticipantId = participantId,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     DateOfBirth = DateTime.Parse(model.DateOfBirth),
                     EventId = eventId,
                     TeamId = ProcessTeam(model.Team, existingTeamsBase, teamsToAdd),
-                    WeightDivisionId = eventWeightDivisions.First(x => x.Value.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase)).Key,
+                    ParticipantWeightDivisions = CreateParicipantWeightDivisions(eventWeightDivisions, model.WeightDivision, participantId),
                     CategoryId = eventCategories.First(x => x.Value.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).Key,
                     IsMember = isMember
                 };
@@ -91,20 +86,6 @@ namespace TRNMNT.Core.Services.Impl
             _teamRepository.AddRange(teamsToAdd);
             _participantRepository.AddRange(participantsToAdd);
             return messageList;
-        }
-
-
-        public List<ParticipantModel> GetOrderedListForBrackets(ParticitantFilterModel filter)
-        {
-            var fighters = GetParticitantModelsByFilter(filter);
-            var count = fighters.Count;
-            var bracketSize = GetBracketsSize(fighters.Count);
-            for (var i = 0; i < bracketSize - count; i++)
-            {
-                fighters.Add(new ParticipantModel());
-            }
-
-            return Distribute(fighters);
         }
         
         #endregion
@@ -152,56 +133,17 @@ namespace TRNMNT.Core.Services.Impl
             return isValid;
         }
 
-        private List<ParticipantModel> Distribute(List<ParticipantModel> fightersList)
+        private List<ParticipantWeightDivision> CreateParicipantWeightDivisions(Dictionary<Guid, string> eventWeightDivisions, string weightDivisionName, Guid participanId)
         {
-
-            var orderedbyTeam = fightersList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
-           .SelectMany(f => f).ToList();
-            if (fightersList.Count > 2)
+            return new List<ParticipantWeightDivision>
             {
-                var sideA = new List<ParticipantModel>();
-                var sideB = new List<ParticipantModel>();
-                for (var i = 0; i < orderedbyTeam.Count; i++)
+                new ParticipantWeightDivision
                 {
-                    var fighter = orderedbyTeam.ElementAtOrDefault(i);
-                    if (i % 2 == 0)
-                    {
-                        sideA.Add(fighter);
-                    }
-                    else
-                    {
-                        sideB.Add(fighter);
-                    }
+                    ParticipantId = participanId,
+                    WeightDivisionId = eventWeightDivisions.First(x =>
+                        x.Value.Equals(weightDivisionName, StringComparison.OrdinalIgnoreCase)).Key
                 }
-                return Distribute(sideA).Concat(Distribute(sideB)).ToList();
-            }
-            return fightersList;
-        } 
-
-        private List<ParticipantModel> GetModels(IEnumerable<Participant> fighters)
-        {
-            return fighters.Select(f => new ParticipantModel()
-            {
-                ParticipantId = f.ParticipantId,
-                FirstName = f.FirstName,
-                LastName = f.LastName,
-                Team = f.Team.Name,
-                WeightDivision = f.WeightDivision.Name,
-                DateOfBirth = f.DateOfBirth.ToString("yyyy-MM-dd")
-            }).ToList();
-
-        }
-
-        private IQueryable<Participant> GetParticitants()
-        {
-            return _participantRepository.GetAll()
-                .Include(f => f.Team).Include(f => f.WeightDivision);
-        }
-
-        private IQueryable<Participant> GetParticitantByFilter(ParticitantFilterModel filter)
-        {
-            return GetParticitants().Where(f => filter.CategoryIds.Contains(f.CategoryId)
-                            && filter.WeightDivisionIds.Contains(f.WeightDivisionId));
+            };
         }
 
         private async Task<List<TeamModelBase>> GetExistingTeams(Guid federationId)
@@ -216,16 +158,6 @@ namespace TRNMNT.Core.Services.Impl
         #endregion
 
         #region Models parsing
-
-        private DateTime? GetDateOfBirth(string stringDob)
-        {
-            //DateTime dob;
-            if (DateTime.TryParse(stringDob, out var dob))
-            {
-                return dob;
-            }
-            return null;
-        }
 
         private Guid ProcessTeam(string name, IEnumerable<TeamModelBase> existingTeamNames, List<Team> teamsToAdd)
         {
@@ -249,38 +181,6 @@ namespace TRNMNT.Core.Services.Impl
             }
             return team.TeamId;
 
-        }
-        private WeightDivision GetWeightDivision(string name)
-        {
-            return _weightDivisionRepository.GetAll().FirstOrDefault(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-        }
-        private Category GetCategory(string name)
-        {
-            return _categoryRepository.GetAll().FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-        }
-
-        #endregion
-        
-        #region Brackets
-
-        private const int FIGHTERS_MAX_COUNT = 64;
-
-        private int GetBracketsSize(int fightersCount)
-        {
-            if (fightersCount == 3)
-            {
-                return 3;
-            }
-            for (var i = 1; i <= Math.Log(FIGHTERS_MAX_COUNT, 2); i++)
-            {
-                var size = Math.Pow(2, i);
-                if (size >= fightersCount)
-                {
-                    return (int)size;
-                }
-            }
-            return 2;
         }
 
         #endregion

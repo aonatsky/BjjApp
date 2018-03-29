@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
@@ -22,14 +23,13 @@ namespace TRNMNT.Data.Entities
 
         public Guid TeamId { get; set; }
         public Guid CategoryId { get; set; }
-        public Guid WeightDivisionId { get; set; }
         public Guid EventId { get; set; }
         public String ActivatedPromoCode { get; set; }
 
         [JsonIgnore]
         public virtual Team Team { get; set; }
         [JsonIgnore]
-        public virtual WeightDivision WeightDivision{ get; set; }
+        public virtual ICollection<ParticipantWeightDivision> ParticipantWeightDivisions { get; set; }
         [JsonIgnore]
         public virtual Category Category { get; set; }
         [JsonIgnore]
