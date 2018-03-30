@@ -1,17 +1,42 @@
 ﻿@import '../../shared/styles/variables.scss';
 
 body {
-    div.trnmnt-crud {
+    div.trnmnt-table {
+        &.table-picker-list {
+            .ui-datatable {
+                .ui-datatable-data tr.ui-state-highlight {
+                    background-color: $theme_black;
+                    border-color: #c7c7c7;
+                    color: $theme_white;
+                }
+            }
+        }
+
         .ui-datatable {
             .ui-datatable-thead > tr > th {
                 padding: .25em;
             }
 
-            .ui-datatable-data tr.ui-state-highlight, 
-            thead th.ui-state-active {
+            .ui-datatable-data tr.ui-state-highlight {
                 background-color: #ffffff;
                 border-color: #c7c7c7;
                 color: #373a3c;
+            }
+
+            thead th.ui-state-active {
+                background-color: $theme_black;
+                border-color: #c7c7c7;
+                color: $theme_white;
+            }
+
+            thead th {
+                background-color: $theme_black;
+                border-color: #c7c7c7;
+                color: $theme_white;
+
+                &.ui-sortable-column:not(.ui-state-active):hover {
+                    background-color: darken($theme_black,10%)
+                }
             }
         }
 
