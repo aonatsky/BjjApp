@@ -41,7 +41,8 @@ namespace TRNMNT.Core.Services.impl
                     TeamName = teams[i].Name
                 });
             }
-
+            return results;
+            
             var medalists = new List<(Guid, int)>();
 
             foreach (var categoryId in categoryIds)
@@ -73,7 +74,7 @@ namespace TRNMNT.Core.Services.impl
                 }
             }
 
-            return new List<TeamResultModel>();
+            
         }
     }
 }

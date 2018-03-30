@@ -4,20 +4,33 @@ import { Input } from '@angular/core';
 import { CategorySimpleModel } from '../../../core/model/category.models';
 import { CategoryService } from '../../../core/services/category.service';
 import { TeamResultModel } from '../../../core/model/team-result.model';
-import {ResultsService} from '../../../core/services/results.service';
+import { ResultsService } from '../../../core/services/results.service';
+import { ICrudColumn as CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent } from '../../../shared/crud/crud.component';
+import {IColumnOptions as IColumnOptions1} from '../../../shared/crud/crud.component';
 
 @Component({
     selector: 'results',
     templateUrl: 'results.component.html',
     encapsulation: ViewEncapsulation.None
 })
-
 export class ResultsComponent {
-    @Input() eventId: string;
+    @Input()
+    eventId: string;
     private categories: CategorySimpleModel[] = [];
     private selectedCategories: string[] = [];
     private teamResults: TeamResultModel[];
-    
+    columns: CrudColumn[] = [
+        { propertyName: "teamName", displayName: "Name", isEditable: false, isSortable: false },
+        { propertyName: "points", displayName: "Points", isEditable: false, isSortable: true }
+    ];
+    private readonly pageLinks: number = 3;
+    private firstIndex: number = 0;
+    private participantsLoading: boolean = true;
+    private ddlDataLoading: boolean = true;
+    private sortDirection: number = 1;
+    private sortField: string = 'teamName';
+    private columnOptions: IColumnOptions = {};
+
     constructor(private categoryService: CategoryService, private resultsService: ResultsService) {
 
     }
@@ -27,10 +40,17 @@ export class ResultsComponent {
             this.categories = r;
         });
     }
-    
+
     getResults() {
         debugger;
         this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => { this.teamResults = r; });
+    }
+
+    public get totalCount(): number {
+        if (this.teamResults) {
+            return this.teamResults.length;
+        }
+        return 0;
     }
 
 }
