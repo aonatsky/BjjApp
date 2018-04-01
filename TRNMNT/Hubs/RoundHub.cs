@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TRNMNT.Core.Model.Round;
 
 namespace TRNMNT.Web.Hubs
 {
@@ -6,9 +7,9 @@ namespace TRNMNT.Web.Hubs
     {
         #region Dependencies
 
-        public async Task Send(string data)
+        public async Task Send(RoundDetailsModel roundDetails)
         {
-            await AllExeptCurrent.Send(data);
+            await Clients.Group(roundDetails.RoundId).Send(roundDetails);
         }
 
         #endregion
@@ -16,6 +17,6 @@ namespace TRNMNT.Web.Hubs
 
     public interface IRoundHubClient
     {
-        Task Send(string data);
+        Task Send(RoundDetailsModel roundDetails);
     }
 }

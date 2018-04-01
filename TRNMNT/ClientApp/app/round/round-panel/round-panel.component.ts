@@ -2,8 +2,8 @@
 import { Observable } from 'rxjs/Observable';
 import { RoundModel } from '../../core/model/round.models';
 import { SignalRHubService } from '../../core/dal/signalr/signalr-hub.service';
-import { HubConnection } from "@aspnet/signalr-client";
 import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
+import { HubConnection } from "@aspnet/signalr-client";
 import './round-panel.component.scss';
 
 @Component({
@@ -13,11 +13,12 @@ import './round-panel.component.scss';
 export class RoundPanelComponent implements OnInit {
     @Input() roundModel: RoundModel;
 
-    private hubConnection: HubConnection;
     private roundDetails: RoundDetailsModel;
 
     private readonly tick: number;
     private timerSubscription: any;
+
+    private hubConnection: HubConnection;
 
     constructor(private signalRService: SignalRHubService) {
         this.roundDetails = new RoundDetailsModel();
@@ -26,27 +27,31 @@ export class RoundPanelComponent implements OnInit {
         this.roundDetails.secondPlayerPenalty = 0;
         this.roundDetails.firstPlayerAdvantage = 0;
         this.roundDetails.secondPlayerAdvantage = 0;
+        this.roundDetails.firstPlayerPoints = 0;
+        this.roundDetails.secondPlayerPoints = 0;
 
         this.roundDetails.countdown = 2 * 60;
         this.roundDetails.isStarted = false;
         this.roundDetails.isPaused = false;
         this.roundDetails.isCompleted = false;
 
+
         this.tick = 1000;
     }
 
     ngOnInit() {
-        this.hubConnection = new HubConnection("/round-hub");
-        this.subscribeOnRecieveMessage();
-        this.hubConnection.start().then(() => console.log("connected"), x=>console.log(x));
+        this.roundDetails.roundId = this.roundModel.roundId;
+        this.setupConnection();
     }
 
     public start(): void {
-        this.startTimer();
-        this.roundDetails.isStarted = true;
-        this.roundDetails.isPaused = false;
-        this.roundDetails.isCompleted = false;
-        this.send();
+        if (!this.roundDetails.isCompleted || !this.timerSubscription) {
+            this.startTimer();
+            this.roundDetails.isStarted = true;
+            this.roundDetails.isPaused = false;
+            this.roundDetails.isCompleted = false;
+            this.send();
+        }
     }
 
     public pause(): void {
@@ -63,6 +68,11 @@ export class RoundPanelComponent implements OnInit {
         this.roundDetails.isPaused = false;
         this.roundDetails.isCompleted = true;
         this.send();
+    }
+
+    public resetTimer(): void {
+        this.roundDetails.countdown = 2 * 60;
+        this.stop();
     }
 
     public changeFirstPlayerAdvantage(advantageStep: number): void {
@@ -85,9 +95,27 @@ export class RoundPanelComponent implements OnInit {
         this.send();
     }
 
+    public changeFirstPlayerPoints(pointStep: number): void {
+        this.roundDetails.firstPlayerPoints = this.roundDetails.firstPlayerPoints + pointStep < 0 ? 0 : this.roundDetails.firstPlayerPoints + pointStep;
+        this.send();
+    }
+
+    public changeSecondPlayerPoints(pointStep: number): void {
+        this.roundDetails.secondPlayerPoints = this.roundDetails.secondPlayerPoints + pointStep < 0 ? 0 : this.roundDetails.secondPlayerPoints + pointStep;
+        this.send();
+    }
+
+    public getFirstPlayerScore(): number {
+        return this.roundDetails.firstPlayerAdvantage + this.roundDetails.firstPlayerPoints - this.roundDetails.firstPlayerPenalty;
+    }
+
+    public getSecondPlayerScore(): number {
+        return this.roundDetails.secondPlayerAdvantage + this.roundDetails.secondPlayerPoints - this.roundDetails.secondPlayerPenalty;
+    }
+
     public subscribeOnRecieveMessage(): void {
         this.hubConnection.on("Send", x => {
-            this.roundDetails = JSON.parse(x);
+            this.roundDetails = x;
 
             if (this.roundDetails.isStarted) {
                 this.startTimer();
@@ -99,12 +127,17 @@ export class RoundPanelComponent implements OnInit {
     }
 
     public send(): void {
-        this.hubConnection.invoke("Send", JSON.stringify(this.roundDetails));
+        this.hubConnection.invoke("Send", this.roundDetails);
     }
 
     private startTimer(): void {
         if (!this.timerSubscription) {
-            this.timerSubscription = Observable.timer(0, this.tick).subscribe(() => --this.roundDetails.countdown);
+            this.timerSubscription = Observable.timer(0, this.tick).subscribe(() => {
+                --this.roundDetails.countdown;
+                if (this.roundDetails.countdown <= 0) {
+                    this.stop();
+                }
+            });
         }
     }
 
@@ -113,5 +146,13 @@ export class RoundPanelComponent implements OnInit {
             this.timerSubscription.unsubscribe();
         }
         this.timerSubscription = null;
+    }
+
+    private setupConnection(): void {
+        this.hubConnection = new HubConnection('/round-hub');
+        this.hubConnection.start().then(() => {
+            this.subscribeOnRecieveMessage();
+            this.hubConnection.invoke("JoinGroup", this.roundModel.roundId);
+        });
     }
 }
