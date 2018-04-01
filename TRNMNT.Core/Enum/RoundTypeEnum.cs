@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TRNMNT.Core.Enum
+﻿namespace TRNMNT.Core.Enum
 {
     public enum RoundTypeEnum 
     {

@@ -16,6 +16,8 @@ namespace TRNMNT.Data.Entities
         public Guid? NextRoundId { get; set; }
         public int Stage { get; set; }
         public int RoundType { get; set; }
+        public int RoundResultType { get; set; }
+        public string RoundResultDetails { get; set; }
 
         [JsonIgnore, ForeignKey(nameof(FirstParticipantId))]
         public virtual Participant FirstParticipant { get; set; }
