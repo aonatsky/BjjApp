@@ -1,11 +1,5 @@
 ﻿import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { LoggerService } from './../../core/services/logger.service';
-import { BracketService } from '../../core/services/bracket.service';
-import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
-import { RouterService } from '../../core/services/router.service';
 import './table-picker-list.component.scss'
-
 @Component({
     selector: 'table-picker-list',
     templateUrl: './table-picker-list.component.html',
@@ -34,14 +28,6 @@ export class TablePickerListComponent implements OnInit, OnChanges {
         let clone: any = Object.assign({}, this.emptyProto);
         clone.__index = this.index++;
         return clone;
-    }
-
-    constructor(
-        private loggerService: LoggerService,
-        private bracketService: BracketService,
-        private route: ActivatedRoute,
-        private routerService: RouterService,
-        private runEventHubService: RunEventHubService) {
     }
 
     ngOnInit() {

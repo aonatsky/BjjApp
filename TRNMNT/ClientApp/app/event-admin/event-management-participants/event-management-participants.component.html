@@ -30,6 +30,6 @@
 </div>
 <div class="ui-g">
     <participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)" class="ui-g-12"></participant-list-upload>
-    <button pButton label="Create Absolute Division" [disabled]="false" (click)="showAbsoluteWeightDivision()"></button>
+    <absolute-weight-division [categoryId]="selectedCategoryId" class="ui-g-12" ></absolute-weight-division>
 </div>
 

@@ -1,5 +1,5 @@
-﻿<div class="absolute-weight-division">
-    <button pButton label="Create Absolute Division" [disabled]="false" (click)="showAbsoluteWeightDivision()"></button>
+﻿<span class="absolute-weight-division">
+    <button pButton label="Create Absolute Division" [disabled]="categoryId == null || categoryId == ''" (click)="showAbsoluteWeightDivision()"></button>
     <p-dialog header="Create Absolute Division"
               [(visible)]="displayAbsoluteWindow"
               [responsive]="fade"
@@ -16,4 +16,4 @@
                            [columnsData]="columnsData"></table-picker-list>
         <button pButton label="Create" (click)="createAbsoluteWeightDivision()"></button>
     </p-dialog>
-</div>
+</span>

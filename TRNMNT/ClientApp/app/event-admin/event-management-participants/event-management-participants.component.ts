@@ -47,6 +47,13 @@ export class EventManagementParticipantsComponent implements OnInit {
         return this.participantsLoading || this.ddlDataLoading;
     }
 
+    public get selectedCategoryId() {
+        if (this.filter != null) {
+            return this.filter.categoryId;
+        }
+        return null;
+    }
+
     public get participantsModel(): ParticipantTableModel[] {
         if (this.participantsListModel != null) {
             return this.participantsListModel.innerList;

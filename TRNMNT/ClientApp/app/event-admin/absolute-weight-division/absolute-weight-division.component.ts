@@ -1,7 +1,6 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
 import { LoggerService } from './../../core/services/logger.service';
 import { BracketService } from '../../core/services/bracket.service';
-import './absolute-weight-division.component.scss'
 import { ParticipantSmallTableModel } from '../../core/model/participant.models';
 
 @Component({
@@ -12,10 +11,11 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
 
     @Input() categoryId: string;
     private candidates: ParticipantSmallTableModel[];
-    private selectedParticipants: ParticipantSmallTableModel[];
+    private selectedParticipants: ParticipantSmallTableModel[] = [];
     private sortDirection: number = 1;
     private sortField: string = "firstName";
     private displayAbsoluteWindow: boolean = false;
+    private prevCategoryId: string;
 
     constructor(
         private loggerService: LoggerService,
@@ -29,10 +29,18 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
     ];
 
     ngOnInit() {
-        this.bracketService.getWinnersByCategory(this.categoryId).subscribe(data => this.candidates = data);
+        
     }
 
     public showAbsoluteWeightDivision() {
+        if (this.prevCategoryId !== this.categoryId) {
+            this.prevCategoryId = this.categoryId;
+            this.bracketService.getWinnersByCategory(this.categoryId).subscribe(data => {
+                this.candidates = data;
+                this.selectedParticipants = [];
+            });
+        }
+        
         this.displayAbsoluteWindow = !this.displayAbsoluteWindow;
     }
 

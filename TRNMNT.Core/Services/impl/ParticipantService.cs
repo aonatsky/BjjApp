@@ -87,7 +87,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 throw new ArgumentNullException(nameof(participantModel));
             }
-            var participant = await _repository.GetAllIncluding(p => p.ParticipantWeightDivisions)
+            var participant = await _repository.GetAll().Include(p => p.ParticipantWeightDivisions).ThenInclude(w => w.WeightDivision)
                 .FirstOrDefaultAsync(p => p.ParticipantId == participantModel.ParticipantId);
             if (participant == null)
             {
@@ -101,9 +101,10 @@ namespace TRNMNT.Core.Services.Impl
             participant.CategoryId = participantModel.CategoryId;
             if (participant.ParticipantWeightDivisions.All(w => w.WeightDivisionId != participantModel.WeightDivisionId))
             {
-                //participant.ParticipantWeightDivisions = participantModel.WeightDivisionId;
+                var division = participant.ParticipantWeightDivisions.Single(w => !w.WeightDivision.IsAbsolute);
+                participant.ParticipantWeightDivisions.Remove(division);
+                participant.ParticipantWeightDivisions.Add(CreateParticipantWeightDivision(participant.ParticipantId, participantModel.WeightDivisionId));
             }
-           
 
             participant.IsMember = participantModel.IsMember;
             participant.IsActive = true;
@@ -134,15 +135,13 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel filter)
         {
             var size = DefaultValues.DefaultPageSize;
-            var allParticipants = _repository.GetAllIncluding(p => p.ParticipantWeightDivisions).Where(p => p.EventId == filter.EventId);
+            var allParticipants = _repository.GetAll().Include(p => p.ParticipantWeightDivisions).ThenInclude(p=> p.WeightDivision).Where(p => p.EventId == filter.EventId);
             if (filter.CategoryId != null)
             {
                 allParticipants = allParticipants.Where(p => p.CategoryId == filter.CategoryId);
             }
             if (filter.WeightDivisionId != null)
             {
-                //allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
-
                 allParticipants = allParticipants.Where(p => p.ParticipantWeightDivisions.Any(w => w.WeightDivisionId == filter.WeightDivisionId));
             }
             if (filter.IsMembersOnly)
@@ -155,7 +154,7 @@ namespace TRNMNT.Core.Services.Impl
 
             allParticipants = allParticipants.Skip(size * filter.PageIndex).Take(size);
 
-            var list = await allParticipants.Select(p => new ParticipantTableModel
+            var anonimList = await allParticipants.Select(p => new ParticipantTableModel
             {
                 ParticipantId = p.ParticipantId,
                 FirstName = p.FirstName,
@@ -163,17 +162,15 @@ namespace TRNMNT.Core.Services.Impl
                 DateOfBirth = p.DateOfBirth,
                 UserId = p.UserId,
                 TeamName = p.Team.Name,
-                TeamId  = p.TeamId,
+                TeamId = p.TeamId,
                 CategoryName = p.Category.Name,
                 CategoryId = p.CategoryId,
-                //WeightDivisionName = p.WeightDivision.Name,
-                //WeightDivisionId = p.WeightDivisionId,
-                WeightDivisionName = p.ParticipantWeightDivisions.Select(w => w.WeightDivision).First(w => !w.IsAbsolute).Name,
-                WeightDivisionId = p.ParticipantWeightDivisions.Select(w => w.WeightDivision).First(w => !w.IsAbsolute).WeightDivisionId,
+                WeightDivisionName = p.ParticipantWeightDivisions.First(w => !w.WeightDivision.IsAbsolute).WeightDivision.Name,
+                WeightDivisionId = p.ParticipantWeightDivisions.First(w => !w.WeightDivision.IsAbsolute).WeightDivisionId,
                 IsMember = p.IsMember
             }).ToListAsync();
 
-            return new PagedList<ParticipantTableModel>(list, filter.PageIndex, size, totalCount);
+            return new PagedList<ParticipantTableModel>(anonimList, filter.PageIndex, size, totalCount);
         }
 
         private IQueryable<Participant> SortParticipants(IQueryable<Participant> allParticipants, ParticpantSortField filterSortField, SortDirectionEnum sortDirection, Guid federationId)
