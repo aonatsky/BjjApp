@@ -33,20 +33,3 @@
     <button pButton label="Create Absolute Division" [disabled]="false" (click)="showAbsoluteWeightDivision()"></button>
 </div>
 
-<div class="ui-g">
-    <p-dialog header="Create Absolute Division"
-              [(visible)]="displayAbsoluteWindow"
-              [responsive]="fade"
-              showEffect="fade"
-              [modal]="true"
-              [width]="1200"
-              [minHeight]="200"
-              [resizable]="false">
-        <table-picker-list class="ui-g-12"
-                           [sortField]="sortField"
-                           [sourceArray]="participantsModel"
-                           [targetArray]="targetModel"
-                           [columnsData]="pickerColumnsData"></table-picker-list>
-    </p-dialog>
-</div>
-

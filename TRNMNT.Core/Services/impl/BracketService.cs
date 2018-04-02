@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
+using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
@@ -61,6 +63,36 @@ namespace TRNMNT.Core.Services.impl
                 bracket.Rounds = _roundService.CreateRoundStructure(participants.ToArray(), bracket.BracketId);
             }
             return GetBracketModel(bracket);
+        }
+
+        public async Task<Participant> GetWinnerAsync(Guid weightDivisionId)
+        {
+            var winnerParticipant =
+                await GetWinnersForBrackets(_bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId))
+                    .FirstOrDefaultAsync();
+            return winnerParticipant;
+        }
+
+        public async Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(IEnumerable<Guid> weightDivisionIds)
+        {
+            var winnerParticipants =
+                await GetWinnersForBrackets(_bracketRepository
+                        .GetAll(b => weightDivisionIds.Contains(b.WeightDivisionId))
+                        .Include(p => p.Rounds)
+                        .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
+                        .Include(p => p.Rounds)
+                        .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.ParticipantWeightDivisions).ThenInclude(p => p.WeightDivision))
+                    .Select(p => new ParticipantSmallTableMobel()
+                    {
+                        ParticipantId = p.ParticipantId,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        TeamName = p.Team.Name,
+                        WeightDivisionName = p.ParticipantWeightDivisions.Select(w => w.WeightDivision)
+                            .First(w => !w.IsAbsolute).Name
+                    })
+                    .ToListAsync();
+            return winnerParticipants;
         }
 
         public async Task UpdateBracket(BracketModel model)
@@ -232,6 +264,11 @@ namespace TRNMNT.Core.Services.impl
             }
         }
 
+        private IQueryable<Participant> GetWinnersForBrackets(IQueryable<Bracket> brackets)
+        {
+            return brackets.SelectMany(b => b.Rounds.Where(r => r.Stage == 0 && r.RoundType == (int) RoundTypeEnum.Standard))
+                .Select(r => r.WinnerParticipant);
+        }
 
         #endregion
     }

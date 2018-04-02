@@ -24,8 +24,7 @@ export class TablePickerListComponent implements OnInit, OnChanges {
     private selectedTargetEntity: any;
     private emptyProto: any;
     private index: number = 0;
-
-    private get sortDirectionBack(): number { return this.sortDirection === 1 ? 0 : 1; }
+    private sortDirectionBack: number;
 
     private get originalEntityCount(): number {
         return this.sourceArray.length;
@@ -46,6 +45,7 @@ export class TablePickerListComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        this.sortDirectionBack = this.sortDirection === 1 ? 0 : 1;
         this.emptyProto = {
             __index: 0,
             __empty: true

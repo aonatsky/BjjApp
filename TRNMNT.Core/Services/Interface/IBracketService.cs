@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
+using TRNMNT.Core.Model.Participant;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -33,5 +35,17 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="weightDivisionId"></param>
         /// <returns></returns>
         Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId);
+        /// <summary>
+        /// Get winner for bracket by selected weight division
+        /// </summary>
+        /// <param name="weightDivisionId"></param>
+        /// <returns></returns>
+        Task<Participant> GetWinnerAsync(Guid weightDivisionId);
+        /// <summary>
+        /// Get all winners for by selected weight division ids
+        /// </summary>
+        /// <param name="weightDivisionIds"></param>
+        /// <returns></returns>
+        Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(IEnumerable<Guid> weightDivisionIds);
     }
 }

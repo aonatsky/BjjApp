@@ -38,7 +38,6 @@ export class EventManagementParticipantsComponent implements OnInit {
     private ddlDataLoading: boolean = true;
     private sortDirection: number = 1;
     private sortField: string = "firstName";
-    private displayAbsoluteWindow: boolean = false;
 
     public get isPaginationEnabled(): boolean {
         return this.participantsModel.length > this.rowsCount;
@@ -137,13 +136,6 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     columnOptions: IColumnOptions = {};
 
-    pickerColumnsData: any[] = [
-        { propertyName: "firstName", displayName: "First Name", isSortable: true},
-        { propertyName: "lastName", displayName: "Last Name", isSortable: true },
-        { propertyName: "teamName", displayName: "Team", isSortable: true},
-        { propertyName: "weightDivisionName", displayName: "Weight division", isSortable: true}
-    ];
-
     public getClassCallback(value: boolean): string {
         let classes = "fa-square-o";
         if (value) {
@@ -166,10 +158,6 @@ export class EventManagementParticipantsComponent implements OnInit {
             $event.entity.weightDivisionId = this.weightDivisionSelectItems[0].value;
         }
         this.refreshDdlModel();
-    }
-
-    public showAbsoluteWeightDivision() {
-        this.displayAbsoluteWindow = !this.displayAbsoluteWindow;
     }
 
     public filterParticipants($event: CategoryWithDivisionFilterModel) {

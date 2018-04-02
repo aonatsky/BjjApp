@@ -1,36 +1,19 @@
-﻿<div class="table-pick-list trnmnt-table">
-    <div>
-        <p-dataTable #sourceTable
-                     [value]="candidates"
-                     [sortField]="sortField"
-                     [sortOrder]="sortDirection"
-                     [(selection)]="selectedSourceEntity"
-                     selectionMode="single"
-                     [responsive]="true">
-            <p-column *ngFor="let column of columnsData" field="{{column.propertyName}}" header="{{column.displayName}}" [sortable]="column.isSortable">
-                <ng-template let-col let-colObj="rowData" pTemplate="body">
-                    <span>{{colObj[col.field]}}</span>
-                </ng-template>
-            </p-column>
-        </p-dataTable>
-    </div>
-    <div class="picker-buttons">
-        <button type="button" pButton (click)="addItem()" label="Add >"></button>
-        <button type="button" pButton (click)="removeItem()" label="< Remove"></button>
-    </div>
-    <div>
-        <p-dataTable #targetTable
-                     [value]="selectedParticipants"
-                     [sortField]="sortField"
-                     [sortOrder]="sortDirectionBack"
-                     [(selection)]="selectedTargetEntity"
-                     selectionMode="single"
-                     [responsive]="true">
-            <p-column *ngFor="let column of columnsData" field="{{column.propertyName}}" header="{{column.displayName}}" [sortable]="column.isSortable">
-                <ng-template let-col let-colObj="rowData" pTemplate="body">
-                    <span>{{colObj[col.field]}}</span>
-                </ng-template>
-            </p-column>
-        </p-dataTable>
-    </div>
+﻿<div class="absolute-weight-division">
+    <button pButton label="Create Absolute Division" [disabled]="false" (click)="showAbsoluteWeightDivision()"></button>
+    <p-dialog header="Create Absolute Division"
+              [(visible)]="displayAbsoluteWindow"
+              [responsive]="fade"
+              showEffect="fade"
+              [modal]="true"
+              [width]="1200"
+              [minHeight]="200"
+              [resizable]="false">
+        <table-picker-list class="ui-g-12"
+                           [sortField]="sortField"
+                           [sourceArray]="candidates"
+                           [targetArray]="selectedParticipants"
+                           [sortDirection]="sortDirection"
+                           [columnsData]="columnsData"></table-picker-list>
+        <button pButton label="Create" (click)="createAbsoluteWeightDivision()"></button>
+    </p-dialog>
 </div>

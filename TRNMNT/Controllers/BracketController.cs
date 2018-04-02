@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,7 @@ namespace TRNMNT.Web.Controllers
         #region dependencies
 
         private readonly IHubContext<RunEventHub> _hubContext;
+        private readonly IWeightDivisionService _weightDivisionService;
         private readonly IBracketService _bracketService;
 
         #endregion
@@ -29,10 +31,12 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IAppDbContext context,
             IHubContext<RunEventHub> hubContext,
+            IWeightDivisionService weightDivisionService,
             IBracketService bracketService)
             : base(logger, userService, eventService, context)
         {
             _hubContext = hubContext;
+            _weightDivisionService = weightDivisionService;
             _bracketService = bracketService;
         }
 
@@ -66,7 +70,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> UpdateBracket([FromBody]BracketModel bracketModel)
+        public async Task<IActionResult> UpdateBracket([FromBody] BracketModel bracketModel)
         {
             return await HandleRequestAsync(async () =>
             {
@@ -76,7 +80,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> FinishRound([FromBody]Guid weightDivisionId)
+        public async Task<IActionResult> FinishRound([FromBody] Guid weightDivisionId)
         {
             return await HandleRequestAsync(async () =>
             {
@@ -102,7 +106,19 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetBracketsByCategory(Guid categoryId)
         {
-            return await HandleRequestWithDataAsync(async () => Success(await _bracketService.GetBracketsByCategoryAsync(categoryId)));
+            return await HandleRequestWithDataAsync(async () =>
+                Success(await _bracketService.GetBracketsByCategoryAsync(categoryId)));
+        }
+
+        [Authorize, HttpGet("[action]/{categoryId}")]
+        public async Task<IActionResult> GetWinners(Guid categoryId)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var weightDivisions = await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId);
+                var winners = await _bracketService.GetWinnersAsync(weightDivisions.Select(w => new Guid(w.WeightDivisionId)));
+                return Success(winners);
+            });
         }
 
         #endregion
