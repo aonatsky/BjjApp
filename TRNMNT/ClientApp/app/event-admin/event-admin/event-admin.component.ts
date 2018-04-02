@@ -37,8 +37,4 @@ export class EventAdminComponent implements OnInit {
     ngOnInit() {
         this.userData = JSON.stringify(this.authService.getUser());
     }
-
-
-
-
 }

@@ -1,0 +1,52 @@
+﻿<div class="round-panel-view-title-box">
+    <div class="round-panel-view-title-white"></div>
+    <div class="round-panel-view-title-yellow"></div>
+</div>
+
+<div class="round-panel-view-participent-box round-panel-flex-wrapper">
+    <div class="round-panel-view-participent-info">
+        <div class="round-panel-view-participent-label">{{roundModel.firstParticipant.firstName}} {{roundModel.firstParticipant.lastName}}</div>
+        <div class="round-panel-view-team-label"></div>
+    </div>
+    <div>
+        <div class="round-panel-flex-wrapper">
+            <div>
+                <div class="round-panel-view-small-score-box">
+                    <div class="round-panel-score-label">ADV.</div>
+                    <div class="round-panel-score-value">{{roundDetails.firstPlayerAdvantage}}</div>
+                </div>
+                <div class="round-panel-view-score-box-delimeter"></div>
+                <div class="round-panel-view-small-score-box">
+                    <div class="round-panel-score-label">PEN.</div>
+                    <div class="round-panel-score-value">{{roundDetails.firstPlayerPenalty}}</div>
+                </div>
+            </div>
+            <div class="round-panel-point-red-box">{{roundDetails.firstPlayerPoints}}</div>
+        </div>
+    </div>
+</div>
+
+<div class="round-panel-view-timer-box">{{roundDetails.countdown | formatTimer}}</div>
+
+<div class="round-panel-view-participent-box round-panel-flex-wrapper">
+    <div class="round-panel-view-participent-info">
+        <div class="round-panel-view-participent-label">{{roundModel.secondParticipant.firstName}} {{roundModel.secondParticipant.lastName}}</div>
+        <div class="round-panel-view-team-label"></div>
+    </div>
+    <div>
+        <div class="round-panel-flex-wrapper">
+            <div>
+                <div class="round-panel-view-small-score-box">
+                    <div class="round-panel-score-label">ADV.</div>
+                    <div class="round-panel-score-value">{{roundDetails.secondPlayerAdvantage}}</div>
+                </div>
+                <div class="round-panel-view-score-box-delimeter"></div>
+                <div class="round-panel-view-small-score-box">
+                    <div class="round-panel-score-label">PEN.</div>
+                    <div class="round-panel-score-value">{{roundDetails.secondPlayerPenalty}}</div>
+                </div>
+            </div>
+            <div class="round-panel-point-blue-box">{{roundDetails.secondPlayerPoints}}</div>
+        </div>
+    </div>
+</div>

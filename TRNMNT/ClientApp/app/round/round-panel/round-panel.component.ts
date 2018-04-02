@@ -1,16 +1,15 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { RoundModel } from '../../core/model/round.models';
-import { SignalRHubService } from '../../core/dal/signalr/signalr-hub.service';
 import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
-import { HubConnection } from "@aspnet/signalr-client";
+import { BaseRoundPanel } from '../round-panel.service';
 import './round-panel.component.scss';
 
 @Component({
     selector: 'round-panel',
     templateUrl: './round-panel.component.html',
 })
-export class RoundPanelComponent implements OnInit {
+export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     @Input() roundModel: RoundModel;
 
     private roundDetails: RoundDetailsModel;
@@ -18,9 +17,8 @@ export class RoundPanelComponent implements OnInit {
     private readonly tick: number;
     private timerSubscription: any;
 
-    private hubConnection: HubConnection;
-
-    constructor(private signalRService: SignalRHubService) {
+    constructor() {
+        super();
         this.roundDetails = new RoundDetailsModel();
 
         this.roundDetails.firstPlayerPenalty = 0;
@@ -35,13 +33,21 @@ export class RoundPanelComponent implements OnInit {
         this.roundDetails.isPaused = false;
         this.roundDetails.isCompleted = false;
 
-
         this.tick = 1000;
     }
 
     ngOnInit() {
         this.roundDetails.roundId = this.roundModel.roundId;
-        this.setupConnection();
+        this.setupConnection(this.roundModel.roundId, x => {
+            this.roundDetails = x;
+
+            if (this.roundDetails.isStarted) {
+                this.startTimer();
+            }
+            if (this.roundDetails.isPaused || this.roundDetails.isCompleted) {
+                this.stopTimer();
+            }
+        });
     }
 
     public start(): void {
@@ -113,21 +119,8 @@ export class RoundPanelComponent implements OnInit {
         return this.roundDetails.secondPlayerAdvantage + this.roundDetails.secondPlayerPoints - this.roundDetails.secondPlayerPenalty;
     }
 
-    public subscribeOnRecieveMessage(): void {
-        this.hubConnection.on("Send", x => {
-            this.roundDetails = x;
-
-            if (this.roundDetails.isStarted) {
-                this.startTimer();
-            }
-            if (this.roundDetails.isPaused || this.roundDetails.isCompleted) {
-                this.stopTimer();
-            }
-        });
-    }
-
     public send(): void {
-        this.hubConnection.invoke("Send", this.roundDetails);
+        this.sendHubMessage(this.roundDetails);
     }
 
     private startTimer(): void {
@@ -146,13 +139,5 @@ export class RoundPanelComponent implements OnInit {
             this.timerSubscription.unsubscribe();
         }
         this.timerSubscription = null;
-    }
-
-    private setupConnection(): void {
-        this.hubConnection = new HubConnection('/round-hub');
-        this.hubConnection.start().then(() => {
-            this.subscribeOnRecieveMessage();
-            this.hubConnection.invoke("JoinGroup", this.roundModel.roundId);
-        });
     }
 }

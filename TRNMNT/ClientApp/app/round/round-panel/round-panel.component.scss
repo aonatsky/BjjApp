@@ -50,10 +50,6 @@
     color: #ffffff;
 }
 
-.round-panel-navigation-box {
-    height: 120px;
-}
-
 .round-panel-navigation-box-points {
     width: 230px;
 }
@@ -123,9 +119,6 @@
     height: 80px;
 }
 
-.round-panel-timer-wrapper {
-    background-color: antiquewhite;
-}
 
 .round-panel-center-wrapper {
     margin: 0 auto;
@@ -179,4 +172,8 @@
     letter-spacing: 0.5px;
     text-align: center;
     color: #ffffff;
+}
+
+.round-panel-margin-wrapper {
+    margin: 0 10px;
 }

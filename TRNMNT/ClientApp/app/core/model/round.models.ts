@@ -7,8 +7,4 @@ export class RoundModel {
     nextRoundId: AAGUID;
     stage: number;
     roundType : number;
-
-     
-
-
 }

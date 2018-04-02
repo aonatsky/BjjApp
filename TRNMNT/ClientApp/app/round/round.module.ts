@@ -1,5 +1,6 @@
 ﻿import { NgModule } from "@angular/core"
 import { RoundPanelComponent } from './round-panel/round-panel.component'
+import { RoundPanelViewComponent } from './round-panel-view/round-panel-view.component'
 import { CoreModule } from './../core/core.module'
 
 @NgModule({
@@ -8,13 +9,15 @@ import { CoreModule } from './../core/core.module'
         CoreModule
     ],
     declarations: [
-        RoundPanelComponent
+        RoundPanelComponent,
+        RoundPanelViewComponent
     ],
 
     providers: [],
 
     exports: [
-        RoundPanelComponent
+        RoundPanelComponent,
+        RoundPanelViewComponent
     ]
 })
 
