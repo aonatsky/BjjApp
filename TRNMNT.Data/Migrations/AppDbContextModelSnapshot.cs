@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 using TRNMNT.Data.Context;
 
@@ -375,6 +373,8 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("UserId");
 
+                    b.Property<Guid>("WeightDivisionId");
+
                     b.HasKey("ParticipantId");
 
                     b.HasIndex("CategoryId");
@@ -383,20 +383,9 @@ namespace TRNMNT.Data.Migrations
 
                     b.HasIndex("TeamId");
 
+                    b.HasIndex("WeightDivisionId");
+
                     b.ToTable("Participant");
-                });
-
-            modelBuilder.Entity("TRNMNT.Data.Entities.ParticipantWeightDivision", b =>
-                {
-                    b.Property<Guid>("WeightDivisionId");
-
-                    b.Property<Guid>("ParticipantId");
-
-                    b.HasKey("WeightDivisionId", "ParticipantId");
-
-                    b.HasAlternateKey("ParticipantId", "WeightDivisionId");
-
-                    b.ToTable("ParticipantWeightDivision");
                 });
 
             modelBuilder.Entity("TRNMNT.Data.Entities.PromoCode", b =>
@@ -547,8 +536,6 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("Descritpion");
 
-                    b.Property<bool>("IsAbsolute");
-
                     b.Property<string>("Name");
 
                     b.Property<int>("Weight");
@@ -692,17 +679,9 @@ namespace TRNMNT.Data.Migrations
                         .WithMany("Participants")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("TRNMNT.Data.Entities.ParticipantWeightDivision", b =>
-                {
-                    b.HasOne("TRNMNT.Data.Entities.Participant", "Participant")
-                        .WithMany("ParticipantWeightDivisions")
-                        .HasForeignKey("ParticipantId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TRNMNT.Data.Entities.WeightDivision", "WeightDivision")
-                        .WithMany("ParticipantWeightDivisions")
+                        .WithMany("Participants")
                         .HasForeignKey("WeightDivisionId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
