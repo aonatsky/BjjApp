@@ -72,7 +72,7 @@ namespace TRNMNT.Core.Services.Impl
                     DateOfBirth = DateTime.Parse(model.DateOfBirth),
                     EventId = eventId,
                     TeamId = ProcessTeam(model.Team, existingTeamsBase, teamsToAdd),
-                    ParticipantWeightDivisions = CreateParicipantWeightDivisions(eventWeightDivisions, model.WeightDivision, participantId),
+                    WeightDivisionId = eventWeightDivisions.First(x => x.Value.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase)).Key,
                     CategoryId = eventCategories.First(x => x.Value.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).Key,
                     IsMember = isMember
                 };
@@ -133,18 +133,6 @@ namespace TRNMNT.Core.Services.Impl
             return isValid;
         }
 
-        private List<ParticipantWeightDivision> CreateParicipantWeightDivisions(Dictionary<Guid, string> eventWeightDivisions, string weightDivisionName, Guid participanId)
-        {
-            return new List<ParticipantWeightDivision>
-            {
-                new ParticipantWeightDivision
-                {
-                    ParticipantId = participanId,
-                    WeightDivisionId = eventWeightDivisions.First(x =>
-                        x.Value.Equals(weightDivisionName, StringComparison.OrdinalIgnoreCase)).Key
-                }
-            };
-        }
 
         private async Task<List<TeamModelBase>> GetExistingTeams(Guid federationId)
         {

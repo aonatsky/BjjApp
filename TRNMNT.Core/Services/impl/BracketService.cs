@@ -81,15 +81,14 @@ namespace TRNMNT.Core.Services.impl
                         .Include(p => p.Rounds)
                         .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
                         .Include(p => p.Rounds)
-                        .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.ParticipantWeightDivisions).ThenInclude(p => p.WeightDivision))
+                        .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.WeightDivision))
                     .Select(p => new ParticipantSmallTableMobel()
                     {
                         ParticipantId = p.ParticipantId,
                         FirstName = p.FirstName,
                         LastName = p.LastName,
                         TeamName = p.Team.Name,
-                        WeightDivisionName = p.ParticipantWeightDivisions.Select(w => w.WeightDivision)
-                            .First(w => !w.IsAbsolute).Name
+                        WeightDivisionName = p.WeightDivision.Name
                     })
                     .ToListAsync();
             return winnerParticipants;

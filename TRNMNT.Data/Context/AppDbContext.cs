@@ -26,8 +26,6 @@ namespace TRNMNT.Data.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-            builder.Entity<ParticipantWeightDivision>()
-                .HasKey(c => new { c.WeightDivisionId, c.ParticipantId});
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
@@ -117,7 +115,6 @@ namespace TRNMNT.Data.Context
         public DbSet<PromoCode> PromoCode { get; set; }
         public DbSet<Bracket> Bracket { get; set; }
         public DbSet<Round> Round { get; set; }
-        public DbSet<ParticipantWeightDivision> ParticipantWeightDivision { get; set; }
 
         #endregion
     }

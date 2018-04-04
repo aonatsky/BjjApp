@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace TRNMNT.Data.Entities
@@ -20,10 +21,11 @@ namespace TRNMNT.Data.Entities
         public virtual Category Category { get; set; }
         [JsonIgnore]
         public virtual ICollection<Fighter> Fighters {get;set;}
-        [JsonIgnore]
-        public virtual ICollection<ParticipantWeightDivision> ParticipantWeightDivisions { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Bracket> Brackets { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Participant> Participants { get; set; }
     }
 }
