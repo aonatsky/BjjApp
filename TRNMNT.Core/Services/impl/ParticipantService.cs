@@ -160,7 +160,7 @@ namespace TRNMNT.Core.Services.Impl
                 CategoryName = p.Category.Name,
                 CategoryId = p.CategoryId,
                 WeightDivisionName = p.WeightDivision.Name,
-                WeightDivisionId = p.WeightDivisionId.Value,
+                WeightDivisionId = p.WeightDivisionId,
                 IsMember = p.IsMember
             }).ToListAsync();
 
