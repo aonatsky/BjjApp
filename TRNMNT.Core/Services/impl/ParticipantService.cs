@@ -99,7 +99,7 @@ namespace TRNMNT.Core.Services.Impl
             participant.TeamId = participantModel.TeamId;
             participant.DateOfBirth = participantModel.DateOfBirth;
             participant.CategoryId = participantModel.CategoryId;
-
+            participant.WeightDivisionId = participantModel.WeightDivisionId;
             participant.IsMember = participantModel.IsMember;
             participant.IsActive = true;
             participant.UpdateTS = DateTime.UtcNow;
@@ -111,8 +111,6 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId)
         {
             return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId).ToListAsync();
-
-            //return await _repository.GetAll(p => p.ParticipantWeightDivisions.Any(w => w.WeightDivisionId == weightDivisionId)).ToListAsync();
         }
 
         public async Task DeleteParticipantAsync(Guid participantId)
