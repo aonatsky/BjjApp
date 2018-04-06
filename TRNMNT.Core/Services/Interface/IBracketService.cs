@@ -42,7 +42,7 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(Guid categoryId);
+        Task<List<ParticipantInAbsoluteDivisionMobel>> GetWinnersAsync(Guid categoryId);
 
         Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId);
 

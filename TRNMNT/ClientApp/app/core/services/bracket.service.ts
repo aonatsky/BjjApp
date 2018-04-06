@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { BracketModel, BracketArrayModel } from '../model/bracket.models';
 import { ResponseContentType } from '@angular/http';
-import { ParticipantSmallTableModel } from '../model/participant.models';
+import { ParticipantInAbsoluteDivisionMobel } from '../model/participant.models';
 
 
 @Injectable()
@@ -42,7 +42,7 @@ export class BracketService {
         return this.httpService.get(ApiMethods.bracket.isAllWinnersSelected + '/' + categoryId).map(res => this.httpService.getJson(res));;
     }
 
-    getWinnersByCategory(categoryId): Observable<ParticipantSmallTableModel[]> {
+    getWinnersByCategory(categoryId): Observable<ParticipantInAbsoluteDivisionMobel[]> {
         return this.httpService.get(ApiMethods.bracket.getWinners + '/' + categoryId)
             .map(res => this.httpService.getJson(res));
     }

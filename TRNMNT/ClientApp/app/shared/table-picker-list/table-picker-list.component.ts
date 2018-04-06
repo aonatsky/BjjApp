@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+﻿import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, SimpleChange } from '@angular/core';
 import './table-picker-list.component.scss'
 @Component({
     selector: 'table-picker-list',
@@ -7,7 +7,7 @@ import './table-picker-list.component.scss'
 export class TablePickerListComponent implements OnInit, OnChanges {
 
     @Input() sourceArray: any[] = [];
-    //@Input() targetArray: any[] = [];
+
     private _targetArray: any[] = [];
     @Input()
     get targetArray(): any[] {
@@ -36,7 +36,7 @@ export class TablePickerListComponent implements OnInit, OnChanges {
     }
 
     private get originalEntityCount(): number {
-        return this.sourceArray.length;
+        return this.sourceArray.length + this.targetArray.length;
     }
 
     private get emptyEntity(): any {
@@ -57,12 +57,8 @@ export class TablePickerListComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        const sourcesChanges = changes["sourceArray"];
-        if (!!sourcesChanges && !!sourcesChanges.currentValue && sourcesChanges.currentValue.length > 0) {
-            this.targetArrayInternal = this.targetArray.slice();
-            this.sourceArrayInternal = this.sourceArray.slice();
-            this.populateArray(this.targetArrayInternal);
-        }
+        this.trackChanges(changes["sourceArray"]);
+        this.trackChanges(changes["targetArray"]);
     }
 
     private addItem() {
@@ -80,6 +76,15 @@ export class TablePickerListComponent implements OnInit, OnChanges {
             this.selectedSourceEntity = this.selectedTargetEntity;
             const next = this.targetArrayInternal.find(p => !p.__empty);
             this.selectedTargetEntity = next;
+        }
+    }
+
+    private trackChanges(arrayChanges: SimpleChange): void {
+        if (!!arrayChanges && !!arrayChanges.currentValue && arrayChanges.currentValue.length > 0) {
+            this.targetArrayInternal = this.targetArray.slice();
+            this.sourceArrayInternal = this.sourceArray.slice();
+            this.populateArray(this.targetArrayInternal);
+            this.populateArray(this.sourceArrayInternal);
         }
     }
 

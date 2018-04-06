@@ -14,6 +14,6 @@
                            [(targetArray)]="selectedParticipants"
                            [sortDirection]="sortDirection"
                            [columnsData]="columnsData"></table-picker-list>
-        <button pButton label="Create" (click)="createAbsoluteWeightDivision()"></button>
+        <button pButton label="Create" [disabled]="selectedParticipants.length == 0" (click)="createAbsoluteWeightDivision()"></button>
     </p-dialog>
 </span>

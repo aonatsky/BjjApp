@@ -83,26 +83,28 @@ namespace TRNMNT.Core.Services.impl
             return !await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null);
         }
 
-        public async Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(Guid categoryId)
+        public async Task<List<ParticipantInAbsoluteDivisionMobel>> GetWinnersAsync(Guid categoryId)
         {
-            if (!await IsWinnersSelectedForAllRoundsAsync(categoryId))
+            var braketsForCategory = _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId);
+            if (await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null))
             {
                 throw new Exception($"For Weight divisions for category with id {categoryId} not all rounds has winners");
             }
 
             var winnerParticipants =
-                await GetWinnersForBrackets(_bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId)
+                await GetWinnersForBrackets(braketsForCategory
                         .Include(p => p.Rounds)
                         .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
                         .Include(p => p.Rounds)
                         .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.WeightDivision))
-                    .Select(p => new ParticipantSmallTableMobel()
+                    .Select(p => new ParticipantInAbsoluteDivisionMobel()
                     {
                         ParticipantId = p.ParticipantId,
                         FirstName = p.FirstName,
                         LastName = p.LastName,
                         TeamName = p.Team.Name,
-                        WeightDivisionName = p.WeightDivision.Name
+                        WeightDivisionName = p.WeightDivision.Name,
+                        IsSelectedIntoDivision = p.AbsoluteWeightDivisionId != null
                     })
                     .ToListAsync();
             return winnerParticipants;

@@ -29,11 +29,12 @@ export class ParticipantTableModel extends ParticipantModelBase {
     public isMember: boolean;
 }
 
-export class ParticipantSmallTableModel {
+export class ParticipantInAbsoluteDivisionMobel {
     public participantId: string;
     public firstName: string;
     public lastName: string;
     public teamName: string;
     public weightDivisionName: string;
+    public isSelectedIntoDivision: boolean;
 }
 
