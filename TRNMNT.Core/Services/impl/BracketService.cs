@@ -138,7 +138,20 @@ namespace TRNMNT.Core.Services.impl
             return result;
         }
 
-        #region private methods
+        public async Task ManageAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model)
+        {
+            var absoluteWeightDivision = await _weightDivisionService.GetAbsoluteWeightDivisionAsync(model.CategoryId);
+
+            await _participantService.AddAbsoluteWeightDivisionForParticipantsAsync(
+                model.ParticipantsIds,
+                model.CategoryId, 
+                absoluteWeightDivision.WeightDivisionId);
+        }
+
+        #endregion
+
+        #region Private methods
+
         private async Task<List<Participant>> GetOrderedListForNewBracketAsync(Guid weightDivisionId)
         {
             var participants = (await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId)).ToList();
@@ -151,7 +164,6 @@ namespace TRNMNT.Core.Services.impl
 
             return Distribute(participants);
         }
-
 
         private List<Participant> GetOrderedParticipantListFromBracket(Bracket bracket)
         {

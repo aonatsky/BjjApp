@@ -62,5 +62,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns>List of participants</returns>
         Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId);
 
+        Task AddAbsoluteWeightDivisionForParticipantsAsync(Guid[] participantsIds, Guid categoryId, Guid absoluteWeightDivisionId);
+
     }
 }

@@ -11,7 +11,7 @@
         <table-picker-list class="ui-g-12"
                            [sortField]="sortField"
                            [sourceArray]="candidates"
-                           [targetArray]="selectedParticipants"
+                           [(targetArray)]="selectedParticipants"
                            [sortDirection]="sortDirection"
                            [columnsData]="columnsData"></table-picker-list>
         <button pButton label="Create" (click)="createAbsoluteWeightDivision()"></button>

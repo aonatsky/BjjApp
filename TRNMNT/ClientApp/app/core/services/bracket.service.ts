@@ -46,4 +46,9 @@ export class BracketService {
         return this.httpService.get(ApiMethods.bracket.getWinners + '/' + categoryId)
             .map(res => this.httpService.getJson(res));
     }
+
+    manageAbsoluteWeightDivision(participantsIds, categoryId): Observable<void> {
+        return this.httpService.post(ApiMethods.bracket.manageAbsoluteWeightDivision,
+            { participantsIds: participantsIds, categoryId: categoryId });
+    }
 }

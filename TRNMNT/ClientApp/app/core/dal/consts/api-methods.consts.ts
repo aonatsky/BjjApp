@@ -63,5 +63,7 @@ export const ApiMethods = Object.freeze({
         finishRound: 'api/bracket/finishRound',
         getBracketsByCategory: 'api/bracket/getBracketsByCategory',
         getWinners: 'api/bracket/getWinners',
+        isAllWinnersSelected: 'api/bracket/isAllWinnersSelected',
+        manageAbsoluteWeightDivision: 'api/bracket/manageAbsoluteWeightDivision',
     }
 });

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
+using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Web.Hubs;
@@ -127,6 +128,17 @@ namespace TRNMNT.Web.Controllers
                 return Success(isSelected);
             });
         }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> ManageAbsoluteWeightDivision([FromBody] CreateAbsoluteDivisionModel model)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await _bracketService.ManageAbsoluteWeightDivisionAsync(model);
+                return HttpStatusCode.OK;
+            });
+        }
+
         #endregion
     }
 }

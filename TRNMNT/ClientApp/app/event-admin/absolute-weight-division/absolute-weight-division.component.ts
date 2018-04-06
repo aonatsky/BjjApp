@@ -46,5 +46,10 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
     }
 
     private createAbsoluteWeightDivision() {
+        this.bracketService.manageAbsoluteWeightDivision(this.selectedParticipantIds, this.categoryId).subscribe();
+    }
+
+    private get selectedParticipantIds() {
+        return this.selectedParticipants.map(p => p.participantId);
     }
 }

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+﻿import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import './table-picker-list.component.scss'
 @Component({
     selector: 'table-picker-list',
@@ -7,7 +7,18 @@ import './table-picker-list.component.scss'
 export class TablePickerListComponent implements OnInit, OnChanges {
 
     @Input() sourceArray: any[] = [];
-    @Input() targetArray: any[] = [];
+    //@Input() targetArray: any[] = [];
+    private _targetArray: any[] = [];
+    @Input()
+    get targetArray(): any[] {
+        return this._targetArray;
+    }
+    set targetArray(value: any[]) {
+        this._targetArray = value;
+        this.targetArrayChange.emit(value);
+    }
+    @Output() targetArrayChange: EventEmitter<any[]>;
+
     @Input() readonly columnsData: IPickerColumn[] = [];
     @Input() readonly sortField: string;
     @Input() readonly sortDirection: number = 1;
@@ -19,6 +30,10 @@ export class TablePickerListComponent implements OnInit, OnChanges {
     private emptyProto: any;
     private index: number = 0;
     private sortDirectionBack: number;
+
+    constructor() {
+        this.targetArrayChange = new EventEmitter<any[]>();
+    }
 
     private get originalEntityCount(): number {
         return this.sourceArray.length;
@@ -43,7 +58,7 @@ export class TablePickerListComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         const sourcesChanges = changes["sourceArray"];
-        if (!!sourcesChanges.currentValue && sourcesChanges.currentValue.length > 0) {
+        if (!!sourcesChanges && !!sourcesChanges.currentValue && sourcesChanges.currentValue.length > 0) {
             this.targetArrayInternal = this.targetArray.slice();
             this.sourceArrayInternal = this.sourceArray.slice();
             this.populateArray(this.targetArrayInternal);
