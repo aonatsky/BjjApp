@@ -27,5 +27,8 @@ namespace TRNMNT.Data.Entities
 
         [JsonIgnore]
         public virtual ICollection<Participant> Participants { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Participant> AbsoluteDivisionParticipants { get; set; }
     }
 }

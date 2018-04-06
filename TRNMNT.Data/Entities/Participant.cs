@@ -25,10 +25,14 @@ namespace TRNMNT.Data.Entities
         public Guid CategoryId { get; set; }
         public Guid EventId { get; set; }
         public Guid WeightDivisionId { get; set; }
+        public Guid? AbsoluteWeightDivisionId { get; set; }
         public String ActivatedPromoCode { get; set; }
 
         [JsonIgnore]
         public virtual Team Team { get; set; }
+
+        [JsonIgnore]
+        public virtual WeightDivision AbsoluteWeightDivision { get; set; }
 
         [JsonIgnore]
         public virtual WeightDivision WeightDivision { get; set; }
