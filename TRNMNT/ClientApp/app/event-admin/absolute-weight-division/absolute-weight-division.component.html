@@ -1,5 +1,5 @@
 ﻿<span class="absolute-weight-division">
-    <button pButton label="Create Absolute Division" [disabled]="categoryId == null || categoryId == ''" (click)="showAbsoluteWeightDivision()"></button>
+    <button pButton label="Create Absolute Division" [disabled]="categoryId == null || categoryId == '' || isAllWinnersSelected == false" (click)="showAbsoluteWeightDivision()"></button>
     <p-dialog header="Create Absolute Division"
               [(visible)]="displayAbsoluteWindow"
               [responsive]="fade"

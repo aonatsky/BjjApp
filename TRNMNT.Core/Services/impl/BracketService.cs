@@ -9,6 +9,7 @@ using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Round;
+using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Impl;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
@@ -41,8 +42,10 @@ namespace TRNMNT.Core.Services.impl
             _bracketsFileService = bracketsFileService;
             _weightDivisionService = weightDivisionService;
         }
-        
+
         #endregion
+
+        #region Public Methods
 
         public async Task<BracketModel> GetBracketAsync(Guid weightDivisionId)
         {
@@ -65,19 +68,30 @@ namespace TRNMNT.Core.Services.impl
             return GetBracketModel(bracket);
         }
 
-        public async Task<Participant> GetWinnerAsync(Guid weightDivisionId)
+        public async Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId)
         {
-            var winnerParticipant =
-                await GetWinnersForBrackets(_bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId))
-                    .FirstOrDefaultAsync();
-            return winnerParticipant;
+            var braketsForCategory = _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId);
+            if (!await braketsForCategory.AnyAsync())
+            {
+                return false;
+            }
+            if (!await braketsForCategory.AnyAsync(b =>
+                b.Rounds.Any(r => r.Stage == 0 && r.RoundType == (int) RoundTypeEnum.Standard)))
+            {
+                return false;
+            }
+            return !await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null);
         }
 
-        public async Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(IEnumerable<Guid> weightDivisionIds)
+        public async Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(Guid categoryId)
         {
+            if (!await IsWinnersSelectedForAllRoundsAsync(categoryId))
+            {
+                throw new Exception($"For Weight divisions for category with id {categoryId} not all rounds has winners");
+            }
+
             var winnerParticipants =
-                await GetWinnersForBrackets(_bracketRepository
-                        .GetAll(b => weightDivisionIds.Contains(b.WeightDivisionId))
+                await GetWinnersForBrackets(_bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId)
                         .Include(p => p.Rounds)
                         .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
                         .Include(p => p.Rounds)
@@ -97,7 +111,7 @@ namespace TRNMNT.Core.Services.impl
         public async Task UpdateBracket(BracketModel model)
         {
 
-            var bracket = await _bracketRepository.GetAll(b => b.BracketId == model.BracketId).Include(b=>b.Rounds).FirstOrDefaultAsync();
+            var bracket = await _bracketRepository.GetAll(b => b.BracketId == model.BracketId).Include(b => b.Rounds).FirstOrDefaultAsync();
             if (bracket != null)
             {
                 UpdateBracketRoundsFromModel(bracket.Rounds, model.RoundModels);

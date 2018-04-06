@@ -10,6 +10,7 @@ import { ParticipantSmallTableModel } from '../../core/model/participant.models'
 export class AbsoluteWeightDivisionComponent implements OnInit {
 
     @Input() categoryId: string;
+    @Input() isAllWinnersSelected: boolean;
     private candidates: ParticipantSmallTableModel[];
     private selectedParticipants: ParticipantSmallTableModel[] = [];
     private sortDirection: number = 1;

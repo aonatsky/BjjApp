@@ -38,6 +38,10 @@ export class BracketService {
             .map(res => this.httpService.getJson(res));
     }
 
+    isAllWinnersSelected(categoryId): Observable<boolean> {
+        return this.httpService.get(ApiMethods.bracket.isAllWinnersSelected + '/' + categoryId).map(res => this.httpService.getJson(res));;
+    }
+
     getWinnersByCategory(categoryId): Observable<ParticipantSmallTableModel[]> {
         return this.httpService.get(ApiMethods.bracket.getWinners + '/' + categoryId)
             .map(res => this.httpService.getJson(res));

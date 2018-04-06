@@ -35,17 +35,15 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="weightDivisionId"></param>
         /// <returns></returns>
         Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId);
+
         /// <summary>
-        /// Get winner for bracket by selected weight division
+        /// Get all winners for selected categoryId
         /// </summary>
-        /// <param name="weightDivisionId"></param>
+        /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<Participant> GetWinnerAsync(Guid weightDivisionId);
-        /// <summary>
-        /// Get all winners for by selected weight division ids
-        /// </summary>
-        /// <param name="weightDivisionIds"></param>
-        /// <returns></returns>
-        Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(IEnumerable<Guid> weightDivisionIds);
+        Task<List<ParticipantSmallTableMobel>> GetWinnersAsync(Guid categoryId);
+
+        Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId);
+
     }
 }

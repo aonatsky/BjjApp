@@ -20,7 +20,6 @@ namespace TRNMNT.Web.Controllers
         #region dependencies
 
         private readonly IHubContext<RunEventHub> _hubContext;
-        private readonly IWeightDivisionService _weightDivisionService;
         private readonly IBracketService _bracketService;
 
         #endregion
@@ -36,7 +35,6 @@ namespace TRNMNT.Web.Controllers
             : base(logger, userService, eventService, context)
         {
             _hubContext = hubContext;
-            _weightDivisionService = weightDivisionService;
             _bracketService = bracketService;
         }
 
@@ -115,12 +113,20 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var weightDivisions = await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId);
-                var winners = await _bracketService.GetWinnersAsync(weightDivisions.Select(w => new Guid(w.WeightDivisionId)));
+                var winners = await _bracketService.GetWinnersAsync(categoryId);
                 return Success(winners);
             });
         }
 
+        [Authorize, HttpGet("[action]/{categoryId}")]
+        public async Task<IActionResult> IsAllWinnersSelected(Guid categoryId)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var isSelected = await _bracketService.IsWinnersSelectedForAllRoundsAsync(categoryId);
+                return Success(isSelected);
+            });
+        }
         #endregion
     }
 }
