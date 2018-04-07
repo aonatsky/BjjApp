@@ -1,0 +1,37 @@
+﻿<div class="ui-g-5">
+    <div class="ui-g-12" *ngFor="let category of categories">
+        <p-checkbox name="categories" [value]="category.categoryId" [label]="category.name" [(ngModel)]="selectedCategories" inputId="ny"></p-checkbox>
+    </div>
+</div>
+<div class="ui-g-7">
+    <crud #crudComponent
+          [entities]="teamResults"
+          [columns]="columns"
+          [columnOptions]="columnOptions"
+          [showRowNumbers]="false"
+          [addEnabled]="false"
+          [editEnabled]="false"
+          [deleteEnabled]="false"
+          [sortField]="sortField"
+          [sortOrder]="sortDirection"
+          [lazy]="true"
+          (onLazyLoad)="onLoadData($event)"
+          [totalRecords]="totalCount"
+          [(firstIndex)]="firstIndex"
+          (onEntitySelected)="onEntitySelected($event)"
+          (onUpdate)="onEntityUpdate($event)"
+          (onDelete)="onEntityDelete($event)"
+          [dialogMinWidth]="500"
+          class="ui-g-12"
+          gridMinHeight="350">
+    </crud>
+    
+    <!--<p-dataTable [value]="teamResults" [loading]="loading">
+        <p-column field="teamName" header="Name"></p-column>
+        <p-column field="points" header="Points"></p-column>
+    </p-dataTable>-->
+</div>
+<div class="ui-g-12">
+    <button pButton type="button" iconPos="left" icon="fa-bars" label="Get Results" (click)="getResults()"></button>
+    <button pButton type="button" iconPos="left" icon="fa-file-excel-o" label="Download" [disabled]="!teamResults" (click)="getResults();"></button>
+</div>

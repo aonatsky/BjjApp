@@ -12,9 +12,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180402120637_RoundUpdate")]
+    partial class RoundUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -346,8 +347,6 @@ namespace TRNMNT.Data.Migrations
                     b.Property<Guid>("ParticipantId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("AbsoluteWeightDivisionId");
-
                     b.Property<string>("ActivatedPromoCode");
 
                     b.Property<Guid>("CategoryId");
@@ -381,8 +380,6 @@ namespace TRNMNT.Data.Migrations
                     b.Property<Guid>("WeightDivisionId");
 
                     b.HasKey("ParticipantId");
-
-                    b.HasIndex("AbsoluteWeightDivisionId");
 
                     b.HasIndex("CategoryId");
 
@@ -547,8 +544,6 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("Descritpion");
 
-                    b.Property<bool>("IsAbsolute");
-
                     b.Property<string>("Name");
 
                     b.Property<int>("Weight");
@@ -678,11 +673,6 @@ namespace TRNMNT.Data.Migrations
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Participant", b =>
                 {
-                    b.HasOne("TRNMNT.Data.Entities.WeightDivision", "AbsoluteWeightDivision")
-                        .WithMany("AbsoluteDivisionParticipants")
-                        .HasForeignKey("AbsoluteWeightDivisionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("TRNMNT.Data.Entities.Category", "Category")
                         .WithMany("Participants")
                         .HasForeignKey("CategoryId")

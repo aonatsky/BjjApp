@@ -65,5 +65,8 @@ export const ApiMethods = Object.freeze({
         getWinners: 'api/bracket/getWinners',
         isAllWinnersSelected: 'api/bracket/isAllWinnersSelected',
         manageAbsoluteWeightDivision: 'api/bracket/manageAbsoluteWeightDivision',
+    },
+    results: {
+        getTeamResutls: 'api/results/getTeamResults'
     }
 });

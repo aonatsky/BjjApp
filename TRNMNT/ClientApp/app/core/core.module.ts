@@ -29,100 +29,104 @@ import { ButtonModule } from 'primeng/components/button/button';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { TableModule } from 'primeng/table';
 import { InputMaskModule } from 'primeng/primeng';
 import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, ToggleButtonModule, ConfirmDialogModule, DragDropModule } from 'primeng/primeng';
 import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
-import {BracketService} from './services/bracket.service';
+import { BracketService } from './services/bracket.service';
 import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
 import { TestSocketService } from './services/test-socket.service';
 import { RunEventHubService } from './hubservices/run-event.hub.serive';
 import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
-
+import { ResultsService } from './services/results.service';
 
 
 @
-NgModule({
-    imports: [
-        FormsModule,
-        HttpModule,
-        RouterModule,
-        BrowserAnimationsModule,
-        BrowserModule,
-        DataTableModule,
-        DialogModule,
-        InputTextModule,
-        ButtonModule,
-        DropdownModule,
-        GrowlModule,
-        InputMaskModule,
-        StepsModule,
-        CalendarModule,
-        InputTextareaModule,
-        AutoCompleteModule,
-        CheckboxModule,
-        DragDropModule,
-        ToggleButtonModule,
-        ConfirmDialogModule
-    ],
-    declarations: [
-        MinuteSecondsPipe,
-        ToDictionaryPipe
-    ],
-    providers: [
-        HttpService,
-        LoggerService,
-        LoaderService,
-        NotificationService,
-        AuthService,
-        AuthHttp,
-        EventService,
-        TeamService,
-        SignalRHubService,
-        TestSocketService,
-        RunEventHubService,
-        { provide: RunEventHubService, useFactory: (l: LoggerService) => new RunEventHubService(new SignalRHubService(l)), deps: [LoggerService] },
+    NgModule({
+        imports: [
+            FormsModule,
+            HttpModule,
+            RouterModule,
+            BrowserAnimationsModule,
+            BrowserModule,
+            DataTableModule,
+            DialogModule,
+            InputTextModule,
+            ButtonModule,
+            DropdownModule,
+            GrowlModule,
+            InputMaskModule,
+            StepsModule,
+            CalendarModule,
+            InputTextareaModule,
+            AutoCompleteModule,
+            CheckboxModule,
+            DragDropModule,
+            ToggleButtonModule,
+            ConfirmDialogModule,
+            TableModule
+        ],
+        declarations: [
+            MinuteSecondsPipe,
+            ToDictionaryPipe
+        ],
+        providers: [
+            HttpService,
+            LoggerService,
+            LoaderService,
+            NotificationService,
+            AuthService,
+            AuthHttp,
+            EventService,
+            TeamService,
+            SignalRHubService,
+            TestSocketService,
+            RunEventHubService,
+            { provide: RunEventHubService, useFactory: (l: LoggerService) => new RunEventHubService(new SignalRHubService(l)), deps: [LoggerService] },
 
-        CategoryService,
-        WeightDivisionService,
-        ParticipantService,
-        BracketService,
-        provideAuth({
-            headerName: 'Authorization',
-            headerPrefix: 'bearer',
-            tokenName: 'token',
-            tokenGetter: (() => localStorage.getItem('id_token')),
-            noJwtError: true
-        }),
-        { provide: Window, useValue: window },
-        AuthGuard, RedirectGuard, RouterService, PaymentService],
+            CategoryService,
+            WeightDivisionService,
+            ParticipantService,
+            BracketService,
+            ResultsService,
+            provideAuth({
+                headerName: 'Authorization',
+                headerPrefix: 'bearer',
+                tokenName: 'token',
+                tokenGetter: (() => localStorage.getItem('id_token')),
+                noJwtError: true
+            }),
+            { provide: Window, useValue: window },
+            AuthGuard, RedirectGuard, RouterService, PaymentService],
 
-    exports: [
-        FormsModule,
-        HttpModule,
-        RouterModule,
-        BrowserAnimationsModule,
-        BrowserModule,
-        DataTableModule,
-        DialogModule,
-        InputTextModule,
-        ButtonModule,
-        DropdownModule,
-        GrowlModule,
-        InputMaskModule,
-        StepsModule,
-        CalendarModule,
-        InputTextareaModule,
-        FileUploadModule,
-        AutoCompleteModule,
-        CheckboxModule,
-        TabViewModule,
-        DragDropModule,
-        MinuteSecondsPipe,
-        ToDictionaryPipe,
-        ToggleButtonModule,
-        ConfirmDialogModule
-    ]
-})
+        exports: [
+            FormsModule,
+            HttpModule,
+            RouterModule,
+            BrowserAnimationsModule,
+            BrowserModule,
+            DataTableModule,
+            DialogModule,
+            InputTextModule,
+            ButtonModule,
+            DropdownModule,
+            GrowlModule,
+            InputMaskModule,
+            StepsModule,
+            CalendarModule,
+            InputTextareaModule,
+            FileUploadModule,
+            AutoCompleteModule,
+            CheckboxModule,
+            TabViewModule,
+            DragDropModule,
+            MinuteSecondsPipe,
+            ToDictionaryPipe,
+            ToggleButtonModule,
+            ConfirmDialogModule,
+            TableModule
+        ]
+    })
 export class CoreModule { }
