@@ -18,7 +18,6 @@ namespace TRNMNT.Web.Controllers
         public WeightDivisionController(
             ILogger<WeightDivisionController> logger,
             IWeightDivisionService weightDivisionService,
-            IRepository<WeightDivision> repository,
             IUserService userService,
             IEventService eventService,
             IAppDbContext context)

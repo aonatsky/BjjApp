@@ -121,7 +121,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var participants = await _participantService.GetFilteredParticipantsAsync(GetFederationId().Value, filter);
+                var participants = await _participantService.GetFilteredParticipantsAsync(filter);
                 return Success(participants);
             });
         }

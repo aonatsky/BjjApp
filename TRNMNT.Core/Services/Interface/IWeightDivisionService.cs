@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model.WeightDivision;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -14,5 +15,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns></returns>
         Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId);
         Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionsByEventIdAsync(Guid eventId);
+        Task<WeightDivision> GetAbsoluteWeightDivisionAsync(Guid categoryId);
     }
 }

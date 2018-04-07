@@ -26,7 +26,17 @@ namespace TRNMNT.Data.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            builder.Entity<Participant>()
+                .HasOne(m => m.WeightDivision)
+                .WithMany(t => t.Participants)
+                .HasForeignKey(m => m.WeightDivisionId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Participant>()
+                .HasOne(m => m.AbsoluteWeightDivision)
+                .WithMany(t => t.AbsoluteDivisionParticipants)
+                .HasForeignKey(m => m.AbsoluteWeightDivisionId)
+                .OnDelete(DeleteBehavior.Restrict);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
@@ -106,7 +116,7 @@ namespace TRNMNT.Data.Context
         public DbSet<WeightDivision> WeightDivision { get; set; }
         public DbSet<Fighter> Fighter { get; set; }
         public DbSet<Team> Team { get; set; }
-        public DbSet<WeightDivision> Category { get; set; }
+        public DbSet<Category> Category { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Event> Event { get; set; }
         public DbSet<Participant> Participant { get; set; }

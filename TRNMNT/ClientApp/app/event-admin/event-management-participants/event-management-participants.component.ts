@@ -15,6 +15,7 @@ import { ParticpantSortField } from '../../core/consts/participant-sort-field.co
 import { SelectItem } from 'primeng/components/common/selectitem';
 import { UploadResultCode } from '../../core/model/enum/upload-result-code.enum';
 import { NotificationService } from '../../core/services/notification.service';
+import { BracketService } from '../../core/services/bracket.service';
 
 @Component({
     selector: 'event-management-participants',
@@ -22,7 +23,7 @@ import { NotificationService } from '../../core/services/notification.service';
     providers: [DatePipe],
 })
 export class EventManagementParticipantsComponent implements OnInit {
-
+    
     @Input() eventId: string;
     private participantsListModel: PagedList<ParticipantTableModel>;
     private participantDdlModel: ParticipantDdlModel;
@@ -47,6 +48,13 @@ export class EventManagementParticipantsComponent implements OnInit {
         return this.participantsLoading || this.ddlDataLoading;
     }
 
+    public get selectedCategoryId() {
+        if (this.filter != null) {
+            return this.filter.categoryId;
+        }
+        return null;
+    }
+
     public get participantsModel(): ParticipantTableModel[] {
         if (this.participantsListModel != null) {
             return this.participantsListModel.innerList;
@@ -67,12 +75,14 @@ export class EventManagementParticipantsComponent implements OnInit {
         }
         return 0;
     }
-
+    private isAllWinnersSelected : boolean = false;
+    private targetModel : any[] = [];
 
     constructor(private loggerService: LoggerService,
         private routerService: RouterService,
         private participantService: ParticipantService,
         private route: ActivatedRoute,
+        private bracketService: BracketService,
         private notificationService: NotificationService,
         private datePipe: DatePipe) {
 
@@ -162,10 +172,16 @@ export class EventManagementParticipantsComponent implements OnInit {
     public filterParticipants($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
         this.loadParticipants(this.getFilterModel());
+        this.bracketService.isAllWinnersSelected(this.filter.categoryId).subscribe(isSelected => this.isAllWinnersSelected = isSelected);
     }
 
     public onEntitySelected(participant: ParticipantTableModel) {
         this.weightDivisionSelectItems = this.getWeightDivisionsForCategory(participant.categoryId);
+        // if weight divisions doesn't contain previously selected wd 
+        if (!this.weightDivisionSelectItems.find(w => w.value == participant.weightDivisionId) && this.weightDivisionSelectItems.length > 0) {
+            participant.weightDivisionName = this.weightDivisionSelectItems[0].label;
+            participant.weightDivisionId = this.weightDivisionSelectItems[0].value;
+        }
         this.refreshDdlModel();
     }
 

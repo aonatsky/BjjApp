@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
+using TRNMNT.Core.Model.Participant;
+using TRNMNT.Core.Model.WeightDivision;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -33,5 +36,16 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="weightDivisionId"></param>
         /// <returns></returns>
         Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId);
+
+        /// <summary>
+        /// Get all winners for selected categoryId
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        Task<List<ParticipantInAbsoluteDivisionMobel>> GetWinnersAsync(Guid categoryId);
+
+        Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId);
+
+        Task ManageAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model);
     }
 }

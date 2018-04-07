@@ -17,6 +17,7 @@ import { ConnectorComponent } from './event-management/brackets-generation/conne
 import { EventRunComponent } from './event-run/event-run.component';
 import { EventRunWeightDivisionViewComponent } from './event-run-wd-view/event-run-wd-view.component';
 import { EventRunCategoryViewComponent } from './event-run-category-view/event-run-category-view.component';
+import { AbsoluteWeightDivisionComponent } from './absolute-weight-division/absolute-weight-division.component';
 import { ResultsComponent } from './event-management/results/results.component';
 
 
@@ -41,6 +42,7 @@ import { ResultsComponent } from './event-management/results/results.component';
             EventRunComponent,
             EventRunWeightDivisionViewComponent,
             EventRunCategoryViewComponent,
+            AbsoluteWeightDivisionComponent,
             ConnectorComponent,
             ResultsComponent
         ],

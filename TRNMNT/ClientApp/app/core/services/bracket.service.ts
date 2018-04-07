@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { BracketModel, BracketArrayModel } from '../model/bracket.models';
 import { ResponseContentType } from '@angular/http';
+import { ParticipantInAbsoluteDivisionMobel } from '../model/participant.models';
 
 
 @Injectable()
@@ -35,5 +36,19 @@ export class BracketService {
     getBracketsByCategory(categoryId): Observable<BracketArrayModel> {
         return this.httpService.get(ApiMethods.bracket.getBracketsByCategory + '/' + categoryId)
             .map(res => this.httpService.getJson(res));
+    }
+
+    isAllWinnersSelected(categoryId): Observable<boolean> {
+        return this.httpService.get(ApiMethods.bracket.isAllWinnersSelected + '/' + categoryId).map(res => this.httpService.getJson(res));;
+    }
+
+    getWinnersByCategory(categoryId): Observable<ParticipantInAbsoluteDivisionMobel[]> {
+        return this.httpService.get(ApiMethods.bracket.getWinners + '/' + categoryId)
+            .map(res => this.httpService.getJson(res));
+    }
+
+    manageAbsoluteWeightDivision(participantsIds, categoryId): Observable<void> {
+        return this.httpService.post(ApiMethods.bracket.manageAbsoluteWeightDivision,
+            { participantsIds: participantsIds, categoryId: categoryId });
     }
 }

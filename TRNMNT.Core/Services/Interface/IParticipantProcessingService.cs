@@ -8,20 +8,6 @@ namespace TRNMNT.Core.Services.Interface
     public interface IParticipantProcessingService
     {
         /// <summary>
-        /// Gets the fighter models by filter.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns></returns>
-        List<ParticipantModel> GetParticitantModelsByFilter(ParticitantFilterModel filter);
-
-        /// <summary>
-        /// Gets the ordered list for brackets.
-        /// </summary>
-        /// <param name="filter">The filter.</param>
-        /// <returns></returns>
-        List<ParticipantModel> GetOrderedListForBrackets(ParticitantFilterModel filter);
-
-        /// <summary>
         /// Adds the fighters by models.
         /// </summary>
         /// <param name="particitantModels">The fighter models.</param>

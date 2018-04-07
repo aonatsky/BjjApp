@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
+using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Round;
+using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Impl;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
@@ -39,8 +42,10 @@ namespace TRNMNT.Core.Services.impl
             _bracketsFileService = bracketsFileService;
             _weightDivisionService = weightDivisionService;
         }
-        
+
         #endregion
+
+        #region Public Methods
 
         public async Task<BracketModel> GetBracketAsync(Guid weightDivisionId)
         {
@@ -63,10 +68,52 @@ namespace TRNMNT.Core.Services.impl
             return GetBracketModel(bracket);
         }
 
+        public async Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId)
+        {
+            var braketsForCategory = _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId);
+            if (!await braketsForCategory.AnyAsync())
+            {
+                return false;
+            }
+            if (!await braketsForCategory.AnyAsync(b =>
+                b.Rounds.Any(r => r.Stage == 0 && r.RoundType == (int) RoundTypeEnum.Standard)))
+            {
+                return false;
+            }
+            return !await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null);
+        }
+
+        public async Task<List<ParticipantInAbsoluteDivisionMobel>> GetWinnersAsync(Guid categoryId)
+        {
+            var braketsForCategory = _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId);
+            if (await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null))
+            {
+                throw new Exception($"For Weight divisions for category with id {categoryId} not all rounds has winners");
+            }
+
+            var winnerParticipants =
+                await GetWinnersForBrackets(braketsForCategory
+                        .Include(p => p.Rounds)
+                        .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
+                        .Include(p => p.Rounds)
+                        .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.WeightDivision))
+                    .Select(p => new ParticipantInAbsoluteDivisionMobel()
+                    {
+                        ParticipantId = p.ParticipantId,
+                        FirstName = p.FirstName,
+                        LastName = p.LastName,
+                        TeamName = p.Team.Name,
+                        WeightDivisionName = p.WeightDivision.Name,
+                        IsSelectedIntoDivision = p.AbsoluteWeightDivisionId != null
+                    })
+                    .ToListAsync();
+            return winnerParticipants;
+        }
+
         public async Task UpdateBracket(BracketModel model)
         {
 
-            var bracket = await _bracketRepository.GetAll(b => b.BracketId == model.BracketId).Include(b=>b.Rounds).FirstOrDefaultAsync();
+            var bracket = await _bracketRepository.GetAll(b => b.BracketId == model.BracketId).Include(b => b.Rounds).FirstOrDefaultAsync();
             if (bracket != null)
             {
                 UpdateBracketRoundsFromModel(bracket.Rounds, model.RoundModels);
@@ -93,7 +140,20 @@ namespace TRNMNT.Core.Services.impl
             return result;
         }
 
-        #region private methods
+        public async Task ManageAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model)
+        {
+            var absoluteWeightDivision = await _weightDivisionService.GetAbsoluteWeightDivisionAsync(model.CategoryId);
+
+            await _participantService.AddAbsoluteWeightDivisionForParticipantsAsync(
+                model.ParticipantsIds,
+                model.CategoryId, 
+                absoluteWeightDivision.WeightDivisionId);
+        }
+
+        #endregion
+
+        #region Private methods
+
         private async Task<List<Participant>> GetOrderedListForNewBracketAsync(Guid weightDivisionId)
         {
             var participants = (await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId)).ToList();
@@ -106,7 +166,6 @@ namespace TRNMNT.Core.Services.impl
 
             return Distribute(participants);
         }
-
 
         private List<Participant> GetOrderedParticipantListFromBracket(Bracket bracket)
         {
@@ -232,6 +291,11 @@ namespace TRNMNT.Core.Services.impl
             }
         }
 
+        private IQueryable<Participant> GetWinnersForBrackets(IQueryable<Bracket> brackets)
+        {
+            return brackets.SelectMany(b => b.Rounds.Where(r => r.Stage == 0 && r.RoundType == (int) RoundTypeEnum.Standard))
+                .Select(r => r.WinnerParticipant);
+        }
 
         #endregion
     }

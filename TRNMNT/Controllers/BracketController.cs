@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
+using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 using TRNMNT.Web.Hubs;
@@ -29,6 +31,7 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IAppDbContext context,
             IHubContext<RunEventHub> hubContext,
+            IWeightDivisionService weightDivisionService,
             IBracketService bracketService)
             : base(logger, userService, eventService, context)
         {
@@ -66,7 +69,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> UpdateBracket([FromBody]BracketModel bracketModel)
+        public async Task<IActionResult> UpdateBracket([FromBody] BracketModel bracketModel)
         {
             return await HandleRequestAsync(async () =>
             {
@@ -76,7 +79,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> FinishRound([FromBody]Guid weightDivisionId)
+        public async Task<IActionResult> FinishRound([FromBody] Guid weightDivisionId)
         {
             return await HandleRequestAsync(async () =>
             {
@@ -102,7 +105,38 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetBracketsByCategory(Guid categoryId)
         {
-            return await HandleRequestWithDataAsync(async () => Success(await _bracketService.GetBracketsByCategoryAsync(categoryId)));
+            return await HandleRequestWithDataAsync(async () =>
+                Success(await _bracketService.GetBracketsByCategoryAsync(categoryId)));
+        }
+
+        [Authorize, HttpGet("[action]/{categoryId}")]
+        public async Task<IActionResult> GetWinners(Guid categoryId)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var winners = await _bracketService.GetWinnersAsync(categoryId);
+                return Success(winners);
+            });
+        }
+
+        [Authorize, HttpGet("[action]/{categoryId}")]
+        public async Task<IActionResult> IsAllWinnersSelected(Guid categoryId)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var isSelected = await _bracketService.IsWinnersSelectedForAllRoundsAsync(categoryId);
+                return Success(isSelected);
+            });
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> ManageAbsoluteWeightDivision([FromBody] CreateAbsoluteDivisionModel model)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await _bracketService.ManageAbsoluteWeightDivisionAsync(model);
+                return HttpStatusCode.OK;
+            });
         }
 
         #endregion

@@ -4,7 +4,6 @@ namespace TRNMNT.Core.Model.Participant
 {
     public class ParticipantTableModel : ParticipantModelBase
     {
-        public Guid ParticipantId { get; set; }
         public string UserId { get; set; }
         public string TeamName { get; set; }
         public string CategoryName { get; set; }

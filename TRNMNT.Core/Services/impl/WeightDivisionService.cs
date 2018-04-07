@@ -52,6 +52,24 @@ namespace TRNMNT.Core.Services.Impl
                     }).ToListAsync();
         }
 
+        public async Task<WeightDivision> GetAbsoluteWeightDivisionAsync(Guid categoryId)
+        {
+            var weightDivision = await _weightDevisionRepository.GetAll(w => w.CategoryId == categoryId && w.IsAbsolute).FirstOrDefaultAsync();
+            if (weightDivision == null)
+            {
+                weightDivision = new WeightDivision
+                {
+                    WeightDivisionId = Guid.NewGuid(),
+                    Name = $"AbsoluteForCategory_{categoryId}",
+                    Weight = 0,
+                    CategoryId = categoryId,
+                    IsAbsolute = true,
+                };
+                _weightDevisionRepository.Add(weightDivision);
+            }
+            return weightDivision;
+        }
+
         #endregion
 
     }

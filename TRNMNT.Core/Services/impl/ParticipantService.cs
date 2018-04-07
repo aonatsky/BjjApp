@@ -50,9 +50,10 @@ namespace TRNMNT.Core.Services.Impl
 
         public Participant CreatePaticipant(ParticipantRegistrationModel model, Guid eventId)
         {
+            var id = Guid.NewGuid();
             return new Participant()
             {
-                ParticipantId = Guid.NewGuid(),
+                ParticipantId = id,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 TeamId = Guid.Parse(model.TeamId),
@@ -86,7 +87,8 @@ namespace TRNMNT.Core.Services.Impl
             {
                 throw new ArgumentNullException(nameof(participantModel));
             }
-            var participant = await _repository.GetByIDAsync(participantModel.ParticipantId);
+            var participant = await _repository.GetAll()
+                .FirstOrDefaultAsync(p => p.ParticipantId == participantModel.ParticipantId);
             if (participant == null)
             {
                 // todo change to custom exception
@@ -111,6 +113,25 @@ namespace TRNMNT.Core.Services.Impl
             return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId).ToListAsync();
         }
 
+        public async Task AddAbsoluteWeightDivisionForParticipantsAsync(Guid[] participantsIds, Guid categoryId,
+            Guid absoluteWeightDivisionId)
+        {
+            var previousParticipants = await _repository.GetAll(p =>
+                p.CategoryId == categoryId && !participantsIds.Contains(p.ParticipantId) &&
+                p.AbsoluteWeightDivisionId == absoluteWeightDivisionId).ToListAsync();
+            foreach (var previousParticipant in previousParticipants)
+            {
+                previousParticipant.AbsoluteWeightDivisionId = null;
+                _repository.Update(previousParticipant);
+            }
+            var participants = await _repository.GetAll(p => participantsIds.Contains(p.ParticipantId)).ToListAsync();
+            foreach (var participant in participants)
+            {
+                participant.AbsoluteWeightDivisionId = absoluteWeightDivisionId;
+                _repository.Update(participant);
+            }
+        }
+
         public async Task DeleteParticipantAsync(Guid participantId)
         {
             var participant = await _repository.GetByIDAsync(participantId);
@@ -122,10 +143,10 @@ namespace TRNMNT.Core.Services.Impl
             _repository.Delete(participant);
         }
 
-        public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(Guid federationId, ParticipantFilterModel filter)
+        public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(ParticipantFilterModel filter)
         {
             var size = DefaultValues.DefaultPageSize;
-            var allParticipants = _repository.GetAll(p => p.EventId == filter.EventId);
+            var allParticipants = _repository.GetAll().Where(p => p.EventId == filter.EventId);
             if (filter.CategoryId != null)
             {
                 allParticipants = allParticipants.Where(p => p.CategoryId == filter.CategoryId);
@@ -140,11 +161,11 @@ namespace TRNMNT.Core.Services.Impl
             }
             var totalCount = await allParticipants.CountAsync();
 
-            allParticipants = SortParticipants(allParticipants, filter.SortField, filter.SortDirection, federationId);
+            allParticipants = SortParticipants(allParticipants, filter.SortField, filter.SortDirection);
 
             allParticipants = allParticipants.Skip(size * filter.PageIndex).Take(size);
 
-            var list = await allParticipants.Select(p => new ParticipantTableModel
+            var anonimList = await allParticipants.Select(p => new ParticipantTableModel
             {
                 ParticipantId = p.ParticipantId,
                 FirstName = p.FirstName,
@@ -152,7 +173,7 @@ namespace TRNMNT.Core.Services.Impl
                 DateOfBirth = p.DateOfBirth,
                 UserId = p.UserId,
                 TeamName = p.Team.Name,
-                TeamId  = p.TeamId,
+                TeamId = p.TeamId,
                 CategoryName = p.Category.Name,
                 CategoryId = p.CategoryId,
                 WeightDivisionName = p.WeightDivision.Name,
@@ -160,10 +181,10 @@ namespace TRNMNT.Core.Services.Impl
                 IsMember = p.IsMember
             }).ToListAsync();
 
-            return new PagedList<ParticipantTableModel>(list, filter.PageIndex, size, totalCount);
+            return new PagedList<ParticipantTableModel>(anonimList, filter.PageIndex, size, totalCount);
         }
 
-        private IQueryable<Participant> SortParticipants(IQueryable<Participant> allParticipants, ParticpantSortField filterSortField, SortDirectionEnum sortDirection, Guid federationId)
+        private IQueryable<Participant> SortParticipants(IQueryable<Participant> allParticipants, ParticpantSortField filterSortField, SortDirectionEnum sortDirection)
         {
             switch (filterSortField)
             {
@@ -186,7 +207,7 @@ namespace TRNMNT.Core.Services.Impl
                     allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.WeightDivision.Name);
                     break;
                 case ParticpantSortField.IsMember:
-                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.Team.FederationId == federationId);
+                    allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.IsMember);
                     break;
                 default:
                     allParticipants = allParticipants.OrderByDirection(sortDirection, p => p.FirstName);
@@ -205,6 +226,11 @@ namespace TRNMNT.Core.Services.Impl
                 LastName = "EMPTY"
             };
         }
+
+        #endregion
+
+        #region Private Methods
+
 
         #endregion
     }
