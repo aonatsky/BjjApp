@@ -18,6 +18,7 @@ import { EventRunComponent } from './event-run/event-run.component';
 import { RoundModule } from '../round/round.module';
 import { EventRunWeightDivisionViewComponent } from './event-run-wd-view/event-run-wd-view.component';
 import { EventRunCategoryViewComponent } from './event-run-category-view/event-run-category-view.component';
+import { ResultsComponent } from './event-management/results/results.component';
 
 
 @
@@ -42,7 +43,8 @@ import { EventRunCategoryViewComponent } from './event-run-category-view/event-r
             EventRunComponent,
             EventRunWeightDivisionViewComponent,
             EventRunCategoryViewComponent,
-            ConnectorComponent
+            ConnectorComponent,
+            ResultsComponent
         ],
 
         providers: [],

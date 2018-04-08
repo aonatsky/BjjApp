@@ -29,9 +29,6 @@ export class BracketGenerationComponent {
     constructor(private bracketService: BracketService) {
     }
 
-    ngOnInit() {
-    }
-
     private createBracket() {
         this.bracket = undefined;
         this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(r => {

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TRNMNT.Core.Model.Round;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
@@ -18,5 +20,12 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="round"></param>
         void UpdateRound(Round round);
+
+        /// <summary>
+        /// Sets round result
+        /// </summary>
+        /// <param name="model">RoundResult model</param>
+        /// <returns></returns>
+        Task SetRoundResult(RoundResultModel model);
     }
 }
