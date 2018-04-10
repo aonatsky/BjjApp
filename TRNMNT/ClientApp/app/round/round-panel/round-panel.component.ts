@@ -116,14 +116,6 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.send();
     }
 
-    public getFirstPlayerScore(): number {
-        return this.roundDetails.firstPlayerAdvantage + this.roundDetails.firstPlayerPoints - this.roundDetails.firstPlayerPenalty;
-    }
-
-    public getSecondPlayerScore(): number {
-        return this.roundDetails.secondPlayerAdvantage + this.roundDetails.secondPlayerPoints - this.roundDetails.secondPlayerPenalty;
-    }
-
     public send(): void {
         this.sendHubMessage(this.roundDetails);
     }
