@@ -60,7 +60,7 @@ namespace TRNMNT.Core.Services.Impl
                 weightDivision = new WeightDivision
                 {
                     WeightDivisionId = Guid.NewGuid(),
-                    Name = $"AbsoluteForCategory_{categoryId}",
+                    Name = "Absolute",
                     Weight = 0,
                     CategoryId = categoryId,
                     IsAbsolute = true,
