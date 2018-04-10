@@ -2,6 +2,8 @@
 import { RoundPanelComponent } from './round-panel/round-panel.component'
 import { RoundPanelViewComponent } from './round-panel-view/round-panel-view.component'
 import { CoreModule } from './../core/core.module'
+import { CompleteRoundComponent } from './complete-round/complete-round.component';
+
 
 @NgModule({
 
@@ -9,6 +11,7 @@ import { CoreModule } from './../core/core.module'
         CoreModule
     ],
     declarations: [
+        CompleteRoundComponent,
         RoundPanelComponent,
         RoundPanelViewComponent
     ],
@@ -16,6 +19,7 @@ import { CoreModule } from './../core/core.module'
     providers: [],
 
     exports: [
+        CompleteRoundComponent,
         RoundPanelComponent,
         RoundPanelViewComponent
     ]

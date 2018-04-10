@@ -1,4 +1,6 @@
-﻿export class RoundDetailsModel {
+﻿import { RoundModel } from '../round.models';
+
+export class RoundDetailsModel {
     roundId: string;
     firstPlayerPenalty: number;
     secondPlayerPenalty: number;
@@ -11,4 +13,6 @@
     isStarted: boolean;
     isPaused: boolean;
     isCompleted: boolean;
+
+    roundModel: RoundModel;
 }

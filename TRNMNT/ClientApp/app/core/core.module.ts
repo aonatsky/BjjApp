@@ -30,6 +30,7 @@ import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { TableModule } from 'primeng/table';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputMaskModule } from 'primeng/primeng';
 import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, ToggleButtonModule, ConfirmDialogModule, DragDropModule } from 'primeng/primeng';
 import { AuthGuard } from './routing/auth.guard';
@@ -67,7 +68,8 @@ import { ResultsService } from './services/results.service';
             DragDropModule,
             ToggleButtonModule,
             ConfirmDialogModule,
-            TableModule
+            TableModule,
+            RadioButtonModule
         ],
         declarations: [
             MinuteSecondsPipe,
@@ -129,6 +131,7 @@ import { ResultsService } from './services/results.service';
             ToggleButtonModule,
             ConfirmDialogModule,
             TableModule,
+            RadioButtonModule,
             FormatTimerPipe
         ]
     })

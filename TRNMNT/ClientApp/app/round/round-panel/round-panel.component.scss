@@ -1,6 +1,6 @@
 ﻿.round-panel-wrapper {
     background-color: #000000;
-    width: 100%;
+    min-width: 1200px;
     clear: both;
 }
 
@@ -71,6 +71,7 @@
 }
 
 .round-panel-label {
+    margin-left: 10px;
     font-family: Roboto;
     font-size: 12px;
     font-weight: normal;

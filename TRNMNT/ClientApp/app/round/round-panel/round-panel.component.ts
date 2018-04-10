@@ -16,6 +16,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
 
     private readonly tick: number;
     private timerSubscription: any;
+    private displayPopup: boolean;
 
     constructor() {
         super();
@@ -34,9 +35,12 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.roundDetails.isCompleted = false;
 
         this.tick = 1000;
+
+        this.displayPopup = false;
     }
 
     ngOnInit() {
+        this.roundDetails.roundModel = this.roundModel;
         this.roundDetails.roundId = this.roundModel.roundId;
         this.setupConnection(this.roundModel.roundId, x => {
             this.roundDetails = x;
@@ -73,6 +77,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.roundDetails.isStarted = false;
         this.roundDetails.isPaused = false;
         this.roundDetails.isCompleted = true;
+        this.displayPopup = true;
         this.send();
     }
 

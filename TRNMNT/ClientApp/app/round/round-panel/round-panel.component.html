@@ -89,3 +89,11 @@
         <div class="round-panel-button" (click)="resetTimer()">RESET TIMER</div>
     </div>
 </div>
+<p-dialog header="Complete Round"
+          [(visible)]="displayPopup"
+          [modal]="true"
+          [resizable]="false"
+          [showHeader]="true"
+          [width]="500">
+    <complete-round [roundDetails]="roundDetails" (onClose)="displayPopup=false;"></complete-round>
+</p-dialog>
