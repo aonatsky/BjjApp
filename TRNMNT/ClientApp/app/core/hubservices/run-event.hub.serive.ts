@@ -1,7 +1,7 @@
 ﻿import { Injectable } from "@angular/core"
 import { Observable } from 'rxjs/Rx';
 import { SignalRHubService } from "../dal/signalr/signalr-hub.service";
-import { TransportType, HubConnection } from "@aspnet/signalr-client";
+import { TransportType, HubConnection } from "@aspnet/signalr";
 import { RefreshBracketModel } from "../model/bracket.models";
 
 

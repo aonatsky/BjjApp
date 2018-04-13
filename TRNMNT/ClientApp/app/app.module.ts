@@ -7,6 +7,7 @@ import { CoreModule } from './core/core.module'
 import { SharedModule } from './shared/shared.module'
 import { EventAdminModule } from './event-admin/event-admin.module'
 import { EventModule } from './event/event.module'
+import { RoundModule } from './round/round.module'
 
 
 
@@ -23,7 +24,8 @@ import { appRoutes } from './core/routing/app.routing'
         CoreModule,
         SharedModule,
         EventAdminModule,
-        EventModule
+        EventModule,
+        RoundModule
 ],
     providers: []
 })

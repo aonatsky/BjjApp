@@ -95,7 +95,7 @@ namespace TRNMNT.Web.Controllers
                             WeightDivisionId = divisionId,
                             Bracket = bracketModel
                         };
-                        await clients.Group(divisionId).InvokeAsync("BracketRoundsUpdated", refreshModel);
+                        await clients.Group(divisionId).SendAsync("BracketRoundsUpdated", refreshModel);
                     }
                 }
                 return HttpStatusCode.OK;
