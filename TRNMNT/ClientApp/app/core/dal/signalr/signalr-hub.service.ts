@@ -1,4 +1,4 @@
-﻿import { HubConnection, TransportType } from '@aspnet/signalr-client';
+﻿import { HubConnection, TransportType } from '@aspnet/signalr';
 import { LoggerService } from '../../services/logger.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';

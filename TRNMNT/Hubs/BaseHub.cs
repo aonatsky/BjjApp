@@ -67,8 +67,8 @@ namespace TRNMNT.Web.Hubs
         {
             if (this is Hub hub)
             {
-                await hub.Clients.Client(Context.ConnectionId).InvokeAsync("Connected", Context.ConnectionId);
-                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("OtherClientConnected", Context.ConnectionId);
+                await hub.Clients.Client(Context.ConnectionId).SendAsync("Connected", Context.ConnectionId);
+                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).SendAsync("OtherClientConnected", Context.ConnectionId);
             }
             
             await base.OnConnectedAsync();
@@ -78,8 +78,8 @@ namespace TRNMNT.Web.Hubs
         {
             if (this is Hub hub)
             {
-                await hub.Clients.Client(Context.ConnectionId).InvokeAsync("Disconnected", Context.ConnectionId);
-                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).InvokeAsync("OtherClientDisconnected", Context.ConnectionId, exception);
+                await hub.Clients.Client(Context.ConnectionId).SendAsync("Disconnected", Context.ConnectionId);
+                await hub.Clients.AllExcept(new[] { Context.ConnectionId }).SendAsync("OtherClientDisconnected", Context.ConnectionId, exception);
             }
             await base.OnDisconnectedAsync(exception);
         }

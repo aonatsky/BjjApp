@@ -1,4 +1,4 @@
-﻿import { HubConnection } from "@aspnet/signalr-client";
+﻿import { HubConnection } from "@aspnet/signalr";
 import { RoundDetailsModel } from "../core/model/round-details/round-details.model";
 
 export abstract class BaseRoundPanel {

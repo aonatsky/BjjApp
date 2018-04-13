@@ -84,14 +84,13 @@ namespace TRNMNT.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("chat");
-                routes.MapHub<RoundHub>("round-hub");
-                routes.MapHub<RunEventHub>("runevent");
+                routes.MapHub<ChatHub>("/chat");
+                routes.MapHub<RunEventHub>("/runevent");
+                routes.MapHub<RoundHub>("/round-hub");
             });
-            
+
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>
