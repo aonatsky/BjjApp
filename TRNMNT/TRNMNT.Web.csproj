@@ -21,10 +21,18 @@
     <EmbeddedResource Remove="Core\**" />
     <None Remove="Core\**" />
     <Compile Remove="Controllers\FighterController.cs" />
+    <None Remove="ClientApp\app\core\enums\round-result.enum.ts" />
+    <None Remove="ClientApp\app\core\enums\submission-type.enum.ts" />
+    <None Remove="ClientApp\app\core\model\round-details\round-details.model.ts" />
+    <None Remove="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <None Remove="ClientApp\app\core\services\bracket.service.ts" />
     <None Remove="ClientApp\app\core\services\results.service.ts" />
     <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <None Remove="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
+    <None Remove="ClientApp\app\round\round-panel-view\round-panel-view.component.ts" />
+    <None Remove="ClientApp\app\round\round-panel.service.ts" />
+    <None Remove="ClientApp\app\round\round-panel\round-panel.component.ts" />
+    <None Remove="ClientApp\app\round\round.module.ts" />
     <None Remove="ClientApp\app\shared\bracket\bracket.component.ts" />
     <None Remove="ClientApp\assets\style\app.css" />
     <None Remove="ClientApp\assets\style\app.min.css" />
@@ -44,7 +52,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-alpha2-final" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-preview2-final" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
@@ -82,10 +90,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\core\enums\round-result.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\app\core\enums\submission-type.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\app\core\model\round-details\round-details.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\results.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\bracket.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.scss" />
     <TypeScriptCompile Include="ClientApp\app\event-admin\event-management\brackets-generation\connector.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\round\round-panel-view\round-panel-view.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\round\round-panel.service.ts" />
+    <TypeScriptCompile Include="ClientApp\app\round\round-panel\round-panel.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\round\round.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\bracket\bracket.component.ts" />
   </ItemGroup>
 

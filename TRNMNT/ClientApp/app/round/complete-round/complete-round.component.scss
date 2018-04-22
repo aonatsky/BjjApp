@@ -1,0 +1,55 @@
+﻿.complete-round-wrapper {
+    background-color: #000000;
+    padding: 50px;
+}
+
+.complete-round-radio-button-group{
+    margin-left: 20px;
+}
+
+.complete-round-label {
+    height: 37px;
+    font-family: ProximaNova;
+    font-size: 30.4px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.complete-round-button {
+    margin: 0 20px;
+    width: 200px;
+    height: 50px;
+    box-shadow: 0 0 8px 0 rgba(91, 91, 91, 0.5);
+    background-color: #f6f6f6;
+    border: solid 1px #3c3c3c;
+    font-family: Helvetica;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 50px;
+    letter-spacing: 0.3px;
+    text-align: center;
+    color: #3c3c3c;
+    cursor: pointer;
+}
+
+.complete-round-navigation-panel {
+    display: flex;
+    justify-content: center;
+}
+
+.complete-round-radio-button {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}

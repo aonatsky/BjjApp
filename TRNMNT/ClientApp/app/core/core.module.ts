@@ -30,6 +30,7 @@ import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { GrowlModule } from 'primeng/components/growl/growl';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { TableModule } from 'primeng/table';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputMaskModule } from 'primeng/primeng';
 import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, AutoCompleteModule, CheckboxModule, TabViewModule, ToggleButtonModule, ConfirmDialogModule, DragDropModule } from 'primeng/primeng';
 import { AuthGuard } from './routing/auth.guard';
@@ -38,6 +39,7 @@ import { BracketService } from './services/bracket.service';
 import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
 import { TestSocketService } from './services/test-socket.service';
+import { FormatTimerPipe } from './pipes/format-timer.pipe';
 import { RunEventHubService } from './hubservices/run-event.hub.serive';
 import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
 import { ResultsService } from './services/results.service';
@@ -66,11 +68,13 @@ import { ResultsService } from './services/results.service';
             DragDropModule,
             ToggleButtonModule,
             ConfirmDialogModule,
-            TableModule
+            TableModule,
+            RadioButtonModule
         ],
         declarations: [
             MinuteSecondsPipe,
-            ToDictionaryPipe
+            ToDictionaryPipe,
+            FormatTimerPipe
         ],
         providers: [
             HttpService,
@@ -126,7 +130,9 @@ import { ResultsService } from './services/results.service';
             ToDictionaryPipe,
             ToggleButtonModule,
             ConfirmDialogModule,
-            TableModule
+            TableModule,
+            RadioButtonModule,
+            FormatTimerPipe
         ]
     })
 export class CoreModule { }
