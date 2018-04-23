@@ -100,12 +100,16 @@ export class BracketComponent {
 
     }
 
+    private isCentralCol(colNumber): boolean {
+        return colNumber == (this.columns.length - 1) / 2;
+    }
+
     private getMatchSideClass(colNumber): string {
         return colNumber > (this.columns.length - 1) / 2 ? 'right-side' : '';
     }
 
-    private getMatchTypeClass(matchModel: RoundModel) : string {
-        let  matchType = '';
+    private getMatchTypeClass(matchModel: RoundModel): string {
+        let matchType = '';
         if (matchModel.stage == 0) {
             matchType = matchModel.roundType == 1 ? 'third-place' : 'final';
         }
@@ -118,11 +122,15 @@ export class BracketComponent {
         const depth = (isRightSide ? maxCol - colNumber : colNumber);
         const stage = this.maxStage - depth;
         const models = this.bracket.roundModels.filter(r => r.stage == stage);
-        if (isRightSide) {
-            return models.splice(models.length / 2, models.length);
-
+        if (stage === 0) {
+            return models;
         } else {
-            return models.splice(0, models.length / 2);
+            if (isRightSide) {
+                return models.splice(models.length / 2, models.length);
+
+            } else {
+                return models.splice(0, models.length / 2);
+            }
         }
     }
 
