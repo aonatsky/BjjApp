@@ -38,8 +38,8 @@ export class BracketComponent {
     }
 
     private getColumns(): number[] {
-        let cols = [];
-        let maxColumn = this.maxStage * 2;
+        const cols = [];
+        const maxColumn = this.maxStage * 2;
         for (let i = 0; i <= maxColumn; i++) {
             cols.push(i);
         }
@@ -49,12 +49,12 @@ export class BracketComponent {
 
 
     private getRoundTemplate(round: RoundModel, isRightSide: boolean): string {
-        let matchSide = isRightSide ? 'right-side' : '';
+        const matchSide = isRightSide ? 'right-side' : '';
         let matchType = '';
         if (round.stage == 0) {
             matchType = round.roundType == 1 ? 'third-place' : 'final';
         }
-        
+
         return `<div class="match ${matchSide} ${matchType} "><div class="match-content ui-g-1 ui-g-nopad">
             <div class="participant-plate ui-g-12">
             ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
@@ -72,11 +72,11 @@ export class BracketComponent {
 
     private getRounds(colNumber: number) {
         let htmlData = '';
-        let maxCol = this.columns.length - 1;
-        let isRightSide = colNumber > maxCol / 2;
-        let depth = (isRightSide ? maxCol - colNumber : colNumber);
-        let stage = this.maxStage - depth;
-        let count = this.bracket.roundModels.filter(r => r.stage == stage).length;
+        const maxCol = this.columns.length - 1;
+        const isRightSide = colNumber > maxCol / 2;
+        const depth = (isRightSide ? maxCol - colNumber : colNumber);
+        const stage = this.maxStage - depth;
+        const count = this.bracket.roundModels.filter(r => r.stage == stage).length;
         if (stage == 0) {
             htmlData += this.getEmptyMatch();
             this.bracket.roundModels.filter(r => r.stage == stage).forEach((r) => {
@@ -98,6 +98,32 @@ export class BracketComponent {
         return htmlData;
 
 
+    }
+
+    private getMatchSideClass(colNumber): string {
+        return colNumber > (this.columns.length - 1) / 2 ? 'right-side' : '';
+    }
+
+    private getMatchTypeClass(matchModel: RoundModel) : string {
+        let  matchType = '';
+        if (matchModel.stage == 0) {
+            matchType = matchModel.roundType == 1 ? 'third-place' : 'final';
+        }
+        return matchType;
+    }
+
+    private getRoundModels(colNumber: number): RoundModel[] {
+        const maxCol = this.columns.length - 1;
+        const isRightSide = colNumber > maxCol / 2;
+        const depth = (isRightSide ? maxCol - colNumber : colNumber);
+        const stage = this.maxStage - depth;
+        const models = this.bracket.roundModels.filter(r => r.stage == stage);
+        if (isRightSide) {
+            return models.splice(models.length / 2, models.length);
+
+        } else {
+            return models.splice(0, models.length / 2);
+        }
     }
 
 }
