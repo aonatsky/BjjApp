@@ -26,6 +26,6 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="model">RoundResult model</param>
         /// <returns></returns>
-        Task SetRoundResult(RoundResultModel model);
+        Task SetRoundResultAsync(RoundResultModel model);
     }
 }

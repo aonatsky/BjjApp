@@ -14,10 +14,13 @@ namespace TRNMNT.Web.Controllers
 {
     public class RoundController : BaseController
     {
+        private readonly IRoundService _roundService;
+
         #region .ctor
 
-        public RoundController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context) : base(logger, userService, eventService, context)
+        public RoundController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context, IRoundService roundService) : base(logger, userService, eventService, context)
         {
+            _roundService = roundService;
         }
 
         #endregion
@@ -29,7 +32,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                
+                await _roundService.SetRoundResultAsync(roundResultModel);
             }
             catch (Exception ex)
             {

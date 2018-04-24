@@ -10,7 +10,9 @@ namespace TRNMNT.Data.Entities
         [Key]
         public Guid BracketId { get; set; }
         public Guid WeightDivisionId { get; set; }
-
+        public DateTime? StartTs { get; set; }
+        public DateTime? CompleteTs { get; set; }
+        
         [JsonIgnore]
         public virtual WeightDivision WeightDivision { get; set; }
         [JsonIgnore]

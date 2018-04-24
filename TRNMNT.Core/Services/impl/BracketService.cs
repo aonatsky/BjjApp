@@ -31,8 +31,8 @@ namespace TRNMNT.Core.Services.impl
 
         #region .ctor
 
-        public BracketService(IRepository<Bracket> bracketRepository, IRoundService roundService, 
-            IParticipantService participantService, 
+        public BracketService(IRepository<Bracket> bracketRepository, IRoundService roundService,
+            IParticipantService participantService,
             BracketsFileService bracketsFileService,
             IWeightDivisionService weightDivisionService)
         {
@@ -47,24 +47,32 @@ namespace TRNMNT.Core.Services.impl
 
         #region Public Methods
 
-        public async Task<BracketModel> GetBracketAsync(Guid weightDivisionId)
+        public async Task<BracketModel> GetBracketModelAsync(Guid weightDivisionId)
         {
-            var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
-                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant)
-                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant)
-                .FirstOrDefaultAsync();
-            if (bracket == null)
-            {
-                bracket = new Bracket()
-                {
-                    BracketId = Guid.NewGuid(),
-                    WeightDivisionId = weightDivisionId
-                };
-                _bracketRepository.Add(bracket);
 
-                var participants = await GetOrderedListForNewBracketAsync(weightDivisionId);
-                bracket.Rounds = _roundService.CreateRoundStructure(participants.ToArray(), bracket.BracketId);
+            return GetBracketModel(await GetBracketAsync(weightDivisionId));
+        }
+
+        public async Task<BracketModel> RunBracketAsync(Guid weightDivisionId)
+        {
+            var bracket = await GetBracketAsync(weightDivisionId);
+            bracket.StartTs = DateTime.UtcNow;
+            var firstRounds = bracket.Rounds.Where(r => r.Stage == bracket.Rounds.Max(rr => rr.Stage));
+            foreach (var round in firstRounds)
+            {
+                if (round.FirstParticipantId == null)
+                {
+                    round.WinnerParticipantId = round.SecondParticipantId;
+                }
+                if (round.SecondParticipantId == null)
+                {
+                    round.WinnerParticipantId = round.SecondParticipantId;
+                }
+
+                bracket.Rounds.First(r => r.RoundId == round.NextRoundId).FirstParticipantId =
+                    round.WinnerParticipantId;
             }
+            _bracketRepository.Update(bracket);
             return GetBracketModel(bracket);
         }
 
@@ -76,7 +84,7 @@ namespace TRNMNT.Core.Services.impl
                 return false;
             }
             if (!await braketsForCategory.AnyAsync(b =>
-                b.Rounds.Any(r => r.Stage == 0 && r.RoundType == (int) RoundTypeEnum.Standard)))
+                b.Rounds.Any(r => r.Stage == 0 && r.RoundType == (int)RoundTypeEnum.Standard)))
             {
                 return false;
             }
@@ -135,7 +143,7 @@ namespace TRNMNT.Core.Services.impl
             var result = new Dictionary<string, BracketModel>();
             foreach (var division in weightDivisions)
             {
-                result.Add(division.WeightDivisionId.ToUpperInvariant(), await GetBracketAsync(new Guid(division.WeightDivisionId)));
+                result.Add(division.WeightDivisionId.ToUpperInvariant(), await GetBracketModelAsync(new Guid(division.WeightDivisionId)));
             }
             return result;
         }
@@ -146,7 +154,7 @@ namespace TRNMNT.Core.Services.impl
 
             await _participantService.AddAbsoluteWeightDivisionForParticipantsAsync(
                 model.ParticipantsIds,
-                model.CategoryId, 
+                model.CategoryId,
                 absoluteWeightDivision.WeightDivisionId);
         }
 
@@ -293,10 +301,31 @@ namespace TRNMNT.Core.Services.impl
 
         private IQueryable<Participant> GetWinnersForBrackets(IQueryable<Bracket> brackets)
         {
-            return brackets.SelectMany(b => b.Rounds.Where(r => r.Stage == 0 && r.RoundType == (int) RoundTypeEnum.Standard))
+            return brackets.SelectMany(b => b.Rounds.Where(r => r.Stage == 0 && r.RoundType == (int)RoundTypeEnum.Standard))
                 .Select(r => r.WinnerParticipant);
         }
 
+        private async Task<Bracket> GetBracketAsync(Guid weightDivisionId)
+        {
+            var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
+                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant)
+                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant)
+                .FirstOrDefaultAsync();
+            if (bracket == null)
+            {
+                bracket = new Bracket()
+                {
+                    BracketId = Guid.NewGuid(),
+                    WeightDivisionId = weightDivisionId
+                };
+                _bracketRepository.Add(bracket);
+
+                var participants = await GetOrderedListForNewBracketAsync(weightDivisionId);
+                bracket.Rounds = _roundService.CreateRoundStructure(participants.ToArray(), bracket.BracketId);
+            }
+            return bracket;
+
+        }
         #endregion
     }
 }

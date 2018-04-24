@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model.Round;
@@ -83,14 +84,46 @@ namespace TRNMNT.Core.Services.impl
             _roundRepository.Update(round);
         }
 
-        public async Task SetRoundResult(RoundResultModel model)
+        public async Task SetRoundResultAsync(RoundResultModel model)
         {
-            var round = await _roundRepository.GetByIDAsync(model.RoundId);
+            var round = await _roundRepository.GetAllIncluding(r => r.RoundId == model.RoundId, r=> r.NextRound).FirstOrDefaultAsync();
             if (round != null)
             {
                 round.WinnerParticipantId = model.WinnerParticipantId;
                 round.RoundResultType = model.RundResultType;
                 round.RoundResultDetails = GetRoundResultDetailsJson(model);
+                if (round.NextRound != null)
+                {
+                    if (round.NextRound.FirstParticipantId == null)
+                    {
+                        round.NextRound.FirstParticipantId = round.WinnerParticipantId;
+                    }
+                    else
+                    {
+                        round.NextRound.SecondParticipantId = round.WinnerParticipantId;
+                    }
+                }
+
+                if (round.Stage == 1)
+                {
+                    var lostParticipantId = round.WinnerParticipantId == round.FirstParticipantId
+                        ? round.SecondParticipantId
+                        : round.FirstParticipantId;
+                    var thirdPlaceRound = await _roundRepository.FirstOrDefaultAsync(r =>
+                        r.BracketId == round.BracketId || r.RoundType == (int) RoundTypeEnum.ThirdPlace);
+                    if (thirdPlaceRound != null)
+                    {
+                        if (thirdPlaceRound.FirstParticipantId == null)
+                        {
+                            thirdPlaceRound.FirstParticipantId = lostParticipantId;
+                        }
+                        else
+                        {
+                            thirdPlaceRound.SecondParticipantId = lostParticipantId;
+                        }
+                        _roundRepository.Update(thirdPlaceRound);
+                    }
+                }
                 _roundRepository.Update(round);
             }
         }

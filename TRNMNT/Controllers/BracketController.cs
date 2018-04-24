@@ -47,7 +47,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
+                var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
                 if (bracketModel != null)
                 {
                     return Success(bracketModel);
@@ -86,7 +86,7 @@ namespace TRNMNT.Web.Controllers
                 var clients = _hubContext.Clients;
                 if (clients != null)
                 {
-                    var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
+                    var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
                     if (bracketModel != null)
                     {
                         var divisionId = weightDivisionId.ToString().ToUpperInvariant();
