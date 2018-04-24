@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Clauses;
+using Newtonsoft.Json.Linq;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
@@ -22,25 +22,29 @@ namespace TRNMNT.Core.Services.impl
         #region Dependencies
 
         private readonly IRepository<Bracket> _bracketRepository;
-        private readonly IRoundService _roundService;
+        private readonly IRepository<Round> _roundRepository;
         private readonly IParticipantService _participantService;
         private readonly BracketsFileService _bracketsFileService;
         private readonly IWeightDivisionService _weightDivisionService;
+        private readonly ICategoryService _categoryService;
 
         #endregion
 
         #region .ctor
 
-        public BracketService(IRepository<Bracket> bracketRepository, IRoundService roundService,
+        public BracketService(IRepository<Bracket> bracketRepository,
             IParticipantService participantService,
             BracketsFileService bracketsFileService,
-            IWeightDivisionService weightDivisionService)
+            IWeightDivisionService weightDivisionService,
+            ICategoryService categoryService,
+            IRepository<Round> roundRepository)
         {
             _bracketRepository = bracketRepository;
-            _roundService = roundService;
             _participantService = participantService;
             _bracketsFileService = bracketsFileService;
             _weightDivisionService = weightDivisionService;
+            _categoryService = categoryService;
+            _roundRepository = roundRepository;
         }
 
         #endregion
@@ -158,6 +162,68 @@ namespace TRNMNT.Core.Services.impl
                 absoluteWeightDivision.WeightDivisionId);
         }
 
+        public async Task SetRoundResultAsync(RoundResultModel model)
+        {
+            var round = await _roundRepository.GetAllIncluding(r => r.RoundId == model.RoundId, r => r.NextRound).FirstOrDefaultAsync();
+            if (round != null)
+            {
+                round.WinnerParticipantId = model.WinnerParticipantId;
+                round.RoundResultType = model.RundResultType;
+                round.RoundResultDetails = GetRoundResultDetailsJson(model);
+                if (round.NextRound != null)
+                {
+                    if (round.NextRound.FirstParticipantId == null)
+                    {
+                        round.NextRound.FirstParticipantId = round.WinnerParticipantId;
+                    }
+                    else
+                    {
+                        round.NextRound.SecondParticipantId = round.WinnerParticipantId;
+                    }
+                }
+
+                if (round.Stage == 1)
+                {
+                    var lostParticipantId = round.WinnerParticipantId == round.FirstParticipantId
+                        ? round.SecondParticipantId
+                        : round.FirstParticipantId;
+                    var thirdPlaceRound = await _roundRepository.FirstOrDefaultAsync(r =>
+                        r.BracketId == round.BracketId || r.RoundType == (int)RoundTypeEnum.ThirdPlace);
+                    if (thirdPlaceRound != null)
+                    {
+                        if (thirdPlaceRound.FirstParticipantId == null)
+                        {
+                            thirdPlaceRound.FirstParticipantId = lostParticipantId;
+                        }
+                        else
+                        {
+                            thirdPlaceRound.SecondParticipantId = lostParticipantId;
+                        }
+                        _roundRepository.Update(thirdPlaceRound);
+                    }
+                }
+
+                if (round.Stage == 0)
+                {
+                    if (!await _roundRepository.GetAll(r => r.BracketId == round.BracketId
+                                                           && r.Stage == 0
+                                                           && r.RoundId != round.RoundId
+                                                           && r.WinnerParticipantId == null
+                                                           ).AnyAsync())
+                    {
+
+                        var bracket = await _bracketRepository.GetAllIncluding(b => b.BracketId == round.BracketId, b => b.WeightDivision).FirstOrDefaultAsync();
+                        bracket.CompleteTs = DateTime.UtcNow;
+                        _bracketRepository.Update(bracket);
+                        await _categoryService.SetCategoryCompleteAsync(bracket.WeightDivision.CategoryId);
+
+                    }
+                }
+
+                _roundRepository.Update(round);
+            }
+        }
+
         #endregion
 
         #region Private methods
@@ -172,7 +238,7 @@ namespace TRNMNT.Core.Services.impl
                 participants.Add(_participantService.GetEmptyParticipant());
             }
 
-            return Distribute(participants);
+            return DistributeParticipants(participants);
         }
 
         private List<Participant> GetOrderedParticipantListFromBracket(Bracket bracket)
@@ -208,7 +274,7 @@ namespace TRNMNT.Core.Services.impl
             return 2;
         }
 
-        private List<Participant> Distribute(List<Participant> participantList)
+        private List<Participant> DistributeParticipants(List<Participant> participantList)
         {
 
             var orderedbyTeam = participantList.ToList().GroupBy(f => f.Team).OrderByDescending(g => g.Count())
@@ -229,7 +295,7 @@ namespace TRNMNT.Core.Services.impl
                         sideB.Add(fighter);
                     }
                 }
-                return Distribute(sideA).Concat(Distribute(sideB)).ToList();
+                return DistributeParticipants(sideA).Concat(DistributeParticipants(sideB)).ToList();
             }
             return participantList;
         }
@@ -295,7 +361,7 @@ namespace TRNMNT.Core.Services.impl
                 {
                     round.SecondParticipantId = null;
                 }
-                _roundService.UpdateRound(round);
+                _roundRepository.Update(round);
             }
         }
 
@@ -321,11 +387,136 @@ namespace TRNMNT.Core.Services.impl
                 _bracketRepository.Add(bracket);
 
                 var participants = await GetOrderedListForNewBracketAsync(weightDivisionId);
-                bracket.Rounds = _roundService.CreateRoundStructure(participants.ToArray(), bracket.BracketId);
+                bracket.Rounds = CreateRoundStructure(participants.ToArray(), bracket.BracketId);
             }
             return bracket;
 
         }
+
+        private string GetRoundResultDetailsJson(RoundResultModel model)
+        {
+            var jObject = new JObject(
+                new JProperty(nameof(model.FirstParticipantAdvantages), model.FirstParticipantPoints),
+                new JProperty(nameof(model.FirstParticipantAdvantages), model.FirstParticipantAdvantages),
+                new JProperty(nameof(model.FirstParticipantPenalties), model.FirstParticipantPenalties),
+                new JProperty(nameof(model.SecondParticipantPoints), model.SecondParticipantPoints),
+                new JProperty(nameof(model.SecondParticipantAdvantages), model.SecondParticipantAdvantages),
+                new JProperty(nameof(model.SecondParticipantPenalties), model.SecondParticipantPenalties),
+                new JProperty(nameof(model.CompleteTime), model.CompleteTime),
+                new JProperty(nameof(model.SubmissionType), model.SubmissionType)
+            );
+            return jObject.ToString();
+
+        }
+
+        private List<Round> GetStageRounds(IEnumerable<Round> stageRounds, int stage, Guid bracketId)
+        {
+            var childRounds = new List<Round>();
+            if (stage == 0)
+            {
+                childRounds.Add(new Round()
+                {
+                    RoundId = Guid.NewGuid(),
+                    BracketId = bracketId,
+                    Stage = stage,
+                    RoundType = (int)RoundTypeEnum.Standard
+                });
+                childRounds.Add(new Round()
+                {
+                    RoundId = Guid.NewGuid(),
+                    BracketId = bracketId,
+                    Stage = stage,
+                    RoundType = (int)RoundTypeEnum.ThirdPlace
+                });
+            }
+            else
+            {
+                foreach (var parentRound in stageRounds)
+                {
+                    if (parentRound.RoundType == (int)RoundTypeEnum.Standard)
+                    {
+                        for (int i = 0; i < 2; i++)
+                        {
+                            childRounds.Add(new Round()
+                            {
+                                RoundId = Guid.NewGuid(),
+                                BracketId = bracketId,
+                                NextRoundId = parentRound.RoundId,
+                                Stage = stage
+                            });
+                        }
+                    }
+                }
+            }
+            return childRounds;
+        }
+
+        private ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId)
+        {
+
+
+            var rounds = new List<Round>();
+            var lastStage = participants.Length == 3 ? 1 : (int)Math.Log(participants.Count(), 2) - 1;
+            for (int i = 0; i <= lastStage; i++)
+            {
+                var roundsToAdd = GetStageRounds(rounds.Where(r => r.Stage == i - 1), i, bracketId);
+                if (i == lastStage)
+                {
+                    if (participants.Length == 2)
+                    {
+                        roundsToAdd.Remove(roundsToAdd.First(r => r.RoundType == (int)RoundTypeEnum.ThirdPlace));
+                    }
+                    if (participants.Length == 3)
+                    {
+                        roundsToAdd[0].FirstParticipant = participants[0];
+                        roundsToAdd[0].FirstParticipantId = participants[0].ParticipantId;
+                        roundsToAdd[0].SecondParticipant = participants[1];
+                        roundsToAdd[0].SecondParticipantId = participants[1].ParticipantId;
+                        roundsToAdd[1].FirstParticipant = participants[2];
+                        roundsToAdd[1].FirstParticipantId = participants[2].ParticipantId;
+                        roundsToAdd[1].RoundType = (int)RoundTypeEnum.Buffer;
+
+                    }
+                    else
+                    {
+                        var j = 0;
+                        foreach (var round in roundsToAdd)
+                        {
+                            if (participants[j].ParticipantId != Guid.Empty)
+                            {
+                                round.FirstParticipant = participants[j];
+                                round.FirstParticipantId = participants[j].ParticipantId;
+                            }
+
+                            if (participants[j + 1].ParticipantId != Guid.Empty)
+                            {
+                                round.SecondParticipant = participants[j + 1];
+                                round.SecondParticipantId = participants[j + 1].ParticipantId;
+                            }
+
+                            j = j + 2;
+                        }
+                    }
+                }
+                rounds.AddRange(roundsToAdd);
+            }
+            _roundRepository.AddRange(rounds);
+            return rounds;
+        }
+
+        private Round AddParticipantToRound(Round round, Guid participantId)
+        {
+            if (round.FirstParticipantId == null)
+            {
+                round.FirstParticipantId = participantId;
+            }
+            else
+            {
+                round.SecondParticipantId = participantId;
+            }
+            return round;
+        }
+
         #endregion
     }
 }

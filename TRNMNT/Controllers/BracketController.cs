@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
+using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
@@ -137,6 +138,20 @@ namespace TRNMNT.Web.Controllers
                 await _bracketService.ManageAbsoluteWeightDivisionAsync(model);
                 return HttpStatusCode.OK;
             });
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task CompleteRound([FromBody]RoundResultModel roundResultModel)
+        {
+            try
+            {
+                await _bracketService.SetRoundResultAsync(roundResultModel);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
         }
 
         #endregion

@@ -7,6 +7,7 @@
         Penalties = 2,
         Decision = 3,
         Submission = 4,
-        Disqualification = 5
+        Disqualification = 5,
+        NoContest = 6
     }
 }

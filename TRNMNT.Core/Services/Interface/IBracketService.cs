@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
+using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Data.Entities;
 
@@ -47,5 +48,12 @@ namespace TRNMNT.Core.Services.Interface
         Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId);
 
         Task ManageAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model);
+
+        /// <summary>
+        /// Sets round result
+        /// </summary>
+        /// <param name="model">RoundResult model</param>
+        /// <returns></returns>
+        Task SetRoundResultAsync(RoundResultModel model);
     }
 }

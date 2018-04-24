@@ -65,40 +65,6 @@ export class BracketComponent {
             </div></div>`;
     }
 
-    private getEmptyMatch(): string {
-        return '<div class="match empty"><div class="match-content"></div></div>';
-    }
-
-
-    private getRounds(colNumber: number) {
-        let htmlData = '';
-        const maxCol = this.columns.length - 1;
-        const isRightSide = colNumber > maxCol / 2;
-        const depth = (isRightSide ? maxCol - colNumber : colNumber);
-        const stage = this.maxStage - depth;
-        const count = this.bracket.roundModels.filter(r => r.stage == stage).length;
-        if (stage == 0) {
-            htmlData += this.getEmptyMatch();
-            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r) => {
-                htmlData += this.getRoundTemplate(r, false);
-            });
-        } else {
-            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r, j) => {
-                if (isRightSide) {
-                    if (j >= count / 2) {
-                        htmlData += this.getRoundTemplate(r, isRightSide);
-                    }
-                } else {
-                    if (j < count / 2) {
-                        htmlData += this.getRoundTemplate(r, isRightSide);
-                    }
-                }
-            });
-        }
-        return htmlData;
-
-
-    }
 
     private isCentralCol(colNumber): boolean {
         return colNumber == (this.columns.length - 1) / 2;
