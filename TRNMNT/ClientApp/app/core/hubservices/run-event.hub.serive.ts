@@ -9,13 +9,13 @@ import { RefreshBracketModel } from "../model/bracket.models";
 export class RunEventHubService {
     private hubConnection: HubConnection;
 
-    public isConnected: boolean = false;
+    isConnected: boolean = false;
 
     constructor(private signalRService: SignalRHubService) {
         this.hubConnection = this.signalRService.createConnection("/runevent", TransportType.ServerSentEvents);
     }
 
-    public joinWeightDivisionGroup(weightDivisionId: string, previousWeightDivisionId?: string) {
+    joinWeightDivisionGroup(weightDivisionId: string, previousWeightDivisionId?: string) {
         let id = weightDivisionId.toUpperCase();
         if (this.isConnected) {
             if (!!previousWeightDivisionId) {
@@ -29,7 +29,7 @@ export class RunEventHubService {
         }
     }
 
-    public joinMultipleWeightDivisionGroups(weightDivisionIds: string[]) {
+    joinMultipleWeightDivisionGroups(weightDivisionIds: string[]) {
         if (!this.isConnected) {
             this.signalRService.onConnected().subscribe(() => this.joinGroups(weightDivisionIds));
             this.signalRService.onDisconnected().subscribe(() => this.leaveGroups(weightDivisionIds));
@@ -51,11 +51,11 @@ export class RunEventHubService {
         }
     }
 
-    public onRefreshRound(): Observable<RefreshBracketModel> {
+    onRefreshRound(): Observable<RefreshBracketModel> {
         return this.signalRService.subscribeOnEvent("BracketRoundsUpdated");
     }
 
-    public connect() {
+    connect() {
         if (this.isConnected) {
             return;
         }
@@ -64,7 +64,7 @@ export class RunEventHubService {
         this.isConnected = true;
     }
 
-    public disconnect() {
+    disconnect() {
         this.signalRService.stop();
         this.isConnected = false;
     }

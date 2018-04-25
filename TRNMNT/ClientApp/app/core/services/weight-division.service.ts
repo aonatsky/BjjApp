@@ -12,11 +12,11 @@ export class WeightDivisionService {
 
     }
 
-    public getWeightDivisionsByEvent(eventId: string): Observable<WeightDivisionModel[]> {
+    getWeightDivisionsByEvent(eventId: string): Observable<WeightDivisionModel[]> {
         return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByEvent + "/" + eventId).map(res => this.httpService.getArray<WeightDivisionModel>(res));
     }
 
-    public getWeightDivisionsByCategory(categoryId: string): Observable<WeightDivisionSimpleModel[]> {
+    getWeightDivisionsByCategory(categoryId: string): Observable<WeightDivisionSimpleModel[]> {
         return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByCategory + "/" + categoryId).map(res => this.httpService.getArray<WeightDivisionSimpleModel>(res));
     }
 

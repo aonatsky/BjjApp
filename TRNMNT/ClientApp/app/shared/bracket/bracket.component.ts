@@ -50,26 +50,6 @@ export class BracketComponent implements OnInit {
         return cols;
     }
 
-
-
-    private getRoundTemplate(round: RoundModel, isRightSide: boolean): string {
-        const matchSide = isRightSide ? 'right-side' : '';
-        let matchType = '';
-        if (round.stage == 0) {
-            matchType = round.roundType == 1 ? 'third-place' : 'final';
-        }
-
-        return `<div class="match ${matchSide} ${matchType} "><div class="match-content ui-g-1 ui-g-nopad">
-            <div class="participant-plate ui-g-12">
-            ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
-            </div>
-            <div class="participant-plate ui-g-12">
-            ${round.secondParticipant ? round.secondParticipant.firstName + ' ' + round.secondParticipant.lastName : ''}
-            </div>
-            </div></div>`;
-    }
-
-
     private isCentralCol(colNumber): boolean {
         return colNumber == (this.columns.length - 1) / 2;
     }

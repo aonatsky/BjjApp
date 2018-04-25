@@ -6,7 +6,7 @@ export abstract class BaseRoundPanel {
 
     private hubConnection: HubConnection;
 
-    public setupConnection(groupId: any, messageHandler: (data: RoundDetailsModel) => void): void {
+    setupConnection(groupId: any, messageHandler: (data: RoundDetailsModel) => void): void {
         this.hubConnection = new HubConnection('/round-hub');
         this.hubConnection.start().then(() => {
             this.subscribeOnRecieveMessage(messageHandler);
@@ -14,11 +14,11 @@ export abstract class BaseRoundPanel {
         });
     }
 
-    public subscribeOnRecieveMessage(messageHandler: (data: RoundDetailsModel) => void): void {
+    subscribeOnRecieveMessage(messageHandler: (data: RoundDetailsModel) => void): void {
         this.hubConnection.on(this.hubMethodName, messageHandler);
     }
 
-    public sendHubMessage(data: RoundDetailsModel): void {
+    sendHubMessage(data: RoundDetailsModel): void {
         this.hubConnection.invoke(this.hubMethodName, data);
     }
 }

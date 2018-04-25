@@ -12,7 +12,7 @@ export class PaymentService {
 
     }
 
-    public getPaymentData(eventId: string): Observable<PaymentDataModel> {
+    getPaymentData(eventId: string): Observable<PaymentDataModel> {
         return this.httpService.get(ApiMethods.payment.getPaymentData + "/" + eventId).map(res => this.httpService.getJson(res));
     }
 

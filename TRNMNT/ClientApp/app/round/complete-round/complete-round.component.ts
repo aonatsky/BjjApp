@@ -19,19 +19,19 @@ export class CompleteRoundComponent implements OnInit {
     private roundResult: number;
     private submissionType: number;
     
-    public ngOnInit(): void {
+    ngOnInit(): void {
         this.winnerId = this.roundDetails.roundModel.firstParticipant.participantId;
         this.roundResult = this.roundResults.Points;
         this.submissionType = this.submissionTypes.Armlock;
     }
 
-    public save(): void {
+    save(): void {
         console.log(this.winnerId);
         console.log(this.roundResult);
         console.log(this.submissionType);
     }
 
-    public close() {
+    close() {
         this.onClose.emit(null);
     }
 }

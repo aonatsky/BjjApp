@@ -1,40 +1,40 @@
 ﻿export class ParticipantModelBase {
-    public participantId: string;
-    public firstName: string;
-    public lastName: string;
-    public dateOfBirth: Date;
+    participantId: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
     constructor() {
     }
 }
 
 export class ParticipantRegistrationModel extends ParticipantModelBase {
-    public teamId: string;
-    public categoryId: string;
-    public weightDivisionId: string;
-    public userId: string;
-    public email: string;
-    public phoneNumber: string;
-    public promoCode: string;
+    teamId: string;
+    categoryId: string;
+    weightDivisionId: string;
+    userId: string;
+    email: string;
+    phoneNumber: string;
+    promoCode: string;
 }
 
 export class ParticipantTableModel extends ParticipantModelBase {
-    public participantId: string;
-    public teamName: string;
-    public categoryName: string;
-    public weightDivisionName: string;
-    public teamId: string;
-    public categoryId: string;
-    public weightDivisionId: string;
-    public userId: string;
-    public isMember: boolean;
+    participantId: string;
+    teamName: string;
+    categoryName: string;
+    weightDivisionName: string;
+    teamId: string;
+    categoryId: string;
+    weightDivisionId: string;
+    userId: string;
+    isMember: boolean;
 }
 
 export class ParticipantInAbsoluteDivisionMobel {
-    public participantId: string;
-    public firstName: string;
-    public lastName: string;
-    public teamName: string;
-    public weightDivisionName: string;
-    public isSelectedIntoDivision: boolean;
+    participantId: string;
+    firstName: string;
+    lastName: string;
+    teamName: string;
+    weightDivisionName: string;
+    isSelectedIntoDivision: boolean;
 }
 
