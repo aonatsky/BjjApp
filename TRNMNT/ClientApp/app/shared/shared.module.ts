@@ -8,12 +8,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './loader/loader';
 import { BracketComponent } from './bracket/bracket.component';
 import { TablePickerListComponent } from './table-picker-list/table-picker-list.component';
+import { RoundModule } from '../round/round.module';
 
 
 @NgModule({
     imports: [
         CoreModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        RoundModule
     ],
     declarations: [
         LoginComponent,
