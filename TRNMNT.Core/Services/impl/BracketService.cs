@@ -53,8 +53,10 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task<BracketModel> GetBracketModelAsync(Guid weightDivisionId)
         {
+            var bracket = await GetBracketAsync(weightDivisionId);
+            var roundTime = await _categoryService.GetRoundTimeAsync(bracket.WeightDivision.CategoryId);
 
-            return GetBracketModel(await GetBracketAsync(weightDivisionId));
+            return GetBracketModel(bracket, roundTime);
         }
 
         public async Task<BracketModel> RunBracketAsync(Guid weightDivisionId)
@@ -76,8 +78,10 @@ namespace TRNMNT.Core.Services.impl
                 bracket.Rounds.First(r => r.RoundId == round.NextRoundId).FirstParticipantId =
                     round.WinnerParticipantId;
             }
+
+            var roundTime = await _categoryService.GetRoundTimeAsync(bracket.WeightDivision.CategoryId);
             _bracketRepository.Update(bracket);
-            return GetBracketModel(bracket);
+            return GetBracketModel(bracket, roundTime);
         }
 
         public async Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId)
@@ -168,7 +172,7 @@ namespace TRNMNT.Core.Services.impl
             if (round != null)
             {
                 round.WinnerParticipantId = model.WinnerParticipantId;
-                round.RoundResultType = model.RundResultType;
+                round.RoundResultType = (int)model.RoundResultTypeType;
                 round.RoundResultDetails = GetRoundResultDetailsJson(model);
                 if (round.NextRound != null)
                 {
@@ -300,7 +304,7 @@ namespace TRNMNT.Core.Services.impl
             return participantList;
         }
 
-        private BracketModel GetBracketModel(Bracket bracket)
+        private BracketModel GetBracketModel(Bracket bracket, int roundTime)
         {
 
             var model = new BracketModel
@@ -310,22 +314,52 @@ namespace TRNMNT.Core.Services.impl
             };
             foreach (var round in bracket.Rounds)
             {
-                model.RoundModels.Add(GetRoundModel(round));
+                model.RoundModels.Add(GetRoundModel(round, roundTime));
             }
             return model;
         }
 
-        private RoundModel GetRoundModel(Round round)
+        private RoundModel GetRoundModel(Round round, int roundTime)
         {
-            return new RoundModel()
+            var model = new RoundModel()
             {
                 RoundId = round.RoundId,
                 NextRoundId = round.NextRoundId,
                 Stage = round.Stage,
                 FirstParticipant = round.FirstParticipant == null ? null : GetParticipantModel(round.FirstParticipant),
                 SecondParticipant = round.SecondParticipant == null ? null : GetParticipantModel(round.SecondParticipant),
-                RoundType = round.RoundType
+                RoundType = round.RoundType,
+                RoundTime = roundTime,
             };
+            if (round.WinnerParticipantId != null)
+            {
+
+                if (round.WinnerParticipantId == round.FirstParticipantId)
+                {
+                    if (round.RoundResultType != (int)RoundResultTypeEnum.DQ)
+                    {
+                        model.FirstParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                    }
+                    else
+                    {
+                        model.SecondParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                    }
+                }
+                else
+                {
+                    if (round.RoundResultType != (int)RoundResultTypeEnum.DQ)
+                    {
+                        model.SecondParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                    }
+                    else
+                    {
+                        model.FirstParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                    }
+                }
+            }
+
+            return model;
+
         }
 
         private ParticipantSimpleModel GetParticipantModel(Participant participant)
@@ -374,6 +408,7 @@ namespace TRNMNT.Core.Services.impl
         private async Task<Bracket> GetBracketAsync(Guid weightDivisionId)
         {
             var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
+                .Include(b => b.WeightDivision)
                 .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant)
                 .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant)
                 .FirstOrDefaultAsync();

@@ -27,5 +27,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="categoryId">Category Id</param>
         /// <returns></returns>
         Task SetCategoryCompleteAsync(Guid categoryId);
+
+        /// <summary>
+        /// Returns round time by category identifier async. 
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        Task<int> GetRoundTimeAsync(Guid categoryId);
     }
 }

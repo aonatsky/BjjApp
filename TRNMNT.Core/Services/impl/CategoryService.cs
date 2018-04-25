@@ -50,6 +50,11 @@ namespace TRNMNT.Core.Services.Impl
             _categoryRepository.Update(category);
         }
 
+        public async Task<int> GetRoundTimeAsync(Guid categoryId)
+        {
+            return (await _categoryRepository.GetByIDAsync(categoryId)).RoundTime;
+        }
+
         public async Task<IEnumerable<CategoryModelBase>> GetCompletedCategoriesByEventIdAsync(Guid eventId)
         {
             return await _categoryRepository.GetAll().Where(c => c.EventId == eventId && c.CompleteTs != null).Select(c => new CategoryModelBase
@@ -64,7 +69,7 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Private Methods
 
-        
+
 
         #endregion
 
