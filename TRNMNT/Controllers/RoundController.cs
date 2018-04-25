@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;

@@ -44,6 +44,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.roundDetails.roundId = this.roundModel.roundId;
         this.setupConnection(this.roundModel.roundId, x => {
             this.roundDetails = x;
+            this.roundDetails.roundModel = this.roundModel;
 
             if (this.roundDetails.isStarted) {
                 this.startTimer();

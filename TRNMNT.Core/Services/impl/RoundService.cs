@@ -89,7 +89,7 @@ namespace TRNMNT.Core.Services.impl
             if (round != null)
             {
                 round.WinnerParticipantId = model.WinnerParticipantId;
-                round.RoundResultType = model.RundResultType;
+                round.RoundResultType = (int)model.RoundResultType;
                 round.RoundResultDetails = GetRoundResultDetailsJson(model);
                 _roundRepository.Update(round);
             }
