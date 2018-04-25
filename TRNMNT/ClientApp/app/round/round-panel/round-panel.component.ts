@@ -84,7 +84,11 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
 
     public resetTimer(): void {
         this.roundDetails.countdown = 2 * 60;
-        this.stop();
+        this.stopTimer();
+        this.roundDetails.isStarted = false;
+        this.roundDetails.isPaused = false;
+        this.roundDetails.isCompleted = true;
+        this.send();
     }
 
     public changeFirstPlayerAdvantage(advantageStep: number): void {

@@ -11,10 +11,13 @@ import { RoundModel } from '../../core/model/round.models';
     encapsulation: ViewEncapsulation.None
 })
 
-export class BracketComponent {
+export class BracketComponent implements OnInit {
     @Input() bracket: BracketModel;
     maxStage: number = 0;
     columns: number[];
+
+    selectedRoundDetails: RoundModel;
+    showRoundPanel: boolean = false;
 
     constructor() {
 
@@ -23,6 +26,7 @@ export class BracketComponent {
     ngOnInit() {
         this.maxStage = this.getMaxStage();
         this.columns = this.getColumns();
+        this.selectedRoundDetails = this.bracket.roundModels[0];
     }
 
 
