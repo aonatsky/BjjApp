@@ -36,7 +36,7 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetWeightDivisionsByEvent(Guid eventId)
         {
-            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId));
+            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId, true));
         }
 
         //public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
