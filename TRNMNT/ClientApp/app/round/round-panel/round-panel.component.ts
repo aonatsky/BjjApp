@@ -44,6 +44,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.roundDetails.roundId = this.roundModel.roundId;
         this.setupConnection(this.roundModel.roundId, x => {
             this.roundDetails = x;
+            this.roundDetails.roundModel = this.roundModel;
 
             if (this.roundDetails.isStarted) {
                 this.startTimer();
@@ -54,7 +55,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         });
     }
 
-    public start(): void {
+    start(): void {
         if (!this.roundDetails.isCompleted || !this.timerSubscription) {
             this.startTimer();
             this.roundDetails.isStarted = true;
@@ -64,7 +65,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         }
     }
 
-    public pause(): void {
+    pause(): void {
         this.stopTimer();
         this.roundDetails.isStarted = false;
         this.roundDetails.isPaused = true;
@@ -72,7 +73,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.send();
     }
 
-    public stop(): void {
+    stop(): void {
         this.stopTimer();
         this.roundDetails.isStarted = false;
         this.roundDetails.isPaused = false;
@@ -81,42 +82,46 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.send();
     }
 
-    public resetTimer(): void {
+    resetTimer(): void {
         this.roundDetails.countdown = 2 * 60;
-        this.stop();
+        this.stopTimer();
+        this.roundDetails.isStarted = false;
+        this.roundDetails.isPaused = false;
+        this.roundDetails.isCompleted = true;
+        this.send();
     }
 
-    public changeFirstPlayerAdvantage(advantageStep: number): void {
+    changeFirstPlayerAdvantage(advantageStep: number): void {
         this.roundDetails.firstPlayerAdvantage = this.roundDetails.firstPlayerAdvantage + advantageStep < 0 ? 0 : this.roundDetails.firstPlayerAdvantage + advantageStep;
         this.send();
     }
 
-    public changeSecondPlayerAdvantage(advantageStep: number): void {
+    changeSecondPlayerAdvantage(advantageStep: number): void {
         this.roundDetails.secondPlayerAdvantage = this.roundDetails.secondPlayerAdvantage + advantageStep < 0 ? 0 : this.roundDetails.secondPlayerAdvantage + advantageStep;
         this.send();
     }
 
-    public changeFirstPlayerPenalty(penaltyStep: number): void {
+    changeFirstPlayerPenalty(penaltyStep: number): void {
         this.roundDetails.firstPlayerPenalty = this.roundDetails.firstPlayerPenalty + penaltyStep < 0 ? 0 : this.roundDetails.firstPlayerPenalty + penaltyStep;
         this.send();
     }
 
-    public changeSecondPlayerPenalty(penaltyStep: number): void {
+    changeSecondPlayerPenalty(penaltyStep: number): void {
         this.roundDetails.secondPlayerPenalty = this.roundDetails.secondPlayerPenalty + penaltyStep < 0 ? 0 : this.roundDetails.secondPlayerPenalty + penaltyStep;
         this.send();
     }
 
-    public changeFirstPlayerPoints(pointStep: number): void {
+    changeFirstPlayerPoints(pointStep: number): void {
         this.roundDetails.firstPlayerPoints = this.roundDetails.firstPlayerPoints + pointStep < 0 ? 0 : this.roundDetails.firstPlayerPoints + pointStep;
         this.send();
     }
 
-    public changeSecondPlayerPoints(pointStep: number): void {
+    changeSecondPlayerPoints(pointStep: number): void {
         this.roundDetails.secondPlayerPoints = this.roundDetails.secondPlayerPoints + pointStep < 0 ? 0 : this.roundDetails.secondPlayerPoints + pointStep;
         this.send();
     }
 
-    public send(): void {
+    send(): void {
         this.sendHubMessage(this.roundDetails);
     }
 

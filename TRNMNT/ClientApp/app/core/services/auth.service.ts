@@ -19,7 +19,7 @@ import { RouterService } from './router.service'
     /** 
      * Stores the URL so we can redirect after signing in. 
      */
-    public redirectUrl: string;
+    redirectUrl: string;
 
     /** 
      * User's data. 
@@ -63,7 +63,7 @@ import { RouterService } from './router.service'
      * @param password 
      * @return The user's data 
      */
-    public signin(username: string, password: string): Observable<boolean> {
+    signin(username: string, password: string): Observable<boolean> {
 
         // Token endpoint & params.  
         let tokenEndpoint: string = ApiMethods.auth.getToken;
@@ -104,7 +104,7 @@ import { RouterService } from './router.service'
     }
 
 
-    public register(email, password): Observable<string> {
+    register(email, password): Observable<string> {
 
         let params: any = {
             username: email,
@@ -135,7 +135,7 @@ import { RouterService } from './router.service'
     /** 
      * Tries to get a new token using refresh token. 
      */
-    public getNewToken(): Observable<boolean> {
+    getNewToken(): Observable<boolean> {
 
         let refreshToken: string = localStorage.getItem('refresh_token');
 
@@ -171,7 +171,7 @@ import { RouterService } from './router.service'
     /** 
     * Indicates if token is not expired
     */
-    public isLoggedIn(): boolean {
+    isLoggedIn(): boolean {
 
         return tokenNotExpired("id_token");
 
@@ -180,7 +180,7 @@ import { RouterService } from './router.service'
     /** 
      * Revokes token. 
      */
-    public revokeToken(): void {
+    revokeToken(): void {
 
         let token: string = localStorage.getItem('id_token');
 
@@ -211,7 +211,7 @@ import { RouterService } from './router.service'
     /** 
      * Revokes refresh token. 
      */
-    public revokeRefreshToken(): Observable<boolean> {
+    revokeRefreshToken(): Observable<boolean> {
 
         let refreshToken: string = localStorage.getItem('refresh_token');
 
@@ -245,7 +245,7 @@ import { RouterService } from './router.service'
     /** 
      * Removes user and revokes tokens. 
      */
-    public signout(): void {
+    signout(): void {
 
         this.redirectUrl = null;
 
@@ -264,7 +264,7 @@ import { RouterService } from './router.service'
      * 
      * @return The user's data 
      */
-    public getUser(): UserModel {
+    getUser(): UserModel {
         return new UserModel(this.user.UserId, this.user.first_name, this.user.last_name, this.user.email, this.user.role);
     }
 

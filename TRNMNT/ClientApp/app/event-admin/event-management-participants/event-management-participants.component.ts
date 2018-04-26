@@ -40,36 +40,36 @@ export class EventManagementParticipantsComponent implements OnInit {
     private sortDirection: number = 1;
     private sortField: string = "firstName";
 
-    public get isPaginationEnabled(): boolean {
+    get isPaginationEnabled(): boolean {
         return this.participantsModel.length > this.rowsCount;
     }
 
-    public get isDataLoading(): boolean {
+    get isDataLoading(): boolean {
         return this.participantsLoading || this.ddlDataLoading;
     }
 
-    public get selectedCategoryId() {
+    get selectedCategoryId() {
         if (this.filter != null) {
             return this.filter.categoryId;
         }
         return null;
     }
 
-    public get participantsModel(): ParticipantTableModel[] {
+    get participantsModel(): ParticipantTableModel[] {
         if (this.participantsListModel != null) {
             return this.participantsListModel.innerList;
         }
         return [];
     }
 
-    public get rowsCount(): number {
+    get rowsCount(): number {
         if (this.participantsListModel != null) {
             return this.participantsListModel.pageSize;
         }
         return 10;
     }
 
-    public get totalCount(): number {
+    get totalCount(): number {
         if (this.participantsListModel != null) {
             return this.participantsListModel.totalCount;
         }
@@ -145,7 +145,7 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     columnOptions: IColumnOptions = {};
 
-    public getClassCallback(value: boolean): string {
+    getClassCallback(value: boolean): string {
         let classes = "fa-square-o";
         if (value) {
             classes = 'fa-check-square-o';
@@ -155,11 +155,11 @@ export class EventManagementParticipantsComponent implements OnInit {
     showError(message: string = "Somethig went wrong", title: string = "Somethig went wrong") {
         this.notificationService.showError(title, message);
     }
-    public dateTransform(value: Date): string {
+    dateTransform(value: Date): string {
         return this.datePipe.transform(value, 'MM.dd.yyyy');
     }
 
-    public onCategoryChange($event: IDdlColumnChangeEvent) {
+    onCategoryChange($event: IDdlColumnChangeEvent) {
         let categoryId = $event.value;
         this.weightDivisionSelectItems = this.getWeightDivisionsForCategory(categoryId);
         if (this.weightDivisionSelectItems.length > 0) {
@@ -169,7 +169,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.refreshDdlModel();
     }
 
-    public filterParticipants($event: CategoryWithDivisionFilterModel) {
+    filterParticipants($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
         this.loadParticipants(this.getFilterModel());
         if (this.filter.categoryId) {
@@ -177,7 +177,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         }
     }
 
-    public onEntitySelected(participant: ParticipantTableModel) {
+    onEntitySelected(participant: ParticipantTableModel) {
         this.weightDivisionSelectItems = this.getWeightDivisionsForCategory(participant.categoryId);
         // if weight divisions doesn't contain previously selected wd 
         if (!this.weightDivisionSelectItems.find(w => w.value == participant.weightDivisionId) && this.weightDivisionSelectItems.length > 0) {
@@ -187,7 +187,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.refreshDdlModel();
     }
 
-    public onEntityUpdate(participant: ParticipantTableModel) {
+    onEntityUpdate(participant: ParticipantTableModel) {
         this.participantService.updateParticipant(participant).subscribe(
             () => {
                 this.loadParticipants(this.getFilterModel(null, false));
@@ -195,7 +195,7 @@ export class EventManagementParticipantsComponent implements OnInit {
             });
     }
 
-    public onEntityDelete(participant: ParticipantTableModel) {
+    onEntityDelete(participant: ParticipantTableModel) {
         this.participantService.deleteParticipant(participant.participantId).subscribe(
             () => {
                 this.loadParticipants(this.getFilterModel());
@@ -203,7 +203,7 @@ export class EventManagementParticipantsComponent implements OnInit {
             });
     }
 
-    public onFileUploaded($event) {
+    onFileUploaded($event) {
         if ($event.code == UploadResultCode.Success || $event.code == UploadResultCode.SuccessWithErrors) {
             this.firstIndex = 0;
             this.loadParticipants(this.getFilterModel());

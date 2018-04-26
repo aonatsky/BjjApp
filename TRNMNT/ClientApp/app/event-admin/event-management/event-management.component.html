@@ -1,16 +1,20 @@
-﻿<div class="ui-g">
-    <div class="ui-g-12 ui-g-nopad page-title">
-        Event Management
+﻿<div class="ui-container">
+    <div class="content">
+        <div class="ui-g">
+            <div class="ui-g-12 ui-g-nopad page-title">
+                Event Management
+            </div>
+        </div>
+        <p-tabView>
+            <p-tabPanel header="Participants">
+                <event-management-participants [eventId]="eventId"></event-management-participants>
+            </p-tabPanel>
+            <p-tabPanel header="Brackets">
+                <bracket-generation [eventId]="eventId"></bracket-generation>
+            </p-tabPanel>
+            <p-tabPanel header="Results">
+                <results [eventId]="eventId"></results>
+            </p-tabPanel>
+        </p-tabView>
     </div>
 </div>
-<p-tabView>
-    <p-tabPanel header="Participants">
-        <event-management-participants [eventId]="eventId"></event-management-participants>
-    </p-tabPanel>
-    <p-tabPanel header="Brackets">
-        <bracket-generation [eventId]="eventId"></bracket-generation>
-    </p-tabPanel>
-    <p-tabPanel header="Results">
-        <results [eventId]="eventId"></results> 
-    </p-tabPanel>
-</p-tabView>

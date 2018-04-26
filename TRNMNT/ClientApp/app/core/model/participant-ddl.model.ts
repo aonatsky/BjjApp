@@ -3,9 +3,9 @@ import { CategoryModelBase } from "./category.models";
 import { WeightDivisionModel } from "./weight-division.models";
 
 export class ParticipantDdlModel {
-    public categories: CategoryModelBase[];
-    public weightDivisions: WeightDivisionModel[];
-    public teams: TeamModelBase[];
+    categories: CategoryModelBase[];
+    weightDivisions: WeightDivisionModel[];
+    teams: TeamModelBase[];
 
     constructor() {
         this.categories = [];

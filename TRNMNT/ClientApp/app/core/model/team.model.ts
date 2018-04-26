@@ -1,7 +1,7 @@
 ﻿
 export class TeamModelBase {
-    public teamId: AAGUID;
-    public name: string;
+    teamId: AAGUID;
+    name: string;
 };
 
 export class TeamModel extends TeamModelBase {
@@ -9,5 +9,5 @@ export class TeamModel extends TeamModelBase {
         super();
     }
 
-    public description: string;
+    description: string;
 };

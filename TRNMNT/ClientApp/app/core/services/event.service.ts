@@ -12,48 +12,48 @@ export class EventService {
 
     }
 
-    public getEvents(): Observable<EventModel> {
+    getEvents(): Observable<EventModel> {
         return this.httpService.get(ApiMethods.event.getEvents);
     }
 
 
-    public updateEvent(event: EventModel): Observable<any> {
+    updateEvent(event: EventModel): Observable<any> {
         return this.httpService.post(ApiMethods.event.updateEvent, event);
     }
 
-    public getEventsForOwner(): Observable<EventPreviewModel[]> {
+    getEventsForOwner(): Observable<EventPreviewModel[]> {
         return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventPreviewModel>(res));
     }
 
-    public getEvent(id): Observable<EventModel> {
+    getEvent(id): Observable<EventModel> {
         return this.httpService.get(ApiMethods.event.getEvent + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
-    public getEventBaseInfo(id): Observable<EventPreviewModel> {
+    getEventBaseInfo(id): Observable<EventPreviewModel> {
         return this.httpService.get(ApiMethods.event.getEventBaseInfo + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
-    public uploadEventImage(file, id) {
+    uploadEventImage(file, id) {
         return this.httpService.postFile(ApiMethods.event.uploadImage + "/" + id, file);
     }
 
-    public uploadEventTncFile(file, id) {
+    uploadEventTncFile(file, id) {
         return this.httpService.postFile(ApiMethods.event.uploadTnc + '/' + id, file);
     }
 
-    public downloadEventTncFile(tncPath: string): Observable<any> {
+    downloadEventTncFile(tncPath: string): Observable<any> {
         return this.httpService.getPdf(tncPath, 'TNC');
     }
 
-    public uploadPromoCodeList(file, id) {
+    uploadPromoCodeList(file, id) {
         return this.httpService.postFile(ApiMethods.event.uploadPromoCodeList + '/' + id, file);
     }
 
-    public getEventInfo() {
+    getEventInfo() {
         return this.httpService.get(ApiMethods.event.getEventInfo + '/').map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
-    public createEvent(): Observable<string> {
+    createEvent(): Observable<string> {
         return this.httpService.get(ApiMethods.event.createEvent).map(res => this.httpService.getJson(res));
     }
 

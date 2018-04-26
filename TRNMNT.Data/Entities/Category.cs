@@ -11,7 +11,8 @@ namespace TRNMNT.Data.Entities
         public Guid CategoryId { get; set; }
         public String Name { get; set; }
         public Guid EventId { get; set; }
-        public int RoundTime { get; set; } 
+        public int RoundTime { get; set; }
+        public  DateTime? CompleteTs { get; set; }
 
         [JsonIgnore]
         public virtual Event Event {get;set;}

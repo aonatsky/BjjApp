@@ -19,19 +19,19 @@ export class EventOverviewComponent implements OnInit {
 
     }
 
-    public createEvent() {
+    createEvent() {
         this.eventService.createEvent().subscribe(r => this.routerService.goToEditEvent(r))
     }
 
-    public editEvent(id: string) {
+    editEvent(id: string) {
         this.routerService.goToEditEvent(id);
     }
 
-    public openDetails(id: string) {
+    openDetails(id: string) {
         this.routerService.goToEventManagement(id);
     }
 
-    public runEvent(id: string) {
+    runEvent(id: string) {
         this.routerService.goToEventRun(id);
     }
 

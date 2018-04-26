@@ -18,7 +18,7 @@ export class SignalRHubService {
         this.logDisconnectionDelegate = (id, exception) => this.logDisconnection(id, exception);
     }
 
-    public createConnection(url: string, transport?: TransportType): HubConnection {
+    createConnection(url: string, transport?: TransportType): HubConnection {
         if (this.hubConnection) {
             return this.hubConnection;
         }
@@ -33,38 +33,38 @@ export class SignalRHubService {
         return this.hubConnection;
     }
 
-    public subscribeOnEvent(eventName: string): Observable<any> {
+    subscribeOnEvent(eventName: string): Observable<any> {
         return Observable.fromEventPattern(
             (handler: (...args: any[]) => void) => this.hubConnection.on(eventName, handler),
             (handler: (...args: any[]) => void) => this.hubConnection.off(eventName, handler)
         );
     }
 
-    public start(): void {
+    start(): void {
         this.hubConnection.start();
     }
 
-    public stop(): void {
+    stop(): void {
         this.hubConnection.off('OtherClientDisconnected', this.logDisconnectionDelegate);
         this.hubConnection.off('OtherClientConnected', this.logConnectionDelegate);
         this.hubConnection.stop();
     }
 
-    public onConnected(): Observable<string> {
+    onConnected(): Observable<string> {
         return this.subscribeOnEvent('Connected');
     }
 
-    public onDisconnected(): Observable<string> {
+    onDisconnected(): Observable<string> {
         return this.subscribeOnEvent('Disconnected');
     }
 
-    public onConnectionClosed(): Observable<string> {
+    onConnectionClosed(): Observable<string> {
         return Observable.fromEventPattern(
             (handler: (e: Error) => void) => this.hubConnection.onclose(handler)
         );
     }
 
-    public bindReconnection() {
+    bindReconnection() {
         this.onConnectionClosed().subscribe((e) => {
             if (this.reconnectionCounter >= this.reconnectionLimit) {
                 return;
@@ -81,11 +81,11 @@ export class SignalRHubService {
         });
     }
 
-    public joinGroup(groupName: string) {
+    joinGroup(groupName: string) {
         this.hubConnection.invoke("JoinGroup", groupName);
     }
 
-    public leaveGroup(groupName: string) {
+    leaveGroup(groupName: string) {
         this.hubConnection.invoke("LeaveGroup", groupName);
     }
 

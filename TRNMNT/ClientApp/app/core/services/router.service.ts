@@ -11,7 +11,7 @@ export class RouterService {
     constructor(private router: Router, private location: Location, @Inject(Window) private win: Window) {
     }
 
-    public navigationStartEvents(): Observable<NavigationStart> {
+    navigationStartEvents(): Observable<NavigationStart> {
         return <Observable<NavigationStart>>this.router.events.filter(event => event instanceof NavigationStart);
     }
 

@@ -33,7 +33,7 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
         
     }
 
-    public showAbsoluteWeightDivision() {
+    showAbsoluteWeightDivision() {
         if (this.prevCategoryId !== this.categoryId) {
             this.prevCategoryId = this.categoryId;
             this.bracketService.getWinnersByCategory(this.categoryId).subscribe(data => {

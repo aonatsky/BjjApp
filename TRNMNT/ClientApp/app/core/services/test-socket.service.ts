@@ -13,19 +13,19 @@ export class TestSocketService {
         this.hubConnection = this.signalRService.createConnection("/chat");
     }
 
-    public recieveMessage(): Observable<string> {
+    recieveMessage(): Observable<string> {
         return this.signalRService.subscribeOnEvent("Send");
     }
 
-    public send(message: string): void {
+    send(message: string): void {
         this.hubConnection.invoke("Send", message);
     }
 
-    public connect() {
+    connect() {
         this.signalRService.start();
     }
 
-    public disconnect() {
+    disconnect() {
         this.signalRService.stop();
     }
 }

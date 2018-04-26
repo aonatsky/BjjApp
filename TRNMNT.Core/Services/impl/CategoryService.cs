@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.WebEncoders.Testing;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
@@ -38,6 +40,38 @@ namespace TRNMNT.Core.Services.Impl
             }).ToListAsync();
         }
 
+        public async Task SetCategoryCompleteAsync(Guid categoryId)
+        {
+            var category = await _categoryRepository.GetByIDAsync(categoryId);
+            if (category != null)
+            {
+                category.CompleteTs = DateTime.UtcNow;
+            }
+            _categoryRepository.Update(category);
+        }
+
+        public async Task<int> GetRoundTimeAsync(Guid categoryId)
+        {
+            return (await _categoryRepository.GetByIDAsync(categoryId)).RoundTime;
+        }
+
+        public async Task<IEnumerable<CategoryModelBase>> GetCompletedCategoriesByEventIdAsync(Guid eventId)
+        {
+            return await _categoryRepository.GetAll().Where(c => c.EventId == eventId && c.CompleteTs != null).Select(c => new CategoryModelBase
+            {
+                CategoryId = c.CategoryId.ToString(),
+                Name = c.Name
+            }).ToListAsync();
+        }
+
         #endregion
+
+
+        #region Private Methods
+
+
+
+        #endregion
+
     }
 }

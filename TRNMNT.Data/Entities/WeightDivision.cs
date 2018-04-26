@@ -19,8 +19,6 @@ namespace TRNMNT.Data.Entities
 
         [JsonIgnore]
         public virtual Category Category { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Fighter> Fighters {get;set;}
 
         [JsonIgnore]
         public virtual ICollection<Bracket> Brackets { get; set; }

@@ -1,7 +1,7 @@
 ﻿
 export class MessageLevel {
-    public static Success = "success";
-    public static Info = "info";
-    public static Warn = "warn";
-    public static Error = "error";
+    static Success = "success";
+    static Info = "info";
+    static Warn = "warn";
+    static Error = "error";
 }

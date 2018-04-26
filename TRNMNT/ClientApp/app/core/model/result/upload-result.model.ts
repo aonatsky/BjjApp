@@ -6,7 +6,7 @@ export interface IUploadResult {
 }
 
 export class UploadResult implements IUploadResult {
-    public code: UploadResultCode;
-    public messages: string[];
+    code: UploadResultCode;
+    messages: string[];
 }
 

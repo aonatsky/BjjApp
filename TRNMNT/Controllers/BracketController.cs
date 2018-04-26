@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
+using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
@@ -47,7 +48,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
+                var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
                 if (bracketModel != null)
                 {
                     return Success(bracketModel);
@@ -86,7 +87,7 @@ namespace TRNMNT.Web.Controllers
                 var clients = _hubContext.Clients;
                 if (clients != null)
                 {
-                    var bracketModel = await _bracketService.GetBracketAsync(weightDivisionId);
+                    var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
                     if (bracketModel != null)
                     {
                         var divisionId = weightDivisionId.ToString().ToUpperInvariant();
@@ -137,6 +138,20 @@ namespace TRNMNT.Web.Controllers
                 await _bracketService.ManageAbsoluteWeightDivisionAsync(model);
                 return HttpStatusCode.OK;
             });
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task CompleteRound([FromBody]RoundResultModel roundResultModel)
+        {
+            try
+            {
+                await _bracketService.SetRoundResultAsync(roundResultModel);
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
         }
 
         #endregion

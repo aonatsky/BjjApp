@@ -11,37 +11,37 @@ export class NotificationService {
     constructor(private routerService: RouterService) {
     }
 
-    public notificationSubject: Subject<Message> = new Subject<Message>();
+    notificationSubject: Subject<Message> = new Subject<Message>();
 
-    public get genericErrorMessage() {
+    get genericErrorMessage() {
         return this.getMessage(MessageLevel.Error, DefaultValues.SomethingWentWrongMessage, "An error occured during request");
     }
 
-    public getMessage(level: string, summary: string, detail: string) : Message {
+    getMessage(level: string, summary: string, detail: string) : Message {
         return { severity: level, summary: summary, detail: detail };
     }
 
-    public showNotification(message: Message) {
+    showNotification(message: Message) {
         this.notificationSubject.next(message);
     }
 
-    public showInfo(summary: string, detail: string): void {
+    showInfo(summary: string, detail: string): void {
         this.showNotification(this.getMessage(MessageLevel.Info, summary, detail));
     }
 
-    public showWarn(summary: string, detail: string): void {
+    showWarn(summary: string, detail: string): void {
         this.showNotification(this.getMessage(MessageLevel.Warn, summary, detail));
     }
 
-    public showError(summary: string, detail: string): void {
+    showError(summary: string, detail: string): void {
         this.showNotification(this.getMessage(MessageLevel.Error, summary, detail));
     }
 
-    public showErrorWithDefaultSummary(detail: string): void {
+    showErrorWithDefaultSummary(detail: string): void {
         this.showError(DefaultValues.SomethingWentWrongMessage, detail);
     }
 
-    public showErrorOrGeneric(detail: string): void {
+    showErrorOrGeneric(detail: string): void {
         if (detail == null || detail == "") {
             this.showGenericError();
         } else {
@@ -49,20 +49,20 @@ export class NotificationService {
         }
     }
 
-    public showSuccess(summary: string, detail: string): void {
+    showSuccess(summary: string, detail: string): void {
         this.showNotification(this.getMessage(MessageLevel.Success, summary, detail));
     }
 
-    public showGenericError(): void {
+    showGenericError(): void {
         this.showNotification(this.genericErrorMessage);
     }
 
-    public subscribeOnNotifications(notifications: Message[]) {
+    subscribeOnNotifications(notifications: Message[]) {
         this.notificationSubject.subscribe((msg) => notifications.push(msg));
         
     }
 
-    public get clearNotifications() {
+    get clearNotifications() {
         return this.routerService.navigationStartEvents();
     }
 }

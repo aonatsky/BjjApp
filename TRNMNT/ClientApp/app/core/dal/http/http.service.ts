@@ -24,7 +24,7 @@ export class HttpService {
 
     //#region Public Methods
 
-    public get(name: string, paramsHolder?: object, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
+    get(name: string, paramsHolder?: object, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
         let options = this.jsonRequestOptions(responseType);
         if (paramsHolder != null) {
             var keys = Reflect.ownKeys(paramsHolder);
@@ -37,49 +37,49 @@ export class HttpService {
         return this.handleRequest(() => this.http.get(name, options), notifyMessage);
     }
 
-    public getById(name: string, id: string, notifyMessage?: string): Observable<any> {
+    getById(name: string, id: string, notifyMessage?: string): Observable<any> {
         return this.handleRequest(() => this.http.get(name), notifyMessage); 
     }
 
-    public post(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
+    post(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
         let options = this.jsonRequestOptions(responseType);
         let body = JSON.stringify(model);
         return this.handleRequest(() => this.http.post(name, body, options), notifyMessage);
     }
 
-    public put(name: string, model: any, notifyMessage?: string): Observable<any> {
+    put(name: string, model: any, notifyMessage?: string): Observable<any> {
         let body = JSON.stringify(model);
         return this.handleRequest(() => this.http.put(name, body, this.jsonRequestOptions()), notifyMessage);
     }
 
-    public delete(name: string, model: any, notifyMessage?: string): Observable<any> {
+    delete(name: string, model: any, notifyMessage?: string): Observable<any> {
         let options = this.jsonRequestOptions();
         options.body = JSON.stringify(model);
         return this.handleRequest(() => this.http.delete(name, options), notifyMessage);
     }
 
-    public deleteById(name: string, id: any, notifyMessage?: string): Observable<any> {
+    deleteById(name: string, id: any, notifyMessage?: string): Observable<any> {
         let url = name + "/" + id;
         return this.handleRequest(() => this.http.delete(url, this.jsonRequestOptions()), notifyMessage);
     }
 
-    public postFile(name: string, file: any, notifyMessage?: string): Observable<any> {
+    postFile(name: string, file: any, notifyMessage?: string): Observable<any> {
         let formData = new FormData();
         formData.append("file", file);
         return this.handleRequest(() => this.http.post(name, formData), notifyMessage);
     }
 
-    public getPdf(url, fileName): Observable<any> {
+    getPdf(url, fileName): Observable<any> {
         return this.http.get(url, { responseType: ResponseContentType.Blob }).map((res) => {
             FileSaver.saveAs(new Blob([res.blob()], { type: 'application/pdf' }), fileName);
         });
     }
 
-    public getExcelFile(response: Response, fileName: string): void {
+    getExcelFile(response: Response, fileName: string): void {
         FileSaver.saveAs(response.blob(), fileName);
     }
 
-    public getArray<T>(response: any): T[] {
+    getArray<T>(response: any): T[] {
         let result = response.json();
         if (result.length == 0) {
             return [];
@@ -87,15 +87,15 @@ export class HttpService {
         return result;
     }
 
-    public getJson(response: Response) {
+    getJson(response: Response) {
         return response.json();
     }
 
-    public getString(response: Response) {
+    getString(response: Response) {
         return response.text();
     }
 
-    public convertDate(input) {
+    convertDate(input) {
         if (typeof input !== "object") {
             return input;
         };

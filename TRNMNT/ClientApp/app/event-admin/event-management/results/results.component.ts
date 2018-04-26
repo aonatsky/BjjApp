@@ -46,7 +46,7 @@ export class ResultsComponent {
         this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => { this.teamResults = r; });
     }
 
-    public get totalCount(): number {
+    get totalCount(): number {
         if (this.teamResults) {
             return this.teamResults.length;
         }

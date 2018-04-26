@@ -15,7 +15,7 @@ import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser
     private subdomain: string;
     private dom: BrowserDomAdapter;
 
-    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         var homepage = this.getHomePage();
         if (homepage != "") {
             this.routerService.navigateByUrl(homepage);

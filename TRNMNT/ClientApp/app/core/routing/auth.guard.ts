@@ -10,7 +10,7 @@ import { RouterService } from '../services/router.service'
 
     constructor(public authService: AuthService, private routerService: RouterService) { }
 
-    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
         if (this.authService.isLoggedIn()) {
             // Signed in.  

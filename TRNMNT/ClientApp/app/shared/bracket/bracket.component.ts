@@ -11,10 +11,13 @@ import { RoundModel } from '../../core/model/round.models';
     encapsulation: ViewEncapsulation.None
 })
 
-export class BracketComponent {
+export class BracketComponent implements OnInit {
     @Input() bracket: BracketModel;
     maxStage: number = 0;
     columns: number[];
+
+    selectedRoundDetails: RoundModel;
+    showRoundPanel: boolean = false;
 
     constructor() {
 
@@ -23,6 +26,7 @@ export class BracketComponent {
     ngOnInit() {
         this.maxStage = this.getMaxStage();
         this.columns = this.getColumns();
+        this.selectedRoundDetails = this.bracket.roundModels[0];
     }
 
 
@@ -38,66 +42,46 @@ export class BracketComponent {
     }
 
     private getColumns(): number[] {
-        let cols = [];
-        let maxColumn = this.maxStage * 2;
+        const cols = [];
+        const maxColumn = this.maxStage * 2;
         for (let i = 0; i <= maxColumn; i++) {
             cols.push(i);
         }
         return cols;
     }
 
+    private isCentralCol(colNumber): boolean {
+        return colNumber == (this.columns.length - 1) / 2;
+    }
 
+    private getMatchSideClass(colNumber): string {
+        return colNumber > (this.columns.length - 1) / 2 ? 'right-side' : '';
+    }
 
-    private getRoundTemplate(round: RoundModel, isRightSide: boolean): string {
-        let matchSide = isRightSide ? 'right-side' : '';
+    private getMatchTypeClass(matchModel: RoundModel): string {
         let matchType = '';
-        if (round.stage == 0) {
-            matchType = round.roundType == 1 ? 'third-place' : 'final';
+        if (matchModel.stage == 0) {
+            matchType = matchModel.roundType == 1 ? 'third-place' : 'final';
         }
-        
-        return `<div class="match ${matchSide} ${matchType} "><div class="match-content ui-g-1 ui-g-nopad">
-            <div class="participant-plate ui-g-12">
-            ${round.firstParticipant ? round.firstParticipant.firstName + ' ' + round.firstParticipant.lastName : ''}
-            </div>
-            <div class="participant-plate ui-g-12">
-            ${round.secondParticipant ? round.secondParticipant.firstName + ' ' + round.secondParticipant.lastName : ''}
-            </div>
-            </div></div>`;
+        return matchType;
     }
 
-    private getEmptyMatch(): string {
-        return '<div class="match empty"><div class="match-content"></div></div>';
-    }
-
-
-    private getRounds(colNumber: number) {
-        let htmlData = '';
-        let maxCol = this.columns.length - 1;
-        let isRightSide = colNumber > maxCol / 2;
-        let depth = (isRightSide ? maxCol - colNumber : colNumber);
-        let stage = this.maxStage - depth;
-        let count = this.bracket.roundModels.filter(r => r.stage == stage).length;
-        if (stage == 0) {
-            htmlData += this.getEmptyMatch();
-            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r) => {
-                htmlData += this.getRoundTemplate(r, false);
-            });
+    private getRoundModels(colNumber: number): RoundModel[] {
+        const maxCol = this.columns.length - 1;
+        const isRightSide = colNumber > maxCol / 2;
+        const depth = (isRightSide ? maxCol - colNumber : colNumber);
+        const stage = this.maxStage - depth;
+        const models = this.bracket.roundModels.filter(r => r.stage == stage);
+        if (stage === 0) {
+            return models;
         } else {
-            this.bracket.roundModels.filter(r => r.stage == stage).forEach((r, j) => {
-                if (isRightSide) {
-                    if (j >= count / 2) {
-                        htmlData += this.getRoundTemplate(r, isRightSide);
-                    }
-                } else {
-                    if (j < count / 2) {
-                        htmlData += this.getRoundTemplate(r, isRightSide);
-                    }
-                }
-            });
+            if (isRightSide) {
+                return models.splice(models.length / 2, models.length);
+
+            } else {
+                return models.splice(0, models.length / 2);
+            }
         }
-        return htmlData;
-
-
     }
 
 }
