@@ -58,6 +58,7 @@ export const ApiMethods = Object.freeze({
      },
     bracket: {
         createBracket: 'api/bracket/createBracket',
+        runBracket: 'api/bracket/runBracket',
         downloadFile: 'api/bracket/downloadFile',
         updateBracket: 'api/bracket/updateBracket',
         finishRound: 'api/bracket/finishRound',
