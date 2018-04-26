@@ -2,11 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import './event-run.component.scss'
-import {BracketModel} from '../../core/model/bracket.models';
-import {BracketService} from '../../core/services/bracket.service';
+import { BracketModel } from '../../core/model/bracket.models';
+import { BracketService } from '../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
 import { RouterService } from '../../core/services/router.service';
+import { RoundModel } from '../../core/model/round.models';
 
 
 @Component({
@@ -19,7 +20,9 @@ export class EventRunComponent implements OnInit {
     private bracket: BracketModel;
     private filter: CategoryWithDivisionFilterModel;
     private previousWeightDivisionId: string;
-
+    private selectedRoundDetails : RoundModel;
+    private showRoundPanel: boolean;
+    
     private get isFilterSelected(): boolean {
         return !!this.filter && !!this.filter.weightDivisionId;
     }
@@ -70,6 +73,12 @@ export class EventRunComponent implements OnInit {
     private refreshModel(model: BracketModel) {
         this.bracket = model;
         console.log("RECIEVED", model);
+    }
+
+    private runRound(model: RoundModel) {
+        console.log(model);
+        this.selectedRoundDetails = model;
+        this.showRoundPanel = true;
     }
 
 }

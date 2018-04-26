@@ -1,7 +1,7 @@
 ﻿<div class="brackets-live" *ngIf="bracket">
     <div class="round" *ngFor="let col of columns">
         <div class="match empty" *ngIf="isCentralCol(col)"><div class="match-content"></div></div>
-        <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)" (click)="selectedRoundDetails=model;showRoundPanel=true">
+        <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)" (click)="onRoundClick(model)">
             <div class="match-content ui-g-1 ui-g-nopad">
                 <div class="participant-plate ui-g-12">
                     {{model.firstParticipant ? model.firstParticipant.firstName + ' ' + model.firstParticipant.lastName : ''}}
@@ -13,12 +13,3 @@
         </div>
     </div>
 </div>
-<p-dialog *ngIf="!!selectedRoundDetails && showRoundPanel"
-          header="Complete Round"
-          [(visible)]="!!selectedRoundDetails && showRoundPanel"
-          [modal]="true"
-          [resizable]="false"
-          showEffect="fade"
-          [showHeader]="true">
-    <round-panel [roundModel]="selectedRoundDetails"></round-panel>
-</p-dialog>

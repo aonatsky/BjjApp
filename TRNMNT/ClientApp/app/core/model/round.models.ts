@@ -7,4 +7,7 @@ export class RoundModel {
     nextRoundId: AAGUID;
     stage: number;
     roundType : number;
+    roundTime: number;
+    firstParticipantResult: string;
+    secondParticipantResult: string;
 }

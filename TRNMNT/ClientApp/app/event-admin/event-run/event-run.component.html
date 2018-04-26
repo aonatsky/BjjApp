@@ -14,7 +14,16 @@
         <button pButton type="button" label="Open Category Spectator View" (click)="runCategorySpectatorView()" [disabled]="!isCategorySelected"></button>
     </div>
 </div>
-<bracket *ngIf="bracket" [bracket]="bracket"></bracket>
+<bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runRound($event);"></bracket>
+<p-dialog *ngIf="!!selectedRoundDetails && showRoundPanel"
+          header="Complete Round"
+          [(visible)]="!!selectedRoundDetails && showRoundPanel"
+          [modal]="true"
+          [resizable]="false"
+          showEffect="fade"
+          [showHeader]="true">
+    <round-panel [roundModel]="selectedRoundDetails"></round-panel>
+</p-dialog>
 
 
 
