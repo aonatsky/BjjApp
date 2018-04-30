@@ -8,6 +8,19 @@
 
 .brackets-live {
     display: flex;
+    margin: auto;
+
+    &.stages-2 {
+        width: 1050px
+    }
+
+    &.stages-1 {
+        width: 630px
+    }
+
+    &.stages-0 {
+        width: 210px
+    }
 }
 
 .round {
@@ -44,7 +57,8 @@
                 border-bottom: $border_style;
                 bottom: calc(50% - 1px);
             }
-            .match-content{
+
+            .match-content {
                 border-color: $theme_orange;
             }
         }

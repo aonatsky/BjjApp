@@ -15,12 +15,8 @@
           [sortField]="sortField"
           [sortOrder]="sortDirection"
           [lazy]="true"
-          (onLazyLoad)="onLoadData($event)"
           [totalRecords]="totalCount"
           [(firstIndex)]="firstIndex"
-          (onEntitySelected)="onEntitySelected($event)"
-          (onUpdate)="onEntityUpdate($event)"
-          (onDelete)="onEntityDelete($event)"
           [dialogMinWidth]="500"
           class="ui-g-12"
           gridMinHeight="350">

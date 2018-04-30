@@ -17,9 +17,6 @@ export class BracketComponent implements OnInit {
     maxStage: number = 0;
     columns: number[];
 
-    selectedRoundDetails: RoundModel;
-    showRoundPanel: boolean = false;
-
     constructor() {
 
     }
@@ -27,13 +24,12 @@ export class BracketComponent implements OnInit {
     ngOnInit() {
         this.maxStage = this.getMaxStage();
         this.columns = this.getColumns();
-        this.selectedRoundDetails = this.bracket.roundModels[0];
     }
 
 
 
     private getMaxStage(): number {
-        let roundsCount = this.bracket.roundModels.filter(r => r.roundType == 0).length;
+        let roundsCount = this.bracket.roundModels.filter(r => r.roundType != 2).length;
         for (let i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
             if (roundsCount == 0) {
@@ -72,7 +68,7 @@ export class BracketComponent implements OnInit {
         const isRightSide = colNumber > maxCol / 2;
         const depth = (isRightSide ? maxCol - colNumber : colNumber);
         const stage = this.maxStage - depth;
-        const models = this.bracket.roundModels.filter(r => r.stage == stage);
+        const models = this.bracket.roundModels.filter(r => r.stage == stage).sort((r1, r2) => { return r1.order - r2.order });
         if (stage === 0) {
             return models;
         } else {
@@ -85,7 +81,24 @@ export class BracketComponent implements OnInit {
         }
     }
 
-    private onRoundClick(model:RoundModel) {
+    private displayParticipantData(model: RoundModel, participantNumber: number) {
+        if (participantNumber == 1) {
+            return model.firstParticipant
+                ? model.firstParticipant.firstName + ' ' + model.firstParticipant.lastName
+                : '';
+        } else {
+            if (model.secondParticipant) {
+                return model.secondParticipant.firstName + ' ' + model.secondParticipant.lastName;
+            } else if (model.roundType == 2) {
+                return 'LOST FIRST ROUND';
+            } else {
+                return '';
+            }
+
+        }
+    }
+
+    private onRoundClick(model: RoundModel) {
         this.roundClick.emit(model);
     }
 

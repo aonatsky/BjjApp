@@ -32,8 +32,9 @@ export class BracketGenerationComponent {
     private createBracket() {
         this.bracket = undefined;
         this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(r => {
+            debugger;
             this.bracket = r;
-            this.maxStage = this.getMaxStage(this.bracket.roundModels.filter(r => r.roundType == 0).length);
+            this.maxStage = this.getMaxStage(this.bracket.roundModels.filter(r => r.roundType != 2).length);
             this.rounds =
                 this.bracket.roundModels.filter(r => r.stage == this.maxStage);
             this.initStages(this.maxStage);

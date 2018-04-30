@@ -5,8 +5,7 @@ import { CategorySimpleModel } from '../../../core/model/category.models';
 import { CategoryService } from '../../../core/services/category.service';
 import { TeamResultModel } from '../../../core/model/team-result.model';
 import { ResultsService } from '../../../core/services/results.service';
-import { ICrudColumn as CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent } from '../../../shared/crud/crud.component';
-import {IColumnOptions as IColumnOptions1} from '../../../shared/crud/crud.component';
+import { ICrudColumn as CrudColumn, IColumnOptions } from '../../../shared/crud/crud.component';
 
 @Component({
     selector: 'results',

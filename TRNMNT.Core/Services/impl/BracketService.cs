@@ -75,8 +75,11 @@ namespace TRNMNT.Core.Services.impl
                     round.WinnerParticipantId = round.SecondParticipantId;
                 }
 
-                bracket.Rounds.First(r => r.RoundId == round.NextRoundId).FirstParticipantId =
-                    round.WinnerParticipantId;
+                if (round.NextRound != null)
+                {
+                    round.NextRound.FirstParticipantId = round.WinnerParticipantId;
+                }
+                
             }
 
             var roundTime = await _categoryService.GetRoundTimeAsync(bracket.WeightDivision.CategoryId);
