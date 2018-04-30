@@ -54,7 +54,7 @@ export class EventRunComponent implements OnInit {
 
     private runWeightDivision() {
         this.runEventHubService.joinWeightDivisionGroup(this.filter.weightDivisionId, this.previousWeightDivisionId);
-        this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(m => this.refreshModel(m));
+        this.bracketService.runBracket(this.filter.weightDivisionId).subscribe(m => this.refreshModel(m));
         this.previousWeightDivisionId = this.filter.weightDivisionId;
     }
 

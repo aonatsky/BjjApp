@@ -15,6 +15,7 @@ namespace TRNMNT.Data.Entities
         public Guid? WinnerParticipantId { get; set; }
         public Guid? NextRoundId { get; set; }
         public int Stage { get; set; }
+        public int Order { get; set; }
         public int RoundType { get; set; }
         public int RoundResultType { get; set; }
         public string RoundResultDetails { get; set; }

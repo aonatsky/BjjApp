@@ -12,6 +12,7 @@ namespace TRNMNT.Core.Model.Round
         public int Stage { get; set; }
         public int RoundType { get; set; }
         public int RoundTime { get; set; }
+        public int Order { get; set; }
         public string FirstParticipantResult { get; set; }
         public string SecondParticipantResult { get; set; }
     }

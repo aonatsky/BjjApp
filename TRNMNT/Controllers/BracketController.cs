@@ -60,6 +60,24 @@ namespace TRNMNT.Web.Controllers
 
         [HttpGet("[action]/{weightDivisionId}")]
         [Authorize]
+        public async Task<IActionResult> RunBracket(Guid weightDivisionId)
+        {
+            return await HandleRequestWithDataAsync(async () =>
+            {
+                var bracketModel = await _bracketService.RunBracketAsync(weightDivisionId);
+                if (bracketModel != null)
+                {
+                    return Success(bracketModel);
+                }
+
+                return NotFoundResponse();
+            });
+        }
+
+
+
+        [HttpGet("[action]/{weightDivisionId}")]
+        [Authorize]
         public async Task<IActionResult> DownloadFile(Guid weightDivisionId)
         {
             return await HandleRequestWithFileAsync(async () =>
