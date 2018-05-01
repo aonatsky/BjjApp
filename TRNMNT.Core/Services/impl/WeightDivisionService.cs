@@ -29,14 +29,19 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
-        public async Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
+        public async Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionModelsByCategoryIdAsync(Guid categoryId)
         {
-            return await _weightDevisionRepository.GetAll().Where(wd => wd.CategoryId == categoryId).Select(wd =>
-                    new WeightDivisionModelBase
-                    {
-                        WeightDivisionId = wd.WeightDivisionId.ToString(),
-                        Name = wd.Name
-                    }).ToListAsync();
+            return (await GetWeightDivisionsByCategoryIdAsync(categoryId)).Select(wd =>
+                new WeightDivisionModelBase
+                {
+                    WeightDivisionId = wd.WeightDivisionId.ToString(),
+                    Name = wd.Name
+                });
+        }
+
+        public async Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
+        {
+            return await _weightDevisionRepository.GetAllIncluding(wd => wd.CategoryId == categoryId, wd => wd.Brackets).ToListAsync();
         }
 
         public async Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionsByEventIdAsync(Guid eventId)

@@ -61,7 +61,7 @@ namespace TRNMNT.Core.Services.impl
         {
             var bracket = await GetBracketAsync(weightDivisionId);
             bracket.StartTs = DateTime.UtcNow;
-            var firstRounds = bracket.Rounds.Where(r => r.Stage == bracket.Rounds.Max(rr => rr.Stage));
+            var firstRounds = bracket.Rounds.Where(r => r.Stage == bracket.Rounds.Max(rr => rr.Stage) && r.RoundType != (int)RoundTypeEnum.Buffer);
             foreach (var round in firstRounds)
             {
                 if (round.FirstParticipantId == null)
@@ -77,7 +77,7 @@ namespace TRNMNT.Core.Services.impl
                 {
                     round.NextRound.FirstParticipantId = round.WinnerParticipantId;
                 }
-                
+
             }
             _bracketRepository.Update(bracket);
             return GetBracketModel(bracket);
@@ -98,7 +98,7 @@ namespace TRNMNT.Core.Services.impl
             return !await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null);
         }
 
-        public async Task<List<ParticipantInAbsoluteDivisionMobel>> GetWinnersAsync(Guid categoryId)
+        public async Task<List<ParticipantInAbsoluteDivisionModel>> GetWinnersAsync(Guid categoryId)
         {
             var braketsForCategory = _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId);
             if (await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null))
@@ -112,7 +112,7 @@ namespace TRNMNT.Core.Services.impl
                         .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
                         .Include(p => p.Rounds)
                         .ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.WeightDivision))
-                    .Select(p => new ParticipantInAbsoluteDivisionMobel()
+                    .Select(p => new ParticipantInAbsoluteDivisionModel()
                     {
                         ParticipantId = p.ParticipantId,
                         FirstName = p.FirstName,
@@ -146,7 +146,7 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task<Dictionary<string, BracketModel>> GetBracketsByCategoryAsync(Guid categoryId)
         {
-            var weightDivisions = await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId);
+            var weightDivisions = await _weightDivisionService.GetWeightDivisionModelsByCategoryIdAsync(categoryId);
             var result = new Dictionary<string, BracketModel>();
             foreach (var division in weightDivisions)
             {
@@ -173,6 +173,37 @@ namespace TRNMNT.Core.Services.impl
                 round.WinnerParticipantId = model.WinnerParticipantId;
                 round.RoundResultType = (int)model.RoundResultTypeType;
                 round.RoundResultDetails = GetRoundResultDetailsJson(model);
+
+
+                if (round.Stage == 1)
+                {
+                    var lostParticipantId = round.WinnerParticipantId == round.FirstParticipantId
+                        ? round.SecondParticipantId
+                        : round.FirstParticipantId;
+                    var bufferRound = (await GetSameStageRoundsAsync(round)).FirstOrDefault(r => r.RoundType == (int)RoundTypeEnum.Buffer && r.RoundId != round.RoundId);
+                    if (bufferRound != null && bufferRound.SecondParticipantId == null)
+                    {
+                        bufferRound.SecondParticipantId = lostParticipantId;
+                    }
+                    else
+                    {
+                        var thirdPlaceRound = await _roundRepository.FirstOrDefaultAsync(r =>
+                            r.BracketId == round.BracketId || r.RoundType == (int)RoundTypeEnum.ThirdPlace);
+                        if (thirdPlaceRound != null)
+                        {
+                            if (thirdPlaceRound.FirstParticipantId == null)
+                            {
+                                thirdPlaceRound.FirstParticipantId = lostParticipantId;
+                            }
+                            else
+                            {
+                                thirdPlaceRound.SecondParticipantId = lostParticipantId;
+                            }
+
+                            _roundRepository.Update(thirdPlaceRound);
+                        }
+                    }
+                }
                 if (round.NextRound != null)
                 {
                     if (round.NextRound.FirstParticipantId == null)
@@ -185,26 +216,7 @@ namespace TRNMNT.Core.Services.impl
                     }
                 }
 
-                if (round.Stage == 1)
-                {
-                    var lostParticipantId = round.WinnerParticipantId == round.FirstParticipantId
-                        ? round.SecondParticipantId
-                        : round.FirstParticipantId;
-                    var thirdPlaceRound = await _roundRepository.FirstOrDefaultAsync(r =>
-                        r.BracketId == round.BracketId || r.RoundType == (int)RoundTypeEnum.ThirdPlace);
-                    if (thirdPlaceRound != null)
-                    {
-                        if (thirdPlaceRound.FirstParticipantId == null)
-                        {
-                            thirdPlaceRound.FirstParticipantId = lostParticipantId;
-                        }
-                        else
-                        {
-                            thirdPlaceRound.SecondParticipantId = lostParticipantId;
-                        }
-                        _roundRepository.Update(thirdPlaceRound);
-                    }
-                }
+
 
                 if (round.Stage == 0)
                 {
@@ -218,11 +230,15 @@ namespace TRNMNT.Core.Services.impl
                         var bracket = await _bracketRepository.GetAllIncluding(b => b.BracketId == round.BracketId, b => b.WeightDivision).FirstOrDefaultAsync();
                         bracket.CompleteTs = DateTime.UtcNow;
                         _bracketRepository.Update(bracket);
-                        await _categoryService.SetCategoryCompleteAsync(bracket.WeightDivision.CategoryId);
-
+                        //find if other brackets are complete
+                        if ((await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(bracket.WeightDivision
+                            .CategoryId)).Any(wd =>
+                            !wd.Brackets.Any(b => b.CompleteTs == null && b.BracketId != bracket.BracketId))) ;
+                        {
+                            await _categoryService.SetCategoryCompleteAsync(bracket.WeightDivision.CategoryId);
+                        }
                     }
                 }
-
                 _roundRepository.Update(round);
             }
         }
@@ -443,7 +459,7 @@ namespace TRNMNT.Core.Services.impl
 
         }
 
-        private List<Round> GetStageRounds(IEnumerable<Round> stageRounds, int stage, Guid bracketId)
+        private List<Round> GetStageRoundsAsync(IEnumerable<Round> stageRounds, int stage, Guid bracketId)
         {
             var childRounds = new List<Round>();
             if (stage == 0)
@@ -480,80 +496,72 @@ namespace TRNMNT.Core.Services.impl
                                 NextRoundId = parentRound.RoundId,
                                 Stage = stage,
                                 Order = (2 * parentRound.Order) + i
-                        });
+                            });
+                        }
                     }
                 }
             }
-        }
             return childRounds;
         }
 
-    private ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId)
-    {
-
-
-        var rounds = new List<Round>();
-        var lastStage = participants.Length == 3 ? 1 : (int)Math.Log(participants.Count(), 2) - 1;
-        for (int i = 0; i <= lastStage; i++)
+        private ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId)
         {
-            var roundsToAdd = GetStageRounds(rounds.Where(r => r.Stage == i - 1), i, bracketId);
-            if (i == lastStage)
+
+
+            var rounds = new List<Round>();
+            var lastStage = participants.Length == 3 ? 1 : (int)Math.Log(participants.Count(), 2) - 1;
+            for (int i = 0; i <= lastStage; i++)
             {
-                if (participants.Length == 2)
+                var roundsToAdd = GetStageRoundsAsync(rounds.Where(r => r.Stage == i - 1), i, bracketId);
+                if (i == lastStage)
                 {
-                    roundsToAdd.Remove(roundsToAdd.First(r => r.RoundType == (int)RoundTypeEnum.ThirdPlace));
-                }
-                if (participants.Length == 3)
-                {
-                    roundsToAdd[0].FirstParticipant = participants[0];
-                    roundsToAdd[0].FirstParticipantId = participants[0].ParticipantId;
-                    roundsToAdd[0].SecondParticipant = participants[1];
-                    roundsToAdd[0].SecondParticipantId = participants[1].ParticipantId;
-                    roundsToAdd[1].FirstParticipant = participants[2];
-                    roundsToAdd[1].FirstParticipantId = participants[2].ParticipantId;
-                    roundsToAdd[1].RoundType = (int)RoundTypeEnum.Buffer;
-
-                }
-                else
-                {
-                    var j = 0;
-                    foreach (var round in roundsToAdd)
+                    if (participants.Length == 2)
                     {
-                        if (participants[j].ParticipantId != Guid.Empty)
-                        {
-                            round.FirstParticipant = participants[j];
-                            round.FirstParticipantId = participants[j].ParticipantId;
-                        }
+                        roundsToAdd.Remove(roundsToAdd.First(r => r.RoundType == (int)RoundTypeEnum.ThirdPlace));
+                    }
+                    if (participants.Length == 3)
+                    {
+                        roundsToAdd[0].FirstParticipant = participants[0];
+                        roundsToAdd[0].FirstParticipantId = participants[0].ParticipantId;
+                        roundsToAdd[0].SecondParticipant = participants[1];
+                        roundsToAdd[0].SecondParticipantId = participants[1].ParticipantId;
+                        roundsToAdd[1].FirstParticipant = participants[2];
+                        roundsToAdd[1].FirstParticipantId = participants[2].ParticipantId;
+                        roundsToAdd[1].RoundType = (int)RoundTypeEnum.Buffer;
 
-                        if (participants[j + 1].ParticipantId != Guid.Empty)
+                    }
+                    else
+                    {
+                        var j = 0;
+                        foreach (var round in roundsToAdd)
                         {
-                            round.SecondParticipant = participants[j + 1];
-                            round.SecondParticipantId = participants[j + 1].ParticipantId;
-                        }
+                            if (participants[j].ParticipantId != Guid.Empty)
+                            {
+                                round.FirstParticipant = participants[j];
+                                round.FirstParticipantId = participants[j].ParticipantId;
+                            }
 
-                        j = j + 2;
+                            if (participants[j + 1].ParticipantId != Guid.Empty)
+                            {
+                                round.SecondParticipant = participants[j + 1];
+                                round.SecondParticipantId = participants[j + 1].ParticipantId;
+                            }
+
+                            j = j + 2;
+                        }
                     }
                 }
+                rounds.AddRange(roundsToAdd);
             }
-            rounds.AddRange(roundsToAdd);
+            _roundRepository.AddRange(rounds);
+            return rounds;
         }
-        _roundRepository.AddRange(rounds);
-        return rounds;
-    }
 
-    private Round AddParticipantToRound(Round round, Guid participantId)
-    {
-        if (round.FirstParticipantId == null)
+        private async Task<List<Round>> GetSameStageRoundsAsync(Round round)
         {
-            round.FirstParticipantId = participantId;
+            return await _roundRepository.GetAll(r => r.BracketId == round.BracketId && r.Stage == round.Stage).ToListAsync();
         }
-        else
-        {
-            round.SecondParticipantId = participantId;
-        }
-        return round;
-    }
 
-    #endregion
-}
+        #endregion
+    }
 }

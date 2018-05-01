@@ -30,7 +30,7 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetWeightDivisionsByCategory(Guid categoryId)
         {
-            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId));
+            return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionModelsByCategoryIdAsync(categoryId));
         }
 
         [HttpGet("[action]/{eventId}")]

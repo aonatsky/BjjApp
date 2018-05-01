@@ -29,10 +29,10 @@ export class BracketComponent implements OnInit {
 
 
     private getMaxStage(): number {
-        let roundsCount = this.bracket.roundModels.filter(r => r.roundType != 2).length;
+        let roundsCount = this.bracket.roundModels.filter(r => r.roundType !== 1).length;
         for (let i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
-            if (roundsCount == 0) {
+            if (roundsCount === 0) {
                 return i;
             }
         }

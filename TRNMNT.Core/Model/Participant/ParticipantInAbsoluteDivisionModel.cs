@@ -2,7 +2,7 @@
 
 namespace TRNMNT.Core.Model.Participant
 {
-    public class ParticipantInAbsoluteDivisionMobel
+    public class ParticipantInAbsoluteDivisionModel
     {
         public Guid ParticipantId { get; set; }
         public string FirstName { get; set; }
