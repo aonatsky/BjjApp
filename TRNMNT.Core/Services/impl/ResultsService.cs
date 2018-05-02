@@ -57,7 +57,7 @@ namespace TRNMNT.Core.Services.impl
                                             ? (round.SecondParticipant, 2)
                                             : (round.FirstParticipant, 2));
                                 }
-                               
+
                             }
                             else
                             {
@@ -65,12 +65,9 @@ namespace TRNMNT.Core.Services.impl
                             }
                         }
                     }
-
                 }
-
             }
-
-
+            return results;
         }
     }
 }
