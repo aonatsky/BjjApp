@@ -1,5 +1,10 @@
 <bracket *ngIf="bracket" [bracket]="bracket"></bracket>
-
-
-
-
+<p-dialog *ngIf="!!selectedRoundDetails && showRoundPanel"
+          header="Complete Round"
+          [(visible)]="!!selectedRoundDetails && showRoundPanel"
+          [modal]="true"
+          [resizable]="false"
+          showEffect="fade"
+          [showHeader]="true">
+    <round-panel-view [roundModel]="selectedRoundDetails"></round-panel-view>
+</p-dialog>

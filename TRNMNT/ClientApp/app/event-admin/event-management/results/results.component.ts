@@ -41,7 +41,6 @@ export class ResultsComponent {
     }
 
     getResults() {
-        debugger;
         this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => { this.teamResults = r; });
     }
 
