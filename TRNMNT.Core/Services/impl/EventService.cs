@@ -348,7 +348,7 @@ namespace TRNMNT.Core.Services.Impl
             var weightDivisionModels = new List<WeightDivisionModel>();
             if (weightDivisions != null)
             {
-                weightDivisionModels.AddRange(weightDivisions.Select(weightDivision => new WeightDivisionModel
+                weightDivisionModels.AddRange(weightDivisions.Where(w => !w.IsAbsolute).Select(weightDivision => new WeightDivisionModel
                 {
                     WeightDivisionId = weightDivision.WeightDivisionId.ToString(),
                     Weight = weightDivision.Weight,

@@ -1,17 +1,47 @@
 ﻿@import '../../shared/styles/variables.scss';
 
-
-.topbar {
-    background-color: $theme_black;
-    height: $header_height;
-
-    .logo {
-        background-color: $theme_orange;
-        width: 200px;
+body {
+    .topbar {
+        background-color: $theme_black;
         height: $header_height;
-        text-align: right;
-        line-height: 2;
-        color: white;
+
+        a {
+            color: $theme_white;
+        }
+
+        .logo {
+            background-color: $theme_orange;
+            width: 200px;
+            height: $header_height;
+            text-align: right;
+            line-height: 2;
+            color: $theme_white;
+        }
+
+        .ui-menubar {
+            background-color: transparent;
+            border: 0;
+            padding: 0;
+
+            .ui-menubar-root-list {
+                float: right;
+                height: $header_height;
+
+                > .ui-menuitem {
+                    height: $header_height;
+
+                    &:hover {
+                        background-color: $theme_orange;
+                    }
+
+                    > .ui-menuitem-link {
+                        background-color: transparent;
+                        padding: 0.8em 1.7em;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
     }
 }
 div.loader-modal:before {

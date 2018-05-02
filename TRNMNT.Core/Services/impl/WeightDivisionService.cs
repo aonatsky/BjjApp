@@ -44,17 +44,22 @@ namespace TRNMNT.Core.Services.Impl
             return await _weightDevisionRepository.GetAll(wd => wd.CategoryId == categoryId).Include(wd => wd.Brackets).ToListAsync();
         }
 
-        public async Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionsByEventIdAsync(Guid eventId)
+        public async Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionModelsByEventIdAsync(Guid eventId, bool isWithAbsolute)
         {
-            return await _weightDevisionRepository.GetAll().Where(wd => wd.Category.EventId == eventId).Select(wd =>
-                    new WeightDivisionModel
-                    {
-                        WeightDivisionId = wd.WeightDivisionId.ToString(),
-                        Name = wd.Name,
-                        CategoryId = wd.CategoryId.ToString(),
-                        Descritpion = wd.Descritpion,
-                        Weight = wd.Weight
-                    }).ToListAsync();
+            var query = _weightDevisionRepository.GetAll().Where(wd => wd.Category.EventId == eventId);
+            if (!isWithAbsolute)
+            {
+                query = query.Where(w => !w.IsAbsolute);
+            }
+            return await query.Select(wd =>
+                new WeightDivisionModel
+                {
+                    WeightDivisionId = wd.WeightDivisionId.ToString(),
+                    Name = wd.Name,
+                    CategoryId = wd.CategoryId.ToString(),
+                    Descritpion = wd.Descritpion,
+                    Weight = wd.Weight
+                }).ToListAsync();
         }
 
         public async Task<WeightDivision> GetAbsoluteWeightDivisionAsync(Guid categoryId)
@@ -65,7 +70,7 @@ namespace TRNMNT.Core.Services.Impl
                 weightDivision = new WeightDivision
                 {
                     WeightDivisionId = Guid.NewGuid(),
-                    Name = $"AbsoluteForCategory_{categoryId}",
+                    Name = "Absolute",
                     Weight = 0,
                     CategoryId = categoryId,
                     IsAbsolute = true,
@@ -74,6 +79,7 @@ namespace TRNMNT.Core.Services.Impl
             }
             return weightDivision;
         }
+       
 
         #endregion
 
