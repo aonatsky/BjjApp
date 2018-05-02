@@ -2,12 +2,12 @@
 
 export class RoundDetailsModel {
     roundId: string;
-    firstPlayerPenalty: number;
-    secondPlayerPenalty: number;
-    firstPlayerAdvantage: number;
-    secondPlayerAdvantage: number;
-    firstPlayerPoints: number;
-    secondPlayerPoints: number;
+    firstParticipantPenalties: number;
+    secondParticipantPenalties: number;
+    firstParticipantAdvantages: number;
+    secondParticipantAdvantages: number;
+    firstParticipantPoints: number;
+    secondParticipantPoints: number;
 
     countdown: number;
     isStarted: boolean;

@@ -22,12 +22,12 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         super();
         this.roundDetails = new RoundDetailsModel();
 
-        this.roundDetails.firstPlayerPenalty = 0;
-        this.roundDetails.secondPlayerPenalty = 0;
-        this.roundDetails.firstPlayerAdvantage = 0;
-        this.roundDetails.secondPlayerAdvantage = 0;
-        this.roundDetails.firstPlayerPoints = 0;
-        this.roundDetails.secondPlayerPoints = 0;
+        this.roundDetails.firstParticipantPenalties = 0;
+        this.roundDetails.secondParticipantPenalties = 0;
+        this.roundDetails.firstParticipantAdvantages = 0;
+        this.roundDetails.secondParticipantAdvantages = 0;
+        this.roundDetails.firstParticipantPoints = 0;
+        this.roundDetails.secondParticipantPoints = 0;
 
         this.roundDetails.countdown = 2 * 60;
         this.roundDetails.isStarted = false;
@@ -91,33 +91,33 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.send();
     }
 
-    changeFirstPlayerAdvantage(advantageStep: number): void {
-        this.roundDetails.firstPlayerAdvantage = this.roundDetails.firstPlayerAdvantage + advantageStep < 0 ? 0 : this.roundDetails.firstPlayerAdvantage + advantageStep;
+    changeFirstParticipantAdvantages(advantagesStep: number): void {
+        this.roundDetails.firstParticipantAdvantages = this.roundDetails.firstParticipantAdvantages + advantagesStep < 0 ? 0 : this.roundDetails.firstParticipantAdvantages + advantagesStep;
         this.send();
     }
 
-    changeSecondPlayerAdvantage(advantageStep: number): void {
-        this.roundDetails.secondPlayerAdvantage = this.roundDetails.secondPlayerAdvantage + advantageStep < 0 ? 0 : this.roundDetails.secondPlayerAdvantage + advantageStep;
+    changeSecondParticipantAdvantages(advantagesStep: number): void {
+        this.roundDetails.secondParticipantAdvantages = this.roundDetails.secondParticipantAdvantages + advantagesStep < 0 ? 0 : this.roundDetails.secondParticipantAdvantages + advantagesStep;
         this.send();
     }
 
-    changeFirstPlayerPenalty(penaltyStep: number): void {
-        this.roundDetails.firstPlayerPenalty = this.roundDetails.firstPlayerPenalty + penaltyStep < 0 ? 0 : this.roundDetails.firstPlayerPenalty + penaltyStep;
+    changeFirstParticipantPenalties(penaltiesStep: number): void {
+        this.roundDetails.firstParticipantPenalties = this.roundDetails.firstParticipantPenalties + penaltiesStep < 0 ? 0 : this.roundDetails.firstParticipantPenalties + penaltiesStep;
         this.send();
     }
 
-    changeSecondPlayerPenalty(penaltyStep: number): void {
-        this.roundDetails.secondPlayerPenalty = this.roundDetails.secondPlayerPenalty + penaltyStep < 0 ? 0 : this.roundDetails.secondPlayerPenalty + penaltyStep;
+    changeSecondParticipantPenalties(penaltiesStep: number): void {
+        this.roundDetails.secondParticipantPenalties = this.roundDetails.secondParticipantPenalties + penaltiesStep < 0 ? 0 : this.roundDetails.secondParticipantPenalties + penaltiesStep;
         this.send();
     }
 
-    changeFirstPlayerPoints(pointStep: number): void {
-        this.roundDetails.firstPlayerPoints = this.roundDetails.firstPlayerPoints + pointStep < 0 ? 0 : this.roundDetails.firstPlayerPoints + pointStep;
+    changeFirstParticipantPoints(pointStep: number): void {
+        this.roundDetails.firstParticipantPoints = this.roundDetails.firstParticipantPoints + pointStep < 0 ? 0 : this.roundDetails.firstParticipantPoints + pointStep;
         this.send();
     }
 
-    changeSecondPlayerPoints(pointStep: number): void {
-        this.roundDetails.secondPlayerPoints = this.roundDetails.secondPlayerPoints + pointStep < 0 ? 0 : this.roundDetails.secondPlayerPoints + pointStep;
+    changeSecondParticipantPoints(pointStep: number): void {
+        this.roundDetails.secondParticipantPoints = this.roundDetails.secondParticipantPoints + pointStep < 0 ? 0 : this.roundDetails.secondParticipantPoints + pointStep;
         this.send();
     }
 

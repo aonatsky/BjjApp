@@ -41,7 +41,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
         {
-            return await _weightDevisionRepository.GetAllIncluding(wd => wd.CategoryId == categoryId, wd => wd.Brackets).ToListAsync();
+            return await _weightDevisionRepository.GetAll(wd => wd.CategoryId == categoryId).Include(wd => wd.Brackets).ToListAsync();
         }
 
         public async Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionsByEventIdAsync(Guid eventId)

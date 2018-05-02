@@ -94,12 +94,13 @@ export class BracketComponent implements OnInit {
             } else {
                 return '';
             }
-
         }
     }
 
     private onRoundClick(model: RoundModel) {
-        this.roundClick.emit(model);
+        if (model.firstParticipant && model.secondParticipant) {
+            this.roundClick.emit(model);    
+        }
     }
 
 }

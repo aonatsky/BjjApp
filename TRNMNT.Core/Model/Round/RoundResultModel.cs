@@ -8,7 +8,7 @@ namespace TRNMNT.Core.Model.Round
         public Guid RoundId { get; set; }
         public Guid WinnerParticipantId { get; set; }
         public int CompleteTime { get; set; }
-        public RoundResultTypeEnum RoundResultTypeType { get; set; }
+        public RoundResultTypeEnum RoundResultType { get; set; }
         public SubmissionTypeEnum SubmissionType { get; set; }
         public int FirstParticipantPoints { get; set; }
         public int FirstParticipantAdvantages { get; set; }

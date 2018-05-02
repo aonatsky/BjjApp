@@ -3,12 +3,12 @@
     public class RoundDetailsModel
     {
         public string RoundId { get; set; }
-        public int FirstPlayerPenalty { get; set; }
-        public int SecondPlayerPenalty { get; set; }
-        public int FirstPlayerAdvantage { get; set; }
-        public int SecondPlayerAdvantage { get; set; }
-        public int FirstPlayerPoints { get; set; }
-        public int SecondPlayerPoints { get; set; }
+        public int FirstParticipantPenalties { get; set; }
+        public int SecondParticipantPenalties { get; set; }
+        public int FirstParticipantAdvantages { get; set; }
+        public int SecondParticipantAdvantages { get; set; }
+        public int FirstParticipantPoints { get; set; }
+        public int SecondParticipantPoints { get; set; }
 
         public int Countdown { get; set; }
         public bool IsStarted { get; set; }

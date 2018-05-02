@@ -21,7 +21,7 @@
     <EmbeddedResource Remove="Core\**" />
     <None Remove="Core\**" />
     <Compile Remove="Controllers\FighterController.cs" />
-    <None Remove="ClientApp\app\core\enums\round-result.enum.ts" />
+    <None Remove="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <None Remove="ClientApp\app\core\enums\submission-type.enum.ts" />
     <None Remove="ClientApp\app\core\model\round-details\round-details.model.ts" />
     <None Remove="ClientApp\app\core\pipes\format-timer.pipe.ts" />
@@ -90,7 +90,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\app\core\enums\round-result.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\enums\submission-type.enum.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\model\round-details\round-details.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\results.service.ts" />

@@ -136,6 +136,10 @@ body {
             padding: 0.5em;
             border: 0px;
         }
+
+        .ui-dialog-content {
+            overflow: visible;
+        }
     }
 
     .ui-tabview {
@@ -221,15 +225,24 @@ body {
         }
     }
 
+    .ui-radiobutton {
+        .ui-radiobutton-box {
+            &.ui-state-active {
+                border-color: $theme_black;
+                background-color: $theme_black;
+            }
+        }
+
+        .ui-radiobutton-label {
+            vertical-align: bottom;
+        }
+    }
+
     a {
         text-decoration: none;
     }
 
     .ui-dropdown {
-
-
-
-
         .ui-dropdown-panel {
             .ui-dropdown-items {
                 .ui-dropdown-item {

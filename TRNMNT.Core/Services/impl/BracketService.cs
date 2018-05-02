@@ -171,7 +171,7 @@ namespace TRNMNT.Core.Services.impl
             if (round != null)
             {
                 round.WinnerParticipantId = model.WinnerParticipantId;
-                round.RoundResultType = (int)model.RoundResultTypeType;
+                round.RoundResultType = (int)model.RoundResultType;
                 round.RoundResultDetails = GetRoundResultDetailsJson(model);
 
 
