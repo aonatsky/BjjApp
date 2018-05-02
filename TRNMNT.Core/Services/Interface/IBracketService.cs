@@ -18,6 +18,13 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="weightDivisionId"></param>
         /// <returns>Bracket model</returns>
         Task<BracketModel> GetBracketModelAsync(Guid weightDivisionId);
+        
+        /// <summary>
+        /// Returns bracket for weightdevision. Marked as started. 
+        /// </summary>
+        /// <param name="weightDivisionId"></param>
+        /// <returns>Bracket model</returns>
+        Task<BracketModel> RunBracketAsync(Guid weightDivisionId);
 
         ///<summary>
         /// Returns brackets for category weightdivisions

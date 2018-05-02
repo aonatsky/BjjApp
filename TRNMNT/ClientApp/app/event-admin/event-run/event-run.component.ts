@@ -2,11 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import './event-run.component.scss'
-import {BracketModel} from '../../core/model/bracket.models';
-import {BracketService} from '../../core/services/bracket.service';
+import { BracketModel } from '../../core/model/bracket.models';
+import { BracketService } from '../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
 import { RouterService } from '../../core/services/router.service';
+import { RoundModel } from '../../core/model/round.models';
 
 
 @Component({
@@ -19,6 +20,8 @@ export class EventRunComponent implements OnInit {
     private bracket: BracketModel;
     private filter: CategoryWithDivisionFilterModel;
     private previousWeightDivisionId: string;
+    private selectedRoundDetails: RoundModel;
+    private showRoundPanel: boolean;
 
     private get isFilterSelected(): boolean {
         return !!this.filter && !!this.filter.weightDivisionId;
@@ -42,16 +45,25 @@ export class EventRunComponent implements OnInit {
             this.eventId = p['id'];
         });
         this.runEventHubService.onRefreshRound().subscribe(m => this.refreshModel(m.bracket));
+        this.runEventHubService.onRoundStart().subscribe(x => {
+            this.selectedRoundDetails = x;
+            this.showRoundPanel = true;
+        });
+        this.runEventHubService.onRoundComplete().subscribe(_ => this.showRoundPanel = false);
     }
 
     private filterSelected($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
         this.bracket = null;
+        if (this.selectedRoundDetails) {
+            this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
+            this.runWeightDivision();
+        }
     }
 
     private runWeightDivision() {
         this.runEventHubService.joinWeightDivisionGroup(this.filter.weightDivisionId, this.previousWeightDivisionId);
-        this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(m => this.refreshModel(m));
+        this.bracketService.runBracket(this.filter.weightDivisionId).subscribe(m => this.refreshModel(m));
         this.previousWeightDivisionId = this.filter.weightDivisionId;
     }
 
@@ -72,4 +84,15 @@ export class EventRunComponent implements OnInit {
         console.log("RECIEVED", model);
     }
 
+    private runRound(model: RoundModel) {
+        console.log(model);
+        this.selectedRoundDetails = model;
+        this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
+        this.runEventHubService.fireRoundStart(model);
+        this.showRoundPanel = true;
+    }
+
+    private completeRound() {
+        this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
+    }
 }

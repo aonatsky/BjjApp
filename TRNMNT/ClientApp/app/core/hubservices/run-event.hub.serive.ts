@@ -3,11 +3,14 @@ import { Observable } from 'rxjs/Rx';
 import { SignalRHubService } from "../dal/signalr/signalr-hub.service";
 import { TransportType, HubConnection } from "@aspnet/signalr";
 import { RefreshBracketModel } from "../model/bracket.models";
+import { RoundModel } from '../model/round.models';
 
 
 @Injectable()
 export class RunEventHubService {
     private hubConnection: HubConnection;
+    private roundStartEventName: string = "RoundStart";
+    private roundCompleteEventName: string = "RoundComplete";
 
     isConnected: boolean = false;
 
@@ -53,6 +56,22 @@ export class RunEventHubService {
 
     onRefreshRound(): Observable<RefreshBracketModel> {
         return this.signalRService.subscribeOnEvent("BracketRoundsUpdated");
+    }
+
+    fireRoundStart(roundDetails: RoundModel): void {
+        this.signalRService.fireEvent(this.roundStartEventName, roundDetails);
+    }
+
+    onRoundStart(): Observable<RoundModel> {
+        return this.signalRService.subscribeOnEvent(this.roundStartEventName);
+    }
+
+    fireRoundComplete(weightDivisionId: string): void {
+        this.signalRService.fireEvent(this.roundCompleteEventName, weightDivisionId);
+    }
+
+    onRoundComplete(): Observable<RoundModel> {
+        return this.signalRService.subscribeOnEvent(this.roundCompleteEventName);
     }
 
     connect() {

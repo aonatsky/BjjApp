@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BracketModel } from '../../core/model/bracket.models';
 import './../../event-admin/event-management/brackets-generation/bracket-generation.component.scss';
 import './bracket.component.scss';
@@ -13,11 +13,9 @@ import { RoundModel } from '../../core/model/round.models';
 
 export class BracketComponent implements OnInit {
     @Input() bracket: BracketModel;
+    @Output() roundClick: EventEmitter<RoundModel> = new EventEmitter();
     maxStage: number = 0;
     columns: number[];
-
-    selectedRoundDetails: RoundModel;
-    showRoundPanel: boolean = false;
 
     constructor() {
 
@@ -26,7 +24,6 @@ export class BracketComponent implements OnInit {
     ngOnInit() {
         this.maxStage = this.getMaxStage();
         this.columns = this.getColumns();
-        this.selectedRoundDetails = this.bracket.roundModels[0];
     }
 
 
@@ -71,7 +68,7 @@ export class BracketComponent implements OnInit {
         const isRightSide = colNumber > maxCol / 2;
         const depth = (isRightSide ? maxCol - colNumber : colNumber);
         const stage = this.maxStage - depth;
-        const models = this.bracket.roundModels.filter(r => r.stage == stage);
+        const models = this.bracket.roundModels.filter(r => r.stage == stage).sort((r1, r2) => {return r1.order - r2.order});
         if (stage === 0) {
             return models;
         } else {
@@ -82,6 +79,10 @@ export class BracketComponent implements OnInit {
                 return models.splice(0, models.length / 2);
             }
         }
+    }
+
+    private onRoundClick(model:RoundModel) {
+        this.roundClick.emit(model);
     }
 
 }
