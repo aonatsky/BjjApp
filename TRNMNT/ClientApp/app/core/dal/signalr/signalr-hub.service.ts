@@ -40,6 +40,10 @@ export class SignalRHubService {
         );
     }
 
+    fireEvent(eventName: string, data?: any): void {
+        this.hubConnection.invoke(eventName, data);
+    }
+
     start(): void {
         this.hubConnection.start();
     }
@@ -82,6 +86,7 @@ export class SignalRHubService {
     }
 
     joinGroup(groupName: string) {
+        console.log("join group: ", groupName);
         this.hubConnection.invoke("JoinGroup", groupName);
     }
 

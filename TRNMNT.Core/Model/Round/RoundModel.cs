@@ -6,6 +6,7 @@ namespace TRNMNT.Core.Model.Round
     public class RoundModel
     {
         public Guid RoundId { get; set; }
+        public Guid WeightDivisionId { get; set; }
         public ParticipantSimpleModel FirstParticipant { get; set; }
         public ParticipantSimpleModel SecondParticipant { get; set; }
         public Guid? NextRoundId { get; set; }

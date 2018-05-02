@@ -21,7 +21,8 @@
           [modal]="true"
           [resizable]="false"
           showEffect="fade"
-          [showHeader]="true">
+          [showHeader]="true"
+          (onHide)="completeRound()">
     <round-panel [roundModel]="selectedRoundDetails"></round-panel>
 </p-dialog>
 

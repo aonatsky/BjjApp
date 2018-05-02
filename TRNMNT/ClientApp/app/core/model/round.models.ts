@@ -2,6 +2,7 @@
 
 export class RoundModel {
     roundId: AAGUID;
+    weightDivisionId: string;
     firstParticipant: ParticipantModelBase;
     secondParticipant: ParticipantModelBase;
     nextRoundId: AAGUID;

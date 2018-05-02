@@ -20,9 +20,9 @@ export class EventRunComponent implements OnInit {
     private bracket: BracketModel;
     private filter: CategoryWithDivisionFilterModel;
     private previousWeightDivisionId: string;
-    private selectedRoundDetails : RoundModel;
+    private selectedRoundDetails: RoundModel;
     private showRoundPanel: boolean;
-    
+
     private get isFilterSelected(): boolean {
         return !!this.filter && !!this.filter.weightDivisionId;
     }
@@ -45,11 +45,20 @@ export class EventRunComponent implements OnInit {
             this.eventId = p['id'];
         });
         this.runEventHubService.onRefreshRound().subscribe(m => this.refreshModel(m.bracket));
+        this.runEventHubService.onRoundStart().subscribe(x => {
+            this.selectedRoundDetails = x;
+            this.showRoundPanel = true;
+        });
+        this.runEventHubService.onRoundComplete().subscribe(_ => this.showRoundPanel = false);
     }
 
     private filterSelected($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
         this.bracket = null;
+        if (this.selectedRoundDetails) {
+            this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
+            this.runWeightDivision();
+        }
     }
 
     private runWeightDivision() {
@@ -78,7 +87,12 @@ export class EventRunComponent implements OnInit {
     private runRound(model: RoundModel) {
         console.log(model);
         this.selectedRoundDetails = model;
+        this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
+        this.runEventHubService.fireRoundStart(model);
         this.showRoundPanel = true;
     }
 
+    private completeRound() {
+        this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
+    }
 }
