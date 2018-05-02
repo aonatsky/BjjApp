@@ -172,7 +172,9 @@ export class EventManagementParticipantsComponent implements OnInit {
     filterParticipants($event: CategoryWithDivisionFilterModel) {
         this.filter = $event;
         this.loadParticipants(this.getFilterModel());
-        this.bracketService.isAllWinnersSelected(this.filter.categoryId).subscribe(isSelected => this.isAllWinnersSelected = isSelected);
+        if (this.filter.categoryId) {
+            this.bracketService.isAllWinnersSelected(this.filter.categoryId).subscribe(isSelected => this.isAllWinnersSelected = isSelected);
+        }
     }
 
     onEntitySelected(participant: ParticipantTableModel) {

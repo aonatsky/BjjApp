@@ -4,6 +4,7 @@ import { AuthService } from './../../core/services/auth.service';
 import { UserModel } from './../../core/model/user.model';
 
 import './topbar.component.scss';
+import { MenuItem } from 'primeng/components/common/menuitem';
 
 @Component({
     selector: 'topbar',
@@ -13,6 +14,7 @@ import './topbar.component.scss';
 export class TopbarComponent  implements OnInit {
 
     user: UserModel;
+    items: MenuItem[];
 
     constructor(private routerService: RouterService, private authService: AuthService) {
 
@@ -20,6 +22,30 @@ export class TopbarComponent  implements OnInit {
 
     ngOnInit() {
         this.user = this.authService.getUser();
+        const isLoggedIn = this.authService.isLoggedIn();
+        this.items = [
+            {
+                label: 'Home',
+                routerLink: '/'
+            },
+            //{
+            //    label: 'Events',
+            //    routerLink: '/'
+            //},
+            //{
+            //    label: 'About',
+            //    routerLink: '/'
+            //},
+            {
+                label: isLoggedIn ? 'Logout': 'Login',
+                command: (event) => {
+                    if (this.authService.isLoggedIn()) {
+                        this.authService.signout();
+                    }
+                    this.routerService.goToLogin();
+                }
+            }
+        ];
     }
 
     private goHome() {

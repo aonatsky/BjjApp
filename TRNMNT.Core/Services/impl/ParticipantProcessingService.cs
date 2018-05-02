@@ -48,7 +48,7 @@ namespace TRNMNT.Core.Services.Impl
             var messageList = new List<string>();
             var existingTeamsBase = await GetExistingTeams(federationId);
             var eventCategories = await _categoryRepository.GetAll(w => w.EventId == eventId).ToDictionaryAsync(x => x.CategoryId, x => x.Name);
-            var eventWeightDivisions = await _weightDivisionRepository.GetAll(w => w.Category.EventId == eventId).ToDictionaryAsync(x => x.WeightDivisionId, x => x.Name);
+            var eventWeightDivisions = await _weightDivisionRepository.GetAll(w => w.Category.EventId == eventId && !w.IsAbsolute).ToDictionaryAsync(x => x.WeightDivisionId, x => x.Name);
             var existingParticipants = await _participantRepository.GetAll().ToListAsync();
 
             var participantsToAdd = new List<Participant>();
