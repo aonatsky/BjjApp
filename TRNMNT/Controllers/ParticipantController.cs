@@ -134,7 +134,7 @@ namespace TRNMNT.Web.Controllers
             {
                 var teams = await _teamService.GetTeamsAsync(eventId);
                 var categories = await _categoryService.GetCategoriesByEventIdAsync(eventId);
-                var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId);
+                var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId, false);
                 return Success(new ParticipantDdlModel
                 {
                     Teams = teams,

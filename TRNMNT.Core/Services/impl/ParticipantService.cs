@@ -110,7 +110,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId)
         {
-            return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId).ToListAsync();
+            return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId || p.AbsoluteWeightDivisionId == weightDivisionId).ToListAsync();
         }
 
         public async Task AddAbsoluteWeightDivisionForParticipantsAsync(Guid[] participantsIds, Guid categoryId,
