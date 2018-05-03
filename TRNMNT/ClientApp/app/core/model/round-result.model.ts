@@ -11,4 +11,5 @@ export class RoundResultModel {
     secondParticipantPenalties: number;
     submissionType : number;
     roundResultType : number;
+    completeTime: number;
 }

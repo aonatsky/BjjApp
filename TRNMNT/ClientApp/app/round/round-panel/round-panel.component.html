@@ -1,5 +1,13 @@
 ﻿<div *ngIf="!!roundModel">
     <div class="round-panel-wrapper">
+        <p-dialog appendTo="body" header="Complete Round"
+                  [(visible)]="displayPopup"
+                  [modal]="true"
+                  [resizable]="false"
+                  [showHeader]="false"
+                  [width]="500">
+            <complete-round *ngIf="displayPopup" [roundDetails]="roundDetails" (close)="displayPopup=false;" (complete)="onComplete()"></complete-round>
+        </p-dialog>
         <div class="round-panel-flex-wrapper">
             <div class="round-panel-user-panel">
                 <div class="round-panel-participant">{{roundModel.firstParticipant.firstName}} {{roundModel.firstParticipant.lastName}}</div>
@@ -45,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-           
+
             </div>
 
 
@@ -98,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-               
+
             </div>
         </div>
         <div class="round-panel-flex-wrapper round-panel-center-button-wrapper">
@@ -109,12 +117,4 @@
             <div class="round-panel-button" (click)="resetTimer()">RESET TIMER</div>
         </div>
     </div>
-    <p-dialog header="Complete Round"
-              [(visible)]="displayPopup"
-              [modal]="false"
-              [resizable]="false"
-              [showHeader]="false"
-              [width]="500">
-        <complete-round [roundDetails]="roundDetails" (onClose)="displayPopup=false;"></complete-round>
-    </p-dialog>
 </div>

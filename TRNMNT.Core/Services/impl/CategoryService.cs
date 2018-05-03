@@ -50,9 +50,9 @@ namespace TRNMNT.Core.Services.Impl
             _categoryRepository.Update(category);
         }
 
-        public async Task<int> GetRoundTimeAsync(Guid categoryId)
+        public async Task<Category> GetCategoryAsync(Guid categoryId)
         {
-            return (await _categoryRepository.GetByIDAsync(categoryId)).RoundTime;
+            return await _categoryRepository.GetByIDAsync(categoryId);
         }
 
         public async Task<IEnumerable<CategoryModelBase>> GetCompletedCategoriesByEventIdAsync(Guid eventId)

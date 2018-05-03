@@ -7,6 +7,7 @@ import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { BracketModel, BracketArrayModel } from '../model/bracket.models';
 import { ResponseContentType } from '@angular/http';
 import { ParticipantInAbsoluteDivisionMobel } from '../model/participant.models';
+import { RoundResultModel } from '../model/round-result.model';
 
 
 @Injectable()
@@ -55,5 +56,9 @@ export class BracketService {
     manageAbsoluteWeightDivision(participantsIds, categoryId): Observable<void> {
         return this.httpService.post(ApiMethods.bracket.manageAbsoluteWeightDivision,
             { participantsIds: participantsIds, categoryId: categoryId });
+    }
+
+    setRoundResult(roundResult: RoundResultModel): Observable<void> {
+        return this.httpService.post(ApiMethods.bracket.setRoundResult, roundResult);
     }
 }

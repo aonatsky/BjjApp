@@ -1,4 +1,5 @@
 ﻿<div class="brackets-live stages-{{getMaxStage()}}" *ngIf="bracket">
+    <div class="bracket-header"><h2>{{bracket.title}}</h2></div>
     <div class="round" *ngFor="let col of columns">
         <div class="match empty" *ngIf="isCentralCol(col)"><div class="match-content"></div></div>
         <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)" (click)="onRoundClick(model)">

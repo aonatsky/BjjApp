@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { RoundModel } from '../../core/model/round.models';
 import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
@@ -11,6 +11,7 @@ import './round-panel.component.scss';
 })
 export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     @Input() roundModel: RoundModel;
+    @Output() completeRound: EventEmitter<any> = new EventEmitter();
 
     private roundDetails: RoundDetailsModel;
 
@@ -141,5 +142,10 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
             this.timerSubscription.unsubscribe();
         }
         this.timerSubscription = null;
+    }
+
+    private onComplete(): void {
+        debugger;
+        this.completeRound.emit(null);
     }
 }

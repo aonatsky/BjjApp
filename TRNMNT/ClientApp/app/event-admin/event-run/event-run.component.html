@@ -23,7 +23,7 @@
           showEffect="fade"
           [showHeader]="true"
           (onHide)="completeRound()">
-    <round-panel [roundModel]="selectedRoundDetails"></round-panel>
+    <round-panel [roundModel]="selectedRoundDetails" (completeRound)="finishRound();"></round-panel>
 </p-dialog>
 
 

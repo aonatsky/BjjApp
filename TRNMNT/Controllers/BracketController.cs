@@ -17,7 +17,8 @@ using TRNMNT.Web.Hubs;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class BracketController : BaseController
+    public class 
+        BracketController : BaseController
     {
         #region dependencies
 
@@ -159,17 +160,14 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpPost("[action]")]
-        public async Task CompleteRound([FromBody]RoundResultModel roundResultModel)
+        public async Task<IActionResult> SetRoundResult([FromBody]RoundResultModel roundResultModel)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 await _bracketService.SetRoundResultAsync(roundResultModel);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
+                return HttpStatusCode.OK;
+            });
+            
         }
 
         #endregion

@@ -79,7 +79,11 @@ namespace TRNMNT.Core.Services.Impl
             }
             return weightDivision;
         }
-       
+
+        public async Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId)
+        {
+            return await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
+        }
 
         #endregion
 

@@ -3,6 +3,8 @@ import { RoundDetailsModel } from '../../core/model/round-details/round-details.
 import { RoundResultModel } from '../../core/model/round-result.model';
 import { RoundResultType } from '../../core/enums/round-result-type.enum';
 import { SubmissionType } from '../../core/enums/submission-type.enum';
+import { BracketService } from '../../core/services/bracket.service';
+
 
 @Component({
     selector: 'complete-round',
@@ -10,15 +12,15 @@ import { SubmissionType } from '../../core/enums/submission-type.enum';
 })
 export class CompleteRoundComponent implements OnInit {
     @Input() roundDetails: RoundDetailsModel;
-    @Output() onClose = new EventEmitter<any>();
+    @Output() close = new EventEmitter<any>();
+    @Output() complete = new EventEmitter<any>();
 
-    private roundResultModel: RoundResultModel; 
+
+    private roundResultModel: RoundResultModel;
     private submissionTypes = SubmissionType;
     private roundResultTypes = RoundResultType;
 
-
-    
-    private submissionType: number;
+    constructor(private bracketService: BracketService) { }
 
     ngOnInit(): void {
         this.initRoundResultModel();
@@ -34,35 +36,41 @@ export class CompleteRoundComponent implements OnInit {
         this.roundResultModel.secondParticipantPoints = this.roundDetails.secondParticipantPoints;
         this.roundResultModel.secondParticipantAdvantages = this.roundDetails.secondParticipantAdvantages;
         this.roundResultModel.secondParticipantPenalties = this.roundDetails.secondParticipantPenalties;
-
+        this.roundResultModel.completeTime = this.roundDetails.roundModel.roundTime - this.roundDetails.countdown;
         this.setWinnerByPoints();
     }
 
     private setWinnerByPoints() {
-        this.roundResultModel.roundResultType = this.roundResultTypes.Points;
+
         if (this.roundDetails.firstParticipantPoints !== this.roundDetails.secondParticipantPoints) {
             this.roundResultModel.winnerParticipantId = this.roundDetails.firstParticipantPoints > this.roundDetails.secondParticipantPoints
                 ? this.roundDetails.roundModel.firstParticipant.participantId
                 : this.roundDetails.roundModel.secondParticipant.participantId;
+            this.roundResultModel.roundResultType = this.roundResultTypes.Points;
         }
-        else if (this.roundDetails.firstParticipantPoints !== this.roundDetails.secondParticipantPoints) {
+        else if (this.roundDetails.firstParticipantAdvantages !== this.roundDetails.secondParticipantAdvantages) {
             this.roundResultModel.winnerParticipantId = this.roundDetails.firstParticipantAdvantages > this.roundDetails.secondParticipantAdvantages
                 ? this.roundDetails.roundModel.firstParticipant.participantId
                 : this.roundDetails.roundModel.secondParticipant.participantId;
+            this.roundResultModel.roundResultType = RoundResultType.Advantages;
         }
         else if (this.roundDetails.firstParticipantPenalties !== this.roundDetails.secondParticipantPenalties) {
-            this.roundResultModel.winnerParticipantId = this.roundDetails.firstParticipantPenalties < this.roundDetails.secondParticipantPenalties
+            this.roundResultModel.winnerParticipantId = this.roundDetails.firstParticipantPenalties <
+                this.roundDetails.secondParticipantPenalties
                 ? this.roundDetails.roundModel.firstParticipant.participantId
                 : this.roundDetails.roundModel.secondParticipant.participantId;
+            this.roundResultModel.roundResultType = RoundResultType.Penalties;
+        } else {
+            this.roundResultModel.winnerParticipantId = this.roundDetails.roundModel.firstParticipant.participantId;
+            this.roundResultModel.roundResultType = RoundResultType.Decision;
         }
+
     }
 
     save(): void {
-        console.log(this.roundResultModel);
-      
+        this.bracketService.setRoundResult(this.roundResultModel).subscribe(r => {
+            debugger;
+            this.complete.emit(null);
+        });
     }
-
-    close() {
-        this.onClose.emit(null);
-    }
-}
+ }

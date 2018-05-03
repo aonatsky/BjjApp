@@ -21,6 +21,15 @@
     &.stages-0 {
         width: 210px
     }
+
+    .bracket-header {
+        position: absolute;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        width: auto;
+        text-align: center;
+    }
 }
 
 .round {
@@ -192,7 +201,8 @@
         }
     }
 
-    &:first-child {
+    //trick to add title
+    &:nth-child(2) {
         .match {
             &::before {
                 display: none;

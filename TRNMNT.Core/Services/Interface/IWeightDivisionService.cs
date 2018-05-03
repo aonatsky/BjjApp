@@ -17,5 +17,6 @@ namespace TRNMNT.Core.Services.Interface
         Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId);
         Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionModelsByEventIdAsync(Guid eventId, bool isWithAbsolute);
         Task<WeightDivision> GetAbsoluteWeightDivisionAsync(Guid categoryId);
+        Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId);
     }
 }
