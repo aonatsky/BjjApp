@@ -333,7 +333,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 categoryModels.AddRange(categories.Select(category => new CategoryModel
                 {
-                    CategoryId = category.CategoryId.ToString(),
+                    CategoryId = category.CategoryId,
                     Name = category.Name,
                     RoundTime = category.RoundTime,
                     WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions),
@@ -350,11 +350,11 @@ namespace TRNMNT.Core.Services.Impl
             {
                 weightDivisionModels.AddRange(weightDivisions.Where(w => !w.IsAbsolute).Select(weightDivision => new WeightDivisionModel
                 {
-                    WeightDivisionId = weightDivision.WeightDivisionId.ToString(),
+                    WeightDivisionId = weightDivision.WeightDivisionId,
                     Weight = weightDivision.Weight,
                     Descritpion = weightDivision.Descritpion,
                     Name = weightDivision.Name,
-                    CategoryId = weightDivision.CategoryId.ToString()
+                    CategoryId = weightDivision.CategoryId
                 }));
             }
             return weightDivisionModels;
@@ -395,7 +395,7 @@ namespace TRNMNT.Core.Services.Impl
                 var category = new Category
                 {
                     EventId = model.EventId,
-                    CategoryId = string.IsNullOrEmpty(model.CategoryId) ? Guid.NewGuid() : Guid.Parse(model.CategoryId),
+                    CategoryId = model.CategoryId == Guid.Empty ? Guid.NewGuid() : model.CategoryId,
                     RoundTime = model.RoundTime,
                     Name = model.Name
                 };
@@ -408,7 +408,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             return models.Select(model => new WeightDivision
             {
-                WeightDivisionId = string.IsNullOrEmpty(model.WeightDivisionId)? Guid.NewGuid() : Guid.Parse(model.WeightDivisionId),
+                WeightDivisionId = model.WeightDivisionId == Guid.Empty ? Guid.NewGuid() : model.WeightDivisionId,
                 Weight = model.Weight,
                 Descritpion = model.Descritpion,
                 Name = model.Name,

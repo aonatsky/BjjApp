@@ -35,7 +35,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             return await _categoryRepository.GetAll().Where(c => c.EventId == eventId).Select(c => new CategoryModelBase
             {
-                CategoryId = c.CategoryId.ToString(),
+                CategoryId = c.CategoryId,
                 Name = c.Name
             }).ToListAsync();
         }
@@ -59,7 +59,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             return await _categoryRepository.GetAll().Where(c => c.EventId == eventId && c.CompleteTs != null).Select(c => new CategoryModelBase
             {
-                CategoryId = c.CategoryId.ToString(),
+                CategoryId = c.CategoryId,
                 Name = c.Name
             }).ToListAsync();
         }

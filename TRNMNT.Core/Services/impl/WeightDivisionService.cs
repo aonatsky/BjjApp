@@ -34,7 +34,7 @@ namespace TRNMNT.Core.Services.Impl
             return (await GetWeightDivisionsByCategoryIdAsync(categoryId)).Select(wd =>
                 new WeightDivisionModelBase
                 {
-                    WeightDivisionId = wd.WeightDivisionId.ToString(),
+                    WeightDivisionId = wd.WeightDivisionId,
                     Name = wd.Name
                 });
         }
@@ -54,9 +54,9 @@ namespace TRNMNT.Core.Services.Impl
             return await query.Select(wd =>
                 new WeightDivisionModel
                 {
-                    WeightDivisionId = wd.WeightDivisionId.ToString(),
+                    WeightDivisionId = wd.WeightDivisionId,
                     Name = wd.Name,
-                    CategoryId = wd.CategoryId.ToString(),
+                    CategoryId = wd.CategoryId,
                     Descritpion = wd.Descritpion,
                     Weight = wd.Weight
                 }).ToListAsync();

@@ -109,7 +109,7 @@ namespace TRNMNT.Web.Controllers
                     var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
                     if (bracketModel != null)
                     {
-                        var divisionId = weightDivisionId.ToString().ToUpperInvariant();
+                        var divisionId = weightDivisionId.ToString();
                         var refreshModel = new RefreshBracketModel
                         {
                             WeightDivisionId = divisionId,

@@ -19,10 +19,10 @@ export class RunEventHubService {
     }
 
     joinWeightDivisionGroup(weightDivisionId: string, previousWeightDivisionId?: string) {
-        let id = weightDivisionId.toUpperCase();
+        let id = weightDivisionId;
         if (this.isConnected) {
             if (!!previousWeightDivisionId) {
-                this.signalRService.leaveGroup(previousWeightDivisionId.toLowerCase());
+                this.signalRService.leaveGroup(previousWeightDivisionId);
             }
             this.signalRService.joinGroup(id);
         } else {
@@ -42,15 +42,13 @@ export class RunEventHubService {
 
     joinGroups(groupNames: string[]) {
         for (var groupName of groupNames) {
-            let id = groupName.toUpperCase();
-            this.signalRService.joinGroup(id);
+            this.signalRService.joinGroup(groupName);
         }
     }
 
     leaveGroups(groupNames: string[]) {
         for (var groupName of groupNames) {
-            let id = groupName.toUpperCase();
-            this.signalRService.leaveGroup(id);
+            this.signalRService.leaveGroup(groupName);
         }
     }
 

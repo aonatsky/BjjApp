@@ -152,7 +152,7 @@ namespace TRNMNT.Core.Services.impl
             var result = new Dictionary<string, BracketModel>();
             foreach (var division in weightDivisions)
             {
-                result.Add(division.WeightDivisionId.ToUpperInvariant(), await GetBracketModelAsync(new Guid(division.WeightDivisionId)));
+                result.Add(division.WeightDivisionId.ToString(), await GetBracketModelAsync(division.WeightDivisionId));
             }
             return result;
         }

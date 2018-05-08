@@ -84,7 +84,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     }
 
     resetTimer(): void {
-        this.roundDetails.countdown = 2 * 60;
+        this.roundDetails.countdown = this.roundDetails.roundModel.roundTime;
         this.stopTimer();
         this.roundDetails.isStarted = false;
         this.roundDetails.isPaused = false;
