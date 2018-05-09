@@ -12,6 +12,7 @@ import './round-panel.component.scss';
 export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     @Input() roundModel: RoundModel;
     @Output() completeRound: EventEmitter<any> = new EventEmitter();
+    @Output() close: EventEmitter<any> = new EventEmitter();
 
     private roundDetails: RoundDetailsModel;
 
@@ -145,7 +146,10 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     }
 
     private onComplete(): void {
-        debugger;
         this.completeRound.emit(null);
+    }
+
+    private onClose(): void {
+        this.close.emit(null);
     }
 }

@@ -70,6 +70,7 @@ export class BracketComponent implements OnInit {
         const stage = this.maxStage - depth;
         const models = this.bracket.roundModels.filter(r => r.stage == stage).sort((r1, r2) => { return r1.order - r2.order });
         if (stage === 0) {
+            debugger;
             return models;
         } else {
             if (isRightSide) {
@@ -98,10 +99,25 @@ export class BracketComponent implements OnInit {
     }
 
     private onRoundClick(model: RoundModel) {
-        if (model.firstParticipant && model.secondParticipant) {
-            this.roundClick.emit(model);    
+        if (this.isEditable(model)) {
+            this.roundClick.emit(model);
         }
     }
 
+    private isEditable(model: RoundModel): boolean {
+        if (model.firstParticipant && model.secondParticipant) {
+            if (model.isCompleted && model.nextRoundId) {
+                const nextRound = this.bracket.roundModels.filter(r => r.roundId === model.nextRoundId)[0];
+                if (nextRound && !nextRound.isCompleted) {
+                    return true;
+                }
+                return false;
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 

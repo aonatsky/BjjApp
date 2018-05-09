@@ -12,4 +12,5 @@ export class RoundModel {
     roundTime: number;
     firstParticipantResult: string;
     secondParticipantResult: string;
+    isCompleted: boolean;
 }

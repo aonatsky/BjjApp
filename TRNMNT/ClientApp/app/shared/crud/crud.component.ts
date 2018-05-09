@@ -8,7 +8,7 @@ import '../styles/table-overriden.scss'
 
 @Component({
     selector: 'crud',
-    templateUrl: "./crud.component.html",
+    templateUrl: './crud.component.html',
     styleUrls: ['./crud.component.css'],
     providers: [ConfirmationService],
 })
@@ -36,7 +36,7 @@ export class CrudComponent implements OnInit, OnChanges {
     @ViewChild('dataTable') dataTable: DataTable;
 
     @Input() readonly entities: any[] = [];
-    @Input() readonly title: string = "";
+    @Input() readonly title: string = '';
     @Input() readonly columns: ICrudColumn[] = [];
     @Input() readonly columnOptions: IColumnOptions;
     @Input() readonly editEnabled: boolean = true;
@@ -118,9 +118,9 @@ export class CrudComponent implements OnInit, OnChanges {
 
     private showConfirm() {
         this.confirmationService.confirm({
-            header : "Confirmation",
-            icon : "fa fa-trash",
-            message : "Do you want to delete this record?",
+            header : 'Confirmation',
+            icon : 'fa fa-trash',
+            message : 'Do you want to delete this record?',
             accept: () => this.delete(),
             reject: () => {
                 this.displayDialog = false;

@@ -59,6 +59,7 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task<BracketModel> RunBracketAsync(Guid weightDivisionId)
         {
+            //TODO REWORK BRACKET DOUBLE SAVE
             var bracket = await GetBracketAsync(weightDivisionId);
             if (bracket.StartTs == null)
             {
@@ -66,21 +67,30 @@ namespace TRNMNT.Core.Services.impl
                 var firstRounds = bracket.Rounds.Where(r => r.Stage == bracket.Rounds.Max(rr => rr.Stage) && r.RoundType != (int)RoundTypeEnum.Buffer);
                 foreach (var round in firstRounds)
                 {
-                    if (round.FirstParticipantId == null)
+                    if (round.FirstParticipantId == null || round.SecondParticipantId == null)
                     {
-                        round.WinnerParticipantId = round.SecondParticipantId;
-                    }
-                    if (round.SecondParticipantId == null)
-                    {
-                        round.WinnerParticipantId = round.FirstParticipantId;
-                    }
-
-                    if (round.NextRound != null)
-                    {
-                        round.NextRound.FirstParticipantId = round.WinnerParticipantId;
+                        if (round.FirstParticipantId == null)
+                        {
+                            round.WinnerParticipantId = round.SecondParticipantId;
+                        }
+                        if (round.SecondParticipantId == null)
+                        {
+                            round.WinnerParticipantId = round.FirstParticipantId;
+                        }
+                        if (round.NextRound != null)
+                        {
+                            if (round.Order % 2 == 0)
+                            {
+                                round.NextRound.FirstParticipantId = round.WinnerParticipantId;
+                            }
+                            else
+                            {
+                                round.NextRound.SecondParticipantId = round.WinnerParticipantId;
+                            }
+                        }
                     }
                 }
-                _bracketRepository.Update(bracket);    
+                _bracketRepository.Update(bracket);
             }
             return GetBracketModel(bracket);
         }
@@ -206,9 +216,10 @@ namespace TRNMNT.Core.Services.impl
                         }
                     }
                 }
+
                 if (round.NextRound != null)
                 {
-                    if (round.NextRound.FirstParticipantId == null)
+                    if (round.Order % 2 == 0)
                     {
                         round.NextRound.FirstParticipantId = round.WinnerParticipantId;
                     }
@@ -217,9 +228,6 @@ namespace TRNMNT.Core.Services.impl
                         round.NextRound.SecondParticipantId = round.WinnerParticipantId;
                     }
                 }
-
-
-
                 if (round.Stage == 0)
                 {
                     if (!await _roundRepository.GetAll(r => r.BracketId == round.BracketId
@@ -332,7 +340,7 @@ namespace TRNMNT.Core.Services.impl
             };
             foreach (var round in bracket.Rounds)
             {
-                model.RoundModels.Add(GetRoundModel(round,bracket.RoundTime));
+                model.RoundModels.Add(GetRoundModel(round, bracket.RoundTime));
             }
             return model;
         }
@@ -348,7 +356,8 @@ namespace TRNMNT.Core.Services.impl
                 SecondParticipant = round.SecondParticipant == null ? null : GetParticipantModel(round.SecondParticipant),
                 RoundType = round.RoundType,
                 RoundTime = roundTime,
-                Order = round.Order
+                Order = round.Order,
+                IsCompleted = round.WinnerParticipantId != null
             };
             if (round.WinnerParticipantId != null)
             {
@@ -434,13 +443,13 @@ namespace TRNMNT.Core.Services.impl
             if (bracket == null)
             {
                 var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId);
-                var category =  await _categoryService.GetCategoryAsync(weightDivision.CategoryId);
+                var category = await _categoryService.GetCategoryAsync(weightDivision.CategoryId);
                 bracket = new Bracket()
                 {
                     BracketId = Guid.NewGuid(),
                     WeightDivisionId = weightDivisionId,
                     RoundTime = category.RoundTime,
-                    Title = GetBracketTtitle(category,weightDivision)
+                    Title = GetBracketTtitle(category, weightDivision)
                 };
                 _bracketRepository.Add(bracket);
 
@@ -519,8 +528,6 @@ namespace TRNMNT.Core.Services.impl
 
         private ICollection<Round> CreateRoundStructure(Participant[] participants, Guid bracketId)
         {
-
-
             var rounds = new List<Round>();
             var lastStage = participants.Length == 3 ? 1 : (int)Math.Log(participants.Count(), 2) - 1;
             for (int i = 0; i <= lastStage; i++)
@@ -541,7 +548,6 @@ namespace TRNMNT.Core.Services.impl
                         roundsToAdd[1].FirstParticipant = participants[2];
                         roundsToAdd[1].FirstParticipantId = participants[2].ParticipantId;
                         roundsToAdd[1].RoundType = (int)RoundTypeEnum.Buffer;
-
                     }
                     else
                     {
@@ -570,6 +576,7 @@ namespace TRNMNT.Core.Services.impl
             return rounds;
         }
 
+    
         private async Task<List<Round>> GetSameStageRoundsAsync(Round round)
         {
             return await _roundRepository.GetAll(r => r.BracketId == round.BracketId && r.Stage == round.Stage).ToListAsync();

@@ -110,7 +110,7 @@
             </div>
         </div>
         <div class="round-panel-flex-wrapper round-panel-center-button-wrapper">
-            <div class="round-panel-button">CANCEL</div>
+            <div class="round-panel-button" (click)="onClose();">CANCEL</div>
             <div class="round-panel-button" [hidden]="isRoundCompleted || timerSubscription" (click)="start()">START</div>
             <div class="round-panel-button" [hidden]="isRoundCompleted || !timerSubscription" (click)="pause()">PAUSE</div>
             <div class="round-panel-button" (click)="stop()">COMPLETE ROUND</div>

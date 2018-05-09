@@ -76,8 +76,12 @@ export class EventRunComponent implements OnInit {
     }
 
     private finishRound() {
-        this.showRoundPanel = false;
         this.bracketService.finishRound(this.filter.weightDivisionId).subscribe();
+        this.closeRoundPanel();
+    }
+
+    private closeRoundPanel() {
+        this.selectedRoundDetails = undefined;
     }
 
     private refreshModel(model: BracketModel) {

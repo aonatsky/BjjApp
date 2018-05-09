@@ -178,6 +178,10 @@
             border: 2px solid $theme_black;
             position: relative;
 
+            &.editable {
+                cursor: pointer;
+            }
+
             .participant-plate {
                 height: 40px;
 
@@ -200,7 +204,6 @@
             }
         }
     }
-
     //trick to add title
     &:nth-child(2) {
         .match {
