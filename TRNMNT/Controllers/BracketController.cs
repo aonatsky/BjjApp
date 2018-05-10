@@ -22,7 +22,6 @@ namespace TRNMNT.Web.Controllers
     {
         #region dependencies
 
-        private readonly IHubContext<RunEventHub> _hubContext;
         private readonly IBracketService _bracketService;
 
         #endregion
@@ -32,12 +31,10 @@ namespace TRNMNT.Web.Controllers
             ILogger<BracketController> logger,
             IUserService userService,
             IAppDbContext context,
-            IHubContext<RunEventHub> hubContext,
             IWeightDivisionService weightDivisionService,
             IBracketService bracketService)
             : base(logger, userService, eventService, context)
         {
-            _hubContext = hubContext;
             _bracketService = bracketService;
         }
 
@@ -94,30 +91,6 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestAsync(async () =>
             {
                 await _bracketService.UpdateBracket(bracketModel);
-                return HttpStatusCode.OK;
-            });
-        }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> FinishRound([FromBody] Guid weightDivisionId)
-        {
-            return await HandleRequestAsync(async () =>
-            {
-                var clients = _hubContext.Clients;
-                if (clients != null)
-                {
-                    var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
-                    if (bracketModel != null)
-                    {
-                        var divisionId = weightDivisionId.ToString();
-                        var refreshModel = new RefreshBracketModel
-                        {
-                            WeightDivisionId = divisionId,
-                            Bracket = bracketModel
-                        };
-                        await clients.Group(divisionId).SendAsync("BracketRoundsUpdated", refreshModel);
-                    }
-                }
                 return HttpStatusCode.OK;
             });
         }

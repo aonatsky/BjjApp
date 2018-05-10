@@ -39,6 +39,7 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     }
 
     ngOnInit(): void {
+        this.roundDetails.countdown = this.roundModel.roundTime;
         this.roundDetails.roundId = this.roundModel.roundId;
         this.setupConnection(this.roundModel.roundId, x => {
             this.roundDetails = x;

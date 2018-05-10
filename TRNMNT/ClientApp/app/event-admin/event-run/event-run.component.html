@@ -10,7 +10,7 @@
     </div>
 </div>
 <bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runRound($event);"></bracket>
-<round-panel *ngIf="selectedRoundDetails" [roundModel]="selectedRoundDetails" (close)="closeRoundPanel()" (completeRound)="finishRound();"></round-panel>
+<round-panel *ngIf="showRoundPanel" [roundModel]="selectedRoundDetails" (close)="completeRound()" (completeRound)="completeRound()"></round-panel>
 
 
 

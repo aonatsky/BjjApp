@@ -51,11 +51,7 @@ export class RunEventHubService {
             this.signalRService.leaveGroup(groupName);
         }
     }
-
-    onRefreshRound(): Observable<RefreshBracketModel> {
-        return this.signalRService.subscribeOnEvent("BracketRoundsUpdated");
-    }
-
+	
     fireRoundStart(roundDetails: RoundModel): void {
         this.signalRService.fireEvent(this.roundStartEventName, roundDetails);
     }
@@ -68,7 +64,7 @@ export class RunEventHubService {
         this.signalRService.fireEvent(this.roundCompleteEventName, weightDivisionId);
     }
 
-    onRoundComplete(): Observable<RoundModel> {
+    onRoundComplete(): Observable<RefreshBracketModel> {
         return this.signalRService.subscribeOnEvent(this.roundCompleteEventName);
     }
 

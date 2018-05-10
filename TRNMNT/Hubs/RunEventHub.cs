@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Services.Interface;
@@ -21,16 +20,28 @@ namespace TRNMNT.Web.Hubs
             await Clients.Group(roundModel.WeightDivisionId.ToString()).RoundStart(roundModel);
         }
 
-        public async Task RoundComplete(string groupId)
+        public async Task RoundComplete(Guid weightDivisionId)
         {
-            await Clients.Group(groupId).RoundComplete(groupId);
+            var divisionId = weightDivisionId.ToString();
+            var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
+            if (bracketModel == null)
+            {
+				// todo add logging
+				return;
+			}
+            var refreshModel = new RefreshBracketModel
+            {
+                WeightDivisionId = divisionId,
+                Bracket = bracketModel
+            };
+            await ToGroup(divisionId).RoundComplete(refreshModel);
         }
     }
 
-    public interface IRunEventHubContract : IClientProxy
+    public interface IRunEventHubContract
     {
-        Task RefreshRound(BracketModel bracketModel);
         Task RoundStart(RoundModel roundModel);
-        Task RoundComplete(string groupId);
+        Task RoundComplete(RefreshBracketModel refreshModel);
+
     }
 }
