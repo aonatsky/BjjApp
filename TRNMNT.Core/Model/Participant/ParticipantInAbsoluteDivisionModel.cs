@@ -2,11 +2,8 @@
 
 namespace TRNMNT.Core.Model.Participant
 {
-    public class ParticipantInAbsoluteDivisionModel
+    public class ParticipantInAbsoluteDivisionModel : ParticipantModelBase
     {
-        public Guid ParticipantId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public string TeamName { get; set; }
         public string WeightDivisionName { get; set; }
         public bool IsSelectedIntoDivision { get; set; }
