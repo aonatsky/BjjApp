@@ -61,7 +61,6 @@ export const ApiMethods = Object.freeze({
         runBracket: 'api/bracket/runBracket',
         downloadFile: 'api/bracket/downloadFile',
         updateBracket: 'api/bracket/updateBracket',
-        finishRound: 'api/bracket/finishRound',
         getBracketsByCategory: 'api/bracket/getBracketsByCategory',
         getWinners: 'api/bracket/getWinners',
         isAllWinnersSelected: 'api/bracket/isAllWinnersSelected',

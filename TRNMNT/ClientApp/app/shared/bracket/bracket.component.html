@@ -8,8 +8,8 @@
     </div>
     <div class="round" *ngFor="let col of columns">
         <div class="match empty" *ngIf="isCentralCol(col)"><div class="match-content"></div></div>
-        <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)" (click)="onRoundClick(model)">
-            <div class="match-content ui-g-1 ui-g-nopad" [ngClass]="{'editable': this.isEditable(model)}">
+        <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)" >
+            <div class="match-content ui-g-1 ui-g-nopad" (click)="onRoundClick(model)" [ngClass]="{'editable': this.isEditable(model)}">
                 <div class="participant-plate ui-g-12">
                     {{displayParticipantData(model, 1)}}
                 </div>

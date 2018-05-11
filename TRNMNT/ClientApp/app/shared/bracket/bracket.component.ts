@@ -24,7 +24,6 @@ export class BracketComponent implements OnInit {
     ngOnInit() {
         this.maxStage = this.getMaxStage();
         this.columns = this.getColumns();
-        console.log(this.bracket.medalists);
     }
 
 
@@ -71,6 +70,7 @@ export class BracketComponent implements OnInit {
         const stage = this.maxStage - depth;
         const models = this.bracket.roundModels.filter(r => r.stage == stage).sort((r1, r2) => { return r1.order - r2.order });
         if (stage === 0) {
+            //debugger;
             return models;
         } else {
             if (isRightSide) {

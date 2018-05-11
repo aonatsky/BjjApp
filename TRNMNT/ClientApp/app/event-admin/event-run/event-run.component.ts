@@ -44,12 +44,14 @@ export class EventRunComponent implements OnInit {
         this.route.params.subscribe(p => {
             this.eventId = p['id'];
         });
-        this.runEventHubService.onRefreshRound().subscribe(m => this.refreshModel(m.bracket));
+        this.runEventHubService.onRoundComplete().subscribe(m => {
+            this.refreshModel(m.bracket);
+            this.showRoundPanel = false;
+        });
         this.runEventHubService.onRoundStart().subscribe(x => {
             this.selectedRoundDetails = x;
             this.showRoundPanel = true;
         });
-        this.runEventHubService.onRoundComplete().subscribe(_ => this.showRoundPanel = false);
     }
 
     private filterSelected($event: CategoryWithDivisionFilterModel) {
@@ -75,13 +77,9 @@ export class EventRunComponent implements OnInit {
         this.routerService.openEventCategorySpactatorView(this.filter.categoryId);
     }
 
-    private finishRound() {
-        this.bracketService.finishRound(this.filter.weightDivisionId).subscribe();
-        this.closeRoundPanel();
-    }
-
-    private closeRoundPanel() {
+    private completeRound() {
         this.selectedRoundDetails = undefined;
+        this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
     }
 
     private refreshModel(model: BracketModel) {
@@ -95,9 +93,5 @@ export class EventRunComponent implements OnInit {
         this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
         this.runEventHubService.fireRoundStart(model);
         this.showRoundPanel = true;
-    }
-
-    private completeRound() {
-        this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
     }
 }

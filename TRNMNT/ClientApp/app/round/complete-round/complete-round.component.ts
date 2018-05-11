@@ -69,6 +69,7 @@ export class CompleteRoundComponent implements OnInit {
 
     save(): void {
         this.bracketService.setRoundResult(this.roundResultModel).subscribe(r => {
+            //debugger;
             this.complete.emit(null);
         });
     }
