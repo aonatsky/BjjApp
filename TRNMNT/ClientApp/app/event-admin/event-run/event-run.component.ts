@@ -78,8 +78,13 @@ export class EventRunComponent implements OnInit {
     }
 
     private completeRound() {
+        this.showRoundPanel = false;
         this.selectedRoundDetails = undefined;
         this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
+    }
+
+    private cancelRound() {
+        this.selectedRoundDetails = undefined;
     }
 
     private refreshModel(model: BracketModel) {
