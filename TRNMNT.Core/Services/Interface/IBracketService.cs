@@ -12,6 +12,13 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IBracketService
     {
+        /// <summary>
+        /// Returns results by selected categories;
+        /// </summary>
+        /// <param name="categoryIds">Category Id</param>
+        /// <returns></returns>
+        Task<IEnumerable<TeamResultModel>> GetTeamResultsByCategoriesAsync(IEnumerable<Guid> categoryIds);
+        
         ///<summary>
         /// Returns bracket for weightdivision
         /// </summary>

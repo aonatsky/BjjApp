@@ -1,5 +1,11 @@
 ﻿<div class="brackets-live stages-{{getMaxStage()}}" *ngIf="bracket">
-    <div class="bracket-header"><h2>{{bracket.title}}</h2></div>
+    <div class="bracket-header">
+        <div class="ui-g-12"><h2>{{bracket.title}}</h2></div>
+        <div *ngIf="bracket.medalists.length > 0">
+            <div class="ui-g-12" *ngFor="let medalist of bracket.medalists">{{medalist.place}} - {{medalist.participant.firstName}} {{medalist.participant.lastName}}</div>
+        </div>
+
+    </div>
     <div class="round" *ngFor="let col of columns">
         <div class="match empty" *ngIf="isCentralCol(col)"><div class="match-content"></div></div>
         <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)" (click)="onRoundClick(model)">

@@ -38,20 +38,6 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () => await _weightDivisionService.GetWeightDivisionModelsByEventIdAsync(eventId, true));
         }
-
-        //public override IQueryable<WeightDivision> ModifyQuery(string key, string value, IQueryable<WeightDivision> query)
-        //{
-        //    switch (key)
-        //    {
-        //        case "categoryId":
-        //            {
-        //                query = query.Where(w => w.CategoryId == Guid.Parse(value));
-        //                break;
-        //            }
-        //    }
-
-        //    return query;
-        //}
     }
 
 }
