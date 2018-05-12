@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using OfficeOpenXml;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Medalist;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 
@@ -75,6 +76,40 @@ namespace TRNMNT.Core.Services.Impl
 
             throw new Exception($"Brackets settings are not found for count {participants.Count}");
         }
+
+
+        public CustomFile GetPersonalResultsFileAsync(List<CategoryWeightDivisionMedalistGroup> categoryWeightDivisionMedalistGroups)
+        {
+            using (var excelPackage = new ExcelPackage())
+            {
+                foreach (var categoryWeightDivisionMedalistGroup in categoryWeightDivisionMedalistGroups)
+                {
+                    var workSheet =
+                        excelPackage.Workbook.Worksheets.Add(categoryWeightDivisionMedalistGroup.CategoryName);
+                    var rowIndex = 0;
+                    foreach (var wdGroup in categoryWeightDivisionMedalistGroup.WeightDivisionMedalistGroups)
+                    {
+                        workSheet.Cells[rowIndex, 0].Value = wdGroup.WeightDivisionName;
+                        workSheet.Cells[rowIndex, 0].Style.Font.Bold = true;
+                        for (var i = 1; i <= wdGroup.Medalists.Count; i++)
+                        {
+                            var medalist = wdGroup.Medalists[i];
+                            workSheet.Cells[rowIndex + i, 0].Value = medalist.Place;
+                            workSheet.Cells[rowIndex + i, 0].Style.Font.Bold = true;
+                            workSheet.Cells[rowIndex + i, 1].Value =
+                                $"{medalist.Participant.FirstName} {medalist.Participant.LastName}";
+                        }
+                        rowIndex += 4;
+                    }
+                }
+                return new CustomFile
+                {
+                    ByteArray = excelPackage.GetAsByteArray(),
+                    ContentType = ContentTypes.ExcelContentType
+                };
+            }
+        }
+
 
         #endregion
 

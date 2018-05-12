@@ -68,6 +68,7 @@ export const ApiMethods = Object.freeze({
         setRoundResult: 'api/bracket/setRoundResult'
     },
     results: {
-        getTeamResutls: 'api/results/getTeamResults'
+        getTeamResutls: 'api/results/getTeamResults',
+        getPersonalResultsFile: 'api/results/GetPersonalResultsFile'
     }
 });

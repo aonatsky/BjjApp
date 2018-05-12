@@ -117,7 +117,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var isSelected = await _bracketService.IsWinnersSelectedForAllRoundsAsync(categoryId);
+                var isSelected = await _bracketService.IsCategoryCompletedAsync(categoryId);
                 return Success(isSelected);
             });
         }

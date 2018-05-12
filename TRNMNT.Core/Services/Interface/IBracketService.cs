@@ -6,7 +6,6 @@ using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Model.WeightDivision;
-using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -59,7 +58,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns></returns>
         Task<List<ParticipantInAbsoluteDivisionModel>> GetWinnersAsync(Guid categoryId);
 
-        Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId);
+        Task<bool> IsCategoryCompletedAsync(Guid categoryId);
 
         Task ManageAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model);
 
@@ -69,5 +68,13 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="model">RoundResult model</param>
         /// <returns></returns>
         Task SetRoundResultAsync(RoundResultModel model);
+
+        /// <summary>
+        /// Returns file with personal results;
+        /// </summary>
+        /// <param name="categoryIds"></param>
+        /// <returns></returns>
+        Task<CustomFile> GetPersonalResultsFileByCategoriesAsync(
+            IEnumerable<Guid> categoryIds);
     }
 }

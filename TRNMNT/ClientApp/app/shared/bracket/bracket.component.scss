@@ -203,6 +203,20 @@
                     color: $theme_grey;
                 }
             }
+
+            $gradient: linear-gradient(to right, white, #4fec4f);
+
+            &.winner-1 {
+                .participant-plate:first-child {
+                    background: $gradient;
+                }
+            }
+
+            &.winner-2 {
+                .participant-plate:nth-child(2) {
+                    background: $gradient
+                }
+            }
         }
     }
     //trick to add title

@@ -21,13 +21,8 @@
           class="ui-g-12"
           gridMinHeight="350">
     </crud>
-    
-    <!--<p-dataTable [value]="teamResults" [loading]="loading">
-        <p-column field="teamName" header="Name"></p-column>
-        <p-column field="points" header="Points"></p-column>
-    </p-dataTable>-->
 </div>
 <div class="ui-g-12">
     <button pButton type="button" iconPos="left" icon="fa-bars" label="Get Results" (click)="getResults()"></button>
-    <button pButton type="button" iconPos="left" icon="fa-file-excel-o" label="Download" [disabled]="!teamResults" (click)="getResults();"></button>
+    <button pButton type="button" iconPos="left" icon="fa-file-excel-o" label="Download Personal Results" [disabled]="selectedCategories.length === 0" (click)="getPersonalResultsFile();"></button>
 </div>

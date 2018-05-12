@@ -19,8 +19,8 @@ export class ResultsComponent {
     private selectedCategories: string[] = [];
     private teamResults: TeamResultModel[];
     columns: CrudColumn[] = [
-        { propertyName: "teamName", displayName: "Name", isEditable: false, isSortable: false },
-        { propertyName: "points", displayName: "Points", isEditable: false, isSortable: true }
+        { propertyName: 'teamName', displayName: 'Name', isEditable: false, isSortable: false },
+        { propertyName: 'points', displayName: 'Points', isEditable: false, isSortable: true }
     ];
     private readonly pageLinks: number = 3;
     private firstIndex: number = 0;
@@ -42,6 +42,10 @@ export class ResultsComponent {
 
     getResults() {
         this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => { this.teamResults = r; });
+    }
+
+    getPersonalResultsFile() {
+        this.resultsService.getPersonalResultsFile(this.selectedCategories, 'personalResults.xlsx').subscribe();
     }
 
     get totalCount(): number {

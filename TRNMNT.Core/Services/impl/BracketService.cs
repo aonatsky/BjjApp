@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
+using TRNMNT.Core.Model.Medalist;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Model.WeightDivision;
@@ -77,24 +79,9 @@ namespace TRNMNT.Core.Services.impl
             return GetBracketModel(bracket);
         }
 
-        public async Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId)
+        public async Task<bool> IsCategoryCompletedAsync(Guid categoryId)
         {
             return (await _categoryService.GetCategoryAsync(categoryId)).CompleteTs != null;
-            //            var braketsForCategory = _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId)
-            //                .Include(b=>b.Rounds);
-            //            if (!await braketsForCategory.AnyAsync())
-            //            {
-            //                return false;
-            //            }
-            //
-            //            if (!await braketsForCategory.AnyAsync(b =>
-            //                b.Rounds.Any(r => r.Stage == 0 && r.RoundType == (int)RoundTypeEnum.Standard)))
-            //            {
-            //                return false;
-            //            }
-            //
-            //            return !await GetWinnersForBrackets(braketsForCategory).AnyAsync(p => p == null);
-            //            
         }
 
         public async Task<List<ParticipantInAbsoluteDivisionModel>> GetWinnersAsync(Guid categoryId)
@@ -177,8 +164,6 @@ namespace TRNMNT.Core.Services.impl
                 round.WinnerParticipantId = model.WinnerParticipantId;
                 round.RoundResultType = (int)model.RoundResultType;
                 round.RoundResultDetails = GetRoundResultDetailsJson(model);
-
-
                 if (round.Stage == 1)
                 {
                     var lostParticipantId = round.WinnerParticipantId == round.FirstParticipantId
@@ -272,8 +257,45 @@ namespace TRNMNT.Core.Services.impl
                 }
             }
 
-           return categoryMedalists.GroupBy(m => m.Participant.TeamId)
-                .Select(g => new TeamResultModel { TeamId = g.Key, Points = g.Sum(gg => gg.Points), TeamName = g.First().Participant.Team.Name});
+            return categoryMedalists.GroupBy(m => m.Participant.TeamId)
+                 .Select(g => new TeamResultModel { TeamId = g.Key, Points = g.Sum(gg => gg.Points), TeamName = g.First().Participant.Team.Name });
+        }
+
+
+        public async Task<CustomFile> GetPersonalResultsFileByCategoriesAsync(
+            IEnumerable<Guid> categoryIds)
+        {
+            var brackets = await _bracketRepository
+                    .GetAll(b => categoryIds.Contains(b.WeightDivision.CategoryId) && b.CompleteTs != null)
+                    .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(t => t.Team)
+                    .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(t => t.Team)
+                    .Include(b => b.Rounds).ThenInclude(r => r.WinnerParticipant).ThenInclude(t => t.Team)
+                    .Include(b => b.WeightDivision).ThenInclude(w => w.Category)
+                    .ToListAsync()
+                ;
+            var categoryWeightDivisioMedalistGroups = new List<CategoryWeightDivisionMedalistGroup>();
+            foreach (var categoryId in categoryIds)
+            {
+                var categoryBrackets = brackets.Where(b => b.WeightDivision.CategoryId == categoryId);
+                var categoryWeightDivisioMedalistGroup = new CategoryWeightDivisionMedalistGroup()
+                {
+                    CategoryName = categoryBrackets.First().WeightDivision.Category.Name,
+                    WeightDivisionMedalistGroups = new List<WeightDivisionMedalistGroup>()
+                };
+                var weightDivisions = categoryBrackets.Select(b => b.WeightDivision);
+                foreach (var weightDivision in weightDivisions)
+                {
+                    var bracket = categoryBrackets.First(b => b.WeightDivisionId == weightDivision.WeightDivisionId);
+                    categoryWeightDivisioMedalistGroup.WeightDivisionMedalistGroups.Add(new WeightDivisionMedalistGroup()
+                    {
+                        WeightDivisionName = bracket.WeightDivision.Name,
+                        Medalists = GetMedalistsForBracket(bracket)
+
+                    });
+                }
+                categoryWeightDivisioMedalistGroups.Add(categoryWeightDivisioMedalistGroup);
+            }
+            return _bracketsFileService.GetPersonalResultsFileAsync(categoryWeightDivisioMedalistGroups);
         }
 
         #endregion
@@ -387,11 +409,10 @@ namespace TRNMNT.Core.Services.impl
                 RoundType = round.RoundType,
                 RoundTime = roundTime,
                 Order = round.Order,
-                IsCompleted = round.WinnerParticipantId != null
             };
             if (round.WinnerParticipantId != null)
             {
-
+                model.WinnerParticipant = GetParticipantModel(round.WinnerParticipant);
                 if (round.WinnerParticipantId == round.FirstParticipantId)
                 {
                     if (round.RoundResultType != (int)RoundResultTypeEnum.DQ)
@@ -709,12 +730,7 @@ namespace TRNMNT.Core.Services.impl
             return bracketMedalists;
         }
 
-        private class MedalistProcessingModel
-        {
-            public Participant Participant { get; set; }
-            public int Place { get; set; }
-            public int Points { get; set; }
-        }
+
 
         #endregion
     }

@@ -98,17 +98,35 @@ export class BracketComponent implements OnInit {
         }
     }
 
+    private displayRoundResult(model: RoundModel, participantNumber: number) {
+        if (participantNumber === 1) {
+            return model.firstParticipantResult;
+        }
+    }
+
     private onRoundClick(model: RoundModel) {
         if (this.isEditable(model)) {
             this.roundClick.emit(model);
         }
     }
 
+    private getWinnerClass(model: RoundModel) {
+        if (model.winnerParticipant) {
+            if (model.winnerParticipant.participantId === model.firstParticipant.participantId) {
+                return 'winner-1';
+            } else {
+                return 'winner-2';
+            }
+        } else {
+            return '';
+        }
+    }
+
     private isEditable(model: RoundModel): boolean {
         if (model.firstParticipant && model.secondParticipant) {
-            if (model.isCompleted && model.nextRoundId) {
+            if (model.winnerParticipant && model.nextRoundId) {
                 const nextRound = this.bracket.roundModels.filter(r => r.roundId === model.nextRoundId)[0];
-                if (nextRound && !nextRound.isCompleted) {
+                if (nextRound && !nextRound.winnerParticipant) {
                     return true;
                 }
                 return false;
