@@ -112,7 +112,7 @@ export class BracketComponent implements OnInit {
 
     private getWinnerClass(model: RoundModel) {
         if (model.winnerParticipant) {
-            if (model.winnerParticipant.participantId === model.firstParticipant.participantId) {
+            if (!!model.firstParticipant && model.winnerParticipant.participantId === model.firstParticipant.participantId) {
                 return 'winner-1';
             } else {
                 return 'winner-2';

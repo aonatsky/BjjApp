@@ -22,7 +22,7 @@
     background-color: $theme_black;
 
     .participant-row {
-        height: 27%;
+        height: 28%;
         color: $theme_black;
 
         &.first-participant {
@@ -30,52 +30,49 @@
         }
 
         &.second-participant {
-            background-color: yellowgreen;
+            background-color: #fadb21;
         }
 
         .participant-info {
-            font-size: 4.5em;
             height: 100%;
-
-            .ui-g-12 {
-                padding: 0.2em;
-                height: 50%;
-            }
-
-            .participant-label {
-            }
-
-            .team-label {
-                color: $theme_grey;
-            }
+            font-size: 7em;
         }
     }
 
     .title-row {
-        height: 19%;
+        height: 16%;
         background-color: $theme_black;
+        font-size: 6em;
+        color: $theme_white;
+        text-align: center;
     }
 
     .timer-row {
-        height: 27%;
+        height: 28%;
         font-size: 12em;
         font-weight: bold;
         letter-spacing: 2.5px;
         text-align: center;
-        color: #cfcfcf;
+        color: $theme_white;
         background-color: $theme_black;
         line-height: 1.5em;
     }
 
     .advantage-box {
         height: 100%;
-        background-color: #525252;
         text-align: center;
-        color: #ffffff;
-
+        color: $theme_black;
 
         .ui-g-12 {
             height: 50%
+        }
+
+        .advantage {
+            background-color: yellow;
+        }
+
+        .penalty {
+            background-color: #e10a0a;
         }
 
         .score-label {
@@ -91,119 +88,14 @@
     }
 
     .point-box {
-        background-color: #e10a0a;
         font-size: 10em;
         font-weight: bold;
         text-align: center;
         line-height: 250px;
-        color: #ffffff;
         height: 100%;
     }
-}
 
-.round-panel-view-title-box {
-}
-
-.round-panel-view-title-white {
-    font-size: 42px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: 0.6px;
-    text-align: center;
-    color: #ffffff;
-}
-
-.round-panel-view-title-yellow {
-    font-size: 42px;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: 0.6px;
-    text-align: center;
-    color: #ffce00;
-}
-
-.round-panel-view-participent-box {
-}
-
-.round-panel-view-participent-info {
-    width: 100%;
-}
-
-.round-panel-view-participent-label {
-    font-size: 65px;
-    font-weight: 600;
-    font-style: normal;
-    font-stretch: normal;
-    letter-spacing: 1px;
-    text-align: center;
-    color: #fefefe;
-}
-
-.round-panel-view-team-label {
-    width: 264px;
-    height: 54px;
-    font-size: 45px;
-    font-weight: 600;
-    font-style: normal;
-    font-stretch: normal;
-    letter-spacing: 0.7px;
-    text-align: center;
-}
-
-.round-panel-view-timer-box {
-}
-
-.round-panel-flex-wrapper {
-    display: flex;
-}
-
-.round-panel-view-small-score-box {
-    width: 173px;
-    height: 120px;
-}
-
-.round-panel-view-score-box-delimeter {
-    height: 10px;
-    width: 100%;
-}
-
-.round-panel-score-label {
-    height: 41px;
-    font-size: 35px;
-    font-weight: normal;
-    font-style: normal;
-    font-stretch: normal;
-    letter-spacing: normal;
-    text-align: center;
-    color: #ffffff;
-}
-
-.round-panel-score-value {
-    font-size: 60px;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    letter-spacing: normal;
-    text-align: center;
-    color: #ffffff;
-}
-
-.round-panel-point-red-box {
-}
-
-.round-panel-point-blue-box {
-    width: 245px;
-    background-color: #410ce2;
-    font-size: 150px;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    letter-spacing: normal;
-    text-align: center;
-    line-height: 250px;
-    color: #ffffff;
+    .logo{
+        background-image: url('/logo_small.png');
+    }
 }

@@ -12,6 +12,7 @@ import './round-panel-view.component.scss';
 })
 export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     @Input() roundModel: RoundModel;
+    @Input() title: string;
 
     private roundDetails: RoundDetailsModel;
 

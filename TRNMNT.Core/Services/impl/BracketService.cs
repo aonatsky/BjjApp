@@ -169,8 +169,8 @@ namespace TRNMNT.Core.Services.impl
                     var lostParticipantId = round.WinnerParticipantId == round.FirstParticipantId
                         ? round.SecondParticipantId
                         : round.FirstParticipantId;
-                    var bufferRound = (await GetSameStageRoundsAsync(round)).FirstOrDefault(r =>
-                        r.RoundType == (int)RoundTypeEnum.Buffer && r.RoundId != round.RoundId);
+                    var bufferRound = await _roundRepository.FirstOrDefaultAsync(r =>
+                        r.BracketId == round.BracketId && r.RoundType == (int)RoundTypeEnum.Buffer);
                     if (bufferRound != null && bufferRound.SecondParticipantId == null)
                     {
                         bufferRound.SecondParticipantId = lostParticipantId;
@@ -181,13 +181,19 @@ namespace TRNMNT.Core.Services.impl
                             r.BracketId == round.BracketId && r.RoundType == (int)RoundTypeEnum.ThirdPlace);
                         if (thirdPlaceRound != null)
                         {
-                            if (thirdPlaceRound.FirstParticipantId == null)
+                            if (round.Order % 2 == 0)
                             {
                                 thirdPlaceRound.FirstParticipantId = lostParticipantId;
                             }
                             else
                             {
                                 thirdPlaceRound.SecondParticipantId = lostParticipantId;
+                            }
+
+                            //if buffer exists = 3 participants
+                            if (bufferRound != null)
+                            {
+                                thirdPlaceRound.WinnerParticipantId = lostParticipantId;
                             }
 
                             _roundRepository.Update(thirdPlaceRound);
@@ -631,13 +637,6 @@ namespace TRNMNT.Core.Services.impl
                 rounds.AddRange(roundsToAdd);
             }
             return rounds;
-        }
-
-
-        private async Task<List<Round>> GetSameStageRoundsAsync(Round round)
-        {
-            return await _roundRepository.GetAll(r => r.BracketId == round.BracketId && r.Stage == round.Stage)
-                .ToListAsync();
         }
 
         private void StartBracket(Bracket bracket)
