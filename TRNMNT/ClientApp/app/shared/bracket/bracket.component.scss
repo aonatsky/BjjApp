@@ -31,6 +31,19 @@
         width: auto;
         text-align: center;
     }
+
+    .medalists {
+        width: 200px;
+        margin: auto;
+
+        div {
+            text-align: center;
+            b{
+                float:left;
+            }
+
+        }
+    }
 }
 
 .round {
@@ -241,4 +254,6 @@
             }
         }
     }
+
+ 
 }

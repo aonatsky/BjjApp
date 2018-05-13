@@ -86,18 +86,20 @@ namespace TRNMNT.Core.Services.Impl
                 {
                     var workSheet =
                         excelPackage.Workbook.Worksheets.Add(categoryWeightDivisionMedalistGroup.CategoryName);
-                    var rowIndex = 0;
+                    var rowIndex = 1;
                     foreach (var wdGroup in categoryWeightDivisionMedalistGroup.WeightDivisionMedalistGroups)
                     {
-                        workSheet.Cells[rowIndex, 0].Value = wdGroup.WeightDivisionName;
-                        workSheet.Cells[rowIndex, 0].Style.Font.Bold = true;
+                        workSheet.Cells[rowIndex, 1].Value = wdGroup.WeightDivisionName;
+                        workSheet.Cells[rowIndex, 1].Style.Font.Bold = true;
                         for (var i = 1; i <= wdGroup.Medalists.Count; i++)
                         {
-                            var medalist = wdGroup.Medalists[i];
-                            workSheet.Cells[rowIndex + i, 0].Value = medalist.Place;
-                            workSheet.Cells[rowIndex + i, 0].Style.Font.Bold = true;
-                            workSheet.Cells[rowIndex + i, 1].Value =
+                            var medalist = wdGroup.Medalists[i - 1];
+                            workSheet.Cells[rowIndex + i, 1].Value = medalist.Place;
+                            workSheet.Cells[rowIndex + i, 1].Style.Font.Bold = true;
+                            workSheet.Cells[rowIndex + i, 2].Value =
                                 $"{medalist.Participant.FirstName} {medalist.Participant.LastName}";
+                            workSheet.Cells[rowIndex + i, 3].Value =
+                                medalist.Participant.Team.Name;
                         }
                         rowIndex += 4;
                     }
