@@ -4,6 +4,8 @@ const merge = require('webpack-merge');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const extractSass = new ExtractTextPlugin("[name].css");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 
 module.exports = (env) => {
     // Configuration in common to both client-side and server-side bundles
@@ -28,7 +30,7 @@ module.exports = (env) => {
                 }
             ]
         },
-        plugins: [new CheckerPlugin(), extractSass]
+        plugins: [new CheckerPlugin(), extractSass, new UglifyJsPlugin()]
     };
 
     // Configuration for client-side bundle suitable for running in browsers
@@ -37,6 +39,7 @@ module.exports = (env) => {
         entry: { 'main-client': './ClientApp/boot-client.ts' },
         output: { path: path.join(__dirname, clientBundleOutputDir) },
         plugins: [
+            new UglifyJsPlugin(),
             new webpack.DllReferencePlugin({
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')
@@ -49,7 +52,7 @@ module.exports = (env) => {
             })
         ] : [
                 // Plugins that apply in production builds only
-                new webpack.optimize.UglifyJsPlugin()
+                //new webpack.optimize.UglifyJsPlugin()
             ])
     });
 
