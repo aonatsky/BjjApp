@@ -73,5 +73,9 @@ export class RouterService {
     openEventCategorySpactatorView(categoryId: string) {
         this.openNewWindow('/event-admin/run-category-spectator-view/' + categoryId);
     }
+
+    getCurrentUrl() {
+        return this.router.url;
+    }
 }
 

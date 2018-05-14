@@ -66,7 +66,6 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<AuthTokenResult> GetTokenAsync(string login, string password)
         {
-            await AddSampleUserAsync();
             var loginResult = await _signInManager.PasswordSignInAsync(login, password, false, false);
             if (loginResult.Succeeded)
             {
@@ -125,7 +124,9 @@ namespace TRNMNT.Core.Services.Impl
             var user = new User
             {
                 Email = email,
-                UserName = email
+                UserName = email,
+                FirstName = "",
+                LastName = ""
             };
             var identityResult = await _userManager.CreateAsync(user, password);
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, roleClaim));

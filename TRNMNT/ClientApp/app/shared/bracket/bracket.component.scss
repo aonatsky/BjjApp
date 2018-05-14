@@ -9,7 +9,10 @@
 .brackets-live {
     display: flex;
     margin: auto;
-    min-height: 600px;
+    min-height: 790px;
+    background-image: url('/logo_big.png');
+    background-position: center;
+    background-repeat:no-repeat;
 
     &.stages-2 {
         width: 1050px

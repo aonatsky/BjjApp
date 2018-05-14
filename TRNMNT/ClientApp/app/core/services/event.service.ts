@@ -21,6 +21,10 @@ export class EventService {
         return this.httpService.post(ApiMethods.event.updateEvent, event);
     }
 
+    deleteEvent(eventId: string): Observable<any> {
+        return this.httpService.post(ApiMethods.event.deleteEvent, event);
+    }
+
     getEventsForOwner(): Observable<EventPreviewModel[]> {
         return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventPreviewModel>(res));
     }

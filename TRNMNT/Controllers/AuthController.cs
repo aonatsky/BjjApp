@@ -106,7 +106,7 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await _authenticationSerivce.CreateParticipantUserAsync(credentials.Username, credentials.Password);
+                await _authenticationSerivce.CreateOwnerUserAsync(credentials.Username, credentials.Password);
                 Response.StatusCode = (int)HttpStatusCode.OK;
             }
             catch (Exception ex)

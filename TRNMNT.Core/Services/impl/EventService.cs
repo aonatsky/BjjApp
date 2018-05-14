@@ -131,7 +131,7 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId)
         {
             var models = await _eventRepository.GetAll()
-                .Where(e => e.OwnerId == userId)
+                //.Where(e => e.OwnerId == userId)
                 .Select(e => new EventModelBase
                 {
                     EventId = e.EventId,

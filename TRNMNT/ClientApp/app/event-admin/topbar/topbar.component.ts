@@ -52,4 +52,14 @@ export class TopbarComponent  implements OnInit {
         this.routerService.goHome();
     }
 
+    private isTopbarShown() : boolean {
+        const urlsToHideMenu = ['run-wd-spectator-view'];
+        for (let i = 0; i < urlsToHideMenu.length; i++) {
+            if (this.routerService.getCurrentUrl().indexOf(urlsToHideMenu[i]) !== -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

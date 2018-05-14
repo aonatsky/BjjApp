@@ -75,6 +75,11 @@ export class EventEditComponent implements OnInit {
         this.eventService.updateEvent(this.eventModel).subscribe();
     }
 
+    private delete() {
+        this.eventService.deleteEvent(this.eventModel.eventId).subscribe();
+
+    }
+
 
 
     private onImageUpload(event) {
