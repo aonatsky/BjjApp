@@ -1,262 +1,278 @@
 ﻿@import '../../shared/styles/variables.scss';
 
-*,
-*::after,
-*::before {
-    box-sizing: border-box;
-}
+.brackets-live-container {
+    $min-height: 790px;
 
-.brackets-live {
-    display: flex;
-    margin: auto;
-    min-height: 790px;
+    min-height: $min-height;
     background-image: url('/logo_big.png');
     background-position: center;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
+    width: 100%;
 
-    &.stages-2 {
-        width: 1050px
+    *,
+    *::after,
+    *::before {
+        box-sizing: border-box;
     }
 
-    &.stages-1 {
-        width: 630px
-    }
-
-    &.stages-0 {
-        width: 210px
-    }
-
-    .bracket-header {
-        position: absolute;
-        margin: 0 auto;
-        left: 0;
-        right: 0;
-        width: auto;
-        text-align: center;
-    }
-
-    .medalists {
-        width: 200px;
-        margin: auto;
-
-        div {
-            text-align: center;
-            b{
-                float:left;
-            }
-
-        }
-    }
-}
-
-.round {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    width: 200px;
-
-
-    %connector {
-        content: "";
-        display: block;
-        height: calc(50% + 1px);
-        position: absolute;
-        width: 10px;
-    }
-
-
-    .match {
-        $border_style: 2px solid $theme_orange;
-
+    .brackets-live {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin: 0px 10px;
-        padding: 10px 0;
+        margin: auto;
+        min-height: $min-height;
+
+        &.stages-3 {
+            width: 1470px
+        }
+
+        &.stages-2 {
+            width: 1050px
+        }
+
+        &.stages-1 {
+            width: 630px
+        }
+
+        &.stages-0 {
+            width: 210px
+        }
+
+        .bracket-header {
+            position: absolute;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            width: auto;
+            text-align: center;
+        }
+
+        .medalists {
+            width: 200px;
+            margin: auto;
+
+            div {
+                text-align: center;
+
+                b {
+                    float: left;
+                }
+            }
+        }
+    }
+
+    .round {
+        display: flex;
         flex-grow: 1;
-        position: relative;
+        flex-direction: column;
+        width: 200px;
 
-        &.final {
-            &::before, &::after {
-                border-left: none !important;
-                border-right: none !important;
-                border-bottom: $border_style;
-                bottom: calc(50% - 1px);
-            }
 
-            .match-content {
-                border-color: $theme_orange;
-            }
+        %connector {
+            content: "";
+            display: block;
+            height: calc(50% + 1px);
+            position: absolute;
+            width: 10px;
         }
 
 
-        &:not(.right-side) {
+        .match {
+            $border_style: 2px solid $theme_orange;
 
-            &::before {
-                @extend %connector;
-                border-bottom: $border_style;
-                bottom: calc(50% - 1px);
-                left: -10px;
-            }
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0px 10px;
+            padding: 10px 0;
+            flex-grow: 1;
+            position: relative;
 
+            &.final {
 
-            &::after {
-                right: -10px;
-            }
-
-            &:not(:only-child) {
-                &:nth-child(odd) {
-                    &::after {
-                        @extend %connector;
-                        border-top: $border_style;
-                        border-right: $border_style;
-                        top: calc(50% - 1px);
-                    }
-                }
-
-                &:nth-child(even) {
-                    &::after {
-                        @extend %connector;
-                        border-bottom: $border_style;
-                        border-right: $border_style;
-                        bottom: calc(50% - 1px);
-                    }
-                }
-            }
-
-            &:only-child {
-                &::after {
-                    @extend %connector;
-                    border: none;
+                &::before, &::after {
+                    border-left: none !important;
+                    border-right: none !important;
                     border-bottom: $border_style;
                     bottom: calc(50% - 1px);
                 }
-            }
-        }
 
-        &.right-side {
-
-            &::after {
-                @extend %connector;
-                border-bottom: $border_style;
-                bottom: calc(50% - 1px);
-                right: -10px;
-            }
-
-            &::before {
-                left: -10px;
-            }
-
-
-            &:not(:only-child) {
-                &:nth-child(odd) {
-                    &::before {
-                        @extend %connector;
-                        border-top: $border_style;
-                        border-left: $border_style;
-                        top: calc(50% - 1px);
-                    }
-                }
-
-                &:nth-child(even) {
-                    &::before {
-                        @extend %connector;
-                        border-bottom: $border_style;
-                        border-left: $border_style;
-                        bottom: calc(50% - 1px);
-                    }
+                .match-content {
+                    border-color: $theme_orange;
                 }
             }
 
-            &:only-child {
+            &.only-final {
+                &::before, &::after {
+                    border-bottom: none !important;
+                }
+            }
+
+
+            &:not(.right-side) {
+
                 &::before {
                     @extend %connector;
                     border-bottom: $border_style;
                     bottom: calc(50% - 1px);
+                    left: -10px;
+                }
+
+
+                &::after {
+                    right: -10px;
+                }
+
+                &:not(:only-child) {
+                    &:nth-child(odd) {
+                        &::after {
+                            @extend %connector;
+                            border-top: $border_style;
+                            border-right: $border_style;
+                            top: calc(50% - 1px);
+                        }
+                    }
+
+                    &:nth-child(even) {
+                        &::after {
+                            @extend %connector;
+                            border-bottom: $border_style;
+                            border-right: $border_style;
+                            bottom: calc(50% - 1px);
+                        }
+                    }
+                }
+
+                &:only-child {
+                    &::after {
+                        @extend %connector;
+                        border: none;
+                        border-bottom: $border_style;
+                        bottom: calc(50% - 1px);
+                    }
                 }
             }
-        }
 
-        &.empty {
+            &.right-side {
+
+                &::after {
+                    @extend %connector;
+                    border-bottom: $border_style;
+                    bottom: calc(50% - 1px);
+                    right: -10px;
+                }
+
+                &::before {
+                    left: -10px;
+                }
+
+
+                &:not(:only-child) {
+                    &:nth-child(odd) {
+                        &::before {
+                            @extend %connector;
+                            border-top: $border_style;
+                            border-left: $border_style;
+                            top: calc(50% - 1px);
+                        }
+                    }
+
+                    &:nth-child(even) {
+                        &::before {
+                            @extend %connector;
+                            border-bottom: $border_style;
+                            border-left: $border_style;
+                            bottom: calc(50% - 1px);
+                        }
+                    }
+                }
+
+                &:only-child {
+                    &::before {
+                        @extend %connector;
+                        border-bottom: $border_style;
+                        bottom: calc(50% - 1px);
+                    }
+                }
+            }
+
+            &.empty {
+                .match-content {
+                    border: none !important;
+                }
+            }
+
+            &.third-place, &.empty {
+                &::before, &::after {
+                    border: none !important;
+                }
+            }
+
             .match-content {
-                border: none !important;
-            }
-        }
+                height: 84px;
+                width: 100%;
+                border: 2px solid $theme_black;
+                position: relative;
 
-        &.third-place, &.empty {
-            &::before, &::after {
-                border: none !important;
-            }
-        }
-
-        .match-content {
-            height: 84px;
-            width: 100%;
-            border: 2px solid $theme_black;
-            position: relative;
-
-            &.editable {
-                cursor: pointer;
-            }
-
-            .participant-plate {
-                height: 40px;
-
-                &.droppable {
-                    color: $theme_grey;
+                &.editable {
+                    cursor: pointer;
                 }
 
-                &:first-child {
-                    border-bottom: 1px solid $theme_orange;
+                .participant-plate {
+                    height: 40px;
+
+                    &.droppable {
+                        color: $theme_grey;
+                    }
+
+                    &:first-child {
+                        border-bottom: 1px solid $theme_orange;
+                    }
+
+                    &:nth-child(2) {
+                        border-top: 1px solid $theme_orange;
+                    }
+
+                    &.buffer {
+                        pointer-events: none;
+                        color: $theme_grey;
+                    }
                 }
 
-                &:nth-child(2) {
-                    border-top: 1px solid $theme_orange;
+                $gradient: linear-gradient(to right, white, #4fec4f);
+
+                &.winner-1 {
+                    .participant-plate:first-child {
+                        background: $gradient;
+                    }
                 }
 
-                &.buffer {
-                    pointer-events: none;
-                    color: $theme_grey;
-                }
-            }
-
-            $gradient: linear-gradient(to right, white, #4fec4f);
-
-            &.winner-1 {
-                .participant-plate:first-child {
-                    background: $gradient;
-                }
-            }
-
-            &.winner-2 {
-                .participant-plate:nth-child(2) {
-                    background: $gradient
+                &.winner-2 {
+                    .participant-plate:nth-child(2) {
+                        background: $gradient
+                    }
                 }
             }
         }
-    }
-    //trick to add title
-    &:nth-child(2) {
-        .match {
-            &::before {
-                display: none;
+        //trick to add title
+        &:nth-child(2) {
+            .match {
+                &::before {
+                    display: none;
+                }
+            }
+
+            .match-content {
+                &::before {
+                    display: none;
+                }
             }
         }
 
-        .match-content {
-            &::before {
-                display: none;
+        &:last-child {
+            .match {
+                &::after {
+                    display: none;
+                }
             }
         }
     }
-
-    &:last-child {
-        .match {
-            &::after {
-                display: none;
-            }
-        }
-    }
-
- 
 }

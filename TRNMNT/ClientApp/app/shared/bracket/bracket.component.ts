@@ -47,8 +47,11 @@ export class BracketComponent implements OnInit {
         return cols;
     }
 
-    private isCentralCol(colNumber): boolean {
-        return colNumber == (this.columns.length - 1) / 2;
+    private addEmptyMatch(colNumber: number): boolean {
+        if (colNumber == (this.columns.length - 1) / 2) {
+            return this.bracket.roundModels.length > 1;
+        };
+        return false;
     }
 
     private getMatchSideClass(colNumber): string {
@@ -56,11 +59,14 @@ export class BracketComponent implements OnInit {
     }
 
     private getMatchTypeClass(matchModel: RoundModel): string {
-        let matchType = '';
+        let matchTypeClass = '';
         if (matchModel.stage == 0) {
-            matchType = matchModel.roundType == 1 ? 'third-place' : 'final';
+            matchTypeClass = matchModel.roundType == 1 ? 'third-place' : 'final';
+            if (this.bracket.roundModels.length === 1) {
+                matchTypeClass += ' only-final';
+            }
         }
-        return matchType;
+        return matchTypeClass;
     }
 
     private getRoundModels(colNumber: number): RoundModel[] {
@@ -70,7 +76,6 @@ export class BracketComponent implements OnInit {
         const stage = this.maxStage - depth;
         const models = this.bracket.roundModels.filter(r => r.stage == stage).sort((r1, r2) => { return r1.order - r2.order });
         if (stage === 0) {
-            //debugger;
             return models;
         } else {
             if (isRightSide) {
