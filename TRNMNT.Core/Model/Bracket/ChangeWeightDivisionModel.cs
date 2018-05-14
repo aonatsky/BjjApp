@@ -2,9 +2,9 @@
 
 namespace TRNMNT.Core.Model.Bracket
 {
-    public class RefreshBracketModel
+    public class ChangeWeightDivisionModel
     {
+        public Guid SyncronizationId { get; set; }
         public Guid WeightDivisionId { get; set; }
-        public BracketModel Bracket { get; set; }
     }
 }

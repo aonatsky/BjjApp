@@ -1,4 +1,4 @@
-﻿import { HubConnection } from "@aspnet/signalr";
+﻿import { HubConnection, TransportType} from "@aspnet/signalr";
 import { RoundDetailsModel } from "../core/model/round-details/round-details.model";
 
 export abstract class BaseRoundPanel {
@@ -7,7 +7,7 @@ export abstract class BaseRoundPanel {
     private hubConnection: HubConnection;
 
     setupConnection(groupId: any, messageHandler: (data: RoundDetailsModel) => void): void {
-        this.hubConnection = new HubConnection('/round-hub');
+        this.hubConnection = new HubConnection('/round-hub', { transport: TransportType.ServerSentEvents });
         this.hubConnection.start().then(() => {
             this.subscribeOnRecieveMessage(messageHandler);
             this.hubConnection.invoke("JoinGroup", groupId);

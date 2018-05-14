@@ -58,7 +58,7 @@ namespace TRNMNT.Web.Hubs
 
         protected T Current => Clients.Client(Context.ConnectionId);
 
-        protected T ToGroup(object groupName)
+        protected T ToGroup(Guid groupName)
         {
             return Clients.Group(groupName.ToString());
         }
