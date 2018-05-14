@@ -13,8 +13,10 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="categoryId">The category identifier.</param>
         /// <returns></returns>
-        Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId);
-        Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionsByEventIdAsync(Guid eventId, bool isWithAbsolute);
+        Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionModelsByCategoryIdAsync(Guid categoryId);
+        Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId);
+        Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionModelsByEventIdAsync(Guid eventId, bool isWithAbsolute);
         Task<WeightDivision> GetAbsoluteWeightDivisionAsync(Guid categoryId);
+        Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId);
     }
 }

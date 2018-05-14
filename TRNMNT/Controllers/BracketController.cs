@@ -17,11 +17,11 @@ using TRNMNT.Web.Hubs;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class BracketController : BaseController
+    public class 
+        BracketController : BaseController
     {
         #region dependencies
 
-        private readonly IHubContext<RunEventHub> _hubContext;
         private readonly IBracketService _bracketService;
 
         #endregion
@@ -31,12 +31,10 @@ namespace TRNMNT.Web.Controllers
             ILogger<BracketController> logger,
             IUserService userService,
             IAppDbContext context,
-            IHubContext<RunEventHub> hubContext,
             IWeightDivisionService weightDivisionService,
             IBracketService bracketService)
             : base(logger, userService, eventService, context)
         {
-            _hubContext = hubContext;
             _bracketService = bracketService;
         }
 
@@ -97,30 +95,6 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> FinishRound([FromBody] Guid weightDivisionId)
-        {
-            return await HandleRequestAsync(async () =>
-            {
-                var clients = _hubContext.Clients;
-                if (clients != null)
-                {
-                    var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
-                    if (bracketModel != null)
-                    {
-                        var divisionId = weightDivisionId.ToString().ToUpperInvariant();
-                        var refreshModel = new RefreshBracketModel
-                        {
-                            WeightDivisionId = divisionId,
-                            Bracket = bracketModel
-                        };
-                        await clients.Group(divisionId).SendAsync("BracketRoundsUpdated", refreshModel);
-                    }
-                }
-                return HttpStatusCode.OK;
-            });
-        }
-
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetBracketsByCategory(Guid categoryId)
         {
@@ -143,7 +117,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var isSelected = await _bracketService.IsWinnersSelectedForAllRoundsAsync(categoryId);
+                var isSelected = await _bracketService.IsCategoryCompletedAsync(categoryId);
                 return Success(isSelected);
             });
         }
@@ -159,17 +133,14 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpPost("[action]")]
-        public async Task CompleteRound([FromBody]RoundResultModel roundResultModel)
+        public async Task<IActionResult> SetRoundResult([FromBody]RoundResultModel roundResultModel)
         {
-            try
+            return await HandleRequestAsync(async () =>
             {
                 await _bracketService.SetRoundResultAsync(roundResultModel);
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
+                return HttpStatusCode.OK;
+            });
+            
         }
 
         #endregion

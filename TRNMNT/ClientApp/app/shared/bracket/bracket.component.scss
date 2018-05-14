@@ -8,6 +8,42 @@
 
 .brackets-live {
     display: flex;
+    margin: auto;
+    min-height: 600px;
+
+    &.stages-2 {
+        width: 1050px
+    }
+
+    &.stages-1 {
+        width: 630px
+    }
+
+    &.stages-0 {
+        width: 210px
+    }
+
+    .bracket-header {
+        position: absolute;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        width: auto;
+        text-align: center;
+    }
+
+    .medalists {
+        width: 200px;
+        margin: auto;
+
+        div {
+            text-align: center;
+            b{
+                float:left;
+            }
+
+        }
+    }
 }
 
 .round {
@@ -44,7 +80,8 @@
                 border-bottom: $border_style;
                 bottom: calc(50% - 1px);
             }
-            .match-content{
+
+            .match-content {
                 border-color: $theme_orange;
             }
         }
@@ -155,6 +192,10 @@
             border: 2px solid $theme_black;
             position: relative;
 
+            &.editable {
+                cursor: pointer;
+            }
+
             .participant-plate {
                 height: 40px;
 
@@ -175,10 +216,24 @@
                     color: $theme_grey;
                 }
             }
+
+            $gradient: linear-gradient(to right, white, #4fec4f);
+
+            &.winner-1 {
+                .participant-plate:first-child {
+                    background: $gradient;
+                }
+            }
+
+            &.winner-2 {
+                .participant-plate:nth-child(2) {
+                    background: $gradient
+                }
+            }
         }
     }
-
-    &:first-child {
+    //trick to add title
+    &:nth-child(2) {
         .match {
             &::before {
                 display: none;
@@ -199,4 +254,6 @@
             }
         }
     }
+
+ 
 }

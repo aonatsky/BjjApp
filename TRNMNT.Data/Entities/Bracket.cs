@@ -12,6 +12,8 @@ namespace TRNMNT.Data.Entities
         public Guid WeightDivisionId { get; set; }
         public DateTime? StartTs { get; set; }
         public DateTime? CompleteTs { get; set; }
+        public int RoundTime { get; set; }
+        public string Title { get; set; }
         
         [JsonIgnore]
         public virtual WeightDivision WeightDivision { get; set; }

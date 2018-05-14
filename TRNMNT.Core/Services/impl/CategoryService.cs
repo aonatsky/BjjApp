@@ -35,7 +35,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             return await _categoryRepository.GetAll().Where(c => c.EventId == eventId).Select(c => new CategoryModelBase
             {
-                CategoryId = c.CategoryId.ToString(),
+                CategoryId = c.CategoryId,
                 Name = c.Name
             }).ToListAsync();
         }
@@ -50,16 +50,16 @@ namespace TRNMNT.Core.Services.Impl
             _categoryRepository.Update(category);
         }
 
-        public async Task<int> GetRoundTimeAsync(Guid categoryId)
+        public async Task<Category> GetCategoryAsync(Guid categoryId)
         {
-            return (await _categoryRepository.GetByIDAsync(categoryId)).RoundTime;
+            return await _categoryRepository.GetByIDAsync(categoryId);
         }
 
         public async Task<IEnumerable<CategoryModelBase>> GetCompletedCategoriesByEventIdAsync(Guid eventId)
         {
             return await _categoryRepository.GetAll().Where(c => c.EventId == eventId && c.CompleteTs != null).Select(c => new CategoryModelBase
             {
-                CategoryId = c.CategoryId.ToString(),
+                CategoryId = c.CategoryId,
                 Name = c.Name
             }).ToListAsync();
         }

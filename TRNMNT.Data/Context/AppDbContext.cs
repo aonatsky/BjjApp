@@ -53,6 +53,8 @@ namespace TRNMNT.Data.Context
         {
             SetInternal<T>().Add(entity);
         }
+
+        
         public void Modify<T>(T entity) where T : class
         {
             if (entity != null)
@@ -112,6 +114,7 @@ namespace TRNMNT.Data.Context
         {
             return base.Set<T>();
         }
+
 
         public DbSet<WeightDivision> WeightDivision { get; set; }
         public DbSet<Fighter> Fighter { get; set; }

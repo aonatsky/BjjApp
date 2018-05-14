@@ -22,16 +22,17 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
         private route: ActivatedRoute,
         private bracketService: BracketService,
         private runEventHubService: RunEventHubService) {
-
     }
 
     ngOnInit() {
-        this.runEventHubService.onRefreshRound().subscribe((model) => this.bracket = model.bracket);
+        this.runEventHubService.onRoundComplete().subscribe((model) => {
+            this.bracket = model.bracket;
+            this.showRoundPanel = false;
+        });
         this.runEventHubService.onRoundStart().subscribe(x => {
             this.selectedRoundDetails = x;
             this.showRoundPanel = true;
         });
-        this.runEventHubService.onRoundComplete().subscribe(_ => this.showRoundPanel = false);
         this.startSubscriptionFromRouteId();
     }
 

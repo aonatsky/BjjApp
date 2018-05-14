@@ -1,52 +1,35 @@
-﻿<div class="complete-round-wrapper">
-    <div class="complete-round-label">Winner</div>
-    <div class="complete-round-radio-button-group">
-        <div>
-            <p-radioButton label="{{roundDetails.roundModel.firstParticipant.firstName}} {{roundDetails.roundModel.firstParticipant.lastName}}"
-                           value="{{roundDetails.roundModel.firstParticipant.participantId}}"
-                           [(ngModel)]="winnerId">
-            </p-radioButton>
-        </div>
-        <div>
-            <p-radioButton label="{{roundDetails.roundModel.secondParticipant.firstName}} {{roundDetails.roundModel.secondParticipant.lastName}}"
-                           value="{{roundDetails.roundModel.secondParticipant.participantId}}"
-                           [(ngModel)]="winnerId">
-            </p-radioButton>
-        </div>
-    </div>
-    <div class="complete-round-label">Reason</div>
-    <div class="complete-round-radio-button-group">
-        <div>
-            <p-radioButton value="{{roundResults.Points}}" label="{{roundResults[roundResults.Points]}}" [(ngModel)]="roundResult"></p-radioButton>
-        </div>
-        <div>
-            <p-radioButton value="{{roundResults.Advantages}}" label="{{roundResults[roundResults.Advantages]}}" [(ngModel)]="roundResult"></p-radioButton>
-        </div>
-        <div><p-radioButton value="{{roundResults.Penalties}}" label="{{roundResults[roundResults.Penalties]}}" [(ngModel)]="roundResult"></p-radioButton></div>
-        <div>
-            <p-radioButton value="{{roundResults.Decision}}" label="{{roundResults[roundResults.Decision]}}" [(ngModel)]="roundResult"></p-radioButton>
-        </div>
-        <div>
-            <p-radioButton value="{{roundResults.Submission}}" label="{{roundResults[roundResults.Submission]}}" [(ngModel)]="roundResult"></p-radioButton>
-        </div>
-        <div class="complete-round-radio-button-group" [hidden]="roundResult!=roundResults.Submission">
-            <div>
-                <p-radioButton value="{{submissionTypes.Armlock}}" label="{{submissionTypes[submissionTypes.Armlock]}}" [(ngModel)]="submissionType"></p-radioButton>
-            </div>
-            <div>
-                <p-radioButton value="{{submissionTypes.Leglock}}" label="{{submissionTypes[submissionTypes.Leglock]}}" [(ngModel)]="submissionType"></p-radioButton>
-            </div>
-            <div>
-                <p-radioButton value="{{submissionTypes.Choke}}" label="{{submissionTypes[submissionTypes.Choke]}}" [(ngModel)]="submissionType"></p-radioButton>
-            </div>
-        </div>
-        <div>
-            <p-radioButton value="{{roundResults.Disqualification}}" label="{{roundResults[roundResults.Disqualification]}}" [(ngModel)]="roundResult"></p-radioButton>
-        </div>
-    </div>
-    <div class="complete-round-navigation-panel">
-        <div class="complete-round-button" (click)="save()">Save</div>
-        <div class="complete-round-button" (click)="close()">Cancel</div>
-    </div>
+﻿<div class="ui-g-12 ui-g-nopad"><h3>Winner</h3></div>
+<div class="ui-g-12 ui-g-nopad">
+    <p-radioButton label="{{roundDetails.roundModel.firstParticipant.firstName}} {{roundDetails.roundModel.firstParticipant.lastName}}"
+                   value="{{roundDetails.roundModel.firstParticipant.participantId}}"
+                   [(ngModel)]="roundResultModel.winnerParticipantId">
+    </p-radioButton>
+</div>
+<div class="ui-g-12 ui-g-12 ui-g-nopad">
+    <p-radioButton label="{{roundDetails.roundModel.secondParticipant.firstName}} {{roundDetails.roundModel.secondParticipant.lastName}}"
+                   value="{{roundDetails.roundModel.secondParticipant.participantId}}"
+                   [(ngModel)]="roundResultModel.winnerParticipantId">
+    </p-radioButton>
 </div>
 
+<div class="ui-g-12 ui-g-nopad"><h3>Reason</h3></div>
+<div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{roundResultTypes.Points}}" label="{{roundResultTypes[roundResultTypes.Points]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton></div>
+<div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{roundResultTypes.Advantages}}" label="{{roundResultTypes[roundResultTypes.Advantages]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton></div>
+<div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{roundResultTypes.Penalties}}" label="{{roundResultTypes[roundResultTypes.Penalties]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton></div>
+<div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{roundResultTypes.Decision}}" label="{{roundResultTypes[roundResultTypes.Decision]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton></div>
+<div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{roundResultTypes.Submission}}" label="{{roundResultTypes[roundResultTypes.Submission]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton></div>
+<div class="ui-g-11 ui-g-offset-1 ui-g-nopad">
+    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Armlock}}" label="{{submissionTypes[submissionTypes.Armlock]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType !== roundResultTypes.Submission"></p-radioButton></div>
+    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Leglock}}" label="{{submissionTypes[submissionTypes.Leglock]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType !== roundResultTypes.Submission"></p-radioButton></div>
+    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Choke}}" label="{{submissionTypes[submissionTypes.Choke]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType !== roundResultTypes.Submission"></p-radioButton></div>
+</div>
+<div class="ui-g-12 ui-g-nopad" >
+    <p-radioButton value="{{roundResultTypes.Disqualification}}" label="{{roundResultTypes[roundResultTypes.Disqualification]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton>
+</div>
+
+<div class="ui-g-12">
+    <div class="float-right">
+        <button pButton type="button" label="Save" (click)="save()"></button>
+        <button pButton type="button" label="Close"(click)="this.close.emit(null)"></button>
+    </div>
+</div>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model.Category;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -29,10 +30,10 @@ namespace TRNMNT.Core.Services.Interface
         Task SetCategoryCompleteAsync(Guid categoryId);
 
         /// <summary>
-        /// Returns round time by category identifier async. 
+        /// Returns category by category identifier async. 
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<int> GetRoundTimeAsync(Guid categoryId);
+        Task<Category> GetCategoryAsync(Guid categoryId);
     }
 }

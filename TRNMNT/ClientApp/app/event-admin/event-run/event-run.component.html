@@ -4,27 +4,13 @@
 </div>
 <div class="ui-g">
     <div class="ui-g-12">
-        <button pButton type="button" label="Update Round" (click)="finishRound()" [disabled]="!isFilterSelected"></button>
-    </div>
-</div>
-<div class="ui-g">
-    <div class="ui-g-12">
         <button pButton type="button" label="Run Weight Division" (click)="runWeightDivision()" [disabled]="!isFilterSelected"></button>
         <button pButton type="button" label="Open Weight Division Spectator View" (click)="runWeightDivisionSpectatorView()" [disabled]="!isFilterSelected"></button>
         <button pButton type="button" label="Open Category Spectator View" (click)="runCategorySpectatorView()" [disabled]="!isCategorySelected"></button>
     </div>
 </div>
 <bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runRound($event);"></bracket>
-<p-dialog *ngIf="!!selectedRoundDetails && showRoundPanel"
-          header="Complete Round"
-          [(visible)]="!!selectedRoundDetails && showRoundPanel"
-          [modal]="true"
-          [resizable]="false"
-          showEffect="fade"
-          [showHeader]="true"
-          (onHide)="completeRound()">
-    <round-panel [roundModel]="selectedRoundDetails"></round-panel>
-</p-dialog>
+<round-panel *ngIf="showRoundPanel" [roundModel]="selectedRoundDetails" (close)="completeRound()" (completeRound)="completeRound()"></round-panel>
 
 
 

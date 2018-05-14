@@ -1,13 +1,20 @@
-﻿<div class="brackets-live" *ngIf="bracket">
+﻿<div class="brackets-live stages-{{getMaxStage()}}" *ngIf="bracket">
+    <div class="bracket-header">
+        <div class="ui-g-12"><h2>{{bracket.title}}</h2></div>
+        <div class="medalists" *ngIf="bracket.medalists.length > 0">
+            <div class="" *ngFor="let medalist of bracket.medalists"><b>{{medalist.place}}</b> {{medalist.participant.firstName}} {{medalist.participant.lastName}}</div>
+        </div>
+
+    </div>
     <div class="round" *ngFor="let col of columns">
         <div class="match empty" *ngIf="isCentralCol(col)"><div class="match-content"></div></div>
-        <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)" (click)="onRoundClick(model)">
-            <div class="match-content ui-g-1 ui-g-nopad">
+        <div class="match {{getMatchSideClass(col)}} {{getMatchTypeClass(model)}} " *ngFor="let model of getRoundModels(col)">
+            <div class="match-content ui-g-1 ui-g-nopad {{getWinnerClass(model)}}" (click)="onRoundClick(model)" [ngClass]="{'editable': this.isEditable(model)}">
                 <div class="participant-plate ui-g-12">
-                    {{model.firstParticipant ? model.firstParticipant.firstName + ' ' + model.firstParticipant.lastName : ''}}
+                    {{displayParticipantData(model, 1)}}
                 </div>
                 <div class="participant-plate ui-g-12">
-                    {{model.secondParticipant ? model.secondParticipant.firstName + ' ' + model.secondParticipant.lastName : ''}}
+                    {{displayParticipantData(model, 2)}}
                 </div>
             </div>
         </div>

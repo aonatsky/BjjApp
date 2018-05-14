@@ -40,7 +40,7 @@ export class EventRunCategoryViewComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.localSubscriptions.push(this.runEventHubService.onRefreshRound().subscribe((model) => {
+        this.localSubscriptions.push(this.runEventHubService.onRoundComplete().subscribe((model) => {
             console.log("RECIEVED", model);
             this.copyArrayWithSubstitution(model);
         }));

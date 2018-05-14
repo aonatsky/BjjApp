@@ -30,20 +30,10 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task<IEnumerable<TeamResultModel>> GetTeamResultsByCategoriesAsync(IEnumerable<Guid> categoryIds)
         {
-            var teams = await _teamRepository.GetAll().Take(3).ToListAsync();
             var results = new List<TeamResultModel>();
-            for (int i = 0; i < 3; i++)
-            {
-                results.Add(new TeamResultModel()
-                {
-                    Points = (i + 3) * 10,
-                    TeamId = teams[i].TeamId,
-                    TeamName = teams[i].Name
-                });
-            }
-            return results;
-            
-            var medalists = new List<(Guid, int)>();
+
+
+            var medalists = new List<(Participant, int)>();
 
             foreach (var categoryId in categoryIds)
             {
@@ -52,29 +42,33 @@ namespace TRNMNT.Core.Services.impl
 
                 foreach (var bracketId in bracketIds)
                 {
-                    var rounds = await _roundRepository.GetAll(r => r.BracketId == bracketId && r.Stage == 0).ToListAsync();
-                    foreach (var round in rounds)
+                    var finals = await _roundRepository.GetAllIncluding(r => r.BracketId == bracketId && r.Stage == 0, r => r.FirstParticipant, r => r.SecondParticipant, r => r.WinnerParticipant).ToListAsync();
+                    foreach (var round in finals)
                     {
-                        if (round.WinnerParticipantId.HasValue)
+                        if (round.WinnerParticipant != null)
                         {
-                            if (round.RoundType == (int)RoundTypeEnum.Standard)
+                            if (round.RoundType != (int)RoundTypeEnum.ThirdPlace)
                             {
-                                medalists.Add((round.WinnerParticipantId.Value, 1));
-                                medalists.Add(
-                                    round.FirstParticipantId.Value == round.WinnerParticipantId.Value
-                                        ? (round.SecondParticipantId.Value, 2)
-                                        : (round.FirstParticipantId.Value, 2));
+                                medalists.Add((round.WinnerParticipant, 1));
+                                if (round.SecondParticipant != null && round.FirstParticipant != null)
+                                {
+                                    medalists.Add(
+                                        round.FirstParticipantId == round.WinnerParticipantId
+                                            ? (round.SecondParticipant, 2)
+                                            : (round.FirstParticipant, 2));
+                                }
+
                             }
                             else
                             {
-                                medalists.Add((round.WinnerParticipantId.Value, 3));
+                                medalists.Add((round.WinnerParticipant, 3));
                             }
                         }
                     }
                 }
             }
-
-            
+            return results;
         }
+
     }
 }

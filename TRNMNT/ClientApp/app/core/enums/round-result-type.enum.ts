@@ -1,4 +1,4 @@
-﻿export enum RoundResult {
+﻿export enum RoundResultType {
     Points = 0,
     Advantages = 1,
     Penalties = 2,

@@ -12,6 +12,7 @@ import './round-panel-view.component.scss';
 })
 export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     @Input() roundModel: RoundModel;
+    @Input() title: string;
 
     private roundDetails: RoundDetailsModel;
 
@@ -23,12 +24,12 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
 
         this.roundDetails = new RoundDetailsModel();
 
-        this.roundDetails.firstPlayerPenalty = 0;
-        this.roundDetails.secondPlayerPenalty = 0;
-        this.roundDetails.firstPlayerAdvantage = 0;
-        this.roundDetails.secondPlayerAdvantage = 0;
-        this.roundDetails.firstPlayerPoints = 0;
-        this.roundDetails.secondPlayerPoints = 0;
+        this.roundDetails.firstParticipantPenalties = 0;
+        this.roundDetails.secondParticipantPenalties = 0;
+        this.roundDetails.firstParticipantAdvantages = 0;
+        this.roundDetails.secondParticipantAdvantages = 0;
+        this.roundDetails.firstParticipantPoints = 0;
+        this.roundDetails.secondParticipantPoints = 0;
 
         this.roundDetails.countdown = 2 * 60;
         this.roundDetails.isStarted = false;
@@ -39,6 +40,7 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     }
 
     ngOnInit(): void {
+        this.roundDetails.countdown = this.roundModel.roundTime;
         this.roundDetails.roundId = this.roundModel.roundId;
         this.setupConnection(this.roundModel.roundId, x => {
             this.roundDetails = x;

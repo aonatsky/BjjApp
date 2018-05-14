@@ -1,54 +1,43 @@
-﻿<div [hidden]="!roundModel">
-    <div class="round-panel-view-title-box">
-        <div class="round-panel-view-title-white"></div>
-        <div class="round-panel-view-title-yellow"></div>
+﻿<div *ngIf="roundModel" class="round-panel-view-wrapper">
+    <div class="logo ui-g-nopad ui-g-2"></div>
+    <div class="title-row ui-g-nopad ui-g-10">
+        {{title}}
+        
     </div>
 
-    <div class="round-panel-view-participent-box round-panel-flex-wrapper">
-        <div class="round-panel-view-participent-info">
-            <div class="round-panel-view-participent-label">{{roundModel.firstParticipant.firstName}} {{roundModel.firstParticipant.lastName}}</div>
-            <div class="round-panel-view-team-label"></div>
+    <div class="participant-row ui-g-12 ui-g-nopad first-participant">
+        <div class="ui-g-9 participant-info">
+            {{roundModel.firstParticipant.firstName}} {{roundModel.firstParticipant.lastName}}
         </div>
-        <div>
-            <div class="round-panel-flex-wrapper">
-                <div>
-                    <div class="round-panel-view-small-score-box">
-                        <div class="round-panel-score-label">ADV.</div>
-                        <div class="round-panel-score-value">{{roundDetails.firstPlayerAdvantage}}</div>
-                    </div>
-                    <div class="round-panel-view-score-box-delimeter"></div>
-                    <div class="round-panel-view-small-score-box">
-                        <div class="round-panel-score-label">PEN.</div>
-                        <div class="round-panel-score-value">{{roundDetails.firstPlayerPenalty}}</div>
-                    </div>
-                </div>
-                <div class="round-panel-point-red-box">{{roundDetails.firstPlayerPoints}}</div>
+        <div class="ui-g-1 ui-g-nopad advantage-box">
+            <div class="ui-g-12 ui-g-nopad advantage">
+                <div class="score-label">ADV.</div>
+                <div class="score-value">{{roundDetails.firstParticipantAdvantages}}</div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad penalty">
+                <div class="score-label">PEN.</div>
+                <div class="score-value">{{roundDetails.firstParticipantPenalties}}</div>
             </div>
         </div>
+        <div class="ui-g-2 ui-g-nopad point-box">{{roundDetails.firstParticipantPoints}}</div>
     </div>
 
-    <div class="round-panel-view-timer-box">{{roundDetails.countdown | formatTimer}}</div>
+    <div class="ui-g-12 ui-g-nopad timer-row">{{roundDetails.countdown | formatTimer}}</div>
 
-    <div class="round-panel-view-participent-box round-panel-flex-wrapper">
-        <div class="round-panel-view-participent-info">
-            <div class="round-panel-view-participent-label">{{roundModel.secondParticipant.firstName}} {{roundModel.secondParticipant.lastName}}</div>
-            <div class="round-panel-view-team-label"></div>
+    <div class="participant-row ui-g-12 ui-g-nopad second-participant">
+        <div class="ui-g-9 participant-info">
+            {{roundModel.secondParticipant.firstName}} {{roundModel.secondParticipant.lastName}}
         </div>
-        <div>
-            <div class="round-panel-flex-wrapper">
-                <div>
-                    <div class="round-panel-view-small-score-box">
-                        <div class="round-panel-score-label">ADV.</div>
-                        <div class="round-panel-score-value">{{roundDetails.secondPlayerAdvantage}}</div>
-                    </div>
-                    <div class="round-panel-view-score-box-delimeter"></div>
-                    <div class="round-panel-view-small-score-box">
-                        <div class="round-panel-score-label">PEN.</div>
-                        <div class="round-panel-score-value">{{roundDetails.secondPlayerPenalty}}</div>
-                    </div>
-                </div>
-                <div class="round-panel-point-blue-box">{{roundDetails.secondPlayerPoints}}</div>
+        <div class="ui-g-1 ui-g-nopad advantage-box">
+            <div class="ui-g-12 ui-g-nopad advantage">
+                <div class="score-label">ADV.</div>
+                <div class="score-value">{{roundDetails.secondParticipantAdvantages}}</div>
+            </div>
+            <div class="ui-g-12 ui-g-nopad penalty">
+                <div class="score-label">PEN.</div>
+                <div class="score-value">{{roundDetails.secondParticipantPenalties}}</div>
             </div>
         </div>
+        <div class="ui-g-2 ui-g-nopad point-box">{{roundDetails.secondParticipantPoints}}</div>
     </div>
 </div>

@@ -29,17 +29,22 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
-        public async Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
+        public async Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionModelsByCategoryIdAsync(Guid categoryId)
         {
-            return await _weightDevisionRepository.GetAll().Where(wd => wd.CategoryId == categoryId).Select(wd =>
-                    new WeightDivisionModelBase
-                    {
-                        WeightDivisionId = wd.WeightDivisionId.ToString(),
-                        Name = wd.Name
-                    }).ToListAsync();
+            return (await GetWeightDivisionsByCategoryIdAsync(categoryId)).Select(wd =>
+                new WeightDivisionModelBase
+                {
+                    WeightDivisionId = wd.WeightDivisionId,
+                    Name = wd.Name
+                });
         }
 
-        public async Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionsByEventIdAsync(Guid eventId, bool isWithAbsolute)
+        public async Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
+        {
+            return await _weightDevisionRepository.GetAll(wd => wd.CategoryId == categoryId).Include(wd => wd.Brackets).ToListAsync();
+        }
+
+        public async Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionModelsByEventIdAsync(Guid eventId, bool isWithAbsolute)
         {
             var query = _weightDevisionRepository.GetAll().Where(wd => wd.Category.EventId == eventId);
             if (!isWithAbsolute)
@@ -49,9 +54,9 @@ namespace TRNMNT.Core.Services.Impl
             return await query.Select(wd =>
                 new WeightDivisionModel
                 {
-                    WeightDivisionId = wd.WeightDivisionId.ToString(),
+                    WeightDivisionId = wd.WeightDivisionId,
                     Name = wd.Name,
-                    CategoryId = wd.CategoryId.ToString(),
+                    CategoryId = wd.CategoryId,
                     Descritpion = wd.Descritpion,
                     Weight = wd.Weight
                 }).ToListAsync();
@@ -73,6 +78,11 @@ namespace TRNMNT.Core.Services.Impl
                 _weightDevisionRepository.Add(weightDivision);
             }
             return weightDivision;
+        }
+
+        public async Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId)
+        {
+            return await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
         }
 
         #endregion

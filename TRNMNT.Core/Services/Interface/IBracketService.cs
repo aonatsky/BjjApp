@@ -6,12 +6,18 @@ using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Model.WeightDivision;
-using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
     public interface IBracketService
     {
+        /// <summary>
+        /// Returns results by selected categories;
+        /// </summary>
+        /// <param name="categoryIds">Category Id</param>
+        /// <returns></returns>
+        Task<IEnumerable<TeamResultModel>> GetTeamResultsByCategoriesAsync(IEnumerable<Guid> categoryIds);
+        
         ///<summary>
         /// Returns bracket for weightdivision
         /// </summary>
@@ -50,9 +56,9 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<List<ParticipantInAbsoluteDivisionMobel>> GetWinnersAsync(Guid categoryId);
+        Task<List<ParticipantInAbsoluteDivisionModel>> GetWinnersAsync(Guid categoryId);
 
-        Task<bool> IsWinnersSelectedForAllRoundsAsync(Guid categoryId);
+        Task<bool> IsCategoryCompletedAsync(Guid categoryId);
 
         Task ManageAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model);
 
@@ -62,5 +68,13 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="model">RoundResult model</param>
         /// <returns></returns>
         Task SetRoundResultAsync(RoundResultModel model);
+
+        /// <summary>
+        /// Returns file with personal results;
+        /// </summary>
+        /// <param name="categoryIds"></param>
+        /// <returns></returns>
+        Task<CustomFile> GetPersonalResultsFileByCategoriesAsync(
+            IEnumerable<Guid> categoryIds);
     }
 }
