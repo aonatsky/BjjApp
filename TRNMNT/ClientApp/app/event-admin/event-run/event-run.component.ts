@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import './event-run.component.scss'
-import { BracketModel } from '../../core/model/bracket.models';
+import { BracketModel, ChageWeightDivisionModel } from '../../core/model/bracket.models';
 import { BracketService } from '../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
 import { RouterService } from '../../core/services/router.service';
 import { RoundModel } from '../../core/model/round.models';
-
+import { v4 as uuid } from 'uuid';
+import { DefaultValues } from '../../core/consts/default-values';
 
 @Component({
     selector: 'event-run',
     templateUrl: './event-run.component.html',
 })
-export class EventRunComponent implements OnInit {
+export class EventRunComponent implements OnInit, OnDestroy {
 
     private eventId: string;
     private bracket: BracketModel;
@@ -29,6 +30,10 @@ export class EventRunComponent implements OnInit {
 
     private get isCategorySelected(): boolean {
         return !!this.filter && !!this.filter.categoryId;
+    }
+
+    private get synchronizationId() : AAGUID {
+        return sessionStorage.getItem(DefaultValues.RunEventSessionId);
     }
 
     constructor(
@@ -52,6 +57,10 @@ export class EventRunComponent implements OnInit {
             this.selectedRoundDetails = x;
             this.showRoundPanel = true;
         });
+        if (sessionStorage.getItem(DefaultValues.RunEventSessionId) == null) {
+            sessionStorage.setItem(DefaultValues.RunEventSessionId, uuid());
+        }
+        this.runEventHubService.joinOperatorGroup(this.synchronizationId);
     }
 
     private filterSelected($event: CategoryWithDivisionFilterModel) {
@@ -59,18 +68,27 @@ export class EventRunComponent implements OnInit {
         this.bracket = null;
         if (this.selectedRoundDetails) {
             this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
-            this.runWeightDivision();
+            this.runWeightDivision();       
         }
     }
 
     private runWeightDivision() {
-        this.runEventHubService.joinWeightDivisionGroup(this.filter.weightDivisionId, this.previousWeightDivisionId);
+        localStorage.setItem(`${DefaultValues.RunEventSyncIdPart}${this.synchronizationId}`, this.filter.weightDivisionId);
+
+        this.runEventHubService.joinWeightDivisionGroup(this.filter.weightDivisionId, this.previousWeightDivisionId)
+            .then(() => {
+                const model = new ChageWeightDivisionModel();
+                model.weightDivisionId = this.filter.weightDivisionId;
+                model.synchronizationId = this.synchronizationId;
+                this.runEventHubService.fireWeightDivisionChange(model);
+            });
+
         this.bracketService.runBracket(this.filter.weightDivisionId).subscribe(m => this.refreshModel(m));
         this.previousWeightDivisionId = this.filter.weightDivisionId;
     }
 
     private runWeightDivisionSpectatorView() {
-        this.routerService.openEventWeightDivisionSpactatorView(this.filter.weightDivisionId);
+        this.routerService.openEventWeightDivisionSpactatorView();
     }
 
     private runCategorySpectatorView() {
@@ -98,5 +116,9 @@ export class EventRunComponent implements OnInit {
         this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
         this.runEventHubService.fireRoundStart(model);
         this.showRoundPanel = true;
+    }
+
+    ngOnDestroy(): void {
+        localStorage.removeItem(`${DefaultValues.RunEventSyncIdPart}${this.synchronizationId}`);
     }
 }

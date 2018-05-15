@@ -44,14 +44,14 @@ export class SignalRHubService {
         this.hubConnection.invoke(eventName, data);
     }
 
-    start(): void {
-        this.hubConnection.start();
+    start(): Promise<void> {
+        return this.hubConnection.start();
     }
 
-    stop(): void {
+    stop(): Promise<void> {
         this.hubConnection.off('OtherClientDisconnected', this.logDisconnectionDelegate);
         this.hubConnection.off('OtherClientConnected', this.logConnectionDelegate);
-        this.hubConnection.stop();
+        return this.hubConnection.stop();
     }
 
     onConnected(): Observable<string> {
@@ -71,6 +71,7 @@ export class SignalRHubService {
     bindReconnection() {
         this.onConnectionClosed().subscribe((e) => {
             if (this.reconnectionCounter >= this.reconnectionLimit) {
+                this.reconnectionCounter = 0;
                 return;
             }
             // huck to start reconnection

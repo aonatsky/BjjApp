@@ -28,7 +28,7 @@ export const eventAdminRoutes: Routes = [
                 path: 'run/:id', component: EventRunComponent,
             },
             {
-                path: 'run-wd-spectator-view/:id', component: EventRunWeightDivisionViewComponent,
+                path: 'run-wd-spectator-view', component: EventRunWeightDivisionViewComponent,
             },
             {
                 path: 'run-category-spectator-view/:id', component: EventRunCategoryViewComponent,

@@ -8,4 +8,7 @@ class DefaultValues {
     static DROPDOWN_ID_ANY = 800;
 
     static SomethingWentWrongMessage = "Somethig went wrong";
+
+    static RunEventSyncIdPart = "runevent-wd-view-sync-id_";
+    static RunEventSessionId = "runevent-sessin-id";
 }

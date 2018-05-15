@@ -24,6 +24,7 @@ export class CategoryWithDivisionFilter implements OnInit {
 
     @Input() eventId: string;
     @Input() useDataFromInput: boolean = false;
+    @Input() autoSelectFirstWeightDivision: boolean = false;
     @Input() categories: CategorySimpleModel[] = [];
     @Input() weightDivisions: WeightDivisionModel[] = [];
     @Input() isMemberFilterEnabled: boolean = false;
@@ -82,9 +83,10 @@ export class CategoryWithDivisionFilter implements OnInit {
             this.weightDivisionsSelectItems = [];
             this.weightDivisionsSelectItems.push(this.defaultOption);
             weightDivisions.map(wd => this.weightDivisionsSelectItems.push(this.getWeightDivisionselectItem(wd)));
-            this.currentFilterValue.weightDivisionId = '';
+            this.currentFilterValue.weightDivisionId = this.autoSelectFirstWeightDivision ? weightDivisions[0].weightDivisionId : '';
         } else {
             this.weightDivisionsSelectItems = null;
+            this.currentFilterValue.weightDivisionId = '';
         }
     }
 
