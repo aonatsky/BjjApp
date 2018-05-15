@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BracketModel } from '../../core/model/bracket.models';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
@@ -22,7 +22,8 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private bracketService: BracketService,
-        private runEventHubService: RunEventHubService) {
+        private runEventHubService: RunEventHubService,
+        private cdRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
@@ -53,7 +54,9 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
         }
     }
 
-    private refreshModel(model: BracketModel) : void {
+    private refreshModel(model: BracketModel): void {
+        this.bracket = null;
+        this.cdRef.detectChanges();
         this.bracket = model;
     }
 }

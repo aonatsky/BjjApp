@@ -46,8 +46,8 @@ export class CategoryWithDivisionFilter implements OnInit {
             this.initFilter([this.categories, this.weightDivisions]);
         } else {
             Observable.forkJoin(
-                    this.categoryService.getCategoriesByEventId(this.eventId),
-                    this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
+                this.categoryService.getCategoriesByEventId(this.eventId),
+                this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
                 .subscribe(data => this.initFilter(data));
         }
     }
@@ -92,11 +92,14 @@ export class CategoryWithDivisionFilter implements OnInit {
 
     private getWeightDivisionselectItem(weightDivision: WeightDivisionModel) {
         let label = weightDivision.name;
-        if (weightDivision.status == 1) {
-            label += ' (IN PROGRESS)';
-        } else {
-            label += ' (COMPLETED)';
+        if (weightDivision.status != 0) {
+            if (weightDivision.status == 1) {
+                label += ' (IN PROGRESS)';
+            } else {
+                label += ' (COMPLETED)';
+            }
         }
+
         return { label: label, value: weightDivision.weightDivisionId }
     }
 
@@ -120,7 +123,7 @@ export class CategoryWithDivisionFilter implements OnInit {
 
     //#endregion
 
-     
+
 
 
 
