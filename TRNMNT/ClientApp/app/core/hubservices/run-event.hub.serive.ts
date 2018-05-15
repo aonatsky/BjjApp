@@ -16,7 +16,7 @@ export class RunEventHubService {
 	isConnected: boolean = false;
 
 	constructor(private signalRService: SignalRHubService) {
-        this.hubConnection = this.signalRService.createConnection("/runevent", TransportType.LongPolling);
+        this.hubConnection = this.signalRService.createConnection("/runevent");
 	}
 
     joinWeightDivisionGroup(weightDivisionId: string, previousWeightDivisionId?: string): Promise<void> {

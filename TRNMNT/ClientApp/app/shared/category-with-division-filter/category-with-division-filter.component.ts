@@ -87,6 +87,7 @@ export class CategoryWithDivisionFilter implements OnInit {
             
         } else {
             this.weightDivisionsSelectItems = null;
+            this.currentFilterValue.weightDivisionId = "";
         }
     }
 

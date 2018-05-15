@@ -66,8 +66,8 @@ export class RouterService {
         this.router.navigateByUrl('event/event-registration/');
     }
 
-    openEventWeightDivisionSpactatorView(syncronizationId: string) {
-        this.openNewWindow('/event-admin/run-wd-spectator-view/' + syncronizationId);
+    openEventWeightDivisionSpactatorView() {
+        this.openNewWindow('/event-admin/run-wd-spectator-view');
     }
 
     openEventCategorySpactatorView(categoryId: string) {

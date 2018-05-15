@@ -39,21 +39,17 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
             this.refreshModel(refreshModel.bracket);
             this.previousWeightDivisionId = refreshModel.weightDivisionId;
         });
-        this.startSubscriptionFromRouteId();
+        this.startSubscription();
     }
 
-    private startSubscriptionFromRouteId() {
-        this.route.params.subscribe(p => {
-            const id = p['id'];
-            this.startSubscription(id);
-        });
-    }
-
-    private startSubscription(syncronizationId) {
-        if (syncronizationId != null) {
-            this.runEventHubService.joinOperatorGroup(syncronizationId);
-            const weightDivisionId = localStorage.getItem(`${DefaultValues.RunEventSyncIdPart}${syncronizationId}`);
-            this.bracketService.getBracket(weightDivisionId).subscribe(model => this.refreshModel(model));
+    private startSubscription() {
+        const synchronizationId = sessionStorage.getItem(DefaultValues.RunEventSessionId);
+        if (synchronizationId != null) {
+            this.runEventHubService.joinOperatorGroup(synchronizationId);
+            const weightDivisionId = localStorage.getItem(`${DefaultValues.RunEventSyncIdPart}${synchronizationId}`);
+            if (weightDivisionId) {
+                this.bracketService.getBracket(weightDivisionId).subscribe(model => this.refreshModel(model));
+            }
         }
     }
 

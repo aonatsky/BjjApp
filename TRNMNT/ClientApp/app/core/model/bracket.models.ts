@@ -18,6 +18,6 @@ export class RefreshBracketModel {
 }
 
 export class ChageWeightDivisionModel {
-    syncronizationId: AAGUID;
+    synchronizationId: AAGUID;
     weightDivisionId: AAGUID;
 }

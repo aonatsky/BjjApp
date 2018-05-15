@@ -36,7 +36,7 @@ namespace TRNMNT.Web.Hubs
         {
             var refreshModel = await GetRefreshRoundModel(changeModel.WeightDivisionId);
             if (refreshModel == null) return;
-            await ToGroup(changeModel.SyncronizationId).WeightDivisionChanged(refreshModel);
+            await ToGroup(changeModel.SynchronizationId).WeightDivisionChanged(refreshModel);
         }
 
         #endregion

@@ -23,7 +23,6 @@ export class EventRunComponent implements OnInit, OnDestroy {
     private previousWeightDivisionId: string;
     private selectedRoundDetails: RoundModel;
     private showRoundPanel: boolean;
-    private syncronizationId: AAGUID;
 
     private get isFilterSelected(): boolean {
         return !!this.filter && !!this.filter.weightDivisionId;
@@ -31,6 +30,10 @@ export class EventRunComponent implements OnInit, OnDestroy {
 
     private get isCategorySelected(): boolean {
         return !!this.filter && !!this.filter.categoryId;
+    }
+
+    private get synchronizationId() : AAGUID {
+        return sessionStorage.getItem(DefaultValues.RunEventSessionId);
     }
 
     constructor(
@@ -54,8 +57,10 @@ export class EventRunComponent implements OnInit, OnDestroy {
             this.selectedRoundDetails = x;
             this.showRoundPanel = true;
         });
-        this.syncronizationId = uuid();
-        this.runEventHubService.joinOperatorGroup(this.syncronizationId);
+        if (sessionStorage.getItem(DefaultValues.RunEventSessionId) == null) {
+            sessionStorage.setItem(DefaultValues.RunEventSessionId, uuid());
+        }
+        this.runEventHubService.joinOperatorGroup(this.synchronizationId);
     }
 
     private filterSelected($event: CategoryWithDivisionFilterModel) {
@@ -68,13 +73,13 @@ export class EventRunComponent implements OnInit, OnDestroy {
     }
 
     private runWeightDivision() {
-        localStorage.setItem(`${DefaultValues.RunEventSyncIdPart}${this.syncronizationId}`, this.filter.weightDivisionId);
+        localStorage.setItem(`${DefaultValues.RunEventSyncIdPart}${this.synchronizationId}`, this.filter.weightDivisionId);
 
         this.runEventHubService.joinWeightDivisionGroup(this.filter.weightDivisionId, this.previousWeightDivisionId)
             .then(() => {
                 const model = new ChageWeightDivisionModel();
                 model.weightDivisionId = this.filter.weightDivisionId;
-                model.syncronizationId = this.syncronizationId;
+                model.synchronizationId = this.synchronizationId;
                 this.runEventHubService.fireWeightDivisionChange(model);
             });
 
@@ -83,7 +88,7 @@ export class EventRunComponent implements OnInit, OnDestroy {
     }
 
     private runWeightDivisionSpectatorView() {
-        this.routerService.openEventWeightDivisionSpactatorView(this.syncronizationId);
+        this.routerService.openEventWeightDivisionSpactatorView();
     }
 
     private runCategorySpectatorView() {
@@ -114,6 +119,6 @@ export class EventRunComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        localStorage.removeItem(`${DefaultValues.RunEventSyncIdPart}${this.syncronizationId}`);
+        localStorage.removeItem(`${DefaultValues.RunEventSyncIdPart}${this.synchronizationId}`);
     }
 }

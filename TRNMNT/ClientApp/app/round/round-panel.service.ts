@@ -7,7 +7,7 @@ export abstract class BaseRoundPanel {
     private hubConnection: HubConnection;
 
     setupConnection(groupId: any, messageHandler: (data: RoundDetailsModel) => void): void {
-        this.hubConnection = new HubConnection('/round-hub', { transport: TransportType.ServerSentEvents });
+        this.hubConnection = new HubConnection('/round-hub');
         this.hubConnection.start().then(() => {
             this.subscribeOnRecieveMessage(messageHandler);
             this.hubConnection.invoke("JoinGroup", groupId);

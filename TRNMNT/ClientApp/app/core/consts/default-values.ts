@@ -10,4 +10,5 @@ class DefaultValues {
     static SomethingWentWrongMessage = "Somethig went wrong";
 
     static RunEventSyncIdPart = "runevent-wd-view-sync-id_";
+    static RunEventSessionId = "runevent-sessin-id";
 }
