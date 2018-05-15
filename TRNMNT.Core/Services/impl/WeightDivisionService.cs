@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
@@ -51,15 +52,10 @@ namespace TRNMNT.Core.Services.Impl
             {
                 query = query.Where(w => !w.IsAbsolute);
             }
-            return await query.Select(wd =>
-                new WeightDivisionModel
-                {
-                    WeightDivisionId = wd.WeightDivisionId,
-                    Name = wd.Name,
-                    CategoryId = wd.CategoryId,
-                    Descritpion = wd.Descritpion,
-                    Weight = wd.Weight
-                }).ToListAsync();
+            query = query.Include(wd => wd.Brackets);
+            var weightDivisions = await query.ToListAsync();
+            return weightDivisions.Select(wd =>
+                GetWeightDivisionModel(wd));
         }
 
         public async Task<WeightDivision> GetAbsoluteWeightDivisionAsync(Guid categoryId)
@@ -85,7 +81,32 @@ namespace TRNMNT.Core.Services.Impl
             return await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
         }
 
+
+
         #endregion
 
+        #region PrivateMethods
+        private WeightDivisionModel GetWeightDivisionModel(WeightDivision wd)
+        {
+            var model = new WeightDivisionModel()
+            {
+                WeightDivisionId = wd.WeightDivisionId,
+                Name = wd.Name,
+                CategoryId = wd.CategoryId,
+                Descritpion = wd.Descritpion,
+                Weight = wd.Weight,
+                Status = (int)ProgressStatusEnum.NotStarted
+            };
+            var bracket = wd.Brackets.FirstOrDefault();
+            if (bracket != null && bracket.StartTs != null)
+            {
+                model.Status = bracket.CompleteTs == null
+                    ? (int)ProgressStatusEnum.InProgress
+                    : (int)ProgressStatusEnum.Completed;
+            }
+
+            return model;
+        }
+        #endregion
     }
 }

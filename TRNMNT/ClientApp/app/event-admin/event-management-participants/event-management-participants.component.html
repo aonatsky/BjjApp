@@ -30,6 +30,6 @@
 </div>
 <div class="ui-g">
     <participant-list-upload [eventId]="eventId" (onUpload)="onFileUploaded($event)" class="ui-g-12"></participant-list-upload>
-    <absolute-weight-division [categoryId]="selectedCategoryId" [isAllWinnersSelected]="isAllWinnersSelected" class="ui-g-12" ></absolute-weight-division>
+    <absolute-weight-division [categoryId]="selectedCategoryId" [isAllWinnersSelected]="isAllWinnersSelected" class="ui-g-12" (saveAbsolute)="refreshDdlModel();" ></absolute-weight-division>
 </div>
 

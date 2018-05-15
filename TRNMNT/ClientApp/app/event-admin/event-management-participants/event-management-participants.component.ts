@@ -4,7 +4,7 @@ import { RouterService } from './../../core/services/router.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { ParticipantTableModel } from './../../core/model/participant.models';
 import { ParticipantDdlModel } from './../../core/model/participant-ddl.model';
-import { ParticipantService } from "./../../core/services/participant.service";
+import { ParticipantService } from './../../core/services/participant.service';
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { ICrudColumn as CrudColumn, ColumnType, IColumnOptions, IDdlColumnChangeEvent } from '../../shared/crud/crud.component';
 import { DatePipe } from '@angular/common';
@@ -38,7 +38,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     private participantsLoading: boolean = true;
     private ddlDataLoading: boolean = true;
     private sortDirection: number = 1;
-    private sortField: string = "firstName";
+    private sortField: string = 'firstName';
 
     get isPaginationEnabled(): boolean {
         return this.participantsModel.length > this.rowsCount;
@@ -89,53 +89,48 @@ export class EventManagementParticipantsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.ddlDataLoading = true;
-        this.participantService.getParticipantsDropdownData(this.eventId).subscribe(result => {
-            this.ddlDataLoading = false;
-            this.participantDdlModel = result;
-            this.mapDdlModel(result);
-        });
+        this.refreshFilter();
     }
 
     columns: CrudColumn[] = [
-        { propertyName: "firstName", displayName: "First Name", isEditable: true, isSortable: true },
-        { propertyName: "lastName", displayName: "Last Name", isEditable: true, isSortable: true },
+        { propertyName: 'firstName', displayName: 'First Name', isEditable: true, isSortable: true },
+        { propertyName: 'lastName', displayName: 'Last Name', isEditable: true, isSortable: true },
         {
-            propertyName: "dateOfBirth",
-            displayName: "D.O.B",
+            propertyName: 'dateOfBirth',
+            displayName: 'D.O.B',
             isEditable: true,
             isSortable: true,
             transform: (value) => this.dateTransform.call(this, value),
             columnType: ColumnType.Date
         },
         <CrudColumn>{
-            propertyName: "teamName",
-            displayName: "Team",
+            propertyName: 'teamName',
+            displayName: 'Team',
             isEditable: true,
             isSortable: true,
             columnType: ColumnType.Dropdown,
-            keyPropertyName: "teamId"
+            keyPropertyName: 'teamId'
         },
         <CrudColumn>{
-            propertyName: "categoryName",
-            displayName: "Category",
+            propertyName: 'categoryName',
+            displayName: 'Category',
             isEditable: true,
             isSortable: true,
             columnType: ColumnType.Dropdown,
-            keyPropertyName: "categoryId",
+            keyPropertyName: 'categoryId',
             onChange: (event) => this.onCategoryChange.call(this, event)
         },
         <CrudColumn>{
-            propertyName: "weightDivisionName",
-            displayName: "Weight division",
+            propertyName: 'weightDivisionName',
+            displayName: 'Weight division',
             isEditable: true,
             isSortable: true,
             columnType: ColumnType.Dropdown,
-            keyPropertyName: "weightDivisionId"
+            keyPropertyName: 'weightDivisionId'
         },
         {
-            propertyName: "isMember",
-            displayName: "Membership",
+            propertyName: 'isMember',
+            displayName: 'Membership',
             isEditable: true,
             isSortable: true,
             useClass: (value) => this.getClassCallback.call(this, value),
@@ -145,14 +140,23 @@ export class EventManagementParticipantsComponent implements OnInit {
 
     columnOptions: IColumnOptions = {};
 
+    refreshFilter() {
+        this.ddlDataLoading = true;
+        this.participantService.getParticipantsDropdownData(this.eventId).subscribe(result => {
+            this.ddlDataLoading = false;
+            this.participantDdlModel = result;
+            this.mapDdlModel(result);
+        });
+    }
+    
     getClassCallback(value: boolean): string {
-        let classes = "fa-square-o";
+        let classes = 'fa-square-o';
         if (value) {
             classes = 'fa-check-square-o';
         }
         return `fa ${classes}`;
     }
-    showError(message: string = "Somethig went wrong", title: string = "Somethig went wrong") {
+    showError(message: string = 'Somethig went wrong', title: string = 'Somethig went wrong') {
         this.notificationService.showError(title, message);
     }
     dateTransform(value: Date): string {
@@ -173,7 +177,8 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.filter = $event;
         this.loadParticipants(this.getFilterModel());
         if (this.filter.categoryId) {
-            this.bracketService.isAllWinnersSelected(this.filter.categoryId).subscribe(isSelected => this.isAllWinnersSelected = isSelected);
+            debugger;
+            this.bracketService.isCategoryCompleted(this.filter.categoryId).subscribe(isSelected => this.isAllWinnersSelected = isSelected);
         }
     }
 
@@ -191,7 +196,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.participantService.updateParticipant(participant).subscribe(
             () => {
                 this.loadParticipants(this.getFilterModel(null, false));
-                this.notificationService.showSuccess("Update Info", "Participant successfully updated");
+                this.notificationService.showSuccess('Update Info', 'Participant successfully updated');
             });
     }
 
@@ -199,7 +204,7 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.participantService.deleteParticipant(participant.participantId).subscribe(
             () => {
                 this.loadParticipants(this.getFilterModel());
-                this.notificationService.showInfo("Delete Info", "Participant successfully deleted");
+                this.notificationService.showInfo('Delete Info', 'Participant successfully deleted');
             });
     }
 
@@ -261,15 +266,15 @@ export class EventManagementParticipantsComponent implements OnInit {
     private getWeightDivisionsForCategory(categoryId: string) {
         let weightDivisions = this.participantDdlModel.weightDivisions.filter(wd => wd.categoryId.toUpperCase() == categoryId.toUpperCase());
         if (weightDivisions.length > 0) {
-            return this.mapDdls(weightDivisions, "weightDivisionId");
+            return this.mapDdls(weightDivisions, 'weightDivisionId');
         }
         return [];
     }
 
     private mapDdlModel(model: ParticipantDdlModel) {
-        this.teamSelectItems = this.mapDdls(model.teams, "teamId");
-        this.categorySelectItems = this.mapDdls(model.categories, "categoryId");
-        this.weightDivisionSelectItems = this.mapDdls(model.weightDivisions, "weightDivisionId");
+        this.teamSelectItems = this.mapDdls(model.teams, 'teamId');
+        this.categorySelectItems = this.mapDdls(model.categories, 'categoryId');
+        this.weightDivisionSelectItems = this.mapDdls(model.weightDivisions, 'weightDivisionId');
         this.refreshDdlModel();
     }
     private refreshDdlModel() {

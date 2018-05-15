@@ -7,5 +7,6 @@ namespace TRNMNT.Core.Model.WeightDivision
         public int Weight { get; set; }
         public string Descritpion { get; set; }
         public Guid CategoryId { get; set; }
+        public int Status { get; set; }
     }
 }

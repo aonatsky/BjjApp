@@ -9,10 +9,8 @@
               [minHeight]="200"
               [resizable]="false">
         <table-picker-list class="ui-g-12"
-                           [sortField]="sortField"
                            [sourceArray]="candidates"
                            [(targetArray)]="selectedParticipants"
-                           [sortDirection]="sortDirection"
                            [columnsData]="columnsData"></table-picker-list>
         <button pButton label="Create" [disabled]="selectedParticipants.length == 0" (click)="createAbsoluteWeightDivision()"></button>
     </p-dialog>

@@ -40,12 +40,12 @@ export class BracketService {
             .map(res => this.httpService.getJson(res));
     }
 
-    isAllWinnersSelected(categoryId): Observable<boolean> {
-        return this.httpService.get(ApiMethods.bracket.isAllWinnersSelected + '/' + categoryId).map(res => this.httpService.getJson(res));;
+    isCategoryCompleted(categoryId): Observable<boolean> {
+        return this.httpService.get(ApiMethods.bracket.isCategoryCompleted + '/' + categoryId).map(res => this.httpService.getJson(res));;
     }
 
     getWinnersByCategory(categoryId): Observable<ParticipantInAbsoluteDivisionMobel[]> {
-        return this.httpService.get(ApiMethods.bracket.getWinners + '/' + categoryId)
+        return this.httpService.get(ApiMethods.bracket.getParticipnatsForAbsoluteDivision + '/' + categoryId)
             .map(res => this.httpService.getJson(res));
     }
 

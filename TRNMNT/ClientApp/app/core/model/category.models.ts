@@ -21,6 +21,6 @@ export class CategoryModel extends CategoryModelBase {
 
 
 export class CategorySimpleModel extends CategoryModelBase {
-    
+
 }
 

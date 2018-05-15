@@ -2,9 +2,9 @@ import { CategorySimpleModel } from '../../core/model/category.models';
 import { WeightDivisionModel } from '../../core/model/weight-division.models';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 
-import { Component, Input, Output, OnInit, EventEmitter } from "@angular/core"
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { DefaultValues } from '../../core/consts/default-values'
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { CategoryService } from '../../core/services/category.service';
 import { WeightDivisionService } from '../../core/services/weight-division.service';
 import { SelectItem } from 'primeng/components/common/selectitem';
@@ -36,8 +36,8 @@ export class CategoryWithDivisionFilter implements OnInit {
     constructor(private categoryService: CategoryService, private weightDivisionService: WeightDivisionService) {
         this.onFilterChanged = new EventEmitter<CategoryWithDivisionFilterModel>();
         this.onFilterLoaded = new EventEmitter<boolean>();
-        this.defaultOption = { label: DefaultValues.DROPDOWN_NAME_ANY, value: "" };
-        this.currentFilterValue = new CategoryWithDivisionFilterModel("", "", false);
+        this.defaultOption = { label: DefaultValues.DROPDOWN_NAME_ANY, value: '' };
+        this.currentFilterValue = new CategoryWithDivisionFilterModel('', '', false);
     }
 
     ngOnInit() {
@@ -81,11 +81,21 @@ export class CategoryWithDivisionFilter implements OnInit {
         if (weightDivisions.length > 0) {
             this.weightDivisionsSelectItems = [];
             this.weightDivisionsSelectItems.push(this.defaultOption);
-            weightDivisions.map(wd => this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId }));
-            this.currentFilterValue.weightDivisionId = "";
+            weightDivisions.map(wd => this.weightDivisionsSelectItems.push(this.getWeightDivisionselectItem(wd)));
+            this.currentFilterValue.weightDivisionId = '';
         } else {
             this.weightDivisionsSelectItems = null;
         }
+    }
+
+    private getWeightDivisionselectItem(weightDivision: WeightDivisionModel) {
+        let label = weightDivision.name;
+        if (weightDivision.status == 1) {
+            label += ' (IN PROGRESS)';
+        } else {
+            label += ' (COMPLETED)';
+        }
+        return { label: label, value: weightDivision.weightDivisionId }
     }
 
     private initCategoryFilter(categories: CategorySimpleModel[]) {

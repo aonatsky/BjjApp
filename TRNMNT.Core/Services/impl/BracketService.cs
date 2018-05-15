@@ -84,7 +84,7 @@ namespace TRNMNT.Core.Services.impl
             return (await _categoryService.GetCategoryAsync(categoryId)).CompleteTs != null;
         }
 
-        public async Task<List<ParticipantInAbsoluteDivisionModel>> GetWinnersAsync(Guid categoryId)
+        public async Task<List<ParticipantInAbsoluteDivisionModel>> GetParticipantsForAbsoluteDivisionAsync(Guid categoryId)
         {
             if ((await _categoryService.GetCategoryAsync(categoryId)).CompleteTs == null)
             {
@@ -92,7 +92,7 @@ namespace TRNMNT.Core.Services.impl
                     $"For Weight divisions for category with id {categoryId} not all rounds has winners");
             }
 
-            var braketsForCategory = await _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId)
+            var braketsForCategory = await _bracketRepository.GetAll(b => b.WeightDivision.CategoryId == categoryId && !b.WeightDivision.IsAbsolute)
                 .Include(b => b.WeightDivision)
                 .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p => p.WeightDivision)
                 .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(p => p.WeightDivision)

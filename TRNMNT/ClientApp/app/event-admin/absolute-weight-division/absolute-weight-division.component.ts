@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LoggerService } from './../../core/services/logger.service';
 import { BracketService } from '../../core/services/bracket.service';
 import { ParticipantInAbsoluteDivisionMobel as ParticipantSmallTableModel } from '../../core/model/participant.models';
@@ -11,10 +11,12 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
 
     @Input() categoryId: string;
     @Input() isAllWinnersSelected: boolean;
+    @Output() saveAbsolute: EventEmitter<any> = new EventEmitter();
+
     private candidates: ParticipantSmallTableModel[];
     private selectedParticipants: ParticipantSmallTableModel[] = [];
     private sortDirection: number = 1;
-    private sortField: string = "firstName";
+    private sortField: string = 'firstName';
     private displayAbsoluteWindow: boolean = false;
     private prevCategoryId: string;
 
@@ -23,17 +25,17 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
         private bracketService: BracketService) {
     }
     columnsData: any[] = [
-        { propertyName: "firstName", displayName: "First Name", isSortable: true},
-        { propertyName: "lastName", displayName: "Last Name", isSortable: true },
-        { propertyName: "teamName", displayName: "Team", isSortable: true},
-        { propertyName: "weightDivisionName", displayName: "Weight division", isSortable: true}
+        { propertyName: 'firstName', displayName: 'First Name', isSortable: false},
+        { propertyName: 'lastName', displayName: 'Last Name', isSortable: false },
+        { propertyName: 'weightDivisionName', displayName: 'Weight division', isSortable: false}
     ];
 
     ngOnInit() {
-        
+        debugger;
     }
 
     showAbsoluteWeightDivision() {
+        debugger;
         if (this.prevCategoryId !== this.categoryId) {
             this.prevCategoryId = this.categoryId;
             this.bracketService.getWinnersByCategory(this.categoryId).subscribe(data => {
@@ -48,6 +50,7 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
     private createAbsoluteWeightDivision() {
         this.bracketService.manageAbsoluteWeightDivision(this.selectedParticipantIds, this.categoryId).subscribe(() => {
             this.displayAbsoluteWindow = false;
+            this.saveAbsolute.emit(null);
         });
     }
 

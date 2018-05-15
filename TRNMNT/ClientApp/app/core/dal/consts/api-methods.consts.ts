@@ -63,8 +63,8 @@ export const ApiMethods = Object.freeze({
         downloadFile: 'api/bracket/downloadFile',
         updateBracket: 'api/bracket/updateBracket',
         getBracketsByCategory: 'api/bracket/getBracketsByCategory',
-        getWinners: 'api/bracket/getWinners',
-        isAllWinnersSelected: 'api/bracket/isAllWinnersSelected',
+        getParticipnatsForAbsoluteDivision: 'api/bracket/getParticipnatsForAbsoluteDivision',
+        isCategoryCompleted: 'api/bracket/isCategoryCompleted',
         manageAbsoluteWeightDivision: 'api/bracket/manageAbsoluteWeightDivision',
         setRoundResult: 'api/bracket/setRoundResult'
     },

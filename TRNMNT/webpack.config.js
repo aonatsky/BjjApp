@@ -26,11 +26,11 @@ module.exports = (env) => {
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
                 {
                     test: /\.scss$/,
-                    use: extractSass.extract({ fallback: 'style-loader', use: ['css-loader','sass-loader','postcss-loader'] })
+                    use: extractSass.extract({ fallback: 'style-loader', use: ['css-loader', 'sass-loader', 'postcss-loader'] })
                 }
             ]
         },
-        plugins: [new CheckerPlugin(), extractSass, new UglifyJsPlugin()]
+        plugins: [new CheckerPlugin(), extractSass]
     };
 
     // Configuration for client-side bundle suitable for running in browsers
@@ -39,7 +39,6 @@ module.exports = (env) => {
         entry: { 'main-client': './ClientApp/boot-client.ts' },
         output: { path: path.join(__dirname, clientBundleOutputDir) },
         plugins: [
-            new UglifyJsPlugin(),
             new webpack.DllReferencePlugin({
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')
@@ -51,6 +50,7 @@ module.exports = (env) => {
                 moduleFilenameTemplate: path.relative(clientBundleOutputDir, '[resourcePath]') // Point sourcemap entries to the original file locations on disk
             })
         ] : [
+                new UglifyJsPlugin()
                 // Plugins that apply in production builds only
                 //new webpack.optimize.UglifyJsPlugin()
             ])

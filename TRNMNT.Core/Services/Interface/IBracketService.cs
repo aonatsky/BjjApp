@@ -52,11 +52,11 @@ namespace TRNMNT.Core.Services.Interface
         Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId);
 
         /// <summary>
-        /// Get all winners for selected categoryId
+        /// Get medalists for selected categoryId
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<List<ParticipantInAbsoluteDivisionModel>> GetWinnersAsync(Guid categoryId);
+        Task<List<ParticipantInAbsoluteDivisionModel>> GetParticipantsForAbsoluteDivisionAsync(Guid categoryId);
 
         Task<bool> IsCategoryCompletedAsync(Guid categoryId);
 

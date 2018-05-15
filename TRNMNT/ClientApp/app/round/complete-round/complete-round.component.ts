@@ -73,4 +73,9 @@ export class CompleteRoundComponent implements OnInit {
             this.complete.emit(null);
         });
     }
+
+    isDisabled(): boolean {
+        debugger;
+        return this.roundResultModel.roundResultType === this.roundResultTypes.Submission;
+    }
  }

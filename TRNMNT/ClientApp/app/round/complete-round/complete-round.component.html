@@ -19,9 +19,9 @@
 <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{roundResultTypes.Decision}}" label="{{roundResultTypes[roundResultTypes.Decision]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton></div>
 <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{roundResultTypes.Submission}}" label="{{roundResultTypes[roundResultTypes.Submission]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton></div>
 <div class="ui-g-11 ui-g-offset-1 ui-g-nopad">
-    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Armlock}}" label="{{submissionTypes[submissionTypes.Armlock]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType !== roundResultTypes.Submission"></p-radioButton></div>
-    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Leglock}}" label="{{submissionTypes[submissionTypes.Leglock]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType !== roundResultTypes.Submission"></p-radioButton></div>
-    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Choke}}" label="{{submissionTypes[submissionTypes.Choke]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType !== roundResultTypes.Submission"></p-radioButton></div>
+    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Armlock}}" label="{{submissionTypes[submissionTypes.Armlock]}}" [(ngModel)]="roundResultModel.submissionType"  [disabled]="roundResultModel.roundResultType != roundResultTypes.Submission"></p-radioButton></div>
+    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Leglock}}" label="{{submissionTypes[submissionTypes.Leglock]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType != roundResultTypes.Submission"></p-radioButton></div>
+    <div class="ui-g-12 ui-g-nopad"><p-radioButton value="{{submissionTypes.Choke}}" label="{{submissionTypes[submissionTypes.Choke]}}" [(ngModel)]="roundResultModel.submissionType" [disabled]="roundResultModel.roundResultType != roundResultTypes.Submission"></p-radioButton></div>
 </div>
 <div class="ui-g-12 ui-g-nopad" >
     <p-radioButton value="{{roundResultTypes.Disqualification}}" label="{{roundResultTypes[roundResultTypes.Disqualification]}}" [(ngModel)]="roundResultModel.roundResultType"></p-radioButton>

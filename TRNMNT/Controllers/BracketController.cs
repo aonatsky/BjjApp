@@ -103,17 +103,17 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpGet("[action]/{categoryId}")]
-        public async Task<IActionResult> GetWinners(Guid categoryId)
+        public async Task<IActionResult> GetParticipnatsForAbsoluteDivision(Guid categoryId)
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var winners = await _bracketService.GetWinnersAsync(categoryId);
+                var winners = await _bracketService.GetParticipantsForAbsoluteDivisionAsync(categoryId);
                 return Success(winners);
             });
         }
 
         [Authorize, HttpGet("[action]/{categoryId}")]
-        public async Task<IActionResult> IsAllWinnersSelected(Guid categoryId)
+        public async Task<IActionResult> IsCategoryCompleted(Guid categoryId)
         {
             return await HandleRequestWithDataAsync(async () =>
             {

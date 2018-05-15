@@ -1,12 +1,9 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
-using TRNMNT.Data.Entities;
-using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Web.Controllers
 {
