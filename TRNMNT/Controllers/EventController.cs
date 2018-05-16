@@ -39,12 +39,12 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestAsync(async () =>
             {
-                if (await CheckEventOwnerAsync(eventModel.EventId))
-                {
+                //if (await CheckEventOwnerAsync(eventModel.EventId))
+                //{
                     await _eventService.UpdateEventAsync(eventModel);
                     return HttpStatusCode.OK;
-                }
-                return HttpStatusCode.Unauthorized;
+                //}
+                //return HttpStatusCode.Unauthorized;
             });
         }
 
