@@ -31,11 +31,9 @@ export class AbsoluteWeightDivisionComponent implements OnInit {
     ];
 
     ngOnInit() {
-        debugger;
     }
 
     showAbsoluteWeightDivision() {
-        debugger;
         if (this.prevCategoryId !== this.categoryId) {
             this.prevCategoryId = this.categoryId;
             this.bracketService.getWinnersByCategory(this.categoryId).subscribe(data => {

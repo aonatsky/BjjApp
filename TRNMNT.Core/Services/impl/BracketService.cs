@@ -68,12 +68,12 @@ namespace TRNMNT.Core.Services.impl
             if (bracket == null)
             {
                 bracket = await CreateBracketAsync(weightDivisionId);
-                StartBracket(bracket);
+                StartBracketAsync(bracket);
                 _bracketRepository.Add(bracket);
             }
             else
             {
-                StartBracket(bracket);
+                StartBracketAsync(bracket);
                 _bracketRepository.Update(bracket);
             }
             return GetBracketModel(bracket);
@@ -127,8 +127,8 @@ namespace TRNMNT.Core.Services.impl
         public async Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId)
         {
             var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
-                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant)
-                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant)
+                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p=>p.Team)
+                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(p=>p.Team)
                 .FirstOrDefaultAsync();
             return await _bracketsFileService.GetBracketsFileAsync(GetOrderedParticipantListFromBracket(bracket));
         }
@@ -221,18 +221,12 @@ namespace TRNMNT.Core.Services.impl
                                                             && r.WinnerParticipantId == null
                     ).AnyAsync())
                     {
-
                         var bracket = await _bracketRepository
                             .GetAll(b => b.BracketId == round.BracketId).Include(b => b.WeightDivision)
                             .FirstOrDefaultAsync();
                         bracket.CompleteTs = DateTime.UtcNow;
                         _bracketRepository.Update(bracket);
-                        //find if other brackets are complete
-                        if (!(await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(bracket.WeightDivision
-                            .CategoryId)).SelectMany(wd => wd.Brackets).Any(b => b.CompleteTs == null && b.BracketId != bracket.BracketId))
-                        {
-                            await _categoryService.SetCategoryCompleteAsync(bracket.WeightDivision.CategoryId);
-                        }
+                        await CheckCategoryCompletionAsync(bracket);
                     }
                 }
 
@@ -639,7 +633,7 @@ namespace TRNMNT.Core.Services.impl
             return rounds;
         }
 
-        private void StartBracket(Bracket bracket)
+        private async Task StartBracketAsync(Bracket bracket)
         {
             if (bracket.StartTs == null)
             {
@@ -671,8 +665,24 @@ namespace TRNMNT.Core.Services.impl
                                 round.NextRound.SecondParticipantId = round.WinnerParticipantId;
                             }
                         }
+
+                        if (bracket.Rounds.Count == 1)
+                        {
+                            bracket.CompleteTs = DateTime.UtcNow;
+                            await CheckCategoryCompletionAsync(bracket);
+                        }
                     }
                 }
+            }
+        }
+
+        private async Task CheckCategoryCompletionAsync(Bracket bracket)
+        {
+            //find if other brackets are complete
+            if (!(await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(bracket.WeightDivision
+                .CategoryId)).SelectMany(wd => wd.Brackets).Any(b => b.CompleteTs == null && b.BracketId != bracket.BracketId))
+            {
+                await _categoryService.SetCategoryCompleteAsync(bracket.WeightDivision.CategoryId);
             }
         }
 

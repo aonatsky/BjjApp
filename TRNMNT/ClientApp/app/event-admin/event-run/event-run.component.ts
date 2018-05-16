@@ -23,6 +23,7 @@ export class EventRunComponent implements OnInit, OnDestroy {
     private previousWeightDivisionId: string;
     private selectedRoundDetails: RoundModel;
     private showRoundPanel: boolean;
+    private filterRefreshTrigger: number = 0;
 
     private get isFilterSelected(): boolean {
         return !!this.filter && !!this.filter.weightDivisionId;
@@ -98,6 +99,7 @@ export class EventRunComponent implements OnInit, OnDestroy {
     private completeRound() {
         this.showRoundPanel = false;
         this.selectedRoundDetails = undefined;
+        this.filterRefreshTrigger += 1;
         this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
     }
 

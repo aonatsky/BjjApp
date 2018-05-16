@@ -177,7 +177,6 @@ export class EventManagementParticipantsComponent implements OnInit {
         this.filter = $event;
         this.loadParticipants(this.getFilterModel());
         if (this.filter.categoryId) {
-            debugger;
             this.bracketService.isCategoryCompleted(this.filter.categoryId).subscribe(isSelected => this.isAllWinnersSelected = isSelected);
         }
     }

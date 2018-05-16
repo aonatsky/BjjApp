@@ -58,7 +58,7 @@ namespace TRNMNT.Core.Services.Impl
                             {
                                 var participant = participants.ElementAtOrDefault(i);
                                 sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(participant?.FirstName)
-                                    ? $"{i + 1}. {participant.FirstName} {participant.LastName}"
+                                    ? $"{i + 1}. {participant.FirstName} {participant.LastName} ({participant.Team.Name})"
                                     : " - ";
                             }
                         }
@@ -134,3 +134,4 @@ namespace TRNMNT.Core.Services.Impl
         #endregion
     }
 }
+

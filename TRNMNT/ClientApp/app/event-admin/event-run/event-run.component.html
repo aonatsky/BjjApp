@@ -1,5 +1,6 @@
 <div class="ui-g">
     <category-with-division-filter [eventId]="eventId"
+                                   [refreshTrigger]="filterRefreshTrigger"
                                    autoSelectFirstWeightDivision="true"
                                    (onFilterChanged)="filterSelected($event)"></category-with-division-filter>
 </div>
@@ -12,7 +13,3 @@
 </div>
 <bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runRound($event);"></bracket>
 <round-panel *ngIf="showRoundPanel" [roundModel]="selectedRoundDetails" (close)="completeRound()" (completeRound)="completeRound()"></round-panel>
-
-
-
-

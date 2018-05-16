@@ -2,7 +2,7 @@ import { CategorySimpleModel } from '../../core/model/category.models';
 import { WeightDivisionModel } from '../../core/model/weight-division.models';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
+import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core'
 import { DefaultValues } from '../../core/consts/default-values'
 import { Observable } from 'rxjs/Observable';
 import { CategoryService } from '../../core/services/category.service';
@@ -28,6 +28,7 @@ export class CategoryWithDivisionFilter implements OnInit {
     @Input() categories: CategorySimpleModel[] = [];
     @Input() weightDivisions: WeightDivisionModel[] = [];
     @Input() isMemberFilterEnabled: boolean = false;
+    @Input() refreshTrigger: number = 0;
 
     @Output() onFilterChanged: EventEmitter<CategoryWithDivisionFilterModel>;
     @Output() onFilterLoaded: EventEmitter<boolean>;
@@ -45,11 +46,12 @@ export class CategoryWithDivisionFilter implements OnInit {
         if (this.useDataFromInput) {
             this.initFilter([this.categories, this.weightDivisions]);
         } else {
-            Observable.forkJoin(
-                this.categoryService.getCategoriesByEventId(this.eventId),
-                this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
-                .subscribe(data => this.initFilter(data));
+           this.refreshFromServer();
         }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.refreshFromServer();
     }
 
     //Events
@@ -75,6 +77,9 @@ export class CategoryWithDivisionFilter implements OnInit {
 
     private initWeightDivisionFilter(weightDivisions: WeightDivisionModel[]) {
         this.weightDivisions = weightDivisions;
+        if (this.currentFilterValue.categoryId != '') {
+            this.refreshWeightDivisionFilter(this.currentFilterValue.categoryId);
+        }
     }
 
     private refreshWeightDivisionFilter(categoryId: string) {
@@ -83,7 +88,9 @@ export class CategoryWithDivisionFilter implements OnInit {
             this.weightDivisionsSelectItems = [];
             this.weightDivisionsSelectItems.push(this.defaultOption);
             weightDivisions.map(wd => this.weightDivisionsSelectItems.push(this.getWeightDivisionselectItem(wd)));
-            this.currentFilterValue.weightDivisionId = this.autoSelectFirstWeightDivision ? weightDivisions[0].weightDivisionId : '';
+            if (this.currentFilterValue.weightDivisionId === '') {
+                this.currentFilterValue.weightDivisionId = this.autoSelectFirstWeightDivision ? weightDivisions[0].weightDivisionId : '';    
+            }
         } else {
             this.weightDivisionsSelectItems = null;
             this.currentFilterValue.weightDivisionId = '';
@@ -119,6 +126,13 @@ export class CategoryWithDivisionFilter implements OnInit {
 
     private get categoryIds(): string[] {
         return this.categories.map(c => c.categoryId);
+    }
+
+    private refreshFromServer() {
+        Observable.forkJoin(
+                this.categoryService.getCategoriesByEventId(this.eventId),
+                this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
+            .subscribe(data => this.initFilter(data));
     }
 
     //#endregion
