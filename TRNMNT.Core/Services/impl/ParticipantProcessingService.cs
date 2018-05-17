@@ -47,8 +47,9 @@ namespace TRNMNT.Core.Services.Impl
         {
             var messageList = new List<string>();
             var existingTeamsBase = await GetExistingTeams(federationId);
-            var eventCategories = await _categoryRepository.GetAll(w => w.EventId == eventId).ToDictionaryAsync(x => x.CategoryId, x => x.Name);
-            var eventWeightDivisions = await _weightDivisionRepository.GetAll(w => w.Category.EventId == eventId && !w.IsAbsolute).ToDictionaryAsync(x => x.WeightDivisionId, x => x.Name);
+            var eventCategories = await _categoryRepository.GetAll(w => w.EventId == eventId).ToListAsync();
+            var eventWeightDivisions =
+                await _weightDivisionRepository.GetAll(w => w.Category.EventId == eventId && !w.IsAbsolute).ToListAsync();
             var existingParticipants = await _participantRepository.GetAll().ToListAsync();
 
             var participantsToAdd = new List<Participant>();
@@ -64,6 +65,7 @@ namespace TRNMNT.Core.Services.Impl
                 }
                 bool.TryParse(model.IsMember, out var isMember);
                 var participantId = Guid.NewGuid();
+                var category = eventCategories.FirstOrDefault(c => c.Name == model.Category);
                 var participant = new Participant
                 {
                     ParticipantId = participantId,
@@ -72,8 +74,8 @@ namespace TRNMNT.Core.Services.Impl
                     DateOfBirth = DateTime.Parse(model.DateOfBirth),
                     EventId = eventId,
                     TeamId = ProcessTeam(model.Team, existingTeamsBase, teamsToAdd),
-                    WeightDivisionId = eventWeightDivisions.First(x => x.Value.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase)).Key,
-                    CategoryId = eventCategories.First(x => x.Value.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).Key,
+                    WeightDivisionId = eventWeightDivisions.First(wd => wd.Name.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase) && wd.CategoryId == category.CategoryId).WeightDivisionId,
+                    CategoryId = eventCategories.First(c => c.Name.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).CategoryId,
                     IsMember = isMember
                 };
 
@@ -92,7 +94,7 @@ namespace TRNMNT.Core.Services.Impl
         
         #region Private methods
 
-        private bool IsParticipantModelValid(ParticipantModel model, List<string> messageBuilder, int modelIndex, IDictionary<Guid,string> categories, IDictionary<Guid, string> weightDivisions)
+        private bool IsParticipantModelValid(ParticipantModel model, List<string> messageBuilder, int modelIndex, List<Category> categories, List<WeightDivision> weightDivisions)
         {
             var isValid = true;
             if (string.IsNullOrEmpty(model.FirstName))
@@ -118,13 +120,13 @@ namespace TRNMNT.Core.Services.Impl
                 messageBuilder.Add($"Team name for '{identifier}' is invalid");
                 isValid = false;
             }
-            var weightDivision = weightDivisions.Values.FirstOrDefault(w => w.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase));
+            var weightDivision = weightDivisions.FirstOrDefault(w => w.Name.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase));
             if (weightDivision == null)
             {
                 messageBuilder.Add($"Weight division '{model.WeightDivision}' for '{identifier}' is invalid");
                 isValid = false;
             }
-            var category = categories.Values.FirstOrDefault(w => w.Equals(model.Category, StringComparison.OrdinalIgnoreCase));
+            var category = categories.FirstOrDefault(c => c.Name.Equals(model.Category, StringComparison.OrdinalIgnoreCase));
             if (category == null)
             {
                 messageBuilder.Add($"Category '{model.Category}' for '{identifier}' is invalid");
