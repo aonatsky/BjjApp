@@ -163,7 +163,8 @@ export class BracketGenerationComponent {
     }
 
     private getBracketsFileName(): string {
-        return 'bracket.xlsx';
+        const name = this.bracket.title.replace('/', '-');
+        return `${name}.xlsx`;
     }
 
     private updateBracket() {
