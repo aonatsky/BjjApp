@@ -129,8 +129,9 @@ namespace TRNMNT.Core.Services.impl
             var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
                 .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p=>p.Team)
                 .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(p=>p.Team)
+                .Include(b => b.WeightDivision).ThenInclude(w => w.Category)
                 .FirstOrDefaultAsync();
-            return await _bracketsFileService.GetBracketsFileAsync(GetOrderedParticipantListFromBracket(bracket));
+            return await _bracketsFileService.GetBracketsFileAsync(GetOrderedParticipantListFromBracket(bracket), GetBracketTtitle(bracket.WeightDivision.Category, bracket.WeightDivision));
         }
 
         public async Task<Dictionary<string, BracketModel>> GetBracketsByCategoryAsync(Guid categoryId)

@@ -34,7 +34,7 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
-        public async Task<CustomFile> GetBracketsFileAsync(List<Participant> participants)
+        public async Task<CustomFile> GetBracketsFileAsync(List<Participant> participants, string title)
         {
             var settings = GetSettings(participants.Count);
 
@@ -47,6 +47,7 @@ namespace TRNMNT.Core.Services.Impl
                 }
 
                 byte[] byteArray;
+
                 using (var stream = new FileStream(templateFilePath, FileMode.Open))
                 {
                     using (var excelPackage = new ExcelPackage(stream))
@@ -54,6 +55,7 @@ namespace TRNMNT.Core.Services.Impl
                         var sheet = excelPackage.Workbook?.Worksheets[1];
                         if (sheet != null)
                         {
+                            sheet.Cells[settings.TitleCell].Value = title;
                             for (var i = 0; i < settings.Count; i++)
                             {
                                 var participant = participants.ElementAtOrDefault(i);
