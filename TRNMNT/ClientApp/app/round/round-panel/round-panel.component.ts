@@ -2,14 +2,15 @@
 import { Observable } from 'rxjs/Observable';
 import { RoundModel } from '../../core/model/round.models';
 import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
-import { BaseRoundPanel } from '../round-panel.service';
 import './round-panel.component.scss';
+import { SignalRHubService } from '../../core/dal/signalr/signalr-hub.service';
+import {RoundPanelBase} from '../round-panel.service';
 
 @Component({
     selector: 'round-panel',
     templateUrl: './round-panel.component.html',
 })
-export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
+export class RoundPanelComponent extends RoundPanelBase implements OnInit {
     @Input() roundModel: RoundModel;
     @Output() completeRound: EventEmitter<any> = new EventEmitter();
     @Output() close: EventEmitter<any> = new EventEmitter();
@@ -20,8 +21,8 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     private timerSubscription: any;
     private displayPopup: boolean;
 
-    constructor() {
-        super();
+    constructor(private signalRHubService: SignalRHubService) {
+        super(signalRHubService);
         this.roundDetails = new RoundDetailsModel();
 
         this.roundDetails.firstParticipantPenalties = 0;
@@ -146,10 +147,14 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     }
 
     private onComplete(): void {
+        this.disconnect();
         this.completeRound.emit(null);
     }
 
     private onClose(): void {
+        this.disconnect();
         this.close.emit(null);
     }
+
+    
 }

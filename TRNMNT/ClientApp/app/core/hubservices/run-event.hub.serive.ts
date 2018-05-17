@@ -101,7 +101,8 @@ export class RunEventHubService {
     }
 
 	disconnect() {
-		const promise = this.signalRService.stop();
+		console.log('DISCONNECTED');
+	    const promise = this.signalRService.stop();
         this.isConnected = false;
 	    return promise;
 	}

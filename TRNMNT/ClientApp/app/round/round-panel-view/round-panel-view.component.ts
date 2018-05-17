@@ -1,16 +1,17 @@
-﻿import { Component, Input, OnInit } from '@angular/core';
+﻿import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { RoundModel } from '../../core/model/round.models';
 import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
-import { BaseRoundPanel } from '../round-panel.service';
 import './round-panel-view.component.scss';
+import {RoundPanelBase} from '../round-panel.service';
+import {SignalRHubService} from '../../core/dal/signalr/signalr-hub.service';
 
 
 @Component({
     selector: 'round-panel-view',
     templateUrl: './round-panel-view.component.html',
 })
-export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
+export class RoundPanelViewComponent extends RoundPanelBase implements OnInit {
     @Input() roundModel: RoundModel;
     @Input() title: string;
 
@@ -19,8 +20,8 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     private readonly tick: number;
     private timerSubscription: any;
 
-    constructor() {
-        super();
+    constructor(private signalRHubService: SignalRHubService) {
+        super(signalRHubService);
 
         this.roundDetails = new RoundDetailsModel();
 
@@ -70,5 +71,9 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
             this.timerSubscription.unsubscribe();
         }
         this.timerSubscription = null;
+    }
+
+    ngOnDestroy() {
+        this.disconnect();
     }
 }

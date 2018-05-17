@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 
+
 @Injectable()
 export class SignalRHubService {
 
@@ -12,6 +13,7 @@ export class SignalRHubService {
     private reconnectionCounter: number = 0;
     private logConnectionDelegate: (id: string) => void;
     private logDisconnectionDelegate: (id: string, exception: any) => void;
+    private isConnected : boolean = false;
 
     constructor(private loggerService: LoggerService) {
         this.logConnectionDelegate = id => this.logConnection(id);
@@ -45,13 +47,13 @@ export class SignalRHubService {
     }
 
     start(): Promise<void> {
-        return this.hubConnection.start();
+        return this.hubConnection.start().then(_ => {this.isConnected = true});
     }
 
     stop(): Promise<void> {
         this.hubConnection.off('OtherClientDisconnected', this.logDisconnectionDelegate);
         this.hubConnection.off('OtherClientConnected', this.logConnectionDelegate);
-        return this.hubConnection.stop();
+        return this.hubConnection.stop().then(_ => {this.isConnected = false});
     }
 
     onConnected(): Observable<string> {
@@ -70,20 +72,27 @@ export class SignalRHubService {
 
     bindReconnection() {
         this.onConnectionClosed().subscribe((e) => {
-            if (this.reconnectionCounter >= this.reconnectionLimit) {
-                this.reconnectionCounter = 0;
-                return;
+            if (this.isConnected) {
+                if (this.reconnectionCounter >= this.reconnectionLimit) {
+                    this.reconnectionCounter = 0;
+                    return;
+                }
+                // huck to start reconnection
+                let hubHttpConnection = this.hubConnection["connection"];
+                hubHttpConnection.connectionState = 0;
+                let url = hubHttpConnection.url;
+                hubHttpConnection.url = url
+                    .replace(`?id=${hubHttpConnection.connectionId}`, "")
+                    .replace(`&id=${hubHttpConnection.connectionId}`, "");
+                this.reconnectionCounter++;
+                this.hubConnection.start();
+                console.log('RECONNECTION: ' + url);
             }
-            // huck to start reconnection
-            let hubHttpConnection = this.hubConnection["connection"];
-            hubHttpConnection.connectionState = 0;
-            let url = hubHttpConnection.url;
-            hubHttpConnection.url = url
-                .replace(`?id=${hubHttpConnection.connectionId}`, "")
-                .replace(`&id=${hubHttpConnection.connectionId}`, "");
-            this.reconnectionCounter++;
-            this.hubConnection.start();
         });
+    }
+
+    unbindReconnection() {
+        this.isConnected = false;
     }
 
     joinGroup(groupName: string) {
