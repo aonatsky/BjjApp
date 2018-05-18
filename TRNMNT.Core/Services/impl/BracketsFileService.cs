@@ -38,6 +38,12 @@ namespace TRNMNT.Core.Services.Impl
         {
             var settings = GetSettings(participants.Count);
 
+            if (participants.Count == 4 && participants.Count(p => p != null) == 3)
+            {
+                settings = GetSettings(3);
+            }
+
+
             if (settings != null)
             {
                 var templateFilePath = Path.Combine(_env.WebRootPath, FilePath.BracketsFileFolderName, string.Concat(FilePath.BracketsFileNameMask, settings.Count, FilePath.ExcelExtension));
