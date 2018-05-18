@@ -56,6 +56,10 @@ namespace TRNMNT.Core.Services.impl
             if (bracket == null)
             {
                 bracket = await CreateBracketAsync(weightDivisionId);
+                if (bracket == null)
+                {
+                    return null;
+                }
                 _bracketRepository.Add(bracket);
             }
 
@@ -449,7 +453,8 @@ namespace TRNMNT.Core.Services.impl
                 FirstName = participant.FirstName,
                 LastName = participant.LastName,
                 ParticipantId = participant.ParticipantId,
-                DateOfBirth = participant.DateOfBirth
+                DateOfBirth = participant.DateOfBirth,
+                TeamName = participant.Team.Name
             };
         }
 
@@ -503,6 +508,11 @@ namespace TRNMNT.Core.Services.impl
         {
             var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId);
             var category = await _categoryService.GetCategoryAsync(weightDivision.CategoryId);
+            var participants = await GetOrderedListForNewBracketAsync(weightDivisionId);
+            if (!participants.Any() )
+            {
+                return null;
+            }
             var bracket = new Bracket()
             {
                 BracketId = Guid.NewGuid(),
@@ -510,7 +520,7 @@ namespace TRNMNT.Core.Services.impl
                 RoundTime = category.RoundTime,
                 Title = GetBracketTtitle(category, weightDivision)
             };
-            var participants = await GetOrderedListForNewBracketAsync(weightDivisionId);
+            
             bracket.Rounds = CreateRoundStructure(participants.ToArray(), bracket.BracketId);
             return bracket;
         }

@@ -3,6 +3,7 @@
     firstName: string;
     lastName: string;
     dateOfBirth: Date;
+    teamName: string;
     constructor() {
     }
 }

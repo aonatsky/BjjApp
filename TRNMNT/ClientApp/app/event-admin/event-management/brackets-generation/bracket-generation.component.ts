@@ -89,7 +89,7 @@ export class BracketGenerationComponent {
         if (participant == undefined) {
             return '';
         } else {
-            return participant.firstName + ' ' + participant.lastName;
+            return `${participant.firstName} ${participant.lastName} (${participant.teamName})`;
         }
 
 
