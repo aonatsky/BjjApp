@@ -53,13 +53,14 @@ namespace TRNMNT.Core.Services.impl
         public async Task<BracketModel> GetBracketModelAsync(Guid weightDivisionId)
         {
             var bracket = await GetBracketAsync(weightDivisionId);
+            if (bracket != null && !bracket.Rounds.Any())
+            {
+                _bracketRepository.Delete(bracket.BracketId);
+                bracket = null;
+            }
             if (bracket == null)
             {
                 bracket = await CreateBracketAsync(weightDivisionId);
-                if (bracket == null)
-                {
-                    return null;
-                }
                 _bracketRepository.Add(bracket);
             }
 
@@ -509,10 +510,6 @@ namespace TRNMNT.Core.Services.impl
             var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId);
             var category = await _categoryService.GetCategoryAsync(weightDivision.CategoryId);
             var participants = await GetOrderedListForNewBracketAsync(weightDivisionId);
-            if (!participants.Any() )
-            {
-                return null;
-            }
             var bracket = new Bracket()
             {
                 BracketId = Guid.NewGuid(),
