@@ -325,7 +325,7 @@ namespace TRNMNT.Core.Services.impl
         {
             var participantList = new List<Participant>();
             var maxStage = bracket.Rounds.Max(r => r.Stage);
-            var firstRounds = bracket.Rounds.Where(r => r.Stage == maxStage);
+            var firstRounds = bracket.Rounds.Where(r => r.Stage == maxStage).OrderBy(r => r.Order);
             foreach (var firstRound in firstRounds)
             {
                 participantList.Add(firstRound.FirstParticipant);
