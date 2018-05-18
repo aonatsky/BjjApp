@@ -498,9 +498,9 @@ namespace TRNMNT.Core.Services.impl
         {
             var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
                 .Include(b => b.WeightDivision)
-                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant)
-                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant)
-                .Include(b => b.Rounds).ThenInclude(r => r.WinnerParticipant)
+                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p=>p.Team)
+                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(p => p.Team)
+                .Include(b => b.Rounds).ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
                 .FirstOrDefaultAsync();
             return bracket;
         }
