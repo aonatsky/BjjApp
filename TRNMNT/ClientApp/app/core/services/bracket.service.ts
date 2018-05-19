@@ -8,6 +8,7 @@ import { BracketModel, BracketArrayModel } from '../model/bracket.models';
 import { ResponseContentType } from '@angular/http';
 import { ParticipantInAbsoluteDivisionMobel } from '../model/participant.models';
 import { RoundResultModel } from '../model/round-result.model';
+import {BracketResultModel} from '../model/bracket-result.model';
 
 
 @Injectable()
@@ -56,5 +57,9 @@ export class BracketService {
 
     setRoundResult(roundResult: RoundResultModel): Observable<void> {
         return this.httpService.post(ApiMethods.bracket.setRoundResult, roundResult);
+    }
+
+    setBracketResult(bracketResult: BracketResultModel) {
+        return this.httpService.post(ApiMethods.bracket.setBracketResult, bracketResult);
     }
 }

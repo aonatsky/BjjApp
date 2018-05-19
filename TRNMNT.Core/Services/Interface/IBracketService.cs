@@ -76,5 +76,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns></returns>
         Task<CustomFile> GetPersonalResultsFileByCategoriesAsync(
             IEnumerable<Guid> categoryIds);
+
+        Task SetBracketResultAsync(BracketResultModel bracketResultModel);
     }
 }

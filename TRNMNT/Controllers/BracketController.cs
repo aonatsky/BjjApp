@@ -143,6 +143,17 @@ namespace TRNMNT.Web.Controllers
             
         }
 
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> SetBracketResult([FromBody]BracketResultModel bracketResultModel)
+        {
+            return await HandleRequestAsync(async () =>
+            {
+                await _bracketService.SetBracketResultAsync(bracketResultModel);
+                return HttpStatusCode.OK;
+            });
+            
+        }
+
         #endregion
     }
 }

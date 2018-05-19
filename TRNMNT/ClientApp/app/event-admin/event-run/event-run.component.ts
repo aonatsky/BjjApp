@@ -17,6 +17,7 @@ import { DefaultValues } from '../../core/consts/default-values';
 })
 export class EventRunComponent implements OnInit, OnDestroy {
 
+    private showResultPopup : boolean = false;
     private eventId: string;
     private bracket: BracketModel;
     private filter: CategoryWithDivisionFilterModel;
@@ -101,6 +102,14 @@ export class EventRunComponent implements OnInit, OnDestroy {
         this.selectedRoundDetails = undefined;
         this.filterRefreshTrigger += 1;
         this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
+    }
+
+    private showResultSetPopup() {
+        this.showResultPopup = true;
+    }
+
+    private hideResultSetPopup() {
+        this.showResultPopup = false;
     }
 
     private cancelRound() {

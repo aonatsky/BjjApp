@@ -1,0 +1,10 @@
+<div class="ui-g-8">First Place</div>
+<div class="ui-g-8"><p-dropdown [options]="participantSelectItems" [(ngModel)]="firstPlaceParticipantId" [style]="{'min-width':'300px'}"></p-dropdown></div>
+<div class="ui-g-8">Second Place</div>
+<div class="ui-g-8"><p-dropdown [options]="participantSelectItems" [(ngModel)]="secondPlaceParticipantId" [style]="{'min-width':'300px'}"></p-dropdown></div>
+<div class="ui-g-8">Third Place</div>
+<div class="ui-g-8"><p-dropdown [options]="participantSelectItems" [(ngModel)]="thirdPlaceParticipantId" [style]="{'min-width':'300px'}"></p-dropdown></div>
+<div class="ui-g-12">
+    <div class="float-right"><button pButton type="button" class="float-right" label="Set Results" (click)="setMedalists();"></button></div>
+</div>
+

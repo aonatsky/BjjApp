@@ -132,8 +132,8 @@ namespace TRNMNT.Core.Services.impl
         public async Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId)
         {
             var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
-                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p=>p.Team)
-                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(p=>p.Team)
+                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p => p.Team)
+                .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(p => p.Team)
                 .Include(b => b.WeightDivision).ThenInclude(w => w.Category)
                 .FirstOrDefaultAsync();
             return await _bracketsFileService.GetBracketsFileAsync(GetOrderedParticipantListFromBracket(bracket), GetBracketTtitle(bracket.WeightDivision.Category, bracket.WeightDivision));
@@ -253,7 +253,6 @@ namespace TRNMNT.Core.Services.impl
             {
                 var bracketMedalists = GetMedalistsForBracket(bracket);
                 if (bracketMedalists.Count == 1 ||
-                         bracketMedalists.Count == 2 &&
                           bracketMedalists.GroupBy(m => m.Participant.TeamId).Any(g => g.Count() == 1))
                 {
                 }
@@ -302,6 +301,31 @@ namespace TRNMNT.Core.Services.impl
                 categoryWeightDivisioMedalistGroups.Add(categoryWeightDivisioMedalistGroup);
             }
             return _bracketsFileService.GetPersonalResultsFileAsync(categoryWeightDivisioMedalistGroups);
+        }
+
+        public async Task SetBracketResultAsync(BracketResultModel bracketResultModel)
+        {
+            var bracket = await _bracketRepository.GetAll(b => b.BracketId == bracketResultModel.BracketId).Include(b => b.WeightDivision).FirstOrDefaultAsync();
+            var rounds = await _roundRepository.GetAll(r =>
+                r.BracketId == bracketResultModel.BracketId && r.Stage == 0).ToListAsync();
+            var thirdPlaceRound = rounds.FirstOrDefault(r => r.RoundType == (int)RoundTypeEnum.ThirdPlace);
+            var finalRound = rounds.FirstOrDefault(r => r.RoundType != (int)RoundTypeEnum.ThirdPlace);
+            if (finalRound != null)
+            {
+                finalRound.FirstParticipantId = bracketResultModel.FirstPlaceParticipantId;
+                finalRound.SecondParticipantId = bracketResultModel.SecondPlaceParticipantId;
+                finalRound.WinnerParticipantId = bracketResultModel.FirstPlaceParticipantId;
+                _roundRepository.Update(finalRound);
+            }
+            if (thirdPlaceRound != null)
+            {
+                thirdPlaceRound.WinnerParticipantId = bracketResultModel.ThirdPlaceParticipantId;
+                thirdPlaceRound.FirstParticipantId = bracketResultModel.ThirdPlaceParticipantId;
+                _roundRepository.Update(thirdPlaceRound);
+            }
+            bracket.CompleteTs = DateTime.UtcNow;
+            _bracketRepository.Update(bracket);
+            await CheckCategoryCompletionAsync(bracket);
         }
 
         #endregion
@@ -498,7 +522,7 @@ namespace TRNMNT.Core.Services.impl
         {
             var bracket = await _bracketRepository.GetAll(b => b.WeightDivisionId == weightDivisionId)
                 .Include(b => b.WeightDivision)
-                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p=>p.Team)
+                .Include(b => b.Rounds).ThenInclude(r => r.FirstParticipant).ThenInclude(p => p.Team)
                 .Include(b => b.Rounds).ThenInclude(r => r.SecondParticipant).ThenInclude(p => p.Team)
                 .Include(b => b.Rounds).ThenInclude(r => r.WinnerParticipant).ThenInclude(p => p.Team)
                 .FirstOrDefaultAsync();
@@ -517,7 +541,7 @@ namespace TRNMNT.Core.Services.impl
                 RoundTime = category.RoundTime,
                 Title = GetBracketTtitle(category, weightDivision)
             };
-            
+
             bracket.Rounds = CreateRoundStructure(participants.ToArray(), bracket.BracketId);
             return bracket;
         }
