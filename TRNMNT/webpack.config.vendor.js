@@ -39,7 +39,6 @@ module.exports = (env) => {
                 'jquery',
                 'zone.js',
                 'font-awesome/css/font-awesome.css',
-                'primeng/resources/themes/bootstrap/theme.css',
                 './ClientApp/assets/style/style.css',
                 'primeng/resources/primeng.css'
             ]

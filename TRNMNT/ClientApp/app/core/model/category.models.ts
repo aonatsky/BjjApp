@@ -8,8 +8,6 @@ export class CategoryModelBase {
 
 
 export class CategoryModel extends CategoryModelBase {
-
-
     constructor() {
         super();
         this.weightDivisionModels = [];

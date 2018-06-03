@@ -252,9 +252,13 @@ namespace TRNMNT.Core.Services.impl
             foreach (var bracket in brackets)
             {
                 var bracketMedalists = GetMedalistsForBracket(bracket);
-                if (bracketMedalists.Count == 1 ||
-                          bracketMedalists.GroupBy(m => m.Participant.TeamId).Any(g => g.Count() == 1))
+                var count = bracketMedalists.GroupBy(m => m.Participant.TeamId);
+                if (bracketMedalists.Count == 1)
                 {
+                }
+                else if(count.Count() == 1)
+                {
+
                 }
                 else
                 {
