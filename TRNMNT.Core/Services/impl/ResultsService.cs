@@ -15,13 +15,13 @@ namespace TRNMNT.Core.Services.impl
     {
         private readonly IRepository<Team> _teamRepository;
         private readonly IRepository<WeightDivision> _weightDivisionRepository;
-        private readonly IRepository<Round> _roundRepository;
+        private readonly IRepository<Match> _roundRepository;
 
 
         public ResultsService(
             IRepository<Team> teamRepository,
             IRepository<WeightDivision> weightDivisionRepository,
-            IRepository<Round> roundRepository)
+            IRepository<Match> roundRepository)
         {
             _teamRepository = teamRepository;
             _weightDivisionRepository = weightDivisionRepository;
@@ -42,7 +42,7 @@ namespace TRNMNT.Core.Services.impl
 
                 foreach (var bracketId in bracketIds)
                 {
-                    var finals = await _roundRepository.GetAllIncluding(r => r.BracketId == bracketId && r.Stage == 0, r => r.FirstParticipant, r => r.SecondParticipant, r => r.WinnerParticipant).ToListAsync();
+                    var finals = await _roundRepository.GetAllIncluding(r => r.BracketId == bracketId && r.Stage == 0, r => r.FirstParticipant, r => r.BParticipant, r => r.WinnerParticipant).ToListAsync();
                     foreach (var round in finals)
                     {
                         if (round.WinnerParticipant != null)

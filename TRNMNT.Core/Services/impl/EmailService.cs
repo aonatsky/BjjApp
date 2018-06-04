@@ -99,7 +99,7 @@ namespace TRNMNT.Core.Services.Impl
             if (tokenValue is DateTime || tokenValue == null)
             {
                 var resultText = rawText;
-                foreach (Match match in Regex.Matches(rawText.ToString(), tokenKey))
+                foreach (System.Text.RegularExpressions.Match match in Regex.Matches(rawText.ToString(), tokenKey))
                 {
                     var index = resultText.ToString().IndexOf(match.ToString(), StringComparison.Ordinal);
                     resultText = ReplaceTokenDateTime(resultText, match.ToString(), tokenValue, index);
