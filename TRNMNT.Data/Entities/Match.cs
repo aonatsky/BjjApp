@@ -14,11 +14,11 @@ namespace TRNMNT.Data.Entities
         public Guid? AParticipantId { get; set; }
         public Guid? BParticipantId { get; set; }
         public Guid? WinnerParticipantId { get; set; }
-        public Guid? NextRoundId { get; set; }
+        public Guid? NextMatchId { get; set; }
         public int Stage { get; set; }
         public int Order { get; set; }
         public int MatchType { get; set; }
-        public int RoundResultType { get; set; }
+        public int MatchResultType { get; set; }
         public string RoundResultDetails { get; set; }
 
         [JsonIgnore, ForeignKey(nameof(AParticipantId))]

@@ -436,7 +436,7 @@ namespace TRNMNT.Core.Services.impl
             var model = new RoundModel()
             {
                 RoundId = round.RoundId,
-                NextRoundId = round.NextRoundId,
+                NextRoundId = round.NextMatchId,
                 Stage = round.Stage,
                 FirstParticipant = round.FirstParticipant == null ? null : GetParticipantModel(round.FirstParticipant),
                 SecondParticipant = round.BParticipant == null ? null : GetParticipantModel(round.BParticipant),
@@ -449,24 +449,24 @@ namespace TRNMNT.Core.Services.impl
                 model.WinnerParticipant = GetParticipantModel(round.WinnerParticipant);
                 if (round.WinnerParticipantId == round.AParticipantId)
                 {
-                    if (round.RoundResultType != (int)RoundResultTypeEnum.DQ)
+                    if (round.MatchResultType != (int)RoundResultTypeEnum.DQ)
                     {
-                        model.FirstParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                        model.FirstParticipantResult = ((RoundResultTypeEnum)round.MatchResultType).ToString();
                     }
                     else
                     {
-                        model.SecondParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                        model.SecondParticipantResult = ((RoundResultTypeEnum)round.MatchResultType).ToString();
                     }
                 }
                 else
                 {
-                    if (round.RoundResultType != (int)RoundResultTypeEnum.DQ)
+                    if (round.MatchResultType != (int)RoundResultTypeEnum.DQ)
                     {
-                        model.SecondParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                        model.SecondParticipantResult = ((RoundResultTypeEnum)round.MatchResultType).ToString();
                     }
                     else
                     {
-                        model.FirstParticipantResult = ((RoundResultTypeEnum)round.RoundResultType).ToString();
+                        model.FirstParticipantResult = ((RoundResultTypeEnum)round.MatchResultType).ToString();
                     }
                 }
             }
@@ -605,7 +605,7 @@ namespace TRNMNT.Core.Services.impl
                             {
                                 RoundId = Guid.NewGuid(),
                                 BracketId = bracketId,
-                                NextRoundId = parentRound.RoundId,
+                                NextMatchId = parentRound.RoundId,
                                 NextRound = parentRound,
                                 Stage = stage,
                                 Order = (2 * parentRound.Order) + i
