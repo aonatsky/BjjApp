@@ -76,9 +76,16 @@ namespace TRNMNT.Core.Services.Impl
             return weightDivision;
         }
 
-        public async Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId)
+        public async Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId, bool includeCategory = false)
         {
-            return await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
+            var query = _weightDevisionRepository.GetAll(wd => wd.WeightDivisionId == weightDivisionId);
+
+            if (includeCategory)
+            {
+                query.Include(wd => wd.Category);
+            }
+
+            return await query.FirstOrDefaultAsync();
         }
 
 
@@ -106,6 +113,20 @@ namespace TRNMNT.Core.Services.Impl
             }
 
             return model;
+        }
+
+        public async Task SetWeightDivisionStarted(Guid weightDivisionId)
+        {
+            var weightDivision = await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
+            weightDivision.StartTs = DateTime.UtcNow;
+            _weightDevisionRepository.Update(weightDivision);
+        }
+
+        public async Task SetWeightDivisionCompleted(Guid weightDivisionId)
+        {
+            var weightDivision = await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
+            weightDivision.CompleteTs = DateTime.UtcNow;
+            _weightDevisionRepository.Update(weightDivision);
         }
         #endregion
     }

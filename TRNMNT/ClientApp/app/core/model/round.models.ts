@@ -3,14 +3,14 @@
 export class RoundModel {
     roundId: AAGUID;
     weightDivisionId: string;
-    firstParticipant: ParticipantModelBase;
+    AParticipant: ParticipantModelBase;
     secondParticipant: ParticipantModelBase;
     nextRoundId: AAGUID;
     stage: number;
     order: number;
     roundType: number;
     roundTime: number;
-    firstParticipantResult: string;
+    AParticipantResult: string;
     secondParticipantResult: string;
     winnerParticipant: ParticipantModelBase;
 }

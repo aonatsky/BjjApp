@@ -64,7 +64,7 @@ namespace TRNMNT.Core.Services.Impl
                 WeightDivisionId = Guid.Parse(model.WeightDivisionId),
                 EventId = eventId,
                 UserId = model.UserId,
-                IsActive = true,
+                IsDisqualified = true,
                 IsApproved = false,
                 UpdateTS = DateTime.UtcNow,
             };
@@ -101,7 +101,7 @@ namespace TRNMNT.Core.Services.Impl
             participant.CategoryId = participantModel.CategoryId;
             participant.WeightDivisionId = participantModel.WeightDivisionId;
             participant.IsMember = participantModel.IsMember;
-            participant.IsActive = true;
+            participant.IsDisqualified = true;
             participant.UpdateTS = DateTime.UtcNow;
 
             _repository.Update(participant);

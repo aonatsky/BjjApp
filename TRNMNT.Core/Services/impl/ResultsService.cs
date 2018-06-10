@@ -42,20 +42,20 @@ namespace TRNMNT.Core.Services.impl
 
                 foreach (var bracketId in bracketIds)
                 {
-                    var finals = await _roundRepository.GetAllIncluding(r => r.BracketId == bracketId && r.Stage == 0, r => r.FirstParticipant, r => r.BParticipant, r => r.WinnerParticipant).ToListAsync();
+                    var finals = await _roundRepository.GetAllIncluding(r => r.BracketId == bracketId && r.Round == 0, r => r.AParticipant, r => r.BParticipant, r => r.WinnerParticipant).ToListAsync();
                     foreach (var round in finals)
                     {
                         if (round.WinnerParticipant != null)
                         {
-                            if (round.RoundType != (int)RoundTypeEnum.ThirdPlace)
+                            if (round.RoundType != (int)MatchTypeEnum.ThirdPlace)
                             {
                                 medalists.Add((round.WinnerParticipant, 1));
-                                if (round.SecondParticipant != null && round.FirstParticipant != null)
+                                if (round.SecondParticipant != null && round.AParticipant != null)
                                 {
                                     medalists.Add(
-                                        round.FirstParticipantId == round.WinnerParticipantId
+                                        round.AParticipantId == round.WinnerParticipantId
                                             ? (round.SecondParticipant, 2)
-                                            : (round.FirstParticipant, 2));
+                                            : (round.AParticipant, 2));
                                 }
 
                             }

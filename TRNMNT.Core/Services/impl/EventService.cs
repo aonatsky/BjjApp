@@ -335,7 +335,7 @@ namespace TRNMNT.Core.Services.Impl
                 {
                     CategoryId = category.CategoryId,
                     Name = category.Name,
-                    RoundTime = category.RoundTime,
+                    RoundTime = category.MatchTime,
                     WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions),
                     EventId = category.EventId
                 }));
@@ -396,7 +396,7 @@ namespace TRNMNT.Core.Services.Impl
                 {
                     EventId = model.EventId,
                     CategoryId = model.CategoryId == Guid.Empty ? Guid.NewGuid() : model.CategoryId,
-                    RoundTime = model.RoundTime,
+                    MatchTime = model.RoundTime,
                     Name = model.Name
                 };
                 category.WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels, category.CategoryId);

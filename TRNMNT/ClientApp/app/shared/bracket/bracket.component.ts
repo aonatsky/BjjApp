@@ -89,8 +89,8 @@ export class BracketComponent implements OnInit {
 
     private displayParticipantData(model: RoundModel, participantNumber: number) {
         if (participantNumber == 1) {
-            return model.firstParticipant
-                ? model.firstParticipant.firstName + ' ' + model.firstParticipant.lastName
+            return model.AParticipant
+                ? model.AParticipant.firstName + ' ' + model.AParticipant.lastName
                 : '';
         } else {
             if (model.secondParticipant) {
@@ -105,7 +105,7 @@ export class BracketComponent implements OnInit {
 
     private displayRoundResult(model: RoundModel, participantNumber: number) {
         if (participantNumber === 1) {
-            return model.firstParticipantResult;
+            return model.AParticipantResult;
         }
     }
 
@@ -117,7 +117,7 @@ export class BracketComponent implements OnInit {
 
     private getWinnerClass(model: RoundModel) {
         if (model.winnerParticipant) {
-            if (!!model.firstParticipant && model.winnerParticipant.participantId === model.firstParticipant.participantId) {
+            if (!!model.AParticipant && model.winnerParticipant.participantId === model.AParticipant.participantId) {
                 return 'winner-1';
             } else {
                 return 'winner-2';
@@ -128,7 +128,7 @@ export class BracketComponent implements OnInit {
     }
 
     private isEditable(model: RoundModel): boolean {
-        if (model.firstParticipant && model.secondParticipant) {
+        if (model.AParticipant && model.secondParticipant) {
             if (model.winnerParticipant && model.nextRoundId) {
                 const nextRound = this.bracket.roundModels.filter(r => r.roundId === model.nextRoundId)[0];
                 if (nextRound && !nextRound.winnerParticipant) {

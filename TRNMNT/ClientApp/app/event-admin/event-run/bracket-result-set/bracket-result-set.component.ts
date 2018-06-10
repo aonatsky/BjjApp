@@ -29,8 +29,8 @@ export class BracketResultSetComponent {
 
     ngOnInit() {
         for (var i = 0; i < this.bracket.roundModels.length; i++) {
-            if (this.bracket.roundModels[i].firstParticipant) {
-                this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].firstParticipant));
+            if (this.bracket.roundModels[i].AParticipant) {
+                this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].AParticipant));
             }
             if (this.bracket.roundModels[i].secondParticipant) {
                 this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].secondParticipant));

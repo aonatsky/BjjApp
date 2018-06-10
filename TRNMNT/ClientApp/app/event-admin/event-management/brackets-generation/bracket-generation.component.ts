@@ -79,7 +79,7 @@ export class BracketGenerationComponent {
     private displayParticipantInfo(round: RoundModel, participantNumber: number) {
     let participant;
     if (participantNumber == 1) {
-        participant = round.firstParticipant;
+        participant = round.AParticipant;
     } else if (participantNumber == 2) {
         if (round.roundType) {
             return 'Lost in previous round';
@@ -135,7 +135,7 @@ export class BracketGenerationComponent {
 
     private getParticipant(round: RoundModel, pNumber: number) {
     if (pNumber == 1) {
-        return round.firstParticipant;
+        return round.AParticipant;
     } else {
         return round.secondParticipant;
     }
@@ -152,7 +152,7 @@ export class BracketGenerationComponent {
 
 setParticipant(round: RoundModel, pNumber: number, value: ParticipantModelBase) {
     if (pNumber == 1) {
-        round.firstParticipant = value;
+        round.AParticipant = value;
     } else {
         round.secondParticipant = value;
     }

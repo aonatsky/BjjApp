@@ -3,9 +3,9 @@
 export class RoundResultModel {
     roundId: AAGUID;
     winnerParticipantId: AAGUID;
-    firstParticipantPoints: number;
-    firstParticipantAdvantages: number;
-    firstParticipantPenalties: number;
+    AParticipantPoints: number;
+    AParticipantAdvantages: number;
+    AParticipantPenalties: number;
     secondParticipantPoints: number;
     secondParticipantAdvantages: number;
     secondParticipantPenalties: number;

@@ -62,7 +62,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var bracketModel = await _bracketService.RunBracketAsync(weightDivisionId);
+                var bracketModel = await _bracketService.RunWeightDivision(weightDivisionId);
                 if (bracketModel != null)
                 {
                     return Success(bracketModel);

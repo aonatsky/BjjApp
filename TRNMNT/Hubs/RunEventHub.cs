@@ -20,7 +20,7 @@ namespace TRNMNT.Web.Hubs
 
         #region Public Methods
 
-        public async Task RoundStart(RoundModel roundModel)
+        public async Task RoundStart(MatchModel roundModel)
         {
             await ToGroup(roundModel.WeightDivisionId).RoundStart(roundModel);
         }
@@ -48,7 +48,7 @@ namespace TRNMNT.Web.Hubs
             var errorMessage = $"Bracket model for weightDivision with id {weightDivisionId} could not be found or created!";
             try
             {
-                var bracketModel = await _bracketService.RunBracketAsync(weightDivisionId);
+                var bracketModel = await _bracketService.RunWeightDivision(weightDivisionId);
                 if (bracketModel == null)
                 {
                     _logger.LogError(errorMessage);
@@ -73,7 +73,7 @@ namespace TRNMNT.Web.Hubs
 
     public interface IRunEventHubContract
     {
-        Task RoundStart(RoundModel roundModel);
+        Task RoundStart(MatchModel roundModel);
         Task RoundComplete(RefreshBracketModel refreshModel);
         Task WeightDivisionChanged(RefreshBracketModel refreshModel);
 

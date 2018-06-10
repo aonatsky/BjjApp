@@ -21,11 +21,11 @@ export class EventAdminComponent implements OnInit {
         this.data.roundId = "asdfasdf";
         this.data.nextRoundId = "asdf";
         this.data.stage = 1;
-        this.data.firstParticipant = new ParticipantModelBase();
-        this.data.firstParticipant.participantId = "partId0";
-        this.data.firstParticipant.firstName = "0FU";
-        this.data.firstParticipant.lastName = "0LU";
-        this.data.firstParticipant.dateOfBirth = new Date("12/10/2000");
+        this.data.AParticipant = new ParticipantModelBase();
+        this.data.AParticipant.participantId = "partId0";
+        this.data.AParticipant.firstName = "0FU";
+        this.data.AParticipant.lastName = "0LU";
+        this.data.AParticipant.dateOfBirth = new Date("12/10/2000");
 
         this.data.secondParticipant = new ParticipantModelBase();
         this.data.secondParticipant.participantId = "partId1";

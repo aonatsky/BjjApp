@@ -24,11 +24,11 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         super();
         this.roundDetails = new RoundDetailsModel();
 
-        this.roundDetails.firstParticipantPenalties = 0;
+        this.roundDetails.AParticipantPenalties = 0;
         this.roundDetails.secondParticipantPenalties = 0;
-        this.roundDetails.firstParticipantAdvantages = 0;
+        this.roundDetails.AParticipantAdvantages = 0;
         this.roundDetails.secondParticipantAdvantages = 0;
-        this.roundDetails.firstParticipantPoints = 0;
+        this.roundDetails.AParticipantPoints = 0;
         this.roundDetails.secondParticipantPoints = 0;
 
         this.roundDetails.countdown = 2 * 60;
@@ -93,8 +93,8 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.send();
     }
 
-    changeFirstParticipantAdvantages(advantagesStep: number): void {
-        this.roundDetails.firstParticipantAdvantages = this.roundDetails.firstParticipantAdvantages + advantagesStep < 0 ? 0 : this.roundDetails.firstParticipantAdvantages + advantagesStep;
+    changeAParticipantAdvantages(advantagesStep: number): void {
+        this.roundDetails.AParticipantAdvantages = this.roundDetails.AParticipantAdvantages + advantagesStep < 0 ? 0 : this.roundDetails.AParticipantAdvantages + advantagesStep;
         this.send();
     }
 
@@ -103,8 +103,8 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.send();
     }
 
-    changeFirstParticipantPenalties(penaltiesStep: number): void {
-        this.roundDetails.firstParticipantPenalties = this.roundDetails.firstParticipantPenalties + penaltiesStep < 0 ? 0 : this.roundDetails.firstParticipantPenalties + penaltiesStep;
+    changeAParticipantPenalties(penaltiesStep: number): void {
+        this.roundDetails.AParticipantPenalties = this.roundDetails.AParticipantPenalties + penaltiesStep < 0 ? 0 : this.roundDetails.AParticipantPenalties + penaltiesStep;
         this.send();
     }
 
@@ -113,8 +113,8 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.send();
     }
 
-    changeFirstParticipantPoints(pointStep: number): void {
-        this.roundDetails.firstParticipantPoints = this.roundDetails.firstParticipantPoints + pointStep < 0 ? 0 : this.roundDetails.firstParticipantPoints + pointStep;
+    changeAParticipantPoints(pointStep: number): void {
+        this.roundDetails.AParticipantPoints = this.roundDetails.AParticipantPoints + pointStep < 0 ? 0 : this.roundDetails.AParticipantPoints + pointStep;
         this.send();
     }
 

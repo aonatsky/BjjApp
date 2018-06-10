@@ -1,0 +1,10 @@
+[*]
+end_of_line = crlf
+
+[*.xml]
+indent_style = space
+
+[*.cs]
+csharp_new_line_before_catch = false : warning
+max_line_length              = 50 : suggestion
+csharp_prefer_braces         = true : suggestion

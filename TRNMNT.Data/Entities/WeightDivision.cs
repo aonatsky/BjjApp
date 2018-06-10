@@ -16,12 +16,11 @@ namespace TRNMNT.Data.Entities
         public string Descritpion { get; set; }
         public Guid CategoryId { get; set; }
         public bool IsAbsolute { get; set; }
+        public DateTime? StartTs { get; set; }
+        public DateTime? CompleteTs { get; set; }
 
         [JsonIgnore]
         public virtual Category Category { get; set; }
-
-        [JsonIgnore]
-        public virtual ICollection<Bracket> Brackets { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Participant> Participants { get; set; }

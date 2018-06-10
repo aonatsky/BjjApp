@@ -1,6 +1,6 @@
 ﻿namespace TRNMNT.Core.Enum
 {
-    public enum RoundTypeEnum 
+    public enum MatchTypeEnum 
     {
         Standard = 0,
         ThirdPlace = 1,

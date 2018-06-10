@@ -6,9 +6,9 @@ namespace TRNMNT.Core.Model.Bracket
 {
     public class BracketModel
     {
-        public Guid BracketId { get; set; }
+        public Guid WeightDivisionId { get; set; }
         public string Title { get; set; }
-        public ICollection<RoundModel> RoundModels { get; set; }
-        public ICollection<MedalistModel> Medalists { get; set; }
+        public List<MatchModel> MatchModels { get; set; }
+        public List<MedalistModel> Medalists { get; set; }
     }
 }

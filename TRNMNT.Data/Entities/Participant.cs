@@ -15,7 +15,8 @@ namespace TRNMNT.Data.Entities
         public string PhoneNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime UpdateTS { get; set; }
-        public string UserId{ get; set; }
+        public string UserId { get; set; }
+        public bool IsDisqualified { get; set; }
         public bool IsActive { get; set; }
         public bool IsApproved { get; set; }
         public bool IsMember { get; set; }
@@ -41,7 +42,7 @@ namespace TRNMNT.Data.Entities
         [JsonIgnore]
         public virtual Category Category { get; set; }
         [JsonIgnore]
-        public virtual Event Event{ get; set; }
+        public virtual Event Event { get; set; }
 
     }
 }
