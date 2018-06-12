@@ -1,3 +1,19 @@
 ﻿@import '_variables.scss';
 @import '_theme.scss';
 
+body {
+    margin: 0px;
+
+    .content {
+        padding-top: 0px;
+    }
+
+    .ui-button {
+        padding: 0.2em;
+        border-color: $theme_black;
+    }
+
+    .ui-inputtext{
+        padding: 0.5em 0.75em;
+    }
+}

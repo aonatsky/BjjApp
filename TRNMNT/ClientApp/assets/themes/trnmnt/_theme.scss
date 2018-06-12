@@ -1,8 +1,8 @@
 ﻿
 @mixin hover-element() {
-    border-color: $stateHoverBorderColor;
-    background: $stateHoverBgColor;
-    color: $stateHoverTextColor;
+    //border-color: darken($stateDefaultBorderColor,5px);
+    background: darken($stateDefaultBgColor,5%);
+    //color: $stateHoverTextColor;
 
     a {
         color: $stateHoverTextColor;
@@ -135,16 +135,16 @@
 }
 
 .ui-inputtext:enabled:hover {
-    border-color: $stateHoverBorderColor;
+    //    border-color: $stateHoverBorderColor;
 }
 
 .ui-inputtext.ui-state-focus,
 .ui-inputtext:focus {
     outline: 0 none;
     border-color: $stateFocusBorderColor;
-    -moz-box-shadow: 0px 0px 5px $stateFocusBorderColor;
-    -webkit-box-shadow: 0px 0px 5px $stateFocusBorderColor;
-    box-shadow: 0px 0px 5px $stateFocusBorderColor;
+    //-moz-box-shadow: 0px 0px 5px $stateFocusBorderColor;
+    //-webkit-box-shadow: 0px 0px 5px $stateFocusBorderColor;
+    //box-shadow: 0px 0px 5px $stateFocusBorderColor;
 }
 
 .ui-inputgroup {

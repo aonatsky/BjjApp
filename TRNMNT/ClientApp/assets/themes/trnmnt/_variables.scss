@@ -7,6 +7,7 @@ $theme_orange_light: #FFAEA3;
 $theme_grey: #cccccc;
 $theme_black: #3c3c3c;
 $theme_white: #ffffff;
+$border_color: #c7c7c7;
 $theme_body_color: #f8f8f8;
 $theme_font_family: Roboto, sans-serif;
 $theme_box_shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -30,13 +31,13 @@ $headerIconTextColor: #eeeeee;
 
 //Content
 $contentBorderWidth: 1px;
-$contentBorderColor: #666666;
-$contentBgColor: #575757;
+$contentBorderColor: $border_color;
+$contentBgColor: #ffffff;
 $contentTextColor: #eeeeee;
 
 //Default State
 $stateDefaultBorderWidth: 1px;
-$stateDefaultBorderColor: #2e2e2e;
+$stateDefaultBorderColor: $border_color;
 $stateDefaultBgColor: #3d3d3d;
 $stateDefaultTextColor: #eeeeee;
 
@@ -51,7 +52,7 @@ $stateHighlightBgColor: #eeeeee;
 $stateHighlightTextColor: #0099e0;
 
 //Focus State
-$stateFocusBorderColor: #2e2e2e;
+$stateFocusBorderColor: $theme_black;
 $stateFocusBgColor: #474747;
 $stateFocusTextColor: #ffffff;
 
@@ -61,7 +62,7 @@ $stateErrorBgColor: #ffc73d;
 $stateErrorTextColor: #111111;
 
 //Hover State
-$stateHoverBorderColor: #2e2e2e;
+$stateHoverBorderColor: $border_color;
 $stateHoverBgColor: #474747;
 $stateHoverTextColor: #ffffff;
 
