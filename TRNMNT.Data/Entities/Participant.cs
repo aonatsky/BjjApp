@@ -38,7 +38,6 @@ namespace TRNMNT.Data.Entities
         [JsonIgnore]
         public virtual WeightDivision WeightDivision { get; set; }
 
-
         [JsonIgnore]
         public virtual Category Category { get; set; }
         [JsonIgnore]

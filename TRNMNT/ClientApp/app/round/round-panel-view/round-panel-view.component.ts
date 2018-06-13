@@ -25,11 +25,11 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
         this.roundDetails = new RoundDetailsModel();
 
         this.roundDetails.AParticipantPenalties = 0;
-        this.roundDetails.secondParticipantPenalties = 0;
+        this.roundDetails.BParticipantPenalties = 0;
         this.roundDetails.AParticipantAdvantages = 0;
-        this.roundDetails.secondParticipantAdvantages = 0;
+        this.roundDetails.BParticipantAdvantages = 0;
         this.roundDetails.AParticipantPoints = 0;
-        this.roundDetails.secondParticipantPoints = 0;
+        this.roundDetails.BParticipantPoints = 0;
 
         this.roundDetails.countdown = 2 * 60;
         this.roundDetails.isStarted = false;

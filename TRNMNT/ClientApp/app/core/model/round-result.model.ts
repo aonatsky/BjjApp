@@ -6,9 +6,9 @@ export class RoundResultModel {
     AParticipantPoints: number;
     AParticipantAdvantages: number;
     AParticipantPenalties: number;
-    secondParticipantPoints: number;
-    secondParticipantAdvantages: number;
-    secondParticipantPenalties: number;
+    BParticipantPoints: number;
+    BParticipantAdvantages: number;
+    BParticipantPenalties: number;
     submissionType : number;
     roundResultType : number;
     completeTime: number;

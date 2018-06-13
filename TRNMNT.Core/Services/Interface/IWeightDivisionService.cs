@@ -20,6 +20,6 @@ namespace TRNMNT.Core.Services.Interface
         Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId, bool includeCategory = false);
 
         Task SetWeightDivisionStarted(Guid weightDivisionId);
-        Task SetWeightDivisionCompleted(Guid weightDivisionId);
+        Task SetWeightDivisionCompletedAsync(Guid weightDivisionId);
     }
 }

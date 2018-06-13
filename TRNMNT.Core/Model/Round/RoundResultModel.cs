@@ -3,9 +3,9 @@ using TRNMNT.Core.Enum;
 
 namespace TRNMNT.Core.Model.Round
 {
-    public class RoundResultModel
+    public class MatchResultModel
     {
-        public Guid RoundId { get; set; }
+        public Guid MathcId { get; set; }
         public Guid WinnerParticipantId { get; set; }
         public int CompleteTime { get; set; }
         public MatchResultTypeEnum RoundResultType { get; set; }
@@ -13,8 +13,8 @@ namespace TRNMNT.Core.Model.Round
         public int AParticipantPoints { get; set; }
         public int AParticipantAdvantages { get; set; }
         public int AParticipantPenalties { get; set; }
-        public int SecondParticipantPoints { get; set; }
-        public int SecondParticipantAdvantages { get; set; }
-        public int SecondParticipantPenalties { get; set; }
+        public int BParticipantPoints { get; set; }
+        public int BParticipantAdvantages { get; set; }
+        public int BParticipantPenalties { get; set; }
     }
 }

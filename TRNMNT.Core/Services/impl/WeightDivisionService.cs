@@ -122,7 +122,7 @@ namespace TRNMNT.Core.Services.Impl
             _weightDevisionRepository.Update(weightDivision);
         }
 
-        public async Task SetWeightDivisionCompleted(Guid weightDivisionId)
+        public async Task SetWeightDivisionCompletedAsync(Guid weightDivisionId)
         {
             var weightDivision = await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
             weightDivision.CompleteTs = DateTime.UtcNow;

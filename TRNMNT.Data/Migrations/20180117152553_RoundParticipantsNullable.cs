@@ -16,7 +16,7 @@ namespace TRNMNT.Data.Migrations
                 oldClrType: typeof(Guid));
 
             migrationBuilder.AlterColumn<Guid>(
-                name: "SecondParticipantId",
+                name: "BParticipantId",
                 table: "Round",
                 type: "uniqueidentifier",
                 nullable: true,
@@ -41,7 +41,7 @@ namespace TRNMNT.Data.Migrations
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<Guid>(
-                name: "SecondParticipantId",
+                name: "BParticipantId",
                 table: "Round",
                 nullable: false,
                 oldClrType: typeof(Guid),

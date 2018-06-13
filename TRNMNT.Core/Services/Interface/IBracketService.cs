@@ -67,7 +67,7 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="model">RoundResult model</param>
         /// <returns></returns>
-        Task SetRoundResultAsync(RoundResultModel model);
+        Task SetRoundResultAsync(MatchResultModel model);
 
         /// <summary>
         /// Returns file with personal results;

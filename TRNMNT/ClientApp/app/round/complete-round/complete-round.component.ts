@@ -33,32 +33,32 @@ export class CompleteRoundComponent implements OnInit {
         this.roundResultModel.AParticipantAdvantages = this.roundDetails.AParticipantAdvantages;
         this.roundResultModel.AParticipantPenalties = this.roundDetails.AParticipantPenalties;
 
-        this.roundResultModel.secondParticipantPoints = this.roundDetails.secondParticipantPoints;
-        this.roundResultModel.secondParticipantAdvantages = this.roundDetails.secondParticipantAdvantages;
-        this.roundResultModel.secondParticipantPenalties = this.roundDetails.secondParticipantPenalties;
+        this.roundResultModel.BParticipantPoints = this.roundDetails.BParticipantPoints;
+        this.roundResultModel.BParticipantAdvantages = this.roundDetails.BParticipantAdvantages;
+        this.roundResultModel.BParticipantPenalties = this.roundDetails.BParticipantPenalties;
         this.roundResultModel.completeTime = this.roundDetails.roundModel.roundTime - this.roundDetails.countdown;
         this.setWinnerByPoints();
     }
 
     private setWinnerByPoints() {
 
-        if (this.roundDetails.AParticipantPoints !== this.roundDetails.secondParticipantPoints) {
-            this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantPoints > this.roundDetails.secondParticipantPoints
+        if (this.roundDetails.AParticipantPoints !== this.roundDetails.BParticipantPoints) {
+            this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantPoints > this.roundDetails.BParticipantPoints
                 ? this.roundDetails.roundModel.AParticipant.participantId
-                : this.roundDetails.roundModel.secondParticipant.participantId;
+                : this.roundDetails.roundModel.BParticipant.participantId;
             this.roundResultModel.roundResultType = this.roundResultTypes.Points;
         }
-        else if (this.roundDetails.AParticipantAdvantages !== this.roundDetails.secondParticipantAdvantages) {
-            this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantAdvantages > this.roundDetails.secondParticipantAdvantages
+        else if (this.roundDetails.AParticipantAdvantages !== this.roundDetails.BParticipantAdvantages) {
+            this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantAdvantages > this.roundDetails.BParticipantAdvantages
                 ? this.roundDetails.roundModel.AParticipant.participantId
-                : this.roundDetails.roundModel.secondParticipant.participantId;
+                : this.roundDetails.roundModel.BParticipant.participantId;
             this.roundResultModel.roundResultType = RoundResultType.Advantages;
         }
-        else if (this.roundDetails.AParticipantPenalties !== this.roundDetails.secondParticipantPenalties) {
+        else if (this.roundDetails.AParticipantPenalties !== this.roundDetails.BParticipantPenalties) {
             this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantPenalties <
-                this.roundDetails.secondParticipantPenalties
+                this.roundDetails.BParticipantPenalties
                 ? this.roundDetails.roundModel.AParticipant.participantId
-                : this.roundDetails.roundModel.secondParticipant.participantId;
+                : this.roundDetails.roundModel.BParticipant.participantId;
             this.roundResultModel.roundResultType = RoundResultType.Penalties;
         } else {
             this.roundResultModel.winnerParticipantId = this.roundDetails.roundModel.AParticipant.participantId;

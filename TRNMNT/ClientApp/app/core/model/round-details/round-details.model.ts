@@ -3,11 +3,11 @@
 export class RoundDetailsModel {
     roundId: string;
     AParticipantPenalties: number;
-    secondParticipantPenalties: number;
+    BParticipantPenalties: number;
     AParticipantAdvantages: number;
-    secondParticipantAdvantages: number;
+    BParticipantAdvantages: number;
     AParticipantPoints: number;
-    secondParticipantPoints: number;
+    BParticipantPoints: number;
 
     countdown: number;
     isStarted: boolean;

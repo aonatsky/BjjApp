@@ -27,11 +27,11 @@ export class EventAdminComponent implements OnInit {
         this.data.AParticipant.lastName = "0LU";
         this.data.AParticipant.dateOfBirth = new Date("12/10/2000");
 
-        this.data.secondParticipant = new ParticipantModelBase();
-        this.data.secondParticipant.participantId = "partId1";
-        this.data.secondParticipant.firstName = "1FU";
-        this.data.secondParticipant.lastName = "1LU";
-        this.data.secondParticipant.dateOfBirth = new Date("10/10/2000");
+        this.data.BParticipant = new ParticipantModelBase();
+        this.data.BParticipant.participantId = "partId1";
+        this.data.BParticipant.firstName = "1FU";
+        this.data.BParticipant.lastName = "1LU";
+        this.data.BParticipant.dateOfBirth = new Date("10/10/2000");
     }
 
     ngOnInit() {

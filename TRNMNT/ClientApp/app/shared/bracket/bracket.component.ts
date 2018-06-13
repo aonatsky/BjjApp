@@ -93,8 +93,8 @@ export class BracketComponent implements OnInit {
                 ? model.AParticipant.firstName + ' ' + model.AParticipant.lastName
                 : '';
         } else {
-            if (model.secondParticipant) {
-                return model.secondParticipant.firstName + ' ' + model.secondParticipant.lastName;
+            if (model.BParticipant) {
+                return model.BParticipant.firstName + ' ' + model.BParticipant.lastName;
             } else if (model.roundType == 2) {
                 return 'LOST FIRST ROUND';
             } else {
@@ -128,7 +128,7 @@ export class BracketComponent implements OnInit {
     }
 
     private isEditable(model: RoundModel): boolean {
-        if (model.AParticipant && model.secondParticipant) {
+        if (model.AParticipant && model.BParticipant) {
             if (model.winnerParticipant && model.nextRoundId) {
                 const nextRound = this.bracket.roundModels.filter(r => r.roundId === model.nextRoundId)[0];
                 if (nextRound && !nextRound.winnerParticipant) {

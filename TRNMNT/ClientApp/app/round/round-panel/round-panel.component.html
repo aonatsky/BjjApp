@@ -63,11 +63,11 @@
 
 
             <div class="round-panel-user-panel">
-                <div class="round-panel-participant">{{roundModel.secondParticipant.firstName}} {{roundModel.secondParticipant.lastName}}</div>
-                <div class="round-panel-current-points">{{roundDetails.secondParticipantPoints}}</div>
+                <div class="round-panel-participant">{{roundModel.BParticipant.firstName}} {{roundModel.BParticipant.lastName}}</div>
+                <div class="round-panel-current-points">{{roundDetails.BParticipantPoints}}</div>
                 <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
-                    <div class="round-panel-large-box">{{roundDetails.secondParticipantAdvantages}}</div>
-                    <div class="round-panel-large-box">{{roundDetails.secondParticipantPenalties}}</div>
+                    <div class="round-panel-large-box">{{roundDetails.BParticipantAdvantages}}</div>
+                    <div class="round-panel-large-box">{{roundDetails.BParticipantPenalties}}</div>
                 </div>
                 <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
                     <div class="round-panel-label-large">ADV.</div>
@@ -77,32 +77,32 @@
                     <div class="points-container">
                         <div class="round-panel-label">POINTS</div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-green-button" (click)="changeSecondParticipantPoints(2)">+ 2</div>
-                            <div class="round-panel-green-button" (click)="changeSecondParticipantPoints(3)">+ 3</div>
-                            <div class="round-panel-green-button" (click)="changeSecondParticipantPoints(4)">+ 4</div>
+                            <div class="round-panel-green-button" (click)="changeBParticipantPoints(2)">+ 2</div>
+                            <div class="round-panel-green-button" (click)="changeBParticipantPoints(3)">+ 3</div>
+                            <div class="round-panel-green-button" (click)="changeBParticipantPoints(4)">+ 4</div>
                         </div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-red-button" (click)="changeSecondParticipantPoints(-2)">- 2</div>
-                            <div class="round-panel-red-button" (click)="changeSecondParticipantPoints(-3)">- 3</div>
-                            <div class="round-panel-red-button" (click)="changeSecondParticipantPoints(-4)">- 4</div>
+                            <div class="round-panel-red-button" (click)="changeBParticipantPoints(-2)">- 2</div>
+                            <div class="round-panel-red-button" (click)="changeBParticipantPoints(-3)">- 3</div>
+                            <div class="round-panel-red-button" (click)="changeBParticipantPoints(-4)">- 4</div>
                         </div>
                     </div>
                     <div class="advantage-container">
                         <div class="round-panel-label">ADVANTAGE</div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-green-button" (click)="changeSecondParticipantAdvantages(1)">+ 1</div>
+                            <div class="round-panel-green-button" (click)="changeBParticipantAdvantages(1)">+ 1</div>
                         </div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-red-button" (click)="changeSecondParticipantAdvantages(-1)">- 1</div>
+                            <div class="round-panel-red-button" (click)="changeBParticipantAdvantages(-1)">- 1</div>
                         </div>
                     </div>
                     <div class="penalty-container">
                         <div class="round-panel-label">PENALTY</div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-green-button" (click)="changeSecondParticipantPenalties(1)">+ 1</div>
+                            <div class="round-panel-green-button" (click)="changeBParticipantPenalties(1)">+ 1</div>
                         </div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-red-button" (click)="changeSecondParticipantPenalties(-1)">- 1</div>
+                            <div class="round-panel-red-button" (click)="changeBParticipantPenalties(-1)">- 1</div>
                         </div>
                     </div>
                 </div>

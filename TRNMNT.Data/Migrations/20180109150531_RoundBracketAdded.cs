@@ -34,7 +34,7 @@ namespace TRNMNT.Data.Migrations
                     BracketId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NextRoundId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SecondParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WinnerParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -59,8 +59,8 @@ namespace TRNMNT.Data.Migrations
                         principalColumn: "RoundId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Round_Participant_SecondParticipantId",
-                        column: x => x.SecondParticipantId,
+                        name: "FK_Round_Participant_BParticipantId",
+                        column: x => x.BParticipantId,
                         principalTable: "Participant",
                         principalColumn: "ParticipantId",
                         onDelete: ReferentialAction.Restrict);
@@ -93,9 +93,9 @@ namespace TRNMNT.Data.Migrations
                 column: "NextRoundId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Round_SecondParticipantId",
+                name: "IX_Round_BParticipantId",
                 table: "Round",
-                column: "SecondParticipantId");
+                column: "BParticipantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Round_WinnerParticipantId",

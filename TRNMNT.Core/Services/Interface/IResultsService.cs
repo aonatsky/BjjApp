@@ -14,6 +14,8 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="categoryIds">Category Id</param>
         /// <returns></returns>
         Task<IEnumerable<TeamResultModel>> GetTeamResultsByCategoriesAsync(IEnumerable<Guid> categoryIds);
-     
+
+        Task<IEnumerable<Participant>> GetMedalistsForAbsolute(Guid categoryId, bool includeAbsolute);
+
     }
 }

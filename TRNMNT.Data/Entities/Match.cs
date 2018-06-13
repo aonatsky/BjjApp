@@ -19,7 +19,7 @@ namespace TRNMNT.Data.Entities
         public int Order { get; set; }
         public int MatchType { get; set; }
         public int MatchResultType { get; set; }
-        public string RoundResultDetails { get; set; }
+        public string MatchResultDetails { get; set; }
 
         [JsonIgnore, ForeignKey(nameof(AParticipantId))]
         public virtual Participant AParticipant { get; set; }

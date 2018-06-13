@@ -30,5 +30,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="weightDivision"></param>
         /// <returns></returns>
         Task<List<Match>> GetProcessedMatchesAsync(Guid categoryId, Guid weightDivision);
+
+        Task SetMatchResultAsync(MatchResultModel model);
     }
 }

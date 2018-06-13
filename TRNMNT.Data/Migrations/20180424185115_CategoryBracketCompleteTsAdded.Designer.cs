@@ -441,7 +441,7 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<int>("RoundType");
 
-                    b.Property<Guid?>("SecondParticipantId");
+                    b.Property<Guid?>("BParticipantId");
 
                     b.Property<int>("Stage");
 
@@ -455,7 +455,7 @@ namespace TRNMNT.Data.Migrations
 
                     b.HasIndex("NextRoundId");
 
-                    b.HasIndex("SecondParticipantId");
+                    b.HasIndex("BParticipantId");
 
                     b.HasIndex("WinnerParticipantId");
 
@@ -736,9 +736,9 @@ namespace TRNMNT.Data.Migrations
                         .HasForeignKey("NextRoundId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TRNMNT.Data.Entities.Participant", "SecondParticipant")
+                    b.HasOne("TRNMNT.Data.Entities.Participant", "BParticipant")
                         .WithMany()
-                        .HasForeignKey("SecondParticipantId")
+                        .HasForeignKey("BParticipantId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TRNMNT.Data.Entities.Participant", "WinnerParticipant")

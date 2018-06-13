@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +15,21 @@ namespace TRNMNT.Core.Services.impl
     class MatchService : IMatchService
     {
         private readonly IRepository<Match> _matchRepository;
+        private readonly IWeightDivisionService _weightDivisionService;
+        private readonly ICategoryService _categoryService;
         private readonly IRepository<WeightDivision> _weightDivisionRepository;
         private readonly IRepository<Participant> _participantRepository;
 
         public MatchService(
             IRepository<Match> matchRepository,
             IRepository<WeightDivision> weightDivisionRepository,
-            IRepository<Participant> participantRepository)
+            IRepository<Participant> participantRepository,
+            IWeightDivisionService weightDivisionService,
+            ICategoryService categoryService)
         {
             _matchRepository = matchRepository;
-            _weightDivisionRepository = weightDivisionRepository;
+            _weightDivisionService = weightDivisionService;
+            _categoryService= categoryService;
             _participantRepository = participantRepository;
         }
 
@@ -93,7 +99,103 @@ namespace TRNMNT.Core.Services.impl
             return matches;
         }
 
-        
+
+        public async Task SetMatchResultAsync(MatchResultModel model)
+        {
+            var match = await _matchRepository.GetAll(m => m.MatchId == model.MathcId).Include(m => m.NextMatch)
+                .FirstOrDefaultAsync();
+            if (match != null)
+            {
+                match.WinnerParticipantId = model.WinnerParticipantId;
+                match.MatchResultType = (int)model.RoundResultType;
+                match.MatchResultDetails = GetRoundResultDetailsJson(model);
+                if (match.Round == 1)
+                {
+                    var lostParticipantId = match.WinnerParticipantId == match.AParticipantId
+                        ? match.BParticipantId
+                        : match.AParticipantId;
+                    var bufferMatch = await _matchRepository.FirstOrDefaultAsync(m =>
+                        m.WeightDivisionID == match.WeightDivisionID
+                        && m.CategoryId == match.CategoryId
+                        && m.MatchType == (int)MatchTypeEnum.Buffer);
+                    if (bufferMatch != null && bufferMatch.BParticipantId == null)
+                    {
+                        bufferMatch.BParticipantId = lostParticipantId;
+                        _matchRepository.Update(bufferMatch);
+                    }
+                    else
+                    {
+                        var thirdPlaceMatch = await _matchRepository.FirstOrDefaultAsync(m =>
+                            m.WeightDivisionID == match.WeightDivisionID
+                            && m.CategoryId == match.CategoryId
+                            && m.MatchType == (int)MatchTypeEnum.ThirdPlace);
+                        if (thirdPlaceMatch != null)
+                        {
+                            if (match.Order % 2 == 0)
+                            {
+                                thirdPlaceMatch.AParticipantId = lostParticipantId;
+                            }
+                            else
+                            {
+                                thirdPlaceMatch.BParticipantId = lostParticipantId;
+                            }
+
+                            //if buffer exists = 3 participants
+                            if (bufferMatch != null)
+                            {
+                                thirdPlaceMatch.WinnerParticipantId = lostParticipantId;
+                            }
+
+                            _matchRepository.Update(thirdPlaceMatch);
+                        }
+                    }
+                }
+
+                if (match.NextMatch != null)
+                {
+                    if (match.Order % 2 == 0)
+                    {
+                        match.NextMatch.AParticipantId = match.WinnerParticipantId;
+                    }
+                    else
+                    {
+                        match.NextMatch.BParticipantId = match.WinnerParticipantId;
+                    }
+                }
+
+                if (match.Round == 0)
+                {
+                    if (!await _matchRepository.GetAll(m => m.WeightDivisionID == match.WeightDivisionID
+                                                            && m.CategoryId == match.CategoryId
+                                                            && m.Round == 0
+                                                            && m.MatchId != match.MatchId
+                                                            && m.WinnerParticipantId == null
+                    ).AnyAsync())
+                    {
+                        await _weightDivisionService.SetWeightDivisionCompletedAsync(match.WeightDivisionID);
+                    }
+                }
+                _matchRepository.Update(match);
+            }
+        }
+
+        private string GetRoundResultDetailsJson(MatchResultModel model)
+        {
+            var jObject = new JObject(
+                new JProperty(nameof(model.AParticipantPoints), model.AParticipantPoints),
+                new JProperty(nameof(model.AParticipantAdvantages), model.AParticipantAdvantages),
+                new JProperty(nameof(model.AParticipantPenalties), model.AParticipantPenalties),
+                new JProperty(nameof(model.BParticipantPoints), model.BParticipantPoints),
+                new JProperty(nameof(model.BParticipantAdvantages), model.BParticipantAdvantages),
+                new JProperty(nameof(model.BParticipantPenalties), model.BParticipantPenalties),
+                new JProperty(nameof(model.CompleteTime), model.CompleteTime),
+                new JProperty(nameof(model.SubmissionType), model.SubmissionType)
+            );
+            return jObject.ToString();
+
+        }
+
+
 
         #region private methods
 

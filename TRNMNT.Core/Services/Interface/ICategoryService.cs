@@ -23,17 +23,17 @@ namespace TRNMNT.Core.Services.Interface
         Task<IEnumerable<CategoryModelBase>> GetCompletedCategoriesByEventIdAsync(Guid eventId);
 
         /// <summary>
-        /// Set category completed asynchronous.
-        /// </summary>
-        /// <param name="categoryId">Category Id</param>
-        /// <returns></returns>
-        Task SetCategoryCompleteAsync(Guid categoryId);
-
-        /// <summary>
         /// Returns category by category identifier async. 
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
         Task<Category> GetCategoryAsync(Guid categoryId);
+
+        /// <summary>
+        /// Checks if category completed. 
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
+        Task<bool> IsCategoryCompletedAsync(Guid categoryId);
     }
 }

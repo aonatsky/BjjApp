@@ -32,8 +32,8 @@ export class BracketResultSetComponent {
             if (this.bracket.roundModels[i].AParticipant) {
                 this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].AParticipant));
             }
-            if (this.bracket.roundModels[i].secondParticipant) {
-                this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].secondParticipant));
+            if (this.bracket.roundModels[i].BParticipant) {
+                this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].BParticipant));
             }
         }
         this.firstPlaceParticipantId = this.participantSelectItems[0] ? this.participantSelectItems[0].value : '00000000-0000-0000-0000-000000000000';

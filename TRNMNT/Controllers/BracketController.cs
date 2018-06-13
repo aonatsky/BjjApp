@@ -23,6 +23,7 @@ namespace TRNMNT.Web.Controllers
         #region dependencies
 
         private readonly IBracketService _bracketService;
+        private readonly ICategoryService _categoryService;
 
         #endregion
 
@@ -32,10 +33,12 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IAppDbContext context,
             IWeightDivisionService weightDivisionService,
-            IBracketService bracketService)
+            IBracketService bracketService,
+            ICategoryService categoryService)
             : base(logger, userService, eventService, context)
         {
             _bracketService = bracketService;
+            _categoryService = categoryService;
         }
 
         #region Public Methods
@@ -117,8 +120,8 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async () =>
             {
-                var isSelected = await _bracketService.IsCategoryCompletedAsync(categoryId);
-                return Success(isSelected);
+                var isCompleted = await _categoryService.IsCategoryCompletedAsync(categoryId);
+                return Success(isCompleted);
             });
         }
 
@@ -133,7 +136,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> SetRoundResult([FromBody]RoundResultModel roundResultModel)
+        public async Task<IActionResult> SetRoundResult([FromBody]MatchResultModel roundResultModel)
         {
             return await HandleRequestAsync(async () =>
             {
