@@ -5,7 +5,7 @@ namespace TRNMNT.Core.Model.Round
 {
     public class MatchResultModel
     {
-        public Guid MathcId { get; set; }
+        public Guid MatchId { get; set; }
         public Guid WinnerParticipantId { get; set; }
         public int CompleteTime { get; set; }
         public MatchResultTypeEnum RoundResultType { get; set; }

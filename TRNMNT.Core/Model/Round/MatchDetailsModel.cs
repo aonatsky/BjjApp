@@ -1,8 +1,8 @@
 ﻿namespace TRNMNT.Core.Model.Round
 {
-    public class RoundDetailsModel
+    public class MatchDetailsModel
     {
-        public string RoundId { get; set; }
+        public string MatchId { get; set; }
         public int AParticipantPenalties { get; set; }
         public int BParticipantPenalties { get; set; }
         public int AParticipantAdvantages { get; set; }

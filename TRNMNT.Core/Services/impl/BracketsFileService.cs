@@ -36,6 +36,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<CustomFile> GetBracketsFileAsync(List<Participant> participants, string title)
         {
+            //todo use matches
             var settings = GetSettings(participants.Count);
 
             if (participants.Count == 4 && participants.Count(p => p != null) == 3)
@@ -107,7 +108,7 @@ namespace TRNMNT.Core.Services.Impl
                             workSheet.Cells[rowIndex + i, 2].Value =
                                 $"{medalist.Participant.FirstName} {medalist.Participant.LastName}";
                             workSheet.Cells[rowIndex + i, 3].Value =
-                                medalist.Participant.Team.Name;
+                                medalist.Participant.TeamName;
                         }
                         rowIndex += 4;
                     }
@@ -125,17 +126,17 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Settings
 
-        private class BracketFileSettings
+        private interface IBracketFileSettings
         {
-            public int Count { get; set; }
-            public string TitleCell { get; set; }
-            public string[] NameCells { get; set; }
+            int Count { get; set; }
+            string TitleCell { get; set; }
+            string[] NameCells { get; set; }
         }
 
-        private BracketFileSettings GetSettings(int fightersCount)
+        private IBracketFileSettings GetSettings(int fightersCount)
         {
             var stringJson = File.ReadAllText(Path.Combine(_env.WebRootPath, "Config", "barcketsSettings.json"));
-            var settingsList = JsonConvert.DeserializeObject<BracketFileSettings[]>(stringJson).ToList();
+            var settingsList = JsonConvert.DeserializeObject<IBracketFileSettings[]>(stringJson).ToList();
             return settingsList.FirstOrDefault(s => s.Count == fightersCount);
         }
 

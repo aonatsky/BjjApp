@@ -9,7 +9,6 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IParticipantService : IPaidEntityService
     {
-        Participant GetEmptyParticipant();
     
         /// <summary>
         /// Determines whether [is participant exists asynchronous].
@@ -62,7 +61,14 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns>List of participants</returns>
         Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId);
 
-        Task AddAbsoluteWeightDivisionForParticipantsAsync(Guid[] participantsIds, Guid categoryId, Guid absoluteWeightDivisionId);
+        /// <summary>
+        /// Returns participants for absolute division by category
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <returns>List of participants</returns>
+        Task<IEnumerable<Participant>> GetParticipantsInAbsoluteDivisionByCategoryAsync(Guid categoryId);
+
+        Task AddParticipantsToAbsoluteWeightDivisionAsync(Guid[] participantsIds, Guid categoryId, Guid absoluteWeightDivisionId);
 
     }
 }

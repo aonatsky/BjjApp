@@ -7,9 +7,9 @@ namespace TRNMNT.Web.Hubs
     {
         #region Dependencies
 
-        public async Task Send(RoundDetailsModel roundDetails)
+        public async Task Send(MatchDetailsModel roundDetails)
         {
-            await Clients.Group(roundDetails.RoundId).Send(roundDetails);
+            await Clients.Group(roundDetails.MatchId).Send(roundDetails);
         }
 
         #endregion
@@ -17,6 +17,6 @@ namespace TRNMNT.Web.Hubs
 
     public interface IRoundHubClient
     {
-        Task Send(RoundDetailsModel roundDetails);
+        Task Send(MatchDetailsModel roundDetails);
     }
 }

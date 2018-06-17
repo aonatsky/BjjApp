@@ -17,14 +17,14 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="categoryIds">Category Id</param>
         /// <returns></returns>
         Task<IEnumerable<TeamResultModel>> GetTeamResultsByCategoriesAsync(IEnumerable<Guid> categoryIds);
-        
+
         ///<summary>
         /// Returns bracket for weightdivision
         /// </summary>
         /// <param name="weightDivisionId"></param>
         /// <returns>Bracket model</returns>
-        Task<BracketModel> GetBracketModelAsync(Guid categoryId, Guid weightDivisionId);
-        
+        Task<BracketModel> GetBracketModelAsync(Guid weightDivisionId);
+
         /// <summary>
         /// Returns bracket for weightdevision. Marked as started. 
         /// </summary>
@@ -56,11 +56,10 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
-        Task<List<ParticipantInAbsoluteDivisionModel>> GetParticipantsForAbsoluteDivisionAsync(Guid categoryId);
+        Task<IEnumerable<ParticipantInAbsoluteDivisionModel>> GetParticipantsForAbsoluteDivisionAsync(Guid categoryId);
 
-        Task<bool> IsCategoryCompletedAsync(Guid categoryId);
 
-        Task ManageAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model);
+        Task EditAbsoluteWeightDivisionAsync(CreateAbsoluteDivisionModel model);
 
         /// <summary>
         /// Sets round result

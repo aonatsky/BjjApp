@@ -113,7 +113,7 @@ namespace TRNMNT.Core.Services.Impl
             return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId || p.AbsoluteWeightDivisionId == weightDivisionId).Include(p => p.Team).ToListAsync();
         }
 
-        public async Task AddAbsoluteWeightDivisionForParticipantsAsync(Guid[] participantsIds, Guid categoryId,
+        public async Task AddParticipantsToAbsoluteWeightDivisionAsync(Guid[] participantsIds, Guid categoryId,
             Guid absoluteWeightDivisionId)
         {
             var previousParticipants = await _repository.GetAll(p =>
@@ -216,15 +216,9 @@ namespace TRNMNT.Core.Services.Impl
             return allParticipants;
         }
 
-        public Participant GetEmptyParticipant()
+        public async Task<IEnumerable<Participant>> GetParticipantsInAbsoluteDivisionByCategoryAsync(Guid categoryId)
         {
-            return new Participant()
-            {
-                ParticipantId = Guid.Empty,
-                TeamId = Guid.Empty,
-                FirstName = "EMPTY",
-                LastName = "EMPTY"
-            };
+            return await _repository.GetAll(p => p.AbsoluteWeightDivisionId != null).ToListAsync();
         }
 
         #endregion

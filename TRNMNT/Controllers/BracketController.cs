@@ -130,7 +130,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestAsync(async () =>
             {
-                await _bracketService.ManageAbsoluteWeightDivisionAsync(model);
+                await _bracketService.EditAbsoluteWeightDivisionAsync(model);
                 return HttpStatusCode.OK;
             });
         }

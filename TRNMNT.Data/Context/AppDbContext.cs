@@ -117,7 +117,6 @@ namespace TRNMNT.Data.Context
 
 
         public DbSet<WeightDivision> WeightDivision { get; set; }
-        public DbSet<Fighter> Fighter { get; set; }
         public DbSet<Team> Team { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<User> User { get; set; }
@@ -126,7 +125,6 @@ namespace TRNMNT.Data.Context
         public DbSet<Order> Order { get; set; }
         public DbSet<Federation> Federation { get; set; }
         public DbSet<PromoCode> PromoCode { get; set; }
-        public DbSet<Bracket> Bracket { get; set; }
         public DbSet<Match> Round { get; set; }
 
         #endregion

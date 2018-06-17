@@ -40,9 +40,14 @@ namespace TRNMNT.Core.Services.Impl
                 });
         }
 
-        public async Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId)
+        public async Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId, bool includeCategory=false)
         {
-            return await _weightDevisionRepository.GetAll(wd => wd.CategoryId == categoryId).Include(wd => wd.Brackets).ToListAsync();
+            var query = _weightDevisionRepository.GetAll(wd => wd.CategoryId == categoryId);
+            if (includeCategory)
+            {
+                query.Include(wd => wd.Category);
+            }
+            return await query.ToListAsync();
         }
 
         public async Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionModelsByEventIdAsync(Guid eventId, bool isWithAbsolute)
@@ -52,7 +57,6 @@ namespace TRNMNT.Core.Services.Impl
             {
                 query = query.Where(w => !w.IsAbsolute);
             }
-            query = query.Include(wd => wd.Brackets);
             var weightDivisions = await query.ToListAsync();
             return weightDivisions.Select(wd =>
                 GetWeightDivisionModel(wd));
@@ -102,20 +106,21 @@ namespace TRNMNT.Core.Services.Impl
                 CategoryId = wd.CategoryId,
                 Descritpion = wd.Descritpion,
                 Weight = wd.Weight,
-                Status = (int)ProgressStatusEnum.NotStarted
+
             };
-            var bracket = wd.Brackets.FirstOrDefault();
-            if (bracket != null && bracket.StartTs != null)
+            if (wd.StartTs != null)
             {
-                model.Status = bracket.CompleteTs == null
-                    ? (int)ProgressStatusEnum.InProgress
-                    : (int)ProgressStatusEnum.Completed;
+                model.Status = wd.CompleteTs != null ? (int)ProgressStatusEnum.InProgress : (int)ProgressStatusEnum.Completed;
+            }
+            else
+            {
+                model.Status = (int)ProgressStatusEnum.NotStarted;
             }
 
             return model;
         }
 
-        public async Task SetWeightDivisionStarted(Guid weightDivisionId)
+        public async Task SetWeightDivisionStartedAsync(Guid weightDivisionId)
         {
             var weightDivision = await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
             weightDivision.StartTs = DateTime.UtcNow;
@@ -127,6 +132,11 @@ namespace TRNMNT.Core.Services.Impl
             var weightDivision = await _weightDevisionRepository.GetByIDAsync(weightDivisionId);
             weightDivision.CompleteTs = DateTime.UtcNow;
             _weightDevisionRepository.Update(weightDivision);
+        }
+
+        public async Task<bool> IsWeightDivisionCompletedAsync(Guid weightDivisionId)
+        {
+            return await _weightDevisionRepository.GetAll(wd => wd.WeightDivisionId == weightDivisionId).Select(wd => wd.CompleteTs != null).AnyAsync();
         }
         #endregion
     }

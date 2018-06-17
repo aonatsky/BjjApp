@@ -39,7 +39,6 @@ namespace TRNMNT.Core.Services.impl
             if (!matches.Any())
             {
                 var participants = await _participantRepository.GetAll(p => p.WeightDivisionId == weightDivisionId && p.CategoryId == categoryId && p.IsActive).ToListAsync();
-                var bracketSize = GetBracketSize(participants.Count);
                 var orderedParticapants = GetParticipantsForBracket(participants);
                 matches = CreateMatches(orderedParticapants, weightDivisionId, categoryId);
                 _matchRepository.AddRange(matches);
@@ -102,7 +101,7 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task SetMatchResultAsync(MatchResultModel model)
         {
-            var match = await _matchRepository.GetAll(m => m.MatchId == model.MathcId).Include(m => m.NextMatch)
+            var match = await _matchRepository.GetAll(m => m.MatchId == model.MatchId).Include(m => m.NextMatch)
                 .FirstOrDefaultAsync();
             if (match != null)
             {
