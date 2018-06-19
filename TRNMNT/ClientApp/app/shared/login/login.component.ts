@@ -13,8 +13,8 @@ import './login.component.scss';
 
 export class LoginComponent {
 
-    username: string = "";
-    password: string = "";
+    username: string = '';
+    password: string = '';
     returnUrl: string;
 
     constructor(

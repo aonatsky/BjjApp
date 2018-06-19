@@ -37,7 +37,7 @@ import { StepsModule, CalendarModule, InputTextareaModule, FileUploadModule, Aut
 import { AuthGuard } from './routing/auth.guard';
 import { RedirectGuard } from './routing/redirect.guard';
 import { BracketService } from './services/bracket.service';
-import { MinuteSecondsPipe } from "./pipes/minutes-seconds.pipe";
+import { MinuteSecondsPipe } from './pipes/minutes-seconds.pipe';
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
 import { TestSocketService } from './services/test-socket.service';
 import { FormatTimerPipe } from './pipes/format-timer.pipe';

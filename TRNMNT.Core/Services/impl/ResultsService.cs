@@ -73,7 +73,7 @@ namespace TRNMNT.Core.Services.impl
             var participantResults = new List<MedalistModel>();
             if (await _weightDivisionService.IsWeightDivisionCompletedAsync(weightDivisionId))
             {
-                var finals = _matchRepository.GetAll(m => m.WeightDivisionID == weightDivisionId && m.Round == 0)
+                var finals = _matchRepository.GetAll(m => m.WeightDivisionId == weightDivisionId && m.Round == 0)
                     .Include(m => m.AParticipant).ThenInclude(p => p.Team)
                     .Include(m => m.BParticipant).ThenInclude(p => p.Team)
                     .Include(m => m.WinnerParticipant).ThenInclude(p => p.Team)

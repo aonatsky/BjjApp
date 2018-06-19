@@ -3,7 +3,7 @@ import { RequestOptions, Response, Headers, ResponseContentType, URLSearchParams
 import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { RouterService } from '../../../core/services/router.service';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import * as FileSaver from 'file-saver';
 import { AuthHttp } from 'angular2-jwt';
 import { AuthService } from '../../services/auth.service';
@@ -59,13 +59,13 @@ export class HttpService {
     }
 
     deleteById(name: string, id: any, notifyMessage?: string): Observable<any> {
-        let url = name + "/" + id;
+        let url = name + '/' + id;
         return this.handleRequest(() => this.http.delete(url, this.jsonRequestOptions()), notifyMessage);
     }
 
     postFile(name: string, file: any, notifyMessage?: string): Observable<any> {
         let formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
         return this.handleRequest(() => this.http.post(name, formData), notifyMessage);
     }
 
@@ -96,7 +96,7 @@ export class HttpService {
     }
 
     convertDate(input) {
-        if (typeof input !== "object") {
+        if (typeof input !== 'object') {
             return input;
         };
 
@@ -109,7 +109,7 @@ export class HttpService {
             if (type == 'string' && (match = value.match(this.iso8601RegEx))) {
                 input[key] = new Date(value)
             }
-            else if (type === "object") {
+            else if (type === 'object') {
                 value = this.convertDate(value);
             }
         }
@@ -161,11 +161,11 @@ export class HttpService {
 
     private goToLogin(error?: Response | any) {
         this.routerService.goToLogin();
-        return this.handleError(error, "Please autentificate");
+        return this.handleError(error, 'Please autentificate');
     }
 
     private getErrorMessage(error: Response | any) : string {
-        let message = "Error during request";
+        let message = 'Error during request';
         if (error instanceof Response) {
             return `${message}. Status: '${error.statusText}', code: '${error.status || ''}' url: '${error.url}'`;
         }

@@ -1,30 +1,30 @@
-﻿import { HubConnection, TransportType} from "@aspnet/signalr";
-import { RoundDetailsModel } from "../core/model/round-details/round-details.model";
+﻿import { HubConnection} from '@aspnet/signalr';
 import { Observable } from 'rxjs/Observable';
+import { MatchDetailsModel } from '../core/model/match-details.model';
 
 export abstract class BaseRoundPanel {
-    private readonly hubMethodName: string = "Send";
+    private readonly hubMethodName: string = 'Send';
 
     private hubConnection: HubConnection;
     private reconnectionCounter: number = 0;
     private readonly reconnectionLimit: number = 10;
 
 
-    setupConnection(groupId: any, messageHandler: (data: RoundDetailsModel) => void): void {
+    setupConnection(groupId: any, messageHandler: (data: MatchDetailsModel) => void): void {
         this.hubConnection = new HubConnection('/round-hub');
         this.hubConnection.start().then(() => {
             this.subscribeOnRecieveMessage(messageHandler);
-            this.hubConnection.invoke("JoinGroup", groupId);
+            this.hubConnection.invoke('JoinGroup', groupId);
             this.bindReconnection();
         });
 
     }
 
-    subscribeOnRecieveMessage(messageHandler: (data: RoundDetailsModel) => void): void {
+    subscribeOnRecieveMessage(messageHandler: (data: MatchDetailsModel) => void): void {
         this.hubConnection.on(this.hubMethodName, messageHandler);
     }
 
-    sendHubMessage(data: RoundDetailsModel): void {
+    sendHubMessage(data: MatchDetailsModel): void {
         this.hubConnection.invoke(this.hubMethodName, data);
     }
 
@@ -41,12 +41,12 @@ export abstract class BaseRoundPanel {
                 return;
             }
             // huck to start reconnection
-            let hubHttpConnection = this.hubConnection["connection"];
+            let hubHttpConnection = this.hubConnection['connection'];
             hubHttpConnection.connectionState = 0;
             let url = hubHttpConnection.url;
             hubHttpConnection.url = url
-                .replace(`?id=${hubHttpConnection.connectionId}`, "")
-                .replace(`&id=${hubHttpConnection.connectionId}`, "");
+                .replace(`?id=${hubHttpConnection.connectionId}`, '')
+                .replace(`&id=${hubHttpConnection.connectionId}`, '');
             this.reconnectionCounter++;
             this.hubConnection.start();
         });

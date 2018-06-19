@@ -3,7 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angul
 import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '../routing/auth.guard';
 import { RouterService } from '../services/router.service'
-import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser_adapter";
+import { BrowserDomAdapter } from '@angular/platform-browser/src/browser/browser_adapter';
 
 /** 
  * Decides if a route can be activated. 
@@ -17,7 +17,7 @@ import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         var homepage = this.getHomePage();
-        if (homepage != "") {
+        if (homepage != '') {
             this.routerService.navigateByUrl(homepage);
         }
         else {
@@ -27,7 +27,7 @@ import { BrowserDomAdapter } from "@angular/platform-browser/src/browser/browser
 
     getHomePage() : string
     {
-        return document.getElementById("homepage").innerText;   
+        return document.getElementById('homepage').innerText;   
     }
 
 }  

@@ -3,7 +3,7 @@ import { BracketModel } from '../../core/model/bracket.models';
 import './../../event-admin/event-management/brackets-generation/bracket-generation.component.scss';
 import './bracket.component.scss';
 import { ViewEncapsulation } from '@angular/core';
-import { RoundModel } from '../../core/model/round.models';
+import { MatchModel } from '../../core/model/match.models';
 
 @Component({
     selector: 'bracket',
@@ -13,7 +13,7 @@ import { RoundModel } from '../../core/model/round.models';
 
 export class BracketComponent implements OnInit {
     @Input() bracket: BracketModel;
-    @Output() roundClick: EventEmitter<RoundModel> = new EventEmitter();
+    @Output() roundClick: EventEmitter<MatchModel> = new EventEmitter();
     maxStage: number = 0;
     columns: number[];
 
@@ -29,7 +29,7 @@ export class BracketComponent implements OnInit {
 
 
     private getMaxStage(): number {
-        let roundsCount = this.bracket.roundModels.filter(r => r.roundType !== 1).length;
+        let roundsCount = this.bracket.matchModels.filter(r => r.matchType !== 1).length;
         for (let i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
             if (roundsCount === 0) {
@@ -49,7 +49,7 @@ export class BracketComponent implements OnInit {
 
     private addEmptyMatch(colNumber: number): boolean {
         if (colNumber == (this.columns.length - 1) / 2) {
-            return this.bracket.roundModels.length > 1;
+            return this.bracket.matchModels.length > 1;
         };
         return false;
     }
@@ -58,23 +58,23 @@ export class BracketComponent implements OnInit {
         return colNumber > (this.columns.length - 1) / 2 ? 'right-side' : '';
     }
 
-    private getMatchTypeClass(matchModel: RoundModel): string {
+    private getMatchTypeClass(matchModel: MatchModel): string {
         let matchTypeClass = '';
-        if (matchModel.stage == 0) {
-            matchTypeClass = matchModel.roundType == 1 ? 'third-place' : 'final';
-            if (this.bracket.roundModels.length === 1) {
+        if (matchModel.round == 0) {
+            matchTypeClass = matchModel.matchType == 1 ? 'third-place' : 'final';
+            if (this.bracket.matchModels.length === 1) {
                 matchTypeClass += ' only-final';
             }
         }
         return matchTypeClass;
     }
 
-    private getRoundModels(colNumber: number): RoundModel[] {
+    private getRoundModels(colNumber: number): MatchModel[] {
         const maxCol = this.columns.length - 1;
         const isRightSide = colNumber > maxCol / 2;
         const depth = (isRightSide ? maxCol - colNumber : colNumber);
         const stage = this.maxStage - depth;
-        const models = this.bracket.roundModels.filter(r => r.stage == stage).sort((r1, r2) => { return r1.order - r2.order });
+        const models = this.bracket.matchModels.filter(m => m.round == stage).sort((m1, m2) => { return m1.order - m2.order });
         if (stage === 0) {
             return models;
         } else {
@@ -87,15 +87,15 @@ export class BracketComponent implements OnInit {
         }
     }
 
-    private displayParticipantData(model: RoundModel, participantNumber: number) {
+    private displayParticipantData(model: MatchModel, participantNumber: number) {
         if (participantNumber == 1) {
-            return model.AParticipant
-                ? model.AParticipant.firstName + ' ' + model.AParticipant.lastName
+            return model.aParticipant
+                ? model.aParticipant.firstName + ' ' + model.aParticipant.lastName
                 : '';
         } else {
-            if (model.BParticipant) {
-                return model.BParticipant.firstName + ' ' + model.BParticipant.lastName;
-            } else if (model.roundType == 2) {
+            if (model.bParticipant) {
+                return model.bParticipant.firstName + ' ' + model.bParticipant.lastName;
+            } else if (model.matchType == 2) {
                 return 'LOST FIRST ROUND';
             } else {
                 return '';
@@ -103,21 +103,21 @@ export class BracketComponent implements OnInit {
         }
     }
 
-    private displayRoundResult(model: RoundModel, participantNumber: number) {
+    private displayRoundResult(model: MatchModel, participantNumber: number) {
         if (participantNumber === 1) {
-            return model.AParticipantResult;
+            return model.aParticipantResult;
         }
     }
 
-    private onRoundClick(model: RoundModel) {
+    private onRoundClick(model: MatchModel) {
         if (this.isEditable(model)) {
             this.roundClick.emit(model);
         }
     }
 
-    private getWinnerClass(model: RoundModel) {
+    private getWinnerClass(model: MatchModel) {
         if (model.winnerParticipant) {
-            if (!!model.AParticipant && model.winnerParticipant.participantId === model.AParticipant.participantId) {
+            if (!!model.aParticipant && model.winnerParticipant.participantId === model.aParticipant.participantId) {
                 return 'winner-1';
             } else {
                 return 'winner-2';
@@ -127,10 +127,10 @@ export class BracketComponent implements OnInit {
         }
     }
 
-    private isEditable(model: RoundModel): boolean {
-        if (model.AParticipant && model.BParticipant) {
-            if (model.winnerParticipant && model.nextRoundId) {
-                const nextRound = this.bracket.roundModels.filter(r => r.roundId === model.nextRoundId)[0];
+    private isEditable(model: MatchModel): boolean {
+        if (model.aParticipant && model.bParticipant) {
+            if (model.winnerParticipant && model.nextMatchId) {
+                const nextRound = this.bracket.matchModels.filter(r => r.matchId === model.nextMatchId)[0];
                 if (nextRound && !nextRound.winnerParticipant) {
                     return true;
                 }

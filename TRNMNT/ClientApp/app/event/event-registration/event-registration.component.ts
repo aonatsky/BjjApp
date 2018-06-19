@@ -14,7 +14,7 @@ import { CategorySimpleModel } from './../../core/model/category.models';
 import { WeightDivisionModel, WeightDivisionSimpleModel } from './../../core/model/weight-division.models';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { SelectItem, MenuModule, MenuItem, Message } from 'primeng/primeng'
 
 @Component({
@@ -37,8 +37,8 @@ export class EventRegistrationComponent implements OnInit {
     private teams: TeamModel[] = [];
     private tncAccepted: boolean = false;
     private messages: Message[] = []
-    private paymentData: string = "";
-    private paymentSignature: string = "";
+    private paymentData: string = '';
+    private paymentSignature: string = '';
 
     @ViewChild('formPrivatElement') formPrivat: ElementRef
 

@@ -9,7 +9,7 @@ namespace TRNMNT.Data.Entities
     {
         [Key]
         public Guid MatchId { get; set; }
-        public Guid WeightDivisionID { get; set; }
+        public Guid WeightDivisionId { get; set; }
         public Guid CategoryId { get; set; }
         public Guid? AParticipantId { get; set; }
         public Guid? BParticipantId { get; set; }

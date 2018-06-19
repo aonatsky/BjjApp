@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { BracketModel } from '../../core/model/bracket.models';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
 import { BracketService } from '../../core/services/bracket.service';
-import { RoundModel } from '../../core/model/round.models';
 import { DefaultValues } from '../../core/consts/default-values';
+import { MatchModel } from '../../core/model/match.models';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
 
     private bracket: BracketModel;
 
-    private selectedRoundDetails: RoundModel;
+    private selectedRoundDetails: MatchModel;
     private showRoundPanel: boolean;
     private previousWeightDivisionId: string;
 

@@ -13,10 +13,10 @@ import { RouterService } from './../../core/services/router.service';
 export class RegisterComponent {
 
 
-    email: string = "";
-    confirmEmail: string = "";
-    password: string = "";
-    confirmPassword: string = "";
+    email: string = '';
+    confirmEmail: string = '';
+    password: string = '';
+    confirmPassword: string = '';
 
     constructor(private authService: AuthService, private routerService: RouterService, private loggerService: LoggerService) {
 

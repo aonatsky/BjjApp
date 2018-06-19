@@ -1,10 +1,10 @@
-﻿import {RoundModel} from './round.models';
-import {MedalistModel} from './medalist.model';
+﻿import { MedalistModel } from './medalist.model';
+import { MatchModel } from './match.models';
 
 export class BracketModel {
-    bracketId : AAGUID;
-    title : string;
-    roundModels: RoundModel[];
+    bracketId: AAGUID;
+    title: string;
+    matchModels: MatchModel[];
     medalists: MedalistModel[];
 }
 

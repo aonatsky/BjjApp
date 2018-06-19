@@ -52,13 +52,13 @@ export class TablePickerListComponent implements OnInit, OnChanges {
             __empty: true
         };
         for (let column of this.columnsData) {
-            this.emptyProto[column.propertyName] = "\u00a0";
+            this.emptyProto[column.propertyName] = '\u00a0';
         }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        this.trackChanges(changes["sourceArray"]);
-        this.trackChanges(changes["targetArray"]);
+        this.trackChanges(changes['sourceArray']);
+        this.trackChanges(changes['targetArray']);
     }
 
     private addItem() {

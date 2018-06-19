@@ -1,22 +1,22 @@
-﻿import { Injectable } from "@angular/core"
+﻿import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
-import { SignalRHubService } from "../dal/signalr/signalr-hub.service";
-import { TransportType, HubConnection } from "@aspnet/signalr";
-import { RefreshBracketModel, ChageWeightDivisionModel } from "../model/bracket.models";
-import { RoundModel } from '../model/round.models';
+import { SignalRHubService } from '../dal/signalr/signalr-hub.service';
+import { HubConnection } from '@aspnet/signalr';
+import { RefreshBracketModel, ChageWeightDivisionModel } from '../model/bracket.models';
+import { MatchModel } from '../model/match.models';
 
 
 @Injectable()
 export class RunEventHubService {
 	private hubConnection: HubConnection;
-	private roundStartEventName: string = "RoundStart";
-	private roundCompleteEventName: string = "RoundComplete";
-    private weightDivisionChangeEventName: string = "WeightDivisionChanged";
+	private roundStartEventName: string = 'RoundStart';
+	private roundCompleteEventName: string = 'RoundComplete';
+    private weightDivisionChangeEventName: string = 'WeightDivisionChanged';
 
 	isConnected: boolean = false;
 
 	constructor(private signalRService: SignalRHubService) {
-        this.hubConnection = this.signalRService.createConnection("/runevent");
+        this.hubConnection = this.signalRService.createConnection('/runevent');
 	}
 
     joinWeightDivisionGroup(weightDivisionId: string, previousWeightDivisionId?: string): Promise<void> {
@@ -65,11 +65,11 @@ export class RunEventHubService {
 		}
 	}
 	
-	fireRoundStart(roundDetails: RoundModel): void {
+	fireRoundStart(roundDetails: MatchModel): void {
 		this.signalRService.fireEvent(this.roundStartEventName, roundDetails);
 	}
 
-	onRoundStart(): Observable<RoundModel> {
+	onRoundStart(): Observable<MatchModel> {
 		return this.signalRService.subscribeOnEvent(this.roundStartEventName);
     }
 

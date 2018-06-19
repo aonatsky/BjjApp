@@ -1,9 +1,9 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
-import { RoundResultModel } from '../../core/model/round-result.model';
 import { RoundResultType } from '../../core/enums/round-result-type.enum';
 import { SubmissionType } from '../../core/enums/submission-type.enum';
 import { BracketService } from '../../core/services/bracket.service';
+import { MatchResultModel } from '../../core/model/match-result.model';
+import { MatchDetailsModel } from '../../core/model/match-details.model';
 
 
 @Component({
@@ -11,12 +11,12 @@ import { BracketService } from '../../core/services/bracket.service';
     templateUrl: './complete-round.component.html',
 })
 export class CompleteRoundComponent implements OnInit {
-    @Input() roundDetails: RoundDetailsModel;
+    @Input() matchDetails: MatchDetailsModel;
     @Output() close = new EventEmitter<any>();
     @Output() complete = new EventEmitter<any>();
 
 
-    private roundResultModel: RoundResultModel;
+    private matchResultModel: MatchResultModel;
     private submissionTypes = SubmissionType;
     private roundResultTypes = RoundResultType;
 
@@ -27,53 +27,53 @@ export class CompleteRoundComponent implements OnInit {
     }
 
     initRoundResultModel() {
-        this.roundResultModel = new RoundResultModel();
-        this.roundResultModel.roundId = this.roundDetails.roundId;
-        this.roundResultModel.AParticipantPoints = this.roundDetails.AParticipantPoints;
-        this.roundResultModel.AParticipantAdvantages = this.roundDetails.AParticipantAdvantages;
-        this.roundResultModel.AParticipantPenalties = this.roundDetails.AParticipantPenalties;
+        this.matchResultModel = new MatchResultModel();
+        this.matchResultModel.roundId = this.matchDetails.matchId;
+        this.matchResultModel.aParticipantPoints = this.matchDetails.aParticipantPoints;
+        this.matchResultModel.aParticipantAdvantages = this.matchDetails.aParticipantAdvantages;
+        this.matchResultModel.aParticipantPenalties = this.matchDetails.aParticipantPenalties;
 
-        this.roundResultModel.BParticipantPoints = this.roundDetails.BParticipantPoints;
-        this.roundResultModel.BParticipantAdvantages = this.roundDetails.BParticipantAdvantages;
-        this.roundResultModel.BParticipantPenalties = this.roundDetails.BParticipantPenalties;
-        this.roundResultModel.completeTime = this.roundDetails.roundModel.roundTime - this.roundDetails.countdown;
+        this.matchResultModel.bParticipantPoints = this.matchDetails.bParticipantPoints;
+        this.matchResultModel.bParticipantAdvantages = this.matchDetails.bParticipantAdvantages;
+        this.matchResultModel.bParticipantPenalties = this.matchDetails.bParticipantPenalties;
+        this.matchResultModel.completeTime = this.matchDetails.matchModel.matchTime - this.matchDetails.countdown;
         this.setWinnerByPoints();
     }
 
     private setWinnerByPoints() {
 
-        if (this.roundDetails.AParticipantPoints !== this.roundDetails.BParticipantPoints) {
-            this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantPoints > this.roundDetails.BParticipantPoints
-                ? this.roundDetails.roundModel.AParticipant.participantId
-                : this.roundDetails.roundModel.BParticipant.participantId;
-            this.roundResultModel.roundResultType = this.roundResultTypes.Points;
+        if (this.matchDetails.aParticipantPoints !== this.matchDetails.bParticipantPoints) {
+            this.matchResultModel.winnerParticipantId = this.matchDetails.aParticipantPoints > this.matchDetails.bParticipantPoints
+                ? this.matchDetails.matchModel.aParticipant.participantId
+                : this.matchDetails.matchModel.bParticipant.participantId;
+            this.matchResultModel.roundResultType = this.roundResultTypes.Points;
         }
-        else if (this.roundDetails.AParticipantAdvantages !== this.roundDetails.BParticipantAdvantages) {
-            this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantAdvantages > this.roundDetails.BParticipantAdvantages
-                ? this.roundDetails.roundModel.AParticipant.participantId
-                : this.roundDetails.roundModel.BParticipant.participantId;
-            this.roundResultModel.roundResultType = RoundResultType.Advantages;
+        else if (this.matchDetails.aParticipantAdvantages !== this.matchDetails.bParticipantAdvantages) {
+            this.matchResultModel.winnerParticipantId = this.matchDetails.aParticipantAdvantages > this.matchDetails.bParticipantAdvantages
+                ? this.matchDetails.matchModel.aParticipant.participantId
+                : this.matchDetails.matchModel.bParticipant.participantId;
+            this.matchResultModel.roundResultType = RoundResultType.Advantages;
         }
-        else if (this.roundDetails.AParticipantPenalties !== this.roundDetails.BParticipantPenalties) {
-            this.roundResultModel.winnerParticipantId = this.roundDetails.AParticipantPenalties <
-                this.roundDetails.BParticipantPenalties
-                ? this.roundDetails.roundModel.AParticipant.participantId
-                : this.roundDetails.roundModel.BParticipant.participantId;
-            this.roundResultModel.roundResultType = RoundResultType.Penalties;
+        else if (this.matchDetails.aParticipantPenalties !== this.matchDetails.bParticipantPenalties) {
+            this.matchResultModel.winnerParticipantId = this.matchDetails.aParticipantPenalties <
+                this.matchDetails.bParticipantPenalties
+                ? this.matchDetails.matchModel.aParticipant.participantId
+                : this.matchDetails.matchModel.bParticipant.participantId;
+            this.matchResultModel.roundResultType = RoundResultType.Penalties;
         } else {
-            this.roundResultModel.winnerParticipantId = this.roundDetails.roundModel.AParticipant.participantId;
-            this.roundResultModel.roundResultType = RoundResultType.Decision;
+            this.matchResultModel.winnerParticipantId = this.matchDetails.matchModel.aParticipant.participantId;
+            this.matchResultModel.roundResultType = RoundResultType.Decision;
         }
 
     }
 
     save(): void {
-        this.bracketService.setRoundResult(this.roundResultModel).subscribe(r => {
+        this.bracketService.setRoundResult(this.matchResultModel).subscribe(r => {
             this.complete.emit(null);
         });
     }
 
     isDisabled(): boolean {
-        return this.roundResultModel.roundResultType === this.roundResultTypes.Submission;
+        return this.matchResultModel.roundResultType === this.roundResultTypes.Submission;
     }
- }
+}

@@ -3,10 +3,10 @@ import './bracket-generation.component.scss';
 import { ViewEncapsulation } from '@angular/core';
 import { BracketService } from '../../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../../core/model/category-with-division-filter.model';
-import { RoundModel } from '../../../core/model/round.models';
 import { BracketModel } from '../../../core/model/bracket.models';
 import Participantmodels = require('../../../core/model/participant.models');
 import ParticipantModelBase = Participantmodels.ParticipantModelBase;
+import { MatchModel } from '../../../core/model/match.models';
 
 @Component({
     selector: 'bracket-generation',
@@ -15,14 +15,14 @@ import ParticipantModelBase = Participantmodels.ParticipantModelBase;
 })
 export class BracketGenerationComponent {
     @Input() eventId: string;
-    rounds: RoundModel[] = [];
+    matches: MatchModel[] = [];
     bracket: BracketModel;
     coumnsCount: number = 3;
     dragMode: boolean = false;
     dragModel: DragModel;
     isEdited: boolean = false;
-    maxStage: number;
-    stages: number[] = [];
+    maxRound: number;
+    rounds: number[] = [];
 
     private filter: CategoryWithDivisionFilterModel = new CategoryWithDivisionFilterModel('', '');
 
@@ -33,159 +33,159 @@ export class BracketGenerationComponent {
         this.bracket = undefined;
         this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(r => {
             this.bracket = r;
-            this.maxStage = this.getMaxStage(this.bracket.roundModels.filter(r => r.roundType != 1).length);
-            this.rounds =
-                this.bracket.roundModels.filter(r => r.stage == this.maxStage).sort((r1, r2) => { return r1.order - r2.order });
-        this.initStages(this.maxStage);
-    });
-}
+            this.maxRound = this.getMaxmatch(this.bracket.matchModels.filter(m => m.matchType !== 1).length);
+            this.matches =
+                this.bracket.matchModels.filter(m => m.round === this.maxRound).sort((r1, r2) => { return r1.order - r2.order });
+            this.initRounds(this.maxRound);
+        });
+    }
 
 
     private getRows() {
-    let rows = [];
-    for (let i = 0; i < this.rounds.length - 1; i++) {
-        rows.push(i);
+        let rows = [];
+        for (let i = 0; i < this.matches.length - 1; i++) {
+            rows.push(i);
+        }
+        return rows;
     }
-    return rows;
-}
 
     private getColumns() {
-    return [0, 1, 2];
-}
+        return [0, 1, 2];
+    }
 
 
-    private getMaxStage(roundsCount: number): number {
-    for (let i = 0; i < 5; i++) {
-        roundsCount -= Math.pow(2, i);
-        if (roundsCount === 0) {
-            return i;
+    private getMaxmatch(matchsCount: number): number {
+        for (let i = 0; i < 5; i++) {
+            matchsCount -= Math.pow(2, i);
+            if (matchsCount === 0) {
+                return i;
+            }
         }
     }
-}
 
-    private getRoundIndex(col, row): number {
-    if (col == 0) {
-        return row / 2;
-    } else {
-        return this.rounds.length / 2 + row / 2;
-    }
-}
-
-    private getRound(col, row): RoundModel {
-    return this.rounds[this.getRoundIndex(col, row)];
-
-}
-
-    private displayParticipantInfo(round: RoundModel, participantNumber: number) {
-    let participant;
-    if (participantNumber == 1) {
-        participant = round.AParticipant;
-    } else if (participantNumber == 2) {
-        if (round.roundType) {
-            return 'Lost in previous round';
+    private getmatchIndex(col, row): number {
+        if (col == 0) {
+            return row / 2;
+        } else {
+            return this.matches.length / 2 + row / 2;
         }
-        participant = round.BParticipant;
-    }
-    if (participant == undefined) {
-        return '';
-    } else {
-        return `${participant.firstName} ${participant.lastName} (${participant.teamName})`;
     }
 
+    private getmatch(col, row): MatchModel {
+        return this.matches[this.getmatchIndex(col, row)];
+
+    }
+
+    private displayParticipantInfo(match: MatchModel, participantNumber: number) {
+        let participant;
+        if (participantNumber == 1) {
+            participant = match.aParticipant;
+        } else if (participantNumber == 2) {
+            if (match.matchType) {
+                return 'Lost in previous match';
+            }
+            participant = match.bParticipant;
+        }
+        if (participant == undefined) {
+            return '';
+        } else {
+            return `${participant.firstName} ${participant.lastName} (${participant.teamName})`;
+        }
 
 
-}
+
+    }
 
 
-    private dragStart(roundIndex: number, participantNumber: number) {
-    this.dragMode = true;
-    this.dragModel = new DragModel(roundIndex, participantNumber);
+    private dragStart(matchIndex: number, participantNumber: number) {
+        this.dragMode = true;
+        this.dragModel = new DragModel(matchIndex, participantNumber);
 
-}
+    }
 
     private dragEnd() {
-    this.dragMode = false;
-}
+        this.dragMode = false;
+    }
 
     private dragEnter($event) {
-    $event.target.style.backgroundColor = '#b5e8b1';
-}
+        $event.target.style.backgmatchColor = '#b5e8b1';
+    }
 
     private dragLeave($event) {
-    $event.target.style.backgroundColor = 'white';
-}
+        $event.target.style.backgmatchColor = 'white';
+    }
 
 
-    private onDrop(roundIndex: number, participantNumber: number, $event) {
-    this.dragEnd();
-    this.dragLeave($event);
+    private onDrop(matchIndex: number, participantNumber: number, $event) {
+        this.dragEnd();
+        this.dragLeave($event);
 
 
-    let targetParticipant = this.getParticipant(this.rounds[roundIndex], participantNumber);
-    let sourceParticipant = this.getParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber);
-    this.setParticipant(this.rounds[this.dragModel.roundIndex], this.dragModel.participantNumber, targetParticipant);
-    this.setParticipant(this.rounds[roundIndex], participantNumber, sourceParticipant);
-    this.isEdited = true;
-}
+        let targetParticipant = this.getParticipant(this.matches[matchIndex], participantNumber);
+        let sourceParticipant = this.getParticipant(this.matches[this.dragModel.matchIndex], this.dragModel.participantNumber);
+        this.setParticipant(this.matches[this.dragModel.matchIndex], this.dragModel.participantNumber, targetParticipant);
+        this.setParticipant(this.matches[matchIndex], participantNumber, sourceParticipant);
+        this.isEdited = true;
+    }
 
 
     private setFilter($event) {
-    this.filter = $event;
-}
+        this.filter = $event;
+    }
 
-    private getParticipant(round: RoundModel, pNumber: number) {
-    if (pNumber == 1) {
-        return round.AParticipant;
-    } else {
-        return round.BParticipant;
+    private getParticipant(match: MatchModel, pNumber: number) {
+        if (pNumber === 1) {
+            return match.aParticipant;
+        } else {
+            return match.bParticipant;
+        }
     }
-}
 
-    private getDraggable(round: RoundModel, num: number): string {
-    if (round.roundType == 2 && num == 2) {
-        return '';
+    private getDraggable(match: MatchModel, num: number): string {
+        if (match.matchType === 2 && num === 2) {
+            return '';
+        }
+        else {
+            return 'participnatPlate';
+        }
     }
-    else {
-        return 'participnatPlate';
-    }
-}
 
-setParticipant(round: RoundModel, pNumber: number, value: ParticipantModelBase) {
-    if (pNumber == 1) {
-        round.AParticipant = value;
-    } else {
-        round.BParticipant = value;
+    setParticipant(match: MatchModel, pNumber: number, value: ParticipantModelBase) {
+        if (pNumber === 1) {
+            match.aParticipant = value;
+        } else {
+            match.bParticipant = value;
+        }
     }
-}
 
     private downloadBracket() {
-    this.bracketService.downloadBracket(this.filter.weightDivisionId, this.getBracketsFileName()).subscribe();
-}
+        this.bracketService.downloadBracket(this.filter.weightDivisionId, this.getBracketsFileName()).subscribe();
+    }
 
     private getBracketsFileName(): string {
-    const name = this.bracket.title.replace('/', '-');
-    return `${name}.xlsx`;
-}
+        const name = this.bracket.title.replace('/', '-');
+        return `${name}.xlsx`;
+    }
 
     private updateBracket() {
-    this.bracketService.updateBracket(this.bracket).subscribe();
-    this.isEdited = false;
-}
-
-    private initStages(maxStage: number) {
-    this.stages = [];
-    for (let i = 0; i < 2 * maxStage; i++) {
-        this.stages.push(i);
+        this.bracketService.updateBracket(this.bracket).subscribe();
+        this.isEdited = false;
     }
-}
+
+    private initRounds(maxStage: number) {
+        this.rounds = [];
+        for (let i = 0; i < 2 * maxStage; i++) {
+            this.rounds.push(i);
+        }
+    }
 
 }
 
 class DragModel {
     constructor(rIndex: number, pNumber: number) {
         this.participantNumber = pNumber;
-        this.roundIndex = rIndex;
+        this.matchIndex = rIndex;
     }
     participantNumber: number;
-    roundIndex: number;
+    matchIndex: number;
 }

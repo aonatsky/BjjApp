@@ -14,7 +14,7 @@ export class NotificationService {
     notificationSubject: Subject<Message> = new Subject<Message>();
 
     get genericErrorMessage() {
-        return this.getMessage(MessageLevel.Error, DefaultValues.SomethingWentWrongMessage, "An error occured during request");
+        return this.getMessage(MessageLevel.Error, DefaultValues.SomethingWentWrongMessage, 'An error occured during request');
     }
 
     getMessage(level: string, summary: string, detail: string) : Message {
@@ -42,7 +42,7 @@ export class NotificationService {
     }
 
     showErrorOrGeneric(detail: string): void {
-        if (detail == null || detail == "") {
+        if (detail == null || detail == '') {
             this.showGenericError();
         } else {
             this.showErrorWithDefaultSummary(detail);

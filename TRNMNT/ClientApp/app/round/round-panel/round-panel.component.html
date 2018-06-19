@@ -6,7 +6,7 @@
                   [resizable]="false"
                   [showHeader]="false"
                   [width]="500">
-            <complete-round *ngIf="displayPopup" [roundDetails]="roundDetails" (close)="displayPopup=false;" (complete)="onComplete()"></complete-round>
+            <complete-round *ngIf="displayPopup" [matchDetails]="roundDetails" (close)="displayPopup=false;" (complete)="onComplete()"></complete-round>
         </p-dialog>
         <div class="round-panel-flex-wrapper">
             <div class="round-panel-user-panel">

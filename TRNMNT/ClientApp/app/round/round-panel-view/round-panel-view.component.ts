@@ -1,9 +1,9 @@
 ﻿import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { RoundModel } from '../../core/model/round.models';
-import { RoundDetailsModel } from '../../core/model/round-details/round-details.model';
 import { BaseRoundPanel } from '../round-panel.service';
 import './round-panel-view.component.scss';
+import { MatchModel } from '../../core/model/match.models';
+import { MatchDetailsModel } from '../../core/model/match-details.model';
 
 
 @Component({
@@ -11,10 +11,10 @@ import './round-panel-view.component.scss';
     templateUrl: './round-panel-view.component.html',
 })
 export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
-    @Input() roundModel: RoundModel;
+    @Input() matchModel: MatchModel;
     @Input() title: string;
 
-    private roundDetails: RoundDetailsModel;
+    private matchDetails: MatchDetailsModel;
 
     private readonly tick: number;
     private timerSubscription: any;
@@ -22,33 +22,33 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     constructor() {
         super();
 
-        this.roundDetails = new RoundDetailsModel();
+        this.matchDetails = new MatchDetailsModel();
 
-        this.roundDetails.AParticipantPenalties = 0;
-        this.roundDetails.BParticipantPenalties = 0;
-        this.roundDetails.AParticipantAdvantages = 0;
-        this.roundDetails.BParticipantAdvantages = 0;
-        this.roundDetails.AParticipantPoints = 0;
-        this.roundDetails.BParticipantPoints = 0;
+        this.matchDetails.aParticipantPenalties = 0;
+        this.matchDetails.bParticipantPenalties = 0;
+        this.matchDetails.aParticipantAdvantages = 0;
+        this.matchDetails.bParticipantAdvantages = 0;
+        this.matchDetails.aParticipantPoints = 0;
+        this.matchDetails.bParticipantPoints = 0;
 
-        this.roundDetails.countdown = 2 * 60;
-        this.roundDetails.isStarted = false;
-        this.roundDetails.isPaused = false;
-        this.roundDetails.isCompleted = false;
+        this.matchDetails.countdown = 2 * 60;
+        this.matchDetails.isStarted = false;
+        this.matchDetails.isPaused = false;
+        this.matchDetails.isCompleted = false;
 
         this.tick = 1000;
     }
 
     ngOnInit(): void {
-        this.roundDetails.countdown = this.roundModel.roundTime;
-        this.roundDetails.roundId = this.roundModel.roundId;
-        this.setupConnection(this.roundModel.roundId, x => {
-            this.roundDetails = x;
+        this.matchDetails.countdown = this.matchModel.matchTime;
+        this.matchDetails.matchId = this.matchModel.matchId;
+        this.setupConnection(this.matchModel.matchId, x => {
+            this.matchDetails = x;
 
-            if (this.roundDetails.isStarted) {
+            if (this.matchDetails.isStarted) {
                 this.startTimer();
             }
-            if (this.roundDetails.isPaused || this.roundDetails.isCompleted) {
+            if (this.matchDetails.isPaused || this.matchDetails.isCompleted) {
                 this.stopTimer();
             }
         });
@@ -57,8 +57,8 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     private startTimer(): void {
         if (!this.timerSubscription) {
             this.timerSubscription = Observable.timer(0, this.tick).subscribe(() => {
-                --this.roundDetails.countdown;
-                if (this.roundDetails.countdown <= 0) {
+                --this.matchDetails.countdown;
+                if (this.matchDetails.countdown <= 0) {
                     this.stopTimer();
                 }
             });

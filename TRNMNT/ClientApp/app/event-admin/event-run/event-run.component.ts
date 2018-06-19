@@ -7,9 +7,9 @@ import { BracketService } from '../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
 import { RouterService } from '../../core/services/router.service';
-import { RoundModel } from '../../core/model/round.models';
 import { v4 as uuid } from 'uuid';
 import { DefaultValues } from '../../core/consts/default-values';
+import { MatchModel } from '../../core/model/match.models';
 
 @Component({
     selector: 'event-run',
@@ -17,12 +17,12 @@ import { DefaultValues } from '../../core/consts/default-values';
 })
 export class EventRunComponent implements OnInit, OnDestroy {
 
-    private showResultPopup : boolean = false;
+    private showResultPopup: boolean = false;
     private eventId: string;
     private bracket: BracketModel;
     private filter: CategoryWithDivisionFilterModel;
     private previousWeightDivisionId: string;
-    private selectedRoundDetails: RoundModel;
+    private selectedRoundDetails: MatchModel;
     private showRoundPanel: boolean;
     private filterRefreshTrigger: number = 0;
 
@@ -34,7 +34,7 @@ export class EventRunComponent implements OnInit, OnDestroy {
         return !!this.filter && !!this.filter.categoryId;
     }
 
-    private get synchronizationId() : AAGUID {
+    private get synchronizationId(): AAGUID {
         return sessionStorage.getItem(DefaultValues.RunEventSessionId);
     }
 
@@ -70,7 +70,7 @@ export class EventRunComponent implements OnInit, OnDestroy {
         this.bracket = null;
         if (this.selectedRoundDetails) {
             this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;
-            this.runWeightDivision();       
+            this.runWeightDivision();
         }
     }
 
@@ -118,10 +118,10 @@ export class EventRunComponent implements OnInit, OnDestroy {
 
     private refreshModel(model: BracketModel) {
         this.bracket = model;
-        console.log("RECIEVED", model);
+        console.log('RECIEVED', model);
     }
 
-    private runRound(model: RoundModel) {
+    private runRound(model: MatchModel) {
         console.log(model);
         this.selectedRoundDetails = model;
         this.selectedRoundDetails.weightDivisionId = this.filter.weightDivisionId;

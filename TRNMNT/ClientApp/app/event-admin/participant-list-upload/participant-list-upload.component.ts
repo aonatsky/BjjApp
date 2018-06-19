@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Rx';
 import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { NotificationService } from "../../core/services/notification.service";
+import { NotificationService } from '../../core/services/notification.service';
 import { ParticipantService } from '../../core/services/participant.service';
 import { IUploadResult } from '../../core/model/result/upload-result.model';
 import { UploadResultCode } from '../../core/model/enum/upload-result-code.enum';
@@ -42,11 +42,11 @@ export class PrticipantsListUploadComponent {
 
     private processUploadResult(result: IUploadResult) {
         if (result.code == UploadResultCode.Success) {
-            this.showMessage(result, MessageLevel.Success, "Processed");
+            this.showMessage(result, MessageLevel.Success, 'Processed');
         } else if (result.code == UploadResultCode.SuccessWithErrors) {
-            this.showMessage(result, MessageLevel.Warn, "Porcessed with errors");
+            this.showMessage(result, MessageLevel.Warn, 'Porcessed with errors');
         } else if (result.code >= UploadResultCode.Error) {
-            this.showMessage(result, MessageLevel.Error, "Fail");
+            this.showMessage(result, MessageLevel.Error, 'Fail');
         }
         //Observable.interval(this.hideMessageDelay).take(1).subscribe(() => this.uploadResultMessages = []);
         this.onUpload.emit(result);

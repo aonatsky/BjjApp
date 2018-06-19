@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from '@angular/core';
 import { BracketModel } from '../../../core/model/bracket.models';
 import { ParticipantModelBase } from '../../../core/model/participant.models';
-import { SelectItem } from "primeng/primeng";
+import { SelectItem } from 'primeng/primeng';
 import { BracketService } from '../../../core/services/bracket.service';
 import { BracketResultModel } from '../../../core/model/bracket-result.model';
 
@@ -28,12 +28,12 @@ export class BracketResultSetComponent {
     }
 
     ngOnInit() {
-        for (var i = 0; i < this.bracket.roundModels.length; i++) {
-            if (this.bracket.roundModels[i].AParticipant) {
-                this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].AParticipant));
+        for (var i = 0; i < this.bracket.matchModels.length; i++) {
+            if (this.bracket.matchModels[i].aParticipant) {
+                this.participantSelectItems.push(this.getSelectItem(this.bracket.matchModels[i].aParticipant));
             }
-            if (this.bracket.roundModels[i].BParticipant) {
-                this.participantSelectItems.push(this.getSelectItem(this.bracket.roundModels[i].BParticipant));
+            if (this.bracket.matchModels[i].bParticipant) {
+                this.participantSelectItems.push(this.getSelectItem(this.bracket.matchModels[i].bParticipant));
             }
         }
         this.firstPlaceParticipantId = this.participantSelectItems[0] ? this.participantSelectItems[0].value : '00000000-0000-0000-0000-000000000000';

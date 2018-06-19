@@ -3,7 +3,7 @@ import { CategoryModel } from '../../../core/model/category.models';
 import './category-edit.component.scss';
 
 import { WeightDivisionModel } from '../../../core/model/weight-division.models';
-import { MinuteSecondsPipe } from "../../../core/pipes/minutes-seconds.pipe";
+import { MinuteSecondsPipe } from '../../../core/pipes/minutes-seconds.pipe';
 
 
 @Component({

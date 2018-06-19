@@ -7,8 +7,8 @@ import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { BracketModel, BracketArrayModel } from '../model/bracket.models';
 import { ResponseContentType } from '@angular/http';
 import { ParticipantInAbsoluteDivisionMobel } from '../model/participant.models';
-import { RoundResultModel } from '../model/round-result.model';
-import {BracketResultModel} from '../model/bracket-result.model';
+import { BracketResultModel } from '../model/bracket-result.model';
+import { MatchResultModel } from '../model/match-result.model';
 
 
 @Injectable()
@@ -55,7 +55,7 @@ export class BracketService {
             { participantsIds: participantsIds, categoryId: categoryId });
     }
 
-    setRoundResult(roundResult: RoundResultModel): Observable<void> {
+    setRoundResult(roundResult: MatchResultModel): Observable<void> {
         return this.httpService.post(ApiMethods.bracket.setRoundResult, roundResult);
     }
 

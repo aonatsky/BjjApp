@@ -145,7 +145,7 @@ import { RouterService } from './router.service'
             let tokenEndpoint: string = ApiMethods.auth.getToken;
 
             let params: any = {
-                grant_type: "refresh_token",
+                grant_type: 'refresh_token',
                 refresh_token: refreshToken
             };
 
@@ -173,7 +173,7 @@ import { RouterService } from './router.service'
     */
     isLoggedIn(): boolean {
 
-        return tokenNotExpired("id_token");
+        return tokenNotExpired('id_token');
 
     }
 
@@ -190,7 +190,7 @@ import { RouterService } from './router.service'
             let revocationEndpoint: string = ApiMethods.auth.refreshToken;
 
             let params: any = {
-                token_type_hint: "id_token",
+                token_type_hint: 'id_token',
                 refreshToken: token
             };
 
@@ -302,12 +302,12 @@ import { RouterService } from './router.service'
      */
     private encodeParams(params: any): string {
 
-        let body: string = "";
+        let body: string = '';
         for (let key in params) {
             if (body.length) {
-                body += "&";
+                body += '&';
             }
-            body += key + "=";
+            body += key + '=';
             body += encodeURIComponent(params[key]);
         }
 

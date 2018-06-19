@@ -58,15 +58,15 @@ export class LoggerService {
     private getLogPrefix(level: LogLevel): string {
         switch (level) {
             case LogLevel.Error:
-                return "ERROR:";
+                return 'ERROR:';
             case LogLevel.Warn:
-                return "WARN:";
+                return 'WARN:';
             case LogLevel.Info:
-                return "INFO:";
+                return 'INFO:';
             case LogLevel.Debug:
-                return "DEBUG:";
+                return 'DEBUG:';
             default:
-                return "";
+                return '';
         }
     }
 

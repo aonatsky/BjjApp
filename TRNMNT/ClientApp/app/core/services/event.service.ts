@@ -30,15 +30,15 @@ export class EventService {
     }
 
     getEvent(id): Observable<EventModel> {
-        return this.httpService.get(ApiMethods.event.getEvent + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+        return this.httpService.get(ApiMethods.event.getEvent + '/' + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
     getEventBaseInfo(id): Observable<EventPreviewModel> {
-        return this.httpService.get(ApiMethods.event.getEventBaseInfo + "/" + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+        return this.httpService.get(ApiMethods.event.getEventBaseInfo + '/' + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
     }
 
     uploadEventImage(file, id) {
-        return this.httpService.postFile(ApiMethods.event.uploadImage + "/" + id, file);
+        return this.httpService.postFile(ApiMethods.event.uploadImage + '/' + id, file);
     }
 
     uploadEventTncFile(file, id) {

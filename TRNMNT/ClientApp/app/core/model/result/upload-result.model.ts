@@ -1,4 +1,4 @@
-﻿import { UploadResultCode } from "../enum/upload-result-code.enum";
+﻿import { UploadResultCode } from '../enum/upload-result-code.enum';
 
 export interface IUploadResult {
     code: UploadResultCode;

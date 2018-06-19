@@ -41,7 +41,7 @@ export class EventRunCategoryViewComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.localSubscriptions.push(this.runEventHubService.onRoundComplete().subscribe((model) => {
-            console.log("RECIEVED", model);
+            console.log('RECIEVED', model);
             this.copyArrayWithSubstitution(model);
         }));
         this.route.params.subscribe(p => {
@@ -107,7 +107,7 @@ export class EventRunCategoryViewComponent implements OnInit, OnDestroy {
         let length = this.weightDivisions.length;
         let index = this.weightDivisions.findIndex(d => d.isVisible);
         if (index < 0) {
-            console.error("invalid index no visible elements");
+            console.error('invalid index no visible elements');
         }
         let nextIndex = index < length - 1 ? index + 1 : 0;
 

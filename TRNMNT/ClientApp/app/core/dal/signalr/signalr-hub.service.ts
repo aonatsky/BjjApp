@@ -75,24 +75,24 @@ export class SignalRHubService {
                 return;
             }
             // huck to start reconnection
-            let hubHttpConnection = this.hubConnection["connection"];
+            let hubHttpConnection = this.hubConnection['connection'];
             hubHttpConnection.connectionState = 0;
             let url = hubHttpConnection.url;
             hubHttpConnection.url = url
-                .replace(`?id=${hubHttpConnection.connectionId}`, "")
-                .replace(`&id=${hubHttpConnection.connectionId}`, "");
+                .replace(`?id=${hubHttpConnection.connectionId}`, '')
+                .replace(`&id=${hubHttpConnection.connectionId}`, '');
             this.reconnectionCounter++;
             this.hubConnection.start();
         });
     }
 
     joinGroup(groupName: string) {
-        console.log("join group: ", groupName);
-        this.hubConnection.invoke("JoinGroup", groupName);
+        console.log('join group: ', groupName);
+        this.hubConnection.invoke('JoinGroup', groupName);
     }
 
     leaveGroup(groupName: string) {
-        this.hubConnection.invoke("LeaveGroup", groupName);
+        this.hubConnection.invoke('LeaveGroup', groupName);
     }
 
     private logConnection(connectionId: string): void {

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
 
 import { WeightDivisionModel } from '../../model/weight-division.models'
-import { CategoryModel } from "../../model/category.models";
+import { CategoryModel } from '../../model/category.models';
 
 @Injectable()
 export abstract class DataService {

@@ -23,7 +23,6 @@
     <Compile Remove="Controllers\FighterController.cs" />
     <None Remove="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <None Remove="ClientApp\app\core\enums\submission-type.enum.ts" />
-    <None Remove="ClientApp\app\core\model\round-details\round-details.model.ts" />
     <None Remove="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <None Remove="ClientApp\app\core\services\bracket.service.ts" />
     <None Remove="ClientApp\app\core\services\results.service.ts" />
@@ -92,7 +91,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\enums\submission-type.enum.ts" />
-    <TypeScriptCompile Include="ClientApp\app\core\model\round-details\round-details.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\core\model\match-details.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\results.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\bracket.service.ts" />
@@ -103,6 +102,10 @@
     <TypeScriptCompile Include="ClientApp\app\round\round-panel\round-panel.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\round\round.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\bracket\bracket.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="log\" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
