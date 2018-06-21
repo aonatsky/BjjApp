@@ -14,7 +14,7 @@ import { MatchModel } from '../../core/model/match.models';
 export class BracketComponent implements OnInit {
     @Input() bracket: BracketModel;
     @Output() roundClick: EventEmitter<MatchModel> = new EventEmitter();
-    maxStage: number = 0;
+    maxRound: number = 0;
     columns: number[];
 
     constructor() {
@@ -22,14 +22,15 @@ export class BracketComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.maxStage = this.getMaxStage();
+        this.maxRound = this.getMaxRound();
         this.columns = this.getColumns();
     }
 
 
 
-    private getMaxStage(): number {
+    private getMaxRound(): number {
         let roundsCount = this.bracket.matchModels.filter(r => r.matchType !== 1).length;
+        
         for (let i = 0; i < 5; i++) {
             roundsCount -= Math.pow(2, i);
             if (roundsCount === 0) {
@@ -40,7 +41,7 @@ export class BracketComponent implements OnInit {
 
     private getColumns(): number[] {
         const cols = [];
-        const maxColumn = this.maxStage * 2;
+        const maxColumn = this.maxRound * 2;
         for (let i = 0; i <= maxColumn; i++) {
             cols.push(i);
         }
@@ -73,9 +74,9 @@ export class BracketComponent implements OnInit {
         const maxCol = this.columns.length - 1;
         const isRightSide = colNumber > maxCol / 2;
         const depth = (isRightSide ? maxCol - colNumber : colNumber);
-        const stage = this.maxStage - depth;
-        const models = this.bracket.matchModels.filter(m => m.round == stage).sort((m1, m2) => { return m1.order - m2.order });
-        if (stage === 0) {
+        const round = this.maxRound - depth;
+        const models = this.bracket.matchModels.filter(m => m.round == round).sort((m1, m2) => { return m1.order - m2.order });
+        if (round === 0) {
             return models;
         } else {
             if (isRightSide) {
@@ -103,7 +104,7 @@ export class BracketComponent implements OnInit {
         }
     }
 
-    private displayRoundResult(model: MatchModel, participantNumber: number) {
+    private displayMatchResult(model: MatchModel, participantNumber: number) {
         if (participantNumber === 1) {
             return model.aParticipantResult;
         }

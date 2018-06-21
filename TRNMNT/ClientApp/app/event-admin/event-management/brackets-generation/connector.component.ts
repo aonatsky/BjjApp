@@ -10,25 +10,25 @@ import './connector.component.scss';
 })
 
 export class ConnectorComponent {
-    @Input() stage: number;
+    @Input() round: number;
     @Input() row: number;
-    @Input() maxStage: number;
+    @Input() maxRound: number;
 
     topClass: string = '';
     bottomClass: string = '';
 
 
     ngOnInit() {
-        let centerStage = this.maxStage / 2;
-        let isRightSide = this.stage > centerStage;
-        let k = isRightSide ? this.maxStage - this.stage : this.stage;
-        let freq = Math.pow(2, 2 + k);
-        let startShift = (Math.pow(2, k) - 1);
-        let endShift = ((Math.pow(2, k) - 1) + Math.pow(2, k + 1));
-        let startIndex = (this.row - startShift);
-        let endIndex = (this.row - endShift);
-        let middleRange = (startShift + endShift) / 2;
-        if (this.stage != centerStage + 0.5 && this.stage != centerStage - 0.5) {
+        const centerRound = this.maxRound / 2;
+        const isRightSide = this.round > centerRound;
+        const k = isRightSide ? this.maxRound - this.round : this.round;
+        const freq = Math.pow(2, 2 + k);
+        const startShift = (Math.pow(2, k) - 1);
+        const endShift = ((Math.pow(2, k) - 1) + Math.pow(2, k + 1));
+        const startIndex = (this.row - startShift);
+        const endIndex = (this.row - endShift);
+        const middleRange = (startShift + endShift) / 2;
+        if (this.round != centerRound + 0.5 && this.round != centerRound - 0.5) {
             if (startIndex % freq == 0) {
                 this.lowCorner(isRightSide);
             }

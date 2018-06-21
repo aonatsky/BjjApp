@@ -6,15 +6,15 @@
                   [resizable]="false"
                   [showHeader]="false"
                   [width]="500">
-            <complete-round *ngIf="displayPopup" [matchDetails]="roundDetails" (close)="displayPopup=false;" (complete)="onComplete()"></complete-round>
+            <complete-round *ngIf="displayPopup" [matchDetails]="matchDetails" (close)="displayPopup=false;" (complete)="onComplete()"></complete-round>
         </p-dialog>
         <div class="round-panel-flex-wrapper">
             <div class="round-panel-user-panel">
-                <div class="round-panel-participant">{{roundModel.firstParticipant.firstName}} {{roundModel.firstParticipant.lastName}}</div>
-                <div class="round-panel-current-points">{{roundDetails.firstParticipantPoints}}</div>
+                <div class="round-panel-participant">{{matchModel.aParticipant.firstName}} {{matchModel.aParticipant.lastName}}</div>
+                <div class="round-panel-current-points">{{matchDetails.aParticipantPoints}}</div>
                 <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
-                    <div class="round-panel-large-box">{{roundDetails.firstParticipantAdvantages}}</div>
-                    <div class="round-panel-large-box">{{roundDetails.firstParticipantPenalties}}</div>
+                    <div class="round-panel-large-box">{{matchDetails.aParticipantAdvantages}}</div>
+                    <div class="round-panel-large-box">{{matchDetails.aParticipantPenalties}}</div>
                 </div>
                 <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
                     <div class="round-panel-label-large">ADV.</div>
@@ -24,32 +24,32 @@
                     <div class="points-container">
                         <div class="round-panel-label">POINTS</div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-green-button" (click)="changeFirstParticipantPoints(2)">+ 2</div>
-                            <div class="round-panel-green-button" (click)="changeFirstParticipantPoints(3)">+ 3</div>
-                            <div class="round-panel-green-button" (click)="changeFirstParticipantPoints(4)">+ 4</div>
+                            <div class="round-panel-green-button" (click)="changeAParticipantPoints(2)">+ 2</div>
+                            <div class="round-panel-green-button" (click)="changeAParticipantPoints(3)">+ 3</div>
+                            <div class="round-panel-green-button" (click)="changeAParticipantPoints(4)">+ 4</div>
                         </div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-red-button" (click)="changeFirstParticipantPoints(-2)">- 2</div>
-                            <div class="round-panel-red-button" (click)="changeFirstParticipantPoints(-3)">- 3</div>
-                            <div class="round-panel-red-button" (click)="changeFirstParticipantPoints(-4)">- 4</div>
+                            <div class="round-panel-red-button" (click)="changeAParticipantPoints(-2)">- 2</div>
+                            <div class="round-panel-red-button" (click)="changeAParticipantPoints(-3)">- 3</div>
+                            <div class="round-panel-red-button" (click)="changeAParticipantPoints(-4)">- 4</div>
                         </div>
                     </div>
                     <div class="advantage-container">
                         <div class="round-panel-label">ADVANTAGE</div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-green-button" (click)="changeFirstParticipantAdvantages(1)">+ 1</div>
+                            <div class="round-panel-green-button" (click)="changeAParticipantAdvantages(1)">+ 1</div>
                         </div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-red-button" (click)="changeFirstParticipantAdvantages(-1)">- 1</div>
+                            <div class="round-panel-red-button" (click)="changeAParticipantAdvantages(-1)">- 1</div>
                         </div>
                     </div>
                     <div class="penalty-container">
                         <div class="round-panel-label">PENALTY</div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-green-button" (click)="changeFirstParticipantPenalties(1)">+ 1</div>
+                            <div class="round-panel-green-button" (click)="changeAParticipantPenalties(1)">+ 1</div>
                         </div>
                         <div class="round-panel-flex-wrapper">
-                            <div class="round-panel-red-button" (click)="changeFirstParticipantPenalties(-1)">- 1</div>
+                            <div class="round-panel-red-button" (click)="changeAParticipantPenalties(-1)">- 1</div>
                         </div>
                     </div>
                 </div>
@@ -58,16 +58,16 @@
 
 
             <div class="round-panel-timer-panel">
-                <span class="round-panel-timer">{{roundDetails.countdown | formatTimer}}</span>
+                <span class="round-panel-timer">{{matchDetails.countdown | formatTimer}}</span>
             </div>
 
 
             <div class="round-panel-user-panel">
-                <div class="round-panel-participant">{{roundModel.BParticipant.firstName}} {{roundModel.BParticipant.lastName}}</div>
-                <div class="round-panel-current-points">{{roundDetails.BParticipantPoints}}</div>
+                <div class="round-panel-participant">{{roundModel.bParticipant.firstName}} {{roundModel.bParticipant.lastName}}</div>
+                <div class="round-panel-current-points">{{matchDetails.bParticipantPoints}}</div>
                 <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
-                    <div class="round-panel-large-box">{{roundDetails.BParticipantAdvantages}}</div>
-                    <div class="round-panel-large-box">{{roundDetails.BParticipantPenalties}}</div>
+                    <div class="round-panel-large-box">{{matchDetails.bParticipantAdvantages}}</div>
+                    <div class="round-panel-large-box">{{matchDetails.bParticipantPenalties}}</div>
                 </div>
                 <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
                     <div class="round-panel-label-large">ADV.</div>
