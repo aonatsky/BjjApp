@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TRNMNT.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,10 +13,10 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,24 +27,24 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,11 +55,11 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    RoleId = table.Column<string>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,11 +76,11 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(nullable: false),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -97,10 +97,10 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
+                    ProviderDisplayName = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,8 +117,8 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -141,10 +141,10 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -161,16 +161,16 @@ namespace TRNMNT.Data.Migrations
                 name: "Federation",
                 columns: table => new
                 {
-                    FederationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ContactInformation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImgPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MembershipPrice = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TeamRegistrationPrice = table.Column<int>(type: "int", nullable: false),
-                    UpdateTs = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FederationId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    UpdateTs = table.Column<DateTime>(nullable: false),
+                    OwnerId = table.Column<string>(nullable: true),
+                    MembershipPrice = table.Column<int>(nullable: false),
+                    TeamRegistrationPrice = table.Column<int>(nullable: false),
+                    Currency = table.Column<string>(nullable: true),
+                    ContactInformation = table.Column<string>(nullable: true),
+                    ImgPath = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -187,16 +187,16 @@ namespace TRNMNT.Data.Migrations
                 name: "Order",
                 columns: table => new
                 {
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    CreateTS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderTypeId = table.Column<int>(type: "int", nullable: false),
-                    PaymentApproved = table.Column<bool>(type: "bit", nullable: false),
-                    PaymentProviderReference = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Reference = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdateTS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    OrderId = table.Column<Guid>(nullable: false),
+                    OrderTypeId = table.Column<int>(nullable: false),
+                    PaymentApproved = table.Column<bool>(nullable: false),
+                    Amount = table.Column<int>(nullable: false),
+                    PaymentProviderReference = table.Column<string>(nullable: true),
+                    Currency = table.Column<string>(nullable: true),
+                    Reference = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    CreateTS = table.Column<DateTime>(nullable: false),
+                    UpdateTS = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -213,34 +213,34 @@ namespace TRNMNT.Data.Migrations
                 name: "Event",
                 columns: table => new
                 {
-                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AdditionalData = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CardNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EarlyRegistrationEndTS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EarlyRegistrationPrice = table.Column<int>(type: "int", nullable: false),
-                    EarlyRegistrationPriceForMembers = table.Column<int>(type: "int", nullable: false),
-                    EventDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FBLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FederationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImgPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    LateRegistrationPrice = table.Column<int>(type: "int", nullable: false),
-                    LateRegistrationPriceForMembers = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    PromoCodeEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    PromoCodeListPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegistrationEndTS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RegistrationStartTS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    TNCFilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdateTS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UrlPrefix = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VKLink = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    EventId = table.Column<Guid>(nullable: false),
+                    OwnerId = table.Column<string>(nullable: true),
+                    EventDate = table.Column<DateTime>(nullable: false),
+                    RegistrationStartTS = table.Column<DateTime>(nullable: false),
+                    EarlyRegistrationEndTS = table.Column<DateTime>(nullable: false),
+                    RegistrationEndTS = table.Column<DateTime>(nullable: false),
+                    ImgPath = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    UpdateTS = table.Column<DateTime>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    StatusId = table.Column<int>(nullable: false),
+                    UrlPrefix = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    TNCFilePath = table.Column<string>(nullable: true),
+                    CardNumber = table.Column<string>(nullable: true),
+                    ContactEmail = table.Column<string>(nullable: true),
+                    ContactPhone = table.Column<string>(nullable: true),
+                    FBLink = table.Column<string>(nullable: true),
+                    VKLink = table.Column<string>(nullable: true),
+                    AdditionalData = table.Column<string>(nullable: true),
+                    FederationId = table.Column<Guid>(nullable: false),
+                    PromoCodeEnabled = table.Column<bool>(nullable: false),
+                    PromoCodeListPath = table.Column<string>(nullable: true),
+                    EarlyRegistrationPrice = table.Column<int>(nullable: false),
+                    LateRegistrationPrice = table.Column<int>(nullable: false),
+                    EarlyRegistrationPriceForMembers = table.Column<int>(nullable: false),
+                    LateRegistrationPriceForMembers = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,10 +263,10 @@ namespace TRNMNT.Data.Migrations
                 name: "FederationMembership",
                 columns: table => new
                 {
-                    FederationMembershipId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreateTs = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FederationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FederationMembershipId = table.Column<Guid>(nullable: false),
+                    FederationId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    CreateTs = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -289,14 +289,14 @@ namespace TRNMNT.Data.Migrations
                 name: "Team",
                 columns: table => new
                 {
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FederationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UpdateBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdateTs = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TeamId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    UpdateTs = table.Column<DateTime>(nullable: false),
+                    UpdateBy = table.Column<string>(nullable: true),
+                    FederationId = table.Column<Guid>(nullable: false),
+                    OrderId = table.Column<Guid>(nullable: true),
+                    IsApproved = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -313,10 +313,11 @@ namespace TRNMNT.Data.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RoundTime = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    EventId = table.Column<Guid>(nullable: false),
+                    MatchTime = table.Column<int>(nullable: false),
+                    CompleteTs = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -333,12 +334,12 @@ namespace TRNMNT.Data.Migrations
                 name: "PromoCode",
                 columns: table => new
                 {
-                    PromoCodeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BurntBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    UpdateTs = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    PromoCodeId = table.Column<Guid>(nullable: false),
+                    EventId = table.Column<Guid>(nullable: false),
+                    Code = table.Column<string>(nullable: true),
+                    IsActive = table.Column<bool>(nullable: false),
+                    UpdateTs = table.Column<DateTime>(nullable: true),
+                    BurntBy = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -355,11 +356,14 @@ namespace TRNMNT.Data.Migrations
                 name: "WeightDivision",
                 columns: table => new
                 {
-                    WeightDivisionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Descritpion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Weight = table.Column<int>(type: "int", nullable: false)
+                    WeightDivisionId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Weight = table.Column<int>(nullable: false),
+                    Descritpion = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<Guid>(nullable: false),
+                    IsAbsolute = table.Column<bool>(nullable: false),
+                    StartTs = table.Column<DateTime>(nullable: true),
+                    CompleteTs = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -373,61 +377,38 @@ namespace TRNMNT.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Fighter",
-                columns: table => new
-                {
-                    FighterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UpdateTs = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    WeightDivisionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Fighter", x => x.FighterId);
-                    table.ForeignKey(
-                        name: "FK_Fighter_Team_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "Team",
-                        principalColumn: "TeamId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Fighter_WeightDivision_WeightDivisionId",
-                        column: x => x.WeightDivisionId,
-                        principalTable: "WeightDivision",
-                        principalColumn: "WeightDivisionId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Participant",
                 columns: table => new
                 {
-                    ParticipantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ActivatedPromoCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TeamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UpdateTS = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WeightDivisionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ParticipantId = table.Column<Guid>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    UpdateTS = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    IsDisqualified = table.Column<bool>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    IsApproved = table.Column<bool>(nullable: false),
+                    IsMember = table.Column<bool>(nullable: false),
+                    OrderId = table.Column<Guid>(nullable: true),
+                    TeamId = table.Column<Guid>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false),
+                    EventId = table.Column<Guid>(nullable: false),
+                    WeightDivisionId = table.Column<Guid>(nullable: false),
+                    AbsoluteWeightDivisionId = table.Column<Guid>(nullable: true),
+                    ActivatedPromoCode = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Participant", x => x.ParticipantId);
+                    table.ForeignKey(
+                        name: "FK_Participant_WeightDivision_AbsoluteWeightDivisionId",
+                        column: x => x.AbsoluteWeightDivisionId,
+                        principalTable: "WeightDivision",
+                        principalColumn: "WeightDivisionId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Participant_Category_CategoryId",
                         column: x => x.CategoryId,
@@ -454,8 +435,65 @@ namespace TRNMNT.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Match",
+                columns: table => new
+                {
+                    MatchId = table.Column<Guid>(nullable: false),
+                    WeightDivisionId = table.Column<Guid>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false),
+                    AParticipantId = table.Column<Guid>(nullable: true),
+                    BParticipantId = table.Column<Guid>(nullable: true),
+                    WinnerParticipantId = table.Column<Guid>(nullable: true),
+                    NextMatchId = table.Column<Guid>(nullable: true),
+                    Round = table.Column<int>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    MatchType = table.Column<int>(nullable: false),
+                    MatchResultType = table.Column<int>(nullable: false),
+                    MatchResultDetails = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Match", x => x.MatchId);
+                    table.ForeignKey(
+                        name: "FK_Match_Participant_AParticipantId",
+                        column: x => x.AParticipantId,
+                        principalTable: "Participant",
+                        principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Match_Participant_BParticipantId",
+                        column: x => x.BParticipantId,
+                        principalTable: "Participant",
+                        principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Match_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Match_Match_NextMatchId",
+                        column: x => x.NextMatchId,
+                        principalTable: "Match",
+                        principalColumn: "MatchId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Match_WeightDivision_WeightDivisionId",
+                        column: x => x.WeightDivisionId,
+                        principalTable: "WeightDivision",
+                        principalColumn: "WeightDivisionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Match_Participant_WinnerParticipantId",
+                        column: x => x.WinnerParticipantId,
+                        principalTable: "Participant",
+                        principalColumn: "ParticipantId",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
-          migrationBuilder.CreateIndex(
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -525,19 +563,44 @@ namespace TRNMNT.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fighter_TeamId",
-                table: "Fighter",
-                column: "TeamId");
+                name: "IX_Match_AParticipantId",
+                table: "Match",
+                column: "AParticipantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fighter_WeightDivisionId",
-                table: "Fighter",
+                name: "IX_Match_BParticipantId",
+                table: "Match",
+                column: "BParticipantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Match_CategoryId",
+                table: "Match",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Match_NextMatchId",
+                table: "Match",
+                column: "NextMatchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Match_WeightDivisionId",
+                table: "Match",
                 column: "WeightDivisionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Match_WinnerParticipantId",
+                table: "Match",
+                column: "WinnerParticipantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_UserId",
                 table: "Order",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participant_AbsoluteWeightDivisionId",
+                table: "Participant",
+                column: "AbsoluteWeightDivisionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Participant_CategoryId",
@@ -573,7 +636,7 @@ namespace TRNMNT.Data.Migrations
                 name: "IX_WeightDivision_CategoryId",
                 table: "WeightDivision",
                 column: "CategoryId");
-         }
+        }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -596,13 +659,10 @@ namespace TRNMNT.Data.Migrations
                 name: "FederationMembership");
 
             migrationBuilder.DropTable(
-                name: "Fighter");
+                name: "Match");
 
             migrationBuilder.DropTable(
                 name: "Order");
-
-            migrationBuilder.DropTable(
-                name: "Participant");
 
             migrationBuilder.DropTable(
                 name: "PromoCode");
@@ -611,10 +671,13 @@ namespace TRNMNT.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Team");
+                name: "Participant");
 
             migrationBuilder.DropTable(
                 name: "WeightDivision");
+
+            migrationBuilder.DropTable(
+                name: "Team");
 
             migrationBuilder.DropTable(
                 name: "Category");

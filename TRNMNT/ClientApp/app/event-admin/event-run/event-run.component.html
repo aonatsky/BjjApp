@@ -15,7 +15,7 @@
     </div>
 </div>
 <bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runRound($event);"></bracket>
-<round-panel *ngIf="showRoundPanel" [roundModel]="selectedRoundDetails" (close)="completeRound()" (completeRound)="completeRound()"></round-panel>
+<round-panel *ngIf="showRoundPanel" [matchModel]="selectedRoundDetails" (close)="completeRound()" (completeRound)="completeRound()"></round-panel>
 <p-dialog width="500" [modal]="true" [(visible)]="showResultPopup" (onHide)="hideResultSetPopup();">
     <bracket-result-set *ngIf="bracket" [bracket]="bracket"></bracket-result-set>
 </p-dialog>

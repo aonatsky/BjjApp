@@ -12,7 +12,7 @@ using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Core.Services.impl
 {
-    class MatchService : IMatchService
+    public class MatchService : IMatchService
     {
         private readonly IRepository<Match> _matchRepository;
         private readonly IWeightDivisionService _weightDivisionService;

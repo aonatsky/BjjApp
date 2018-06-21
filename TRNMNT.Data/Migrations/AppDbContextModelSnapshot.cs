@@ -308,7 +308,7 @@ namespace TRNMNT.Data.Migrations
 
                     b.HasIndex("WinnerParticipantId");
 
-                    b.ToTable("Round");
+                    b.ToTable("Match");
                 });
 
             modelBuilder.Entity("TRNMNT.Data.Entities.Order", b =>
@@ -628,7 +628,7 @@ namespace TRNMNT.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TRNMNT.Data.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("Matches")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -638,7 +638,7 @@ namespace TRNMNT.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TRNMNT.Data.Entities.WeightDivision", "WeightDivision")
-                        .WithMany()
+                        .WithMany("Matches")
                         .HasForeignKey("WeightDivisionId")
                         .OnDelete(DeleteBehavior.Restrict);
 

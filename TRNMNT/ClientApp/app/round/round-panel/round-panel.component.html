@@ -1,4 +1,4 @@
-﻿<div class="round-panel-popup" *ngIf="!!roundModel">
+﻿<div class="round-panel-popup" *ngIf="!!matchModel">
     <div class="round-panel-wrapper">
         <p-dialog appendTo="body" header="Complete Round"
                   [(visible)]="displayPopup"
@@ -63,7 +63,7 @@
 
 
             <div class="round-panel-user-panel">
-                <div class="round-panel-participant">{{roundModel.bParticipant.firstName}} {{roundModel.bParticipant.lastName}}</div>
+                <div class="round-panel-participant">{{matchModel.bParticipant.firstName}} {{matchModel.bParticipant.lastName}}</div>
                 <div class="round-panel-current-points">{{matchDetails.bParticipantPoints}}</div>
                 <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
                     <div class="round-panel-large-box">{{matchDetails.bParticipantAdvantages}}</div>

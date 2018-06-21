@@ -41,8 +41,10 @@ namespace TRNMNT.Web.Helpers
             services.AddScoped(typeof(IPromoCodeService), typeof(PromoCodeService));
             services.AddScoped(typeof(IBracketService), typeof(BracketService));
             services.AddScoped(typeof(IResultsService), typeof(ResultsService));
+            services.AddScoped(typeof(IMatchService), typeof(MatchService));
             services.AddScoped(typeof(IParticipantRegistrationService), typeof(ParticipantRegistrationService));
             services.AddScoped(typeof(IAuthConfiguration), typeof(AuthConfiguration));
+
             services.AddScoped<IPaidServiceFactory, PaidServiceFactory>();
 
             return services;

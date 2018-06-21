@@ -18,19 +18,19 @@ INSERT [dbo].[Event]
 VALUES
     (N'60e9da46-c660-4a9b-5c43-08d4c85dc994', N'Conroe High School Pit Gym - 3200 W Davis St, Conroe Tx 77304', N'$85 for 1 division, $95 for 2 ($10 off during early online registration period). Early weigh ins are AT THE VENUE the night before at 5:30-7:30 pm and the morning of the event between 8-9:30 am. Please be assured that we make all possible effort to match all competitors (including those who fall in the women''s 150+ division) as closely as possible according to age, weight and rank. Should the event reach capacity, we reserve the right to close online registration early and to restrict registration at the door as we see fit.', CAST(N'2017-10-04T09:00:00.0000000' AS DateTime2), '', 1, N'a2070395-168a-49aa-972b-326edd47bf70', CAST(N'2017-05-29T06:00:00.0000000' AS DateTime2), CAST(N'2017-05-01T06:00:00.0000000' AS DateTime2), 1, N'Kiev open 2022', CAST(N'2017-09-28T15:42:46.2163470' AS DateTime2), N'kievopen2017', N'In-person registration is available for this event. If you are unable to register online, you may register in-person at the venue during early weigh-ins or the morning of the event. In-person registrations are not eligible for any promotional items or discounts that are available online.', NULL, N'bjjukraine@gmail.com', N'+380501234567', N'https://www.facebook.com/events/1218851341576411', '', N'https://vk.com/bjjfreaks', CAST(N'2017-06-01T06:00:00.0000000' AS DateTime2), 95, 8, 8, 13, N'673ea3ce-2530-48c0-b84c-a3de492cab25', 1, NULL);
 INSERT [dbo].[Category]
-    ([CategoryId], [Name], [EventId], [RoundTime])
+    ([CategoryId], [Name], [EventId], [MatchTime])
 VALUES
     (N'8edc9c5c-5bdd-4376-8415-26a886b738b0', N'KIDS 1', N'60e9da46-c660-4a9b-5c43-08d4c85dc994', 300);
 INSERT [dbo].[Category]
-    ([CategoryId], [Name], [EventId], [RoundTime])
+    ([CategoryId], [Name], [EventId], [MatchTime])
 VALUES
     (N'7198b661-e612-40f5-af17-839526393d07', N'Category TEST', N'60e9da46-c660-4a9b-5c43-08d4c85dc994', 300);
 INSERT [dbo].[Category]
-    ([CategoryId], [Name], [EventId], [RoundTime])
+    ([CategoryId], [Name], [EventId], [MatchTime])
 VALUES
     (N'02b44457-be9e-4196-a666-e5602e04ee61', N'Male Balck Belt', N'60e9da46-c660-4a9b-5c43-08d4c85dc994', 300);
 INSERT [dbo].[Category]
-    ([CategoryId], [Name], [EventId], [RoundTime])
+    ([CategoryId], [Name], [EventId], [MatchTime])
 VALUES
     (N'02b44457-be9e-4196-a666-e5602e04ee63', N'Female Black', N'60e9da46-c660-4a9b-5c43-08d4c85dc994', 300);
 INSERT [dbo].[WeightDivision]

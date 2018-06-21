@@ -19,11 +19,9 @@ namespace TRNMNT.Core.Services.impl
     {
         #region Dependencies
 
-        private readonly IRepository<Match> _roundRepository;
         private readonly IParticipantService _participantService;
         private readonly BracketsFileService _fileService;
         private readonly IWeightDivisionService _weightDivisionService;
-        private readonly ICategoryService _categoryService;
         private readonly IMatchService _matchService;
         private readonly IResultsService _resultsService;
 
@@ -42,9 +40,7 @@ namespace TRNMNT.Core.Services.impl
             _participantService = participantService;
             _fileService = fileService;
             _weightDivisionService = weightDivisionService;
-            _categoryService = categoryService;
             _matchService = matchService;
-            _roundRepository = matchRepository;
             _resultsService = resultsService;
         }
         #endregion

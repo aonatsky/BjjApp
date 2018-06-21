@@ -43,7 +43,7 @@ namespace TRNMNT.Web
 
             #region AppDBContext
 
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DbConnection")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddIdentity<User, IdentityRole>(o =>
                 {
