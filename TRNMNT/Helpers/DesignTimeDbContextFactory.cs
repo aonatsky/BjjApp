@@ -15,8 +15,8 @@ namespace TRNMNT.Web.Helpers
                 .AddJsonFile("appsettings.json")
                 .Build();
             var builder = new DbContextOptionsBuilder<AppDbContext>();
-            var connectionString = configuration.GetConnectionString("DbConnection");
-            builder.UseSqlServer(connectionString);
+            var connectionString = configuration.GetConnectionString("PostgreConnection");
+            builder.UseNpgsql(connectionString);
             return new AppDbContext(builder.Options);
         }
     }

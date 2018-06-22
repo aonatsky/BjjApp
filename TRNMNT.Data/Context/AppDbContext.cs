@@ -3,24 +3,26 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Configuration;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Data.Context
 {
     public class AppDbContext : IdentityDbContext<User>, IAppDbContext
     {
+        private readonly IConfiguration _configuration;
+
         #region .ctor
         public AppDbContext(DbContextOptions<AppDbContext> options)
            : base(options)
         {
-
+            
         }
         #endregion
 
         #region protected
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<Owner>().HasKey(o => o.OwnerId);
             base.OnModelCreating(builder);
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
@@ -42,7 +44,6 @@ namespace TRNMNT.Data.Context
             // Add your customizations after calling base.OnModelCreating(builder);
         }
         #endregion
-
 
         #region interface implementation
         public new IQueryable<T> Set<T>() where T : class

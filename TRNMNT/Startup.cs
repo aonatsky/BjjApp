@@ -22,8 +22,6 @@ namespace TRNMNT.Web
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile($"appsettings.home.json", optional: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -43,7 +41,8 @@ namespace TRNMNT.Web
 
             #region AppDBContext
 
-            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DbConnection")));
+            services.AddEntityFrameworkNpgsql();
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgreConnection")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddIdentity<User, IdentityRole>(o =>
                 {
