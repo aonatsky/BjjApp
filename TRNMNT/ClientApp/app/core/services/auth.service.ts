@@ -10,6 +10,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 import { UserModel } from './../model/user.model'
 import { RouterService } from './router.service'
+import {CredentialsModel} from '../model/credentials.model';
 
 /** 
  * Authentication service. 
@@ -40,13 +41,13 @@ import { RouterService } from './router.service'
         this.options = new RequestOptions({ headers: this.headers });
     }
 
-    login(username: string, password: string) {
+    login(email: string, password: string) {
 
-        let params: any = {
-            username: username,
+        const credentials: CredentialsModel = {
+            email: email,
             password: password
         };
-        this.http.post(ApiMethods.auth.getToken, params)
+        this.http.post(ApiMethods.auth.getToken, credentials)
             .map(res => res.json())
             .subscribe(
             // We're assuming the response will be an object
@@ -59,27 +60,26 @@ import { RouterService } from './router.service'
     /**
      * Tries to sign in the user. 
      * 
-     * @param username 
+     * @param email 
      * @param password 
      * @return The user's data 
      */
-    signin(username: string, password: string): Observable<boolean> {
+    signin(email: string, password: string): Observable<boolean> {
 
         // Token endpoint & params.  
-        let tokenEndpoint: string = ApiMethods.auth.getToken;
+        const tokenEndpoint: string = ApiMethods.auth.getToken;
 
-        let params: any = {
-            username: username,
+        const credentials: CredentialsModel = {
+            email: email,
             password: password
         };
 
         // Encodes the parameters.  
-        let body = JSON.stringify(params);
 
-        return this.http.post(tokenEndpoint, body, this.options)
+        return this.http.post(tokenEndpoint, credentials, this.options)
             .map((res: Response) => {
 
-                let body: any = res.json();
+                const body: any = res.json();
 
                 // Sign in successful if there's an access token in the response.  
                 if (typeof body.id_token !== 'undefined') {
@@ -106,14 +106,12 @@ import { RouterService } from './router.service'
 
     register(email, password): Observable<string> {
 
-        let params: any = {
-            username: email,
+        const credentials: CredentialsModel = {
+            email: email,
             password: password
         };
 
-        let body = JSON.stringify(params);
-
-       return this.http.post(ApiMethods.auth.register, body, this.options)
+       return this.http.post(ApiMethods.auth.register, credentials, this.options)
             .map((res: Response) => {
 
                 return res.json();
@@ -137,24 +135,24 @@ import { RouterService } from './router.service'
      */
     getNewToken(): Observable<boolean> {
 
-        let refreshToken: string = localStorage.getItem('refresh_token');
+        const refreshToken: string = localStorage.getItem('refresh_token');
 
         if (refreshToken != null) {
 
             // Token endpoint & params.  
-            let tokenEndpoint: string = ApiMethods.auth.getToken;
+            const tokenEndpoint: string = ApiMethods.auth.getToken;
 
-            let params: any = {
+            const params: any = {
                 grant_type: 'refresh_token',
                 refresh_token: refreshToken
             };
 
             // Encodes the parameters.  
-            let body: string = this.encodeParams(params); 
+            const body: string = this.encodeParams(params); 
             return this.http.post(tokenEndpoint, body, this.options).map(
                 (res: Response) => {
 
-                    let body: any = res.json();
+                    const body: any = res.json();
 
                     // Successful if there's an access token in the response.  
                     if (typeof body.id_token !== 'undefined') {
@@ -182,20 +180,20 @@ import { RouterService } from './router.service'
      */
     revokeToken(): void {
 
-        let token: string = localStorage.getItem('id_token');
+        const token: string = localStorage.getItem('id_token');
 
         if (token != null) {
 
             // Revocation endpoint & params.  
-            let revocationEndpoint: string = ApiMethods.auth.refreshToken;
+            const revocationEndpoint: string = ApiMethods.auth.refreshToken;
 
-            let params: any = {
+            const params: any = {
                 token_type_hint: 'id_token',
                 refreshToken: token
             };
 
             // Encodes the parameters.  
-            let body = JSON.stringify(params);
+            const body = JSON.stringify(params);
 
             this.http.post(revocationEndpoint, body, this.options)
                 .subscribe(
@@ -206,32 +204,32 @@ import { RouterService } from './router.service'
                 });
         }
     }
-    
+
 
     /** 
      * Revokes refresh token. 
      */
     revokeRefreshToken(): Observable<boolean> {
 
-        let refreshToken: string = localStorage.getItem('refresh_token');
+        const refreshToken: string = localStorage.getItem('refresh_token');
 
         if (refreshToken == null) {
             return Observable.of(false);
         }
 
         // Revocation endpoint & params.  
-        let revocationEndpoint: string = ApiMethods.auth.refreshToken;
+        const revocationEndpoint: string = ApiMethods.auth.refreshToken;
 
-        let params: any = {
+        const params: any = {
             RefreshToken: refreshToken
         };
 
         // Encodes the parameters.  
-        let body = JSON.stringify(params);
+        const body = JSON.stringify(params);
 
         return this.http.post(revocationEndpoint, body, this.options).map(
             (res: Response) => {
-                let body: any = this.getResponseBody(res);
+                const body: any = this.getResponseBody(res);
                 // Successful if there's an access token in the response.  
                 if (typeof body.id_token !== 'undefined') {
                     // Stores access token & refresh token.  
@@ -275,9 +273,9 @@ import { RouterService } from './router.service'
 
         if (this.isLoggedIn()) {
 
-            let token: string = localStorage.getItem('id_token');
+            const token: string = localStorage.getItem('id_token');
 
-            let jwtHelper: JwtHelper = new JwtHelper();
+            const jwtHelper: JwtHelper = new JwtHelper();
             this.user = jwtHelper.decodeToken(token);
 
         }

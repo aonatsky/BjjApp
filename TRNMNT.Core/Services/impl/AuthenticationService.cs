@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using TRNMNT.Core.Configurations;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Core.Settings;
@@ -107,29 +108,30 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<UserRegistrationResult> CreateParticipantUserAsync(string email, string password)
         {
-            return await CreateUserAsync(email, password, Roles.Participant);
+            return await CreateUserAsync(new UserCredentialsModel()
+            {
+                Email = email,
+                Password = password
+            });
         }
 
-        public async Task<UserRegistrationResult> CreateOwnerUserAsync(string email, string password)
-        {
-            return await CreateUserAsync(email, password, Roles.Owner);
-        }
+       
 
         #endregion
 
         #region Private Methods
 
-        private async Task<UserRegistrationResult> CreateUserAsync(string email, string password, string roleClaim)
+        public async Task<UserRegistrationResult> CreateUserAsync(UserCredentialsModel model)
         {
             var user = new User
             {
-                Email = email,
-                UserName = email,
-                FirstName = "",
-                LastName = ""
+                Email = model.Email,
+                UserName = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
             };
-            var identityResult = await _userManager.CreateAsync(user, password);
-            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, roleClaim));
+            var identityResult = await _userManager.CreateAsync(user, model.Password);
+            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, model.Role));
 
             if (identityResult.Succeeded)
             {

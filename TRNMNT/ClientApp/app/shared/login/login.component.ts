@@ -19,7 +19,7 @@ export class LoginComponent {
 
     constructor(
         private route: ActivatedRoute,
-        private AuthService: AuthService,
+        private authService: AuthService,
         private routerService: RouterService,
         private loggerService: LoggerService) {
 
@@ -27,7 +27,7 @@ export class LoginComponent {
 
     ngOnInit() {
         // reset login status
-        this.AuthService.signout();
+        this.authService.signout();
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -36,7 +36,7 @@ export class LoginComponent {
 
     login(): any {
 
-        this.AuthService.signin(this.username, this.password).subscribe(data => this.processLogin(data), error => this.loggerService.logError(error));
+        this.authService.signin(this.username, this.password).subscribe(data => this.processLogin(data), error => this.loggerService.logError(error));
 
     }
 

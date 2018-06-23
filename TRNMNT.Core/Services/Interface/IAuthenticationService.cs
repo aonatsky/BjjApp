@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Result;
 
 namespace TRNMNT.Core.Services.Interface
@@ -28,12 +29,11 @@ namespace TRNMNT.Core.Services.Interface
         Task<UserRegistrationResult> CreateParticipantUserAsync(string login, string password);
 
         /// <summary>
-        /// Creates the owner user asynchronous.
+        /// Creates user asynchronous.
         /// </summary>
-        /// <param name="login">The login.</param>
-        /// <param name="password">The password.</param>
+        /// <param name="model">Credentials model.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateOwnerUserAsync(string login, string password);
+        Task<UserRegistrationResult> CreateUserAsync(UserCredentialsModel model);
 
         /// <summary>
         /// Updates the token asynchronous.

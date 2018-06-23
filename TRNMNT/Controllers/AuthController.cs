@@ -48,8 +48,8 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                //var token = await _authenticationSerivce.GetToken(credentials.Username, credentials.Password);
-                var tokenResult = await _authenticationSerivce.GetTokenAsync(credentials.Username, credentials.Password);
+                //var token = await _authenticationSerivce.GetToken(credentials.Email, credentials.Password);
+                var tokenResult = await _authenticationSerivce.GetTokenAsync(credentials.Email, credentials.Password);
                 if (tokenResult != null)
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
@@ -106,8 +106,15 @@ namespace TRNMNT.Web.Controllers
         {
             try
             {
-                await _authenticationSerivce.CreateOwnerUserAsync(credentials.Username, credentials.Password);
-                Response.StatusCode = (int)HttpStatusCode.OK;
+                if (Request.Headers["password"] == "pizdecpassword")
+                {
+                    await _authenticationSerivce.CreateUserAsync(credentials);
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+                else
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Forbidden; ;
+                }
             }
             catch (Exception ex)
             {

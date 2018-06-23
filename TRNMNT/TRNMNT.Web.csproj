@@ -27,6 +27,7 @@
     <Compile Remove="Controllers\FighterController.cs" />
     <None Remove="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <None Remove="ClientApp\app\core\enums\submission-type.enum.ts" />
+    <None Remove="ClientApp\app\core\model\credentials.model.ts" />
     <None Remove="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <None Remove="ClientApp\app\core\services\bracket.service.ts" />
     <None Remove="ClientApp\app\core\services\results.service.ts" />
@@ -96,6 +97,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\enums\submission-type.enum.ts" />
+    <TypeScriptCompile Include="ClientApp\app\core\model\credentials.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\model\match-details.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\results.service.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\pipes\format-timer.pipe.ts" />
@@ -111,6 +113,12 @@
 
   <ItemGroup>
     <Folder Include="log\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>

@@ -1,6 +1,6 @@
 ﻿namespace TRNMNT.Core.Settings
 {
-    public class Roles
+    public static class Roles
     {
         public const string Owner = nameof(Owner);
         public const string Participant = nameof(Participant);
