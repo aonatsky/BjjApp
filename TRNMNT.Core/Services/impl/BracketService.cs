@@ -158,6 +158,8 @@ namespace TRNMNT.Core.Services.impl
                 MatchType = match.MatchType,
                 MatchTime = matchTime,
                 Order = match.Order,
+                CategoryId = match.CategoryId,
+                WeightDivisionId = match.WeightDivisionId
             };
 
             if (match.WinnerParticipantId != null)

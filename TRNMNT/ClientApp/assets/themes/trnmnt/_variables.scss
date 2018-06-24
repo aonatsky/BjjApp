@@ -28,10 +28,10 @@ $headerFontWeight: bold;
 $headerIconTextColor: #eeeeee;
 
 //Content
-$contentBorderWidth: 1px;
+$contentBorderWidth: 0px;
 $contentBorderColor: $theme_light_grey;
 $contentBgColor: $theme_white;
-$contentTextColor: #eeeeee;
+$contentTextColor: $theme_black;
 
 //Default State
 $stateDefaultBorderWidth: 1px;
@@ -46,7 +46,7 @@ $stateActiveTextColor: #ffffff;
 
 //Highlight State
 $stateHighlightBorderColor: $theme_grey;
-$stateHighlightBgColor: #eeeeee;
+$stateHighlightBgColor: $theme_white;
 $stateHighlightTextColor: $theme_orange;
 
 //Focus State

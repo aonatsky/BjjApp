@@ -86,7 +86,7 @@ namespace TRNMNT.Core.Services.Impl
 
             if (includeCategory)
             {
-                query.Include(wd => wd.Category);
+                query = query.Include(wd => wd.Category);
             }
 
             return await query.FirstOrDefaultAsync();

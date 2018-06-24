@@ -63,7 +63,7 @@ export class BracketGenerationComponent {
         }
     }
 
-    private getmatchIndex(col, row): number {
+    private getMatchIndex(col, row): number {
         if (col == 0) {
             return row / 2;
         } else {
@@ -71,8 +71,8 @@ export class BracketGenerationComponent {
         }
     }
 
-    private getmatch(col, row): MatchModel {
-        return this.matches[this.getmatchIndex(col, row)];
+    private getMatch(col, row): MatchModel {
+        return this.matches[this.getMatchIndex(col, row)];
 
     }
 

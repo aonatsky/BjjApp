@@ -18,25 +18,25 @@
                         <div *ngFor="let num of [1,2]"
                              class="bracket-participant-plate ui-g-12"
                              [class.droppable]="dragMode"
-                             [class.buffer]="getDraggable(getRound(col,row),num) === ''"
+                             [class.buffer]="getDraggable(getMatch(col,row),num) === ''"
                              [dragEffect]="'move'"
-                             [pDraggable]="getDraggable(getRound(col,row),num)"
-                             [pDroppable]="getDraggable(getRound(col,row),num)"
-                             (onDragStart)="dragStart(getRoundIndex(col,row),num)"
-                             (onDrop)="onDrop(getRoundIndex(col,row),num,$event)"
+                             [pDraggable]="getDraggable(getMatch(col,row),num)"
+                             [pDroppable]="getDraggable(getMatch(col,row),num)"
+                             (onDragStart)="dragStart(getMatchIndex(col,row),num)"
+                             (onDrop)="onDrop(getMatchIndex(col,row),num,$event)"
                              (onDragEnd)="dragEnd()"
                              (onDragEnter)="dragEnter($event)"
                              (onDragLeave)="dragLeave($event);">
-                            {{displayParticipantInfo(getRound(col,row),num)}}
+                            {{displayParticipantInfo(getMatch(col,row),num)}}
                         </div>
                     </div>
                     <div *ngIf="row %2 != 0" class="ui-g-12 table-block ui-g-nopad"></div>
                 </div>
             </div>
             <div *ngIf="col % 2 != 0">
-                <div class="inline-block ui-g-nopad" [ngStyle]="{'width':(100/stages.length)+'%'}" *ngFor="let stage of stages">
+                <div class="inline-block ui-g-nopad" [ngStyle]="{'width':(100/rounds.length)+'%'}" *ngFor="let round of rounds">
                     <div *ngFor="let row of getRows();" class="ui-g-12 ui-g-nopad">
-                        <connector [row]="row" [round]="stage" [maxRound]="2 * maxStage -1"></connector>
+                        <connector [row]="row" [round]="round" [maxRound]="2 * maxRound -1"></connector>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
         <div class="bracket ui-g-4 ui-g-offset-4 ui-g-nopad">
             <div *ngFor="let num of [1,2]"
                  class="bracket-participant-plate ui-g-12">
-                {{displayParticipantInfo(getRound(0,0),num)}}
+                {{displayParticipantInfo(getMatch(0,0),num)}}
             </div>
         </div>
     </div>

@@ -30,8 +30,9 @@ body {
 
 
 
-    .ui-button, .ui-button-icon-left, .ui-button-icon-right, .ui-button-icon-only, .ui-fileupload, .ui-fileupload-choose {
+    .ui-button {
         padding: .25em 1em;
+
         &.ui-button-danger.ui-state-default {
             background-color: transparent;
             color: $theme_red;
@@ -63,6 +64,10 @@ body {
         /*pointer-events: none;*/
         position: inherit;
 
+        .ui-state-default {
+            border: 0px;
+        }
+
         &:before {
             position: absolute;
             border-color: $theme_orange;
@@ -79,7 +84,7 @@ body {
                 padding: 0px;
 
                 .ui-steps-number {
-                    width: 34px;
+                    //width: 34px;
                     background-color: $theme_body_color;
                     border-color: $bg_color;
                     border-width: 2px;
@@ -133,7 +138,8 @@ body {
     }
 
     .ui-tabview {
-
+        padding:0px;
+        
         .ui-tabview-panel {
             padding: 0px;
             box-shadow: $theme_box_shadow;
@@ -268,4 +274,3 @@ body {
 .inline-block {
     display: inline-block;
 }
-

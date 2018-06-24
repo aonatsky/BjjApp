@@ -283,6 +283,9 @@ namespace TRNMNT.Core.Services.Impl
                 OwnerId = userId,
                 FederationId = federationId,
                 EventDate = DateTime.UtcNow.AddMonths(1).Date,
+                RegistrationStartTS = DateTime.UtcNow.AddDays(7).Date,
+                EarlyRegistrationEndTS = DateTime.UtcNow.AddDays(14).Date,
+                RegistrationEndTS  = DateTime.UtcNow.AddDays(21).Date,
                 IsActive = false
             };
             _eventRepository.Add(_event);

@@ -108,9 +108,20 @@ namespace TRNMNT.Core.Services.Impl
             return participant;
         }
 
-        public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId)
+        public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId, bool includeTeam = false, bool showInactive = true)
         {
-            return await _repository.GetAll(p => p.WeightDivisionId == weightDivisionId || p.AbsoluteWeightDivisionId == weightDivisionId).Include(p => p.Team).ToListAsync();
+            var query = _repository.GetAll(p =>
+                p.WeightDivisionId == weightDivisionId || p.AbsoluteWeightDivisionId == weightDivisionId);
+            if (!showInactive)
+            {
+                query = query.Where(p => p.IsActive);
+            }
+
+            if (includeTeam)
+            {
+                query = query.Include(p => p.Team);
+            }
+            return await query.ToListAsync();
         }
 
         public async Task AddParticipantsToAbsoluteWeightDivisionAsync(Guid[] participantsIds, Guid categoryId,

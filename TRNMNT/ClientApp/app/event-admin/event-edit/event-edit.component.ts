@@ -36,7 +36,7 @@ export class EventEditComponent implements OnInit {
         this.route.params.subscribe(p => {
             let id = p['id'];
             if (id && id != '') {
-                this.eventService.getEvent(id).subscribe(r => { this.eventModel = r });
+                this.eventService.getEvent(id).subscribe(r => this.eventModel = r);
             } else {
                 alert('No data to display');
             }
@@ -87,7 +87,7 @@ export class EventEditComponent implements OnInit {
     }
 
     private onTncUpload(event) {
-        this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
+        this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe(r => {this.modelReload()});
     }
 
     private onPromoCodeUpload(event) {

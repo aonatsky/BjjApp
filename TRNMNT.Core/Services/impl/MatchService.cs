@@ -16,30 +16,31 @@ namespace TRNMNT.Core.Services.impl
     {
         private readonly IRepository<Match> _matchRepository;
         private readonly IWeightDivisionService _weightDivisionService;
-        private readonly ICategoryService _categoryService;
-        private readonly IRepository<WeightDivision> _weightDivisionRepository;
-        private readonly IRepository<Participant> _participantRepository;
+        private readonly IParticipantService _participantService;
 
         public MatchService(
             IRepository<Match> matchRepository,
-            IRepository<WeightDivision> weightDivisionRepository,
-            IRepository<Participant> participantRepository,
             IWeightDivisionService weightDivisionService,
-            ICategoryService categoryService)
+            IParticipantService participantService)
         {
             _matchRepository = matchRepository;
             _weightDivisionService = weightDivisionService;
-            _categoryService= categoryService;
-            _participantRepository = participantRepository;
+            _participantService = participantService;
         }
 
         public async Task<List<Match>> GetMatchesAsync(Guid categoryId, Guid weightDivisionId)
         {
-            var matches = await _matchRepository.GetAll(m => m.CategoryId == categoryId && m.WeightDivisionId == weightDivisionId).ToListAsync();
+            var matches = await _matchRepository.GetAll(
+                m => m.CategoryId == categoryId && m.WeightDivisionId == weightDivisionId)
+                .Include(m => m.AParticipant).ThenInclude(p => p.Team)
+                .Include(m => m.BParticipant).ThenInclude(p => p.Team)
+                .Include(m => m.WinnerParticipant).ThenInclude(p => p.Team)
+                .ToListAsync();
             if (!matches.Any())
             {
-                var participants = await _participantRepository.GetAll(p => p.WeightDivisionId == weightDivisionId && p.CategoryId == categoryId && p.IsActive).ToListAsync();
-                var orderedParticapants = GetParticipantsForBracket(participants);
+                var participants =
+                    await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
+                var orderedParticapants = GetParticipantsForBracket(participants.ToList());
                 matches = CreateMatches(orderedParticapants, weightDivisionId, categoryId);
                 _matchRepository.AddRange(matches);
                 return matches;
