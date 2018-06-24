@@ -17,7 +17,7 @@ import { RouterService } from '../services/router.service'
             return true;
         }
         // Stores the attempted URL for redirecting.  
-        let url: string = state.url;
+        const url: string = state.url;
         this.authService.redirectUrl = url;
         // Not signed in so redirects to signin page.  
         this.routerService.goToLogin(url);

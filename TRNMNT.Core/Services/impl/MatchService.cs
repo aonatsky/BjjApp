@@ -69,29 +69,32 @@ namespace TRNMNT.Core.Services.impl
             {
                 if (matchToProcess.AParticipantId == null)
                 {
-                    SetMatchNoContest(matchToProcess, matchToProcess.BParticipantId.Value, matches);
+                    SetMatchNoContest(matchToProcess, matchToProcess.BParticipant);
                 }
                 else if (matchToProcess.BParticipantId == null)
                 {
-                    SetMatchNoContest(matchToProcess, matchToProcess.AParticipantId.Value, matches);
+                    SetMatchNoContest(matchToProcess, matchToProcess.AParticipant);
                 }
                 _matchRepository.Update(matchToProcess);
             }
 
-            void SetMatchNoContest(Match matchToProcess, Guid winnerId, List<Match> allMatches)
+            void SetMatchNoContest(Match matchToProcess, Participant winner)
             {
-                matchToProcess.WinnerParticipantId = winnerId;
+                matchToProcess.WinnerParticipantId = winner.ParticipantId;
+                matchToProcess.WinnerParticipant = winner;
                 matchToProcess.MatchResultType = (int)MatchResultTypeEnum.NC;
                 if (matchToProcess.NextMatchId != null)
                 {
                     var nextMatch = matches.First(m => m.MatchId == matchToProcess.NextMatchId);
                     if (matchToProcess.Order % 2 == 0)
                     {
-                        nextMatch.AParticipantId = winnerId;
+                        nextMatch.AParticipantId = winner.ParticipantId;
+                        nextMatch.AParticipant = winner;
                     }
                     else
                     {
-                        nextMatch.BParticipantId = winnerId;
+                        nextMatch.BParticipantId = winner.ParticipantId;
+                        nextMatch.BParticipant = winner;
                     };
                     _matchRepository.Update(nextMatch);
                 }

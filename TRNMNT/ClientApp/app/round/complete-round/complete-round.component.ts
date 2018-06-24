@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { RoundResultType } from '../../core/enums/round-result-type.enum';
+import { MatchResultType } from '../../core/enums/round-result-type.enum';
 import { SubmissionType } from '../../core/enums/submission-type.enum';
 import { BracketService } from '../../core/services/bracket.service';
 import { MatchResultModel } from '../../core/model/match-result.model';
@@ -18,7 +18,7 @@ export class CompleteRoundComponent implements OnInit {
 
     private matchResultModel: MatchResultModel;
     private submissionTypes = SubmissionType;
-    private roundResultTypes = RoundResultType;
+    private matchResultTypes = MatchResultType;
 
     constructor(private bracketService: BracketService) { }
 
@@ -46,23 +46,23 @@ export class CompleteRoundComponent implements OnInit {
             this.matchResultModel.winnerParticipantId = this.matchDetails.aParticipantPoints > this.matchDetails.bParticipantPoints
                 ? this.matchDetails.matchModel.aParticipant.participantId
                 : this.matchDetails.matchModel.bParticipant.participantId;
-            this.matchResultModel.roundResultType = this.roundResultTypes.Points;
+            this.matchResultModel.roundResultType = this.matchResultTypes.Points;
         }
         else if (this.matchDetails.aParticipantAdvantages !== this.matchDetails.bParticipantAdvantages) {
             this.matchResultModel.winnerParticipantId = this.matchDetails.aParticipantAdvantages > this.matchDetails.bParticipantAdvantages
                 ? this.matchDetails.matchModel.aParticipant.participantId
                 : this.matchDetails.matchModel.bParticipant.participantId;
-            this.matchResultModel.roundResultType = RoundResultType.Advantages;
+            this.matchResultModel.roundResultType = MatchResultType.Advantages;
         }
         else if (this.matchDetails.aParticipantPenalties !== this.matchDetails.bParticipantPenalties) {
             this.matchResultModel.winnerParticipantId = this.matchDetails.aParticipantPenalties <
                 this.matchDetails.bParticipantPenalties
                 ? this.matchDetails.matchModel.aParticipant.participantId
                 : this.matchDetails.matchModel.bParticipant.participantId;
-            this.matchResultModel.roundResultType = RoundResultType.Penalties;
+            this.matchResultModel.roundResultType = MatchResultType.Penalties;
         } else {
             this.matchResultModel.winnerParticipantId = this.matchDetails.matchModel.aParticipant.participantId;
-            this.matchResultModel.roundResultType = RoundResultType.Decision;
+            this.matchResultModel.roundResultType = MatchResultType.Decision;
         }
 
     }
@@ -74,6 +74,6 @@ export class CompleteRoundComponent implements OnInit {
     }
 
     isDisabled(): boolean {
-        return this.matchResultModel.roundResultType === this.roundResultTypes.Submission;
+        return this.matchResultModel.roundResultType === this.matchResultTypes.Submission;
     }
 }

@@ -110,7 +110,7 @@ export class BracketComponent implements OnInit {
         }
     }
 
-    private onRoundClick(model: MatchModel) {
+    private onMatchClick(model: MatchModel) {
         if (this.isEditable(model)) {
             this.roundClick.emit(model);
         }

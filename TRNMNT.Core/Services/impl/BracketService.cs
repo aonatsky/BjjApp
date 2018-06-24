@@ -55,7 +55,7 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task<BracketModel> RunWeightDivision(Guid weightDivisionId)
         {
-            var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId);
+            var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId, true);
             List<Match> matches;
             if (weightDivision.StartTs == null)
             {
