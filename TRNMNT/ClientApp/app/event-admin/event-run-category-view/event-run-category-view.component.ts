@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BracketArrayModel, RefreshBracketModel} from '../../core/model/bracket.models';
 import { BracketService } from '../../core/services/bracket.service';
 import { WeightDivisionService } from '../../core/services/weight-division.service';
-import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
+import { RunEventHubService } from '../../core/hubservices/run-event.hub.service';
 import { WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
 import { animate, state, trigger, transition, style } from '@angular/animations';
 import { Observable } from 'rxjs/Observable';

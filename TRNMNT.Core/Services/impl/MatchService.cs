@@ -38,15 +38,21 @@ namespace TRNMNT.Core.Services.impl
                 .ToListAsync();
             if (!matches.Any())
             {
-                var participants =
-                    await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
-                var orderedParticapants = GetParticipantsForBracket(participants.ToList());
-                matches = CreateMatches(orderedParticapants, weightDivisionId, categoryId);
+                matches = await CreateMatchesAsync(categoryId, weightDivisionId);
                 _matchRepository.AddRange(matches);
                 return matches;
             }
             return matches;
         }
+
+        private async Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId)
+        {
+            var participants =
+                await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
+            var orderedParticapants = GetParticipantsForBracket(participants.ToList());
+            return CreateMatches(orderedParticapants, weightDivisionId, categoryId);
+        }
+
 
         public async Task UpdateMatchesParticipantsAsync(List<MatchModel> matchModels)
         {
@@ -64,8 +70,27 @@ namespace TRNMNT.Core.Services.impl
         public async Task<List<Match>> GetProcessedMatchesAsync(Guid categoryId, Guid weightDivisionId)
         {
             var matches = await GetMatchesAsync(categoryId, weightDivisionId);
-            var maxRound = matches.Max(m => m.Round);
-            foreach (var matchToProcess in matches.Where(m => m.Round == maxRound))
+            if (matches.Any())
+            {
+                matches = ProcessMatches(matches);
+                foreach (var match in matches)
+                {
+                    _matchRepository.Update(match);
+                }
+            }
+            else
+            {
+                matches = await CreateMatchesAsync(categoryId, weightDivisionId);
+                matches = ProcessMatches(matches);
+                _matchRepository.AddRange(matches);
+            }
+            return matches;
+        }
+
+        private List<Match> ProcessMatches(List<Match> matchesToProcess)
+        {
+            var maxRound = matchesToProcess.Max(m => m.Round);
+            foreach (var matchToProcess in matchesToProcess.Where(m => m.Round == maxRound))
             {
                 if (matchToProcess.AParticipantId == null)
                 {
@@ -75,7 +100,6 @@ namespace TRNMNT.Core.Services.impl
                 {
                     SetMatchNoContest(matchToProcess, matchToProcess.AParticipant);
                 }
-                _matchRepository.Update(matchToProcess);
             }
 
             void SetMatchNoContest(Match matchToProcess, Participant winner)
@@ -85,7 +109,7 @@ namespace TRNMNT.Core.Services.impl
                 matchToProcess.MatchResultType = (int)MatchResultTypeEnum.NC;
                 if (matchToProcess.NextMatchId != null)
                 {
-                    var nextMatch = matches.First(m => m.MatchId == matchToProcess.NextMatchId);
+                    var nextMatch = matchesToProcess.First(m => m.MatchId == matchToProcess.NextMatchId);
                     if (matchToProcess.Order % 2 == 0)
                     {
                         nextMatch.AParticipantId = winner.ParticipantId;
@@ -96,10 +120,9 @@ namespace TRNMNT.Core.Services.impl
                         nextMatch.BParticipantId = winner.ParticipantId;
                         nextMatch.BParticipant = winner;
                     };
-                    _matchRepository.Update(nextMatch);
                 }
             }
-            return matches;
+            return matchesToProcess;
         }
 
 

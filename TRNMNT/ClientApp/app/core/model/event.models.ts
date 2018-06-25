@@ -18,7 +18,7 @@ export class EventModel extends EventModelBase {
 
     description: string;
     address: string;
-    imagePath: any;
+    imgPath: any;
     urlPrefix: string;
     descritpion : string;
     tncFilePath: string;

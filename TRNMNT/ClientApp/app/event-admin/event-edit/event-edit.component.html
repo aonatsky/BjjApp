@@ -16,7 +16,7 @@
 
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label class="field-title">Domain</label></div>
-                        <div class="ui-g-6 ui-fluid"><input pInputText [(ngModel)]="eventModel.url" /></div>
+                        <div class="ui-g-6 ui-fluid"><input pInputText [(ngModel)]="eventModel.urlPrefix" /></div>
                         <div class="ui-g-3 ui-fluid"><label>uabjjf.trnmnt.pro</label></div>
                     </div>
                     <div class="ui-g">
@@ -49,14 +49,14 @@
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label class="field-title">Image</label></div>
                         <div class="ui-g-4 ui-fluid">
-                            <p-fileUpload #fubauto mode="basic" accept="image/*" maxFileSize="1000000" (onUpload)="onImageUpload($event)" auto="true" chooseLabel="Choose Image"></p-fileUpload>
+                            <p-fileUpload #fubauto mode="basic" maxFileSize="10000000" accept="image/*" (onUpload)="onImageUpload($event)" auto="true" chooseLabel="Choose Image"></p-fileUpload>
                         </div>
                         <img *ngIf="eventModel.imgPath" src={{eventModel.imgPath}} class="ui-g-9 ui-g-offset-3" />
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label>Terms and Conditions</label></div>
                         <div class="ui-g-4 ui-fluid">
-                            <p-fileUpload #fubauto mode="basic" accept="application/pdf" maxFileSize="1000000" (onUpload)="onTncUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
+                            <p-fileUpload #fubauto mode="basic" accept="application/pdf" maxFileSize="10000000" (onUpload)="onTncUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
                         </div>
                         <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Download" (click)="downloadTnc()" [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button></div>
                     </div>

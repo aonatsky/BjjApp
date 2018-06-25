@@ -41,7 +41,7 @@ import { MinuteSecondsPipe } from './pipes/minutes-seconds.pipe';
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
 import { TestSocketService } from './services/test-socket.service';
 import { FormatTimerPipe } from './pipes/format-timer.pipe';
-import { RunEventHubService } from './hubservices/run-event.hub.serive';
+import { RunEventHubService } from './hubservices/run-event.hub.service';
 import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
 import { ResultsService } from './services/results.service';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BracketModel } from '../../core/model/bracket.models';
-import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
+import { RunEventHubService } from '../../core/hubservices/run-event.hub.service';
 import { BracketService } from '../../core/services/bracket.service';
 import { DefaultValues } from '../../core/consts/default-values';
 import { MatchModel } from '../../core/model/match.models';

@@ -5,7 +5,7 @@ import './event-run.component.scss'
 import { BracketModel, ChageWeightDivisionModel } from '../../core/model/bracket.models';
 import { BracketService } from '../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
-import { RunEventHubService } from '../../core/hubservices/run-event.hub.serive';
+import { RunEventHubService } from '../../core/hubservices/run-event.hub.service';
 import { RouterService } from '../../core/services/router.service';
 import { v4 as uuid } from 'uuid';
 import { DefaultValues } from '../../core/consts/default-values';
