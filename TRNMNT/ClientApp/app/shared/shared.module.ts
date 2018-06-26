@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './loader/loader';
 import { BracketComponent } from './bracket/bracket.component';
 import { TablePickerListComponent } from './table-picker-list/table-picker-list.component';
+import { FooterComponent} from './footer/footer.component';
+
 import { RoundModule } from '../round/round.module';
 
 
@@ -24,7 +26,8 @@ import { RoundModule } from '../round/round.module';
         CategoryWithDivisionFilter,
         LoaderComponent,
         BracketComponent,
-        TablePickerListComponent
+        TablePickerListComponent,
+        FooterComponent
     ],
 
     providers: [],

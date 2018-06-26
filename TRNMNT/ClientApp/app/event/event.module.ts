@@ -11,6 +11,7 @@ import { EventInfoComponent } from './event-info/event-info.component'
 import { EventRegistrationComponent } from './event-registration/event-registration.component'
 import { EventRegistrationCompleteComponent } from './event-registration-complete/event-registration-complete.component'
 import { EventComponent } from './event.component'
+import {FooterComponent} from '../shared/footer/footer.component';
 
 
 @NgModule({
@@ -29,7 +30,10 @@ import { EventComponent } from './event.component'
                         },
                         {
                             path: 'event-registration-complete/', component: EventRegistrationCompleteComponent
-                        }
+                        },
+                        {
+                            path: '', outlet: 'footer', component: FooterComponent
+                        },
                     ]
                 }
             ]),

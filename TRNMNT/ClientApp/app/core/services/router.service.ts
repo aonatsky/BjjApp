@@ -47,15 +47,15 @@ export class RouterService {
 
 
     goToEditEvent(id: string) {
-        this.router.navigateByUrl('/event-admin/edit/' + id);
+        this.router.navigateByUrl(`/event-admin/edit/${id}`);
     }
 
     goToEventManagement(id: string) {
-        this.router.navigateByUrl('/event-admin/management/' + id);
+        this.router.navigateByUrl(`/event-admin/management/${id}`);
     }
 
     goToEventRun(id: string) {
-        this.router.navigateByUrl('/event-admin/run/' + id);
+        this.router.navigateByUrl(`/event-admin/run/${id}`);
     }
 
     goToEventInfo() {
@@ -71,7 +71,7 @@ export class RouterService {
     }
 
     openEventCategorySpactatorView(categoryId: string) {
-        this.openNewWindow('/event-admin/run-category-spectator-view/' + categoryId);
+        this.openNewWindow(`/event-admin/run-category-spectator-view/${categoryId}`);
     }
 
     getCurrentUrl() {

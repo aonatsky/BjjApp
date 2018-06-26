@@ -18,6 +18,8 @@ import { BrowserDomAdapter } from '@angular/platform-browser/src/browser/browser
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const homepage = this.getHomePage();
         if (homepage != '') {
+            debugger;
+            console.log(this.routerService.getCurrentUrl());
             this.routerService.navigateByUrl(homepage);
         }
         else {
@@ -29,5 +31,4 @@ import { BrowserDomAdapter } from '@angular/platform-browser/src/browser/browser
     {
         return document.getElementById('homepage').innerText;   
     }
-
 }  

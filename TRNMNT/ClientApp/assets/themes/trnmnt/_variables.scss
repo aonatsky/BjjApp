@@ -5,6 +5,7 @@ $theme_green: #66d33f;
 $theme_orange: #FE1600;
 $theme_orange_light: #FFAEA3;
 $theme_grey: #cccccc;
+$theme_dark_grey: #7b7979;
 $theme_black: #3c3c3c;
 $theme_white: #ffffff;
 $theme_body_color: #f8f8f8;
@@ -13,7 +14,6 @@ $theme_box_shadow: 0 0 10px rgba(0,0,0,0.2);
 $container_width: 750px;
 $content_padding_top: 30px;
 $header_height: 50px;
-$theme_light_grey: #c7c7c7 ;
 $fontFamily: $theme_font_family;
 $fontSize: 1em;
 $borderRadius: 0px;
@@ -29,13 +29,13 @@ $headerIconTextColor: #eeeeee;
 
 //Content
 $contentBorderWidth: 0px;
-$contentBorderColor: $theme_light_grey;
+$contentBorderColor: $theme_grey;
 $contentBgColor: $theme_white;
 $contentTextColor: $theme_black;
 
 //Default State
 $stateDefaultBorderWidth: 1px;
-$stateDefaultBorderColor: $theme_light_grey;
+$stateDefaultBorderColor: $theme_grey;
 $stateDefaultBgColor: #3d3d3d;
 $stateDefaultTextColor: #eeeeee;
 

@@ -10,7 +10,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 import { UserModel } from './../model/user.model'
 import { RouterService } from './router.service'
-import {CredentialsModel} from '../model/credentials.model';
+import { CredentialsModel } from '../model/credentials.model';
 
 /** 
  * Authentication service. 
@@ -90,15 +90,17 @@ import {CredentialsModel} from '../model/credentials.model';
                 }
                 return false;
 
-            }).catch((data: any) => {
+            }).catch((error: any) => {
 
                 // Error on post request.  
-                if (data instanceof Response) {
-                    if (data.status != 401) {
-                        return Observable.throw(data);
-                    }
+                if (error instanceof Response) {
+                    if (error.status == 401) {
+                        return Observable.of(false);
+                    } else {
+                        return Observable.throw(error);
+                    };
                 } else {
-                    return Observable.throw(data);
+                    return Observable.throw(error);
                 }
             });
     }
@@ -111,7 +113,7 @@ import {CredentialsModel} from '../model/credentials.model';
             password: password
         };
 
-       return this.http.post(ApiMethods.auth.register, credentials, this.options)
+        return this.http.post(ApiMethods.auth.register, credentials, this.options)
             .map((res: Response) => {
 
                 return res.json();
@@ -148,7 +150,7 @@ import {CredentialsModel} from '../model/credentials.model';
             };
 
             // Encodes the parameters.  
-            const body: string = this.encodeParams(params); 
+            const body: string = this.encodeParams(params);
             return this.http.post(tokenEndpoint, body, this.options).map(
                 (res: Response) => {
 

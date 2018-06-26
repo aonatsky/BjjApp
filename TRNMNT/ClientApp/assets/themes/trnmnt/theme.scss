@@ -32,8 +32,10 @@ body {
 
     .ui-button {
         padding: .25em 1em;
+        border-width: 0px;
 
         &.ui-button-danger.ui-state-default {
+            border-width: 1px;
             background-color: transparent;
             color: $theme_red;
             border-color: $theme_red;
@@ -138,8 +140,8 @@ body {
     }
 
     .ui-tabview {
-        padding:0px;
-        
+        padding: 0px;
+
         .ui-tabview-panel {
             padding: 0px;
             box-shadow: $theme_box_shadow;
@@ -239,14 +241,9 @@ body {
     }
 
     .ui-dropdown {
-        .ui-dropdown-panel {
-            .ui-dropdown-items {
-                .ui-dropdown-item {
-                    &.ui-state-highlight {
-                        background-color: $theme_orange;
-                    }
-                }
-            }
+        .ui-dropdown-trigger {
+            padding: 0.35em .25em;
+            border: 0px;
         }
     }
 

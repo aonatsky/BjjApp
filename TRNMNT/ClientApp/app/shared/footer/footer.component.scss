@@ -1,0 +1,13 @@
+﻿@import '../../../assets/themes/trnmnt/_variables.scss';
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    text-align: right;
+    background-color: $theme_grey;
+    color: $theme_dark_grey;
+    padding: .6em 1em;
+    box-sizing: border-box;
+}
