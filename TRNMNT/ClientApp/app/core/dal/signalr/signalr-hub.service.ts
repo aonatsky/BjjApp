@@ -1,4 +1,4 @@
-﻿import { HubConnection, TransportType } from '@aspnet/signalr';
+﻿import { HubConnection, HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { LoggerService } from '../../services/logger.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -18,12 +18,12 @@ export class SignalRHubService {
         this.logDisconnectionDelegate = (id, exception) => this.logDisconnection(id, exception);
     }
 
-    createConnection(url: string, transport?: TransportType): HubConnection {
+    createConnection(url: string, transport?: HttpTransportType): HubConnection {
         if (this.hubConnection) {
             return this.hubConnection;
         }
         let transportType = transport || this.detectSupportedTransport();
-        this.hubConnection = new HubConnection(url, { transport: transportType });
+        this.hubConnection = new HubConnectionBuilder().withUrl(url, transportType).build();
 
         this.hubConnection.on('OtherClientDisconnected', this.logDisconnectionDelegate);
         this.hubConnection.on('OtherClientConnected', this.logConnectionDelegate);
@@ -107,15 +107,15 @@ export class SignalRHubService {
         }
     }
 
-    private detectSupportedTransport(): TransportType {
+    private detectSupportedTransport(): HttpTransportType {
         let $window: any = window;
         if (!!$window.WebSocket) {
-            return TransportType.WebSockets;
+            return HttpTransportType.WebSockets;
         }
         if (!!$window.EventSource) {
-            return TransportType.ServerSentEvents;
+            return HttpTransportType.ServerSentEvents;
         }
-        return TransportType.LongPolling;
+        return HttpTransportType.LongPolling;
     }
 
 }

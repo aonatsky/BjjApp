@@ -2,7 +2,7 @@
 import { LoggerService } from './logger.service'
 import { Observable } from 'rxjs/Rx';
 import { SignalRHubService } from '../dal/signalr/signalr-hub.service';
-import { TransportType, HubConnection } from '@aspnet/signalr';
+import { HubConnection } from '@aspnet/signalr';
 
 
 @Injectable()

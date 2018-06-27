@@ -1,4 +1,4 @@
-﻿import { HubConnection} from '@aspnet/signalr';
+﻿import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { Observable } from 'rxjs/Observable';
 import { MatchDetailsModel } from '../core/model/match-details.model';
 
@@ -11,7 +11,7 @@ export abstract class BaseRoundPanel {
 
 
     setupConnection(groupId: any, messageHandler: (data: MatchDetailsModel) => void): void {
-        this.hubConnection = new HubConnection('/round-hub');
+        this.hubConnection = new HubConnectionBuilder().withUrl('/round-hub').build();
         this.hubConnection.start().then(() => {
             this.subscribeOnRecieveMessage(messageHandler);
             this.hubConnection.invoke('JoinGroup', groupId);
