@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using TRNMNT.Core.Authentication;
 using TRNMNT.Core.Configurations;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Result;
@@ -24,18 +28,20 @@ namespace TRNMNT.Core.Services.Impl
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IdentityErrorDescriber _identityErrorDescriber;
         private readonly IAuthConfiguration _authConfiguration;
+        private readonly IConfiguration _configuration;
 
         #endregion
 
         #region .ctor
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _identityErrorDescriber = new IdentityErrorDescriber();
             _authConfiguration = authConfiguration;
+            _configuration = configuration;
         }
 
         #endregion
@@ -70,8 +76,8 @@ namespace TRNMNT.Core.Services.Impl
             var loginResult = await _signInManager.PasswordSignInAsync(login, password, false, false);
             if (loginResult.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(login);
-                return await GetTokens(user);
+                var user = await _userManager.FindByEmailAsync(login);
+                return await GetTokensAsync(user);
             }
             return null;
         }
@@ -84,7 +90,7 @@ namespace TRNMNT.Core.Services.Impl
             if (userIdClaim.Value != null)
             {
                 var user = await _userManager.FindByIdAsync(userIdClaim.Value.ToString());
-                return await GetTokens(user);
+                return await GetTokensAsync(user);
             }
 
             return null;
@@ -101,7 +107,7 @@ namespace TRNMNT.Core.Services.Impl
                 var requestAt = DateTime.Now;
 
                 var token = GenerateTokenAsync(user);
-                return await GetTokens(user);
+                return await GetTokensAsync(user);
             }
             return null;
         }
@@ -115,7 +121,7 @@ namespace TRNMNT.Core.Services.Impl
             });
         }
 
-       
+
 
         #endregion
 
@@ -139,7 +145,7 @@ namespace TRNMNT.Core.Services.Impl
             }
             return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
         }
-        
+
         private async Task AddSampleRolesAsync()
         {
             if (!await _roleManager.RoleExistsAsync(Roles.Owner))
@@ -204,7 +210,7 @@ namespace TRNMNT.Core.Services.Impl
             };
         }
 
-        private async Task<AuthTokenResult> GetTokens(User user)
+        private async Task<AuthTokenResult> GetTokensAsync(User user)
         {
             return new AuthTokenResult
             {
@@ -213,6 +219,45 @@ namespace TRNMNT.Core.Services.Impl
             };
         }
 
+
+        public async Task<AuthTokenResult> FacebookLogin(string fbToken)
+        {
+            var client = new HttpClient();
+            // 1.generate an app access token
+            var appAccessTokenResponse = 
+                await client.GetStringAsync(string.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials",_configuration["Facebook:AppId"],_configuration["Facebook:AppSecret"]));
+            var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
+            // 2. validate the user access token
+            var userAccessTokenValidationResponse = 
+                await client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={fbToken}&access_token={appAccessToken.AccessToken}");
+            var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
+
+            if (!userAccessTokenValidation.Data.IsValid)
+            {
+                throw new Exception("Invalid facebook data");
+            }
+
+            // 3. we've got a valid token so we can request user data from fb
+            var userInfoResponse = await client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={fbToken}");
+            var fbUser = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
+            var user = await _userManager.FindByEmailAsync(fbUser.Email);
+            if (user == null)
+            {
+                user = new User()
+                {
+                    Email = fbUser.Email,
+                    FirstName = fbUser.FirstName,
+                    LastName = fbUser.LastName,
+                    FacebookId = fbUser.Id,
+                    UserName = fbUser.Email,
+                    PictureUrl = fbUser.Picture.Data.Url
+                };
+                await _userManager.CreateAsync(user);
+            }
+
+            return await GetTokensAsync(user);
+        }
         #endregion
     }
+
 }

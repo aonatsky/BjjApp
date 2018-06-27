@@ -23,6 +23,10 @@ namespace TRNMNT.Web
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<UserSecretsConfig>();
+            }
 
             Configuration = builder.Build();
         }
@@ -57,7 +61,7 @@ namespace TRNMNT.Web
             #endregion
 
             //Authorization
-            services.AddJwtAuthentication();
+            services.AddAuthenticationOptions(Configuration);
 
             services.AddSignalR();
 
@@ -76,8 +80,7 @@ namespace TRNMNT.Web
                 {
                     HotModuleReplacement = true,
                     HotModuleReplacementEndpoint = "/dist/__webpack_hmr"
-                });
-
+                });  
             }
             else
             {

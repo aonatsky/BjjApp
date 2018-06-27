@@ -11,6 +11,7 @@ import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { UserModel } from './../model/user.model'
 import { RouterService } from './router.service'
 import { CredentialsModel } from '../model/credentials.model';
+import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular5-social-login';
 
 /** 
  * Authentication service. 
@@ -31,7 +32,7 @@ import { CredentialsModel } from '../model/credentials.model';
     private options: RequestOptions;
     private jwtHelper: JwtHelper = new JwtHelper();
 
-    constructor(private http: Http, private routerService: RouterService) {
+    constructor(private http: Http, private routerService: RouterService, private socialAuthService: SocialAuthService) {
 
         // On bootstrap or refresh, tries to get the user's data.  
         this.decodeToken();
@@ -66,32 +67,15 @@ import { CredentialsModel } from '../model/credentials.model';
      */
     signin(email: string, password: string): Observable<boolean> {
 
-        // Token endpoint & params.  
-        const tokenEndpoint: string = ApiMethods.auth.getToken;
-
         const credentials: CredentialsModel = {
             email: email,
             password: password
         };
 
-        // Encodes the parameters.  
-
-        return this.http.post(tokenEndpoint, credentials, this.options)
+        return this.http.post(ApiMethods.auth.getToken, credentials, this.options)
             .map((res: Response) => {
-
-                const body: any = res.json();
-
-                // Sign in successful if there's an access token in the response.  
-                if (typeof body.id_token !== 'undefined') {
-
-                    // Stores access token & refresh token.  
-                    this.store(body);
-                    return true;
-                }
-                return false;
-
+                return this.processTokensResponse(res.json());
             }).catch((error: any) => {
-
                 // Error on post request.  
                 if (error instanceof Response) {
                     if (error.status == 401) {
@@ -153,17 +137,7 @@ import { CredentialsModel } from '../model/credentials.model';
             const body: string = this.encodeParams(params);
             return this.http.post(tokenEndpoint, body, this.options).map(
                 (res: Response) => {
-
-                    const body: any = res.json();
-
-                    // Successful if there's an access token in the response.  
-                    if (typeof body.id_token !== 'undefined') {
-
-                        // Stores access token & refresh token.  
-                        this.store(body);
-                        return true;
-                    }
-                    return false;
+                    return this.processTokensResponse(res.json());
                 });
         }
     }
@@ -330,4 +304,28 @@ import { CredentialsModel } from '../model/credentials.model';
         this.decodeToken();
     }
 
-}  
+    private processTokensResponse(body): boolean {
+        if (typeof body.id_token !== 'undefined') {
+
+            // Stores access token & refresh token.  
+            this.store(body);
+            return true;
+        }
+        return false;
+    }
+
+
+    facebookLogin(): Observable<boolean> {
+        const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+        return Observable.fromPromise(this.socialAuthService.signIn(socialPlatformProvider)).flatMap(
+            (userData) => {
+                return this.http.post(ApiMethods.auth.facebookLogin, { token: userData.token })
+                    .map(
+                    (r) => {
+                        return this.processTokensResponse(r.json());
+                    })
+                    .catch(e => { return Observable.throw(e); });
+            });
+    }
+
+}

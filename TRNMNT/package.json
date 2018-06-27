@@ -20,6 +20,7 @@
     "angular2-universal": "^2.1.0-rc.1",
     "angular2-universal-patch": "^0.2.1",
     "angular2-universal-polyfills": "^2.1.0-rc.1",
+    "angular5-social-login": "^1.0.9",
     "aspnet-prerendering": "^2.0.0",
     "aspnet-webpack": "^2.0.1",
     "bootstrap": "^3.3.7",

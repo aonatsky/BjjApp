@@ -8,16 +8,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderComponent } from './loader/loader';
 import { BracketComponent } from './bracket/bracket.component';
 import { TablePickerListComponent } from './table-picker-list/table-picker-list.component';
-import { FooterComponent} from './footer/footer.component';
+import { FooterComponent } from './footer/footer.component';
 
 import { RoundModule } from '../round/round.module';
+import { SocialLoginModule, AuthServiceConfig } from 'angular5-social-login';
+import { getAuthServiceConfigs } from '../socialLoginConfig';
 
 
 @NgModule({
     imports: [
         CoreModule,
         BrowserAnimationsModule,
-        RoundModule
+        RoundModule,
+        SocialLoginModule
     ],
     declarations: [
         LoginComponent,
@@ -30,7 +33,11 @@ import { RoundModule } from '../round/round.module';
         FooterComponent
     ],
 
-    providers: [],
+    providers: [
+        {
+            provide: AuthServiceConfig,
+            useFactory: getAuthServiceConfigs
+        }],
 
     exports: [
         CrudComponent,

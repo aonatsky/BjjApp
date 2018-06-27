@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,7 +50,7 @@ namespace TRNMNT.Web.Helpers
 
             return services;
         }
-        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+        public static IServiceCollection AddAuthenticationOptions(this IServiceCollection services, IConfiguration configuration)
         {
             var sp = services.BuildServiceProvider();
             var authConfig = sp.GetService<IAuthConfiguration>();
@@ -88,8 +89,11 @@ namespace TRNMNT.Web.Helpers
                             return Task.CompletedTask;
                         }
                     };
+                }).AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = configuration["Facebook:AppId"];
+                    facebookOptions.AppSecret = configuration["Facebook:AppSecret"];
                 });
-
             return services;
         }
     }

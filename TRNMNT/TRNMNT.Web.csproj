@@ -38,6 +38,7 @@
     <None Remove="ClientApp\app\round\round-panel\round-panel.component.ts" />
     <None Remove="ClientApp\app\round\round.module.ts" />
     <None Remove="ClientApp\app\shared\bracket\bracket.component.ts" />
+    <None Remove="ClientApp\app\socialLoginConfig.ts" />
     <None Remove="ClientApp\assets\style\app.css" />
     <None Remove="ClientApp\assets\style\app.min.css" />
     <None Remove="ClientApp\assets\style\app.scss" />
@@ -51,6 +52,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0" />
@@ -109,6 +111,7 @@
     <TypeScriptCompile Include="ClientApp\app\round\round-panel\round-panel.component.ts" />
     <TypeScriptCompile Include="ClientApp\app\round\round.module.ts" />
     <TypeScriptCompile Include="ClientApp\app\shared\bracket\bracket.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\socialLoginConfig.ts" />
   </ItemGroup>
 
   <ItemGroup>

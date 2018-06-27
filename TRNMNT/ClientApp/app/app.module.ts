@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app-component/app.component'
 import { RouterModule } from '@angular/router';
-
 //modules
 import { CoreModule } from './core/core.module'
 import { SharedModule } from './shared/shared.module'
@@ -25,8 +24,8 @@ import { appRoutes } from './core/routing/app.routing'
         SharedModule,
         EventAdminModule,
         EventModule,
-        RoundModule
-],
+        RoundModule,
+    ],
     providers: []
 })
 export class AppModule {

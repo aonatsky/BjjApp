@@ -12,7 +12,8 @@ export const ApiMethods = Object.freeze({
     auth: {
         getToken: 'api/auth/gettoken',
         refreshToken: 'api/auth/updateToken',
-        register: 'api/auth/register'
+        register: 'api/auth/register',
+        facebookLogin: 'api/auth/facebooklogin',
         },
     log: 'api/log',
     event: {

@@ -123,6 +123,35 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
+        [AllowAnonymous, HttpPost("[action]")]
+        public async Task FacebookLogin([FromBody]FacebookAuthViewModel model)
+        {
+            try
+            {
+                var tokenResult = await _authenticationSerivce.FacebookLogin(model.Token);
+                if (tokenResult != null)
+                {
+                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    var response = new
+                    {
+                        id_token = tokenResult.AccessToken,
+                        refresh_token = tokenResult.RefreshToken
+                    };
+                    await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+
+                }
+                else
+                {
+                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                HandleException(ex);
+            }
+        }
+
         #endregion
     }
 }
