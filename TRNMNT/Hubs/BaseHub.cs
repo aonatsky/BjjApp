@@ -46,12 +46,12 @@ namespace TRNMNT.Web.Hubs
 
         protected virtual async Task JoinGroupAsync(string groupName)
         {
-            await Groups.AddAsync(Context.ConnectionId, groupName);
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
 
         protected virtual async Task LeaveGroupAsync(string groupName)
         {
-            await Groups.RemoveAsync(Context.ConnectionId, groupName);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
 
         protected T AllExeptCurrent => Clients.AllExcept(new[] {Context.ConnectionId});
