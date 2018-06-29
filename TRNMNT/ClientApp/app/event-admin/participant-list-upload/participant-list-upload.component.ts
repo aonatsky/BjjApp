@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { NotificationService } from '../../core/services/notification.service';
 import { ParticipantService } from '../../core/services/participant.service';

@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core'
 import { LoggerService } from './logger.service'
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { SignalRHubService } from '../dal/signalr/signalr-hub.service';
 import { HubConnection } from '@aspnet/signalr';
 

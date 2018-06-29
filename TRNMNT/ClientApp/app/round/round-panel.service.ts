@@ -1,6 +1,7 @@
 ﻿import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { MatchDetailsModel } from '../core/model/match-details.model';
+import { fromEventPattern } from 'rxjs';
 
 export abstract class BaseRoundPanel {
     private readonly hubMethodName: string = 'Send';
@@ -29,7 +30,7 @@ export abstract class BaseRoundPanel {
     }
 
     onConnectionClosed(): Observable<string> {
-        return Observable.fromEventPattern(
+        return fromEventPattern(
             (handler: (e: Error) => void) => this.hubConnection.onclose(handler)
         );
     }

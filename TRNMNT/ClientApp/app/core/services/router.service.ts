@@ -1,9 +1,10 @@
 ﻿
-import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { Location } from '@angular/common';
 
 import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Injectable()
 export class RouterService {
@@ -12,7 +13,7 @@ export class RouterService {
     }
 
     navigationStartEvents(): Observable<NavigationStart> {
-        return <Observable<NavigationStart>>this.router.events.filter(event => event instanceof NavigationStart);
+        return <Observable<NavigationStart>>this.router.events.pipe(filter(event => event instanceof NavigationStart));
     }
 
     navigateByUrl(url: string) {

@@ -1,6 +1,6 @@
 ﻿namespace TRNMNT.Core.Model
 {
-    public class TokenModel
+    public class RefreshTokenModel
     {
         public string RefreshToken { get; set; }
     }

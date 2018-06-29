@@ -2,10 +2,10 @@
 import { CategoryWithDivisionFilterModel as FighterFilterModel } from '../../model/category-with-division-filter.model';
 
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs/Rx';
 
 import { WeightDivisionModel } from '../../model/weight-division.models'
 import { CategoryModel } from '../../model/category.models';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export abstract class DataService {

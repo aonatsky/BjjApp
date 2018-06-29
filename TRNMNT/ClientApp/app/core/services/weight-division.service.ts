@@ -3,7 +3,8 @@ import { LoggerService } from './logger.service'
 import { HttpService, SearchParams } from './../dal/http/http.service'
 import { WeightDivisionModel, WeightDivisionSimpleModel } from './../model/weight-division.models'
 import { ApiMethods } from './../dal/consts/api-methods.consts'
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -12,10 +13,10 @@ export class WeightDivisionService {
     }
 
     getWeightDivisionsByEvent(eventId: string): Observable<WeightDivisionModel[]> {
-        return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByEvent + '/' + eventId).map(res => this.httpService.getArray<WeightDivisionModel>(res));
+        return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByEvent + '/' + eventId).pipe(map(res => this.httpService.getArray<WeightDivisionModel>(res)));
     }
 
     getWeightDivisionsByCategory(categoryId: string): Observable<WeightDivisionSimpleModel[]> {
-        return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByCategory + '/' + categoryId).map(res => this.httpService.getArray<WeightDivisionSimpleModel>(res));
+        return this.httpService.get(ApiMethods.weightDivision.getWeightDivisionsByCategory + '/' + categoryId).pipe(map(res => this.httpService.getArray<WeightDivisionSimpleModel>(res)));
     }
 }

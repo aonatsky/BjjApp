@@ -6,8 +6,8 @@ import { WeightDivisionService } from '../../core/services/weight-division.servi
 import { RunEventHubService } from '../../core/hubservices/run-event.hub.service';
 import { WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
 import { animate, state, trigger, transition, style } from '@angular/animations';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs';
+import { Observable, of, timer, Subscription } from 'rxjs';
+import { concatMap, repeat, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -95,10 +95,10 @@ export class EventRunCategoryViewComponent implements OnInit, OnDestroy {
 
     private startInfiniteAnimationLoop() {
         if (this.bracketsList != null && this.weightDivisions != null) {
-            this.localSubscriptions.push(Observable.of(null)
-                .concatMap(() => Observable.timer(this.animationInterval))
-                .do(() => this.runAnimation())
-                .repeat()
+            this.localSubscriptions.push(of(null).pipe(
+                concatMap(() => timer(this.animationInterval)),
+                tap(() => this.runAnimation()),
+                repeat())
                 .subscribe());
         }
     }

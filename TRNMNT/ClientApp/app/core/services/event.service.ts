@@ -3,7 +3,8 @@ import { LoggerService } from './logger.service'
 import { HttpService } from './../dal/http/http.service'
 import { EventModel, EventPreviewModel } from './../model/event.models'
 import { ApiMethods } from './../dal/consts/api-methods.consts'
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -26,15 +27,15 @@ export class EventService {
     }
 
     getEventsForOwner(): Observable<EventPreviewModel[]> {
-        return this.httpService.get(ApiMethods.event.getEventsForOwner).map(res => this.httpService.getArray<EventPreviewModel>(res));
+        return this.httpService.get(ApiMethods.event.getEventsForOwner).pipe(map(res => this.httpService.getArray<EventPreviewModel>(res)));
     }
 
     getEvent(id): Observable<EventModel> {
-        return this.httpService.get(ApiMethods.event.getEvent + '/' + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+        return this.httpService.get(ApiMethods.event.getEvent + '/' + id).pipe(map(res => this.httpService.convertDate(res)));
     }
 
     getEventBaseInfo(id): Observable<EventPreviewModel> {
-        return this.httpService.get(ApiMethods.event.getEventBaseInfo + '/' + id).map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+        return this.httpService.get(ApiMethods.event.getEventBaseInfo + '/' + id).pipe(map(res => this.httpService.convertDate(res)));
     }
 
     uploadEventImage(file, id) {
@@ -54,11 +55,11 @@ export class EventService {
     }
 
     getEventInfo() {
-        return this.httpService.get(ApiMethods.event.getEventInfo + '/').map(res => this.httpService.getJson(res)).map(res => this.httpService.convertDate(res));
+        return this.httpService.get(ApiMethods.event.getEventInfo + '/').pipe(map(res => this.httpService.convertDate(res)));
     }
 
     createEvent(): Observable<string> {
-        return this.httpService.get(ApiMethods.event.createEvent).map(res => this.httpService.getJson(res));
+        return this.httpService.get(ApiMethods.event.createEvent);
     }
 
     //private methods

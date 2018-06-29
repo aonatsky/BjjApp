@@ -1,8 +1,8 @@
 ﻿import { NgModule } from '@angular/core'
-import { HttpModule, Http } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
-import { AuthHttp, AuthConfig, AUTH_PROVIDERS, provideAuth } from 'angular2-jwt';
+import { JwtModule } from '@auth0/angular-jwt';
+import { HttpClientModule } from '@angular/common/http';
 
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -24,7 +24,6 @@ import { PaymentService } from './services/payment.service';
 //PrimeNG
 import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { DialogModule } from 'primeng/components/dialog/dialog';
-import { SharedModule } from 'primeng/components/common/shared';
 import { ButtonModule } from 'primeng/components/button/button';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { GrowlModule } from 'primeng/components/growl/growl';
@@ -46,11 +45,20 @@ import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
 import { ResultsService } from './services/results.service';
 
 
+
 @
-    NgModule({
-        imports: [
-            FormsModule,
-            HttpModule,
+NgModule({
+    imports: [
+        FormsModule,
+        HttpClientModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: () => localStorage.getItem('id_token'),
+                whitelistedDomains: ['localhost:53432/api'],
+                blacklistedRoutes: ['localhost:53432/api/auth/', 'localhost:53432/api/log/'],
+                throwNoTokenError: false
+                }
+            }),
             RouterModule,
             BrowserAnimationsModule,
             BrowserModule,
@@ -84,7 +92,6 @@ import { ResultsService } from './services/results.service';
             LoaderService,
             NotificationService,
             AuthService,
-            AuthHttp,
             EventService,
             TeamService,
             SignalRHubService,
@@ -97,19 +104,19 @@ import { ResultsService } from './services/results.service';
             ParticipantService,
             BracketService,
             ResultsService,
-            provideAuth({
-                headerName: 'Authorization',
-                headerPrefix: 'bearer',
-                tokenName: 'token',
-                tokenGetter: (() => localStorage.getItem('id_token')),
-                noJwtError: true
-            }),
+//            provideAuth({
+//                headerName: 'Authorization',
+//                headerPrefix: 'bearer',
+//                tokenName: 'token',
+//                tokenGetter: (() => localStorage.getItem('id_token')),
+//                noJwtError: true
+//            }),
             { provide: Window, useValue: window },
             AuthGuard, RedirectGuard, RouterService, PaymentService],
 
         exports: [
             FormsModule,
-            HttpModule,
+            HttpClientModule,
             RouterModule,
             BrowserAnimationsModule,
             BrowserModule,

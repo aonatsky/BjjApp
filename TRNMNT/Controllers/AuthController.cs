@@ -75,11 +75,11 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task UpdateToken([FromBody] TokenModel tokenModel)
+        public async Task UpdateToken([FromBody] RefreshTokenModel refreshTokenModel)
         {
             try
             {
-                var tokenResult = await _authenticationSerivce.UpdateTokenAsync(tokenModel.RefreshToken);
+                var tokenResult = await _authenticationSerivce.UpdateTokenAsync(refreshTokenModel.RefreshToken);
                 if (tokenResult != null)
                 {
                     var response = new

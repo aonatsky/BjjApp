@@ -5,7 +5,7 @@ import { ParticipantRegistrationModel, ParticipantModelBase, ParticipantTableMod
 import { ParticipantDdlModel } from './../model/participant-ddl.model'
 import { ParticipantRegistrationResultModel } from './../model/result/participant-registration-result.model'
 import { ApiMethods } from './../dal/consts/api-methods.consts'
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { PagedList } from '../model/paged-list.model';
 import { ParticipantFilterModel } from '../model/participant-filter.model';
 import { IUploadResult } from '../model/result/upload-result.model';
@@ -19,24 +19,26 @@ export class ParticipantService {
     }
 
     processParticipantRegistration(participant: ParticipantRegistrationModel): Observable<ParticipantRegistrationResultModel> {
-        return this.httpService.post(ApiMethods.participant.processParticipantRegistration, participant).map(r => this.httpService.getJson(r));
+        return this.httpService.post(ApiMethods.participant.processParticipantRegistration, participant);
     }
 
     isParticipantExists(participant: ParticipantModelBase): Observable<boolean> {
-        return this.httpService.post(ApiMethods.participant.isParticipantExist, participant).map(r => this.httpService.getJson(r));
+        return this.httpService.post<boolean>(ApiMethods.participant.isParticipantExist, participant);
     }
 
     getParticipantsTableModel(filterModel: ParticipantFilterModel): Observable<PagedList<ParticipantTableModel>> {
-        return this.httpService.get(ApiMethods.participant.participantsTable, filterModel, null, 'Could not load participants data').map(r => this.httpService.getJson(r));
+        return this.httpService.get<PagedList<ParticipantTableModel>>(ApiMethods.participant.participantsTable, filterModel, null, 'Could not load participants data');
     }
 
     getParticipantsDropdownData(eventId: string): Observable<ParticipantDdlModel> {
-        return this.httpService.get(ApiMethods.participant.participantsDropdownData, { eventId: eventId }, null, 'Could not load categories and weight divisions data')
-            .map(r => this.httpService.getJson(r));
+        return this.httpService.get(ApiMethods.participant.participantsDropdownData,
+            { eventId: eventId },
+            null,
+            'Could not load categories and weight divisions data');
     }
 
     uploadParticipantsFromFile(file: any, eventId: string): Observable<IUploadResult> {
-        return this.httpService.postFile(`${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`, file).map(r => this.httpService.getJson(r));
+        return this.httpService.postFile(`${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`, file);
     }
 
     updateParticipant(participant: ParticipantTableModel): Observable<any> {

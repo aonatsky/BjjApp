@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { ApiMethods } from '../dal/consts/api-methods.consts'
 import { RequestOptions, Http, Headers } from '@angular/http';
 import { isDevMode } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LoggerService {
     handleError: any;
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
 
     }
 
@@ -86,11 +87,8 @@ export class LoggerService {
     }
 
     private postLog(log: LogModel) {
-        let options = new RequestOptions({
-            headers: new Headers({ 'Content-Type': 'application/json' })
-        });
-        let body = JSON.stringify(log);
-        this.http.post(ApiMethods.log, body, options).subscribe();
+        
+        this.http.post(ApiMethods.log, log).subscribe();
     }
 
 }

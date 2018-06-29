@@ -2,6 +2,7 @@
 import { LoggerService } from './logger.service';
 import { HttpService } from '../dal/http/http.service';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { BracketModel, BracketArrayModel } from '../model/bracket.models';
@@ -19,17 +20,15 @@ export class BracketService {
 
     getBracket(weightDivisionId): Observable<BracketModel> {
         return this.httpService.get(ApiMethods.bracket.createBracket + '/' + weightDivisionId)
-            .map(res => this.httpService.getJson(res));
     }
 
     runBracket(weightDivisionId): Observable<BracketModel> {
         return this.httpService.get(ApiMethods.bracket.runBracket + '/' + weightDivisionId)
-            .map(res => this.httpService.getJson(res));
     }
 
     downloadBracket(weightDivisionId: string, fileName: string) {
         return this.httpService.get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId, null, ResponseContentType.Blob)
-            .map(r => this.httpService.getExcelFile(r, fileName));
+            .pipe(map(r => this.httpService.getExcelFile(r, fileName)));
     }
 
     updateBracket(model: BracketModel): Observable<void> {
@@ -38,16 +37,14 @@ export class BracketService {
 
     getBracketsByCategory(categoryId): Observable<BracketArrayModel> {
         return this.httpService.get(ApiMethods.bracket.getBracketsByCategory + '/' + categoryId)
-            .map(res => this.httpService.getJson(res));
     }
 
     isCategoryCompleted(categoryId): Observable<boolean> {
-        return this.httpService.get(ApiMethods.bracket.isCategoryCompleted + '/' + categoryId).map(res => this.httpService.getJson(res));;
+        return this.httpService.get(ApiMethods.bracket.isCategoryCompleted + '/' + categoryId);
     }
 
     getWinnersByCategory(categoryId): Observable<ParticipantInAbsoluteDivisionMobel[]> {
         return this.httpService.get(ApiMethods.bracket.getParticipnatsForAbsoluteDivision + '/' + categoryId)
-            .map(res => this.httpService.getJson(res));
     }
 
     manageAbsoluteWeightDivision(participantsIds, categoryId): Observable<void> {

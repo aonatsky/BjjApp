@@ -1,21 +1,20 @@
-﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { NgForm } from '@angular/forms'
+﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from './../../core/services/team.service';
 import { ParticipantService } from './../../core/services/participant.service';
 import { CategoryService } from './../../core/services/category.service';
 import { PaymentService } from './../../core/services/payment.service';
 import { WeightDivisionService } from './../../core/services/weight-division.service';
-import { ParticipantRegistrationModel, ParticipantModelBase } from './../../core/model/participant.models';
+import { ParticipantRegistrationModel } from './../../core/model/participant.models';
 import { ParticipantRegistrationResultModel } from './../../core/model/result/participant-registration-result.model';
 import { TeamModel } from './../../core/model/team.model';
 import { PaymentDataModel } from './../../core/model/payment-data.model';
 import { CategorySimpleModel } from './../../core/model/category.models';
-import { WeightDivisionModel, WeightDivisionSimpleModel } from './../../core/model/weight-division.models';
+import { WeightDivisionSimpleModel } from './../../core/model/weight-division.models';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { Observable } from 'rxjs/Observable';
-import { SelectItem, MenuModule, MenuItem, Message } from 'primeng/primeng'
+import { Observable, forkJoin } from 'rxjs';
+import { SelectItem, Message } from 'primeng/primeng'
 
 @Component({
     selector: 'event-registration',
@@ -64,7 +63,7 @@ export class EventRegistrationComponent implements OnInit {
 
 
     private loadData() {
-        Observable.forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForCurrentEvent())
+        forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForCurrentEvent())
             .subscribe(data => this.initData(data));
     }
 

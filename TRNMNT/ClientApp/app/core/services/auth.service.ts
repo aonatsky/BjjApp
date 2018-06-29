@@ -1,17 +1,19 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError, of, from } from 'rxjs';
+import { map, flatMap, catchError } from 'rxjs/operators';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+//import 'rxjs/add/operator/map';
+//import 'rxjs/add/operator/catch';
+//import 'rxjs/add/observable/throw';
 
-import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
+import { JwtHelperService, } from '@auth0/angular-jwt';
 
 import { UserModel } from './../model/user.model'
 import { RouterService } from './router.service'
 import { CredentialsModel } from '../model/credentials.model';
 import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular5-social-login';
+import { SocialUser } from 'angular5-social-login';
+import { HttpClient } from '@angular/common/http';
 
 /** 
  * Authentication service. 
@@ -29,17 +31,13 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
     private user: any = {};
 
     private headers: Headers;
-    private options: RequestOptions;
-    private jwtHelper: JwtHelper = new JwtHelper();
 
-    constructor(private http: Http, private routerService: RouterService, private socialAuthService: SocialAuthService) {
+    constructor(private http: HttpClient, private routerService: RouterService, private socialAuthService: SocialAuthService, private jwtHelper: JwtHelperService) {
 
         // On bootstrap or refresh, tries to get the user's data.  
         this.decodeToken();
 
         // Creates header for post requests.  
-        this.headers = new Headers({ 'Content-Type': 'application/json' });
-        this.options = new RequestOptions({ headers: this.headers });
     }
 
     login(email: string, password: string) {
@@ -48,8 +46,7 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
             email: email,
             password: password
         };
-        this.http.post(ApiMethods.auth.getToken, credentials)
-            .map(res => res.json())
+        this.http.post<any>(ApiMethods.auth.getToken, credentials)
             .subscribe(
             // We're assuming the response will be an object
             // with the JWT on an id_token key
@@ -72,21 +69,21 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
             password: password
         };
 
-        return this.http.post(ApiMethods.auth.getToken, credentials, this.options)
-            .map((res: Response) => {
+        return this.http.post(ApiMethods.auth.getToken, credentials)
+            .pipe(map((res: Response) => {
                 return this.processTokensResponse(res.json());
-            }).catch((error: any) => {
+            }), catchError((error: any) => {
                 // Error on post request.  
                 if (error instanceof Response) {
                     if (error.status == 401) {
-                        return Observable.of(false);
+                        return of(false);
                     } else {
-                        return Observable.throw(error);
+                        return throwError(error);
                     };
                 } else {
-                    return Observable.throw(error);
+                    return throwError(error);
                 }
-            });
+            }));
     }
 
 
@@ -96,24 +93,16 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
             email: email,
             password: password
         };
-
-        return this.http.post(ApiMethods.auth.register, credentials, this.options)
-            .map((res: Response) => {
-
-                return res.json();
-
-            }).catch((data: any) => {
-
-                // Error on post request.  
-                if (data instanceof Response) {
-                    if (data.status != 401) {
-                        return Observable.throw(data);
-                    }
-                } else {
-                    return Observable.throw(data);
+        return this.http.post<string>(ApiMethods.auth.register, credentials).pipe(catchError((e) => {
+            if (e instanceof Response) {
+                if (e.status != 401) {
+                    return Observable.throw(e);
                 }
-
-            });
+            } else {
+                return Observable.throw(e);
+            }
+        }
+        ));
     }
 
     /** 
@@ -135,10 +124,10 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
 
             // Encodes the parameters.  
             const body: string = this.encodeParams(params);
-            return this.http.post(tokenEndpoint, body, this.options).map(
+            return this.http.post(tokenEndpoint, body).pipe(map(
                 (res: Response) => {
                     return this.processTokensResponse(res.json());
-                });
+                }));
         }
     }
 
@@ -147,8 +136,11 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
     */
     isLoggedIn(): boolean {
 
-        return tokenNotExpired('id_token');
-
+        const token = this.jwtHelper.tokenGetter();
+        if (token) {
+            return !this.jwtHelper.isTokenExpired(token);
+        }
+        return false;
     }
 
     /** 
@@ -171,10 +163,9 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
             // Encodes the parameters.  
             const body = JSON.stringify(params);
 
-            this.http.post(revocationEndpoint, body, this.options)
+            this.http.post(revocationEndpoint, body)
                 .subscribe(
                 () => {
-
                     localStorage.removeItem('id_token');
 
                 });
@@ -190,7 +181,7 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
         const refreshToken: string = localStorage.getItem('refresh_token');
 
         if (refreshToken == null) {
-            return Observable.of(false);
+            return of(false);
         }
 
         // Revocation endpoint & params.  
@@ -203,7 +194,7 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
         // Encodes the parameters.  
         const body = JSON.stringify(params);
 
-        return this.http.post(revocationEndpoint, body, this.options).map(
+        return this.http.post(revocationEndpoint, body).pipe(map(
             (res: Response) => {
                 const body: any = this.getResponseBody(res);
                 // Successful if there's an access token in the response.  
@@ -213,7 +204,7 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
                     return true;
                 }
                 return false;
-            });
+            }));
     }
 
     /** 
@@ -250,10 +241,7 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
         if (this.isLoggedIn()) {
 
             const token: string = localStorage.getItem('id_token');
-
-            const jwtHelper: JwtHelper = new JwtHelper();
-            this.user = jwtHelper.decodeToken(token);
-
+            this.user = this.jwtHelper.decodeToken(token);
         }
 
     }
@@ -317,15 +305,14 @@ import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular
 
     facebookLogin(): Observable<boolean> {
         const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
-        return Observable.fromPromise(this.socialAuthService.signIn(socialPlatformProvider)).flatMap(
-            (userData) => {
-                return this.http.post(ApiMethods.auth.facebookLogin, { token: userData.token })
-                    .map(
-                    (r) => {
-                        return this.processTokensResponse(r.json());
-                    })
-                    .catch(e => { return Observable.throw(e); });
-            });
+        return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(flatMap(
+            (userData: SocialUser) => {
+                return this.http.post(ApiMethods.auth.facebookLogin, { token: userData.token });
+            }),
+            map(
+                (r) => {
+                    return this.processTokensResponse(r);
+                }), catchError(e => { return throwError(e); }))
     }
 
 }

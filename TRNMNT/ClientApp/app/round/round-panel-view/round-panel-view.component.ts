@@ -1,5 +1,5 @@
 ﻿import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, timer } from 'rxjs';
 import { BaseRoundPanel } from '../round-panel.service';
 import './round-panel-view.component.scss';
 import { MatchModel } from '../../core/model/match.models';
@@ -56,7 +56,7 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
 
     private startTimer(): void {
         if (!this.timerSubscription) {
-            this.timerSubscription = Observable.timer(0, this.tick).subscribe(() => {
+            this.timerSubscription = timer(0, this.tick).subscribe(() => {
                 --this.matchDetails.countdown;
                 if (this.matchDetails.countdown <= 0) {
                     this.stopTimer();

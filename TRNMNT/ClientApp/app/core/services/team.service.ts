@@ -3,7 +3,8 @@ import { LoggerService } from './logger.service'
 import { HttpService } from './../dal/http/http.service'
 import { TeamModel } from './../model/team.model'
 import { ApiMethods } from './../dal/consts/api-methods.consts'
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -13,7 +14,7 @@ export class TeamService {
     }
 
     getTeams(): Observable<TeamModel[]> {
-        return this.httpService.get(ApiMethods.team.getTeams).map(res => this.httpService.getArray<TeamModel>(res));
+        return this.httpService.get(ApiMethods.team.getTeams).pipe(map(res => this.httpService.getArray<TeamModel>(res)));
     }
 
     addTeam(team: TeamModel): Observable<any> {

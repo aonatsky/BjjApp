@@ -4,7 +4,7 @@ import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-
 
 import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core'
 import { DefaultValues } from '../../core/consts/default-values'
-import { Observable } from 'rxjs/Observable';
+import { Observable, forkJoin } from 'rxjs';
 import { CategoryService } from '../../core/services/category.service';
 import { WeightDivisionService } from '../../core/services/weight-division.service';
 import { SelectItem } from 'primeng/components/common/selectitem';
@@ -129,7 +129,7 @@ export class CategoryWithDivisionFilter implements OnInit {
     }
 
     private refreshFromServer() {
-        Observable.forkJoin(
+        forkJoin(
                 this.categoryService.getCategoriesByEventId(this.eventId),
                 this.weightDivisionService.getWeightDivisionsByEvent(this.eventId))
             .subscribe(data => this.initFilter(data));

@@ -1,7 +1,8 @@
 ﻿import { HubConnection, HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { LoggerService } from '../../services/logger.service';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, from, fromEventPattern } from 'rxjs';
+import {  } from 'rxjs/operators';
 
 
 @Injectable()
@@ -34,7 +35,7 @@ export class SignalRHubService {
     }
 
     subscribeOnEvent(eventName: string): Observable<any> {
-        return Observable.fromEventPattern(
+        return fromEventPattern(
             (handler: (...args: any[]) => void) => this.hubConnection.on(eventName, handler),
             (handler: (...args: any[]) => void) => this.hubConnection.off(eventName, handler)
         );
@@ -63,7 +64,7 @@ export class SignalRHubService {
     }
 
     onConnectionClosed(): Observable<string> {
-        return Observable.fromEventPattern(
+        return fromEventPattern(
             (handler: (e: Error) => void) => this.hubConnection.onclose(handler)
         );
     }
