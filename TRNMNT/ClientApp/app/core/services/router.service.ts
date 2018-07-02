@@ -17,7 +17,7 @@ export class RouterService {
         return <Observable<NavigationStart>>this.router.events.pipe(filter(event => event instanceof NavigationStart));
     }
 
-    navigateByUrl(url: string, options? : NavigationExtras) {
+    navigateByUrl(url: string, options?: NavigationExtras) {
         this.router.navigateByUrl(url, options);
     }
 
@@ -37,11 +37,13 @@ export class RouterService {
         this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl } });
     }
 
+    goToRegistration(returnUrl?: string) {
+        this.router.navigate(['/register'], { queryParams: { returnUrl: returnUrl } });
+    }
 
     goToOrganizerScreen() {
         this.router.navigateByUrl('/administration/home');
     }
-
 
     goToEventAdmin() {
         this.router.navigateByUrl('/event-admin');
@@ -64,7 +66,7 @@ export class RouterService {
         this.router.navigateByUrl('event/event-info/');
     }
 
-    goToRegistration(id: string) {
+    goToEventRegistration() {
         this.router.navigateByUrl('event/event-registration/');
     }
 
@@ -77,7 +79,7 @@ export class RouterService {
     }
 
     getCurrentUrl() {
-        return this.router.url;
+        return this.location.path();
     }
 }
 

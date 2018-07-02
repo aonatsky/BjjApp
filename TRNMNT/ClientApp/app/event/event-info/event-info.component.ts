@@ -4,7 +4,7 @@ import { AuthService } from './../../core/services/auth.service';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
 import { EventService } from './../../core/services/event.service';
-import { EventModel} from './../../core/model/event.models';
+import { EventModel } from './../../core/model/event.models';
 
 @Component({
     selector: 'event-info',
@@ -13,10 +13,10 @@ import { EventModel} from './../../core/model/event.models';
 })
 export class EventInfoComponent implements OnInit {
 
-    private eventModel: EventModel
+    private eventModel: EventModel;
 
     constructor(private routerService: RouterService, private loggerService: LoggerService, private eventService: EventService, private route: ActivatedRoute) {
-        
+
     }
 
     ngOnInit() {
@@ -29,6 +29,6 @@ export class EventInfoComponent implements OnInit {
     }
 
     private participate() {
-        this.routerService.goToRegistration(this.eventModel.eventId);
+        this.routerService.goToEventRegistration();
     }
 }

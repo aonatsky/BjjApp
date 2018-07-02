@@ -9,7 +9,7 @@ import { LoaderComponent } from './loader/loader';
 import { BracketComponent } from './bracket/bracket.component';
 import { TablePickerListComponent } from './table-picker-list/table-picker-list.component';
 import { FooterComponent } from './footer/footer.component';
-
+import { TopbarComponent } from './topbar/topbar.component';
 import { RoundModule } from '../round/round.module';
 import { SocialLoginModule, AuthServiceConfig } from 'angular5-social-login';
 import { getAuthServiceConfigs } from '../socialLoginConfig';
@@ -30,7 +30,8 @@ import { getAuthServiceConfigs } from '../socialLoginConfig';
         LoaderComponent,
         BracketComponent,
         TablePickerListComponent,
-        FooterComponent
+        FooterComponent,
+        TopbarComponent
     ],
 
     providers: [
@@ -44,7 +45,7 @@ import { getAuthServiceConfigs } from '../socialLoginConfig';
         CategoryWithDivisionFilter,
         LoaderComponent,
         BracketComponent,
-        TablePickerListComponent
+        TablePickerListComponent,
     ]
 })
 

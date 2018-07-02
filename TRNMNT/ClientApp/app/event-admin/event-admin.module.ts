@@ -2,7 +2,6 @@
 import { CoreModule } from './../core/core.module'
 import { RouterModule } from '@angular/router';
 import { EventAdminComponent } from './event-admin/event-admin.component'
-import { TopbarComponent } from './topbar/topbar.component'
 import { EventOverviewComponent } from './event-overview/event-overview.component'
 import { EventEditComponent } from './event-edit/event-edit.component'
 import { eventAdminRoutes } from './event-admin.routing'
@@ -33,7 +32,6 @@ import {BracketResultSetComponent} from './event-run/bracket-result-set/bracket-
         ],
         declarations: [
             EventAdminComponent,
-            TopbarComponent,
             EventOverviewComponent,
             EventEditComponent,
             BracketGenerationComponent,

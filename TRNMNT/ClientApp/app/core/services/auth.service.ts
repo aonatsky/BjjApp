@@ -2,12 +2,7 @@
 import { Observable, throwError, of, from } from 'rxjs';
 import { map, flatMap, catchError } from 'rxjs/operators';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
-//import 'rxjs/add/operator/map';
-//import 'rxjs/add/operator/catch';
-//import 'rxjs/add/observable/throw';
-
 import { JwtHelperService, } from '@auth0/angular-jwt';
-
 import { UserModel } from './../model/user.model'
 import { RouterService } from './router.service'
 import { CredentialsModel } from '../model/credentials.model';
@@ -195,7 +190,7 @@ import {RefreshTokenModel} from '../model/auth-token.model';
         const body = JSON.stringify(params);
 
         return this.http.post<AuthTokenModel>(revocationEndpoint, body).pipe(map(
-            res => {
+            (res: AuthTokenModel) => {
                 // Successful if there's an access token in the response.  
                 if (res.idToken) {
                     // Stores access token & refresh token.  

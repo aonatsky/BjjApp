@@ -3,7 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angul
 import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '../routing/auth.guard';
 import { RouterService } from '../services/router.service'
-import { BrowserDomAdapter } from '@angular/platform-browser/src/browser/browser_adapter';
+
 
 /** 
  * Decides if a route can be activated. 
@@ -12,22 +12,23 @@ import { BrowserDomAdapter } from '@angular/platform-browser/src/browser/browser
 
     constructor(public authService: AuthService, private routerService: RouterService, private authGuard: AuthGuard) { }
 
-    private subdomain: string;
-    private dom: BrowserDomAdapter;
-
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-        const homepage = this.getHomePage();
-        if (homepage != '') {
-            debugger;
-            console.log(this.routerService.getCurrentUrl());
-            this.routerService.navigateByUrl(homepage, { skipLocationChange: true });
+        if (this.redirectToEventPage()) {
+            this.routerService.goToEventInfo();
         }
         else {
-            return this.authGuard.canActivate(route, state);
+            return true;
         };
     }
 
-    getHomePage(): string {
-        return document.getElementById('homepage').innerText;
+    getSubdomains(): string[] {
+        const parts = window.location.host.split('.');
+        parts.pop();
+        return parts;
     }
+
+    redirectToEventPage(): boolean {
+        return this.getSubdomains().length === 1 && !this.routerService.getCurrentUrl().startsWith('/event/');
+    }
+
 }  

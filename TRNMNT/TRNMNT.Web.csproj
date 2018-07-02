@@ -19,10 +19,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\app\event-admin\topbar\**" />
     <Compile Remove="Core\**" />
     <Compile Remove="node_modules\**\*" />
+    <Content Remove="ClientApp\app\event-admin\topbar\**" />
     <Content Remove="Core\**" />
+    <EmbeddedResource Remove="ClientApp\app\event-admin\topbar\**" />
     <EmbeddedResource Remove="Core\**" />
+    <None Remove="ClientApp\app\event-admin\topbar\**" />
     <None Remove="Core\**" />
     <Compile Remove="Controllers\FighterController.cs" />
     <None Remove="ClientApp\app\core\enums\round-result-type.enum.ts" />
@@ -83,7 +87,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ClientApp\app\event-admin\topbar\topbar.component.scss" />
     <None Include="wwwroot\Config\log4net.config" />
   </ItemGroup>
 

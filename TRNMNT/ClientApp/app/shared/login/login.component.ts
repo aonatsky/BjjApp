@@ -40,6 +40,10 @@ export class LoginComponent {
         this.authService.signin(this.username, this.password).subscribe(data => this.processLogin(data), error => this.loggerService.logError(error));
     }
 
+    signUp(): any {
+        this.routerService.goToRegistration(this.returnUrl);
+    }
+
     processLogin(isAuthenticated: boolean) {
         if (isAuthenticated) {
             this.routerService.navigateByUrl(this.returnUrl);

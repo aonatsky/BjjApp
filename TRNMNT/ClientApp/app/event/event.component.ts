@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import {LoggerService} from './../core/services/logger.service'
-import {AuthService} from './../core/services/auth.service'
+import { LoggerService } from './../core/services/logger.service'
+import { AuthService } from './../core/services/auth.service'
 
 
 @Component({
@@ -20,8 +19,4 @@ export class EventComponent implements OnInit {
     ngOnInit() {
         this.userData = JSON.stringify(this.authService.getUser());
     }
-
-
-
-
 }
