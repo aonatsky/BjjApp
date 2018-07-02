@@ -5,6 +5,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { NavigationExtras } from '@angular/router';
 
 @Injectable()
 export class RouterService {
@@ -16,13 +17,13 @@ export class RouterService {
         return <Observable<NavigationStart>>this.router.events.pipe(filter(event => event instanceof NavigationStart));
     }
 
-    navigateByUrl(url: string) {
-        this.router.navigateByUrl(url);
-    } 
+    navigateByUrl(url: string, options? : NavigationExtras) {
+        this.router.navigateByUrl(url, options);
+    }
 
     openNewWindow(url: string) {
         this.win.open(url);
-    } 
+    }
 
     goHome(subdomain: string = '') {
         if (subdomain != '') {
@@ -32,7 +33,7 @@ export class RouterService {
 
     }
 
-    goToLogin(returnUrl? : string) {
+    goToLogin(returnUrl?: string) {
         this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl } });
     }
 
@@ -60,7 +61,7 @@ export class RouterService {
     }
 
     goToEventInfo() {
-        this.router.navigateByUrl('event/event-info/');    
+        this.router.navigateByUrl('event/event-info/');
     }
 
     goToRegistration(id: string) {

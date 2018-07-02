@@ -119,7 +119,7 @@ export class CrudComponent implements OnInit, OnChanges {
     private showConfirm() {
         this.confirmationService.confirm({
             header : 'Confirmation',
-            icon : 'fa fa-trash',
+            icon : 'fa fa fa-trash',
             message : 'Do you want to delete this record?',
             accept: () => this.delete(),
             reject: () => {

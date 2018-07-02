@@ -27,7 +27,7 @@ export class EventService {
     }
 
     getEventsForOwner(): Observable<EventPreviewModel[]> {
-        return this.httpService.get(ApiMethods.event.getEventsForOwner).pipe(map(res => this.httpService.getArray<EventPreviewModel>(res)));
+        return this.httpService.get<EventPreviewModel>(ApiMethods.event.getEventsForOwner);
     }
 
     getEvent(id): Observable<EventModel> {

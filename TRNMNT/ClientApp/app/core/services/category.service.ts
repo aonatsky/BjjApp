@@ -14,11 +14,11 @@ export class CategoryService {
     }
 
     getCategoriesByEventId(eventId: string): Observable<CategorySimpleModel[]> {
-        return this.httpService.get(ApiMethods.category.getCategoriesByEventId + '/' + eventId).pipe(map(res => this.httpService.getArray<CategorySimpleModel>(res)));
+        return this.httpService.get<CategorySimpleModel[]>(ApiMethods.category.getCategoriesByEventId + '/' + eventId);
     }
 
     getCategoriesForCurrentEvent(): Observable<CategorySimpleModel[]> {
-        return this.httpService.get(ApiMethods.category.getCategoriesForCurrentEvent).pipe(map(res => this.httpService.getArray<CategorySimpleModel>(res)));
+        return this.httpService.get<CategorySimpleModel>(ApiMethods.category.getCategoriesForCurrentEvent);
     }
    
 }

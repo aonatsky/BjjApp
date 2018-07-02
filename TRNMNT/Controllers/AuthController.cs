@@ -55,8 +55,8 @@ namespace TRNMNT.Web.Controllers
                     Response.StatusCode = (int)HttpStatusCode.OK;
                     var response = new
                     {
-                        id_token = tokenResult.AccessToken,
-                        refresh_token = tokenResult.RefreshToken
+                        idToken = tokenResult.AccessToken,
+                        refreshToken = tokenResult.RefreshToken
                     };
                     await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 
@@ -82,12 +82,7 @@ namespace TRNMNT.Web.Controllers
                 var tokenResult = await _authenticationSerivce.UpdateTokenAsync(refreshTokenModel.RefreshToken);
                 if (tokenResult != null)
                 {
-                    var response = new
-                    {
-                        id_token = tokenResult.AccessToken,
-                        refresh_token = tokenResult.RefreshToken
-                    };
-                    await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+                    await Response.WriteAsync(JsonConvert.SerializeObject(tokenResult, new JsonSerializerSettings { Formatting = Formatting.Indented }));
                 }
                 else
                 {
@@ -134,8 +129,8 @@ namespace TRNMNT.Web.Controllers
                     Response.StatusCode = (int)HttpStatusCode.OK;
                     var response = new
                     {
-                        id_token = tokenResult.AccessToken,
-                        refresh_token = tokenResult.RefreshToken
+                        idToken = tokenResult.AccessToken,
+                        refreshToken = tokenResult.RefreshToken
                     };
                     await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
 

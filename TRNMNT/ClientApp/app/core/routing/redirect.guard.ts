@@ -20,15 +20,14 @@ import { BrowserDomAdapter } from '@angular/platform-browser/src/browser/browser
         if (homepage != '') {
             debugger;
             console.log(this.routerService.getCurrentUrl());
-            this.routerService.navigateByUrl(homepage);
+            this.routerService.navigateByUrl(homepage, { skipLocationChange: true });
         }
         else {
             return this.authGuard.canActivate(route, state);
         };
     }
 
-    getHomePage() : string
-    {
-        return document.getElementById('homepage').innerText;   
+    getHomePage(): string {
+        return document.getElementById('homepage').innerText;
     }
 }  

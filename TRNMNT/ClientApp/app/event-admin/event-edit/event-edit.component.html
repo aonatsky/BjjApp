@@ -22,24 +22,24 @@
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label class="field-title">Date</label></div>
                         <div class="ui-g-9 ui-fluid">
-                            <p-calendar [(ngModel)]="eventModel.eventDate" [showIcon]="true"></p-calendar>
+                            <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.eventDate" [showIcon]="true"></p-calendar>
                         </div>
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label class="field-title">Registration Start</label></div>
                         <div class="ui-g-9 ui-fluid">
-                            <p-calendar [(ngModel)]="eventModel.registrationStartTS" [showIcon]="true"></p-calendar>
+                            <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.registrationStartTS" [showIcon]="true"></p-calendar>
                         </div>
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label class="field-title">Early Registration End</label></div>
                         <div class="ui-g-9 ui-fluid">
-                            <p-calendar [(ngModel)]="eventModel.earlyRegistrationEndTS" [showIcon]="true"></p-calendar>
+                            <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.earlyRegistrationEndTS" [showIcon]="true"></p-calendar>
                         </div>
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label class="field-title">Registration End</label></div>
-                        <div class="ui-g-9 ui-fluid"><p-calendar [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true"></p-calendar></div>
+                        <div class="ui-g-9 ui-fluid"><p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true"></p-calendar></div>
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid"><label class="field-title">Location</label></div>
@@ -124,9 +124,9 @@
                 </div>
             </div>
             <div class="ui-g-12 navigation-buttons">
-                <div class="float-left"><button pButton type="button" iconPos="left" icon="fa-arrow-left" label="Back" (click)="previousStep()" *ngIf="currentStep != 0"></button></div>
-                <div class="float-right"><button pButton type="button" iconPos="right" icon="fa-arrow-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep"></button></div>
-                <div class="float-right"><button pButton type="button" iconPos="left" icon="fa-save" label="Save" (click)="save()"></button></div>
+                <div class="float-left"><button pButton type="button" iconPos="left" icon="fa fa fa-arrow-left" label="Back" (click)="previousStep()" *ngIf="currentStep != 0"></button></div>
+                <div class="float-right"><button pButton type="button" iconPos="right" icon="fa fa fa-arrow-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep"></button></div>
+                <div class="float-right"><button pButton type="button" iconPos="left" icon="fa fa fa-save" label="Save" (click)="save()"></button></div>
             </div>
         </div>
     </div>

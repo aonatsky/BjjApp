@@ -150,9 +150,9 @@ export class EventManagementParticipantsComponent implements OnInit {
     }
     
     getClassCallback(value: boolean): string {
-        let classes = 'fa-square-o';
+        let classes = 'fa fa-square-o';
         if (value) {
-            classes = 'fa-check-square-o';
+            classes = 'fa fa-check-square-o';
         }
         return `fa ${classes}`;
     }

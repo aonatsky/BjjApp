@@ -14,7 +14,7 @@ export class ResultsService {
     }
 
     getTeamResults(categoryIds: string[]): Observable<TeamResultModel[]> {
-        return this.httpService.post(ApiMethods.results.getTeamResutls, categoryIds).pipe(map(r => this.httpService.getArray(r)));
+        return this.httpService.post<TeamResultModel[]>(ApiMethods.results.getTeamResutls, categoryIds);
     }
 
     getPersonalResultsFile(categoryIds: string[], fileName: string) {

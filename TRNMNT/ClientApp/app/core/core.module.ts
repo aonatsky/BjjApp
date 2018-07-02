@@ -53,7 +53,7 @@ NgModule({
         HttpClientModule,
         JwtModule.forRoot({
             config: {
-                tokenGetter: () => localStorage.getItem('id_token'),
+                tokenGetter: () => localStorage.getItem('idToken'),
                 whitelistedDomains: ['localhost:53432/api'],
                 blacklistedRoutes: ['localhost:53432/api/auth/', 'localhost:53432/api/log/'],
                 throwNoTokenError: false
@@ -108,7 +108,7 @@ NgModule({
 //                headerName: 'Authorization',
 //                headerPrefix: 'bearer',
 //                tokenName: 'token',
-//                tokenGetter: (() => localStorage.getItem('id_token')),
+//                tokenGetter: (() => localStorage.getItem('idToken')),
 //                noJwtError: true
 //            }),
             { provide: Window, useValue: window },

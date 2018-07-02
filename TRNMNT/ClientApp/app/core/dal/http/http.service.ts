@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { RequestOptions, Response, Headers, ResponseContentType, URLSearchParams } from '@angular/http';
+import { Response, ResponseContentType } from '@angular/http';
 import { LoggerService } from '../../../core/services/logger.service';
 import { LoaderService } from '../../../core/services/loader.service';
 import { RouterService } from '../../../core/services/router.service';
-import { Observable, throwError, pipe } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, flatMap, catchError, finalize } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
 import { AuthService } from '../../services/auth.service';
@@ -25,33 +25,19 @@ export class HttpService {
     //#region Public Methods
 
     get<T>(name: string, paramsHolder?: object, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
-        const options = this.jsonRequestOptions(responseType);
-        if (paramsHolder != null) {
-            const keys = Reflect.ownKeys(paramsHolder);
-            const urlSearchParams = new URLSearchParams();
-            for (let i = 0; i < keys.length; i++) {
-                urlSearchParams.set(keys[i].toString(), paramsHolder[keys[i]]);
-            }
-            options.search = urlSearchParams;
-        }
         return this.handleRequest(() => this.http.get<T>(name), notifyMessage);
     }
 
 
     post<T>(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
-        const options = this.jsonRequestOptions(responseType);
-        const body = JSON.stringify(model);
         return this.handleRequest(() => this.http.post<T>(name, model), notifyMessage);
     }
 
     put<T>(name: string, model: any, notifyMessage?: string): Observable<any> {
-        const body = JSON.stringify(model);
-        return this.handleRequest(() => this.http.put<T>(name, body), notifyMessage);
+        return this.handleRequest(() => this.http.put<T>(name, model), notifyMessage);
     }
 
     delete(name: string, model: any, notifyMessage?: string): Observable<any> {
-        const options = this.jsonRequestOptions();
-        options.body = JSON.stringify(model);
         return this.handleRequest(() => this.http.delete(name), notifyMessage);
     }
 
@@ -76,22 +62,7 @@ export class HttpService {
         FileSaver.saveAs(response.blob(), fileName);
     }
 
-    getArray<T>(response: any): T[] {
-        const result = response.json();
-        if (result.length == 0) {
-            return [];
-        }
-        return result;
-    }
-
-    getJson(response: Response) {
-        return response.json();
-    }
-
-    getString(response: Response) {
-        return response.text();
-    }
-
+   
     convertDate(input) {
         if (typeof input !== 'object') {
             return input;
@@ -168,16 +139,6 @@ export class HttpService {
     }
 
     private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
-
-    private jsonRequestOptions(responseType?: ResponseContentType): RequestOptions {
-        const options = new RequestOptions({
-            headers: new Headers({ 'Content-Type': 'application/json' }),
-        });
-        if (responseType) {
-            options.responseType = responseType;
-        }
-        return options;
-    }
 
     //#endregion
 }

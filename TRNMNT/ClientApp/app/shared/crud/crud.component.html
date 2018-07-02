@@ -37,7 +37,7 @@
         </div>
         <p-footer *ngIf="addEnabled">
             <div class="ui-helper-clearfix" style="width: 100%">
-                <button type="button" pButton icon="fa-plus" style="float: left" (click)="showDialogToAdd()" label="Add"></button>
+                <button type="button" pButton icon="fa fa-plus" style="float: left" (click)="showDialogToAdd()" label="Add"></button>
             </div>
         </p-footer>
     </p-dataTable>
@@ -70,7 +70,7 @@
                             [(ngModel)]="entityToEdit[column.keyPropertyName]"
                             (onChange)="onDdlChange($event, column)"
                             [style]="{'width':'100%'}"></p-dropdown>
-                <p-calendar *ngIf="isDateColumn(column)"
+                <p-calendar icon="fa fa-calendar" *ngIf="isDateColumn(column)"
                             dateFormat="dd.mm.yy"
                             [disabled]="!column.isEditable"
                             showIcon="true"
@@ -86,8 +86,8 @@
     </div>
     <div class="ui-g-12">
         <div class="float-right">
-            <button type="button" pButton icon="fa-check" (click)="save()" label="Save"></button>
-            <button type="button" pButton icon="fa-close" (click)="showConfirm()" class="ui-button-danger" label="Delete"></button>
+            <button type="button" pButton icon="fa fa-check" (click)="save()" label="Save"></button>
+            <button type="button" pButton icon="fa fa-close" (click)="showConfirm()" class="ui-button-danger" label="Delete"></button>
         </div>
 
     </div>

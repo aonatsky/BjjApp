@@ -3,9 +3,9 @@
 </div>
 <div class="ui-g">
     <div class="ui-g-12">
-        <button pButton type="button" iconPos="left" icon="fa-bars" label="Get Bracket" [disabled]="filter.weightDivisionId == ''" (click)="createBracket();"></button>
-        <button pButton type="button" iconPos="left" icon="fa-save" label="Update" [disabled]="!bracket || !isEdited" (click)="updateBracket();"></button>
-        <button pButton type="button" iconPos="left" icon="fa-file-excel-o" label="Download" [disabled]="!bracket || isEdited" (click)="downloadBracket();"></button>
+        <button pButton type="button" iconPos="left" icon="fa fa-bars" label="Get Bracket" [disabled]="filter.weightDivisionId == ''" (click)="createBracket();"></button>
+        <button pButton type="button" iconPos="left" icon="fa fa-save" label="Update" [disabled]="!bracket || !isEdited" (click)="updateBracket();"></button>
+        <button pButton type="button" iconPos="left" icon="fa fa-file-excel-o" label="Download" [disabled]="!bracket || isEdited" (click)="downloadBracket();"></button>
     </div>
 </div>
 <div class="ui-g brackets" *ngIf="bracket">

@@ -11,7 +11,7 @@
     <!--<RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>-->
     <AssetTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</AssetTargetFallback>
     <UserSecretsId>1e57bcac-a123-448e-a041-42501495c57a</UserSecretsId>
-    <TypeScriptToolsVersion>2.6</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,7 +27,7 @@
     <Compile Remove="Controllers\FighterController.cs" />
     <None Remove="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <None Remove="ClientApp\app\core\enums\submission-type.enum.ts" />
-    <None Remove="ClientApp\app\core\model\auth-tokens.model.ts" />
+    <None Remove="ClientApp\app\core\model\auth-token.model.ts" />
     <None Remove="ClientApp\app\core\model\credentials.model.ts" />
     <None Remove="ClientApp\app\core\pipes\format-timer.pipe.ts" />
     <None Remove="ClientApp\app\core\services\bracket.service.ts" />
@@ -99,7 +99,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\app\core\enums\round-result-type.enum.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\enums\submission-type.enum.ts" />
-    <TypeScriptCompile Include="ClientApp\app\core\model\auth-tokens.model.ts" />
+    <TypeScriptCompile Include="ClientApp\app\core\model\auth-token.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\model\credentials.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\model\match-details.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\core\services\results.service.ts" />

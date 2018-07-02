@@ -14,6 +14,8 @@ import { CredentialsModel } from '../model/credentials.model';
 import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular5-social-login';
 import { SocialUser } from 'angular5-social-login';
 import { HttpClient } from '@angular/common/http';
+import {AuthTokenModel} from '../model/auth-token.model';
+import {RefreshTokenModel} from '../model/auth-token.model';
 
 /** 
  * Authentication service. 
@@ -49,8 +51,8 @@ import { HttpClient } from '@angular/common/http';
         this.http.post<any>(ApiMethods.auth.getToken, credentials)
             .subscribe(
             // We're assuming the response will be an object
-            // with the JWT on an id_token key
-            data => localStorage.setItem('id_token', data.id_token),
+            // with the JWT on an idToken key
+            data => localStorage.setItem('idToken', data.idToken),
             error => console.log(error)
             );
     }
@@ -69,9 +71,9 @@ import { HttpClient } from '@angular/common/http';
             password: password
         };
 
-        return this.http.post(ApiMethods.auth.getToken, credentials)
-            .pipe(map((res: Response) => {
-                return this.processTokensResponse(res.json());
+        return this.http.post<AuthTokenModel>(ApiMethods.auth.getToken, credentials)
+            .pipe(map((tokenModel) => {
+                return this.processTokensResponse(tokenModel);
             }), catchError((error: any) => {
                 // Error on post request.  
                 if (error instanceof Response) {
@@ -110,7 +112,7 @@ import { HttpClient } from '@angular/common/http';
      */
     getNewToken(): Observable<boolean> {
 
-        const refreshToken: string = localStorage.getItem('refresh_token');
+        const refreshToken: string = localStorage.getItem('refreshToken');
 
         if (refreshToken != null) {
 
@@ -118,8 +120,8 @@ import { HttpClient } from '@angular/common/http';
             const tokenEndpoint: string = ApiMethods.auth.getToken;
 
             const params: any = {
-                grant_type: 'refresh_token',
-                refresh_token: refreshToken
+                grant_type: 'refreshToken',
+                refreshToken: refreshToken
             };
 
             // Encodes the parameters.  
@@ -148,26 +150,24 @@ import { HttpClient } from '@angular/common/http';
      */
     revokeToken(): void {
 
-        const token: string = localStorage.getItem('id_token');
-
-        if (token != null) {
+        const token = this.jwtHelper.tokenGetter();
+        if (token) {
 
             // Revocation endpoint & params.  
             const revocationEndpoint: string = ApiMethods.auth.refreshToken;
 
             const params: any = {
-                token_type_hint: 'id_token',
+                token_type_hint: 'idToken',
                 refreshToken: token
             };
 
             // Encodes the parameters.  
             const body = JSON.stringify(params);
 
-            this.http.post(revocationEndpoint, body)
+            this.http.post<AuthTokenModel>(revocationEndpoint, body)
                 .subscribe(
                 () => {
-                    localStorage.removeItem('id_token');
-
+                    localStorage.removeItem('idToken');
                 });
         }
     }
@@ -178,7 +178,7 @@ import { HttpClient } from '@angular/common/http';
      */
     revokeRefreshToken(): Observable<boolean> {
 
-        const refreshToken: string = localStorage.getItem('refresh_token');
+        const refreshToken: string = localStorage.getItem('refreshToken');
 
         if (refreshToken == null) {
             return of(false);
@@ -187,20 +187,19 @@ import { HttpClient } from '@angular/common/http';
         // Revocation endpoint & params.  
         const revocationEndpoint: string = ApiMethods.auth.refreshToken;
 
-        const params: any = {
-            RefreshToken: refreshToken
-        };
+        const params: RefreshTokenModel = {
+            refreshToken: refreshToken
+    };
 
         // Encodes the parameters.  
         const body = JSON.stringify(params);
 
-        return this.http.post(revocationEndpoint, body).pipe(map(
-            (res: Response) => {
-                const body: any = this.getResponseBody(res);
+        return this.http.post<AuthTokenModel>(revocationEndpoint, body).pipe(map(
+            res => {
                 // Successful if there's an access token in the response.  
-                if (typeof body.id_token !== 'undefined') {
+                if (res.idToken) {
                     // Stores access token & refresh token.  
-                    this.store(body);
+                    this.store(res);
                     return true;
                 }
                 return false;
@@ -240,21 +239,12 @@ import { HttpClient } from '@angular/common/http';
 
         if (this.isLoggedIn()) {
 
-            const token: string = localStorage.getItem('id_token');
+            const token: string = localStorage.getItem('idToken');
             this.user = this.jwtHelper.decodeToken(token);
         }
 
     }
 
-    private getResponseBody(res: Response) {
-        let body: any;
-        try {
-            body = res.json();
-        } catch (e) {
-            return {};
-        }
-        return body;
-    }
 
     /** 
      * // Encodes the parameters. 
@@ -279,21 +269,21 @@ import { HttpClient } from '@angular/common/http';
     /** 
      * Stores access token & refresh token. 
      * 
-     * @param body The response of the request to the token endpoint 
+     * @param tokenModel The response of the request to the token endpoint 
      */
-    private store(body: any): void {
+    private store(tokenModel:AuthTokenModel ): void {
 
         // Stores access token in local storage to keep user signed in.  
-        localStorage.setItem('id_token', body.id_token);
+        localStorage.setItem('idToken', tokenModel.idToken);
         // Stores refresh token in local storage.  
-        localStorage.setItem('refresh_token', body.refresh_token);
+        localStorage.setItem('refreshToken', tokenModel.refreshToken);
 
         // Decodes the token.  
         this.decodeToken();
     }
 
     private processTokensResponse(body): boolean {
-        if (typeof body.id_token !== 'undefined') {
+        if (typeof body.idToken !== 'undefined') {
 
             // Stores access token & refresh token.  
             this.store(body);
@@ -306,13 +296,14 @@ import { HttpClient } from '@angular/common/http';
     facebookLogin(): Observable<boolean> {
         const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
         return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(flatMap(
-            (userData: SocialUser) => {
-                return this.http.post(ApiMethods.auth.facebookLogin, { token: userData.token });
-            }),
+                (userData: SocialUser) => {
+                    return this.http.post(ApiMethods.auth.facebookLogin, { token: userData.token });
+                }),
             map(
                 (r) => {
                     return this.processTokensResponse(r);
-                }), catchError(e => { return throwError(e); }))
+                }),
+            catchError(e => { return throwError(e); }));
     }
 
 }
