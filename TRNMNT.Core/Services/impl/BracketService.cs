@@ -81,7 +81,6 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId)
         {
-
             //TODO 
             return new CustomFile();
         }

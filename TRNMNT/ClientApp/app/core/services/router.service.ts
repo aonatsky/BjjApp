@@ -1,6 +1,5 @@
 ﻿
 import { Location } from '@angular/common';
-
 import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -14,7 +13,7 @@ export class RouterService {
     }
 
     navigationStartEvents(): Observable<NavigationStart> {
-        return <Observable<NavigationStart>>this.router.events.pipe(filter(event => event instanceof NavigationStart));
+        return this.router.events.pipe(filter(event => event instanceof NavigationStart)) as Observable<NavigationStart>;
     }
 
     navigateByUrl(url: string, options?: NavigationExtras) {
@@ -26,19 +25,19 @@ export class RouterService {
     }
 
     goHome(subdomain: string = '') {
-        if (subdomain != '') {
-            let path = location.host.replace(subdomain + '.', '');
+        if (subdomain !== '') {
+            const path = location.host.replace(subdomain + '.', '');
             location.href = location.protocol + '//' + path;
         }
 
     }
 
     goToLogin(returnUrl?: string) {
-        this.router.navigate(['/login'], { queryParams: { returnUrl: returnUrl } });
+        this.router.navigate(['/login'], { queryParams: { returnUrl } });
     }
 
     goToRegistration(returnUrl?: string) {
-        this.router.navigate(['/register'], { queryParams: { returnUrl: returnUrl } });
+        this.router.navigate(['/register'], { queryParams: { returnUrl } });
     }
 
     goToOrganizerScreen() {
@@ -48,7 +47,6 @@ export class RouterService {
     goToEventAdmin() {
         this.router.navigateByUrl('/event-admin');
     }
-
 
     goToEditEvent(id: string) {
         this.router.navigateByUrl(`/event-admin/edit/${id}`);
@@ -82,4 +80,3 @@ export class RouterService {
         return this.location.path();
     }
 }
-

@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "TRNMNT.Core"
+		},
+		{
+			"path": "TRNMNT"
+		},
+		{
+			"path": "TRNMNT.Data"
+		}
+	],
+	"settings": {}
+}

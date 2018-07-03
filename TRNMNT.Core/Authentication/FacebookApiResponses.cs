@@ -11,13 +11,17 @@ namespace TRNMNT.Core.Authentication
         public long Id { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
-        [JsonProperty("first_name")]
+
+        [JsonProperty ("first_name")]
         public string FirstName { get; set; }
-        [JsonProperty("last_name")]
+
+        [JsonProperty ("last_name")]
         public string LastName { get; set; }
         public string Gender { get; set; }
         public string Locale { get; set; }
         public FacebookPictureData Picture { get; set; }
+        [JsonProperty ("birthday")]
+        public string DateOfBirthString { get; set; }
     }
 
     internal class FacebookPictureData
@@ -29,22 +33,26 @@ namespace TRNMNT.Core.Authentication
     {
         public int Height { get; set; }
         public int Width { get; set; }
-        [JsonProperty("is_silhouette")]
+
+        [JsonProperty ("is_silhouette")]
         public bool IsSilhouette { get; set; }
         public string Url { get; set; }
     }
 
     internal class FacebookUserAccessTokenData
     {
-        [JsonProperty("app_id")]
+        [JsonProperty ("app_id")]
         public long AppId { get; set; }
         public string Type { get; set; }
         public string Application { get; set; }
-        [JsonProperty("expires_at")]
+
+        [JsonProperty ("expires_at")]
         public long ExpiresAt { get; set; }
-        [JsonProperty("is_valid")]
+
+        [JsonProperty ("is_valid")]
         public bool IsValid { get; set; }
-        [JsonProperty("user_id")]
+
+        [JsonProperty ("user_id")]
         public long UserId { get; set; }
     }
 
@@ -55,10 +63,10 @@ namespace TRNMNT.Core.Authentication
 
     internal class FacebookAppAccessToken
     {
-        [JsonProperty("token_type")]
+        [JsonProperty ("token_type")]
         public string TokenType { get; set; }
-        [JsonProperty("access_token")]
+
+        [JsonProperty ("access_token")]
         public string AccessToken { get; set; }
     }
 }
-

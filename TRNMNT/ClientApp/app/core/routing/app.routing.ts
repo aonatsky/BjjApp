@@ -9,6 +9,7 @@ export const appRoutes: Routes = [
     { path: '', redirectTo: 'event-admin', pathMatch: 'full', canActivate: [RedirectGuard, AuthGuard] },
     { path: 'login', component: LoginComponent, pathMatch: 'full' },
     { path: 'register', component: RegisterComponent, pathMatch: 'full' },
+    { path: 'register/:id', component: RegisterComponent, pathMatch: 'full' },
     { path: 'event', redirectTo: 'event' },
     { path: 'home', redirectTo: 'event-admin' },
     { path: '**', redirectTo: 'event-admin', canActivate: [AuthGuard] }

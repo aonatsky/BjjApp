@@ -47,6 +47,6 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="fbToken"></param>
         /// <returns></returns>
-        Task<AuthTokenResult> FacebookLogin(string fbToken);
+        Task<SocialLoginResult> FacebookLogin(string fbToken);
     }
 }

@@ -47,8 +47,6 @@ namespace TRNMNT.Web.Controllers
             IAppDbContext context)
             : base(logger, userService, eventService, context)
         {
-
-            _participantService = participantService;
             _participantRegistrationService = participantRegistrationService;
             _teamService = teamService;
             _weightDivisionService = weightDivisionService;

@@ -82,21 +82,12 @@
   </Target>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.DotNet.Watcher.Tools" Version="1.0.0" />
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\Config\log4net.config" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TRNMNT.Core\TRNMNT.Core.csproj" />
     <ProjectReference Include="..\TRNMNT.Data\TRNMNT.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>

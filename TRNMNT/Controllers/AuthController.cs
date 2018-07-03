@@ -55,7 +55,7 @@ namespace TRNMNT.Web.Controllers
                     Response.StatusCode = (int)HttpStatusCode.OK;
                     var response = new
                     {
-                        idToken = tokenResult.AccessToken,
+                        idToken = tokenResult.IdToken,
                         refreshToken = tokenResult.RefreshToken
                     };
                     await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
@@ -119,21 +119,15 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task FacebookLogin([FromBody]FacebookAuthViewModel model)
+        public async Task FacebookLogin([FromBody]FacebookLoginModel model)
         {
             try
             {
-                var tokenResult = await _authenticationSerivce.FacebookLogin(model.Token);
-                if (tokenResult != null)
+                var socialLoginResult = await _authenticationSerivce.FacebookLogin(model.Token);
+                if (socialLoginResult != null)
                 {
                     Response.StatusCode = (int)HttpStatusCode.OK;
-                    var response = new
-                    {
-                        idToken = tokenResult.AccessToken,
-                        refreshToken = tokenResult.RefreshToken
-                    };
-                    await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-
+                    await Response.WriteAsync(JsonConvert.SerializeObject(socialLoginResult, new JsonSerializerSettings { Formatting = Formatting.Indented }));
                 }
                 else
                 {

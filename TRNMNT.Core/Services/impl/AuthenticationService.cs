@@ -62,9 +62,9 @@ namespace TRNMNT.Core.Services.Impl
                 var identity = await _userManager.CreateAsync(new User
                 {
                     UserName = "admin",
-                    FirstName = "Ivan",
-                    LastName = "Drago",
-                    Email = "Ivan.drago@trnmnt.com"
+                        FirstName = "Ivan",
+                        LastName = "Drago",
+                        Email = "Ivan.drago@trnmnt.com"
                 }, "1");
                 existUser = await _userManager.FindByNameAsync("admin");
                 var result = await _userManager.AddClaimAsync(existUser, new Claim(ClaimTypes.Role, Roles.Owner));
@@ -101,7 +101,6 @@ namespace TRNMNT.Core.Services.Impl
             await AddSampleUserAsync();
             var user = await _userManager.FindByNameAsync("admin");
 
-
             if (user != null)
             {
                 var requestAt = DateTime.Now;
@@ -117,16 +116,12 @@ namespace TRNMNT.Core.Services.Impl
             return await CreateUserAsync(new UserCredentialsModel()
             {
                 Email = email,
-                Password = password
+                    Password = password
             });
         }
-
-
-
         #endregion
 
         #region Private Methods
-
         public async Task<UserRegistrationResult> CreateUserAsync(UserCredentialsModel model)
         {
             var user = new User
@@ -166,10 +161,10 @@ namespace TRNMNT.Core.Services.Impl
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = _authConfiguration.Issuer,
-                Audience = _authConfiguration.Audience,
-                SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
-                Subject = identity,
-                Expires = expiresIn
+                    Audience = _authConfiguration.Audience,
+                    SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
+                    Subject = identity,
+                    Expires = expiresIn
             });
             return handler.WriteToken(securityToken);
         }
@@ -183,29 +178,31 @@ namespace TRNMNT.Core.Services.Impl
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = _authConfiguration.Issuer,
-                Audience = _authConfiguration.Audience,
-                SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
-                Subject = identity,
-                Expires = expiresIn
+                    Audience = _authConfiguration.Audience,
+                    SigningCredentials = new SigningCredentials(_authConfiguration.Key, SecurityAlgorithms.HmacSha256),
+                    Subject = identity,
+                    Expires = expiresIn
             });
             return handler.WriteToken(securityToken);
         }
 
         private List<Claim> GetTokenClaims(User user)
         {
-            return new List<Claim> {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),    
+            return new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 //new Claim("UserId", user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.FirstName),
-                    new Claim(ClaimTypes.Surname, user.LastName),
-                    new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.FirstName),
+                new Claim(ClaimTypes.Surname, user.LastName),
+                new Claim(ClaimTypes.Email, user.Email),
 
-                };
+            };
         }
 
         private List<Claim> GetRefreshTokenClaims(User user)
         {
-            return new List<Claim> {
+            return new List<Claim>
+            {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
             };
         }
@@ -214,21 +211,20 @@ namespace TRNMNT.Core.Services.Impl
         {
             return new AuthTokenResult
             {
-                AccessToken = await GenerateTokenAsync(user),
-                RefreshToken = GenerateRefreshToken(user)
+                IdToken = await GenerateTokenAsync(user),
+                    RefreshToken = GenerateRefreshToken(user)
             };
         }
 
-
-        public async Task<AuthTokenResult> FacebookLogin(string fbToken)
+        public async Task<SocialLoginResult> FacebookLogin(string fbToken)
         {
             var client = new HttpClient();
             // 1.generate an app access token
-            var appAccessTokenResponse = 
-                await client.GetStringAsync(string.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials",_configuration["Facebook:AppId"],_configuration["Facebook:AppSecret"]));
+            var appAccessTokenResponse =
+                await client.GetStringAsync(string.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials", _configuration["Facebook:AppId"], _configuration["Facebook:AppSecret"]));
             var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
             // 2. validate the user access token
-            var userAccessTokenValidationResponse = 
+            var userAccessTokenValidationResponse =
                 await client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={fbToken}&access_token={appAccessToken.AccessToken}");
             var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
 
@@ -241,21 +237,26 @@ namespace TRNMNT.Core.Services.Impl
             var userInfoResponse = await client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={fbToken}");
             var fbUser = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
             var user = await _userManager.FindByEmailAsync(fbUser.Email);
-            if (user == null)
+            var result = new SocialLoginResult()
             {
-                user = new User()
+                UserData = new UserRegistrationModel()
                 {
-                    Email = fbUser.Email,
-                    FirstName = fbUser.FirstName,
-                    LastName = fbUser.LastName,
-                    FacebookId = fbUser.Id,
-                    UserName = fbUser.Email,
-                    PictureUrl = fbUser.Picture.Data.Url
-                };
-                await _userManager.CreateAsync(user);
+                FirstName = fbUser.FirstName,
+                LastName = fbUser.LastName,
+                Email = fbUser.Email,
+                DateOfBirth = DateTime.Parse(fbUser.DateOfBirthString)
+                }
+            };
+            if (user != null)
+            {
+                result.IsExistingUser = true;
+                result.AuthTokenResult = await GetTokensAsync(user);
             }
+            else
+            {
 
-            return await GetTokensAsync(user);
+            }
+            return result;
         }
         #endregion
     }

@@ -1,0 +1,17 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "quotemark": [true, "single"],
+    "member-access": [true, "no-public"],
+    "trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
+    "object-literal-sort-keys": false,
+    "forin": false,
+    "arrow-parens": false,
+    "max-line-length": [true, { "limit": 120 }],
+    "max-classes-per-file": false,
+    "ordered-imports": false
+  },
+  "rulesDirectory": []
+}
