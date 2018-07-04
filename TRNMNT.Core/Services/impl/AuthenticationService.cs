@@ -209,7 +209,7 @@ namespace TRNMNT.Core.Services.Impl
 
         private async Task<AuthTokenResult> GetTokensAsync(User user)
         {
-            return new AuthTokenResult
+            return new AuthTokenResult()
             {
                 IdToken = await GenerateTokenAsync(user),
                     RefreshToken = GenerateRefreshToken(user)
@@ -237,6 +237,7 @@ namespace TRNMNT.Core.Services.Impl
             var userInfoResponse = await client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={fbToken}");
             var fbUser = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
             var user = await _userManager.FindByEmailAsync(fbUser.Email);
+
             var result = new SocialLoginResult()
             {
                 UserData = new UserRegistrationModel()
@@ -244,7 +245,6 @@ namespace TRNMNT.Core.Services.Impl
                 FirstName = fbUser.FirstName,
                 LastName = fbUser.LastName,
                 Email = fbUser.Email,
-                DateOfBirth = DateTime.Parse(fbUser.DateOfBirthString)
                 }
             };
             if (user != null)
@@ -252,9 +252,9 @@ namespace TRNMNT.Core.Services.Impl
                 result.IsExistingUser = true;
                 result.AuthTokenResult = await GetTokensAsync(user);
             }
-            else
+            if (!String.IsNullOrEmpty(fbUser.DateOfBirthString))
             {
-
+                result.UserData.DateOfBirth = DateTime.Parse(fbUser.DateOfBirthString);
             }
             return result;
         }

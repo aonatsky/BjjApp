@@ -1,12 +1,13 @@
-﻿import { NgModule } from '@angular/core'
-import { CoreModule } from './../core/core.module'
+﻿import { NgModule } from '@angular/core';
+import { CoreModule } from './../core/core.module';
 import { RouterModule } from '@angular/router';
-import { EventAdminComponent } from './event-admin/event-admin.component'
-import { EventOverviewComponent } from './event-overview/event-overview.component'
-import { EventEditComponent } from './event-edit/event-edit.component'
-import { eventAdminRoutes } from './event-admin.routing'
+import { EventAdminPageComponent } from './event-admin.page.component';
+import { EventOverviewComponent } from './event-overview/event-overview.component';
+import { EventEditComponent } from './event-edit/event-edit.component';
+import { eventAdminRoutes } from './event-admin.routing';
 import { BracketGenerationComponent } from './event-management/brackets-generation/bracket-generation.component';
 import { EventManagementComponent } from './event-management/event-management.component';
+// tslint:disable-next-line:max-line-length
 import { EventManagementParticipantsComponent } from './event-management-participants/event-management-participants.component';
 import { SharedModule } from '../shared/shared.module';
 import { PrticipantsListUploadComponent } from './participant-list-upload/participant-list-upload.component';
@@ -19,42 +20,31 @@ import { EventRunWeightDivisionViewComponent } from './event-run-wd-view/event-r
 import { EventRunCategoryViewComponent } from './event-run-category-view/event-run-category-view.component';
 import { AbsoluteWeightDivisionComponent } from './absolute-weight-division/absolute-weight-division.component';
 import { ResultsComponent } from './event-management/results/results.component';
-import {BracketResultSetComponent} from './event-run/bracket-result-set/bracket-result-set.component';
+import { BracketResultSetComponent } from './event-run/bracket-result-set/bracket-result-set.component';
 
+@NgModule({
+  imports: [CoreModule, SharedModule, RoundModule, RouterModule.forChild(eventAdminRoutes)],
+  declarations: [
+    EventAdminPageComponent,
+    EventOverviewComponent,
+    EventEditComponent,
+    BracketGenerationComponent,
+    EventManagementComponent,
+    CategoryEditComponent,
+    EventManagementParticipantsComponent,
+    PrticipantsListUploadComponent,
+    WebsocketInteractionComponent,
+    EventRunComponent,
+    EventRunWeightDivisionViewComponent,
+    EventRunCategoryViewComponent,
+    AbsoluteWeightDivisionComponent,
+    ConnectorComponent,
+    ResultsComponent,
+    BracketResultSetComponent
+  ],
 
-@
-    NgModule({
-        imports: [
-            CoreModule,
-            SharedModule,
-            RoundModule,
-            RouterModule.forChild(eventAdminRoutes)
-        ],
-        declarations: [
-            EventAdminComponent,
-            EventOverviewComponent,
-            EventEditComponent,
-            BracketGenerationComponent,
-            EventManagementComponent,
-            CategoryEditComponent,
-            EventManagementParticipantsComponent,
-            PrticipantsListUploadComponent,
-            WebsocketInteractionComponent,
-            EventRunComponent,
-            EventRunWeightDivisionViewComponent,
-            EventRunCategoryViewComponent,
-            AbsoluteWeightDivisionComponent,
-            ConnectorComponent,
-            ResultsComponent,
-            BracketResultSetComponent
-        ],
+  providers: [],
 
-        providers: [],
-
-        exports: [
-
-        ]
-    })
-
-export class EventAdminModule {
-}
+  exports: []
+})
+export class EventAdminModule {}

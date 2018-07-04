@@ -220,14 +220,19 @@ export class AuthService {
     return new UserModel(this.user.UserId, this.user.first_name, this.user.last_name, this.user.email, this.user.role);
   }
 
-  facebookLogin(): Observable<boolean> {
+  facebookLogin(): Observable<SocialLoginResultModel> {
     const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
     return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(
       flatMap((userData: SocialUser) => {
+        debugger;
         return this.http.post<SocialLoginResultModel>(ApiMethods.auth.facebookLogin, { token: userData.token });
       }),
-      map(r => {
-        return this.processTokensResponse(r);
+      map((r: SocialLoginResultModel) => {
+        debugger;
+        if (r.authTokenModel && r.isExistingUser) {
+          this.processTokensResponse(r.authTokenModel);
+        }
+        return r;
       }),
       catchError(e => {
         return throwError(e);
@@ -282,15 +287,6 @@ export class AuthService {
     if (typeof body.idToken !== 'undefined') {
       // Stores access token & refresh token.
       this.store(body);
-      return true;
-    }
-    return false;
-  }
-
-  private processFacebookLogin(result: SocialLoginResultModel): boolean {
-    if (typeof result.idToken !== 'undefined') {
-      // Stores access token & refresh token.
-      this.store(result);
       return true;
     }
     return false;

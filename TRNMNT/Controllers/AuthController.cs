@@ -44,103 +44,78 @@ namespace TRNMNT.Web.Controllers
         #region Public Methods
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task GetToken([FromBody] UserCredentialsModel credentials)
+        public async Task<IActionResult> GetToken([FromBody] UserCredentialsModel credentials)
         {
-            try
+            return await HandleRequestWithDataAsync(async() =>
             {
-                //var token = await _authenticationSerivce.GetToken(credentials.Email, credentials.Password);
                 var tokenResult = await _authenticationSerivce.GetTokenAsync(credentials.Email, credentials.Password);
                 if (tokenResult != null)
                 {
-                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    Response.StatusCode = (int) HttpStatusCode.OK;
                     var response = new
                     {
                         idToken = tokenResult.IdToken,
                         refreshToken = tokenResult.RefreshToken
                     };
-                    await Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
-
+                    return Success(response);
                 }
                 else
                 {
-                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
-
+                    return (null, HttpStatusCode.Unauthorized);
+                };
+            });
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task UpdateToken([FromBody] RefreshTokenModel refreshTokenModel)
+        public async Task<IActionResult> UpdateToken([FromBody] RefreshTokenModel refreshTokenModel)
         {
-            try
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var tokenResult = await _authenticationSerivce.UpdateTokenAsync(refreshTokenModel.RefreshToken);
                 if (tokenResult != null)
                 {
-                    await Response.WriteAsync(JsonConvert.SerializeObject(tokenResult, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+                    return Success(tokenResult);
                 }
                 else
                 {
-                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return (null, HttpStatusCode.Unauthorized);
                 }
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
+            });
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task Register([FromBody] UserCredentialsModel credentials)
+        public async Task<IActionResult> Register([FromBody] UserCredentialsModel credentials)
         {
-            try
+            return await HandleRequestAsync(async() =>
             {
                 if (Request.Headers["password"] == "pizdecpassword")
                 {
                     await _authenticationSerivce.CreateUserAsync(credentials);
-                    Response.StatusCode = (int)HttpStatusCode.OK;
+                    return HttpStatusCode.OK;
                 }
                 else
                 {
-                    Response.StatusCode = (int)HttpStatusCode.Forbidden; ;
+                    return HttpStatusCode.Forbidden;;
                 }
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(ex);
-            }
+            });
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task FacebookLogin([FromBody]FacebookLoginModel model)
+        public async Task<IActionResult> FacebookLogin([FromBody] FacebookLoginModel model)
         {
-            try
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var socialLoginResult = await _authenticationSerivce.FacebookLogin(model.Token);
                 if (socialLoginResult != null)
                 {
-                    Response.StatusCode = (int)HttpStatusCode.OK;
-                    await Response.WriteAsync(JsonConvert.SerializeObject(socialLoginResult, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+                    return Success(socialLoginResult);
                 }
                 else
                 {
-                    Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return (null,HttpStatusCode.Unauthorized);
                 }
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                HandleException(ex);
-            }
+            });
         }
-
         #endregion
     }
 }

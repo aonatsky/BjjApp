@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using TRNMNT.Core.Logger;
 using TRNMNT.Data.Context;
 using TRNMNT.Data.Entities;
@@ -22,7 +23,7 @@ namespace TRNMNT.Web
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional : false, reloadOnChange : true)
                 .AddEnvironmentVariables();
             if (env.IsDevelopment())
             {
@@ -67,7 +68,8 @@ namespace TRNMNT.Web
             services.AddSignalR();
 
             // Add framework services.
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);;
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,8 +82,8 @@ namespace TRNMNT.Web
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 {
                     HotModuleReplacement = true,
-                    HotModuleReplacementEndpoint = "/dist/__webpack_hmr"
-                });  
+                        HotModuleReplacementEndpoint = "/dist/__webpack_hmr"
+                });
             }
             else
             {
@@ -93,7 +95,6 @@ namespace TRNMNT.Web
                 routes.MapHub<RunEventHub>("/runevent");
                 routes.MapHub<RoundHub>("/round-hub");
             });
-
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>
@@ -101,11 +102,11 @@ namespace TRNMNT.Web
                 routes.MapRoute(
                     name: "default",
                     template: "{*all}",
-                    defaults: new { controller = "Home", action = "Index" }
-                    );
+                    defaults : new { controller = "Home", action = "Index" }
+                );
                 routes.MapSpaFallbackRoute(
                     name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                    defaults : new { controller = "Home", action = "Index" });
             });
 
         }

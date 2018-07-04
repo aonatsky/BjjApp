@@ -1,4 +1,6 @@
-﻿export class AuthTokenModel {
+﻿import { UserRegistrationModel } from './user.models';
+
+export class AuthTokenModel {
   idToken: string;
   refreshToken: string;
 }
@@ -10,6 +12,5 @@ export class RefreshTokenModel {
 export class SocialLoginResultModel {
   authTokenModel: AuthTokenModel;
   isExistingUser: boolean;
-  userData
-
+  userData: UserRegistrationModel;
 }
