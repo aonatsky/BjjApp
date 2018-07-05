@@ -105,14 +105,14 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var socialLoginResult = await _authenticationSerivce.FacebookLogin(model.Token);
-                if (socialLoginResult != null)
+                var authTokenresult = await _authenticationSerivce.FacebookLogin(model.Token);
+                if (authTokenresult != null)
                 {
-                    return Success(socialLoginResult);
+                    return Success(authTokenresult);
                 }
                 else
                 {
-                    return (null,HttpStatusCode.Unauthorized);
+                    return (null, HttpStatusCode.Unauthorized);
                 }
             });
         }

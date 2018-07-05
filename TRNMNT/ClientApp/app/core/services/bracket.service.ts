@@ -24,7 +24,7 @@ export class BracketService {
 
   downloadBracket(weightDivisionId: string, fileName: string) {
     return this.httpService
-      .get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId, null, ResponseContentType.Blob)
+      .get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId)
       .pipe(map((r) => this.httpService.getExcelFile(r, fileName)));
   }
 

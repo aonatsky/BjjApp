@@ -90,11 +90,6 @@ namespace TRNMNT.Web.Helpers
                         }
                     };
                 });
-//                        .AddFacebook(facebookOptions =>
-//                {
-//                    facebookOptions.AppId = configuration["Facebook:AppId"];
-//                    facebookOptions.AppSecret = configuration["Facebook:AppSecret"];
-//                });
             return services;
         }
     }

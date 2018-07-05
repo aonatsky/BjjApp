@@ -12,141 +12,148 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class HttpService {
-    constructor(
-        private loggerService: LoggerService,
-        private loaderService: LoaderService,
-        private routerService: RouterService,
-        private notificationService: NotificationService,
-        private authService: AuthService,
-        private http: HttpClient
-    ) {
+  constructor(
+    private loggerService: LoggerService,
+    private loaderService: LoaderService,
+    private routerService: RouterService,
+    private notificationService: NotificationService,
+    private authService: AuthService,
+    private http: HttpClient
+  ) {}
+
+  //#region Public Methods
+
+  get<T>(
+    name: string,
+    paramsHolder?: object,
+    responseType?: ResponseContentType,
+    notifyMessage?: string
+  ): Observable<any> {
+    return this.handleRequest(() => this.http.get<T>(name), notifyMessage);
+  }
+
+  post<T>(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
+    return this.handleRequest(() => this.http.post<T>(name, model), notifyMessage);
+  }
+
+  put<T>(name: string, model: any, notifyMessage?: string): Observable<any> {
+    return this.handleRequest(() => this.http.put<T>(name, model), notifyMessage);
+  }
+
+  delete(name: string, model: any, notifyMessage?: string): Observable<any> {
+    return this.handleRequest(() => this.http.delete(name), notifyMessage);
+  }
+
+  deleteById(name: string, id: any, notifyMessage?: string): Observable<any> {
+    const url = name + '/' + id;
+    return this.handleRequest(() => this.http.delete(url), notifyMessage);
+  }
+
+  postFile(name: string, file: any, notifyMessage?: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.handleRequest(() => this.http.post(name, formData), notifyMessage);
+  }
+
+  getPdf(url, fileName): Observable<any> {
+    return this.http.get<Blob>(url).pipe(
+      map(res => {
+        FileSaver.saveAs(res, 'application/pdf', fileName);
+      })
+    );
+  }
+
+  getExcelFile(response: any, fileName: string): void {
+    FileSaver.saveAs(response.blob(), fileName);
+  }
+
+  convertDate(input) {
+    if (typeof input !== 'object') {
+      return input;
     }
 
-    //#region Public Methods
+    for (let key in input) {
+      if (!input.hasOwnProperty(key)) continue;
 
-    get<T>(name: string, paramsHolder?: object, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
-        return this.handleRequest(() => this.http.get<T>(name), notifyMessage);
+      let value = input[key];
+      const type = typeof value;
+      let match;
+      if (type == 'string' && (match = value.match(this.iso8601RegEx))) {
+        input[key] = new Date(value);
+      } else if (type === 'object') {
+        value = this.convertDate(value);
+      }
     }
+    return input;
+  }
 
+  //#endregion
 
-    post<T>(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
-        return this.handleRequest(() => this.http.post<T>(name, model), notifyMessage);
-    }
+  //#region Private Methods
 
-    put<T>(name: string, model: any, notifyMessage?: string): Observable<any> {
-        return this.handleRequest(() => this.http.put<T>(name, model), notifyMessage);
-    }
+  private handleRequest(httpHandler: () => Observable<any>, notifyMessage?: string): Observable<any> {
+    this.loaderService.showLoader();
+    return httpHandler().pipe(
+      catchError((error: Response | any) => this.handleErrorRepeater(error, () => httpHandler(), notifyMessage)),
+      finalize(() => this.loaderService.hideLoader())
+    );
+  }
 
-    delete(name: string, model: any, notifyMessage?: string): Observable<any> {
-        return this.handleRequest(() => this.http.delete(name), notifyMessage);
-    }
-
-    deleteById(name: string, id: any, notifyMessage?: string): Observable<any> {
-        const url = name + '/' + id;
-        return this.handleRequest(() => this.http.delete(url), notifyMessage);
-    }
-
-    postFile(name: string, file: any, notifyMessage?: string): Observable<any> {
-        const formData = new FormData();
-        formData.append('file', file);
-        return this.handleRequest(() => this.http.post(name, formData), notifyMessage);
-    }
-
-    getPdf(url, fileName): Observable<any> {
-        return this.http.get<Blob>(url).pipe(map((res) => {
-            FileSaver.saveAs(res, 'application/pdf', fileName);
-        }));
-    }
-
-    getExcelFile(response: any, fileName: string): void {
-        FileSaver.saveAs(response.blob(), fileName);
-    }
-
-   
-    convertDate(input) {
-        if (typeof input !== 'object') {
-            return input;
-        };
-
-        for (let key in input) {
-            if (!input.hasOwnProperty(key)) continue;
-
-            let value = input[key];
-            const type = typeof value;
-            let match;
-            if (type == 'string' && (match = value.match(this.iso8601RegEx))) {
-                input[key] = new Date(value)
+  private handleErrorRepeater(error: Response | any, repeatRequest: Function, notifyMessage?: string) {
+    // In a real world app, you might use a remote logging infrastructure
+    if (error instanceof Response && error.status === 401) {
+      this.loaderService.showLoader();
+      return this.authService
+        .getNewToken()
+        .pipe(
+          flatMap(isSucceed => {
+            if (!isSucceed) {
+              throwError(error);
             }
-            else if (type === 'object') {
-                value = this.convertDate(value);
-            }
-        }
-        return input;
-    }
-
-    //#endregion
-
-    //#region Private Methods
-
-
-    private handleRequest(httpHandler: () => Observable<any>, notifyMessage?: string): Observable<any> {
-        this.loaderService.showLoader();
-        return httpHandler().pipe(catchError((error: Response | any) => this.handleErrorRepeater(error, () => httpHandler(), notifyMessage))
-            , finalize(() => this.loaderService.hideLoader()));
-    }
-
-    private handleErrorRepeater(error: Response | any, repeatRequest: Function, notifyMessage?: string) {
-        // In a real world app, you might use a remote logging infrastructure
-        if (error instanceof Response && error.status == 401) {
             this.loaderService.showLoader();
-            return this.authService.revokeRefreshToken().pipe(flatMap((isSucceed) => {
-                if (!isSucceed) {
-                    throwError(error);
-                }
-                this.loaderService.showLoader();
-                return repeatRequest().pipe(
-                    catchError((error: Response | any) => this.handleError(error, notifyMessage)),
-                    finalize(() => this.loaderService.hideLoader()));
-
-            })).pipe(catchError((error: Response | any) => this.goToLogin(error)),
-                finalize(() => this.loaderService.hideLoader()));
-
-        }
-        return this.handleError(error, notifyMessage);
+            return repeatRequest().pipe(
+              catchError((error: Response | any) => this.handleError(error, notifyMessage)),
+              finalize(() => this.loaderService.hideLoader())
+            );
+          })
+        )
+        .pipe(
+          catchError((error: Response | any) => this.goToLogin(error)),
+          finalize(() => this.loaderService.hideLoader())
+        );
     }
+    return this.handleError(error, notifyMessage);
+  }
 
-    private handleError(error: Response | any, notifyMessage?: string) {
-        const errMsg = this.getErrorMessage(error);
-        this.notificationService.showErrorOrGeneric(notifyMessage);
-        this.loggerService.logError(errMsg);
-        return throwError(errMsg);
+  private handleError(error: Response | any, notifyMessage?: string) {
+    const errMsg = this.getErrorMessage(error);
+    this.notificationService.showErrorOrGeneric(notifyMessage);
+    this.loggerService.logError(errMsg);
+    return throwError(errMsg);
+  }
+
+  private goToLogin(error?: Response | any) {
+    this.routerService.goToLogin();
+    return this.handleError(error, 'Please sigh in');
+  }
+
+  private getErrorMessage(error: Response | any): string {
+    const message = 'Error during request';
+    if (error instanceof Response) {
+      return `${message}. Status: '${error.statusText}', code: '${error.status || ''}' url: '${error.url}'`;
     }
-
-    private goToLogin(error?: Response | any) {
-        this.routerService.goToLogin();
-        return this.handleError(error, 'Please sigh in');
+    if (!!error) {
+      return `${message}. Message: '${error.message ? error.message : error.toString()}'`;
     }
+    return message;
+  }
 
-    private getErrorMessage(error: Response | any): string {
-        const message = 'Error during request';
-        if (error instanceof Response) {
-            return `${message}. Status: '${error.statusText}', code: '${error.status || ''}' url: '${error.url}'`;
-        }
-        if (!!error) {
-            return `${message}. Message: '${error.message ? error.message : error.toString()}'`;
-        }
-        return message;
-    }
+  private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
 
-    private iso8601RegEx = /(19|20|21)\d\d([-/.])(0[1-9]|1[012])\2(0[1-9]|[12][0-9]|3[01])T(\d\d)([:/.])(\d\d)([:/.])(\d\d)/;
-
-    //#endregion
+  //#endregion
 }
-
-
 
 export interface SearchParams {
-    name: string;
-    value: string;
+  name: string;
+  value: string;
 }
-

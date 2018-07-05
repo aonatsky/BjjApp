@@ -92,7 +92,6 @@ namespace TRNMNT.Core.Services.Impl
                 var user = await _userManager.FindByIdAsync(userIdClaim.Value.ToString());
                 return await GetTokensAsync(user);
             }
-
             return null;
         }
 
@@ -195,7 +194,6 @@ namespace TRNMNT.Core.Services.Impl
                 new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Email, user.Email),
-
             };
         }
 
@@ -216,7 +214,7 @@ namespace TRNMNT.Core.Services.Impl
             };
         }
 
-        public async Task<SocialLoginResult> FacebookLogin(string fbToken)
+        public async Task<AuthTokenResult> FacebookLogin(string fbToken)
         {
             var client = new HttpClient();
             // 1.generate an app access token
@@ -237,26 +235,21 @@ namespace TRNMNT.Core.Services.Impl
             var userInfoResponse = await client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={fbToken}");
             var fbUser = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
             var user = await _userManager.FindByEmailAsync(fbUser.Email);
-
-            var result = new SocialLoginResult()
+            if (user == null)
             {
-                UserData = new UserRegistrationModel()
+                user = new User()
                 {
+                Email = fbUser.Email,
                 FirstName = fbUser.FirstName,
                 LastName = fbUser.LastName,
-                Email = fbUser.Email,
-                }
-            };
-            if (user != null)
-            {
-                result.IsExistingUser = true;
-                result.AuthTokenResult = await GetTokensAsync(user);
+                FacebookId = fbUser.Id,
+                UserName = fbUser.Email,
+                PictureUrl = fbUser.Picture.Data.Url
+                };
+                await _userManager.CreateAsync(user);
             }
-            if (!String.IsNullOrEmpty(fbUser.DateOfBirthString))
-            {
-                result.UserData.DateOfBirth = DateTime.Parse(fbUser.DateOfBirthString);
-            }
-            return result;
+
+            return await GetTokensAsync(user);
         }
         #endregion
     }

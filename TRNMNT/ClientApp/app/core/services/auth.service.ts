@@ -7,10 +7,9 @@ import { from, Observable, of, throwError } from 'rxjs';
 import { catchError, flatMap, map } from 'rxjs/operators';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { RefreshTokenModel } from '../model/auth.models';
-import { AuthTokenModel, SocialLoginResultModel } from '../model/auth.models';
+import { AuthTokenModel } from '../model/auth.models';
 import { CredentialsModel } from '../model/credentials.model';
 import { UserModel } from '../model/user.models';
-import { RouterService } from './router.service';
 
 /**
  * Authentication service.
@@ -31,7 +30,6 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private routerService: RouterService,
     private socialAuthService: SocialAuthService,
     private jwtHelper: JwtHelperService
   ) {
@@ -111,21 +109,10 @@ export class AuthService {
     const refreshToken: string = localStorage.getItem('refreshToken');
 
     if (refreshToken != null) {
-      // Token endpoint & params.
-      const tokenEndpoint: string = ApiMethods.auth.getToken;
-
-      const params: any = {
-        grant_type: 'refreshToken',
-        refreshToken
-      };
-
-      // Encodes the parameters.
-      const body: string = this.encodeParams(params);
-      return this.http.post(tokenEndpoint, body).pipe(
-        map((res: Response) => {
-          return this.processTokensResponse(res.json());
-        })
-      );
+      return this.http.post<AuthTokenModel>(ApiMethods.auth.refreshToken, { refreshToken })
+        .pipe(map(r => {
+          return this.processTokensResponse(r);
+        }));
     }
   }
 
@@ -220,19 +207,14 @@ export class AuthService {
     return new UserModel(this.user.UserId, this.user.first_name, this.user.last_name, this.user.email, this.user.role);
   }
 
-  facebookLogin(): Observable<SocialLoginResultModel> {
+  facebookLogin(): Observable<boolean> {
     const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
     return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(
       flatMap((userData: SocialUser) => {
-        debugger;
-        return this.http.post<SocialLoginResultModel>(ApiMethods.auth.facebookLogin, { token: userData.token });
+        return this.http.post<AuthTokenModel>(ApiMethods.auth.facebookLogin, { token: userData.token });
       }),
-      map((r: SocialLoginResultModel) => {
-        debugger;
-        if (r.authTokenModel && r.isExistingUser) {
-          this.processTokensResponse(r.authTokenModel);
-        }
-        return r;
+      map(r => {
+        return this.processTokensResponse(r);
       }),
       catchError(e => {
         return throwError(e);

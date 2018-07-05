@@ -3,10 +3,7 @@ import { AuthService } from './../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular5-social-login';
-
 import './login.component.scss';
-import { StateService } from '../../services/state.service';
 
 @Component({
   selector: 'login',
@@ -23,8 +20,6 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private routerService: RouterService,
     private loggerService: LoggerService,
-    private socialAuthService: SocialAuthService,
-    private stateService: StateService
   ) {}
 
   ngOnInit() {
@@ -53,14 +48,6 @@ export class LoginComponent implements OnInit {
   }
 
   facebookLogin() {
-    this.authService.facebookLogin().subscribe(r => {
-      if (r.isExistingUser) {
-        this.processLogin(this.authService.isLoggedIn());
-      }
-      if (r.userData && !r.isExistingUser) {
-        this.stateService.setValue('socialUser', r.userData);
-        this.routerService.goToRegistration(this.returnUrl);
-      }
-    });
+    this.authService.facebookLogin().subscribe(r => this.processLogin);
   }
 }
