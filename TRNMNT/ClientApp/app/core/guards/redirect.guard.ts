@@ -12,6 +12,7 @@ export class RedirectGuard implements CanActivate {
   constructor(public authService: AuthService, private routerService: RouterService, private authGuard: AuthGuard) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    debugger;
     if (this.redirectToEventPage()) {
       this.routerService.goToEventInfo();
     } else {

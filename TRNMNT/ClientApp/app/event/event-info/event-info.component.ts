@@ -7,28 +7,30 @@ import { EventService } from './../../core/services/event.service';
 import { EventModel } from './../../core/model/event.models';
 
 @Component({
-    selector: 'event-info',
-    templateUrl: './event-info.component.html',
-    styleUrls: ['./event-info.component.css']
+  selector: 'event-info',
+  templateUrl: './event-info.component.html',
+  styleUrls: ['./event-info.component.css']
 })
 export class EventInfoComponent implements OnInit {
+  private eventModel: EventModel;
 
-    private eventModel: EventModel;
+  constructor(
+    private routerService: RouterService,
+    private loggerService: LoggerService,
+    private eventService: EventService,
+    private route: ActivatedRoute
+  ) {}
 
-    constructor(private routerService: RouterService, private loggerService: LoggerService, private eventService: EventService, private route: ActivatedRoute) {
+  ngOnInit() {
+    this.eventService.getEventInfo().subscribe(r => {
+      this.eventModel = r;
+      if (!this.eventModel) {
+        this.routerService.goHome();
+      }
+    });
+  }
 
-    }
-
-    ngOnInit() {
-        this.eventService.getEventInfo().subscribe(r => {
-            this.eventModel = r;
-            if (!this.eventModel) {
-                this.routerService.goHome();
-            }
-        });
-    }
-
-    private participate() {
-        this.routerService.goToEventRegistration();
-    }
+  private participate() {
+    this.routerService.goToEventRegistration();
+  }
 }

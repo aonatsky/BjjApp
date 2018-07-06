@@ -57,11 +57,11 @@ export class RouterService {
   }
 
   goToEventInfo() {
-    this.router.navigateByUrl('event/event-info/');
+    this.router.navigateByUrl('/event/');
   }
 
   goToEventRegistration() {
-    this.router.navigateByUrl('event/event-registration/');
+    this.router.navigateByUrl('/event/event-registration/');
   }
 
   openEventWeightDivisionSpactatorView() {
