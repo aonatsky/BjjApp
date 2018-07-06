@@ -9,7 +9,7 @@ import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { RefreshTokenModel } from '../model/auth.models';
 import { AuthTokenModel } from '../model/auth.models';
 import { CredentialsModel } from '../model/credentials.model';
-import { UserModel } from '../model/user.models';
+import { UserModel, UserRegistrationModel } from '../model/user.models';
 
 /**
  * Authentication service.
@@ -39,18 +39,16 @@ export class AuthService {
     // Creates header for post requests.
   }
 
-  login(email: string, password: string) {
-    const credentials: CredentialsModel = {
-      email,
-      password
-    };
-    this.http.post<any>(ApiMethods.auth.getToken, credentials).subscribe(
-      // We're assuming the response will be an object
-      // with the JWT on an idToken key
-      data => localStorage.setItem('idToken', data.idToken),
-      error => console.log(error)
-    );
-  }
+  // login(email: string, password: string): Observable<any> {
+  //   const credentials: CredentialsModel = {
+  //     email,
+  //     password
+  //   };
+  //   return this.http.post<any>(ApiMethods.auth.getToken, credentials).pipe(
+  //     map(data => localStorage.setItem('idToken', data.idToken)),
+  //     catchError(error => console.log(error))
+  //   );
+  // }
 
   /**
    * Tries to sign in the user.
@@ -84,22 +82,8 @@ export class AuthService {
     );
   }
 
-  register(email, password): Observable<string> {
-    const credentials: CredentialsModel = {
-      email,
-      password
-    };
-    return this.http.post<string>(ApiMethods.auth.register, credentials).pipe(
-      catchError(e => {
-        if (e instanceof Response) {
-          if (e.status !== 401) {
-            return Observable.throw(e);
-          }
-        } else {
-          return Observable.throw(e);
-        }
-      })
-    );
+  register(model: UserRegistrationModel): Observable<string> {
+    return this.http.post<string>(ApiMethods.auth.register, model);
   }
 
   /**
@@ -109,10 +93,11 @@ export class AuthService {
     const refreshToken: string = localStorage.getItem('refreshToken');
 
     if (refreshToken != null) {
-      return this.http.post<AuthTokenModel>(ApiMethods.auth.refreshToken, { refreshToken })
-        .pipe(map(r => {
+      return this.http.post<AuthTokenModel>(ApiMethods.auth.refreshToken, { refreshToken }).pipe(
+        map(r => {
           return this.processTokensResponse(r);
-        }));
+        })
+      );
     }
   }
 

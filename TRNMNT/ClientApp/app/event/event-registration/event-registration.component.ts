@@ -13,149 +13,135 @@ import { CategorySimpleModel } from './../../core/model/category.models';
 import { WeightDivisionSimpleModel } from './../../core/model/weight-division.models';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import { Observable, forkJoin } from 'rxjs';
-import { SelectItem, Message } from 'primeng/primeng'
+import { forkJoin } from 'rxjs';
+import { SelectItem, Message } from 'primeng/primeng';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-    selector: 'event-registration',
-    templateUrl: './event-registration.component.html',
-    styleUrls: ['./event-registration.component.css'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'event-registration',
+  templateUrl: './event-registration.component.html',
+  styleUrls: ['./event-registration.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
-
 export class EventRegistrationComponent implements OnInit {
+  @ViewChild('formPrivatElement') formPrivat: ElementRef;
+  participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
+  categories: CategorySimpleModel[] = [];
+  weightDivisions: WeightDivisionSimpleModel[] = [];
+  categorySelectItems: SelectItem[];
+  weightDivisionsSelectItems: SelectItem[];
+  teamSelectItems: SelectItem[] = [];
+  teams: TeamModel[] = [];
 
-    private eventId: string;
-    private currentStep: number = 0;
-    private participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
-    private categories: CategorySimpleModel[] = [];
-    private weightDivisions: WeightDivisionSimpleModel[] = [];
-    private categorySelectItems: SelectItem[];
-    private weightDivisionsSelectItems: SelectItem[];
-    private teamSelectItems: SelectItem[] = [];
-    private teams: TeamModel[] = [];
-    private tncAccepted: boolean = false;
-    private messages: Message[] = []
-    private paymentData: string = '';
-    private paymentSignature: string = '';
+  private eventId: string;
+  private currentStep: number = 0;
+  private tncAccepted: boolean = false;
+  private messages: Message[] = [];
+  private paymentData: string = '';
+  private paymentSignature: string = '';
 
-    @ViewChild('formPrivatElement') formPrivat: ElementRef
+  constructor(
+    private routerService: RouterService,
+    private loggerService: LoggerService,
+    private route: ActivatedRoute,
+    private weightDivisionService: WeightDivisionService,
+    private categoryService: CategoryService,
+    private teamService: TeamService,
+    private participantService: ParticipantService,
+    private paymentService: PaymentService,
+    private cd: ChangeDetectorRef,
+    private authService: AuthService
+  ) {}
 
-    constructor(
-        private routerService: RouterService,
-        private loggerService: LoggerService,
-        private route: ActivatedRoute,
-        private weightDivisionService: WeightDivisionService,
-        private categoryService: CategoryService,
-        private teamService: TeamService,
-        private participantService: ParticipantService,
-        private paymentService: PaymentService,
-        private cd: ChangeDetectorRef
+  ngOnInit() {
+    console.log(this.authService.getUser());
+    this.loadData();
+  }
 
-    ) {
+  private loadData() {
+    forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForCurrentEvent()).subscribe(data =>
+      this.initData(data)
+    );
+  }
 
+  private initData(data) {
+    this.teams = data[0];
+    this.categories = data[1];
+    this.initCategoryDropdown();
+    this.initTeamDropdown();
+  }
+
+  private getDefaultDateOfBirth() {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 20);
+    return date;
+  }
+
+  private initTeamDropdown() {
+    this.teamSelectItems = [];
+    for (const team of this.teams) {
+      this.teamSelectItems.push({ label: team.name, value: team.teamId });
     }
+  }
 
-    ngOnInit() {
-        this.loadData();
+  private initCategoryDropdown() {
+    this.categorySelectItems = [];
+    for (const category of this.categories) {
+      this.categorySelectItems.push({ label: category.name, value: category.categoryId });
     }
+  }
 
+  private initWeightDivisionDropdown(event) {
+    this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
+      this.weightDivisions = w;
+      this.weightDivisionsSelectItems = [];
+      this.weightDivisions.forEach(wd => {
+        this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId });
+      });
+    });
+  }
 
+  private getTeam() {
+    return this.teams.filter(t => t.teamId === this.participant.teamId)[0].name;
+  }
 
-    private loadData() {
-        forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForCurrentEvent())
-            .subscribe(data => this.initData(data));
-    }
+  private getCategory() {
+    return this.categories.filter(c => c.categoryId === this.participant.categoryId)[0].name;
+  }
 
-    private initData(data) {
-        this.teams = data[0];
-        this.categories = data[1];
-        this.initCategoryDropdown();
-        this.initTeamDropdown();
+  private getWeightDivision() {
+    return this.weightDivisions.filter(wd => wd.weightDivisionId === this.participant.weightDivisionId)[0].name;
+  }
 
-    }
+  private showMessage(message: string) {
+    this.messages.push({ severity: 'error', summary: 'Error', detail: message });
+  }
 
+  private goToPayment() {
+    // todo click payment form
 
-
-    private getDefaultDateOfBirth() {
-        let date = new Date();
-        date.setFullYear(date.getFullYear() - 20);
-        return date;
-    }
-
-    private initTeamDropdown() {
-        this.teamSelectItems = [];
-        for (var i = 0; i < this.teams.length; i++) {
-            let team = this.teams[i];
-            this.teamSelectItems.push({ label: team.name, value: team.teamId })
+    this.participantService
+      .processParticipantRegistration(this.participant)
+      .subscribe((r: ParticipantRegistrationResultModel) => {
+        if (!r.success) {
+          this.showMessage(r.reason);
+        } else {
+          this.submitPaymentForm(r.paymentData);
         }
-    }
+      });
+  }
 
-    private initCategoryDropdown() {
-        this.categorySelectItems = [];
-        for (var i = 0; i < this.categories.length; i++) {
-            let category = this.categories[i];
-            this.categorySelectItems.push({ label: category.name, value: category.categoryId })
-        }
-    }
+  private submitPaymentForm(paymentData: PaymentDataModel) {
+    this.formPrivat.nativeElement.elements[0].value = paymentData.data;
+    this.formPrivat.nativeElement.elements[1].value = paymentData.signature;
+    this.formPrivat.nativeElement.submit();
+  }
 
-    private initWeightDivisionDropdown(event) {
-        this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
-            this.weightDivisions = w;
-            this.weightDivisionsSelectItems = [];
-            for (var i = 0; i < this.weightDivisions.length; i++) {
-                let weightDivision = this.weightDivisions[i];
-                this.weightDivisionsSelectItems.push({ label: weightDivision.name, value: weightDivision.weightDivisionId })
-            }
-        })
+  private nextStep() {
+    this.currentStep++;
+  }
 
-    }
-
-    private getTeam() {
-        return this.teams.filter(t => t.teamId == this.participant.teamId)[0].name;
-    }
-
-    private getCategory() {
-        return this.categories.filter(c => c.categoryId == this.participant.categoryId)[0].name;
-    }
-
-    private getWeightDivision() {
-        return this.weightDivisions.filter(wd => wd.weightDivisionId == this.participant.weightDivisionId)[0].name;
-    }
-
-    private showMessage(message: string) {
-        this.messages.push({ severity: 'error', summary: 'Error', detail: message });
-    };
-
-
-
-    private goToPayment() {
-        // todo click payment form
-
-        this.participantService.processParticipantRegistration(this.participant).subscribe((r: ParticipantRegistrationResultModel) => {
-            if (!r.success) {
-                this.showMessage(r.reason);
-            } else {
-                this.submitPaymentForm(r.paymentData);
-            }
-        });
-
-    }
-
-    private submitPaymentForm(paymentData: PaymentDataModel) {
-        this.formPrivat.nativeElement.elements[0].value = paymentData.data;
-        this.formPrivat.nativeElement.elements[1].value = paymentData.signature;
-        this.formPrivat.nativeElement.submit();
-    }
-
-    private nextStep() {
-        this.currentStep++;
-    }
-
-    private previousStep() {
-        this.currentStep--;
-    }
-
-
+  private previousStep() {
+    this.currentStep--;
+  }
 }
-

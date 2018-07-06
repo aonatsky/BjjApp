@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
@@ -122,6 +123,10 @@ namespace TRNMNT.Web.Controllers
                 var code = action();
                 return StatusCode((int) code);
             }
+            catch (BusinessException be)
+            {
+                return BadRequest(be.Message);
+            }
             catch (Exception e)
             {
                 HandleException(e);
@@ -144,6 +149,10 @@ namespace TRNMNT.Web.Controllers
                 }
                 await Context.SaveAsync();
                 return Ok();
+            }
+            catch (BusinessException be)
+            {
+                return BadRequest(be.Message);
             }
             catch (Exception e)
             {
@@ -177,6 +186,10 @@ namespace TRNMNT.Web.Controllers
                 await Context.SaveAsync();
                 return Ok();
             }
+            catch (BusinessException be)
+            {
+                return BadRequest(be.Message);
+            }
             catch (Exception e)
             {
                 HandleException(e);
@@ -208,6 +221,10 @@ namespace TRNMNT.Web.Controllers
                 await Context.SaveAsync();
                 return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
+            catch (BusinessException be)
+            {
+                return BadRequest(be.Message);
+            }
             catch (Exception e)
             {
                 HandleException(e);
@@ -235,6 +252,10 @@ namespace TRNMNT.Web.Controllers
                 }
                 await Context.SaveAsync();
                 return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
+            }
+            catch (BusinessException be)
+            {
+                return BadRequest(be.Message);
             }
             catch (Exception e)
             {
@@ -264,6 +285,10 @@ namespace TRNMNT.Web.Controllers
                 await Context.SaveAsync();
                 return new FileContentResult(result.Response.ByteArray, result.Response.ContentType);
             }
+            catch (BusinessException be)
+            {
+                return BadRequest(be.Message);
+            }
             catch (Exception e)
             {
                 HandleException(e);
@@ -291,6 +316,10 @@ namespace TRNMNT.Web.Controllers
                 }
                 return new FileContentResult(result.Response.ByteArray, result.Response.ContentType);
             }
+            catch (BusinessException be)
+            {
+                return BadRequest(be.Message);
+            }
             catch (Exception e)
             {
                 HandleException(e);
@@ -307,7 +336,6 @@ namespace TRNMNT.Web.Controllers
         {
             return (value, HttpStatusCode.OK);
         }
-
         #endregion
     }
 }

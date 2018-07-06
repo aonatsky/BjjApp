@@ -26,14 +26,14 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateParticipantUserAsync(string login, string password);
+        Task<UserRegistrationResult> CreateParticipantUserAsync(UserRegistrationModel model);
 
         /// <summary>
         /// Creates user asynchronous.
         /// </summary>
         /// <param name="model">Credentials model.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateUserAsync(UserCredentialsModel model);
+        Task<UserRegistrationResult> CreateUserAsync(UserRegistrationModel model, string role);
 
         /// <summary>
         /// Updates the token asynchronous.

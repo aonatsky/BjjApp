@@ -3,13 +3,13 @@ import { CategoryModelBase } from './category.models';
 import { WeightDivisionModel } from './weight-division.models';
 
 export class ParticipantDdlModel {
-    categories: CategoryModelBase[];
-    weightDivisions: WeightDivisionModel[];
-    teams: TeamModelBase[];
+  categories: CategoryModelBase[];
+  weightDivisions: WeightDivisionModel[];
+  teams: TeamModelBase[];
 
-    constructor() {
-        this.categories = [];
-        this.weightDivisions = [];
-        this.teams = [];
-    }
+  constructor() {
+    this.categories = [];
+    this.weightDivisions = [];
+    this.teams = [];
+  }
 }

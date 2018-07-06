@@ -110,28 +110,27 @@ namespace TRNMNT.Core.Services.Impl
             return null;
         }
 
-        public async Task<UserRegistrationResult> CreateParticipantUserAsync(string email, string password)
+        public async Task<UserRegistrationResult> CreateParticipantUserAsync(UserRegistrationModel model)
         {
-            return await CreateUserAsync(new UserCredentialsModel()
-            {
-                Email = email,
-                    Password = password
-            });
+            return await CreateUserAsync(model, Roles.Participant);
         }
         #endregion
 
         #region Private Methods
-        public async Task<UserRegistrationResult> CreateUserAsync(UserCredentialsModel model)
+        public async Task<UserRegistrationResult> CreateUserAsync(UserRegistrationModel model, string role)
         {
             var user = new User
             {
                 Email = model.Email,
-                UserName = model.Email,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                CreateTS = DateTime.UtcNow,
+                UpdateTS = DateTime.UtcNow,
+                UserName = model.Email,
+                IsActive = true
             };
             var identityResult = await _userManager.CreateAsync(user, model.Password);
-            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, model.Role));
+            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
 
             if (identityResult.Succeeded)
             {

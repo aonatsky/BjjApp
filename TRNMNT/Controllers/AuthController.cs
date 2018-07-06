@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
@@ -84,19 +85,32 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] UserCredentialsModel credentials)
+        public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
         {
             return await HandleRequestAsync(async() =>
             {
                 if (Request.Headers["password"] == "pizdecpassword")
                 {
-                    await _authenticationSerivce.CreateUserAsync(credentials);
+                    await _authenticationSerivce.CreateUserAsync(model, "Owner");
                     return HttpStatusCode.OK;
                 }
                 else
                 {
                     return HttpStatusCode.Forbidden;;
                 }
+            });
+        }
+
+        [AllowAnonymous, HttpPost("[action]")]
+        public async Task<IActionResult> RegisterParticipantUser([FromBody] UserRegistrationModel model)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                var result = await _authenticationSerivce.CreateParticipantUserAsync(model);
+                if(!result.Success){
+                    throw new BusinessException(result.Reason);
+                }
+                return HttpStatusCode.OK;
             });
         }
 
