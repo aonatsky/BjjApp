@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EventModel } from '../core/model/event.models';
 import { EventService } from '../core/services/event.service';
 import { RouterService } from '../core/services/router.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'event',
@@ -10,8 +11,12 @@ import { RouterService } from '../core/services/router.service';
 })
 export class EventComponent implements OnInit {
   eventModel: EventModel;
-
-  constructor(private routerService: RouterService, private eventService: EventService) {}
+  displayPopup: boolean = false;
+  constructor(
+    private routerService: RouterService,
+    private eventService: EventService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.eventService.getEventInfo().subscribe(r => {
@@ -23,6 +28,10 @@ export class EventComponent implements OnInit {
   }
 
   participate() {
-    this.routerService.goToEventRegistration();
+    if (this.authService.isLoggedIn()) {
+      this.routerService.goToEventRegistration();
+    } else {
+      this.displayPopup = true;
+    }
   }
 }

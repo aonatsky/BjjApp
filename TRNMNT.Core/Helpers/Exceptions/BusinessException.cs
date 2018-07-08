@@ -1,11 +1,13 @@
-using System;
 namespace TRNMNT.Core.Helpers.Exceptions
 {
+    [System.Serializable]
     public class BusinessException : System.Exception
     {
-        public BusinessException(string message) : base(message)
-        {
-
-        }
+        public BusinessException() { }
+        public BusinessException(string message) : base(message) { }
+        public BusinessException(string message, System.Exception inner) : base(message, inner) { }
+        protected BusinessException(
+            System.Runtime.Serialization.SerializationInfo info,
+            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

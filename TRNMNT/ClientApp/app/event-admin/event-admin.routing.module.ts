@@ -1,4 +1,4 @@
-﻿import { Routes } from '@angular/router';
+﻿import { Routes, RouterModule } from '@angular/router';
 import { RedirectGuard } from '../core/guards/redirect.guard';
 import { EventAdminPageComponent } from './event-admin.page.component';
 import { TopbarComponent } from './../shared/topbar/topbar.component';
@@ -10,6 +10,7 @@ import { EventRunWeightDivisionViewComponent } from './event-run-wd-view/event-r
 import { EventRunCategoryViewComponent } from './event-run-category-view/event-run-category-view.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { AuthGuard } from '../core/guards/auth.guard';
+import { NgModule } from '@angular/core';
 
 export const eventAdminRoutes: Routes = [
   {
@@ -44,17 +45,14 @@ export const eventAdminRoutes: Routes = [
         path: 'edit',
         component: EventEditComponent
       },
-      {
-        path: '',
-        outlet: 'topmenu',
-        component: TopbarComponent
-      },
-      {
-        path: '',
-        outlet: 'footer',
-        component: FooterComponent
-      }
+      
     ],
     canActivate: [RedirectGuard, AuthGuard]
   }
 ];
+
+@NgModule({
+  imports: [RouterModule.forChild(eventAdminRoutes)],
+  providers: [RouterModule]
+})
+export class EventAdminRoutingModule {}

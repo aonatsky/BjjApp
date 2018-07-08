@@ -1,18 +1,18 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from './../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from './../../core/services/logger.service';
 import { RouterService } from './../../core/services/router.service';
-import './login.component.scss';
 
 @Component({
   selector: 'login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
-  returnUrl: string;
+  @Input() returnUrl: string;
   errorMessage: string;
 
   constructor(
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     // reset login status
     this.authService.signout();
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    
   }
 
   login(): any {

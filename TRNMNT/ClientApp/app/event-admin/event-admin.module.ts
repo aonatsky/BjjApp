@@ -1,10 +1,9 @@
 ﻿import { NgModule } from '@angular/core';
 import { CoreModule } from './../core/core.module';
-import { RouterModule } from '@angular/router';
 import { EventAdminPageComponent } from './event-admin.page.component';
 import { EventOverviewComponent } from './event-overview/event-overview.component';
 import { EventEditComponent } from './event-edit/event-edit.component';
-import { eventAdminRoutes } from './event-admin.routing';
+import { EventAdminRoutingModule } from './event-admin.routing.module';
 import { BracketGenerationComponent } from './event-management/brackets-generation/bracket-generation.component';
 import { EventManagementComponent } from './event-management/event-management.component';
 // tslint:disable-next-line:max-line-length
@@ -23,7 +22,7 @@ import { ResultsComponent } from './event-management/results/results.component';
 import { BracketResultSetComponent } from './event-run/bracket-result-set/bracket-result-set.component';
 
 @NgModule({
-  imports: [CoreModule, SharedModule, RoundModule, RouterModule.forChild(eventAdminRoutes)],
+  imports: [CoreModule, SharedModule, RoundModule, EventAdminRoutingModule],
   declarations: [
     EventAdminPageComponent,
     EventOverviewComponent,
