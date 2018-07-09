@@ -203,7 +203,7 @@ namespace TRNMNT.Core.Services.Impl
                 UserName = fbUser.Email,
                 PictureUrl = fbUser.Picture.Data.Url
                 };
-                await CreateUserWithRoleAsync(user, Roles.Participant, "");
+                await CreateUserWithRoleAsync(user, Roles.Participant, "1");
             }
 
             return await GetTokensAsync(user);

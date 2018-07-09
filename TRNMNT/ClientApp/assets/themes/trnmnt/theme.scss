@@ -24,7 +24,7 @@ body {
   }
 
   .ui-button {
-    padding: 0.25em 2em;
+    padding: 0.25em 1em;
     border-width: 1px;
 
     &.ui-button-danger.ui-state-default {
@@ -253,21 +253,14 @@ body {
   }
 
   .ui-calendar {
-    .ui-state-default {
-      color: black;
+    .ui-state-default{
+      color: white;
     }
-    .fa-calendar {
-      color: $theme_black !important;
-      background-color: green !important;
-    }
-    .ui-calendar-button:active:enabled {
+    .ui-button {
       background-color: white !important;
-      color: $theme_black !important;
+      color: $theme_black;
+      border-left: 0px;
     }
-  }
-
-  .ui-datepicker-trigger{
-      display: none;
   }
 }
 

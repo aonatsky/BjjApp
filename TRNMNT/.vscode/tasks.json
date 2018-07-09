@@ -1,15 +1,28 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/TRNMNT.Web.csproj"
-            ],
-            "problemMatcher": "$msCompile"
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["build", "${workspaceFolder}/TRNMNT.Web.csproj"],
+      "problemMatcher": "$msCompile",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "webpack config",
+      "type": "shell",
+      "command": "webpack",
+      "args": ["--config", "webpack.config.js"]
+    },
+    {
+      "label": "webpack config vendor",
+      "type": "shell",
+      "command": "webpack",
+      "args": ["--config", "webpack.config.vendor.js"]
+    }
+  ]
 }

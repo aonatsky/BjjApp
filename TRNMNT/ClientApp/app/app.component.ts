@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app',
   templateUrl: './app.component.html',
+  styleUrls: ['../assets/themes/trnmnt/theme.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
