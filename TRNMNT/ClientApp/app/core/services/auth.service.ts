@@ -20,6 +20,7 @@ export class AuthService {
    * Stores the URL so we can redirect after signing in.
    */
   redirectUrl: string;
+  goToHomePage: any;
 
   /**
    * User's data.
@@ -173,14 +174,11 @@ export class AuthService {
    */
   signout(): void {
     this.redirectUrl = null;
-
     this.user = {};
-
-    // Revokes token.
-    this.revokeToken();
-
-    // Revokes refresh token.
-    this.revokeRefreshToken();
+    this.removeTokens();
+    if (this.goToHomePage) {
+      this.goToHomePage();
+    }
   }
 
   /**
@@ -257,5 +255,10 @@ export class AuthService {
       return true;
     }
     return false;
+  }
+
+  private removeTokens() {
+    localStorage.removeItem('idToken');
+    localStorage.removeItem('refreshToken');
   }
 }

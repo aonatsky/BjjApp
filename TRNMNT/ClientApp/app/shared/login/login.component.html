@@ -2,35 +2,37 @@
     <div class="ui-g-12 center-block federation-logo">
     </div>
     <div class="ui-g-12">
-            Sign in or
-            <a (click)="signUp()">sign up</a>
-            if you don't have account
-        </div>
-        
-    <div class="ui-g-6">
-        <button pButton type="button" icon="fa fa-facebook" (click)="facebookLogin()"></button>
+        Sign in or
+        <a (click)="signUp()">sign up</a>
+        if you don't have account
     </div>
-    <div class="ui-g-6">
-        <button pButton type="button" icon="fa fa-google" (click)="facebookLogin()"></button>
+
+    <div *ngIf="socialLoginEnabled">
+        <div class="ui-g-6">
+            <button pButton type="button" icon="fa fa-facebook" (click)="facebookLogin()"></button>
+        </div>
+        <div class="ui-g-6">
+            <button pButton type="button" icon="fa fa-google" (click)="facebookLogin()"></button>
+        </div>
     </div>
-        <div class="ui-g-3 ui-fluid">
-            <label class="field-title">Email</label>
-        </div>
-    
-        <div class="ui-g-9 ui-fluid">
-            <input type="text" pInputText [(ngModel)]="username" placeholder="" />
-        </div>
-        <div class="ui-g-3 ui-fluid">
-            <label class="field-title">Password</label>
-        </div>
-        <div class="ui-g-9 ui-fluid">
-            <input type="password" pInputText [(ngModel)]="password" placeholder="" />
-        </div>
+    <div class="ui-g-3 ui-fluid">
+        <label class="field-title">Email</label>
+    </div>
+
+    <div class="ui-g-9 ui-fluid">
+        <input type="text" pInputText [(ngModel)]="username" placeholder="" />
+    </div>
+    <div class="ui-g-3 ui-fluid">
+        <label class="field-title">Password</label>
+    </div>
+    <div class="ui-g-9 ui-fluid">
+        <input type="password" pInputText [(ngModel)]="password" placeholder="" />
+    </div>
     <div class="ui-g-12">
         <button pButton type="button" (click)="login()" label="Sign In"></button>
     </div>
-    
-    
+
+
     <div class="ui-g-12">
         <span class="ui-messages-error">{{errorMessage}}</span>
     </div>

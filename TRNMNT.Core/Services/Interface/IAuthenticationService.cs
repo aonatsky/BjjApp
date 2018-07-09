@@ -9,12 +9,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <summary>
         /// Gets the token asynchronous.
         /// </summary>
-        /// <returns></returns>
-        Task<AuthTokenResult> GetTokenAsync();
-
-        /// <summary>
-        /// Gets the token asynchronous.
-        /// </summary>
         /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>

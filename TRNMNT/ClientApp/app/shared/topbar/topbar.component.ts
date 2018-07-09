@@ -3,21 +3,17 @@ import { UserModel } from '../../core/model/user.models';
 import { AuthService } from './../../core/services/auth.service';
 import { RouterService } from './../../core/services/router.service';
 import { MenuItem } from 'primeng/components/common/menuitem';
-import './topbar.component.scss';
 
 @Component({
   selector: 'topbar',
   templateUrl: './topbar.component.html',
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
   user: UserModel;
   items: MenuItem[];
 
-  constructor(
-    private routerService: RouterService,
-    private authService: AuthService
-  ) {}
+  constructor(private routerService: RouterService, private authService: AuthService) {}
 
   ngOnInit() {
     this.user = this.authService.getUser();
@@ -52,14 +48,9 @@ export class TopbarComponent implements OnInit {
   }
 
   private isTopbarShown(): boolean {
-    const urlsToHideMenu = [
-      'run-wd-spectator-view',
-      'run-category-spectator-view'
-    ];
+    const urlsToHideMenu = ['run-wd-spectator-view', 'run-category-spectator-view'];
     for (let i = 0; i < urlsToHideMenu.length; i++) {
-      if (
-        this.routerService.getCurrentUrl().indexOf(urlsToHideMenu[i]) !== -1
-      ) {
+      if (this.routerService.getCurrentUrl().indexOf(urlsToHideMenu[i]) !== -1) {
         return false;
       }
     }

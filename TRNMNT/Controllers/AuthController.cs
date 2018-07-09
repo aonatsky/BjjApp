@@ -23,7 +23,7 @@ namespace TRNMNT.Web.Controllers
     {
         #region Dependencies
 
-        private readonly IAuthenticationService _authenticationSerivce;
+        private readonly IAuthenticationService _authenticationService;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace TRNMNT.Web.Controllers
             IAppDbContext context
         ) : base(logger, userService, eventService, context)
         {
-            _authenticationSerivce = authenticationService;
+            _authenticationService = authenticationService;
         }
 
         #endregion
@@ -49,7 +49,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var tokenResult = await _authenticationSerivce.GetTokenAsync(credentials.Email, credentials.Password);
+                var tokenResult = await _authenticationService.GetTokenAsync(credentials.Email, credentials.Password);
                 if (tokenResult != null)
                 {
                     Response.StatusCode = (int) HttpStatusCode.OK;
@@ -72,7 +72,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var tokenResult = await _authenticationSerivce.UpdateTokenAsync(refreshTokenModel.RefreshToken);
+                var tokenResult = await _authenticationService.UpdateTokenAsync(refreshTokenModel.RefreshToken);
                 if (tokenResult != null)
                 {
                     return Success(tokenResult);
@@ -91,7 +91,7 @@ namespace TRNMNT.Web.Controllers
             {
                 if (Request.Headers["password"] == "pizdecpassword")
                 {
-                    await _authenticationSerivce.CreateUserAsync(model, "Owner");
+                    await _authenticationService.CreateUserAsync(model, "Owner");
                     return HttpStatusCode.OK;
                 }
                 else
@@ -106,7 +106,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestAsync(async() =>
             {
-                var result = await _authenticationSerivce.CreateParticipantUserAsync(model);
+                var result = await _authenticationService.CreateParticipantUserAsync(model);
                 if(!result.Success){
                     throw new BusinessException(result.Reason);
                 }
@@ -119,7 +119,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var authTokenresult = await _authenticationSerivce.FacebookLogin(model.Token);
+                var authTokenresult = await _authenticationService.FacebookLogin(model.Token);
                 if (authTokenresult != null)
                 {
                     return Success(authTokenresult);

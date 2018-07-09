@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { sharedModuleRules } = require('./webpack.additions');
+const extractSass = new ExtractTextPlugin('vendor1.css');
 
 module.exports = (env) => {
     const extractCSS = new ExtractTextPlugin('vendor.css');
@@ -40,6 +42,7 @@ module.exports = (env) => {
                 'zone.js',
                 'font-awesome/css/font-awesome.css',
                 './ClientApp/assets/style/style.css',
+                './ClientApp/assets/themes/trnmnt/theme.scss',
                 'primeng/resources/primeng.css'
             ]
         },
@@ -59,11 +62,13 @@ module.exports = (env) => {
         output: { path: path.join(__dirname, 'wwwroot', 'dist') },
         module: {
             rules: [
-                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: 'css-loader' }) }
+                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: 'css-loader' }) },
+                ...sharedModuleRules
             ]
         },
         plugins: [
             extractCSS,
+            extractSass,
             new webpack.DllPlugin({
                 path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'

@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   @Input() returnUrl: string;
+  @Input() socialLoginEnabled: boolean = true;
   errorMessage: string;
 
   constructor(
@@ -26,7 +27,6 @@ export class LoginComponent implements OnInit {
     // reset login status
     this.authService.signout();
     // get return url from route parameters or default to '/'
-    
   }
 
   login(): any {
@@ -43,11 +43,13 @@ export class LoginComponent implements OnInit {
     if (isAuthenticated) {
       this.routerService.navigateByUrl(this.returnUrl);
     } else {
-      this.errorMessage = 'Auuthentication failed, please check your credentials';
+      this.errorMessage = 'Authentication failed, please check your credentials';
     }
   }
 
   facebookLogin() {
-    this.authService.facebookLogin().subscribe(r => this.processLogin);
+    this.authService.facebookLogin().subscribe((r: boolean) => {
+      return this.processLogin(r);
+    });
   }
 }

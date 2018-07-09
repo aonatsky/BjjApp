@@ -44,6 +44,7 @@ jspm_packages
 /TRNMNT.Web/bin/
 /TRNMNT/obj/
 /TRNMNT/bin/
+/TRNMNT/.vscode/chrome/
 /TRNMNT.Core/obj/
 /TRNMNT.Core/bin/
 /TRNMNT/appsettings.home.json

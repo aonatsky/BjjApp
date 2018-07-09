@@ -9,13 +9,13 @@ using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TRNMNT.Web.Controllers
 {
+    [Authorize(Roles = "FederationOwner, Owner")]
     [Route("api/[controller]")]
-    public class EventController : BaseController 
+    public class EventController : BaseController
     {
         #region Dependencies
 
@@ -37,12 +37,12 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModelFull eventModel)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 //if (await CheckEventOwnerAsync(eventModel.EventId))
                 //{
-                    await _eventService.UpdateEventAsync(eventModel);
-                    return HttpStatusCode.OK;
+                await _eventService.UpdateEventAsync(eventModel);
+                return HttpStatusCode.OK;
                 //}
                 //return HttpStatusCode.Unauthorized;
             });
@@ -51,7 +51,7 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEvent(Guid id)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
@@ -65,7 +65,7 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEventBaseInfo(Guid id)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var eventModel = await _eventService.GetFullEventAsync(id);
                 if (eventModel != null)
@@ -76,11 +76,10 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-
         [Authorize, HttpGet("[action]")]
         public async Task<EventModelBase[]> GetEventsForOwner()
         {
-            Response.StatusCode = (int)HttpStatusCode.OK;
+            Response.StatusCode = (int) HttpStatusCode.OK;
             try
             {
 
@@ -90,7 +89,7 @@ namespace TRNMNT.Web.Controllers
             }
             catch (Exception e)
             {
-                Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                 HandleException(e);
                 return null;
             }
@@ -99,13 +98,13 @@ namespace TRNMNT.Web.Controllers
         [AllowAnonymous, HttpGet("[action]")]
         public async Task<IActionResult> GetEventInfo()
         {
-            return await HandleRequestWithDataAsync(async () => (await _eventService.GetEventInfoAsync(GetEventId()), HttpStatusCode.OK), true);
+            return await HandleRequestWithDataAsync(async() =>(await _eventService.GetEventInfoAsync(GetEventId()), HttpStatusCode.OK), true);
         }
 
         [Authorize, HttpGet("[action]")]
         public async Task<IActionResult> IsPrefixExists(string prefix)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 if (await _eventService.IsEventUrlPrefixExistAsync(prefix))
                 {
@@ -115,13 +114,12 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventImage(IFormFile file, string id)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
-                using (var stream = file.OpenReadStream())
+                using(var stream = file.OpenReadStream())
                 {
                     await _eventService.SaveEventImageAsync(stream, id);
                 }
@@ -131,9 +129,9 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventTnc(IFormFile file, string id)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
-                using (var stream = file.OpenReadStream())
+                using(var stream = file.OpenReadStream())
                 {
                     await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
@@ -143,9 +141,9 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadPromoCodeList(IFormFile file, string id)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
-                using (var stream = file.OpenReadStream())
+                using(var stream = file.OpenReadStream())
                 {
                     await _eventService.SaveEventTncAsync(stream, id, file.FileName);
                 }
@@ -155,7 +153,7 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> GetPrice(string eventId)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var user = await GetUserAsync();
                 var price = _eventService.GetPriceAsync(Guid.Parse(eventId), user.Id);
@@ -163,16 +161,14 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-
         [Authorize, HttpGet("[action]")]
         public async Task<IActionResult> CreateEvent()
         {
-            return await HandleRequestWithDataAsync(async () => _eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), false, true);
+            return await HandleRequestWithDataAsync(async() => _eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), false, true);
         }
 
-
         #endregion
-        
+
         #region Private Methods
 
         private async Task<bool> CheckEventOwnerAsync(Guid eventId)

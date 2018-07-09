@@ -4,18 +4,16 @@ import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { RouterService } from '../services/router.service';
 
-/**
- * Decides if a route can be activated.
- */
 @Injectable()
 export class RedirectGuard implements CanActivate {
   constructor(public authService: AuthService, private routerService: RouterService, private authGuard: AuthGuard) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.redirectToEventPage()) {
-      // this.routerService.goToEventInfo();
+      this.authService.goToHomePage = this.routerService.goToEventInfo;
       this.routerService.goToEventInfo();
     } else {
+      this.authService.goToHomePage = this.routerService.goToLogin;
       return true;
     }
   }

@@ -20,7 +20,7 @@ import { AuthService } from '../../core/services/auth.service';
 @Component({
   selector: 'event-registration',
   templateUrl: './event-registration.component.html',
-  styleUrls: ['./event-registration.component.css'],
+  styleUrls: ['./event-registration.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class EventRegistrationComponent implements OnInit {

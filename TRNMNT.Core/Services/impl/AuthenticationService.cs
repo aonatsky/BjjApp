@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using TRNMNT.Core.Authentication;
 using TRNMNT.Core.Configurations;
+using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Services.Interface;
@@ -48,29 +49,6 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public methods
 
-        public async Task AddSampleUserAsync()
-        {
-            await AddSampleRolesAsync();
-            var existUser = await _userManager.FindByNameAsync("admin");
-            if (existUser != null)
-            {
-                //await _userManager.DeleteAsync(existUser);
-            }
-
-            if (existUser == null)
-            {
-                var identity = await _userManager.CreateAsync(new User
-                {
-                    UserName = "admin",
-                        FirstName = "Ivan",
-                        LastName = "Drago",
-                        Email = "Ivan.drago@trnmnt.com"
-                }, "1");
-                existUser = await _userManager.FindByNameAsync("admin");
-                var result = await _userManager.AddClaimAsync(existUser, new Claim(ClaimTypes.Role, Roles.Owner));
-            }
-        }
-
         public async Task<AuthTokenResult> GetTokenAsync(string login, string password)
         {
             var loginResult = await _signInManager.PasswordSignInAsync(login, password, false, false);
@@ -95,21 +73,6 @@ namespace TRNMNT.Core.Services.Impl
             return null;
         }
 
-        public async Task<AuthTokenResult> GetTokenAsync()
-        {
-            await AddSampleUserAsync();
-            var user = await _userManager.FindByNameAsync("admin");
-
-            if (user != null)
-            {
-                var requestAt = DateTime.Now;
-
-                var token = GenerateTokenAsync(user);
-                return await GetTokensAsync(user);
-            }
-            return null;
-        }
-
         public async Task<UserRegistrationResult> CreateParticipantUserAsync(UserRegistrationModel model)
         {
             return await CreateUserAsync(model, Roles.Participant);
@@ -129,7 +92,12 @@ namespace TRNMNT.Core.Services.Impl
                 UserName = model.Email,
                 IsActive = true
             };
-            var identityResult = await _userManager.CreateAsync(user, model.Password);
+            return await CreateUserWithRoleAsync(user, role, model.Password);
+        }
+
+        private async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string role, string password)
+        {
+            var identityResult = await _userManager.CreateAsync(user, password);
             await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
 
             if (identityResult.Succeeded)
@@ -137,15 +105,6 @@ namespace TRNMNT.Core.Services.Impl
                 return new UserRegistrationResult(true);
             }
             return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
-        }
-
-        private async Task AddSampleRolesAsync()
-        {
-            if (!await _roleManager.RoleExistsAsync(Roles.Owner))
-            {
-                var newRole = new IdentityRole(Roles.Owner);
-                await _roleManager.CreateAsync(newRole);
-            }
         }
 
         private async Task<string> GenerateTokenAsync(User user)
@@ -189,7 +148,6 @@ namespace TRNMNT.Core.Services.Impl
             return new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                //new Claim("UserId", user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(ClaimTypes.Email, user.Email),
@@ -227,7 +185,7 @@ namespace TRNMNT.Core.Services.Impl
 
             if (!userAccessTokenValidation.Data.IsValid)
             {
-                throw new Exception("Invalid facebook data");
+                throw new BusinessException("Invalid facebook data");
             }
 
             // 3. we've got a valid token so we can request user data from fb
@@ -245,7 +203,7 @@ namespace TRNMNT.Core.Services.Impl
                 UserName = fbUser.Email,
                 PictureUrl = fbUser.Picture.Data.Url
                 };
-                await _userManager.CreateAsync(user);
+                await CreateUserWithRoleAsync(user, Roles.Participant, "");
             }
 
             return await GetTokensAsync(user);
