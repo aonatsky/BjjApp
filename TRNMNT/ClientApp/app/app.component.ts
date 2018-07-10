@@ -4,7 +4,6 @@ import { NotificationService } from './core/services/notification.service';
 import { LoaderService } from './core/services/loader.service';
 import { RouterService } from './core/services/router.service';
 import { EventService } from './core/services/event.service';
-import '../assets/themes/trnmnt/theme.scss';
 import { Subscription } from 'rxjs';
 
 @Component({

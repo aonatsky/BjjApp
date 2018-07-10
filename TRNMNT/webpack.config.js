@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const extractSass = new ExtractTextPlugin('[name].css');
+const extractTextPlugin = new ExtractTextPlugin('[name].css');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { sharedModuleRules } = require('./webpack.additions');
 
@@ -26,12 +26,14 @@ module.exports = env => {
           use: ['awesome-typescript-loader?silent=true', 'angular2-template-loader']
         },
         { test: /\.html$/, use: 'html-loader?minimize=false' },
-        { test: /\.css$/, use: ['to-string-loader', 'css-loader'] },
+        {
+          test: /\.(css|scss)$/,
+          use: ['to-string-loader'].concat(['css-loader?sourceMap', 'sass-loader?sourceMap'])
+        },
         { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
-        ...sharedModuleRules
       ]
     },
-    plugins: [new CheckerPlugin(), extractSass]
+    plugins: [new CheckerPlugin(), extractTextPlugin]
   };
 
   // Configuration for client-side bundle suitable for running in browsers

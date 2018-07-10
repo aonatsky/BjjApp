@@ -42,8 +42,8 @@ module.exports = (env) => {
                 'zone.js',
                 'font-awesome/css/font-awesome.css',
                 './ClientApp/assets/style/style.css',
-                './ClientApp/assets/themes/trnmnt/theme.scss',
-                'primeng/resources/primeng.css'
+                'primeng/resources/primeng.css',
+                'primeicons/primeicons.css'
             ]
         },
         output: {
@@ -63,7 +63,6 @@ module.exports = (env) => {
         module: {
             rules: [
                 { test: /\.css(\?|$)/, use: extractCSS.extract({ use: 'css-loader' }) },
-                ...sharedModuleRules
             ]
         },
         plugins: [
