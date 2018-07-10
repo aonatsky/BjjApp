@@ -30,7 +30,7 @@ module.exports = env => {
           test: /\.(css|scss)$/,
           use: ['to-string-loader'].concat(['css-loader?sourceMap', 'sass-loader?sourceMap'])
         },
-        { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+        { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
       ]
     },
     plugins: [new CheckerPlugin(), extractTextPlugin]

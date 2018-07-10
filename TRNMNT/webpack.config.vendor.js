@@ -3,8 +3,6 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { sharedModuleRules } = require('./webpack.additions');
-const extractSass = new ExtractTextPlugin('vendor1.css');
 
 module.exports = (env) => {
     const extractCSS = new ExtractTextPlugin('vendor.css');
@@ -34,7 +32,6 @@ module.exports = (env) => {
                 '@angular/animations',
                 'bootstrap',
                 'file-saver',
-                //'bootstrap/dist/css/bootstrap.css',
                 'es6-shim',
                 'es6-promise',
                 'event-source-polyfill',
@@ -67,7 +64,6 @@ module.exports = (env) => {
         },
         plugins: [
             extractCSS,
-            extractSass,
             new webpack.DllPlugin({
                 path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'

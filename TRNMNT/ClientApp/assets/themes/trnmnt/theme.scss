@@ -253,13 +253,10 @@ body {
   }
 
   .ui-calendar {
-    .ui-state-default{
-      color: white;
-    }
-    .ui-button {
-      background-color: white !important;
-      color: $theme_black;
-      border-left: 0px;
+    .ui-datepicker-calendar {
+      .ui-state-default {
+        color: white;
+      }
     }
   }
 }
