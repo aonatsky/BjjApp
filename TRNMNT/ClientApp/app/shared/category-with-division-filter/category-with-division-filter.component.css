@@ -3,10 +3,6 @@
     display: inline-block;
 }
 
-button {
-    width: 200px !important;
-}
-
 .is-member-chbox {
     padding-left: 15px;
 }

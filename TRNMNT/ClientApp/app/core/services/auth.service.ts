@@ -187,7 +187,15 @@ export class AuthService {
    * @return The user's data
    */
   getUser(): UserModel {
-    return new UserModel(this.user.UserId, this.user.first_name, this.user.last_name, this.user.email, this.user.role);
+    if (this.isLoggedIn()) {
+      return new UserModel(
+        this.user.UserId,
+        this.user.first_name,
+        this.user.last_name,
+        this.user.email,
+        this.user.role
+      );
+    }
   }
 
   facebookLogin(): Observable<boolean> {

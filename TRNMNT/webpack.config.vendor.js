@@ -3,8 +3,6 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const { sharedModuleRules } = require('./webpack.additions');
-const extractSass = new ExtractTextPlugin('vendor1.css');
 
 module.exports = (env) => {
     const extractCSS = new ExtractTextPlugin('vendor.css');
@@ -34,16 +32,15 @@ module.exports = (env) => {
                 '@angular/animations',
                 'bootstrap',
                 'file-saver',
-                //'bootstrap/dist/css/bootstrap.css',
                 'es6-shim',
                 'es6-promise',
                 'event-source-polyfill',
                 'jquery',
                 'zone.js',
                 'font-awesome/css/font-awesome.css',
-                './ClientApp/assets/style/style.css',
-                './ClientApp/assets/themes/trnmnt/theme.scss',
-                'primeng/resources/primeng.css'
+                'primeng/resources/primeng.css',
+                'primeicons/primeicons.css',
+                './ClientApp/assets/style/style.css'
             ]
         },
         output: {
@@ -63,12 +60,10 @@ module.exports = (env) => {
         module: {
             rules: [
                 { test: /\.css(\?|$)/, use: extractCSS.extract({ use: 'css-loader' }) },
-                ...sharedModuleRules
             ]
         },
         plugins: [
             extractCSS,
-            extractSass,
             new webpack.DllPlugin({
                 path: path.join(__dirname, 'wwwroot', 'dist', '[name]-manifest.json'),
                 name: '[name]_[hash]'
