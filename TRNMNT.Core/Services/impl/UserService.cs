@@ -3,9 +3,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
-using TRNMNT.Core.Settings;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Impl

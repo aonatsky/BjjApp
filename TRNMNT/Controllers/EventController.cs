@@ -77,22 +77,13 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpGet("[action]")]
-        public async Task<EventModelBase[]> GetEventsForOwner()
+        public async Task<IActionResult> GetEventsForOwner()
         {
-            Response.StatusCode = (int) HttpStatusCode.OK;
-            try
+            return await HandleRequestWithDataAsync(async () =>
             {
-
-                var events = await _eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
-                return events.ToArray();
-
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int) HttpStatusCode.InternalServerError;
-                HandleException(e);
-                return null;
-            }
+                var events =  await _eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
+                return Success(events.ToArray());
+            });
         }
 
         [AllowAnonymous, HttpGet("[action]")]

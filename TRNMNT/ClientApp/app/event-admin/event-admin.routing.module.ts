@@ -16,7 +16,7 @@ export const eventAdminRoutes: Routes = [
   {
     path: 'event-admin',
     component: EventAdminPageComponent,
-    data: { expectedRoles: ['Admin, Owner, FederationOwner'] },
+    data: { expectedRoles: ['Admin', 'Owner', 'FederationOwner'] },
     canActivate: [RedirectGuard, AuthGuard],
     children: [
       {

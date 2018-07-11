@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
@@ -58,7 +59,7 @@ namespace TRNMNT.Web.Controllers
         {
             if (_user == null)
             {
-                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == JWTClaimNames.UserId);
                 if (userIdClaim != null)
                 {
                     _user = await UserService.GetUserAsync(userIdClaim.Value);

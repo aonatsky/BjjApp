@@ -189,11 +189,12 @@ export class AuthService {
   getUser(): UserModel {
     if (this.isLoggedIn()) {
       return new UserModel(
-        this.user.UserId,
-        this.user.first_name,
-        this.user.last_name,
+        this.user.userId,
+        this.user.firstName,
+        this.user.lastName,
         this.user.email,
-        this.user.role
+        this.user.role,
+        new Date(this.user.dateOfBirth)
       );
     }
   }

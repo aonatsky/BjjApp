@@ -41,7 +41,9 @@ export class LoginComponent implements OnInit {
 
   processLogin(isAuthenticated: boolean) {
     if (isAuthenticated) {
-      this.routerService.navigateByUrl(this.returnUrl);
+      if (this.returnUrl) {
+        this.routerService.navigateByUrl(this.returnUrl);
+      }
     } else {
       this.errorMessage = 'Authentication failed, please check your credentials';
     }

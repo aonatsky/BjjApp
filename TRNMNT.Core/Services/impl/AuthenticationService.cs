@@ -11,11 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using TRNMNT.Core.Authentication;
 using TRNMNT.Core.Configurations;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Helpers.Exceptions;
-using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Services.Interface;
-using TRNMNT.Core.Settings;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Impl
@@ -147,10 +146,11 @@ namespace TRNMNT.Core.Services.Impl
         {
             return new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(JWTClaimNames.UserId, user.Id),
+                new Claim(JWTClaimNames.FirstName, user.FirstName),
+                new Claim(JWTClaimNames.LastName, user.LastName),
+                new Claim(JWTClaimNames.Email, user.Email),
+                new Claim(JWTClaimNames.DateOfBirth, user.DateOfBirth.ToString())
             };
         }
 
@@ -203,7 +203,7 @@ namespace TRNMNT.Core.Services.Impl
                 UserName = fbUser.Email,
                 PictureUrl = fbUser.Picture.Data.Url
                 };
-                await CreateUserWithRoleAsync(user, Roles.Participant, "1");
+                await CreateUserWithRoleAsync(user, Roles.Participant, "facebookPass1");
             }
 
             return await GetTokensAsync(user);

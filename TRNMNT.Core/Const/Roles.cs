@@ -1,4 +1,4 @@
-﻿namespace TRNMNT.Core.Settings
+﻿namespace TRNMNT.Core.Const
 {
     public static class Roles
     {

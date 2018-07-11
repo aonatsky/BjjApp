@@ -33,9 +33,9 @@ export class EventRegistrationComponent implements OnInit {
   teamSelectItems: SelectItem[] = [];
   teams: TeamModel[] = [];
 
-  private eventId: string;
-  private currentStep: number = 0;
-  private tncAccepted: boolean = false;
+  eventId: string;
+  currentStep: number = 0;
+  tncAccepted: boolean = false;
   private messages: Message[] = [];
   private paymentData: string = '';
   private paymentSignature: string = '';
@@ -54,7 +54,12 @@ export class EventRegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.authService.getUser());
+    const user = this.authService.getUser();
+    this.participant.userId = user.userId;
+    this.participant.dateOfBirth = user.dateOfBirth ? user.dateOfBirth : this.getDefaultDateOfBirth();
+    this.participant.firstName = user.firstName;
+    this.participant.lastName = user.lastName;
+    this.participant.email = user.email;
     this.loadData();
   }
 
