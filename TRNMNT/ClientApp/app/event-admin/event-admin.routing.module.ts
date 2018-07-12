@@ -1,7 +1,7 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
 import { RedirectGuard } from '../core/guards/redirect.guard';
 import { EventAdminPageComponent } from './event-admin.page.component';
-import { TopbarComponent } from './../shared/topbar/topbar.component';
+import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { EventOverviewComponent } from './event-overview/event-overview.component';
 import { EventEditComponent } from './event-edit/event-edit.component';
 import { EventManagementComponent } from './event-management/event-management.component';

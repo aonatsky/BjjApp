@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LoggerService } from './../../core/services/logger.service';
+import { LoggerService } from '../../core/services/logger.service';
 import './event-run.component.scss'
 import { BracketModel, ChageWeightDivisionModel } from '../../core/model/bracket.models';
 import { BracketService } from '../../core/services/bracket.service';

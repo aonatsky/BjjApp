@@ -1,14 +1,14 @@
 ﻿import { Injectable } from '@angular/core';
 import { LoggerService } from './logger.service';
-import { HttpService } from './../dal/http/http.service';
+import { HttpService } from '../dal/http/http.service';
 import {
   ParticipantRegistrationModel,
   ParticipantModelBase,
   ParticipantTableModel
-} from './../model/participant.models';
-import { ParticipantDdlModel } from './../model/participant-ddl.model';
-import { ParticipantRegistrationResultModel } from './../model/result/participant-registration-result.model';
-import { ApiMethods } from './../dal/consts/api-methods.consts';
+} from '../model/participant.models';
+import { ParticipantDdlModel } from '../model/participant-ddl.model';
+import { ParticipantRegistrationResultModel } from '../model/result/participant-registration-result.model';
+import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable } from 'rxjs';
 import { PagedList } from '../model/paged-list.model';
 import { ParticipantFilterModel } from '../model/participant-filter.model';

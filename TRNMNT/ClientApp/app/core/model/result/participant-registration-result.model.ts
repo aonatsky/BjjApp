@@ -1,4 +1,4 @@
-﻿import { PaymentDataModel } from './../payment-data.model';
+﻿import { PaymentDataModel } from '../payment-data.model';
 
 export class ParticipantRegistrationResultModel {
     success: boolean;

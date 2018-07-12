@@ -1,8 +1,8 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
-import { AuthService } from './../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
-import { LoggerService } from './../../core/services/logger.service';
-import { RouterService } from './../../core/services/router.service';
+import { LoggerService } from '../../core/services/logger.service';
+import { RouterService } from '../../core/services/router.service';
 
 @Component({
   selector: 'login',

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Response, ResponseContentType } from '@angular/http';
-import { LoggerService } from '../../../core/services/logger.service';
-import { LoaderService } from '../../../core/services/loader.service';
-import { RouterService } from '../../../core/services/router.service';
+import { LoggerService } from '../../services/logger.service';
+import { LoaderService } from '../../services/loader.service';
+import { RouterService } from '../../services/router.service';
 import { Observable, throwError } from 'rxjs';
 import { map, flatMap, catchError, finalize } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';

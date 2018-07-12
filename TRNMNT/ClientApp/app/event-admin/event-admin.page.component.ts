@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoggerService } from './../core/services/logger.service';
-import { AuthService } from './../core/services/auth.service';
+import { LoggerService } from '../core/services/logger.service';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'event-admin',

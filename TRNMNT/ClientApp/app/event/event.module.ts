@@ -1,5 +1,5 @@
 ﻿import { NgModule } from '@angular/core';
-import { CoreModule } from './../core/core.module';
+import { CoreModule } from '../core/core.module';
 import { EventInfoComponent } from './event-info/event-info.component';
 import { EventRegistrationComponent } from './event-registration/event-registration.component';
 // tslint:disable-next-line:max-line-length

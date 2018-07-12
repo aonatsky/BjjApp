@@ -1,7 +1,7 @@
 ﻿import { ActivatedRoute } from '@angular/router';
-import { EventService } from './../../core/services/event.service';
-import { LoggerService } from './../../core/services/logger.service';
-import { RouterService } from './../../core/services/router.service';
+import { EventService } from '../../core/services/event.service';
+import { LoggerService } from '../../core/services/logger.service';
+import { RouterService } from '../../core/services/router.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

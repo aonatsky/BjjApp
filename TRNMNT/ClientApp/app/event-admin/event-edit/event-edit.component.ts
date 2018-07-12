@@ -1,9 +1,9 @@
 ﻿import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
-import { EventModel } from './../../core/model/event.models';
-import { AuthService } from './../../core/services/auth.service';
-import { EventService } from './../../core/services/event.service';
+import { EventModel } from '../../core/model/event.models';
+import { AuthService } from '../../core/services/auth.service';
+import { EventService } from '../../core/services/event.service';
 import './event-edit.component.scss';
 
 @Component({

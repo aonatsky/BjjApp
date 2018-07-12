@@ -5,6 +5,7 @@ import { LoaderService } from './core/services/loader.service';
 import { RouterService } from './core/services/router.service';
 import { EventService } from './core/services/event.service';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app',
@@ -23,10 +24,22 @@ export class AppComponent implements OnInit {
     private notificationService: NotificationService,
     private loaderService: LoaderService,
     private routerService: RouterService,
-    private eventService: EventService
-  ) {}
+    private eventService: EventService,
+    private translate: TranslateService
+  ) {
+    // this language will be used as a fallback when a translation isn't found in the current language
+    translate.setDefaultLang('en');
+
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
+    translate.use('ua');
+    // const browserLang = translate.getBrowserLang();
+    // translate.use(browserLang.match(/en|ua/) ? browserLang : 'ua');
+  }
 
   ngOnInit() {
+    this.translate.get('Sign in or').subscribe((res: string) => {
+      console.log(res);
+  });
     this.notificationSubscription = this.notificationService.notificationSubject.subscribe(msg =>
       this.notifications.push(msg)
     );

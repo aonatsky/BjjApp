@@ -1,8 +1,8 @@
 ﻿import { Injectable } from '@angular/core'
 import { LoggerService } from './logger.service'
-import { HttpService } from './../dal/http/http.service'
-import { CategorySimpleModel } from './../model/category.models'
-import { ApiMethods } from './../dal/consts/api-methods.consts'
+import { HttpService } from '../dal/http/http.service'
+import { CategorySimpleModel } from '../model/category.models'
+import { ApiMethods } from '../dal/consts/api-methods.consts'
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

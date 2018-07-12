@@ -1,5 +1,5 @@
 ﻿import { NgModule } from '@angular/core';
-import { CoreModule } from './../core/core.module';
+import { CoreModule } from '../core/core.module';
 import { EventAdminPageComponent } from './event-admin.page.component';
 import { EventOverviewComponent } from './event-overview/event-overview.component';
 import { EventEditComponent } from './event-edit/event-edit.component';

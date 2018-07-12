@@ -1,8 +1,9 @@
-﻿import { NgModule } from '@angular/core'
-import { CoreModule } from './../core/core.module'
-import { LoginComponent } from './login/login.component'
-import { LoginPageComponent } from './login/login-page.component'
-import { RegisterComponent } from './register/register.component'
+﻿import { TranslateModule } from '@ngx-translate/core';
+import { NgModule } from '@angular/core';
+import { CoreModule } from '../core/core.module';
+import { LoginComponent } from './login/login.component';
+import { LoginPageComponent } from './login/login-page.component';
+import { RegisterComponent } from './register/register.component';
 import { CategoryWithDivisionFilter } from './category-with-division-filter/category-with-division-filter.component';
 import { CrudComponent } from './crud/crud.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,44 +17,37 @@ import { SocialLoginModule, AuthServiceConfig } from 'angular5-social-login';
 import { getAuthServiceConfigs } from '../socialLoginConfig';
 import { PopupComponent } from './popup/popup.component';
 
-
 @NgModule({
-    imports: [
-        CoreModule,
-        BrowserAnimationsModule,
-        RoundModule,
-        SocialLoginModule
-    ],
-    declarations: [
-        LoginComponent,
-        RegisterComponent,
-        CrudComponent,
-        CategoryWithDivisionFilter,
-        LoaderComponent,
-        BracketComponent,
-        TablePickerListComponent,
-        FooterComponent,
-        TopbarComponent,
-        LoginPageComponent,
-        PopupComponent
-    ],
+  imports: [CoreModule, BrowserAnimationsModule, RoundModule, SocialLoginModule, TranslateModule],
+  declarations: [
+    LoginComponent,
+    RegisterComponent,
+    CrudComponent,
+    CategoryWithDivisionFilter,
+    LoaderComponent,
+    BracketComponent,
+    TablePickerListComponent,
+    FooterComponent,
+    TopbarComponent,
+    LoginPageComponent,
+    PopupComponent
+  ],
 
-    providers: [
-        {
-            provide: AuthServiceConfig,
-            useFactory: getAuthServiceConfigs
-        }],
+  providers: [
+    {
+      provide: AuthServiceConfig,
+      useFactory: getAuthServiceConfigs
+    }
+  ],
 
-    exports: [
-        CrudComponent,
-        CategoryWithDivisionFilter,
-        LoaderComponent,
-        BracketComponent,
-        TablePickerListComponent,
-        PopupComponent,
-        LoginComponent
-    ]
+  exports: [
+    CrudComponent,
+    CategoryWithDivisionFilter,
+    LoaderComponent,
+    BracketComponent,
+    TablePickerListComponent,
+    PopupComponent,
+    LoginComponent
+  ]
 })
-
-export class SharedModule {
-}
+export class SharedModule {}

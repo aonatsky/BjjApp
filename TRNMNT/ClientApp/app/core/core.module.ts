@@ -53,6 +53,7 @@ import { FormatTimerPipe } from './pipes/format-timer.pipe';
 import { RunEventHubService } from './hubservices/run-event.hub.service';
 import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
 import { ResultsService } from './services/results.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -86,7 +87,8 @@ import { ResultsService } from './services/results.service';
     ConfirmDialogModule,
     TableModule,
     RadioButtonModule,
-    MenubarModule
+    MenubarModule,
+    TranslateModule
   ],
   declarations: [MinuteSecondsPipe, ToDictionaryPipe, FormatTimerPipe],
   providers: [

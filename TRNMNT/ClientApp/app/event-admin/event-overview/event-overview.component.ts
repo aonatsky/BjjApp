@@ -1,6 +1,6 @@
-﻿import { EventService } from './../../core/services/event.service';
-import { RouterService } from './../../core/services/router.service';
-import { EventPreviewModel } from './../../core/model/event.models';
+﻿import { EventService } from '../../core/services/event.service';
+import { RouterService } from '../../core/services/router.service';
+import { EventPreviewModel } from '../../core/model/event.models';
 import { Component, OnInit } from '@angular/core';
 import './event-overview.component.scss';
 
