@@ -1,4 +1,5 @@
-﻿import { NgModule } from '@angular/core';
+﻿import { TranslateModule } from '@ngx-translate/core';
+import { NgModule } from '@angular/core';
 import { CoreModule } from '../core/core.module';
 import { EventInfoComponent } from './event-info/event-info.component';
 import { EventRegistrationComponent } from './event-registration/event-registration.component';
@@ -9,11 +10,7 @@ import { EventRoutingModule } from './event.routing.module';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  imports: [
-    CoreModule,
-    SharedModule,
-    EventRoutingModule
-  ],
+  imports: [CoreModule, SharedModule, EventRoutingModule, TranslateModule],
   declarations: [EventInfoComponent, EventComponent, EventRegistrationComponent, EventRegistrationCompleteComponent],
   providers: [],
   exports: []

@@ -11,19 +11,19 @@ export class CustomLoader implements TranslateLoader {
   constructor(private http: HttpClient) {}
 
   getTranslation(lang: string): Observable<any> {
-    switch(lang) { 
-      case 'ua': { 
+    switch (lang) {
+      case 'ua': {
         return of(ua.data);
         break;
-      } 
-      case 'en': { 
-         return of(en.data)
-         break;
-      } 
-      default: { 
-        return of(en.data)
+      }
+      case 'en': {
+        return of(en.data);
         break;
-      } 
+      }
+      default: {
+        return of(en.data);
+        break;
+      }
     }
   }
 }
