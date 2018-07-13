@@ -1,4 +1,5 @@
-﻿import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
+﻿import { EventService } from './../../core/services/event.service';
+import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TeamService } from '../../core/services/team.service';
 import { ParticipantService } from '../../core/services/participant.service';
@@ -34,6 +35,7 @@ export class EventRegistrationComponent implements OnInit {
   teams: TeamModel[] = [];
 
   eventId: string;
+  eventTitleParameter = {value: this.eventService.getCurrentEvent()}
   currentStep: number = 0;
   tncAccepted: boolean = false;
   private messages: Message[] = [];
@@ -50,7 +52,8 @@ export class EventRegistrationComponent implements OnInit {
     private participantService: ParticipantService,
     private paymentService: PaymentService,
     private cd: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private eventService: EventService
   ) {}
 
   ngOnInit() {

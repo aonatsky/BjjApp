@@ -17,5 +17,4 @@ export const data = {
     'I_ACCEPT_TNC':'Я приймаю положення',
     'TITLE':'Реєсрація на {{value}}'
   }
-  
 };
