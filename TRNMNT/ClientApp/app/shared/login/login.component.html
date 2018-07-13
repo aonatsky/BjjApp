@@ -2,9 +2,9 @@
     <div class="ui-g-12 center-block federation-logo">
     </div>
     <div class="ui-g-12">
-        {{'Sign in or' | translate}}
-        <a (click)="signUp()">sign up</a>
-        if you don't have account
+        {{'LOGIN.SIGN_IN_OR' | translate}}
+        <a (click)="signUp()">{{'LOGIN.SIGN_UP' | translate}}</a>
+        {{'LOGIN.IF_YOU_DONT_HAVE_ACCOUNT' | translate}}
     </div>
 
     <div *ngIf="socialLoginEnabled">
@@ -16,20 +16,20 @@
         </div>
     </div>
     <div class="ui-g-3 ui-fluid">
-        <label class="field-title">Email</label>
+        <label class="field-title">{{'COMMON.EMAIL' | translate}}</label>
     </div>
 
     <div class="ui-g-9 ui-fluid">
         <input type="text" pInputText [(ngModel)]="username" placeholder="" />
     </div>
     <div class="ui-g-3 ui-fluid">
-        <label class="field-title">Password</label>
+        <label class="field-title">{{'COMMON.PASSWORD' | translate}}</label>
     </div>
     <div class="ui-g-9 ui-fluid">
         <input type="password" pInputText [(ngModel)]="password" placeholder="" />
     </div>
     <div class="ui-g-12">
-        <button pButton type="button" (click)="login()" label="Sign In"></button>
+        <button pButton type="button" (click)="login()" label="{{'LOGIN.SIGN_IN' | translate}}"></button>
     </div>
 
 
