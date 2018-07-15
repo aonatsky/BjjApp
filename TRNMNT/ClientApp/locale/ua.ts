@@ -11,10 +11,15 @@ export const data = {
     'DATE_OF_BIRTH': 'Дата народження',
     'CONTINUE':'Продовжити',
     'BACK':"Назад",
+    'SAVE':"Зберегти",
     'GO_TO_PAYMENT':'Перейти до оплати'
   },
   'REGISTRATION_TO_EVENT':{
     'I_ACCEPT_TNC':'Я приймаю положення',
     'TITLE':'Реєсрація на {{value}}'
+  },
+  'EVENT_INFO:': {
+    'EVENT_STARTS':'Захід починаєтся',
+    'EARLY_REGISTRATION':'Рання реэстрація'
   }
 };

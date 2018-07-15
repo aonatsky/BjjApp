@@ -30,7 +30,7 @@ export class ParticipantService {
   }
 
   getParticipantsTableModel(filterModel: ParticipantFilterModel): Observable<PagedList<ParticipantTableModel>> {
-    return this.httpService.get<PagedList<ParticipantTableModel>>(
+    return this.httpService.post<PagedList<ParticipantTableModel>>(
       ApiMethods.participant.participantsTable,
       filterModel,
       null,
@@ -42,7 +42,6 @@ export class ParticipantService {
     return this.httpService.get<ParticipantDdlModel>(
       ApiMethods.participant.participantsDropdownData,
       { eventId },
-      ResponseContentType.Json,
       'Could not load categories and weight divisions data'
     );
   }

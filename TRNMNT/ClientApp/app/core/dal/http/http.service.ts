@@ -8,7 +8,7 @@ import { map, flatMap, catchError, finalize } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class HttpService {
@@ -26,10 +26,9 @@ export class HttpService {
   get<T>(
     name: string,
     paramsHolder?: object,
-    responseType?: ResponseContentType,
     notifyMessage?: string
   ): Observable<any> {
-    return this.handleRequest(() => this.http.get<T>(name), notifyMessage);
+    return this.handleRequest(() => this.http.get<T>(name, { params: this.convertParams(paramsHolder) }), notifyMessage);
   }
 
   post<T>(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
@@ -56,9 +55,9 @@ export class HttpService {
   }
 
   getPdf(url, fileName): Observable<any> {
-    return this.http.get<Blob>(url).pipe(
+    return this.http.get(url,{responseType: 'blob'}).pipe(
       map(res => {
-        FileSaver.saveAs(res, 'application/pdf', fileName);
+        FileSaver.saveAs(res, fileName);
       })
     );
   }
@@ -130,6 +129,12 @@ export class HttpService {
     this.notificationService.showErrorOrGeneric(notifyMessage);
     this.loggerService.logError(errMsg);
     return throwError(errMsg);
+  }
+
+  private convertParams(paramsHolder): HttpParams {
+    return new HttpParams({
+      fromObject: paramsHolder
+    });
   }
 
   private goToLogin(error?: Response | any) {

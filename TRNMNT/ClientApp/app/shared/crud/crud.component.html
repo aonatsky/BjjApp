@@ -1,27 +1,19 @@
 <div class="trnmnt-table trnmnt-crud">
     <h3 *ngIf="title.length > 0" class="first">{{title}}</h3>
-    <p-dataTable #dataTable
-                 [value]="entities"
-                 [rows]="pageSize"
-                 [pageLinks]="3"
-                 [sortField]="sortField"
-                 [sortOrder]="sortOrder"
-                 [paginator]="totalRecords > pageSize"
-                 [(selection)]="selectedEntity"
-                 selectionMode="single"
-                 (onRowSelect)="onRowSelect($event)"
-                 [totalRecords]="totalRecords"
-                 [lazy]="lazy"
-                 [(first)]="firstIndex"
-                 (onLazyLoad)="lazyLoadData($event)"
-                 [responsive]="true">
+    <p-dataTable #dataTable [value]="entities" [rows]="pageSize"
+        [pageLinks]="3" [sortField]="sortField" [sortOrder]="sortOrder"
+        [paginator]="totalRecords > pageSize" [(selection)]="selectedEntity"
+        selectionMode="single" (onRowSelect)="onRowSelect($event)"
+        [totalRecords]="totalRecords" [lazy]="lazy" [(first)]="firstIndex"
+        (onLazyLoad)="lazyLoadData($event)" [responsive]="true">
         <p-column *ngIf="showRowNumbers" header="#" [style]="{'width':'4%','text-align':'center'}">
             <ng-template let-ri="rowIndex+1" pTemplate type="body">
                 <span>{{ri}}</span>
             </ng-template>
         </p-column>
         <div *ngFor="let column of columns">
-            <p-column field="{{column.propertyName}}" header="{{column.displayName}}" [sortable]="column.isSortable">
+            <p-column field="{{column.propertyName}}" header="{{column.displayName}}"
+                [sortable]="column.isSortable">
                 <ng-template let-col let-colObj="rowData" pTemplate="body">
                     <ng-container *ngIf="!!column.useClass; else filter">
                         <span [ngClass]="column.useClass != null ? column.useClass(colObj[col.field]) : ''"></span>
@@ -31,65 +23,64 @@
                             <span [innerText]="column.transform(colObj[col.field])"></span>
                         </ng-container>
                     </ng-template>
-                    <ng-template #text><span>{{colObj[col.field]}}</span></ng-template>
+                    <ng-template #text>
+                        <span>{{colObj[col.field]}}</span>
+                    </ng-template>
                 </ng-template>
             </p-column>
         </div>
         <p-footer *ngIf="addEnabled">
             <div class="ui-helper-clearfix" style="width: 100%">
-                <button type="button" pButton icon="fa fa-plus" style="float: left" (click)="showDialogToAdd()" label="Add"></button>
+                <button type="button" pButton icon="fa fa-plus" style="float: left"
+                    (click)="showDialogToAdd()" label="Add"></button>
             </div>
         </p-footer>
     </p-dataTable>
 </div>
 
-<p-dialog header="{{title}} Details"
-          [(visible)]="displayDialog"
-          [responsive]="fade"
-          showEffect="fade"
-          [modal]="true"
-          [width]="dialogWidth"
-          [minWidth]="dialogMinWidth"
-          [height]="dialogHeight"
-          [minHeight]="dialogMinHeight"
-          [resizable]="false">
-    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="entityToEdit" [ngStyle]="{'min-height': gridMinHeight + 'px'}">
-        <div class="ui-grid-row" *ngFor="let column of columns">
-            <div *ngIf="!isIdColumn(column) || (isIdColumn(column) && !newEntity)" class="ui-grid-col-4"><label for="{{column.propertyName}}">{{column.displayName}}</label></div>
-
-            <div *ngIf="!isIdColumn(column)" class="ui-grid-col-12">
-                <input *ngIf="isStringColumn(column)" [disabled]="!column.isEditable" pInputText id="{{column.displayName}}" [(ngModel)]="entityToEdit[column.propertyName]" />
-                <p-checkbox *ngIf="isBooleanColumn(column)"
-                            [disabled]="!column.isEditable"
-                            [(ngModel)]="entityToEdit[column.propertyName]"
-                            binary="true"></p-checkbox>
-
-                <p-dropdown *ngIf="isDropdownColumn(column)"
-                            [options]="columnOptions[column.propertyName]"
-                            [disabled]="!column.isEditable"
-                            [(ngModel)]="entityToEdit[column.keyPropertyName]"
-                            (onChange)="onDdlChange($event, column)"
-                            [style]="{'width':'100%'}"></p-dropdown>
-                <p-calendar icon="fa fa-calendar" *ngIf="isDateColumn(column)"
-                            dateFormat="dd.mm.yy"
-                            [disabled]="!column.isEditable"
-                            showIcon="true"
-                            monthNavigator="true"
-                            yearNavigator="true"
-                            yearRange="1960:2015"
-                            [name]="column.propertyName"
-                            [(ngModel)]="entityToEdit[column.propertyName]"></p-calendar>
+<app-popup title="{{title}} Details" [(visible)]="displayDialog"
+    showEffect="fade" appendTo="body" [closable]="true"
+    (onHide)="onEditPopupClose()">
+    <div class="ui-g ui-g-nopad ui-fluid" *ngIf="entityToEdit"
+        [ngStyle]="{'min-height': gridMinHeight + 'px'}">
+        <div class="ui-g-12" *ngFor="let column of columns">
+            <div *ngIf="!isIdColumn(column) || (isIdColumn(column) && !newEntity)"
+                class="ui-g-4">
+                <label class="field-title" for="{{column.propertyName}}">{{column.displayName}}</label>
             </div>
-            <div *ngIf="isIdColumn(column) && !newEntity" class="ui-grid-col-12"><label class="id-label" for="{{column.propertyName}}">{{entityToEdit[column.propertyName]}}</label></div>
-        </div>
 
+            <div *ngIf="!isIdColumn(column)" class="ui-g-8 ui-g-nopad">
+                <input *ngIf="isStringColumn(column)" [disabled]="!column.isEditable"
+                    pInputText id="{{column.displayName}}"
+                    [(ngModel)]="entityToEdit[column.propertyName]"
+                />
+                <p-checkbox *ngIf="isBooleanColumn(column)" [disabled]="!column.isEditable"
+                    [(ngModel)]="entityToEdit[column.propertyName]"
+                    binary="true"></p-checkbox>
+
+                <p-dropdown *ngIf="isDropdownColumn(column)" [options]="columnOptions[column.propertyName]"
+                    [disabled]="!column.isEditable" [(ngModel)]="entityToEdit[column.keyPropertyName]"
+                    (onChange)="onDdlChange($event, column)"
+                    [style]="{'width':'100%'}"></p-dropdown>
+                <p-calendar icon="fa fa-calendar" *ngIf="isDateColumn(column)"
+                    dateFormat="dd.mm.yy" [disabled]="!column.isEditable"
+                    showIcon="true" monthNavigator="true"
+                    yearNavigator="true" yearRange="1960:2015"
+                    [name]="column.propertyName" [(ngModel)]="entityToEdit[column.propertyName]"></p-calendar>
+            </div>
+            <div *ngIf="isIdColumn(column) && !newEntity" class="ui-g-8">
+                <label class="id-label" for="{{column.propertyName}}">{{entityToEdit[column.propertyName]}}</label>
+            </div>
+        </div>
     </div>
     <div class="ui-g-12">
         <div class="float-right">
-            <button type="button" pButton icon="fa fa-check" (click)="save()" label="Save"></button>
-            <button type="button" pButton icon="fa fa-close" (click)="showConfirm()" class="ui-button-danger" label="Delete"></button>
+            <button type="button" pButton icon="fa fa-check" (click)="save()"
+                label="Save"></button>
+            <button type="button" pButton icon="fa fa-close" (click)="showConfirm()"
+                class="ui-button-danger" label="Delete"></button>
         </div>
 
     </div>
-</p-dialog>
+</app-popup>
 <p-confirmDialog width="425"> </p-confirmDialog>

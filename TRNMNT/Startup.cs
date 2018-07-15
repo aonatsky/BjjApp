@@ -69,12 +69,20 @@ namespace TRNMNT.Web
 
             // Add framework services.
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(o => o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+                .AddJsonOptions(o =>
+                {
+                    o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    o.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver()
+                    {
+                        NamingStrategy = new Newtonsoft.Json.Serialization.CamelCaseNamingStrategy()
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddDebug(LogLevel.Error);
             loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
             if (env.IsDevelopment())
             {

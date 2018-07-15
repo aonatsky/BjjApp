@@ -26,6 +26,11 @@
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
       "internalConsoleOptions": "openOnSessionStart",
+      "logging": {
+        "engineLogging": false,
+        "moduleLoad": false
+      },
+      "justMyCode": false,
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

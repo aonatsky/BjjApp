@@ -5,129 +5,233 @@
                 Event Edit
             </div>
         </div>
-        <div class="ui-widget">
+        <div class="">
             <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
             <div class="ui-g-8 ui-g-offset-2 steps-content" *ngIf="eventModel">
-                <div *ngIf="currentStep==0" class="">
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Title</label></div>
-                        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.title" /></div>
-                    </div>
+                <div class="ui-widget ui-widget-content">
+                    <div *ngIf="currentStep==0" class="">
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-sm-12 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.TITLE'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-sm-12 ui-fluid">
+                                <input pInputText [(ngModel)]="eventModel.title" />
+                            </div>
+                        </div>
 
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Domain</label></div>
-                        <div class="ui-g-6 ui-fluid"><input pInputText [(ngModel)]="eventModel.urlPrefix" /></div>
-                        <div class="ui-g-3 ui-fluid"><label>uabjjf.trnmnt.pro</label></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Date</label></div>
-                        <div class="ui-g-9 ui-fluid">
-                            <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.eventDate" [showIcon]="true"></p-calendar>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-sm-12 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.DOMAIN'|translate}}</label>
+                            </div>
+                            <div class="ui-g-6 ui-sm-8 ui-fluid">
+                                <input pInputText [(ngModel)]="eventModel.urlPrefix"
+                                />
+                            </div>
+                            <div class="ui-g-3 ui-sm-4 ui-fluid">
+                                <label>uabjjf.trnmnt.pro</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Registration Start</label></div>
-                        <div class="ui-g-9 ui-fluid">
-                            <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.registrationStartTS" [showIcon]="true"></p-calendar>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.DATE'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.eventDate"
+                                    [showIcon]="true"></p-calendar>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Early Registration End</label></div>
-                        <div class="ui-g-9 ui-fluid">
-                            <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.earlyRegistrationEndTS" [showIcon]="true"></p-calendar>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.REGISTRATION_START'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.registrationStartTS"
+                                    [showIcon]="true"></p-calendar>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Registration End</label></div>
-                        <div class="ui-g-9 ui-fluid"><p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true"></p-calendar></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Location</label></div>
-                        <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:5em"></textarea></div>
-                    </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.EARLY_REGISTRATION_ENDS'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.earlyRegistrationEndTS"
+                                    [showIcon]="true"></p-calendar>
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.REGISTRATION_ENDS'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <p-calendar icon="fa fa-calendar" [(ngModel)]="eventModel.registrationEndTS"
+                                    [showIcon]="true"></p-calendar>
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.LOCATION'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <textarea pInputTextarea [(ngModel)]="eventModel.address"
+                                    style="resize:none; height:5em"></textarea>
+                            </div>
+                        </div>
 
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Image</label></div>
-                        <div class="ui-g-4 ui-fluid">
-                            <p-fileUpload #fubauto mode="basic" maxFileSize="10000000" accept="image/*" (onUpload)="onImageUpload($event)" auto="true" chooseLabel="Choose Image"></p-fileUpload>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.IMAGE'|translate}}</label>
+                            </div>
+                            <div class="ui-g-4 ui-fluid">
+                                <p-fileUpload #fubauto mode="basic" maxFileSize="10000000"
+                                    accept="image/*" (onUpload)="onImageUpload($event)"
+                                    auto="true" chooseLabel="{{'COMMON.CHOOSE_IMAGE'|translate}}"></p-fileUpload>
+                            </div>
+                            <img *ngIf="eventModel.imgPath" src={{eventModel.imgPath}}
+                                class="ui-g-9 ui-g-offset-3"
+                            />
                         </div>
-                        <img *ngIf="eventModel.imgPath" src={{eventModel.imgPath}} class="ui-g-9 ui-g-offset-3" />
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label>Terms and Conditions</label></div>
-                        <div class="ui-g-4 ui-fluid">
-                            <p-fileUpload #fubauto mode="basic" accept="application/pdf" maxFileSize="10000000" (onUpload)="onTncUpload($event)" auto="true" chooseLabel="Choose File"></p-fileUpload>
-                        </div>
-                        <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Download" (click)="downloadTnc()" [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button></div>
-                    </div>
-                </div>
-                <div *ngIf="currentStep===1" class="">
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-g-offset-3 price-column"><label>Standard</label></div>
-                        <div class="ui-g-3 price-column"><label>Members</label></div>
-                        <div class="ui-g-3 price-column"><label>Promo</label></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3"><label class="field-title">Early Registration</label></div>
-                        <div class="ui-g-3 price-column ui-fluid"><input pInputText /></div>
-                        <div class="ui-g-3 price-column ui-fluid"><input pInputText /></div>
-                        <div class="ui-g-3 price-column ui-fluid"><input pInputText /></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3"><label class="field-title">Late Registration</label></div>
-                        <div class="ui-g-3 price-column ui-fluid"><input pInputText /></div>
-                        <div class="ui-g-3 price-column ui-fluid"><input pInputText /></div>
-                        <div class="ui-g-3 price-column ui-fluid"><input pInputText /></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-g-offset-3 price-column"></div>
-                        <div class="ui-g-3 price-column"></div>
-                        <div class="ui-g-3 price-column"></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Enable Promocode</label></div>
-                        <div class="ui-g-3 ui-fluid">
-                            <p-checkbox [(ngModel)]="eventModel.promoCodeEnabled" binary="true"></p-checkbox>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label>{{'EVENT_EDIT.TREMS_AND_CONDITIONS'|translate}}</label>
+                            </div>
+                            <div class="ui-g-4 ui-fluid">
+                                <p-fileUpload #fubauto mode="basic" accept="application/pdf"
+                                    maxFileSize="10000000"
+                                    (onUpload)="onTncUpload($event)"
+                                    auto="true" chooseLabel="{{'COMMON.CHOOSE_FILE'|translate}}"></p-fileUpload>
+                            </div>
+                            <div class="ui-g-4 ui-fluid">
+                                <button pButton type="button" label="{{'COMMON.DOWNLOAD'|translate}}" (click)="downloadTnc()"
+                                    [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Promocode List</label></div>
-                        <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Upload" (disabled)="true"></button></div>
-                        <div class="ui-g-4 ui-fluid"><button pButton type="button" label="Remove" [disabled]="true"></button></div>
+                    <div *ngIf="currentStep===1" class="">
+                        <div class="ui-g">
+                            <div class="ui-g-4 ui-g-offset-3 price-column">
+                                <label>{{'EVENT_EDIT.STANDARD'|translate}}</label>
+                            </div>
+                            <div class="ui-g-4 price-column">
+                                <label>{{'EVENT_EDIT.MEMBERS'|translate}}</label>
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3">
+                                <label class="field-title">{{'EVENT_EDIT.EARLY_REGISTRATION' | translate}}</label>
+                            </div>
+                            <div class="ui-g-4 price-column ui-fluid">
+                                <input pInputText />
+                            </div>
+                            <div class="ui-g-4 price-column ui-fluid">
+                                <input pInputText />
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3">
+                                <label class="field-title">{{'EVENT_EDIT.LATE_REGISTRATION'|translate}}</label>
+                            </div>
+                            <div class="ui-g-4 price-column ui-fluid">
+                                <input pInputText />
+                            </div>
+                            <div class="ui-g-4 price-column ui-fluid">
+                                <input pInputText />
+                            </div>
+                        </div>
+                        <!-- <div class="ui-g">
+                            <div class="ui-g-3 ui-g-offset-3 price-column"></div>
+                            <div class="ui-g-3 price-column"></div>
+                            <div class="ui-g-3 price-column"></div>
+                        </div> -->
+                        <!-- <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">Enable Promocode</label>
+                            </div>
+                            <div class="ui-g-3 ui-fluid">
+                                <p-checkbox [(ngModel)]="eventModel.promoCodeEnabled"
+                                    binary="true"></p-checkbox>
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">Promocode List</label>
+                            </div>
+                            <div class="ui-g-4 ui-fluid">
+                                <button pButton type="button" label="Upload" (disabled)="true"></button>
+                            </div>
+                            <div class="ui-g-4 ui-fluid">
+                                <button pButton type="button" label="Remove" [disabled]="true"></button>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div *ngIf="currentStep==2" class="">
+                        <category-edit [categories]="eventModel.categoryModels"
+                            [eventId]="eventModel.eventId">
+                        </category-edit>
+                    </div>
+                    <div *ngIf="currentStep==3">
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.CONTACT_PHONE'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <input pInputText [(ngModel)]="eventModel.contactPhone"
+                                />
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.CONTACT_EMAIL'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <input pInputText [(ngModel)]="eventModel.contactEmail"
+                                />
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.FB_LINK'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <input pInputText [(ngModel)]="eventModel.fbLink" />
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.VK_LINK'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <input pInputText [(ngModel)]="eventModel.vkLink" />
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-3 ui-fluid">
+                                <label class="field-title">{{'EVENT_EDIT.ADDITIONAL_INFO'|translate}}</label>
+                            </div>
+                            <div class="ui-g-9 ui-fluid">
+                                <textarea pInputTextarea [(ngModel)]="eventModel.additionalData"
+                                    style="resize:none; height:10em"></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div *ngIf="currentStep==2" class="">
-                    <category-edit [categories]="eventModel.categoryModels" [eventId]="eventModel.eventId">
-                    </category-edit>
-                </div>
-                <div *ngIf="currentStep==3">
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Contact Phone</label></div>
-                        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.contactPhone" /></div>
+                <div class="ui-g-12 navigation-buttons">
+                    <div class="float-left">
+                        <button pButton type="button" iconPos="left" icon="fa fa fa-arrow-left"
+                            label="{{'COMMON.BACK'|translate}}" (click)="previousStep()"
+                            *ngIf="currentStep != 0"></button>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Contact Email</label></div>
-                        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.contactEmail" /></div>
+                    <div class="float-right">
+                        <button pButton type="button" iconPos="right" icon="fa fa fa-arrow-right"
+                            label="{{'COMMON.CONTINUE'|translate}}" (click)="nextStep()"
+                            *ngIf="currentStep != lastStep"></button>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Facebook Link</label></div>
-                        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.fbLink" /></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Vkontakte Link</label></div>
-                        <div class="ui-g-9 ui-fluid"><input pInputText [(ngModel)]="eventModel.vkLink" /></div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid"><label class="field-title">Additional Info</label></div>
-                        <div class="ui-g-9 ui-fluid"><textarea pInputTextarea [(ngModel)]="eventModel.additionalData" style="resize:none; height:10em"></textarea></div>
+                    <div class="float-right">
+                        <button pButton type="button" iconPos="left" icon="fa fa fa-save"
+                            label="{{'COMMON.SAVE'|translate}}" (click)="save()"></button>
                     </div>
                 </div>
             </div>
-            <div class="ui-g-12 navigation-buttons">
-                <div class="float-left"><button pButton type="button" iconPos="left" icon="fa fa fa-arrow-left" label="Back" (click)="previousStep()" *ngIf="currentStep != 0"></button></div>
-                <div class="float-right"><button pButton type="button" iconPos="right" icon="fa fa fa-arrow-right" label="Continue" (click)="nextStep()" *ngIf="currentStep != lastStep"></button></div>
-                <div class="float-right"><button pButton type="button" iconPos="left" icon="fa fa fa-save" label="Save" (click)="save()"></button></div>
-            </div>
+
         </div>
     </div>
 </div>

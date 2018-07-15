@@ -14,18 +14,18 @@ import { MinuteSecondsPipe } from '../../../core/pipes/minutes-seconds.pipe';
 
 export class CategoryEditComponent {
 
-    private displayPopup = false;
+    displayPopup = false;
     private categoryToEdit = new CategoryModel();
     private roundTimeFormatted: string;
     private selectedIndex: number;
-    private isNewCategory: boolean;
+    isNewCategory: boolean;
 
 
 
     @Input() categories: CategoryModel[];
     @Input() eventId: string;
 
-    private addCategory() {
+    addCategory() {
         this.categoryToEdit = new CategoryModel();
         this.categoryToEdit.eventId = this.eventId;
         this.isNewCategory = true;
@@ -33,7 +33,7 @@ export class CategoryEditComponent {
         this.roundTimeFormatted = '';
     }
 
-    private editCategory(index: number) {
+    editCategory(index: number) {
         this.selectedIndex = index;
         this.isNewCategory = false;
         this.categoryToEdit = this.cloneCategory(this.categories[index]);
@@ -41,7 +41,7 @@ export class CategoryEditComponent {
         this.roundTimeFormatted = this.getRoundTimeFormatted();
     }
 
-    private saveCategory(): void {
+    saveCategory(): void {
         this.categoryToEdit.roundTime = this.getRoundTime();
         if (!this.isNewCategory) {
             this.categories[this.selectedIndex] = this.categoryToEdit;
@@ -52,17 +52,17 @@ export class CategoryEditComponent {
 
     }
 
-    private deleteCategory(): void {
+    deleteCategory(): void {
         this.categories.splice(this.selectedIndex, 1);
         this.displayPopup = false;
     }
 
 
 
-    private addWeightDivision(): void {
+    addWeightDivision(): void {
         this.categoryToEdit.weightDivisionModels.push(new WeightDivisionModel());
     }
-    private deleteWeightDivision(index: number): void {
+    deleteWeightDivision(index: number): void {
         this.categoryToEdit.weightDivisionModels.splice(index, 1);
     }
 

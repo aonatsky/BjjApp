@@ -1,5 +1,8 @@
 <p-dialog header="{{title}}" [(visible)]="visible" showEffect="fade" [modal]="true" [width]="dialogWidth" [minWidth]="dialogMinWidth"
-  [height]="dialogHeight" [minHeight]="dialogMinHeight" [resizable]="false" appendTo="body" [showHeader]="showHeader" [closable]="closable"
-  [modal]="true">
+  [height]="dialogHeight" [minHeight]="dialogMinHeight" [resizable]="false" appendTo="body" [showHeader]="showHeader"
+  [draggable]=false
+  [closable]="closable"
+  [modal]="true"
+  (onHide)="onHide.emit($event)">
   <ng-content></ng-content>
 </p-dialog>

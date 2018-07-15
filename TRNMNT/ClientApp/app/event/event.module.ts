@@ -1,4 +1,4 @@
-﻿import { TranslateModule } from '@ngx-translate/core';
+﻿import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CoreModule } from '../core/core.module';
 import { EventInfoComponent } from './event-info/event-info.component';
@@ -8,9 +8,15 @@ import { EventRegistrationCompleteComponent } from './event-registration-complet
 import { EventComponent } from './event.component';
 import { EventRoutingModule } from './event.routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { CustomLoader } from '../core/helpers/custom-loader';
 
 @NgModule({
-  imports: [CoreModule, SharedModule, EventRoutingModule, TranslateModule],
+  imports: [
+    CoreModule,
+    SharedModule,
+    EventRoutingModule,
+    TranslateModule.forChild({ loader: { provide: TranslateLoader, useClass: CustomLoader } })
+  ],
   declarations: [EventInfoComponent, EventComponent, EventRegistrationComponent, EventRegistrationCompleteComponent],
   providers: [],
   exports: []

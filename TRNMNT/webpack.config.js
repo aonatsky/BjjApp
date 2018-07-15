@@ -27,7 +27,7 @@ module.exports = env => {
         { test: /\.html$/, use: 'html-loader?minimize=false' },
         {
           test: /\.(css|scss)$/,
-          use: ['to-string-loader'].concat(['css-loader?sourceMap', 'sass-loader?sourceMap'])
+          use: ['to-string-loader'].concat(extractTextPlugin.extract({ use: ['css-loader', 'sass-loader'] }))
         },
         { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
         {

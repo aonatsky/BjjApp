@@ -35,13 +35,13 @@ export const ApiMethods = Object.freeze({
   },
   participant: {
     participant: 'api/participant/',
-    processParticipantRegistration: 'api/participant/processParticipantRegistration/',
-    isParticipantExist: 'api/participant/isParticipantExist/',
-    participantsTable: 'api/participant/participantsTable/',
-    participantsDropdownData: 'api/participant/participantsDropdownData/',
-    uploadParticipantsFromFile: 'api/participant/uploadParticipantsFromFile/',
-    update: 'api/participant/update/',
-    delete: 'api/participant/delete/'
+    processParticipantRegistration: 'api/participant/processParticipantRegistration',
+    isParticipantExist: 'api/participant/isParticipantExist',
+    participantsTable: 'api/participant/participantsTable',
+    participantsDropdownData: 'api/participant/participantsDropdownData',
+    uploadParticipantsFromFile: 'api/participant/uploadParticipantsFromFile',
+    update: 'api/participant/update',
+    delete: 'api/participant/delete'
   },
   payment: {
     payment: 'api/payment',

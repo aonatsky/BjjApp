@@ -15,6 +15,10 @@ body {
   margin: 0px;
   font-family: $theme_font_family !important;
 
+  .box-shadow {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
   .ui-corner-all {
     border-radius: 0 !important;
   }
@@ -23,25 +27,23 @@ body {
     padding-top: 0px;
   }
 
+  .ui-widget-content {
+    padding: 1em 2em;
+  }
+
   .ui-button {
     padding: 0.25em 1em;
     border-width: 1px;
 
     &.ui-button-danger.ui-state-default {
-      border-width: 1px;
-      background-color: transparent;
+      background-color: $theme_grey;
       color: $theme_red;
-      border-color: $theme_red;
+      border-color: $theme_grey;
 
       &:hover {
-        background-color: transparent !important;
-        color: darken($theme_red, 10%);
-        border-color: darken($theme_red, 10%);
+        background-color: $theme_grey;
+        border-width: 1px;
       }
-    }
-
-    .fa {
-      background-color: transparent;
     }
   }
 
@@ -117,6 +119,16 @@ body {
 
   .ui-dialog {
     border-radius: 0;
+    border: 0px;
+
+    &.ui-widget-content {
+      padding: 0px;
+    }
+
+    .ui-dialog-titlebar {
+      text-align: center;
+      font-weight: normal;
+    }
 
     .ui-dialog-titlebar {
       padding: 0.5em;
@@ -263,4 +275,8 @@ body {
 
 .inline-block {
   display: inline-block;
+}
+
+.bold {
+  font-weight: bold;
 }

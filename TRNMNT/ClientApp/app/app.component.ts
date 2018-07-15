@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   notifications: Message[] = [];
   isLoaderShown: boolean = false;
   private loaderSubscription: Subscription;
-  private notificationSubscription: Subscription;
+  private notificationSubscription: Subscription;      
   private clearNotificationSubscription: Subscription;
 
   constructor(

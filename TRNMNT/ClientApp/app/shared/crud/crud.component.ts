@@ -72,9 +72,9 @@ export class CrudComponent implements OnInit, OnChanges {
     @Output() readonly onEntitySelected: EventEmitter<any>;
     @Output() readonly onLazyLoad: EventEmitter<LazyLoadEvent>;
     
-    private displayDialog: boolean;
+    displayDialog: boolean;
     private isNewEntity: boolean;
-    private entityToEdit: any = new Object();
+    entityToEdit: any = new Object();
 
     refreshPage() {
         this.firstIndex = 0;
@@ -94,12 +94,17 @@ export class CrudComponent implements OnInit, OnChanges {
         this.onEntitySelected.emit(this.entityToEdit);
     }
 
-    private save() {
+    save() {
         if (this.isNewEntity) {
             this.onAdd.emit(this.entityToEdit);
         } else {
             this.onUpdate.emit(this.entityToEdit);
         }
+        this.displayDialog = false;
+    }
+
+    onEditPopupClose() {
+        this.entityToEdit = null;
         this.displayDialog = false;
     }
 

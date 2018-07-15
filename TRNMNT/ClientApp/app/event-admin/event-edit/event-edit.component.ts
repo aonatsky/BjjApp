@@ -4,21 +4,27 @@ import { MenuItem } from 'primeng/primeng';
 import { EventModel } from '../../core/model/event.models';
 import { AuthService } from '../../core/services/auth.service';
 import { EventService } from '../../core/services/event.service';
-import './event-edit.component.scss';
+import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'event-edit',
   templateUrl: './event-edit.component.html',
+  styleUrls:['./event-edit.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class EventEditComponent implements OnInit {
   eventModel: EventModel;
-  private menuItems: MenuItem[];
-  private currentStep: number = 0;
-  private categoryCount: number = 0;
-  private lastStep: number = 3;
+  private menuItems: MenuItem[] = [];
+  currentStep: number = 0;
+  categoryCount: number = 0;
+  lastStep: number = 3;
 
-  constructor(private authService: AuthService, private eventService: EventService, private route: ActivatedRoute) {}
+  constructor(
+    private authService: AuthService,
+    private eventService: EventService,
+    private route: ActivatedRoute,
+    private translateservice: TranslateService
+  ) {}
 
   ngOnInit() {
     this.initMenu();
@@ -37,20 +43,12 @@ export class EventEditComponent implements OnInit {
   }
 
   private initMenu() {
-    this.menuItems = [
-      {
-        label: 'General Information'
-      },
-      {
-        label: 'Prices'
-      },
-      {
-        label: 'Categories'
-      },
-      {
-        label: 'Additional Information'
-      }
-    ];
+    this.translateservice
+      .get('EVENT_EDIT.GENERAL_INFORMATION')
+      .subscribe((r: string) => this.menuItems.push({ label: r }));
+    this.translateservice.get('EVENT_EDIT.PRICES').subscribe((r: string) => this.menuItems.push({ label: r }));
+    this.translateservice.get('EVENT_EDIT.CATEGORIES').subscribe((r: string) => this.menuItems.push({ label: r }));
+    this.translateservice.get('EVENT_EDIT.ADDITIONAL').subscribe((r: string) => this.menuItems.push({ label: r }));
   }
 
   private modelReload() {

@@ -115,8 +115,8 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        [Authorize, HttpGet("[action]")]
-        public async Task<IActionResult> ParticipantsTable(ParticipantFilterModel filter)
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> ParticipantsTable([FromBody] ParticipantFilterModel filter)
         {
             return await HandleRequestWithDataAsync(async () =>
             {
@@ -146,14 +146,14 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPost("[action]/{eventId}")]
         public async Task<IActionResult> UploadParticipantsFromFile(IFormFile file, Guid eventId)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestAsync(async () =>
             {
                 var options = new ParticipantListProcessingOptions
                 {
                     EventId = eventId,
                     FederationId = GetFederationId().Value
                 };
-                return await _fileProcessiongService.ProcessFileAsync(file, options);
+                await _fileProcessiongService.ProcessFileAsync(file, options);
             });
         }
 

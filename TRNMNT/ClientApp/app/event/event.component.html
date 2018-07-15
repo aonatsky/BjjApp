@@ -1,4 +1,19 @@
 <div class="ui-container" *ngIf="eventModel">
+    <div class="ui-widget ui-widget-content main-info box-shadow">
+        <div class="ui-g">
+            <div class="ui-g-8">
+                <label class="ui-g-4 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</label>
+                <label class="ui-g-8 ">{{eventModel.eventDate | date}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</label>
+                <label class="ui-g-8">{{eventModel.registrationStartTS | date}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.LATE_REGISTRATION' | translate}}</label>
+                <label class="ui-g-8">{{eventModel.earlyRegistrationEndTS | date}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.CONTACT' | translate}}</label>
+                <label class="ui-g-8">{{eventModel.contactEmail}}</label>
+            </div>
+            <div class="ui-g-4"></div>
+        </div>
+    </div>
     <div class="ui-widget ui-widget-content ui-corner-all ui-g">
         <div class="ui-g-8 event-image">
             <img src={{eventModel.imgPath}}/>
@@ -13,20 +28,25 @@
             </div>
             <div class="ui-g-12">
                 <div class="ui-g-8">Registrations Starts</div>
-                <div class="ui-g-4">{{eventModel.registrationStartTS | date}}</div>
+                <div class="ui-g-4">{{eventModel.registrationStartTS |
+                    date}}
+                </div>
             </div>
             <div class="ui-g-12">
                 <div class="ui-g-8">Registration Ends</div>
                 <div class="ui-g-4">{{eventModel.registrationEndTS | date}}</div>
             </div>
             <div class="ui-g-2">
-                <button pButton class="ui-button-icon-only" icon="fa fa-facebook" label="{{eventModel.fbLink}}"></button>
+                <button pButton class="ui-button-icon-only" icon="fa fa-facebook"
+                    label="{{eventModel.fbLink}}"></button>
             </div>
             <div class="ui-g-2">
-                <button pButton class="ui-button-icon-only" icon="fa fa-vk" label="{{eventModel.vkLink}}"></button>
+                <button pButton class="ui-button-icon-only" icon="fa fa-vk"
+                    label="{{eventModel.vkLink}}"></button>
             </div>
             <div class="ui-g-12">
-                <button pButton class="ui-button-success" icon="fa fa-check-circle" label="Register" (click)="participate()"></button>
+                <button pButton class="ui-button-success" icon="fa fa-check-circle"
+                    label="Register" (click)="participate()"></button>
             </div>
         </div>
     </div>
