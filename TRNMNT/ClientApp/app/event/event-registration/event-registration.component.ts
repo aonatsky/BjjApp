@@ -12,8 +12,6 @@ import { TeamModel } from '../../core/model/team.model';
 import { PaymentDataModel } from '../../core/model/payment-data.model';
 import { CategorySimpleModel } from '../../core/model/category.models';
 import { WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
-import { LoggerService } from '../../core/services/logger.service';
-import { RouterService } from '../../core/services/router.service';
 import { forkJoin } from 'rxjs';
 import { SelectItem, Message } from 'primeng/primeng';
 import { AuthService } from '../../core/services/auth.service';
@@ -35,17 +33,15 @@ export class EventRegistrationComponent implements OnInit {
   teams: TeamModel[] = [];
 
   eventId: string;
-  eventTitleParameter = {value: this.eventService.getCurrentEvent()}
+  price: number;
+  eventTitleParameter: object;
   currentStep: number = 0;
   tncAccepted: boolean = false;
   private messages: Message[] = [];
-  private paymentData: string = '';
-  private paymentSignature: string = '';
+  paymentData: string = '';
+  paymentSignature: string = '';
 
   constructor(
-    private routerService: RouterService,
-    private loggerService: LoggerService,
-    private route: ActivatedRoute,
     private weightDivisionService: WeightDivisionService,
     private categoryService: CategoryService,
     private teamService: TeamService,
@@ -67,14 +63,20 @@ export class EventRegistrationComponent implements OnInit {
   }
 
   private loadData() {
-    forkJoin(this.teamService.getTeams(), this.categoryService.getCategoriesForCurrentEvent()).subscribe(data =>
-      this.initData(data)
-    );
+    this.eventService.getPrice().subscribe(r => (this.price = r));
+    forkJoin(
+      this.teamService.getTeams(),
+      this.categoryService.getCategoriesForCurrentEvent(),
+      this.eventService.getCurrentEvent(),
+      this.eventService.getPrice()
+    ).subscribe(data => this.initData(data));
   }
 
   private initData(data) {
     this.teams = data[0];
     this.categories = data[1];
+    this.eventTitleParameter = { value: data[2] };
+    this.price = data[3];
     this.initCategoryDropdown();
     this.initTeamDropdown();
   }

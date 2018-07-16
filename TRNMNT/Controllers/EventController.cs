@@ -13,7 +13,7 @@ using TRNMNT.Data.Context;
 
 namespace TRNMNT.Web.Controllers
 {
-    [Authorize(Roles = "FederationOwner, Owner")]
+    [Authorize]
     [Route("api/[controller]")]
     public class EventController : BaseController
     {
@@ -34,7 +34,7 @@ namespace TRNMNT.Web.Controllers
 
         #region Public Methods
 
-        [Authorize, HttpPost("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModelFull eventModel)
         {
             return await HandleRequestAsync(async() =>
@@ -53,7 +53,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var eventModel = await _eventService.GetFullEventAsync(id);
+                var eventModel = await _eventService.GetFullEventModelAsync(id);
                 if (eventModel != null)
                 {
                     return Success(eventModel);
@@ -67,7 +67,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var eventModel = await _eventService.GetFullEventAsync(id);
+                var eventModel = await _eventService.GetFullEventModelAsync(id);
                 if (eventModel != null)
                 {
                     return Success(eventModel);
@@ -76,12 +76,12 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpGet("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner"), HttpGet("[action]")]
         public async Task<IActionResult> GetEventsForOwner()
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
-                var events =  await _eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
+                var events = await _eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
                 return Success(events.ToArray());
             });
         }
@@ -105,7 +105,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpPost("[action]/{id}")]
+        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventImage(IFormFile file, string id)
         {
             return await HandleRequestAsync(async() =>
@@ -117,7 +117,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpPost("[action]/{id}")]
+        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventTnc(IFormFile file, string id)
         {
             return await HandleRequestAsync(async() =>
@@ -129,7 +129,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpPost("[action]/{id}")]
+        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadPromoCodeList(IFormFile file, string id)
         {
             return await HandleRequestAsync(async() =>
@@ -152,10 +152,16 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpGet("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner"), HttpGet("[action]")]
         public async Task<IActionResult> CreateEvent()
         {
             return await HandleRequestWithDataAsync(async() => _eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), false, true);
+        }
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<IActionResult> GetPrice()
+        {
+            return await HandleRequestWithDataAsync(async() => await _eventService.GetPriceAsync(GetEventId().Value, (await GetUserAsync()).Id), true, true);
         }
 
         #endregion

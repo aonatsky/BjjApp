@@ -18,8 +18,6 @@ namespace TRNMNT.Core.Services.Impl
 
         private readonly IPaidServiceFactory _paidServiceFactory;
         private readonly IOrderService _orderService;
-        //private readonly ILogger _logger; // todo need to research Exception thrown during resolve
-
         #endregion
 
         #region Properties
@@ -31,47 +29,40 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService)
+        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService, IConfiguration configuration)
         {
             _paidServiceFactory = paidServiceFactory;
             _orderService = orderService;
-            // _logger = logger;
+            publicKey = configuration["LiqPay:PublicKey"];
+            privateKey = configuration["LiqPay:PrivateKey"];
         }
 
         #endregion
 
         #region Public Methods
-        
+
         public async Task ConfirmPaymentAsync(PaymentDataModel dataModel)
         {
             if (dataModel.Signature == GetSignature(dataModel.Data))
             {
-                try
-                {
-                    var jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
-                    var paymentReference = jsonData["payment_id"].ToString();
-                    var orderId = jsonData["order_id"].ToString();
-                    var status = jsonData["status"].ToString();
-                    //_logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
 
-                    if (status == "success" || status == "sandbox")
+                var jsonData = JObject.Parse(DecodeBase64(dataModel.Data));
+                var paymentReference = jsonData["payment_id"].ToString();
+                var orderId = jsonData["order_id"].ToString();
+                var status = jsonData["status"].ToString();
+                //_logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
+
+                if (status == "success" || status == "sandbox")
+                {
+                    var order = await _orderService.GetOrderAsync(Guid.Parse(orderId));
+                    if (order != null)
                     {
-                        var order = await _orderService.GetOrderAsync(Guid.Parse(orderId));
-                        if (order != null)
-                        {
-                            await _orderService.ApproveOrderAsync(order.OrderId, paymentReference);
-                            var service = _paidServiceFactory.GetService(order.OrderTypeId);
-                            await service.ApproveEntityAsync(Guid.Parse(order.Reference), order.OrderId);
-                        }
+                        await _orderService.ApproveOrderAsync(order.OrderId, paymentReference);
+                        var service = _paidServiceFactory.GetService(order.OrderTypeId);
+                        await service.ApproveEntityAsync(Guid.Parse(order.Reference), order.OrderId);
                     }
                 }
-                catch (Exception ex)
-                {
-                    //_logger.LogError(ex.Message);
-                }
-
             }
-            //_logger.LogError("Signature declined");
         }
 
         public PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl)
@@ -81,7 +72,7 @@ namespace TRNMNT.Core.Services.Impl
             return new PaymentDataModel
             {
                 Data = encodedData,
-                Signature = encodedsignature
+                    Signature = encodedsignature
             };
         }
 
@@ -99,16 +90,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             var jsonData = new JObject
             {
-                ["version"] = 3,
-                ["public_key"] = publicKey,
-                ["action"] = "pay",
-                ["amount"] = order.Amount,
-                ["currency"] = order.Currency,
-                ["description"] = "Sport Event Participation",
-                ["order_id"] = order.OrderId.ToString(),
-                ["expired_date"] = "2017-10-24 00:00:00",
-                ["sandbox"] = "1",
-                ["result_url"] = callbackUrl
+                ["version"] = 3, ["public_key"] = publicKey, ["action"] = "pay", ["amount"] = order.Amount, ["currency"] = order.Currency, ["description"] = "Sport Event Participation", ["order_id"] = order.OrderId.ToString(), ["expired_date"] = "2017-10-24 00:00:00", ["sandbox"] = "1", ["result_url"] = callbackUrl
             };
             return GetBase64EncodedData(jsonData.ToString());
         }

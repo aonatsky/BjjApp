@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Result;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -42,5 +43,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="fbToken"></param>
         /// <returns></returns>
         Task<AuthTokenResult> FacebookLogin(string fbToken);
+
+        /// <summary>
+        /// Returns user by userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<User> GetUser(string userId);
     }
 }

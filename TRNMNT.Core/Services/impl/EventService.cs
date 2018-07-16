@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Const;
+using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.WeightDivision;
@@ -23,7 +24,7 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IRepository<Category> _categoryRepository;
         private readonly IRepository<WeightDivision> _weightDivisionRepository;
         private readonly IFileService _fileService;
-        private readonly IRepository<FederationMembership> _federationMembershipRepository;
+        private readonly IFederationMembershipService _federationMembershipService;
         private readonly IAppDbContext _unitOfWork;
         private readonly IPromoCodeService _promoCodeService;
 
@@ -35,7 +36,7 @@ namespace TRNMNT.Core.Services.Impl
             IRepository<Event> eventRepository,
             IRepository<Category> categoryRepository,
             IRepository<WeightDivision> weightDivisionRepository,
-            IRepository<FederationMembership> federationMembershipRepository,
+            IFederationMembershipService federationMembershipService,
             IFileService fileService,
             IAppDbContext unitOfWork,
             IPromoCodeService promoCodeService
@@ -44,7 +45,7 @@ namespace TRNMNT.Core.Services.Impl
             _eventRepository = eventRepository;
             _categoryRepository = categoryRepository;
             _weightDivisionRepository = weightDivisionRepository;
-            _federationMembershipRepository = federationMembershipRepository;
+            _federationMembershipService = federationMembershipService;
             _fileService = fileService;
             _unitOfWork = unitOfWork;
             _promoCodeService = promoCodeService;
@@ -56,7 +57,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task UpdateEventAsync(EventModelFull eventModel)
         {
-            var existingEvent = await _eventRepository.GetAll(e => e.EventId == eventModel.EventId).Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync();// GetByIDAsync<Guid>(eventModel.EventId);
+            var existingEvent = await _eventRepository.GetAll(e => e.EventId == eventModel.EventId).Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(); // GetByIDAsync<Guid>(eventModel.EventId);
             var updatedEvent = GetEventFromModel(eventModel);
             updatedEvent.UpdateTS = DateTime.UtcNow;
             updatedEvent.IsActive = true;
@@ -90,7 +91,7 @@ namespace TRNMNT.Core.Services.Impl
                     _categoryRepository.Add(updatedCategory);
                     _weightDivisionRepository.AddRange(updatedCategory.WeightDivisions);
                 }
-                
+
             }
 
         }
@@ -122,7 +123,7 @@ namespace TRNMNT.Core.Services.Impl
             }
 
         }
-        public async Task<EventModelFull> GetFullEventAsync(Guid id)
+        public async Task<EventModelFull> GetFullEventModelAsync(Guid id)
         {
             var @event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
             return @event != null ? GetEventModel(@event) : null;
@@ -135,11 +136,11 @@ namespace TRNMNT.Core.Services.Impl
                 .Select(e => new EventModelBase
                 {
                     EventId = e.EventId,
-                    EventDate = e.EventDate,
-                    RegistrationEndTS = e.RegistrationEndTS,
-                    EarlyRegistrationEndTS = e.EarlyRegistrationEndTS,
-                    RegistrationStartTS = e.RegistrationStartTS,
-                    Title = e.Title
+                        EventDate = e.EventDate,
+                        RegistrationEndTS = e.RegistrationEndTS,
+                        EarlyRegistrationEndTS = e.EarlyRegistrationEndTS,
+                        RegistrationStartTS = e.RegistrationStartTS,
+                        Title = e.Title
                 }).ToListAsync();
 
             return models;
@@ -204,17 +205,19 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<int> GetPriceAsync(Guid eventId, string userId)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
-            if (_event != null)
+            if (_event == null)
             {
-                var isMember = await _federationMembershipRepository.GetAll().Where(fm => fm.UserId == userId && fm.FederationId == _event.FederationId).AnyAsync();
-                var dateNow = DateTime.UtcNow;
-                if (dateNow <= _event.EarlyRegistrationEndTS)
-                {
-                    return isMember ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
-                }
-                return isMember ? _event.LateRegistrationPriceForMembers : _event.LateRegistrationPrice;
+                throw new BusinessException("Event not found");
             }
-            return 0;
+            var isMember = await _federationMembershipService.IsFederationMemberAsync(_event.FederationId, userId);
+            if (DateTime.UtcNow <= _event.EarlyRegistrationEndTS)
+            {
+                return isMember? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+            }
+            else
+            {
+                return isMember? _event.LateRegistrationPrice : _event.LateRegistrationPrice;
+            }
         }
 
         public async Task<int> GetPriceAsync(Guid eventId, string userId, string promoCode = "")
@@ -236,7 +239,6 @@ namespace TRNMNT.Core.Services.Impl
             }
             return 0;
         }
-
 
         public async Task<int> GetPriceAsync(Guid eventId, bool specialPrice)
         {
@@ -285,7 +287,7 @@ namespace TRNMNT.Core.Services.Impl
                 EventDate = DateTime.UtcNow.AddMonths(1).Date,
                 RegistrationStartTS = DateTime.UtcNow.AddDays(7).Date,
                 EarlyRegistrationEndTS = DateTime.UtcNow.AddDays(14).Date,
-                RegistrationEndTS  = DateTime.UtcNow.AddDays(21).Date,
+                RegistrationEndTS = DateTime.UtcNow.AddDays(21).Date,
                 IsActive = false
             };
             _eventRepository.Add(_event);
@@ -302,32 +304,30 @@ namespace TRNMNT.Core.Services.Impl
             return new EventModelFull
             {
                 EventId = @event.EventId,
-                EventDate = @event.EventDate,
-                AdditionalData = @event.AdditionalData,
-                Address = @event.Address,
-                ContactEmail = @event.ContactEmail,
-                Description = @event.Description,
-                ImgPath = @event.ImgPath,
-                TNCFilePath = @event.TNCFilePath,
-                ContactPhone = @event.ContactPhone,
-                Title = @event.Title,
-                FBLink = @event.FBLink,
-                RegistrationEndTS = @event.RegistrationEndTS,
-                RegistrationStartTS = @event.RegistrationStartTS,
-                UrlPrefix = @event.UrlPrefix,
-                VKLink = @event.VKLink,
-                EarlyRegistrationEndTS = @event.EarlyRegistrationEndTS,
-                EarlyRegistrationPrice = @event.EarlyRegistrationPrice,
-                EarlyRegistrationPriceForMembers = @event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPrice = @event.LateRegistrationPrice,
-                LateRegistrationPriceForMembers = @event.LateRegistrationPriceForMembers,
-                PromoCodeEnabled = @event.PromoCodeEnabled,
-                PromoCodeListPath = @event.PromoCodeListPath,
-                CategoryModels = GetCategoryModels(@event.Categories)
+                    EventDate = @event.EventDate,
+                    AdditionalData = @event.AdditionalData,
+                    Address = @event.Address,
+                    ContactEmail = @event.ContactEmail,
+                    Description = @event.Description,
+                    ImgPath = @event.ImgPath,
+                    TNCFilePath = @event.TNCFilePath,
+                    ContactPhone = @event.ContactPhone,
+                    Title = @event.Title,
+                    FBLink = @event.FBLink,
+                    RegistrationEndTS = @event.RegistrationEndTS,
+                    RegistrationStartTS = @event.RegistrationStartTS,
+                    UrlPrefix = @event.UrlPrefix,
+                    VKLink = @event.VKLink,
+                    EarlyRegistrationEndTS = @event.EarlyRegistrationEndTS,
+                    EarlyRegistrationPrice = @event.EarlyRegistrationPrice,
+                    EarlyRegistrationPriceForMembers = @event.EarlyRegistrationPriceForMembers,
+                    LateRegistrationPrice = @event.LateRegistrationPrice,
+                    LateRegistrationPriceForMembers = @event.LateRegistrationPriceForMembers,
+                    PromoCodeEnabled = @event.PromoCodeEnabled,
+                    PromoCodeListPath = @event.PromoCodeListPath,
+                    CategoryModels = GetCategoryModels(@event.Categories)
             };
         }
-
-       
 
         private static ICollection<CategoryModel> GetCategoryModels(ICollection<Category> categories)
         {
@@ -337,10 +337,10 @@ namespace TRNMNT.Core.Services.Impl
                 categoryModels.AddRange(categories.Select(category => new CategoryModel
                 {
                     CategoryId = category.CategoryId,
-                    Name = category.Name,
-                    RoundTime = category.MatchTime,
-                    WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions),
-                    EventId = category.EventId
+                        Name = category.Name,
+                        RoundTime = category.MatchTime,
+                        WeightDivisionModels = GetWeightDeivisionsModels(category.WeightDivisions),
+                        EventId = category.EventId
                 }));
             }
             return categoryModels;
@@ -354,10 +354,10 @@ namespace TRNMNT.Core.Services.Impl
                 weightDivisionModels.AddRange(weightDivisions.Where(w => !w.IsAbsolute).Select(weightDivision => new WeightDivisionModel
                 {
                     WeightDivisionId = weightDivision.WeightDivisionId,
-                    Weight = weightDivision.Weight,
-                    Descritpion = weightDivision.Descritpion,
-                    Name = weightDivision.Name,
-                    CategoryId = weightDivision.CategoryId
+                        Weight = weightDivision.Weight,
+                        Descritpion = weightDivision.Descritpion,
+                        Name = weightDivision.Name,
+                        CategoryId = weightDivision.CategoryId
                 }));
             }
             return weightDivisionModels;
@@ -368,27 +368,27 @@ namespace TRNMNT.Core.Services.Impl
             return new Event
             {
                 EventId = eventModel.EventId,
-                EventDate = eventModel.EventDate,
-                AdditionalData = eventModel.AdditionalData,
-                Address = eventModel.Address,
-                ContactEmail = eventModel.ContactEmail,
-                Description = eventModel.Description,
-                ImgPath = eventModel.ImgPath,
-                TNCFilePath = eventModel.TNCFilePath,
-                ContactPhone = eventModel.ContactPhone,
-                Title = eventModel.Title,
-                FBLink = eventModel.FBLink,
-                RegistrationEndTS = eventModel.RegistrationEndTS,
-                RegistrationStartTS = eventModel.RegistrationStartTS,
-                UrlPrefix = eventModel.UrlPrefix,
-                VKLink = eventModel.VKLink,
-                PromoCodeEnabled = eventModel.PromoCodeEnabled,
-                LateRegistrationPrice = eventModel.LateRegistrationPrice,
-                LateRegistrationPriceForMembers = eventModel.LateRegistrationPriceForMembers,
-                EarlyRegistrationPriceForMembers = eventModel.EarlyRegistrationPriceForMembers,
-                EarlyRegistrationPrice = eventModel.EarlyRegistrationPrice,
-                EarlyRegistrationEndTS = eventModel.EarlyRegistrationEndTS,
-                Categories = GetCategoriesFromModels(eventModel.CategoryModels)
+                    EventDate = eventModel.EventDate,
+                    AdditionalData = eventModel.AdditionalData,
+                    Address = eventModel.Address,
+                    ContactEmail = eventModel.ContactEmail,
+                    Description = eventModel.Description,
+                    ImgPath = eventModel.ImgPath,
+                    TNCFilePath = eventModel.TNCFilePath,
+                    ContactPhone = eventModel.ContactPhone,
+                    Title = eventModel.Title,
+                    FBLink = eventModel.FBLink,
+                    RegistrationEndTS = eventModel.RegistrationEndTS,
+                    RegistrationStartTS = eventModel.RegistrationStartTS,
+                    UrlPrefix = eventModel.UrlPrefix,
+                    VKLink = eventModel.VKLink,
+                    PromoCodeEnabled = eventModel.PromoCodeEnabled,
+                    LateRegistrationPrice = eventModel.LateRegistrationPrice,
+                    LateRegistrationPriceForMembers = eventModel.LateRegistrationPriceForMembers,
+                    EarlyRegistrationPriceForMembers = eventModel.EarlyRegistrationPriceForMembers,
+                    EarlyRegistrationPrice = eventModel.EarlyRegistrationPrice,
+                    EarlyRegistrationEndTS = eventModel.EarlyRegistrationEndTS,
+                    Categories = GetCategoriesFromModels(eventModel.CategoryModels)
             };
         }
 
@@ -398,10 +398,10 @@ namespace TRNMNT.Core.Services.Impl
             {
                 var category = new Category
                 {
-                    EventId = model.EventId,
-                    CategoryId = model.CategoryId == Guid.Empty ? Guid.NewGuid() : model.CategoryId,
-                    MatchTime = model.RoundTime,
-                    Name = model.Name
+                EventId = model.EventId,
+                CategoryId = model.CategoryId == Guid.Empty ? Guid.NewGuid() : model.CategoryId,
+                MatchTime = model.RoundTime,
+                Name = model.Name
                 };
                 category.WeightDivisions = GetWeightDeivisionsFromModels(model.WeightDivisionModels, category.CategoryId);
                 return category;
@@ -413,15 +413,14 @@ namespace TRNMNT.Core.Services.Impl
             return models.Select(model => new WeightDivision
             {
                 WeightDivisionId = model.WeightDivisionId == Guid.Empty ? Guid.NewGuid() : model.WeightDivisionId,
-                Weight = model.Weight,
-                Descritpion = model.Descritpion,
-                Name = model.Name,
-                CategoryId = categoryId
+                    Weight = model.Weight,
+                    Descritpion = model.Descritpion,
+                    Name = model.Name,
+                    CategoryId = categoryId
             }).ToList();
         }
-        
+
         #endregion
     }
 
 }
-

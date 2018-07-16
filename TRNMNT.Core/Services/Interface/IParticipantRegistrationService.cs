@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -14,6 +15,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="model">The model.</param>
         /// <param name="callbackUrl">The callback URL.</param>
         /// <returns></returns>
-        Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl);
+        Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, User user);
     }
 }

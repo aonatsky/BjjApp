@@ -43,31 +43,28 @@ namespace TRNMNT.Core.Services.Impl
                 p.DateOfBirth == model.DateOfBirth);
         }
 
-        public void AddParticipant(Participant participant)
-        {
-            _repository.Add(participant);
-        }
 
-        public Participant CreatePaticipant(ParticipantRegistrationModel model, Guid eventId)
+        public Guid AddParticipant(ParticipantRegistrationModel model, Guid eventId)
         {
-            var id = Guid.NewGuid();
-            return new Participant()
+            var participant = new Participant()
             {
-                ParticipantId = id,
+                    ParticipantId = Guid.NewGuid(),
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    TeamId = Guid.Parse(model.TeamId),
+                    TeamId = model.TeamId,
                     DateOfBirth = model.DateOfBirth,
                     Email = model.Email,
                     PhoneNumber = model.PhoneNumber,
-                    CategoryId = Guid.Parse(model.CategoryId),
-                    WeightDivisionId = Guid.Parse(model.WeightDivisionId),
+                    CategoryId = model.CategoryId,
+                    WeightDivisionId = model.WeightDivisionId,
                     EventId = eventId,
                     UserId = model.UserId,
                     IsDisqualified = true,
                     IsApproved = false,
                     UpdateTS = DateTime.UtcNow,
             };
+            _repository.Add(participant);
+            return participant.ParticipantId;
         }
 
         public async Task ApproveEntityAsync(Guid entityId, Guid orderId)

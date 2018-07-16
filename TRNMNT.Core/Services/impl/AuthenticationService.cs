@@ -48,6 +48,12 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public methods
 
+        public async Task<User> GetUser(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId);
+        }
+        
+        
         public async Task<AuthTokenResult> GetTokenAsync(string login, string password)
         {
             var loginResult = await _signInManager.PasswordSignInAsync(login, password, false, false);
@@ -208,7 +214,9 @@ namespace TRNMNT.Core.Services.Impl
 
             return await GetTokensAsync(user);
         }
+
         #endregion
+
     }
 
 }

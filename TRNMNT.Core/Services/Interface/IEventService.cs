@@ -20,7 +20,7 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        Task<EventModelFull> GetFullEventAsync(Guid id);
+        Task<EventModelFull> GetFullEventModelAsync(Guid id);
 
         /// <summary>
         /// Gets the event information asynchronous.

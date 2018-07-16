@@ -3,7 +3,7 @@ import { LoggerService } from './logger.service';
 import { HttpService } from '../dal/http/http.service';
 import { EventModel, EventPreviewModel } from '../model/event.models';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -11,13 +11,14 @@ export class EventService {
   constructor(private loggerService: LoggerService, private httpService: HttpService) {}
 
   private currentEvent: EventModel;
-  
-  getCurrentEvent() {
-    if (!this.currentEvent) {
-      this.getEventInfo().subscribe(() => {
-        return this.currentEvent;
-      });
+
+  getCurrentEvent(): Observable<EventModel> {
+    if (this.currentEvent) {
+      return of(this.currentEvent);
     }
+    this.getEventInfo().subscribe(() => {
+      return this.currentEvent;
+    });
   }
 
   getEvents(): Observable<EventModel> {
@@ -76,6 +77,10 @@ export class EventService {
 
   createEvent(): Observable<string> {
     return this.httpService.get(ApiMethods.event.createEvent);
+  }
+
+  getPrice(): Observable<number> {
+    return this.httpService.get<number>(ApiMethods.event.getPrice);
   }
 
   //private methods
