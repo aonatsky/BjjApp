@@ -1,21 +1,60 @@
-﻿.main-info{
-  margin: 50px 0px  
-}
+﻿@import './../../assets/themes/trnmnt/_variables.scss';
+event {
+  .main-info {
+    margin: 50px 0px;
+    .info {
+      padding: 2em 3em;
+      button {
+        margin-left: 10px;
+      }
+    }
+  }
 
-.details-block{
-    
-}
-
-.event-image{
-    padding: 0 !important
-}
-
-.event-image img{
+  .event-header {
+    position: relative;
+    height: 200px;
     width: 100%;
-    height: 100%
-}
+    background-size: 100% auto;
+    background-position-y: 50%;
+    background-repeat: no-repeat;
 
-.event-details .event-title {
+    .event-title {
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+      color: $theme_white;
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 0.7px;
+    }
+  }
+
+  .details-block {
+    padding: 2em 3em;
+  }
+
+
+  .prices {
+    border-left: 1px solid $theme_grey;
+    padding: 2em;
+    .prices-details {
+      border: 1px solid $theme_black;
+    }
+  }
+
+  .event-image {
+    padding: 0 !important;
+  }
+
+  .event-image img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .event-details .event-title {
     text-align: center;
     padding: 0em 1em;
+  }
 }

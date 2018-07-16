@@ -22,7 +22,7 @@ export class ParticipantService {
   processParticipantRegistration(
     participant: ParticipantRegistrationModel
   ): Observable<ParticipantRegistrationResultModel> {
-    return this.httpService.post(ApiMethods.participant.processParticipantRegistration, participant);
+    return this.httpService.post<ParticipantRegistrationResultModel>(ApiMethods.participant.processParticipantRegistration, participant);
   }
 
   isParticipantExists(participant: ParticipantModelBase): Observable<boolean> {

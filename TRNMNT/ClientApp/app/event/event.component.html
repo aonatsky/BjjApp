@@ -1,57 +1,62 @@
 <div class="ui-container" *ngIf="eventModel">
-    <div class="ui-widget ui-widget-content main-info box-shadow">
+    <div class="event-header ui-fluid" [style.background-image]="'url('+eventImageUrl()+')'">
+        <div class="ui-g-12 event-title">{{eventModel.title}}</div>
+    </div>
+    <div class="ui-widget ui-g-nopad main-info box-shadow">
         <div class="ui-g">
-            <div class="ui-g-8">
-                <label class="ui-g-4 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</label>
+            <div class="ui-g-8 ui-widget-content info">
+                <label class="ui-g-4 bold">{{'EVENT_INFO.EVENT_STARTS' | translate}}</label>
                 <label class="ui-g-8 ">{{eventModel.eventDate | date}}</label>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</label>
                 <label class="ui-g-8">{{eventModel.registrationStartTS | date}}</label>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.LATE_REGISTRATION' | translate}}</label>
                 <label class="ui-g-8">{{eventModel.earlyRegistrationEndTS | date}}</label>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.CONTACT' | translate}}</label>
-                <label class="ui-g-8">{{eventModel.contactEmail}}</label>
-            </div>
-            <div class="ui-g-4"></div>
-        </div>
-    </div>
-    <div class="ui-widget ui-widget-content ui-corner-all ui-g">
-        <div class="ui-g-8 event-image">
-            <img src={{eventModel.imgPath}}/>
-        </div>
-        <div class="event-details ui-g-4 ui-fluid">
-            <div class="ui-g-12 event-title">
-                <h3>{{eventModel.title}}</h3>
-            </div>
-            <div class="ui-g-12">
-                <div class="ui-g-8">Event Date</div>
-                <div class="ui-g-4">{{eventModel.eventDate | date}}</div>
-            </div>
-            <div class="ui-g-12">
-                <div class="ui-g-8">Registrations Starts</div>
-                <div class="ui-g-4">{{eventModel.registrationStartTS |
-                    date}}
+                <div class="ui-g-8">
+                    <label>{{eventModel.contactEmail}}</label>
+                    <button *ngIf="eventModel.fbLink" pButton class="ui-button-icon-only" icon="fa fa-facebook" label="{{eventModel.fbLink}}"></button>
+                    <button *ngIf="eventModel.vkLink" pButton class="ui-button-icon-only" icon="fa fa-vk" label="{{eventModel.vkLink}}"></button>
                 </div>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.TNC' | translate}}</label>
+                <label class="ui-g-8">
+                    <a href="{{eventModel.tncFilePath}}">{{'COMMON.DOWNLOAD' | translate}}</a>
+                </label>
+
             </div>
-            <div class="ui-g-12">
-                <div class="ui-g-8">Registration Ends</div>
-                <div class="ui-g-4">{{eventModel.registrationEndTS | date}}</div>
-            </div>
-            <div class="ui-g-2">
-                <button pButton class="ui-button-icon-only" icon="fa fa-facebook"
-                    label="{{eventModel.fbLink}}"></button>
-            </div>
-            <div class="ui-g-2">
-                <button pButton class="ui-button-icon-only" icon="fa fa-vk"
-                    label="{{eventModel.vkLink}}"></button>
-            </div>
-            <div class="ui-g-12">
-                <button pButton class="ui-button-success" icon="fa fa-check-circle"
-                    label="Register" (click)="participate()"></button>
+            <div class="ui-g-4 ui-widget-content prices">
+                <div class='ui-g ui-g-12 prices-details'>
+                    <div class="ui-g-12 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</div>
+                    <div class="ui-g-6">{{eventModel.earlyRegistrationPrice}}</div>
+                    <div class="ui-g-6">{{eventModel.earlyRegistrationPriceForMembers}}
+                        <span class="ui-state-highlight">*</span>
+                    </div>
+                    <div class="ui-g-12 bold">{{'EVENT_INFO.LATE_REGISTRATION' | translate}}</div>
+                    <div class="ui-g-6">{{eventModel.lateRegistrationPrice}}</div>
+                    <div class="ui-g-6">{{eventModel.lateRegistrationPriceForMembers}}
+                        <span class="ui-state-highlight">*</span>
+                    </div>
+                </div>
+                <label class="ui-g-12 text-allign-center bold">
+                    <span class="ui-state-highlight">*</span>{{'EVENT_INFO.FOR_FEDERATION_MEMBERS' | translate}}</label>
+                <p-button class="ui-g-12 ui-fluid" label="{{'EVENT_INFO.PARTICIPATE'|translate}}" (click)="participate()"></p-button>
             </div>
         </div>
     </div>
-    <div class="ui-g-12">
-        {{eventModel.description}}
+    <div class="ui-widget ui-widget-content box-shadow details-block">
+        <p-tabView>
+            <p-tabPanel header="{{'EVENT_INFO.DESCRIPTION' | translate}}">
+                Participants
+            </p-tabPanel>
+            <p-tabPanel header="{{'EVENT_INFO.PARTICIPANTS' | translate}}">
+                Participants
+            </p-tabPanel>
+            <p-tabPanel header="{{'EVENT_INFO.BRACKETS' | translate}}">
+                Brackets
+            </p-tabPanel>
+            <p-tabPanel header="{{'EVENT_INFO.RESULTS' | translate}}">
+                Results
+            </p-tabPanel>
+        </p-tabView>
     </div>
 </div>
 <app-popup [visible]="displayPopup" [dialogWidth]="400">

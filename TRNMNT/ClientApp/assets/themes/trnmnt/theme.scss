@@ -27,7 +27,7 @@ body {
     padding-top: 0px;
   }
 
-  .ui-widget-content {
+  .form{
     padding: 1em 2em;
   }
 
@@ -142,24 +142,35 @@ body {
 
   .ui-tabview {
     padding: 0px;
+    border: 0px;
+    background-color: transparent;
 
     .ui-tabview-panel {
-      padding: 0px;
-      box-shadow: $theme_box_shadow;
-      min-height: 75vh;
       overflow: auto;
     }
 
     &.ui-tabview-top {
       .ui-tabview-nav {
-        background-color: $theme_body_color !important;
+        background-color: transparent !important;
         border: none;
 
         li {
-          background-color: $theme_body_color !important;
+          background-color: transparent;
           border: none;
           height: 40px;
           margin-bottom: 10px;
+
+          a {
+            color: $theme_dark_grey !important;
+          }
+
+          &:hover {
+            background-color: transparent !important;
+            color: $theme_orange !important;
+            a {
+              color: $theme_orange !important;
+            }
+          }
         }
       }
 
@@ -271,12 +282,4 @@ body {
       }
     }
   }
-}
-
-.inline-block {
-  display: inline-block;
-}
-
-.bold {
-  font-weight: bold;
 }

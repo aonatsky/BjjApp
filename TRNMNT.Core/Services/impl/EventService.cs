@@ -319,7 +319,7 @@ namespace TRNMNT.Core.Services.Impl
                 EarlyRegistrationEndTS = @event.EarlyRegistrationEndTS,
                 EarlyRegistrationPrice = @event.EarlyRegistrationPrice,
                 EarlyRegistrationPriceForMembers = @event.EarlyRegistrationPriceForMembers,
-                LateRegistrationPrice = @event.EarlyRegistrationPriceForMembers,
+                LateRegistrationPrice = @event.LateRegistrationPrice,
                 LateRegistrationPriceForMembers = @event.LateRegistrationPriceForMembers,
                 PromoCodeEnabled = @event.PromoCodeEnabled,
                 PromoCodeListPath = @event.PromoCodeListPath,
@@ -384,8 +384,9 @@ namespace TRNMNT.Core.Services.Impl
                 VKLink = eventModel.VKLink,
                 PromoCodeEnabled = eventModel.PromoCodeEnabled,
                 LateRegistrationPrice = eventModel.LateRegistrationPrice,
+                LateRegistrationPriceForMembers = eventModel.LateRegistrationPriceForMembers,
                 EarlyRegistrationPriceForMembers = eventModel.EarlyRegistrationPriceForMembers,
-                EarlyRegistrationPrice = eventModel.EarlyRegistrationPriceForMembers,
+                EarlyRegistrationPrice = eventModel.EarlyRegistrationPrice,
                 EarlyRegistrationEndTS = eventModel.EarlyRegistrationEndTS,
                 Categories = GetCategoriesFromModels(eventModel.CategoryModels)
             };

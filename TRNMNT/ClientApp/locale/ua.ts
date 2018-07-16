@@ -1,5 +1,4 @@
 export const data = {
-  'Sign in or': 'Увійдіть або',
   'COMMON': {
     'FIRST_NAME': 'Ім`я',
     'LAST_NAME': 'Призвіще',
@@ -12,14 +11,30 @@ export const data = {
     'CONTINUE':'Продовжити',
     'BACK':"Назад",
     'SAVE':"Зберегти",
-    'GO_TO_PAYMENT':'Перейти до оплати'
+    'GO_TO_PAYMENT':'Перейти до оплати',
+    'PASSWORD':'Пароль'
+  },
+  'LOGIN':{
+    'SIGN_IN_OR':'Увійдіть або',
+    'SIGN_UP':'зареєструйтесь',
+    'SIGN_IN':'Увійти',
+    'IF_YOU_DONT_HAVE_ACCOUNT':'якщо у вас немає акаунту',
   },
   'REGISTRATION_TO_EVENT':{
     'I_ACCEPT_TNC':'Я приймаю положення',
-    'TITLE':'Реєсрація на {{value}}'
+    'TITLE':'Реєстрація на {{value}}'
   },
-  'EVENT_INFO:': {
+  'EVENT_INFO': {
     'EVENT_STARTS':'Захід починаєтся',
-    'EARLY_REGISTRATION':'Рання реэстрація'
+    'EARLY_REGISTRATION':'Рання реєстрація',
+    'LATE_REGISTRATION':'Пізня реєстрація',
+    'CONTACT':'Контакти',
+    'FOR_FEDERATION_MEMBERS':'для членів федерації',
+    'TNC':'Положення',
+    'PARTICIPANTS':'Учасники',
+    'DESCRIPTION':'Опис',
+    'BRACKETS':'Турнірні таблиці',
+    'RESULTS':'Результати',
+    'PARTICIPATE':'Прийняти участь'
   }
 };

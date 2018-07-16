@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Const;
+using TRNMNT.Core.Enum;
+using TRNMNT.Core.Helpers;
+using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Interface;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
-using TRNMNT.Core.Helpers;
-using TRNMNT.Core.Const;
-using TRNMNT.Core.Enum;
-using TRNMNT.Core.Model.Interface;
-using TRNMNT.Core.Model;
 
 namespace TRNMNT.Core.Services.Impl
 {
@@ -37,10 +37,10 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model, Guid eventId)
         {
             return await _repository.GetAll().AnyAsync(p =>
-             p.EventId == eventId
-             && p.FirstName == model.FirstName
-             && p.LastName == model.LastName
-             && p.DateOfBirth == model.DateOfBirth);
+                p.EventId == eventId &&
+                p.FirstName == model.FirstName &&
+                p.LastName == model.LastName &&
+                p.DateOfBirth == model.DateOfBirth);
         }
 
         public void AddParticipant(Participant participant)
@@ -54,19 +54,19 @@ namespace TRNMNT.Core.Services.Impl
             return new Participant()
             {
                 ParticipantId = id,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                TeamId = Guid.Parse(model.TeamId),
-                DateOfBirth = model.DateOfBirth,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                CategoryId = Guid.Parse(model.CategoryId),
-                WeightDivisionId = Guid.Parse(model.WeightDivisionId),
-                EventId = eventId,
-                UserId = model.UserId,
-                IsDisqualified = true,
-                IsApproved = false,
-                UpdateTS = DateTime.UtcNow,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    TeamId = Guid.Parse(model.TeamId),
+                    DateOfBirth = model.DateOfBirth,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+                    CategoryId = Guid.Parse(model.CategoryId),
+                    WeightDivisionId = Guid.Parse(model.WeightDivisionId),
+                    EventId = eventId,
+                    UserId = model.UserId,
+                    IsDisqualified = true,
+                    IsApproved = false,
+                    UpdateTS = DateTime.UtcNow,
             };
         }
 
@@ -179,17 +179,17 @@ namespace TRNMNT.Core.Services.Impl
             var anonimList = await allParticipants.Select(p => new ParticipantTableModel
             {
                 ParticipantId = p.ParticipantId,
-                FirstName = p.FirstName,
-                LastName = p.LastName,
-                DateOfBirth = p.DateOfBirth,
-                UserId = p.UserId,
-                TeamName = p.Team.Name,
-                TeamId = p.TeamId,
-                CategoryName = p.Category.Name,
-                CategoryId = p.CategoryId,
-                WeightDivisionName = p.WeightDivision.Name,
-                WeightDivisionId = p.WeightDivisionId,
-                IsMember = p.IsMember
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    DateOfBirth = p.DateOfBirth,
+                    UserId = p.UserId,
+                    TeamName = p.Team.Name,
+                    TeamId = p.TeamId,
+                    CategoryName = p.Category.Name,
+                    CategoryId = p.CategoryId,
+                    WeightDivisionName = p.WeightDivision.Name,
+                    WeightDivisionId = p.WeightDivisionId,
+                    IsMember = p.IsMember
             }).ToListAsync();
 
             return new PagedList<ParticipantTableModel>(anonimList, filter.PageIndex, size, totalCount);
@@ -235,7 +235,6 @@ namespace TRNMNT.Core.Services.Impl
         #endregion
 
         #region Private Methods
-
 
         #endregion
     }

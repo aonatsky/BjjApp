@@ -8,7 +8,7 @@
         <div class="">
             <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
             <div class="ui-g-8 ui-g-offset-2 steps-content" *ngIf="eventModel">
-                <div class="ui-widget ui-widget-content">
+                <div class="ui-widget ui-widget-content form">
                     <div *ngIf="currentStep==0" class="">
                         <div class="ui-g">
                             <div class="ui-g-3 ui-sm-12 ui-fluid">
@@ -120,10 +120,10 @@
                                 <label class="field-title">{{'EVENT_EDIT.EARLY_REGISTRATION' | translate}}</label>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText />
+                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" />
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText />
+                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers"/>
                             </div>
                         </div>
                         <div class="ui-g">
@@ -131,10 +131,10 @@
                                 <label class="field-title">{{'EVENT_EDIT.LATE_REGISTRATION'|translate}}</label>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText />
+                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPrice"/>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText />
+                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers"/>
                             </div>
                         </div>
                         <!-- <div class="ui-g">

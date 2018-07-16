@@ -37,9 +37,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.translate.get('Sign in or').subscribe((res: string) => {
-      console.log(res);
-  });
     this.notificationSubscription = this.notificationService.notificationSubject.subscribe(msg =>
       this.notifications.push(msg)
     );
