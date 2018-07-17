@@ -12,6 +12,8 @@ namespace TRNMNT.Data.Entities
         public Guid FederationId { get; set; }
         public string UserId { get; set; }
         public DateTime CreateTs { get; set; }
+        public DateTime? UpdateTs { get; set; }
+        public bool IsApproved { get; set; }
 
         public virtual Federation Federation { get; set; }
         public virtual User User { get; set; }

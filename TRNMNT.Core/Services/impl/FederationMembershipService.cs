@@ -29,6 +29,14 @@ namespace TRNMNT.Core.Services.Impl
         {
             return await _repository.GetAll().AnyAsync(fm => fm.UserId == userId && fm.FederationId == federationId);
         }
+
+        public async Task ApproveEntityAsync(Guid entityId, Guid orderId)
+        {
+            var membership = await _repository.GetByIDAsync(entityId);
+            membership.UpdateTs = DateTime.UtcNow;
+            membership.IsApproved = true;
+            _repository.Update(membership);
+        }
         #endregion
 
     }

@@ -13,7 +13,6 @@ using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TRNMNT.Web.Controllers
@@ -44,8 +43,7 @@ namespace TRNMNT.Web.Controllers
             IWeightDivisionService weightDivisionService,
             ICategoryService categoryService,
             IFileProcessiongService<ParticipantListProcessingOptions> fileProcessiongService,
-            IAppDbContext context)
-            : base(logger, userService, eventService, context)
+            IAppDbContext context) : base(logger, userService, eventService, context)
         {
             _participantService = participantService;
             _participantRegistrationService = participantRegistrationService;
@@ -60,7 +58,7 @@ namespace TRNMNT.Web.Controllers
         #region Public Methods
 
         [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> IsParticipantExist([FromBody]ParticipantRegistrationModel model)
+        public async Task<IActionResult> IsParticipantExist([FromBody] ParticipantRegistrationModel model)
         {
             try
             {
@@ -74,14 +72,14 @@ namespace TRNMNT.Web.Controllers
             catch (Exception ex)
             {
                 HandleException(ex);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
+                return StatusCode((int) HttpStatusCode.InternalServerError);
             }
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> ProcessParticipantRegistration([FromBody]ParticipantRegistrationModel model)
+        public async Task<IActionResult> ProcessParticipantRegistration([FromBody] ParticipantRegistrationModel model)
         {
-            try
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var eventId = GetEventId();
                 if (eventId != null)
@@ -89,36 +87,17 @@ namespace TRNMNT.Web.Controllers
                     var user = await GetUserAsync();
                     var callbackUrl = $"{Request.Host}{Url.Action("ConfirmPayment", "Payment")}";
                     var result = await _participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, await GetUserAsync());
-                    return Ok(JsonConvert.SerializeObject(result, JsonSerializerSettings));
+                    return Success(result);
                 }
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
+                return (null,HttpStatusCode.NotFound);
+            });
         }
 
-
-        [HttpPost("[action]/{eventId}")]
-        public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
-        {
-            try
-            {
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                HandleException(e);
-                return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-            }
-        }
 
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> ParticipantsTable([FromBody] ParticipantFilterModel filter)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var participants = await _participantService.GetFilteredParticipantsAsync(filter);
                 return Success(participants);
@@ -129,7 +108,7 @@ namespace TRNMNT.Web.Controllers
         public async Task<IActionResult> ParticipantsDropdownData(Guid eventId)
         {
 
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var teams = await _teamService.GetTeamsAsync(eventId);
                 var categories = await _categoryService.GetCategoriesByEventIdAsync(eventId);
@@ -137,8 +116,8 @@ namespace TRNMNT.Web.Controllers
                 return Success(new ParticipantDdlModel
                 {
                     Teams = teams,
-                    Categories = categories,
-                    WeightDivisions = weightDivisions
+                        Categories = categories,
+                        WeightDivisions = weightDivisions
                 });
             });
         }
@@ -146,12 +125,12 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPost("[action]/{eventId}")]
         public async Task<IActionResult> UploadParticipantsFromFile(IFormFile file, Guid eventId)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 var options = new ParticipantListProcessingOptions
                 {
-                    EventId = eventId,
-                    FederationId = GetFederationId().Value
+                EventId = eventId,
+                FederationId = GetFederationId().Value
                 };
                 await _fileProcessiongService.ProcessFileAsync(file, options);
             });
@@ -160,7 +139,7 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPut("[action]")]
         public async Task<IActionResult> Update([FromBody] ParticipantTableModel participantModel)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 return await _participantService.UpdateParticipantAsync(participantModel);
             });
@@ -169,7 +148,7 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpDelete("[action]/{participantId}")]
         public async Task<IActionResult> Delete(Guid participantId)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 await _participantService.DeleteParticipantAsync(participantId);
             });
@@ -178,4 +157,3 @@ namespace TRNMNT.Web.Controllers
         #endregion
     }
 }
-

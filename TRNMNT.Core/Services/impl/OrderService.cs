@@ -45,17 +45,21 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference)
+        public Order AddNewOrder(OrderTypeEnum orderType, int amount, string currency, string reference, string userId)
         {
             var order = new Order
             {
                 CreateTS = DateTime.UtcNow,
-                OrderTypeId = (int)orderType,
-                Amount = ammount,
+                OrderTypeId = (int) orderType,
+                Amount = amount,
                 Currency = currency,
                 PaymentApproved = false,
-                Reference = reference
+                Reference = reference,
+                UserId = userId,
+                OrderId = new Guid(),
+                UpdateTS = DateTime.UtcNow                
             };
+            _repository.Add(order);
             return order;
         }
 

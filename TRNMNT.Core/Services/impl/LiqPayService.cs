@@ -50,8 +50,6 @@ namespace TRNMNT.Core.Services.Impl
                 var paymentReference = jsonData["payment_id"].ToString();
                 var orderId = jsonData["order_id"].ToString();
                 var status = jsonData["status"].ToString();
-                //_logger.LogDebug($"paymentId:{paymentReference}, orderId:{orderId}, status:{status}");
-
                 if (status == "success" || status == "sandbox")
                 {
                     var order = await _orderService.GetOrderAsync(Guid.Parse(orderId));

@@ -35,7 +35,7 @@ namespace TRNMNT.Web.Controllers
 
         #region Public Methods
 
-        [HttpPost("[action]/{eventId}")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
         {
             return await HandleRequestAsync(async () => await _paymentService.ConfirmPaymentAsync(model));

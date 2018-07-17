@@ -45,7 +45,6 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, User user)
         {
-
             if (await _participantService.IsParticipantExistsAsync(model, eventId))
             {
                 return new ParticipantRegistrationResult
@@ -55,8 +54,7 @@ namespace TRNMNT.Core.Services.Impl
                 };
             }
             var participantId = _participantService.AddParticipant(model, eventId);
-            var order = _orderService.GetNewOrder(OrderTypeEnum.EventParticipation, await _eventService.GetPriceAsync(eventId, user.Id), "UAH", participantId.ToString());
-            _orderService.AddOrder(order);
+            var order = _orderService.AddNewOrder(OrderTypeEnum.EventParticipation, await _eventService.GetPriceAsync(eventId, user.Id), "UAH", participantId.ToString(), user.Id);
             var paymentData = _paymentService.GetPaymentDataModel(order, callbackUrl);
 
             return new ParticipantRegistrationResult
@@ -66,8 +64,6 @@ namespace TRNMNT.Core.Services.Impl
                     PaymentData = paymentData
             };
         }
-
-      
 
         #endregion
     }

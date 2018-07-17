@@ -63,7 +63,6 @@ export class EventRegistrationComponent implements OnInit {
   }
 
   private loadData() {
-    this.eventService.getPrice().subscribe(r => (this.price = r));
     forkJoin(
       this.teamService.getTeams(),
       this.categoryService.getCategoriesForCurrentEvent(),
@@ -127,7 +126,7 @@ export class EventRegistrationComponent implements OnInit {
     this.messages.push({ severity: 'error', summary: 'Error', detail: message });
   }
 
-  private goToPayment() {
+  goToPayment() {
     // todo click payment form
 
     this.participantService

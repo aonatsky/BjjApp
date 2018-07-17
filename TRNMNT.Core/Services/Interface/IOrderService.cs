@@ -8,14 +8,15 @@ namespace TRNMNT.Core.Services.Interface
     public interface IOrderService
     {
         /// <summary>
-        /// Gets the new order.
+        /// Adds new order.
         /// </summary>
         /// <param name="orderType">Type of the order.</param>
-        /// <param name="ammount">The ammount.</param>
+        /// <param name="amount">The amount.</param>
         /// <param name="currency">The currency.</param>
         /// <param name="reference">The reference.</param>
+        /// <param name="userId">User id.</param>
         /// <returns></returns>
-        Order GetNewOrder(OrderTypeEnum orderType, int ammount, string currency, string reference);
+        Order AddNewOrder(OrderTypeEnum orderType, int amount, string currency, string reference, string userId);
 
         /// <summary>
         /// Approves the order asynchronous.
@@ -31,11 +32,5 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="orderId">The order identifier.</param>
         /// <returns></returns>
         Task<Order> GetOrderAsync(Guid orderId);
-
-        /// <summary>
-        /// Adds the order.
-        /// </summary>
-        /// <param name="order">The order.</param>
-        void AddOrder(Order order);
     }
 }

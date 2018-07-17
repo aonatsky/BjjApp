@@ -10,15 +10,17 @@ namespace TRNMNT.Core.Helpers.Impl
 
         private readonly ITeamService _teamService;
         private readonly IParticipantService _participantService;
+        private readonly IFederationMembershipService _federationMembershipService;
 
         #endregion
 
         #region .ctor
 
-        public PaidServiceFactory(ITeamService teamService, IParticipantService participantService)
+        public PaidServiceFactory(ITeamService teamService, IParticipantService participantService, IFederationMembershipService federationMembershipService)
         {
             _teamService = teamService;
             _participantService = participantService;
+            _federationMembershipService = federationMembershipService;
         }
 
         #endregion
@@ -33,10 +35,10 @@ namespace TRNMNT.Core.Helpers.Impl
                     {
                         return _participantService;
                     }
-                //case (int)OrderTypeEnum.FederationMembership:
-                //    {
-                //        return participantService;
-                //    }
+                case (int)OrderTypeEnum.FederationMembership:
+                   {
+                       return _federationMembershipService;
+                   }
                 case (int)OrderTypeEnum.TeamRegistration:
                     {
                         return _teamService;
