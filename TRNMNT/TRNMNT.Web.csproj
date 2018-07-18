@@ -8,10 +8,11 @@
     <AssemblyName>TRNMNT.Web</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>TRNMNT</PackageId>
-    <!--<RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>-->
+    <RuntimeFrameworkVersion>2.1.1</RuntimeFrameworkVersion>
     <AssetTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</AssetTargetFallback>
     <UserSecretsId>1e57bcac-a123-448e-a041-42501495c57a</UserSecretsId>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -56,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.1" />

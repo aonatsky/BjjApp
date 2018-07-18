@@ -1,6 +1,8 @@
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -48,7 +50,7 @@ namespace TRNMNT.Web
             #region AppDBContext
 
             services.AddEntityFrameworkNpgsql();
-            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgreConnection")));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration["DbConnection"]));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddIdentity<User, IdentityRole>(o =>
                 {
@@ -82,8 +84,8 @@ namespace TRNMNT.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddDebug(LogLevel.Error);
-            loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
+            loggerFactory.AddConsole(LogLevel.Information);
+            // loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -97,6 +99,10 @@ namespace TRNMNT.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chat");
@@ -116,7 +122,7 @@ namespace TRNMNT.Web
                     name: "spa-fallback",
                     defaults : new { controller = "Home", action = "Index" });
             });
-
+            
         }
     }
 }

@@ -39,7 +39,7 @@
       "label": "publish ubuntu",
       "command": "dotnet",
       "type": "process",
-      "args": ["publish", "${workspaceFolder}/TRNMNT.Web.csproj","-o","${workspaceFolder}/publish/","-r", "ubuntu.16.04-x64"],
+      "args": ["publish", "--configuration", "Release", "${workspaceFolder}/TRNMNT.Web.csproj","-o","${workspaceFolder}/publish/","-r", "ubuntu.16.04-x64"],
       "problemMatcher": "$msCompile",
       "group": {
         "kind": "build",
