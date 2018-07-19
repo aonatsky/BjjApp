@@ -21,6 +21,7 @@ namespace TRNMNT.Web.Controllers
     [Route("api/[controller]")]
     public class AuthController : BaseController
     {
+        private readonly ILogger<AuthController> logger;
         #region Dependencies
 
         private readonly IAuthenticationService _authenticationService;
@@ -37,6 +38,7 @@ namespace TRNMNT.Web.Controllers
             IAppDbContext context
         ) : base(logger, userService, eventService, context)
         {
+            this.logger = logger;
             _authenticationService = authenticationService;
         }
 
@@ -52,6 +54,7 @@ namespace TRNMNT.Web.Controllers
                 var tokenResult = await _authenticationService.GetTokenAsync(credentials.Email, credentials.Password);
                 if (tokenResult != null)
                 {
+                    this.logger.LogError($"id token = {tokenResult.IdToken}");
                     Response.StatusCode = (int) HttpStatusCode.OK;
                     var response = new
                     {

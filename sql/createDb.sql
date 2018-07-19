@@ -1,0 +1,1 @@
+CREATE DATABASE trnmnt_dev OWNER trnmnt_app_dev

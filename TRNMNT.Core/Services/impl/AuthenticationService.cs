@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using TRNMNT.Core.Authentication;
@@ -21,6 +22,7 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class AuthenticationService : IAuthenticationService
     {
+        private readonly ILogger<AuthenticationService> _logger;
         #region Dependencies
 
         private readonly UserManager<User> _userManager;
@@ -34,8 +36,9 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration, IConfiguration configuration)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration, IConfiguration configuration, ILogger<AuthenticationService> logger)
         {
+            _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -52,14 +55,19 @@ namespace TRNMNT.Core.Services.Impl
         {
             return await _userManager.FindByIdAsync(userId);
         }
-        
-        
+
         public async Task<AuthTokenResult> GetTokenAsync(string login, string password)
         {
+
             var loginResult = await _signInManager.PasswordSignInAsync(login, password, false, false);
+
             if (loginResult.Succeeded)
             {
                 var user = await _userManager.FindByEmailAsync(login);
+                if (user == null)
+                {
+                    return null;
+                }
                 return await GetTokensAsync(user);
             }
             return null;
@@ -118,7 +126,8 @@ namespace TRNMNT.Core.Services.Impl
             var identity = new ClaimsIdentity(
                 GetTokenClaims(user).Union(await _userManager.GetClaimsAsync(user))
             );
-
+            _logger.LogDebug($"Configuration is {_authConfiguration != null}");
+            _logger.LogDebug($"Configuration key is {_authConfiguration.Key}");
             var expiresIn = DateTime.Now + TimeSpan.FromMinutes(_authConfiguration.AccessTokenLifetime);
             var securityToken = handler.CreateToken(new SecurityTokenDescriptor
             {

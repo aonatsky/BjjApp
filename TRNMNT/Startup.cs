@@ -50,7 +50,7 @@ namespace TRNMNT.Web
             #region AppDBContext
 
             services.AddEntityFrameworkNpgsql();
-            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration["DbConnection"]));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration["TRNMNT_DB_CONNECTION"]));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddIdentity<User, IdentityRole>(o =>
                 {
@@ -84,7 +84,7 @@ namespace TRNMNT.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(LogLevel.Information);
+            loggerFactory.AddConsole(LogLevel.Debug);
             // loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
             if (env.IsDevelopment())
             {
