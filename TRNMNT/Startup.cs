@@ -85,7 +85,7 @@ namespace TRNMNT.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(LogLevel.Debug);
-            // loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
+            loggerFactory.AddLog4Net(Path.Combine(env.WebRootPath, "Config", "log4net.config"));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
@@ -24,8 +25,9 @@ namespace TRNMNT.Web.Controllers
             ILogger<PaymentController> logger,
             IUserService userService,
             IPaymentService paymentService,
+            IConfiguration configuration,
             IAppDbContext context)
-            : base(logger, userService, eventService, context)
+            : base(logger, userService, eventService, context, configuration)
         {
             _paymentService = paymentService;
             _eventService = eventService;
@@ -38,6 +40,7 @@ namespace TRNMNT.Web.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
         {
+            Logger.LogInformation($"model data {model.Data}");
             return await HandleRequestAsync(async () => await _paymentService.ConfirmPaymentAsync(model));
         }
 

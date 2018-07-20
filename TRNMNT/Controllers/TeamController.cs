@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
@@ -26,8 +27,9 @@ namespace TRNMNT.Web.Controllers
             ILogger<TeamController> logger,
             IUserService userService,
             ITeamService teamService,
-            IAppDbContext context
-        ) : base(logger, userService, eventService, context)
+            IAppDbContext context,
+            IConfiguration configuration
+        ) : base(logger, userService, eventService, context,configuration)
         {
             _teamService = teamService;
         }

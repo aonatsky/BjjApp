@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
@@ -15,8 +16,9 @@ namespace TRNMNT.Web.Controllers
         public HomeController(ILogger<HomeController> logger,
             IUserService userService,
             IEventService eventService,
-            IAppDbContext context
-            ) : base(logger, userService, eventService, context) { }
+            IAppDbContext context,
+            IConfiguration configuration
+            ) : base(logger, userService, eventService, context, configuration) { }
 
         #endregion
 

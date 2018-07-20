@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TRNMNT.Core.Helpers.Exceptions;
@@ -35,8 +36,9 @@ namespace TRNMNT.Web.Controllers
             IAuthenticationService authenticationService,
             IUserService userService,
             IEventService eventService,
-            IAppDbContext context
-        ) : base(logger, userService, eventService, context)
+            IAppDbContext context,
+            IConfiguration configuration
+        ) : base(logger, userService, eventService, context, configuration)
         {
             this.logger = logger;
             _authenticationService = authenticationService;

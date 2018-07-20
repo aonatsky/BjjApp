@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
@@ -17,7 +18,8 @@ namespace TRNMNT.Web.Controllers
         private readonly IBracketService _bracketService;
         
 
-        public ResultsController(IBracketService bracketService, ILogger<ResultsController> logger, IUserService userService, IEventService eventService, IAppDbContext context) : base(logger, userService, eventService, context)
+        public ResultsController(IBracketService bracketService, ILogger<ResultsController> logger, IUserService userService, IEventService eventService, IAppDbContext context, IConfiguration configuration)
+         : base(logger, userService, eventService, context, configuration)
         {
             _bracketService = bracketService;
         }

@@ -1,0 +1,20 @@
+
+[Unit]
+Description=TRNMNT_DEV
+
+[Service]
+WorkingDirectory=/var/aspnet/trnmnt
+ #путь к publish папке вашего приложения
+ExecStart=/usr/bin/dotnet /var/aspnet/trnmnt/TRNMNT.Web.dll # путь к опубликованной dll
+Restart=always
+RestartSec=10 # Перезапускать сервис через 10 секунд при краше приложения
+SyslogIdentifier=trnmnt-dev
+User=root # пользователь, под которым следует запускать ваш сервис
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=TRNMNT_DB_CONNECTION=User ID=trnmnt_app_dev;Password=1;Host=127.0.0.1;Port=5456;Database=trnmnt_dev;Pooling=true;Integrated Security=true;
+Environment=HOSTNAME=trnmnt.pro
+
+[Install]
+WantedBy=multi-user.target
+
+

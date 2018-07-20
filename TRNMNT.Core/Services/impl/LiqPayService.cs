@@ -18,6 +18,7 @@ namespace TRNMNT.Core.Services.Impl
 
         private readonly IPaidServiceFactory _paidServiceFactory;
         private readonly IOrderService _orderService;
+        private readonly ILogger _logger;
         #endregion
 
         #region Properties
@@ -29,10 +30,11 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService, IConfiguration configuration)
+        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService, IConfiguration configuration, ILogger logger)
         {
             _paidServiceFactory = paidServiceFactory;
             _orderService = orderService;
+            _logger = logger;
             publicKey = configuration["LiqPay:PublicKey"];
             privateKey = configuration["LiqPay:PrivateKey"];
         }
@@ -50,6 +52,7 @@ namespace TRNMNT.Core.Services.Impl
                 var paymentReference = jsonData["payment_id"].ToString();
                 var orderId = jsonData["order_id"].ToString();
                 var status = jsonData["status"].ToString();
+                _logger.LogInformation($"refereance{paymentReference} orderid {orderId} status {status}");
                 if (status == "success" || status == "sandbox")
                 {
                     var order = await _orderService.GetOrderAsync(Guid.Parse(orderId));

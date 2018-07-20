@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -26,6 +27,7 @@ namespace TRNMNT.Web.Controllers
         protected readonly IEventService EventService;
         protected readonly IAppDbContext Context;
         protected JsonSerializerSettings JsonSerializerSettings;
+        protected readonly IConfiguration Configuration;
 
         #endregion
 
@@ -37,8 +39,9 @@ namespace TRNMNT.Web.Controllers
 
         #endregion
 
-        public BaseController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context)
+        public BaseController(ILogger logger, IUserService userService, IEventService eventService, IAppDbContext context, IConfiguration configuration)
         {
+            Configuration = configuration;
             Logger = logger;
             UserService = userService;
             EventService = eventService;
@@ -68,13 +71,16 @@ namespace TRNMNT.Web.Controllers
             return _user;
         }
 
-        private async Task ParseEventSubdomain()
+        private async Task ParseEventSubdomainAsync()
         {
-            var fullAddress = HttpContext.Request.Headers["Host"].FirstOrDefault().Split('.');
-            if (fullAddress.Length == 2)
+            Logger.LogInformation("Parsing event subdomain");
+            var hostName = Configuration["HOSTNAME"];
+            var subdomains = HttpContext.Request.Host.Host.Replace(hostName, "").TrimEnd('.').Split('.');
+            Logger.LogInformation($"Full address {HttpContext.Request.Host.Host}");
+            if (subdomains.Any(s => s != ""))
             {
-                var eventSubdomain = fullAddress[0];
-                var host = fullAddress[1];
+                var eventSubdomain = subdomains[0];
+                Logger.LogInformation($"Subdomain {eventSubdomain}, host {hostName}");
                 var eventId = await EventService.GetEventIdAsync(eventSubdomain);
                 if (eventId != null)
                 {
@@ -82,7 +88,8 @@ namespace TRNMNT.Web.Controllers
                 }
                 else
                 {
-                    HttpContext.Response.Redirect($"{HttpContext.Request.Scheme}://{host}/");
+                    Logger.LogInformation($"redirecting {HttpContext.Request.Scheme}://{hostName}/");
+                    HttpContext.Response.Redirect($"{HttpContext.Request.Scheme}://{hostName}/");
                 }
             }
             //hadrcoded federationid
@@ -102,7 +109,7 @@ namespace TRNMNT.Web.Controllers
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            await ParseEventSubdomain();
+            await ParseEventSubdomainAsync();
             await base.OnActionExecutionAsync(context, next);
         }
 

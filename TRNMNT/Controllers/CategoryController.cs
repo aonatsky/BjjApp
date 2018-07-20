@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TRNMNT.Core.Services.Interface;
@@ -30,7 +31,8 @@ namespace TRNMNT.Web.Controllers
             IHttpContextAccessor httpContextAccessor,
             IEventService eventService,
             IUserService userService,
-            IAppDbContext context) : base(logger, userService, eventService, context)
+            IConfiguration configuration,
+            IAppDbContext context) : base(logger, userService, eventService, context, configuration)
         {
             _categoryService = categoryService;
         }

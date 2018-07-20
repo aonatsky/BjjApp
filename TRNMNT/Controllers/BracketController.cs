@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
@@ -34,8 +35,9 @@ namespace TRNMNT.Web.Controllers
             IAppDbContext context,
             IWeightDivisionService weightDivisionService,
             IBracketService bracketService,
-            ICategoryService categoryService)
-            : base(logger, userService, eventService, context)
+            ICategoryService categoryService,
+            IConfiguration configuration)
+            : base(logger, userService, eventService, context, configuration)
         {
             _bracketService = bracketService;
             _categoryService = categoryService;

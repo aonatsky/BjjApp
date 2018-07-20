@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
@@ -13,8 +14,8 @@ namespace TRNMNT.Web.Controllers
     {
         #region .ctor
 
-        public UserController(ILogger<UserController> logger, IUserService userService, IEventService eventService, IAppDbContext context)
-            : base(logger, userService, eventService, context) { }
+        public UserController(ILogger<UserController> logger, IUserService userService, IEventService eventService, IAppDbContext context, IConfiguration configuration)
+            : base(logger, userService, eventService, context, configuration) { }
 
         #endregion
 

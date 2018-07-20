@@ -21,7 +21,16 @@ export class RedirectGuard implements CanActivate {
   getSubdomains(): string[] {
     const parts = window.location.host.split('.');
     parts.pop();
+    if (parts.filter(p => p.indexOf('trnmnt') !== -1).length > 0) {
+      parts.pop();
+    }
     return parts;
+  }
+
+  logParts(parts) {
+    for (var part in parts) {
+      console.log(part)
+    }
   }
 
   redirectToEventPage(): boolean {

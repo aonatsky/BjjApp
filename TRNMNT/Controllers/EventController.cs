@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Services.Interface;
@@ -25,7 +26,8 @@ namespace TRNMNT.Web.Controllers
 
         #region .ctor
 
-        public EventController(IEventService eventService, ILogger<EventController> logger, IUserService userService, IAppDbContext context) : base(logger, userService, eventService, context)
+        public EventController(IEventService eventService, ILogger<EventController> logger, IUserService userService, IAppDbContext context, IConfiguration configuration) 
+        : base(logger, userService, eventService, context, configuration)
         {
             _eventService = eventService;
         }

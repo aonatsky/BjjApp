@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TRNMNT.Core.Model;
@@ -43,7 +44,8 @@ namespace TRNMNT.Web.Controllers
             IWeightDivisionService weightDivisionService,
             ICategoryService categoryService,
             IFileProcessiongService<ParticipantListProcessingOptions> fileProcessiongService,
-            IAppDbContext context) : base(logger, userService, eventService, context)
+            IConfiguration configuration,
+            IAppDbContext context) : base(logger, userService, eventService, context, configuration)
         {
             _participantService = participantService;
             _participantRegistrationService = participantRegistrationService;
