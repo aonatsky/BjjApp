@@ -87,14 +87,14 @@ namespace TRNMNT.Web.Controllers
                 if (eventId != null)
                 {
                     var user = await GetUserAsync();
-                    var callbackUrl = $"{Request.Host}{Url.Action("ConfirmPayment", "Payment")}";
+                    var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
+                    Logger.LogWarning($"callback {callbackUrl}");
                     var result = await _participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, await GetUserAsync());
                     return Success(result);
                 }
-                return (null,HttpStatusCode.NotFound);
+                return (null, HttpStatusCode.NotFound);
             });
         }
-
 
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> ParticipantsTable([FromBody] ParticipantFilterModel filter)

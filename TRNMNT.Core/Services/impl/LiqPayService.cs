@@ -18,7 +18,7 @@ namespace TRNMNT.Core.Services.Impl
 
         private readonly IPaidServiceFactory _paidServiceFactory;
         private readonly IOrderService _orderService;
-        private readonly ILogger _logger;
+        private readonly ILogger<LiqPayService> _logger;
         #endregion
 
         #region Properties
@@ -30,13 +30,13 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService, IConfiguration configuration, ILogger logger)
+        public LiqPayService(IPaidServiceFactory paidServiceFactory, IOrderService orderService, IConfiguration configuration, ILogger<LiqPayService> logger)
         {
             _paidServiceFactory = paidServiceFactory;
             _orderService = orderService;
             _logger = logger;
-            publicKey = configuration["LiqPay:PublicKey"];
-            privateKey = configuration["LiqPay:PrivateKey"];
+            publicKey = configuration["LIQPAY_PUBLICKEY"];
+            privateKey = configuration["LIQPAY_PRIVATEKEY"];
         }
 
         #endregion
@@ -66,6 +66,25 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
+        public PaymentDataModel CheckStatusAsync(string orderId){
+            var jsonData = new JObject
+            {
+                ["version"] = 3,
+                 ["public_key"] = publicKey, 
+                 ["action"] = "status", 
+                 ["order_id"] = orderId, 
+            };
+            _logger.LogWarning($"payment {jsonData.ToString()}");
+            var encodedData =  GetBase64EncodedData(jsonData.ToString());
+            var encodedsignature = GetSignature(encodedData);
+            return new PaymentDataModel
+            {
+                Data = encodedData,
+                    Signature = encodedsignature
+            };
+        }
+
+
         public PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl)
         {
             var encodedData = EncodeData(order, callbackUrl);
@@ -91,8 +110,17 @@ namespace TRNMNT.Core.Services.Impl
         {
             var jsonData = new JObject
             {
-                ["version"] = 3, ["public_key"] = publicKey, ["action"] = "pay", ["amount"] = order.Amount, ["currency"] = order.Currency, ["description"] = "Sport Event Participation", ["order_id"] = order.OrderId.ToString(), ["expired_date"] = "2017-10-24 00:00:00", ["sandbox"] = "1", ["result_url"] = callbackUrl
+                ["version"] = 3,
+                 ["public_key"] = publicKey, 
+                 ["action"] = "pay", 
+                 ["amount"] = order.Amount, 
+                 ["currency"] = order.Currency, 
+                 ["description"] = "Sport Event Participation", 
+                 ["order_id"] = order.OrderId.ToString(), 
+                 ["sandbox"] = "1",
+                 ["server_url"] = callbackUrl
             };
+            _logger.LogWarning($"payment {jsonData.ToString()}");
             return GetBase64EncodedData(jsonData.ToString());
         }
 

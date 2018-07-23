@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Data.Entities;

@@ -35,7 +35,9 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "TRNMNT_DB_CONNECTION":
           "User ID=trnmnt_app_dev;Password=1;Host=127.0.0.1;Port=5432;Database=trnmnt_dev;Pooling=true;Integrated Security=true;",
-        "HOSTNAME": "localhost"
+        "HOSTNAME": "localhost",
+        "FACEBOOK_APPID": "",
+        "FACEBOOK_APPSECRET": ""
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"

@@ -20,5 +20,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="dataModel">The data model.</param>
         /// <returns></returns>
         Task ConfirmPaymentAsync(PaymentDataModel dataModel);
+
+        PaymentDataModel CheckStatusAsync(string orderId);
     }
 }

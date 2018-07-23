@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Services.Interface;
@@ -64,7 +65,6 @@ namespace TRNMNT.Core.Services.Impl
                     PaymentData = paymentData
             };
         }
-
         #endregion
     }
 }

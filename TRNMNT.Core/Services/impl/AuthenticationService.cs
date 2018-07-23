@@ -190,10 +190,12 @@ namespace TRNMNT.Core.Services.Impl
         {
             var client = new HttpClient();
             // 1.generate an app access token
+            _logger.LogInformation($"Getting access token. creds {_configuration["FACEBOOK_APPID"]}, {_configuration["FACEBOOK_APPSECRET"]}");
             var appAccessTokenResponse =
-                await client.GetStringAsync(string.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials", _configuration["Facebook:AppId"], _configuration["Facebook:AppSecret"]));
+                await client.GetStringAsync(string.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials", _configuration["FACEBOOK_APPID"], _configuration["FACEBOOK_APPSECRET"]));
             var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
             // 2. validate the user access token
+            _logger.LogInformation("validation access token");
             var userAccessTokenValidationResponse =
                 await client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={fbToken}&access_token={appAccessToken.AccessToken}");
             var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
@@ -204,6 +206,7 @@ namespace TRNMNT.Core.Services.Impl
             }
 
             // 3. we've got a valid token so we can request user data from fb
+            _logger.LogInformation("Getting user info");
             var userInfoResponse = await client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={fbToken}");
             var fbUser = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
             var user = await _userManager.FindByEmailAsync(fbUser.Email);

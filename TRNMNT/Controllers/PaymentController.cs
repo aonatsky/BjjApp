@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -26,8 +27,7 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             IPaymentService paymentService,
             IConfiguration configuration,
-            IAppDbContext context)
-            : base(logger, userService, eventService, context, configuration)
+            IAppDbContext context) : base(logger, userService, eventService, context, configuration)
         {
             _paymentService = paymentService;
             _eventService = eventService;
@@ -37,14 +37,19 @@ namespace TRNMNT.Web.Controllers
 
         #region Public Methods
 
-        [HttpPost("[action]")]
+        [AllowAnonymous, HttpPost("[action]")]
         public async Task<IActionResult> ConfirmPayment([FromBody] PaymentDataModel model)
         {
-            Logger.LogInformation($"model data {model.Data}");
-            return await HandleRequestAsync(async () => await _paymentService.ConfirmPaymentAsync(model));
+            Logger.LogWarning($"model data {model.Data}");
+            return Ok();
+            //return await HandleRequestAsync(async() => await _paymentService.ConfirmPaymentAsync(model));
         }
 
+        [AllowAnonymous, HttpGet("[action]/{orderId}")]
+        public async Task<IActionResult> CheckPaymentStatus(string orderId)
+        {
+            return HandleRequest(() => _paymentService.CheckStatusAsync(orderId));
+        }
         #endregion
     }
 }
-
