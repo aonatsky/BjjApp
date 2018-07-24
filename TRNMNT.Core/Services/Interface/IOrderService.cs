@@ -32,5 +32,19 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="orderId">The order identifier.</param>
         /// <returns></returns>
         Task<Order> GetOrderAsync(Guid orderId);
+
+        /// <summary>
+        /// Returns order by reference;
+        /// </summary>
+        /// <param name="reference"></param>
+        /// <returns></returns>
+        Task<Order> GetOrderAsync(string reference);
+
+        /// <summary>
+        /// Returns entity approval status;
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        Task<string> GetApprovalStatus(Guid orderId);
     }
 }

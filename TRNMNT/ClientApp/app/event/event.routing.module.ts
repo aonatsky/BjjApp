@@ -1,6 +1,5 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EventInfoComponent } from './event-info/event-info.component';
 import { EventRegistrationComponent } from './event-registration/event-registration.component';
 // tslint:disable-next-line:max-line-length
 import { EventRegistrationCompleteComponent } from './event-registration-complete/event-registration-complete.component';
@@ -14,10 +13,6 @@ const routes: Routes = [
     path: 'event',
     component: EventComponent,
     children: [
-      {
-        path: 'event-info/',
-        component: EventInfoComponent
-      },
       {
         path: 'event-registration/',
         component: EventRegistrationComponent,

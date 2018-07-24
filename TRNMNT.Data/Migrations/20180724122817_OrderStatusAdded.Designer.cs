@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TRNMNT.Data.Context;
@@ -9,9 +10,10 @@ using TRNMNT.Data.Context;
 namespace TRNMNT.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180724122817_OrderStatusAdded")]
+    partial class OrderStatusAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,6 +327,8 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<int>("OrderTypeId");
 
+                    b.Property<bool>("PaymentApproved");
+
                     b.Property<string>("PaymentProviderReference");
 
                     b.Property<string>("Reference");
@@ -351,8 +355,6 @@ namespace TRNMNT.Data.Migrations
 
                     b.Property<string>("ActivatedPromoCode");
 
-                    b.Property<string>("ApprovalStatus");
-
                     b.Property<Guid>("CategoryId");
 
                     b.Property<DateTime>("DateOfBirth");
@@ -364,6 +366,8 @@ namespace TRNMNT.Data.Migrations
                     b.Property<string>("FirstName");
 
                     b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsApproved");
 
                     b.Property<bool>("IsDisqualified");
 

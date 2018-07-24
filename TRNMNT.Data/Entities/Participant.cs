@@ -18,7 +18,7 @@ namespace TRNMNT.Data.Entities
         public string UserId { get; set; }
         public bool IsDisqualified { get; set; }
         public bool IsActive { get; set; }
-        public bool IsApproved { get; set; }
+        public string ApprovalStatus { get; set; }
         public bool IsMember { get; set; }
         public Guid? OrderId { get; set; }
 

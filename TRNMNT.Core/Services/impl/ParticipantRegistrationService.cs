@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
+using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Result;
@@ -44,20 +45,16 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
-        public async Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, User user)
+        public async Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user)
         {
             if (await _participantService.IsParticipantExistsAsync(model, eventId))
             {
-                return new ParticipantRegistrationResult
-                {
-                    Success = false,
-                        Reason = DefaultMessage.ParticipantRegistrationParticipantIsAlreadyExists
-                };
+               throw new BusinessException("REGISTRATION_TO_EVENT.PARTICIPANT_IS_ALREADY_REGISTERED");
             }
-            var participantId = _participantService.AddParticipant(model, eventId);
+            var participantId = Guid.NewGuid();
             var order = _orderService.AddNewOrder(OrderTypeEnum.EventParticipation, await _eventService.GetPriceAsync(eventId, user.Id), "UAH", participantId.ToString(), user.Id);
-            var paymentData = _paymentService.GetPaymentDataModel(order, callbackUrl);
-
+            _participantService.AddParticipant(model, eventId, order.OrderId, participantId);
+            var paymentData = _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
             return new ParticipantRegistrationResult
             {
                 ParticipantId = participantId.ToString(),

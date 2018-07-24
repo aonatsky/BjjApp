@@ -3,7 +3,6 @@ import { EventModel } from '../core/model/event.models';
 import { EventService } from '../core/services/event.service';
 import { RouterService } from '../core/services/router.service';
 import { AuthService } from '../core/services/auth.service';
-import { TranslateService } from '../../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'event',

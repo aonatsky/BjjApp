@@ -6,7 +6,7 @@ indent_style = space
 
 [*.cs]
 csharp_new_line_before_catch = false : warning
-max_line_length              = 150 : warning
+max_line_length              = 120 : warning
 csharp_prefer_braces         = true : warning
 
 dotnet_naming_rule.private_members_with_underscore.symbols  = private_members

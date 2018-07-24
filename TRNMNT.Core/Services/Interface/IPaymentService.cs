@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
 
@@ -10,9 +11,10 @@ namespace TRNMNT.Core.Services.Interface
         /// Gets the payment data model.
         /// </summary>
         /// <param name="order">The order.</param>
-        /// <param name="callbackUrl">The callback URL.</param>
+        /// <param name="serverUrl">The server URL.</param>
+        /// <param name="redirectUrl">The redirect URL.</param>
         /// <returns></returns>
-        PaymentDataModel GetPaymentDataModel(Order order, string callbackUrl);
+        PaymentDataModel GetPaymentDataModel(Order order, string serverUrl, string redirectUrl);
 
         /// <summary>
         /// Confirms the payment asynchronous.
@@ -20,7 +22,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="dataModel">The data model.</param>
         /// <returns></returns>
         Task ConfirmPaymentAsync(PaymentDataModel dataModel);
-
-        PaymentDataModel CheckStatusAsync(string orderId);
+        
+        /// <summary>
+        /// Returns order status and provider reference
+        /// </summary>
+        /// <param name="orderId">Order ID</param>
+        /// <returns></returns>
+        Task<(string status, string paymentProviderReference)> GetPaymentStatusAsync(Guid orderId);
     }
 }

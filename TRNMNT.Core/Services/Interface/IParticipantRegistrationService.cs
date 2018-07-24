@@ -16,6 +16,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="model">The model.</param>
         /// <param name="callbackUrl">The callback URL.</param>
         /// <returns></returns>
-        Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, User user);
+        Task<ParticipantRegistrationResult> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user);
     }
 }

@@ -1,9 +1,10 @@
+import { Message } from 'primeng/primeng';
 import { Injectable } from '@angular/core';
 import { Response, ResponseContentType } from '@angular/http';
 import { LoggerService } from '../../services/logger.service';
 import { LoaderService } from '../../services/loader.service';
 import { RouterService } from '../../services/router.service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { map, flatMap, catchError, finalize } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
 import { AuthService } from '../../services/auth.service';
@@ -23,12 +24,11 @@ export class HttpService {
 
   //#region Public Methods
 
-  get<T>(
-    name: string,
-    paramsHolder?: object,
-    notifyMessage?: string
-  ): Observable<any> {
-    return this.handleRequest(() => this.http.get<T>(name, { params: this.convertParams(paramsHolder) }), notifyMessage);
+  get<T>(name: string, paramsHolder?: object, notifyMessage?: string): Observable<any> {
+    return this.handleRequest(
+      () => this.http.get<T>(name, { params: this.convertParams(paramsHolder) }),
+      notifyMessage
+    );
   }
 
   post<T>(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
@@ -55,7 +55,7 @@ export class HttpService {
   }
 
   getPdf(url, fileName): Observable<any> {
-    return this.http.get(url,{responseType: 'blob'}).pipe(
+    return this.http.get(url, { responseType: 'blob' }).pipe(
       map(res => {
         FileSaver.saveAs(res, fileName);
       })
@@ -121,11 +121,15 @@ export class HttpService {
           finalize(() => this.loaderService.hideLoader())
         );
     }
+    if (error.status === 400) {
+      this.notificationService.showWarn('', error.error);
+      return of(true);
+    }
     return this.handleError(error, notifyMessage);
   }
 
-  private handleError(error: Response | any, notifyMessage?: string) {
-    const errMsg = this.getErrorMessage(error);
+  private handleError(errorResponse: Response | any, notifyMessage?: string) {
+    const errMsg = this.getErrorMessage(errorResponse);
     this.notificationService.showErrorOrGeneric(notifyMessage);
     this.loggerService.logError(errMsg);
     return throwError(errMsg);
@@ -139,7 +143,7 @@ export class HttpService {
 
   private goToLogin(error?: Response | any) {
     this.routerService.goToLogin();
-    return this.handleError(error, 'Please sigh in');
+    return this.handleError(error, 'Please sign in');
   }
 
   private getErrorMessage(error: Response | any): string {

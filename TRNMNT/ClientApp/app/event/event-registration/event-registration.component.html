@@ -12,7 +12,7 @@
                         <label>{{'COMMON.FIRST_NAME'| translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
-                        <input pInputText [(ngModel)]="participant.firstName" required name="firstName" />
+                        <input pInputText [(ngModel)]="participant.firstName" required name="firstName" [maxLength]=100/>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -20,7 +20,7 @@
                         <label>{{'COMMON.LAST_NAME'| translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
-                        <input pInputText [(ngModel)]="participant.lastName" required name="lastName" />
+                        <input pInputText [(ngModel)]="participant.lastName" required name="lastName" [maxLength]=100/>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -30,7 +30,7 @@
                     <div class="ui-g-9 ui-fluid">
                         <p-calendar icon="fa fa-calendar" [(ngModel)]="participant.dateOfBirth" dateFormat="dd.mm.yy" readonlyInput="readonlyInput"
                             showIcon="true" monthNavigator="true" yearNavigator="true" yearRange="1960:2015" [defaultDate]="getDefaultDateOfBirth()"
-                            required name="dateOfBirth">
+                            required name="dateOfBirth" >
                         </p-calendar>
                     </div>
                 </div>

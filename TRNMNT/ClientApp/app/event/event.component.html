@@ -6,11 +6,11 @@
         <div class="ui-g">
             <div class="ui-g-8 ui-widget-content info">
                 <label class="ui-g-4 bold">{{'EVENT_INFO.EVENT_STARTS' | translate}}</label>
-                <label class="ui-g-8 ">{{eventModel.eventDate | date}}</label>
+                <label class="ui-g-8 ">{{eventModel.eventDate | date:'dd/MM/yyyy'}}</label>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</label>
-                <label class="ui-g-8">{{eventModel.registrationStartTS | date}}</label>
+                <label class="ui-g-8">{{eventModel.registrationStartTS | date:'dd/MM/yyyy'}}</label>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.LATE_REGISTRATION' | translate}}</label>
-                <label class="ui-g-8">{{eventModel.earlyRegistrationEndTS | date}}</label>
+                <label class="ui-g-8">{{eventModel.earlyRegistrationEndTS | date:'dd/MM/yyyy'}}</label>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.CONTACT' | translate}}</label>
                 <div class="ui-g-8">
                     <label>{{eventModel.contactEmail}}</label>
@@ -19,7 +19,7 @@
                 </div>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.TNC' | translate}}</label>
                 <label class="ui-g-8">
-                    <a href="{{eventModel.tncFilePath}}">{{'COMMON.DOWNLOAD' | translate}}</a>
+                    <a href="{{eventModel.tncFilePath}}" class="btn-link">{{'COMMON.DOWNLOAD' | translate}}</a>
                 </label>
 
             </div>

@@ -16,9 +16,7 @@ export class EventService {
     if (this.currentEvent) {
       return of(this.currentEvent);
     }
-    this.getEventInfo().subscribe(() => {
-      return this.currentEvent;
-    });
+    return this.getEventInfo();
   }
 
   getEvents(): Observable<EventModel> {

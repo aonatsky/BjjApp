@@ -8,7 +8,7 @@ namespace TRNMNT.Data.Entities
         [Key]
         public Guid OrderId { get; set; }
         public int OrderTypeId { get; set; }
-        public bool PaymentApproved { get; set; }
+        public string Status { get; set; }
         public int Amount { get; set; }
         public string PaymentProviderReference { get; set; }
         public string Currency { get; set; }
@@ -18,6 +18,6 @@ namespace TRNMNT.Data.Entities
         public DateTime UpdateTS { get; set; }
 
         public virtual User User { get; set; }
-        
+
     }
 }

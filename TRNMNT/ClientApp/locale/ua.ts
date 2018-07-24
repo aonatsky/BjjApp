@@ -12,7 +12,8 @@ export const data = {
     'BACK':"Назад",
     'SAVE':"Зберегти",
     'GO_TO_PAYMENT':'Перейти до оплати',
-    'PASSWORD':'Пароль'
+    'PASSWORD':'Пароль',
+    'DOWNLOAD':'Завантажити'
   },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
@@ -22,7 +23,8 @@ export const data = {
   },
   'REGISTRATION_TO_EVENT':{
     'I_ACCEPT_TNC':'Я приймаю положення',
-    'TITLE':'Реєстрація на {{value}}'
+    'TITLE':'Реєстрація на {{value}}',
+    'PARTICIPANT_IS_ALREADY_REGISTERED':'Такий учасник вже зареєстрований'
   },
   'EVENT_INFO': {
     'EVENT_STARTS':'Захід починаєтся',

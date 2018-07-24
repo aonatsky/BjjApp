@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +49,7 @@ namespace TRNMNT.Web.Controllers
         [AllowAnonymous, HttpGet("[action]/{orderId}")]
         public async Task<IActionResult> CheckPaymentStatus(string orderId)
         {
-            return HandleRequest(() => _paymentService.CheckStatusAsync(orderId));
+            return await HandleRequestAsync(async () => await _paymentService.GetPaymentStatusAsync(new Guid(orderId)));
         }
         #endregion
     }

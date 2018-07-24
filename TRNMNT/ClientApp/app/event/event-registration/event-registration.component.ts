@@ -1,6 +1,5 @@
 ﻿import { EventService } from './../../core/services/event.service';
 import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { TeamService } from '../../core/services/team.service';
 import { ParticipantService } from '../../core/services/participant.service';
 import { CategoryService } from '../../core/services/category.service';
@@ -46,8 +45,6 @@ export class EventRegistrationComponent implements OnInit {
     private categoryService: CategoryService,
     private teamService: TeamService,
     private participantService: ParticipantService,
-    private paymentService: PaymentService,
-    private cd: ChangeDetectorRef,
     private authService: AuthService,
     private eventService: EventService
   ) {}
@@ -74,7 +71,7 @@ export class EventRegistrationComponent implements OnInit {
   private initData(data) {
     this.teams = data[0];
     this.categories = data[1];
-    this.eventTitleParameter = { value: data[2] };
+    this.eventTitleParameter = { value: data[2].title };
     this.price = data[3];
     this.initCategoryDropdown();
     this.initTeamDropdown();
@@ -100,27 +97,9 @@ export class EventRegistrationComponent implements OnInit {
     }
   }
 
-  private initWeightDivisionDropdown(event) {
-    this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
-      this.weightDivisions = w;
-      this.weightDivisionsSelectItems = [];
-      this.weightDivisions.forEach(wd => {
-        this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId });
-      });
-    });
-  }
 
-  private getTeam() {
-    return this.teams.filter(t => t.teamId === this.participant.teamId)[0].name;
-  }
 
-  private getCategory() {
-    return this.categories.filter(c => c.categoryId === this.participant.categoryId)[0].name;
-  }
 
-  private getWeightDivision() {
-    return this.weightDivisions.filter(wd => wd.weightDivisionId === this.participant.weightDivisionId)[0].name;
-  }
 
   private showMessage(message: string) {
     this.messages.push({ severity: 'error', summary: 'Error', detail: message });
@@ -146,11 +125,5 @@ export class EventRegistrationComponent implements OnInit {
     this.formPrivat.nativeElement.submit();
   }
 
-  private nextStep() {
-    this.currentStep++;
-  }
 
-  private previousStep() {
-    this.currentStep--;
-  }
 }

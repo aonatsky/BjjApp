@@ -10,6 +10,12 @@ import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { CustomLoader } from './core/helpers/custom-loader';
+import { registerLocaleData } from '../../node_modules/@angular/common';
+import localeEn from '@angular/common/locales/en';
+import localeUa from '@angular/common/locales/ru-UA';
+
+registerLocaleData(localeEn, 'en');
+registerLocaleData(localeUa, 'ua')
 
 @NgModule({
   bootstrap: [AppComponent],

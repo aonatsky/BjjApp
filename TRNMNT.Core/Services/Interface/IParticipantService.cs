@@ -18,13 +18,13 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns></returns>
         Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant, Guid eventId);
 
-        /// <summary>
-        /// Adds new participant to save from model
+        /// Adds new participant;
         /// </summary>
-        /// <param name="model">Registration Model</param>
-        /// <param name="eventId">Event Id</param>
-        /// <returns>Participant ID</returns>
-        Guid AddParticipant(ParticipantRegistrationModel model, Guid eventId);
+        /// <param name="model"></param>
+        /// <param name="eventId"></param>
+        /// <param name="orderId"></param>
+        /// <param name="participantId"></param>
+        void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId);
 
         /// <summary>
         /// Select ParticipantTableModel list for specified event with filtration.

@@ -50,7 +50,7 @@ namespace TRNMNT.Web
             #region AppDBContext
 
             services.AddEntityFrameworkNpgsql();
-            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration["TRNMNT_DB_CONNECTION"]));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(Configuration["TRNMNT_DB_CONNECTION"], b => b.MigrationsAssembly("TRNMNT.Web")));
             services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
             services.AddIdentity<User, IdentityRole>(o =>
                 {

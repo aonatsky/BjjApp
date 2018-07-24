@@ -88,8 +88,8 @@ namespace TRNMNT.Web.Controllers
                 {
                     var user = await GetUserAsync();
                     var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
-                    Logger.LogWarning($"callback {callbackUrl}");
-                    var result = await _participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, await GetUserAsync());
+                    var redirectUrl = $"{Request.Host}/event/event-registration-complete";
+                    var result = await _participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, redirectUrl, await GetUserAsync());
                     return Success(result);
                 }
                 return (null, HttpStatusCode.NotFound);

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Helpers;
+using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Interface;
 using TRNMNT.Core.Model.Participant;
@@ -20,14 +21,16 @@ namespace TRNMNT.Core.Services.Impl
         #region Dependencies
 
         private readonly IRepository<Participant> _repository;
+        private readonly IOrderService _orderService;
 
         #endregion
 
         #region .ctor
 
-        public ParticipantService(IRepository<Participant> repository)
+        public ParticipantService(IRepository<Participant> repository, IOrderService orderService)
         {
             _repository = repository;
+            _orderService = orderService;
         }
 
         #endregion
@@ -43,28 +46,27 @@ namespace TRNMNT.Core.Services.Impl
                 p.DateOfBirth == model.DateOfBirth);
         }
 
-
-        public Guid AddParticipant(ParticipantRegistrationModel model, Guid eventId)
+        public void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId)
         {
             var participant = new Participant()
             {
-                    ParticipantId = Guid.NewGuid(),
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    TeamId = model.TeamId,
-                    DateOfBirth = model.DateOfBirth,
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    CategoryId = model.CategoryId,
-                    WeightDivisionId = model.WeightDivisionId,
-                    EventId = eventId,
-                    UserId = model.UserId,
-                    IsDisqualified = true,
-                    IsApproved = false,
-                    UpdateTS = DateTime.UtcNow,
+                ParticipantId = participantId,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                TeamId = model.TeamId,
+                DateOfBirth = model.DateOfBirth,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                CategoryId = model.CategoryId,
+                WeightDivisionId = model.WeightDivisionId,
+                EventId = eventId,
+                UserId = model.UserId,
+                ApprovalStatus = ApprovalStatus.Pending,
+                IsActive = true,
+                UpdateTS = DateTime.UtcNow,
+                OrderId = orderId
             };
             _repository.Add(participant);
-            return participant.ParticipantId;
         }
 
         public async Task ApproveEntityAsync(Guid entityId, Guid orderId)
@@ -72,7 +74,7 @@ namespace TRNMNT.Core.Services.Impl
             var participant = await _repository.GetByIDAsync(entityId);
             if (participant != null)
             {
-                participant.IsApproved = true;
+                participant.ApprovalStatus = ApprovalStatus.Approved;
                 participant.OrderId = orderId;
                 _repository.Update(participant);
             }
@@ -89,7 +91,7 @@ namespace TRNMNT.Core.Services.Impl
             if (participant == null)
             {
                 // todo change to custom exception
-                throw new Exception($"Participant with id {participantModel.ParticipantId} not found");
+                throw new BusinessException($"Participant with id {participantModel.ParticipantId} not found");
             }
             participant.FirstName = participantModel.FirstName;
             participant.LastName = participantModel.LastName;
@@ -98,7 +100,6 @@ namespace TRNMNT.Core.Services.Impl
             participant.CategoryId = participantModel.CategoryId;
             participant.WeightDivisionId = participantModel.WeightDivisionId;
             participant.IsMember = participantModel.IsMember;
-            participant.IsDisqualified = true;
             participant.UpdateTS = DateTime.UtcNow;
 
             _repository.Update(participant);
@@ -154,26 +155,29 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(ParticipantFilterModel filter)
         {
             var size = DefaultValues.DefaultPageSize;
-            var allParticipants = _repository.GetAll().Where(p => p.EventId == filter.EventId);
+            var participantsQuery = _repository.GetAll().Where(p => p.EventId == filter.EventId);
             if (filter.CategoryId != null)
             {
-                allParticipants = allParticipants.Where(p => p.CategoryId == filter.CategoryId);
+                participantsQuery = participantsQuery.Where(p => p.CategoryId == filter.CategoryId);
             }
             if (filter.WeightDivisionId != null)
             {
-                allParticipants = allParticipants.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
+                participantsQuery = participantsQuery.Where(p => p.WeightDivisionId == filter.WeightDivisionId);
             }
             if (filter.IsMembersOnly)
             {
-                allParticipants = allParticipants.Where(p => p.IsMember);
+                participantsQuery = participantsQuery.Where(p => p.IsMember);
             }
-            var totalCount = await allParticipants.CountAsync();
+            var totalCount = await participantsQuery.CountAsync();
 
-            allParticipants = SortParticipants(allParticipants, filter.SortField, filter.SortDirection);
+            participantsQuery = SortParticipants(participantsQuery, filter.SortField, filter.SortDirection);
 
-            allParticipants = allParticipants.Skip(size * filter.PageIndex).Take(size);
+            participantsQuery = participantsQuery.Skip(size * filter.PageIndex).Take(size);
+            var participants = await participantsQuery.ToListAsync();
+            await CheckParticipantStatus(participants);
+            await CheckParticipantStatus(participants);
 
-            var anonimList = await allParticipants.Select(p => new ParticipantTableModel
+            var anonymList = await participantsQuery.Select(p => new ParticipantTableModel
             {
                 ParticipantId = p.ParticipantId,
                     FirstName = p.FirstName,
@@ -189,9 +193,17 @@ namespace TRNMNT.Core.Services.Impl
                     IsMember = p.IsMember
             }).ToListAsync();
 
-            return new PagedList<ParticipantTableModel>(anonimList, filter.PageIndex, size, totalCount);
+            return new PagedList<ParticipantTableModel>(anonymList, filter.PageIndex, size, totalCount);
         }
 
+        public async Task<IEnumerable<Participant>> GetParticipantsInAbsoluteDivisionByCategoryAsync(Guid categoryId)
+        {
+            return await _repository.GetAll(p => p.AbsoluteWeightDivisionId != null).ToListAsync();
+        }
+
+        #endregion
+
+        #region Private Methods
         private IQueryable<Participant> SortParticipants(IQueryable<Participant> allParticipants, ParticpantSortField filterSortField, SortDirectionEnum sortDirection)
         {
             switch (filterSortField)
@@ -224,14 +236,18 @@ namespace TRNMNT.Core.Services.Impl
             return allParticipants;
         }
 
-        public async Task<IEnumerable<Participant>> GetParticipantsInAbsoluteDivisionByCategoryAsync(Guid categoryId)
+        private async Task CheckParticipantStatus(List<Participant> participants)
         {
-            return await _repository.GetAll(p => p.AbsoluteWeightDivisionId != null).ToListAsync();
+            foreach (var participant in participants)
+            {
+                if (participant.ApprovalStatus != ApprovalStatus.Pending && participant.OrderId.HasValue)
+                {
+                    participant.ApprovalStatus = await _orderService.GetApprovalStatus(participant.OrderId.Value);
+                    _repository.Update(participant);
+
+                }
+            }
         }
-
-        #endregion
-
-        #region Private Methods
 
         #endregion
     }

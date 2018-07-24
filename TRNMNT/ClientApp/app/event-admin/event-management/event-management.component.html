@@ -5,16 +5,18 @@
                 {{'EVENT_MANAGEMENT.TITLE' | translate}}
             </div>
         </div>
-        <p-tabView>
-            <p-tabPanel header="Participants">
-                <event-management-participants [eventId]="eventId"></event-management-participants>
-            </p-tabPanel>
-            <p-tabPanel header="Brackets">
-                <bracket-generation [eventId]="eventId"></bracket-generation>
-            </p-tabPanel>
-            <p-tabPanel header="Results">
-                <results [eventId]="eventId"></results>
-            </p-tabPanel>
-        </p-tabView>
+        <div class="ui-widget ui-widget-content">
+            <p-tabView>
+                <p-tabPanel header="Participants">
+                    <event-management-participants [eventId]="eventId"></event-management-participants>
+                </p-tabPanel>
+                <p-tabPanel header="Brackets">
+                    <bracket-generation [eventId]="eventId"></bracket-generation>
+                </p-tabPanel>
+                <p-tabPanel header="Results">
+                    <results [eventId]="eventId"></results>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
     </div>
 </div>
