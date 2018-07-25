@@ -15,7 +15,7 @@ namespace TRNMNT.Data.Entities
         public string Reference { get; set; }
         public string UserId { get; set; }
         public DateTime CreateTS { get; set; }
-        public DateTime UpdateTS { get; set; }
+        public DateTime? UpdateTS { get; set; }
 
         public virtual User User { get; set; }
 

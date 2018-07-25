@@ -11,7 +11,7 @@ namespace TRNMNT.Data.Entities
         public Guid FederationId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime UpdateTs { get; set; }
+        public DateTime? UpdateTs { get; set; }
         public string OwnerId { get; set; }
         public int MembershipPrice { get; set; }
         public int TeamRegistrationPrice { get; set; }

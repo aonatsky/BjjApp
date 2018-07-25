@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Event;
 
 namespace TRNMNT.Core.Services.Interface
@@ -90,27 +91,12 @@ namespace TRNMNT.Core.Services.Interface
         Task<string> GetEventOwnerIdAsync(Guid eventId);
 
         /// <summary>
-        /// Get prive for an event based on user
+        /// Returns price model for an event based on user
         /// </summary>
         /// <param name="EventId"></param>
         /// <param name="userId"></param>
         /// <returns>Price</returns>
-        Task<int> GetPriceAsync(Guid EventId, string userId);
-
-        /// <summary>
-        /// Returns price based on registration dates. And promocode (optional)
-        /// </summary>
-        /// <param name="EventId"></param>
-        /// <returns></returns>
-        Task<int> GetPriceAsync(Guid eventId, string userId, string promocode = "");
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="eventId">Event Id</param>
-        /// <param name="isMember">Is special price</param>
-        /// <returns></returns>
-        Task<int> GetPriceAsync(Guid eventId, bool specialPrice);
+        Task<PriceModel> GetPriceAsync(Guid EventId, string userId);
 
         /// <summary>
         /// Creates new event to edit.

@@ -1,0 +1,65 @@
+<div class="ui-container">
+  <div class="ui-g">
+    <div class="ui-g-12 ui-g-nopad page-title">
+      {{'TEAM_REGISTRATION.TITLE'|translate}}
+    </div>
+  </div>
+  <div class="ui-widget ui-widget-content ui-corner-all ui-g-offset-2 ui-g-8">
+    <form novalidate #teamForm="ngForm">
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'TEAM.NAME'| translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <input pInputText [(ngModel)]="model.name" required name="name" [maxLength]=100/>
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'TEAM.DESCRIPTION'| translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <textarea pInputTextarea [rows]="5" [(ngModel)]="model.description" name="description" [maxLength]=500></textarea>
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'TEAM.CONTACT_NAME'|translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <input pInputText [(ngModel)]="model.contactName" name="contactName" required />
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'TEAM.CONTACT_PHONE'|translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <input pInputText [(ngModel)]="model.contactPhone" name="contactPhone" required />
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'TEAM.CONTACT_EMAIL'|translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <input pInputText [(ngModel)]="model.contactEmail" name="contactEmail" email />
+        </div>
+      </div>
+    </form>
+    <div class="ui-g-12">
+      <div class="float-right">
+        <button pButton type="button" class="float-right" label="{{'COMMON.GO_TO_PAYMENT'| translate}}" (click)="goToPayment()" [disabled]="teamForm.invalid"></button>
+      </div>
+    </div>
+  </div>
+  <div class="ui-g-12 display-none">
+    <form #formPrivat="ngForm" #formPrivatElement method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8"
+      novalidate>
+      <input type="hidden" name="data" value="{{paymentData}}" />
+      <input type="hidden" name="signature" value={{paymentSignature}} />
+      <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />
+    </form>
+  </div>
+ 
+</div>

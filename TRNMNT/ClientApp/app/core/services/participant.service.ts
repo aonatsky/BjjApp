@@ -7,13 +7,12 @@ import {
   ParticipantTableModel
 } from '../model/participant.models';
 import { ParticipantDdlModel } from '../model/participant-ddl.model';
-import { ParticipantRegistrationResultModel } from '../model/result/participant-registration-result.model';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable } from 'rxjs';
 import { PagedList } from '../model/paged-list.model';
 import { ParticipantFilterModel } from '../model/participant-filter.model';
 import { IUploadResult } from '../model/result/upload-result.model';
-import { ResponseContentType } from '@angular/http';
+import { PaymentDataModel } from '../model/payment-data.model';
 
 @Injectable()
 export class ParticipantService {
@@ -21,8 +20,8 @@ export class ParticipantService {
 
   processParticipantRegistration(
     participant: ParticipantRegistrationModel
-  ): Observable<ParticipantRegistrationResultModel> {
-    return this.httpService.post<ParticipantRegistrationResultModel>(ApiMethods.participant.processParticipantRegistration, participant);
+  ): Observable<PaymentDataModel> {
+    return this.httpService.post<PaymentDataModel>(ApiMethods.participant.processParticipantRegistration, participant);
   }
 
   isParticipantExists(participant: ParticipantModelBase): Observable<boolean> {

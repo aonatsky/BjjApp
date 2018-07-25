@@ -16,18 +16,34 @@ namespace TRNMNT.Data.Entities
         public DateTime EarlyRegistrationEndTS { get; set; }
         public DateTime RegistrationEndTS { get; set; }
         public string ImgPath { get; set; }
+
+        [MaxLength(100)]
         public string Title { get; set; }
-        public DateTime UpdateTS { get; set; }
+        public DateTime? UpdateTS { get; set; }
         public bool IsActive { get; set; }
         public int StatusId { get; set; }
+
+        [MaxLength(100)]
         public string UrlPrefix { get; set; }
         public string Description { get; set; }
+
+        [MaxLength(500)]
         public string Address { get; set; }
         public string TNCFilePath { get; set; }
+
+        [MaxLength(100)]
         public string CardNumber { get; set; }
+
+        [MaxLength(100)]
         public string ContactEmail { get; set; }
+
+        [MaxLength(100)]
         public string ContactPhone { get; set; }
+
+        [MaxLength(500)]
         public string FBLink { get; set; }
+
+        [MaxLength(500)]
         public string VKLink { get; set; }
         public string AdditionalData { get; set; }
         public Guid FederationId { get; set; }

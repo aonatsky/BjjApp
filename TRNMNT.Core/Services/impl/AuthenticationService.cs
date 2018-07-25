@@ -101,7 +101,6 @@ namespace TRNMNT.Core.Services.Impl
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 CreateTS = DateTime.UtcNow,
-                UpdateTS = DateTime.UtcNow,
                 UserName = model.Email,
                 IsActive = true
             };

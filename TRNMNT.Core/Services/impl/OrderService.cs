@@ -56,7 +56,6 @@ namespace TRNMNT.Core.Services.Impl
                 Reference = reference,
                 UserId = userId,
                 OrderId = new Guid(),
-                UpdateTS = DateTime.UtcNow,
                 Status = OrderStatus.Pending
             };
             _repository.Add(order);

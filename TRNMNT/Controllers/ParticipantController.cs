@@ -24,7 +24,6 @@ namespace TRNMNT.Web.Controllers
         #region Dependencies
 
         private readonly IParticipantService _participantService;
-        private readonly IParticipantRegistrationService _participantRegistrationService;
         private readonly ITeamService _teamService;
         private readonly IWeightDivisionService _weightDivisionService;
         private readonly ICategoryService _categoryService;
@@ -39,7 +38,6 @@ namespace TRNMNT.Web.Controllers
             IParticipantService participantService,
             IPaymentService paymentService,
             IOrderService orderService,
-            IParticipantRegistrationService participantRegistrationService,
             ITeamService teamService,
             IWeightDivisionService weightDivisionService,
             ICategoryService categoryService,
@@ -48,7 +46,6 @@ namespace TRNMNT.Web.Controllers
             IAppDbContext context) : base(logger, userService, eventService, context, configuration)
         {
             _participantService = participantService;
-            _participantRegistrationService = participantRegistrationService;
             _teamService = teamService;
             _weightDivisionService = weightDivisionService;
             _categoryService = categoryService;
@@ -89,7 +86,7 @@ namespace TRNMNT.Web.Controllers
                     var user = await GetUserAsync();
                     var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
                     var redirectUrl = $"{Request.Host}/event/event-registration-complete";
-                    var result = await _participantRegistrationService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, redirectUrl, await GetUserAsync());
+                    var result = await _participantService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, redirectUrl, await GetUserAsync());
                     return Success(result);
                 }
                 return (null, HttpStatusCode.NotFound);

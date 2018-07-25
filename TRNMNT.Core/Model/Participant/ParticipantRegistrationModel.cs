@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace TRNMNT.Core.Model.Participant
 {
     public class ParticipantRegistrationModel : ParticipantModelBase

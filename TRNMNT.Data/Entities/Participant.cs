@@ -9,12 +9,16 @@ namespace TRNMNT.Data.Entities
     {
         [Key]
         public Guid ParticipantId { get; set; }
+        [MaxLength(100)]
         public string FirstName { get; set; }
+        [MaxLength(100)]
         public string LastName { get; set; }
+        [MaxLength(100)]
         public string Email { get; set; }
+        [MaxLength(100)]
         public string PhoneNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public DateTime UpdateTS { get; set; }
+        public DateTime? UpdateTS { get; set; }
         public string UserId { get; set; }
         public bool IsDisqualified { get; set; }
         public bool IsActive { get; set; }

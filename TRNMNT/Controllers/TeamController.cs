@@ -1,7 +1,10 @@
+using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Model.Team;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -52,6 +55,23 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> ProcessTeamRegistration([FromBody] TeamModelFull model)
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var eventId = GetEventId();
+                if (eventId != null)
+                {
+                    var user = await GetUserAsync();
+                    var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
+                    var redirectUrl = $"{Request.Host}/event/team-registration-complete";
+                    var result = await _teamService.ProcessTeamRegistrationAsync(GetFederationId().Value, model, callbackUrl, redirectUrl, await GetUserAsync());
+                    return Success(result);
+                }
+                return (null, HttpStatusCode.NotFound);
+            });
+        }
         #endregion
     }
 }

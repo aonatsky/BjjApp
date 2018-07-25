@@ -1,19 +1,18 @@
 ﻿import { EventService } from './../../core/services/event.service';
-import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { TeamService } from '../../core/services/team.service';
 import { ParticipantService } from '../../core/services/participant.service';
 import { CategoryService } from '../../core/services/category.service';
-import { PaymentService } from '../../core/services/payment.service';
 import { WeightDivisionService } from '../../core/services/weight-division.service';
 import { ParticipantRegistrationModel } from '../../core/model/participant.models';
-import { ParticipantRegistrationResultModel } from '../../core/model/result/participant-registration-result.model';
 import { TeamModel } from '../../core/model/team.model';
 import { PaymentDataModel } from '../../core/model/payment-data.model';
 import { CategorySimpleModel } from '../../core/model/category.models';
 import { WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
 import { forkJoin } from 'rxjs';
-import { SelectItem, Message } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import { AuthService } from '../../core/services/auth.service';
+import { RouterService } from '../../core/services/router.service';
 
 @Component({
   selector: 'event-registration',
@@ -36,7 +35,6 @@ export class EventRegistrationComponent implements OnInit {
   eventTitleParameter: object;
   currentStep: number = 0;
   tncAccepted: boolean = false;
-  private messages: Message[] = [];
   paymentData: string = '';
   paymentSignature: string = '';
 
@@ -46,7 +44,8 @@ export class EventRegistrationComponent implements OnInit {
     private teamService: TeamService,
     private participantService: ParticipantService,
     private authService: AuthService,
-    private eventService: EventService
+    private eventService: EventService,
+    private routerService: RouterService
   ) {}
 
   ngOnInit() {
@@ -97,26 +96,34 @@ export class EventRegistrationComponent implements OnInit {
     }
   }
 
+  initWeightDivisionDropdown(event) {
+    this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
+      this.weightDivisions = w;
+      this.weightDivisionsSelectItems = [];
+      this.weightDivisions.forEach(wd => {
+        this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId });
+      });
+    });
+  }
 
+  nextStep() {
+    this.currentStep++;
+  }
 
+  previousStep() {
+    this.currentStep--;
+  }
 
-
-  private showMessage(message: string) {
-    this.messages.push({ severity: 'error', summary: 'Error', detail: message });
+  goToTeamRegistration() {
+    this.routerService.goToTeamRegistration();
   }
 
   goToPayment() {
     // todo click payment form
 
-    this.participantService
-      .processParticipantRegistration(this.participant)
-      .subscribe((r: ParticipantRegistrationResultModel) => {
-        if (!r.success) {
-          this.showMessage(r.reason);
-        } else {
-          this.submitPaymentForm(r.paymentData);
-        }
-      });
+    this.participantService.processParticipantRegistration(this.participant).subscribe((r: PaymentDataModel) => {
+      this.submitPaymentForm(r);
+    });
   }
 
   private submitPaymentForm(paymentData: PaymentDataModel) {
@@ -124,6 +131,4 @@ export class EventRegistrationComponent implements OnInit {
     this.formPrivat.nativeElement.elements[1].value = paymentData.signature;
     this.formPrivat.nativeElement.submit();
   }
-
-
 }

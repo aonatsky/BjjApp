@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -34,7 +35,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             var membership = await _repository.GetByIDAsync(entityId);
             membership.UpdateTs = DateTime.UtcNow;
-            membership.IsApproved = true;
+            membership.ApprovalStatus = ApprovalStatus.Approved;
             _repository.Update(membership);
         }
         #endregion

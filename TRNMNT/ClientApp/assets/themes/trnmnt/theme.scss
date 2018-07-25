@@ -289,9 +289,10 @@ body {
   }
 
   .ui-widget-content {
-    a {
+    .btn-link {
       text-decoration: underline;
       color: $theme_blue;
+      cursor: pointer;
     }
   }
 }

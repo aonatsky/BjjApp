@@ -8,6 +8,7 @@ using OfficeOpenXml;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Services.Interface;
 

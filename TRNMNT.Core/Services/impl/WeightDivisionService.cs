@@ -104,7 +104,7 @@ namespace TRNMNT.Core.Services.Impl
                 WeightDivisionId = wd.WeightDivisionId,
                 Name = wd.Name,
                 CategoryId = wd.CategoryId,
-                Descritpion = wd.Descritpion,
+                Description = wd.Description,
                 Weight = wd.Weight,
 
             };

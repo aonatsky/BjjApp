@@ -8,6 +8,7 @@ import { EventComponent } from './event.component';
 import { EventRoutingModule } from './event.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { CustomLoader } from '../core/helpers/custom-loader';
+import { TeamRegistrationComponent } from './team-registration/team-registration.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,12 @@ import { CustomLoader } from '../core/helpers/custom-loader';
     EventRoutingModule,
     TranslateModule.forChild({ loader: { provide: TranslateLoader, useClass: CustomLoader } })
   ],
-  declarations: [EventComponent, EventRegistrationComponent, EventRegistrationCompleteComponent],
+  declarations: [
+    EventComponent,
+    EventRegistrationComponent,
+    EventRegistrationCompleteComponent,
+    TeamRegistrationComponent
+  ],
   providers: [],
   exports: []
 })

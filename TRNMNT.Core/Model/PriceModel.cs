@@ -1,8 +1,8 @@
-﻿namespace TRNMNT.Core.Model
+namespace TRNMNT.Core.Model
 {
     public class PriceModel
     {
-        public string Currency { get; set; }
-        public int Price{ get; set; }
+        public int Amount {get;set;}
+        public string Currency {get;set;}
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Team;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;

@@ -30,7 +30,7 @@
                     <div class="ui-g-9 ui-fluid">
                         <p-calendar icon="fa fa-calendar" [(ngModel)]="participant.dateOfBirth" dateFormat="dd.mm.yy" readonlyInput="readonlyInput"
                             showIcon="true" monthNavigator="true" yearNavigator="true" yearRange="1960:2015" [defaultDate]="getDefaultDateOfBirth()"
-                            required name="dateOfBirth" >
+                            required name="dateOfBirth">
                         </p-calendar>
                     </div>
                 </div>
@@ -44,12 +44,17 @@
                     </div>
                 </div>
                 <div class="ui-g">
+                    <div class="ui-g-9 ui-fluid ui-g-offset-3">
+                        <span class="btn-link" (click)="goToTeamRegistration()">{{'COMMON.ADD_TEAM' | translate}}</span>
+                    </div>
+                </div>
+                <div class="ui-g">
                     <div class="ui-g-3 ui-fluid">
                         <label>{{'COMMON.CATEGORY'|translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
                         <p-dropdown [options]="categorySelectItems" [(ngModel)]="participant.categoryId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_CATEGORY'|translate}}"
-                            (onChange)="initWeightDivisionDropdown($event)" name="category" required></p-dropdown>
+                            (onChange)="($event)" name="category" required></p-dropdown>
                     </div>
                 </div>
                 <div class="ui-g">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Interface;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Data.Entities;
@@ -64,6 +65,17 @@ namespace TRNMNT.Core.Services.Interface
         Task<IEnumerable<Participant>> GetParticipantsInAbsoluteDivisionByCategoryAsync(Guid categoryId);
 
         Task AddParticipantsToAbsoluteWeightDivisionAsync(Guid[] participantsIds, Guid categoryId, Guid absoluteWeightDivisionId);
+
+        /// <summary>
+        /// Processes the participant registration asynchronous. Returns payment data
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="callbackUrl">The callback URL.</param>
+        /// <param name="redirectUrl">The redirect URL.</param>
+        /// <param name="user">User</param>
+        /// <returns></returns>
+        Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user);
 
     }
 }

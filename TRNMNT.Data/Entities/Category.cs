@@ -7,7 +7,9 @@ namespace TRNMNT.Data.Entities
 {
     public class Category
     {
-        [Key] public Guid CategoryId { get; set; }
+        [Key] 
+        public Guid CategoryId { get; set; }
+        [MaxLength(100)]
         public String Name { get; set; }
         public Guid EventId { get; set; }
         public int MatchTime { get; set; }

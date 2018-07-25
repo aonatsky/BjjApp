@@ -1,6 +1,6 @@
 using System;
 
-namespace TRNMNT.Core.Model
+namespace TRNMNT.Core.Model.Participant
 {
     public class ParticipantModel
     {

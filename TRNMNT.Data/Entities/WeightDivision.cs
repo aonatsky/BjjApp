@@ -11,9 +11,13 @@ namespace TRNMNT.Data.Entities
     {
         [Key]
         public Guid WeightDivisionId { get; set; }
+
+        [MaxLength(100)]
         public string Name { get; set; }
         public int Weight { get; set; }
-        public string Descritpion { get; set; }
+
+        [MaxLength(1000)]
+        public string Description { get; set; }
         public Guid CategoryId { get; set; }
         public bool IsAbsolute { get; set; }
         public DateTime? StartTs { get; set; }
@@ -29,7 +33,7 @@ namespace TRNMNT.Data.Entities
         public virtual ICollection<Participant> AbsoluteDivisionParticipants { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Match> Matches{ get; set; }
+        public virtual ICollection<Match> Matches { get; set; }
 
     }
 }

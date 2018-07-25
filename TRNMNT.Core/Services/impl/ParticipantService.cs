@@ -22,15 +22,20 @@ namespace TRNMNT.Core.Services.Impl
 
         private readonly IRepository<Participant> _repository;
         private readonly IOrderService _orderService;
+        private readonly IPaymentService _paymentService;
+        private readonly IEventService _eventService;
 
         #endregion
 
         #region .ctor
+        private readonly IPaymentService paymentService;
 
-        public ParticipantService(IRepository<Participant> repository, IOrderService orderService)
+        public ParticipantService(IRepository<Participant> repository, IOrderService orderService, IPaymentService paymentService, IEventService eventService)
         {
+            _paymentService = paymentService;
             _repository = repository;
             _orderService = orderService;
+            _eventService = eventService;
         }
 
         #endregion
@@ -199,6 +204,19 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<IEnumerable<Participant>> GetParticipantsInAbsoluteDivisionByCategoryAsync(Guid categoryId)
         {
             return await _repository.GetAll(p => p.AbsoluteWeightDivisionId != null).ToListAsync();
+        }
+
+        public async Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user)
+        {
+            if (await IsParticipantExistsAsync(model, eventId))
+            {
+                throw new BusinessException("REGISTRATION_TO_EVENT.PARTICIPANT_IS_ALREADY_REGISTERED");
+            }
+            var participantId = Guid.NewGuid();
+            var priceModel = await _eventService.GetPriceAsync(eventId, user.Id);
+            var order = _orderService.AddNewOrder(OrderTypeEnum.EventParticipation, priceModel.Amount, priceModel.Currency, participantId.ToString(), user.Id);
+            AddParticipant(model, eventId, order.OrderId, participantId);
+            return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
         #endregion

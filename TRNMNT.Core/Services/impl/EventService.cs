@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Helpers.Exceptions;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.WeightDivision;
@@ -25,8 +26,8 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IRepository<WeightDivision> _weightDivisionRepository;
         private readonly IFileService _fileService;
         private readonly IFederationMembershipService _federationMembershipService;
-        private readonly IAppDbContext _unitOfWork;
         private readonly IPromoCodeService _promoCodeService;
+        private readonly IFederationService _federationService;
 
         #endregion
 
@@ -38,8 +39,8 @@ namespace TRNMNT.Core.Services.Impl
             IRepository<WeightDivision> weightDivisionRepository,
             IFederationMembershipService federationMembershipService,
             IFileService fileService,
-            IAppDbContext unitOfWork,
-            IPromoCodeService promoCodeService
+            IPromoCodeService promoCodeService,
+            IFederationService federationService
         )
         {
             _eventRepository = eventRepository;
@@ -47,8 +48,8 @@ namespace TRNMNT.Core.Services.Impl
             _weightDivisionRepository = weightDivisionRepository;
             _federationMembershipService = federationMembershipService;
             _fileService = fileService;
-            _unitOfWork = unitOfWork;
             _promoCodeService = promoCodeService;
+            _federationService = federationService;
         }
 
         #endregion
@@ -65,7 +66,6 @@ namespace TRNMNT.Core.Services.Impl
             updatedEvent.OwnerId = existingEvent.OwnerId;
             _eventRepository.UpdateValues(existingEvent, updatedEvent);
             UpdateCategories(existingEvent.Categories, updatedEvent.Categories);
-            await _unitOfWork.SaveAsync();
         }
 
         public void UpdateCategories(IEnumerable<Category> existingCategories, IEnumerable<Category> updatedCategories)
@@ -159,7 +159,6 @@ namespace TRNMNT.Core.Services.Impl
             await _fileService.SaveImageAsync(path, stream, fileName);
             _event.ImgPath = path;
             _eventRepository.Update(_event);
-            await _unitOfWork.SaveAsync();
         }
 
         public async Task SaveEventTncAsync(Stream stream, string eventId, string fileName)
@@ -169,7 +168,6 @@ namespace TRNMNT.Core.Services.Impl
             var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
             _event.TNCFilePath = path;
             _eventRepository.Update(_event);
-            await _unitOfWork.SaveAsync();
         }
 
         public async Task SavePromoCodeListAsync(Stream stream, string eventId)
@@ -179,7 +177,6 @@ namespace TRNMNT.Core.Services.Impl
             var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
             _event.PromoCodeListPath = path;
             _eventRepository.Update(_event);
-            await _unitOfWork.SaveAsync();
         }
 
         public async Task<Guid?> GetEventIdAsync(string url)
@@ -202,22 +199,30 @@ namespace TRNMNT.Core.Services.Impl
             return string.Empty;
         }
 
-        public async Task<int> GetPriceAsync(Guid eventId, string userId)
+        public async Task<PriceModel> GetPriceAsync(Guid eventId, string userId)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
             if (_event == null)
             {
                 throw new BusinessException("Event not found");
             }
+            
             var isMember = await _federationMembershipService.IsFederationMemberAsync(_event.FederationId, userId);
+            var priceModel = new PriceModel()
+            {
+                Currency = await _federationService.GetFederationCurrencyAsync(_event.FederationId)
+            };
+
             if (DateTime.UtcNow <= _event.EarlyRegistrationEndTS)
             {
-                return isMember? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+                priceModel.Amount = isMember? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
             }
             else
             {
-                return isMember? _event.LateRegistrationPrice : _event.LateRegistrationPrice;
+                priceModel.Amount = isMember? _event.LateRegistrationPrice : _event.LateRegistrationPrice;
             }
+
+            return priceModel;
         }
 
         public async Task<int> GetPriceAsync(Guid eventId, string userId, string promoCode = "")
@@ -355,7 +360,7 @@ namespace TRNMNT.Core.Services.Impl
                 {
                     WeightDivisionId = weightDivision.WeightDivisionId,
                         Weight = weightDivision.Weight,
-                        Descritpion = weightDivision.Descritpion,
+                        Description = weightDivision.Description,
                         Name = weightDivision.Name,
                         CategoryId = weightDivision.CategoryId
                 }));
@@ -414,7 +419,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 WeightDivisionId = model.WeightDivisionId == Guid.Empty ? Guid.NewGuid() : model.WeightDivisionId,
                     Weight = model.Weight,
-                    Descritpion = model.Descritpion,
+                    Description = model.Description,
                     Name = model.Name,
                     CategoryId = categoryId
             }).ToList();

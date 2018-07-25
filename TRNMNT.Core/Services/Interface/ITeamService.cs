@@ -27,5 +27,18 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<TeamModelBase>> GetTeamsAsync(Guid eventId);
+        
+
+        /// <summary>
+        /// Processes the team registration asynchronous. Returns payment data
+        /// </summary>
+        /// <param name="federationId">The federation identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="callbackUrl">The callback URL.</param>
+        /// <param name="redirectUrl">The redirect URL.</param>
+        /// <param name="user">User</param>
+        /// <returns></returns>
+        Task<PaymentDataModel> ProcessTeamRegistrationAsync(Guid federationId, TeamModelFull model, string callbackUrl, string redirectUrl, User user);
+        
     }
 }

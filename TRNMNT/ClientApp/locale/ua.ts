@@ -13,7 +13,8 @@ export const data = {
     'SAVE':"Зберегти",
     'GO_TO_PAYMENT':'Перейти до оплати',
     'PASSWORD':'Пароль',
-    'DOWNLOAD':'Завантажити'
+    'DOWNLOAD':'Завантажити',
+    'ADD_TEAM':'Зареєструвати команду'
   },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
@@ -38,5 +39,15 @@ export const data = {
     'BRACKETS':'Турнірні таблиці',
     'RESULTS':'Результати',
     'PARTICIPATE':'Прийняти участь'
+  },
+  'TEAM':{
+    'NAME':'Назва',
+    'CONTACT_NAME':'Контактна особа',
+    'CONTACT_PHONE':'Контактний номер телефону',
+    'CONTACT_EMAIL':'Контактна електронна пошта',
+    'DESCRIPTION':'Опис',
+  },
+  'TEAM_REGISTRATION':{
+    'TITLE':'Реєстрація команди'
   }
 };

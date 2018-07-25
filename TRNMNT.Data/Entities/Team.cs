@@ -11,13 +11,28 @@ namespace TRNMNT.Data.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid TeamId { get; set; }
-        public String Name { get; set; }
-        public String Description { get; set; }
-        public DateTime UpdateTs { get; set; }
-        public string UpdateBy { get; set; }
+
+        [MaxLength(100)]
+        public string Name { get; set; }
+
+        [MaxLength(1000)]
+        public string Description { get; set; }
+
+        [MaxLength(1000)]
+        public string ContactName { get; set; }
+
+        [MaxLength(1000)]
+        public string ContactEmail { get; set; }
+
+        [MaxLength(1000)]
+        public string ContactPhone { get; set; }
+
+        public DateTime CreateTs { get; set; }
+        public DateTime? UpdateTs { get; set; }
+        public string CreateBy { get; set; }
         public Guid FederationId { get; set; }
         public Guid? OrderId { get; set; }
-        public bool IsApproved { get; set; }
+        public string ApprovalStatus { get; set; }
 
         [JsonIgnore]
         public ICollection<Participant> Participants { get; set; }

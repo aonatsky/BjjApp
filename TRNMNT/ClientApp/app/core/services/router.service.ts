@@ -63,6 +63,10 @@ export class RouterService {
   goToEventRegistration() {
     this.router.navigateByUrl('/event/event-registration');
   }
+  
+  goToTeamRegistration() {
+    this.router.navigateByUrl('/event/team-registration');
+  }
 
   openEventWeightDivisionSpactatorView() {
     this.openNewWindow('/event-admin/run-wd-spectator-view');
