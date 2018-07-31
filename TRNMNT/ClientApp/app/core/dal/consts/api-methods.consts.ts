@@ -23,7 +23,8 @@ export const ApiMethods = Object.freeze({
   },
   team: {
     getTeams: 'api/team/getTeams',
-    processTeamRegistration: 'api/team/processTeamRegistration'
+    processTeamRegistration: 'api/team/processTeamRegistration',
+    getTeamRegistrationPrice: 'api/team/getTeamRegistrationPrice'
   },
   weightDivision: {
     weightDivision: 'api/weightdivision',

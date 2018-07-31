@@ -29,6 +29,7 @@ export class EventComponent implements OnInit {
       if (!this.eventModel) {
         this.routerService.goHome();
       }
+      console.log(this.authService.isLoggedIn());
     });
   }
 

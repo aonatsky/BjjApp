@@ -23,10 +23,11 @@ namespace TRNMNT.Core.Services.Interface
         Task<IEnumerable<TeamModel>> GetTeamsAsync();
 
         /// <summary>
-        /// Gets teams where team members participate in Event with current id asynchronous.
+        /// Returns teams registered in the federation;
         /// </summary>
+        /// <param name="federationId"></param>
         /// <returns></returns>
-        Task<IEnumerable<TeamModelBase>> GetTeamsAsync(Guid eventId);
+        Task<IEnumerable<TeamModelBase>> GetTeamsAsync(Guid federationId);
         
 
         /// <summary>

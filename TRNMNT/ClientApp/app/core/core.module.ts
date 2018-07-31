@@ -61,7 +61,11 @@ import { TranslateModule } from '@ngx-translate/core';
     HttpClientModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => localStorage.getItem('idToken'),
+        tokenGetter: () => {
+          const token = localStorage.getItem('idToken');
+          console.log(token);
+          return token;
+        },
         whitelistedDomains: ['localhost:53432/api'],
         blacklistedRoutes: ['localhost:53432/api/auth/', 'localhost:53432/api/log/'],
         throwNoTokenError: false

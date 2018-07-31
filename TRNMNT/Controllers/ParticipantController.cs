@@ -27,6 +27,7 @@ namespace TRNMNT.Web.Controllers
         private readonly ITeamService _teamService;
         private readonly IWeightDivisionService _weightDivisionService;
         private readonly ICategoryService _categoryService;
+        private readonly IFederationMembershipService _federationMembershipService;
         private readonly IFileProcessiongService<ParticipantListProcessingOptions> _fileProcessiongService;
 
         #endregion
@@ -41,6 +42,7 @@ namespace TRNMNT.Web.Controllers
             ITeamService teamService,
             IWeightDivisionService weightDivisionService,
             ICategoryService categoryService,
+            IFederationMembershipService federationMembershipService,
             IFileProcessiongService<ParticipantListProcessingOptions> fileProcessiongService,
             IConfiguration configuration,
             IAppDbContext context) : base(logger, userService, eventService, context, configuration)
@@ -49,6 +51,7 @@ namespace TRNMNT.Web.Controllers
             _teamService = teamService;
             _weightDivisionService = weightDivisionService;
             _categoryService = categoryService;
+            _federationMembershipService = federationMembershipService;
             _fileProcessiongService = fileProcessiongService;
         }
 
@@ -75,7 +78,7 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        [HttpPost("[action]")]
+        [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> ProcessParticipantRegistration([FromBody] ParticipantRegistrationModel model)
         {
             return await HandleRequestWithDataAsync(async() =>
@@ -87,6 +90,24 @@ namespace TRNMNT.Web.Controllers
                     var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
                     var redirectUrl = $"{Request.Host}/event/event-registration-complete";
                     var result = await _participantService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, redirectUrl, await GetUserAsync());
+                    return Success(result);
+                }
+                return (null, HttpStatusCode.NotFound);
+            });
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> ProcessMembershipRegistration()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var eventId = GetEventId();
+                if (eventId != null)
+                {
+                    var user = await GetUserAsync();
+                    var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
+                    var redirectUrl = $"{Request.Host}/event/membership-registration-complete";
+                    var result = await _federationMembershipService.ProcessFederationMembershipAsync(GetFederationId().Value, callbackUrl, redirectUrl, await GetUserAsync());
                     return Success(result);
                 }
                 return (null, HttpStatusCode.NotFound);
@@ -109,7 +130,7 @@ namespace TRNMNT.Web.Controllers
 
             return await HandleRequestWithDataAsync(async() =>
             {
-                var teams = await _teamService.GetTeamsAsync(eventId);
+                var teams = await _teamService.GetTeamsAsync(GetFederationId().Value);
                 var categories = await _categoryService.GetCategoriesByEventIdAsync(eventId);
                 var weightDivisions = await _weightDivisionService.GetWeightDivisionModelsByEventIdAsync(eventId, false);
                 return Success(new ParticipantDdlModel

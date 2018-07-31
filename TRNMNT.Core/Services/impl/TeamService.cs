@@ -26,7 +26,6 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-
         public TeamService(IRepository<Team> repository, IOrderService orderService, IFederationService federationService, IPaymentService paymentService)
         {
             _paymentService = paymentService;
@@ -64,20 +63,22 @@ namespace TRNMNT.Core.Services.Impl
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<TeamModelBase>> GetTeamsAsync(Guid eventId)
+        public async Task<IEnumerable<TeamModelBase>> GetTeamsAsync(Guid federationId)
         {
-            return await _repository.GetAll().Where(t => t.Participants.Any(p => p.EventId == eventId)).Select(t => new TeamModelBase
+            var teams = await _repository.GetAll().Where(t => t.FederationId == federationId).ToListAsync();
+            await CheckTeamStatusAsync(teams);
+            return teams.Where(t => t.ApprovalStatus == ApprovalStatus.Approved).Select(t => new TeamModelBase
             {
                 TeamId = t.TeamId.ToString(),
                     Name = t.Name
-            }).ToListAsync();
+            });
         }
 
         public async Task<PaymentDataModel> ProcessTeamRegistrationAsync(Guid federationId, TeamModelFull model, string callbackUrl, string redirectUrl, User user)
         {
-            if (await GetTeamByNameAsync(model.Name) != null)
+            if (await IsTeamExistAsync(model.Name))
             {
-                throw new BusinessException("REGISTRATION_TO_EVENT.PARTICIPANT_IS_ALREADY_REGISTERED");
+                throw new BusinessException("TEAM_REGISTRATION_IS_ALREADY_REQUESTED");
             }
             var teamId = Guid.NewGuid();
             var priceModel = await _federationService.GetTeamRegistrationPriceAsync(federationId);
@@ -85,6 +86,10 @@ namespace TRNMNT.Core.Services.Impl
             AddTeam(model, teamId, order.OrderId, federationId, user.Id);
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
+
+        #endregion
+
+        #region private methods
 
         private void AddTeam(TeamModelFull model, Guid teamId, Guid orderId, Guid federationId, string userId)
         {
@@ -104,7 +109,24 @@ namespace TRNMNT.Core.Services.Impl
             };
             _repository.Add(team);
         }
+        private async Task<bool> IsTeamExistAsync(string name)
+        {
+            return await _repository.GetAll(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).AnyAsync();
+        }
+
+        private async Task CheckTeamStatusAsync(List<Team> teams)
+        {
+            foreach (var team in teams)
+            {
+                if (team.ApprovalStatus == ApprovalStatus.Pending && team.OrderId.HasValue)
+                {
+                    team.ApprovalStatus = await _orderService.GetApprovalStatus(team.OrderId.Value);
+                    _repository.Update(team);
+                }
+            }
+        }
 
         #endregion
+
     }
 }

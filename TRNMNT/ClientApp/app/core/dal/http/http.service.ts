@@ -121,18 +121,19 @@ export class HttpService {
           finalize(() => this.loaderService.hideLoader())
         );
     }
-    if (error.status === 400) {
-      this.notificationService.showWarn('', error.error);
-      return of(true);
-    }
     return this.handleError(error, notifyMessage);
   }
 
   private handleError(errorResponse: Response | any, notifyMessage?: string) {
-    const errMsg = this.getErrorMessage(errorResponse);
-    this.notificationService.showErrorOrGeneric(notifyMessage);
-    this.loggerService.logError(errMsg);
-    return throwError(errMsg);
+    if (errorResponse.status == 400) {
+      this.notificationService.showWarn('', errorResponse.error);
+      return throwError(errorResponse.error);
+    } else {
+      const errMsg = this.getErrorMessage(errorResponse);
+      this.notificationService.showErrorOrGeneric(notifyMessage);
+      this.loggerService.logError(errMsg);
+      return throwError(errMsg);
+    }
   }
 
   private convertParams(paramsHolder): HttpParams {

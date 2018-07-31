@@ -14,7 +14,8 @@ export const data = {
     'GO_TO_PAYMENT':'Перейти до оплати',
     'PASSWORD':'Пароль',
     'DOWNLOAD':'Завантажити',
-    'ADD_TEAM':'Зареєструвати команду'
+    'ADD_TEAM':'Зареєструвати команду',
+    'NO_TEAM':'Без команди'
   },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
@@ -25,7 +26,10 @@ export const data = {
   'REGISTRATION_TO_EVENT':{
     'I_ACCEPT_TNC':'Я приймаю положення',
     'TITLE':'Реєстрація на {{value}}',
-    'PARTICIPANT_IS_ALREADY_REGISTERED':'Такий учасник вже зареєстрований'
+    'PARTICIPANT_IS_ALREADY_REGISTERED':'Такий учасник вже зареєстрований',
+    'YOUR_PRICE': 'Ваша ціна',
+    'CONGRATS_YOU_ARE_REGISTERED_TO': 'Вітаємо, ви зареєстровані на {{value}}',
+    'GO_BACK_TO_EVENT_PAGE': 'Повернутись на сторінку події'
   },
   'EVENT_INFO': {
     'EVENT_STARTS':'Захід починаєтся',

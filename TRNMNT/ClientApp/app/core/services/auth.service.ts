@@ -10,6 +10,7 @@ import { RefreshTokenModel } from '../model/auth.models';
 import { AuthTokenModel } from '../model/auth.models';
 import { CredentialsModel } from '../model/credentials.model';
 import { UserModel, UserRegistrationModel } from '../model/user.models';
+import { RouterService } from './router.service';
 
 /**
  * Authentication service.
@@ -32,7 +33,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private socialAuthService: SocialAuthService,
-    private jwtHelper: JwtHelperService
+    private jwtHelper: JwtHelperService,
+    private routerService: RouterService
   ) {
     // On bootstrap or refresh, tries to get the user's data.
     this.decodeToken();
@@ -203,7 +205,10 @@ export class AuthService {
     const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
     return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(
       flatMap((userData: SocialUser) => {
-        return this.http.post<AuthTokenModel>(ApiMethods.auth.facebookLogin, { token: userData.token });
+        return this.http.post<AuthTokenModel>(
+          `${this.routerService.getMainDomainUrl()}/${ApiMethods.auth.facebookLogin}`,
+          { token: userData.token }
+        );
       }),
       map(r => {
         return this.processTokensResponse(r);

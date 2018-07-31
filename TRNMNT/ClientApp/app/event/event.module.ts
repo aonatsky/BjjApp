@@ -9,6 +9,7 @@ import { EventRoutingModule } from './event.routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { CustomLoader } from '../core/helpers/custom-loader';
 import { TeamRegistrationComponent } from './team-registration/team-registration.component';
+import { TeamRegistrationCompleteComponent } from './team-registration-complete/team-registration-complete.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { TeamRegistrationComponent } from './team-registration/team-registration
     EventComponent,
     EventRegistrationComponent,
     EventRegistrationCompleteComponent,
-    TeamRegistrationComponent
+    TeamRegistrationComponent,
+    TeamRegistrationCompleteComponent
   ],
   providers: [],
   exports: []

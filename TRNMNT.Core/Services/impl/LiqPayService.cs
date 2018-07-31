@@ -103,7 +103,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 return (OrderStatus.Refund, jResponse.liqpay_order_id);
             }
-            return (OrderStatus.Failed , jResponse.liqpay_order_id);
+            return (OrderStatus.Failed, jResponse.liqpay_order_id);
         }
 
         public PaymentDataModel GetPaymentDataModel(Order order, string serverUrl, string redirectUrl)

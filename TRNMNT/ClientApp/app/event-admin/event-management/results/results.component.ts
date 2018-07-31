@@ -43,7 +43,6 @@ export class ResultsComponent {
     getResults() {
         this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => {
             this.teamResults = r.sort((r1, r2) => { return r2.points - r1.points });
-            console.log(this.teamResults);
         });
     }
 

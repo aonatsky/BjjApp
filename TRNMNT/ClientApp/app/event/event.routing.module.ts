@@ -8,28 +8,12 @@ import { FooterComponent } from '../shared/footer/footer.component';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { TeamRegistrationComponent } from './team-registration/team-registration.component';
+import { TeamRegistrationCompleteComponent } from './team-registration-complete/team-registration-complete.component';
 
 const routes: Routes = [
   {
     path: 'event',
-    component: EventComponent,
-    children: [
-      
-      {
-        path: 'event-registration-complete/',
-        component: EventRegistrationCompleteComponent
-      },
-      {
-        path: '',
-        outlet: 'footer',
-        component: FooterComponent
-      },
-      {
-        path: '',
-        outlet: 'topbar',
-        component: TopbarComponent
-      }
-    ]
+    component: EventComponent
   },
   {
     path: 'event/event-registration',
@@ -43,6 +27,11 @@ const routes: Routes = [
   {
     path: 'event/team-registration',
     component: TeamRegistrationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'event/team-registration-complete',
+    component: TeamRegistrationCompleteComponent,
     canActivate: [AuthGuard]
   }
 ];

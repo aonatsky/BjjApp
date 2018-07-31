@@ -13,6 +13,8 @@ import { forkJoin } from 'rxjs';
 import { SelectItem } from 'primeng/primeng';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterService } from '../../core/services/router.service';
+import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { PriceModel } from '../../core/model/price.model';
 
 @Component({
   selector: 'event-registration',
@@ -31,9 +33,10 @@ export class EventRegistrationComponent implements OnInit {
   teams: TeamModel[] = [];
 
   eventId: string;
-  price: number;
+  price: PriceModel;
   eventTitleParameter: object;
   currentStep: number = 0;
+  lastStep: number = 1;
   tncAccepted: boolean = false;
   paymentData: string = '';
   paymentSignature: string = '';
@@ -45,7 +48,8 @@ export class EventRegistrationComponent implements OnInit {
     private participantService: ParticipantService,
     private authService: AuthService,
     private eventService: EventService,
-    private routerService: RouterService
+    private routerService: RouterService,
+    private translateService : TranslateService
   ) {}
 
   ngOnInit() {
@@ -74,6 +78,7 @@ export class EventRegistrationComponent implements OnInit {
     this.price = data[3];
     this.initCategoryDropdown();
     this.initTeamDropdown();
+    console.log(this.authService.isLoggedIn());
   }
 
   private getDefaultDateOfBirth() {
@@ -84,6 +89,7 @@ export class EventRegistrationComponent implements OnInit {
 
   private initTeamDropdown() {
     this.teamSelectItems = [];
+    this.teamSelectItems.push({ label: this.translateService.instant('COMMON.NO_TEAM'), value: null });
     for (const team of this.teams) {
       this.teamSelectItems.push({ label: team.name, value: team.teamId });
     }
@@ -106,6 +112,18 @@ export class EventRegistrationComponent implements OnInit {
     });
   }
 
+  getTeam(): string {
+    return this.teams.find(t => t.teamId == this.participant.teamId).name;
+  }
+
+  getCategory() : string{
+    return this.categories.find(c => c.categoryId == this.participant.categoryId).name;
+  }
+
+  getWeightDivision(){
+    return this.weightDivisions.find(w => w.weightDivisionId == this.participant.weightDivisionId).name;
+  }
+
   nextStep() {
     this.currentStep++;
   }
@@ -119,9 +137,7 @@ export class EventRegistrationComponent implements OnInit {
   }
 
   goToPayment() {
-    // todo click payment form
-
-    this.participantService.processParticipantRegistration(this.participant).subscribe((r: PaymentDataModel) => {
+      this.participantService.processParticipantRegistration(this.participant).subscribe((r: PaymentDataModel) => {
       this.submitPaymentForm(r);
     });
   }

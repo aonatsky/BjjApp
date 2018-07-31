@@ -8,7 +8,6 @@ using TRNMNT.Core.Model.Team;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TRNMNT.Web.Controllers
@@ -20,6 +19,7 @@ namespace TRNMNT.Web.Controllers
         #region Dependencies
 
         private readonly ITeamService _teamService;
+        private readonly IFederationService _federationService;
 
         #endregion
 
@@ -31,10 +31,12 @@ namespace TRNMNT.Web.Controllers
             IUserService userService,
             ITeamService teamService,
             IAppDbContext context,
+            IFederationService federationService,
             IConfiguration configuration
-        ) : base(logger, userService, eventService, context,configuration)
+        ) : base(logger, userService, eventService, context, configuration)
         {
             _teamService = teamService;
+            _federationService = federationService;
         }
 
         #endregion
@@ -44,11 +46,25 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetTeams()
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 if (GetEventId() != null)
                 {
-                    var data = await _teamService.GetTeamsAsync();
+                    var data = await _teamService.GetTeamsAsync(GetFederationId().Value);
+                    return Success(data);
+                }
+                return NotFoundResponse();
+            });
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetTeamRegistrationPrice()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                if (GetEventId() != null)
+                {
+                    var data = await _federationService.GetTeamRegistrationPriceAsync(GetFederationId().Value);
                     return Success(data);
                 }
                 return NotFoundResponse();
@@ -75,4 +91,3 @@ namespace TRNMNT.Web.Controllers
         #endregion
     }
 }
-

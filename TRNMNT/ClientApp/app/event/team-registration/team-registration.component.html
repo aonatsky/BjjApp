@@ -4,7 +4,7 @@
       {{'TEAM_REGISTRATION.TITLE'|translate}}
     </div>
   </div>
-  <div class="ui-widget ui-widget-content ui-corner-all ui-g-offset-2 ui-g-8">
+  <div class="ui-widget ui-widget-content ui-corner-all ui-g-8">
     <form novalidate #teamForm="ngForm">
       <div class="ui-g">
         <div class="ui-g-3 ui-fluid">
@@ -60,6 +60,14 @@
       <input type="hidden" name="signature" value={{paymentSignature}} />
       <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />
     </form>
+    
   </div>
- 
+ <div class="ui-g ui-g-4 price-box" *ngIf="price">
+      <div class="ui-g ui-g-12">
+          {{'REGISTRATION_TO_EVENT.YOUR_PRICE'|translate}}:
+      </div>
+      <div class="ui-g ui-g-12 price">
+          <span class="price">{{price.amount}} {{price.currency}}</span>
+      </div>
+  </div>
 </div>

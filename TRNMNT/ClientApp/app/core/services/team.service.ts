@@ -3,6 +3,7 @@ import { HttpService } from '../dal/http/http.service';
 import { TeamModel, TeamRegistrationModel } from '../model/team.model';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable } from 'rxjs';
+import { PriceModel } from '../model/price.model';
 
 @Injectable()
 export class TeamService {
@@ -16,7 +17,10 @@ export class TeamService {
     return this.httpService.post(ApiMethods.team.getTeams, team);
   }
 
-  processTeamRegistration(model: TeamRegistrationModel) {
+  processTeamRegistration(model: TeamRegistrationModel): Observable<any> {
     return this.httpService.post(ApiMethods.team.processTeamRegistration, model);
+  }
+  getTeamRegistrationPrice(): Observable<PriceModel> {
+    return this.httpService.get<PriceModel>(ApiMethods.team.getTeamRegistrationPrice);
   }
 }

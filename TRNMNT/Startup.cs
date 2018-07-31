@@ -68,7 +68,7 @@ namespace TRNMNT.Web
             services.AddAuthenticationOptions(Configuration);
 
             services.AddSignalR();
-
+            services.AddCors();
             // Add framework services.
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(o =>
@@ -103,6 +103,7 @@ namespace TRNMNT.Web
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
+            app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build());
             app.UseSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chat");
@@ -122,7 +123,7 @@ namespace TRNMNT.Web
                     name: "spa-fallback",
                     defaults : new { controller = "Home", action = "Index" });
             });
-            
+
         }
     }
 }

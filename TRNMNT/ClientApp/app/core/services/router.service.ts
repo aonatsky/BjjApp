@@ -63,7 +63,7 @@ export class RouterService {
   goToEventRegistration() {
     this.router.navigateByUrl('/event/event-registration');
   }
-  
+
   goToTeamRegistration() {
     this.router.navigateByUrl('/event/team-registration');
   }
@@ -78,5 +78,23 @@ export class RouterService {
 
   getCurrentUrl() {
     return this.location.path();
+  }
+
+  getSubdomains(): string[] {
+    const parts = window.location.host.split('.');
+    parts.pop();
+    if (parts.filter(p => p.indexOf('trnmnt') !== -1).length > 0) {
+      parts.pop();
+    }
+    return parts;
+  }
+
+  getMainDomainUrl() {
+    var subdomains = this.getSubdomains();
+    let path = location.host;
+    for (const subdomain of subdomains) {
+      path = path.replace(subdomain + '.', '');
+    }
+    return location.protocol + '//' + path;
   }
 }

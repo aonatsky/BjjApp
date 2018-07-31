@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Const;
+using TRNMNT.Core.Enum;
+using TRNMNT.Core.Helpers.Exceptions;
+using TRNMNT.Core.Model;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -13,14 +16,21 @@ namespace TRNMNT.Core.Services.Impl
         #region Dependencies
 
         private readonly IRepository<FederationMembership> _repository;
-
+        private readonly IFederationService _federationService;
+        private readonly IOrderService _orderService;
+        private readonly IPaymentService _paymentService;
         #endregion
 
         #region .ctor
 
-        public FederationMembershipService(IRepository<FederationMembership> federationMembershipRepository)
+        public FederationMembershipService(IRepository<FederationMembership> federationMembershipRepository,
+            IFederationService federationService, IOrderService orderService,
+            IPaymentService paymentService)
         {
+            _paymentService = paymentService;
+            _orderService = orderService;
             _repository = federationMembershipRepository;
+            _federationService = federationService;
         }
 
         #endregion
@@ -28,7 +38,13 @@ namespace TRNMNT.Core.Services.Impl
         #region public methods
         public async Task<bool> IsFederationMemberAsync(Guid federationId, string userId)
         {
-            return await _repository.GetAll().AnyAsync(fm => fm.UserId == userId && fm.FederationId == federationId);
+            var membership = await _repository.GetAll().FirstOrDefaultAsync(fm => fm.UserId == userId && fm.FederationId == federationId);
+            if (membership == null || membership.ApprovalStatus == ApprovalStatus.Declined)
+            {
+                return false;
+            }
+            await CheckMembershipStatusAsync(membership);
+            return membership.ApprovalStatus == ApprovalStatus.Approved;
         }
 
         public async Task ApproveEntityAsync(Guid entityId, Guid orderId)
@@ -38,7 +54,45 @@ namespace TRNMNT.Core.Services.Impl
             membership.ApprovalStatus = ApprovalStatus.Approved;
             _repository.Update(membership);
         }
+
+        public async Task<PaymentDataModel> ProcessFederationMembershipAsync(Guid federationId, string callbackUrl, string redirectUrl, User user)
+        {
+            if (await IsFederationMemberAsync(federationId, user.Id))
+            {
+                throw new BusinessException("REGISTRATION_TO_EVENT.PARTICIPANT_IS_ALREADY_MEMBER");
+            }
+            var federationMembershipId = Guid.NewGuid();
+            var priceModel = await _federationService.GetTeamRegistrationPriceAsync(federationId);
+            var order = _orderService.AddNewOrder(OrderTypeEnum.FederationMembership, priceModel.Amount, priceModel.Currency, federationId.ToString(), user.Id);
+            AddFederationMembership(user.Id, federationId, order.OrderId, federationMembershipId);
+            return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
+        }
+
         #endregion
 
+        #region
+        private void AddFederationMembership(string userId, Guid federationId, Guid orderId, Guid federationMembershipId)
+        {
+            var federationMembership = new FederationMembership()
+            {
+                FederationMembershipId = federationMembershipId,
+                ApprovalStatus = ApprovalStatus.Pending,
+                OrderId = orderId,
+                UserId = userId,
+                CreateTs = DateTime.UtcNow,
+                FederationId = federationId
+            };
+            _repository.Add(federationMembership);
+        }
+        #endregion
+
+        private async Task CheckMembershipStatusAsync(FederationMembership membership)
+        {
+            if (membership.ApprovalStatus != ApprovalStatus.Pending && membership.OrderId.HasValue)
+            {
+                membership.ApprovalStatus = await _orderService.GetApprovalStatus(membership.OrderId.Value);
+                _repository.Update(membership);
+            }
+        }
     }
 }

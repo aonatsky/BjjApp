@@ -4,7 +4,7 @@
             {{'REGISTRATION_TO_EVENT.TITLE'|translate:eventTitleParameter}}
         </div>
     </div>
-    <div class="ui-widget ui-widget-content ui-corner-all ui-g-offset-2 ui-g-8">
+    <div class="ui-widget ui-widget-content ui-corner-all ui-g-8">
         <div *ngIf="currentStep == 0">
             <form novalidate #participantForm="ngForm">
                 <div class="ui-g">
@@ -54,7 +54,7 @@
                     </div>
                     <div class="ui-g-9 ui-fluid">
                         <p-dropdown [options]="categorySelectItems" [(ngModel)]="participant.categoryId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_CATEGORY'|translate}}"
-                            (onChange)="($event)" name="category" required></p-dropdown>
+                            (onChange)="initWeightDivisionDropdown($event)" name="category" required></p-dropdown>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -63,7 +63,7 @@
                     </div>
                     <div class="ui-g-9 ui-fluid">
                         <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="participant.weightDivisionId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_WEIGHT_DIVISION'|translate}}"
-                            [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0" name="weightDivision"
+                            [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.length == 0" name="weightDivision"
                             required></p-dropdown>
                     </div>
                 </div>
@@ -92,9 +92,7 @@
             </form>
 
         </div>
-        <div class="ui-widget ui-g-offset-2 ui-g-2">
-            {{'REGISTRATION_TO_EVENT.YOUR_PRICE'|translate}}:{{price}}
-        </div>
+
         <div *ngIf="currentStep == 1">
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid">
@@ -182,9 +180,6 @@
                 </div>
                 <p-checkbox [(ngModel)]="tncAccepted"></p-checkbox>
             </div>
-            <div class="ui-g-12">
-                <p-messages [(value)]="message"></p-messages>
-            </div>
             <div class="ui-g-12 display-none">
                 <form #formPrivat="ngForm" #formPrivatElement method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8"
                     novalidate>
@@ -201,6 +196,14 @@
                     <button pButton type="button" class="float-left" label="{{'COMMON.BACK'| translate}}" (click)="previousStep()"></button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="ui-g ui-g-4 price-box" *ngIf="price">
+        <div class="ui-g ui-g-12">
+            {{'REGISTRATION_TO_EVENT.YOUR_PRICE'|translate}}:
+        </div>
+        <div class="ui-g ui-g-12 price">
+            <span class="price">{{price.amount}} {{price.currency}}</span>
         </div>
     </div>
 </div>
