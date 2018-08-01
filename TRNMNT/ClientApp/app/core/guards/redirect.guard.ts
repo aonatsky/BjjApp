@@ -14,6 +14,6 @@ export class RedirectGuard implements CanActivate {
     }
   }
   redirectToEventPage(): boolean {
-    return this.routerService.getSubdomains().length === 1 && !this.routerService.getCurrentUrl().startsWith('/event/');
+    return this.routerService.getSubdomains().length == 1;
   }
 }
