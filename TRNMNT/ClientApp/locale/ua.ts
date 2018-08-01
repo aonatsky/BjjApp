@@ -17,6 +17,11 @@ export const data = {
     'ADD_TEAM':'Зареєструвати команду',
     'NO_TEAM':'Без команди'
   },
+  'MENU':{
+    'LOGIN':'Увійти',
+    'LOGOUT': 'Вийти',
+    'HOME': 'Додому'
+  },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
     'SIGN_UP':'зареєструйтесь',

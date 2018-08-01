@@ -90,11 +90,11 @@ export class EventRunComponent implements OnInit, OnDestroy {
     }
 
     private runWeightDivisionSpectatorView() {
-        this.routerService.openEventWeightDivisionSpactatorView();
+        this.routerService.openEventWeightDivisionSpectatorView();
     }
 
     private runCategorySpectatorView() {
-        this.routerService.openEventCategorySpactatorView(this.filter.categoryId);
+        this.routerService.openEventCategorySpectatorView(this.filter.categoryId);
     }
 
     private completeRound() {

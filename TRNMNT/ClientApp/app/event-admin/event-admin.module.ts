@@ -20,7 +20,7 @@ import { EventRunCategoryViewComponent } from './event-run-category-view/event-r
 import { AbsoluteWeightDivisionComponent } from './absolute-weight-division/absolute-weight-division.component';
 import { ResultsComponent } from './event-management/results/results.component';
 import { BracketResultSetComponent } from './event-run/bracket-result-set/bracket-result-set.component';
-import { TranslateModule } from '../../../node_modules/@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [CoreModule, SharedModule, RoundModule, EventAdminRoutingModule, TranslateModule],

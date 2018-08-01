@@ -24,9 +24,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // reset login status
-    this.authService.signout();
-    // get return url from route parameters or default to '/'
+    // this.authService.signout();
   }
 
   login(): any {

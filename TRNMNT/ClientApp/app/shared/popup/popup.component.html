@@ -4,5 +4,5 @@
   [closable]="closable"
   [modal]="true"
   (onHide)="onHide.emit($event)">
-  <ng-content></ng-content>
+  <div *ngIf="visible"><ng-content></ng-content></div>
 </p-dialog>

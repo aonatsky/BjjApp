@@ -3,8 +3,8 @@ import { TranslateLoader } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs';
-import * as en from './../../../locale/en';
-import * as ua from './../../../locale/ua';
+import * as en from '../../../locale/en';
+import * as ua from '../../../locale/ua';
 
 @Injectable()
 export class CustomLoader implements TranslateLoader {

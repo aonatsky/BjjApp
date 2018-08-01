@@ -4,7 +4,7 @@ import { MenuItem } from 'primeng/primeng';
 import { EventModel } from '../../core/model/event.models';
 import { AuthService } from '../../core/services/auth.service';
 import { EventService } from '../../core/services/event.service';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'event-edit',

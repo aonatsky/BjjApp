@@ -1,5 +1,5 @@
 ﻿import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService as SocialAuthService, FacebookLoginProvider } from 'angular5-social-login';
 import { SocialUser } from 'angular5-social-login';
@@ -21,8 +21,8 @@ export class AuthService {
    * Stores the URL so we can redirect after signing in.
    */
   redirectUrl: string;
-  goToHomePage: any;
-
+  
+  @Output() getLoggedInStatus: EventEmitter<boolean> = new EventEmitter();
   /**
    * User's data.
    */
@@ -36,22 +36,9 @@ export class AuthService {
     private jwtHelper: JwtHelperService,
     private routerService: RouterService
   ) {
-    // On bootstrap or refresh, tries to get the user's data.
     this.decodeToken();
-
-    // Creates header for post requests.
   }
 
-  // login(email: string, password: string): Observable<any> {
-  //   const credentials: CredentialsModel = {
-  //     email,
-  //     password
-  //   };
-  //   return this.http.post<any>(ApiMethods.auth.getToken, credentials).pipe(
-  //     map(data => localStorage.setItem('idToken', data.idToken)),
-  //     catchError(error => console.log(error))
-  //   );
-  // }
 
   /**
    * Tries to sign in the user.
@@ -68,6 +55,7 @@ export class AuthService {
 
     return this.http.post<AuthTokenModel>(ApiMethods.auth.getToken, credentials).pipe(
       map(tokenModel => {
+        this.getLoggedInStatus.emit(true);
         return this.processTokensResponse(tokenModel);
       }),
       catchError((error: any) => {
@@ -178,9 +166,8 @@ export class AuthService {
     this.redirectUrl = null;
     this.user = {};
     this.removeTokens();
-    if (this.goToHomePage) {
-      this.goToHomePage();
-    }
+    this.getLoggedInStatus.emit(false);
+    this.routerService.goHome();
   }
 
   /**
@@ -201,6 +188,13 @@ export class AuthService {
     }
   }
 
+  getRole(): string {
+    if (this.isLoggedIn()) {
+     return this.getUser().role;
+    }
+    return "";
+  }
+
   facebookLogin(): Observable<boolean> {
     const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
     return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(
@@ -211,6 +205,7 @@ export class AuthService {
         );
       }),
       map(r => {
+        this.getLoggedInStatus.emit(true);
         return this.processTokensResponse(r);
       }),
       catchError(e => {

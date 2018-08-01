@@ -14,7 +14,7 @@ export class PopupComponent implements OnInit {
   @Input() readonly dialogHeight?: number;
   @Input() readonly dialogMinWidth: number = 200;
   @Input() readonly dialogMinHeight: number = 350;
-  @Input() visible: boolean;
+  @Input() visible: boolean = false;
 
   @Output() onHide: EventEmitter<any> = new EventEmitter();
   @Output() onShow: EventEmitter<any> = new EventEmitter();

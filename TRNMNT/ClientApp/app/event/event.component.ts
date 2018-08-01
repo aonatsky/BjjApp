@@ -27,9 +27,8 @@ export class EventComponent implements OnInit {
     this.eventService.getEventInfo().subscribe(r => {
       this.eventModel = r;
       if (!this.eventModel) {
-        this.routerService.goHome();
+        this.routerService.goToMainDomain();
       }
-      console.log(this.authService.isLoggedIn());
     });
   }
 

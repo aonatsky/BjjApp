@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { UserModel } from '../../core/model/user.models';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterService } from '../../core/services/router.service';
 import { MenuItem } from 'primeng/components/common/menuitem';
+import { TranslateService } from '@ngx-translate/core';
+import { Roles } from '../../core/consts/roles.const';
 
 @Component({
   selector: 'topbar',
@@ -10,44 +11,54 @@ import { MenuItem } from 'primeng/components/common/menuitem';
   styleUrls: ['./topbar.component.scss']
 })
 export class TopbarComponent implements OnInit {
-  user: UserModel;
   items: MenuItem[];
+  isLoggedIn: boolean;
 
-  constructor(private routerService: RouterService, private authService: AuthService) {}
+  constructor(
+    private routerService: RouterService,
+    private authService: AuthService,
+    private translateService: TranslateService
+  ) {}
 
   ngOnInit() {
-    this.user = this.authService.getUser();
-    const isLoggedIn = this.authService.isLoggedIn();
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.authService.getLoggedInStatus.subscribe(status => {
+      this.isLoggedIn = status;
+      this.initMenu();
+    });
+    this.initMenu();
+  }
+
+  initMenu() {
     this.items = [
       {
-        label: 'Home',
-        routerLink: '/'
+        label: this.translateService.instant('MENU.HOME'),
+        routerLink: '/',
+        visible: this.isLoggedIn && this.authService.getRole() in [Roles.Admin, Roles.FederationOwner, Roles.Owner]
       },
-      //{
-      //    label: 'Events',
-      //    routerLink: '/'
-      //},
-      //{
-      //    label: 'About',
-      //    routerLink: '/'
-      //},
       {
-        label: isLoggedIn ? 'Logout' : 'Login',
+        label: this.translateService.instant('MENU.LOGIN'),
         command: event => {
-          if (this.authService.isLoggedIn()) {
-            this.authService.signout();
-          }
           this.routerService.goToLogin();
+        },
+        visible: !this.isLoggedIn && !this.routerService.isEventPortal()
+      },
+      {
+        label: this.translateService.instant('MENU.LOGOUT'),
+        routerLink: '/',
+        visible: this.isLoggedIn,
+        command: c => {
+          this.authService.signout();
         }
       }
     ];
   }
 
-  private goHome() {
+  goHome(){
     this.routerService.goHome();
   }
 
-  private isTopbarShown(): boolean {
+  isTopbarShown(): boolean {
     const urlsToHideMenu = ['run-wd-spectator-view', 'run-category-spectator-view'];
     for (let i = 0; i < urlsToHideMenu.length; i++) {
       if (this.routerService.getCurrentUrl().indexOf(urlsToHideMenu[i]) !== -1) {

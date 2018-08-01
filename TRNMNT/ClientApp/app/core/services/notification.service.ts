@@ -4,7 +4,7 @@ import { MessageLevel } from '../consts/message-level.const';
 import { RouterService } from './router.service';
 import { Subject } from 'rxjs';
 import { DefaultValues } from '../consts/default-values';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class NotificationService {

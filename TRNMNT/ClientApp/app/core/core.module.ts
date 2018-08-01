@@ -63,7 +63,6 @@ import { TranslateModule } from '@ngx-translate/core';
       config: {
         tokenGetter: () => {
           const token = localStorage.getItem('idToken');
-          console.log(token);
           return token;
         },
         whitelistedDomains: ['localhost:53432/api'],

@@ -21,10 +21,18 @@ export class RouterService {
     this.win.open(url);
   }
 
-  goHome(subdomain: string = '') {
+  goToMainDomain(subdomain: string = '') {
     if (subdomain !== '') {
       const path = location.host.replace(subdomain + '.', '');
       location.href = location.protocol + '//' + path;
+    }
+  }
+
+  goHome(){
+    if(this.isEventPortal()){
+      this.goToEventInfo()
+    }else{
+      this.goToEventAdmin()
     }
   }
 
@@ -68,11 +76,11 @@ export class RouterService {
     this.router.navigateByUrl('/event/team-registration');
   }
 
-  openEventWeightDivisionSpactatorView() {
+  openEventWeightDivisionSpectatorView() {
     this.openNewWindow('/event-admin/run-wd-spectator-view');
   }
 
-  openEventCategorySpactatorView(categoryId: string) {
+  openEventCategorySpectatorView(categoryId: string) {
     this.openNewWindow(`/event-admin/run-category-spectator-view/${categoryId}`);
   }
 
@@ -96,5 +104,9 @@ export class RouterService {
       path = path.replace(subdomain + '.', '');
     }
     return location.protocol + '//' + path;
+  }
+
+  isEventPortal() : boolean{
+    return this.getSubdomains().length > 0;
   }
 }

@@ -1,4 +1,4 @@
-﻿import { EventService } from './../../core/services/event.service';
+﻿import { EventService } from '../../core/services/event.service';
 import { Component, ViewEncapsulation, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { TeamService } from '../../core/services/team.service';
 import { ParticipantService } from '../../core/services/participant.service';
@@ -13,7 +13,7 @@ import { forkJoin } from 'rxjs';
 import { SelectItem } from 'primeng/primeng';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterService } from '../../core/services/router.service';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { PriceModel } from '../../core/model/price.model';
 
 @Component({
@@ -78,7 +78,6 @@ export class EventRegistrationComponent implements OnInit {
     this.price = data[3];
     this.initCategoryDropdown();
     this.initTeamDropdown();
-    console.log(this.authService.isLoggedIn());
   }
 
   private getDefaultDateOfBirth() {

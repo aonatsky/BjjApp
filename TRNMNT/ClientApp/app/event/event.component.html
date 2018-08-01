@@ -59,6 +59,6 @@
         </p-tabView>
     </div>
 </div>
-<app-popup *ngIf="displayPopup" [dialogWidth]="400">
+<app-popup [visible]="displayPopup" [dialogWidth]="400">
     <login returnUrl="/event/event-registration"></login>
 </app-popup>
