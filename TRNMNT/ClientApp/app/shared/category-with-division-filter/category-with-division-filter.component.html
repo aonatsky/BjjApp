@@ -14,7 +14,7 @@
                     [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0"
                     (onChange)="onSelect($event)"
                     [style]="{'min-width':'200px'}"
-                    placeholder="Select Weight Division"></p-dropdown>
+                    placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION' | translate}}"></p-dropdown>
     </div>
     <div class="filter-section is-member-chbox">
         <p-checkbox *ngIf="isMemberFilterEnabled"

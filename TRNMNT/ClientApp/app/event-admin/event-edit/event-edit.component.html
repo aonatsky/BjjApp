@@ -2,7 +2,7 @@
     <div class="content">
         <div class="ui-g">
             <div class="ui-g-12 ui-g-nopad page-title">
-                Event Edit
+                {{'EVENT_EDIT.TITLE'|translate}}
             </div>
         </div>
         <div class="">
@@ -12,7 +12,7 @@
                     <div *ngIf="currentStep==0" class="">
                         <div class="ui-g">
                             <div class="ui-g-3 ui-sm-12 ui-fluid">
-                                <label class="field-title">{{'EVENT_EDIT.TITLE'|translate}}</label>
+                                <label class="field-title">{{'EVENT_EDIT.EVENT_TITLE'|translate}}</label>
                             </div>
                             <div class="ui-g-9 ui-sm-12 ui-fluid">
                                 <input pInputText [(ngModel)]="eventModel.title" />
@@ -92,7 +92,7 @@
                         </div>
                         <div class="ui-g">
                             <div class="ui-g-3 ui-fluid">
-                                <label>{{'EVENT_EDIT.TREMS_AND_CONDITIONS'|translate}}</label>
+                                <label>{{'EVENT_EDIT.TERMS_AND_CONDITIONS'|translate}}</label>
                             </div>
                             <div class="ui-g-4 ui-fluid">
                                 <p-fileUpload #fubauto mode="basic" accept="application/pdf"
@@ -112,7 +112,7 @@
                                 <label>{{'EVENT_EDIT.STANDARD'|translate}}</label>
                             </div>
                             <div class="ui-g-4 price-column">
-                                <label>{{'EVENT_EDIT.MEMBERS'|translate}}</label>
+                                <label>{{'EVENT_EDIT.FOR_MEMBERS'|translate}}</label>
                             </div>
                         </div>
                         <div class="ui-g">

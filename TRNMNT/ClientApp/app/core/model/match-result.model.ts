@@ -1,5 +1,5 @@
 ﻿export class MatchResultModel {
-    roundId: AAGUID;
+    matchId: AAGUID;
     winnerParticipantId: AAGUID;
     aParticipantPoints: number;
     aParticipantAdvantages: number;

@@ -1,9 +1,9 @@
 ﻿<div class="ui-fluid">
     <div class="ui-g-12 center-block federation-logo">
     </div>
-    <div class="ui-g-12">
+    <div *ngIf="registrationEnabled" class="ui-g-12">
         {{'LOGIN.SIGN_IN_OR' | translate}}
-        <a (click)="signUp()">{{'LOGIN.SIGN_UP' | translate}}</a>
+        <a class="btn-link" (click)="signUp()">{{'LOGIN.SIGN_UP' | translate}}</a>
         {{'LOGIN.IF_YOU_DONT_HAVE_ACCOUNT' | translate}}
     </div>
 

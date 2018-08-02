@@ -55,7 +55,6 @@ export class TopbarComponent implements OnInit {
   }
 
   goHome(){
-    // this.routerService.goHome();
     this.routerService.navigateByUrl('/');
   }
 

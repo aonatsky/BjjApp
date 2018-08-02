@@ -1,8 +1,8 @@
 <div class="ui-g topbar" *ngIf="isTopbarShown()">
     <div class="ui-container ui-g-nopad" (click)="goHome()">
-        <div  class="ui-g-1 logo">
+        <a [routerLink]="'/'" class="ui-g-1 logo">
             <b>coming soon</b>
-        </div>
+        </a>
         <div class="profile-section ui-g-3">
             <h4></h4>
         </div>

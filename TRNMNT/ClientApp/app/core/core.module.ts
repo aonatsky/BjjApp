@@ -54,6 +54,7 @@ import { RunEventHubService } from './hubservices/run-event.hub.service';
 import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
 import { ResultsService } from './services/results.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { StorageService } from './services/storage.service';
 
 @NgModule({
   imports: [
@@ -104,6 +105,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TeamService,
     SignalRHubService,
     TestSocketService,
+    StorageService,
     RunEventHubService,
     {
       provide: RunEventHubService,

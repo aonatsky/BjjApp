@@ -21,6 +21,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 import { UploadResultCode } from '../../core/model/enum/upload-result-code.enum';
 import { NotificationService } from '../../core/services/notification.service';
 import { BracketService } from '../../core/services/bracket.service';
+import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'event-management-participants',
@@ -29,20 +30,20 @@ import { BracketService } from '../../core/services/bracket.service';
 })
 export class EventManagementParticipantsComponent implements OnInit {
   @Input() eventId: string;
-  private participantsListModel: PagedList<ParticipantTableModel>;
-  private participantDdlModel: ParticipantDdlModel;
-  private filter: CategoryWithDivisionFilterModel;
+  participantsListModel: PagedList<ParticipantTableModel>;
+  participantDdlModel: ParticipantDdlModel;
+  filter: CategoryWithDivisionFilterModel;
 
-  private teamSelectItems: SelectItem[];
-  private categorySelectItems: SelectItem[];
-  private weightDivisionSelectItems: SelectItem[];
+  teamSelectItems: SelectItem[];
+  categorySelectItems: SelectItem[];
+  weightDivisionSelectItems: SelectItem[];
 
   private readonly pageLinks: number = 3;
-  private firstIndex: number = 0;
-  private participantsLoading: boolean = true;
-  private ddlDataLoading: boolean = true;
-  private sortDirection: number = 1;
-  private sortField: string = 'firstName';
+  firstIndex: number = 0;
+  participantsLoading: boolean = true;
+  ddlDataLoading: boolean = true;
+  sortDirection: number = 1;
+  sortField: string = 'firstName';
 
   get isPaginationEnabled(): boolean {
     return this.participantsModel.length > this.rowsCount;
@@ -89,7 +90,8 @@ export class EventManagementParticipantsComponent implements OnInit {
     private route: ActivatedRoute,
     private bracketService: BracketService,
     private notificationService: NotificationService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -97,11 +99,21 @@ export class EventManagementParticipantsComponent implements OnInit {
   }
 
   columns: CrudColumn[] = [
-    { propertyName: 'firstName', displayName: 'First Name', isEditable: true, isSortable: true },
-    { propertyName: 'lastName', displayName: 'Last Name', isEditable: true, isSortable: true },
+    {
+      propertyName: 'firstName',
+      displayName: this.translateService.instant('COMMON.FIRST_NAME'),
+      isEditable: true,
+      isSortable: true
+    },
+    {
+      propertyName: 'lastName',
+      displayName: this.translateService.instant('COMMON.LAST_NAME'),
+      isEditable: true,
+      isSortable: true
+    },
     {
       propertyName: 'dateOfBirth',
-      displayName: 'D.O.B',
+      displayName: this.translateService.instant('COMMON.DATE_OF_BIRTH'),
       isEditable: true,
       isSortable: true,
       transform: value => this.dateTransform.call(this, value),
@@ -109,7 +121,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     },
     <CrudColumn>{
       propertyName: 'teamName',
-      displayName: 'Team',
+      displayName: this.translateService.instant('COMMON.TEAM'),
       isEditable: true,
       isSortable: true,
       columnType: ColumnType.Dropdown,
@@ -117,7 +129,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     },
     <CrudColumn>{
       propertyName: 'categoryName',
-      displayName: 'Category',
+      displayName: this.translateService.instant('COMMON.CATEGORY'),
       isEditable: true,
       isSortable: true,
       columnType: ColumnType.Dropdown,
@@ -126,7 +138,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     },
     <CrudColumn>{
       propertyName: 'weightDivisionName',
-      displayName: 'Weight division',
+      displayName: this.translateService.instant('COMMON.WEIGHT_DIVISION'),
       isEditable: true,
       isSortable: true,
       columnType: ColumnType.Dropdown,
@@ -134,7 +146,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     },
     {
       propertyName: 'isMember',
-      displayName: 'Membership',
+      displayName: this.translateService.instant('COMMON.MEMBERSHIP'),
       isEditable: true,
       isSortable: true,
       useClass: value => this.getClassCallback.call(this, value),

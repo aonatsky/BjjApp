@@ -5,11 +5,11 @@
     <div class="ui-g-12">
         <div class="ui-g-3">
             <label class="field-title">
-                <b>{{'COMMON.ROUND_TIME'|translate}}</b>
+                <b>{{'COMMON.MATCH_TIME'|translate}}</b>
             </label>
         </div>
         <div class="ui-g-2">
-            <label>{{category.roundTime | minuteSeconds}}</label>
+            <label>{{category.matchTime | minuteSeconds}}</label>
         </div>
     </div>
     <div class="ui-g-12">
@@ -50,10 +50,10 @@
     </div>
     <div class="ui-g">
         <div class="ui-g-3">
-            <label class="field-title">{{'COMMON.ROUND_TIME'|translate}}</label>
+            <label class="field-title">{{'COMMON.MATCH_TIME'|translate}}</label>
         </div>
         <div class="ui-g-3">
-            <p-inputMask class="round-time-picker" [(ngModel)]="roundTimeFormatted"
+            <p-inputMask class="round-time-picker" [(ngModel)]="matchTimeFormatted"
                 mask="99:99" placeholder="mm:ss"></p-inputMask>
         </div>
     </div>

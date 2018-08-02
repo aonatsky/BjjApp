@@ -14,7 +14,7 @@ export class EventRegistrationCompleteComponent implements OnInit {
 
   ngOnInit() {
     this.eventService.getCurrentEvent().subscribe(r => {
-      this.eventModel == r;
+      this.eventModel = r;
       this.eventTitleParameter = { value: this.eventModel.title };
     });
   }

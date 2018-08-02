@@ -1,7 +1,6 @@
 ﻿.round-panel-popup {
     clear: both;
-    top: 0;
-    right: 0;
+    top: 100px;    right: 0;
     bottom: 0;
     left: 0;
     z-index: 1000;
@@ -9,12 +8,12 @@
 
     .advantage-container {
         border: 1px solid yellow;
-        margin-left: 2px;
+        margin-left: 1px;
     }
 
     .penalty-container {
         border: 1px solid red;
-        margin-left: 2px
+        margin-left: 1px
     }
 
     .points-container {
@@ -29,23 +28,9 @@
         margin: 0 auto;
     }
 
-    .round-panel-user-panel {
-        height: 603px;
-        flex-grow: 1;
-    }
-
     .round-panel-timer {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 50%;
-        height: 30%;
-        margin: auto;
-        width: 274px;
-        height: 119px;
-        font-family: ProximaNova;
+        margin-top: 46%;
+        text-align: center;
         font-size: 98px;
         font-weight: bold;
         font-style: normal;
@@ -53,18 +38,12 @@
         line-height: normal;
         letter-spacing: 1.5px;
         color: #cfcfcf;
+        
     }
 
-    .round-panel-timer-panel {
-        height: 603px;
-        width: 360px;
-        flex-grow: 1;
-        position: relative;
-    }
+
 
     .round-panel-current-points {
-        height: 149px;
-        font-family: Roboto;
         font-size: 150px;
         font-weight: bold;
         font-style: normal;
@@ -76,9 +55,6 @@
     }
 
     .round-panel-label-large {
-        margin: 10px;
-        width: 170px;
-        font-family: Roboto;
         font-size: 28px;
         font-weight: normal;
         font-style: normal;
@@ -99,7 +75,6 @@
 
     .round-panel-label {
         margin-left: 10px;
-        font-family: Roboto;
         font-size: 12px;
         font-weight: normal;
         font-style: normal;
@@ -115,7 +90,6 @@
         height: 48px;
         background-color: rgba(0, 255, 109, 0.2);
         border: solid 0.8px #00ff6d;
-        font-family: Roboto;
         font-size: 28.8px;
         font-weight: 500;
         font-style: normal;
@@ -132,7 +106,6 @@
         height: 48px;
         background-color: rgba(255, 0, 0, 0.2);
         border: solid 0.8px #ff0000;
-        font-family: Roboto;
         font-size: 28.8px;
         font-weight: 500;
         font-style: normal;
@@ -171,12 +144,11 @@
 
     .round-panel-button {
         margin: 0 20px;
-        width: 284px;
+        min-width: 240px;
         height: 72px;
         box-shadow: 0 0 8px 0 rgba(91, 91, 91, 0.5);
         background-color: #f6f6f6;
         border: solid 1px #3c3c3c;
-        font-family: Helvetica;
         font-size: 21.6px;
         font-weight: normal;
         font-style: normal;
@@ -189,9 +161,6 @@
     }
 
     .round-panel-participant {
-        margin-top: 50px;
-        height: 37px;
-        font-family: ProximaNova;
         font-size: 30.4px;
         font-weight: 600;
         font-style: normal;
@@ -207,12 +176,9 @@
     }
 
     .round-panel-large-box {
-        height: 52px;
-        width: 170px;
-        margin: 10px;
         background-color: #7c7c7c;
         box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
-        font-family: Roboto;
+        padding:10px;
         font-size: 48px;
         font-weight: bold;
         font-style: normal;

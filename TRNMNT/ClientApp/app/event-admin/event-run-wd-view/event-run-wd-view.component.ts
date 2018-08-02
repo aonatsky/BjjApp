@@ -5,58 +5,63 @@ import { RunEventHubService } from '../../core/hubservices/run-event.hub.service
 import { BracketService } from '../../core/services/bracket.service';
 import { DefaultValues } from '../../core/consts/default-values';
 import { MatchModel } from '../../core/model/match.models';
-
+import { StorageService } from '../../core/services/storage.service';
 
 @Component({
-    selector: 'event-run-wd-view',
-    templateUrl: './event-run-wd-view.component.html',
+  selector: 'event-run-wd-view',
+  templateUrl: './event-run-wd-view.component.html'
 })
 export class EventRunWeightDivisionViewComponent implements OnInit {
+  private bracket: BracketModel;
 
-    private bracket: BracketModel;
+  selectedRoundDetails: MatchModel;
+  showRoundPanel: boolean;
+  private previousWeightDivisionId: string;
+  sharedObject: string;
 
-    private selectedRoundDetails: MatchModel;
-    private showRoundPanel: boolean;
-    private previousWeightDivisionId: string;
+  constructor(
+    private route: ActivatedRoute,
+    private bracketService: BracketService,
+    private runEventHubService: RunEventHubService,
+    private storageService: StorageService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
-    constructor(
-        private route: ActivatedRoute,
-        private bracketService: BracketService,
-        private runEventHubService: RunEventHubService,
-        private cdRef: ChangeDetectorRef) {
+  ngOnInit() {
+    this.runEventHubService.onRoundComplete().subscribe(model => {
+      this.bracket = model.bracket;
+      this.showRoundPanel = false;
+    });
+    this.runEventHubService.onRoundStart().subscribe(x => {
+      this.selectedRoundDetails = x;
+      this.showRoundPanel = true;
+    });
+    this.runEventHubService.onWeightDivisionChange().subscribe(refreshModel => {
+      this.runEventHubService.joinWeightDivisionGroup(refreshModel.weightDivisionId, this.previousWeightDivisionId);
+      this.refreshModel(refreshModel.bracket);
+      this.previousWeightDivisionId = refreshModel.weightDivisionId;
+    });
+    this.startSubscription();
+    this.storageService.changes.subscribe(r => {
+      debugger;
+      this.sharedObject = r.value;
+    });
+  }
+
+  private startSubscription() {
+    const synchronizationId = sessionStorage.getItem(DefaultValues.RunEventSessionId);
+    if (synchronizationId != null) {
+      this.runEventHubService.joinOperatorGroup(synchronizationId);
+      const weightDivisionId = localStorage.getItem(`${DefaultValues.RunEventSyncIdPart}${synchronizationId}`);
+      if (weightDivisionId) {
+        this.bracketService.getBracket(weightDivisionId).subscribe(model => this.refreshModel(model));
+      }
     }
+  }
 
-    ngOnInit() {
-        this.runEventHubService.onRoundComplete().subscribe((model) => {
-            this.bracket = model.bracket;
-            this.showRoundPanel = false;
-        });
-        this.runEventHubService.onRoundStart().subscribe(x => {
-            this.selectedRoundDetails = x;
-            this.showRoundPanel = true;
-        });
-        this.runEventHubService.onWeightDivisionChange().subscribe(refreshModel => {
-            this.runEventHubService.joinWeightDivisionGroup(refreshModel.weightDivisionId, this.previousWeightDivisionId);
-            this.refreshModel(refreshModel.bracket);
-            this.previousWeightDivisionId = refreshModel.weightDivisionId;
-        });
-        this.startSubscription();
-    }
-
-    private startSubscription() {
-        const synchronizationId = sessionStorage.getItem(DefaultValues.RunEventSessionId);
-        if (synchronizationId != null) {
-            this.runEventHubService.joinOperatorGroup(synchronizationId);
-            const weightDivisionId = localStorage.getItem(`${DefaultValues.RunEventSyncIdPart}${synchronizationId}`);
-            if (weightDivisionId) {
-                this.bracketService.getBracket(weightDivisionId).subscribe(model => this.refreshModel(model));
-            }
-        }
-    }
-
-    private refreshModel(model: BracketModel): void {
-        this.bracket = null;
-        this.cdRef.detectChanges();
-        this.bracket = model;
-    }
+  private refreshModel(model: BracketModel): void {
+    this.bracket = null;
+    this.cdRef.detectChanges();
+    this.bracket = model;
+  }
 }

@@ -14,7 +14,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     @Output() completeRound: EventEmitter<any> = new EventEmitter();
     @Output() close: EventEmitter<any> = new EventEmitter();
 
-    private matchDetails: MatchDetailsModel;
+    matchDetails: MatchDetailsModel;
 
     private readonly tick: number;
     private timerSubscription: any;

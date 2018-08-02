@@ -13,7 +13,7 @@ export class CategoryModel extends CategoryModelBase {
         this.weightDivisionModels = [];
     }
     eventId: string;
-    roundTime: number;
+    matchTime: number;
     weightDivisionModels: WeightDivisionModel[];
 }
 

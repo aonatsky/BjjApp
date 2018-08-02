@@ -22,7 +22,7 @@ export class PrticipantsListUploadComponent {
 
     @Output() onUpload: EventEmitter<IUploadResult>;
 
-    private uploadResultMessages: Message[] = [];
+    uploadResultMessages: Message[] = [];
 
     constructor(private notificationService: NotificationService, private participantService: ParticipantService) {
         this.onUpload = new EventEmitter<IUploadResult>();

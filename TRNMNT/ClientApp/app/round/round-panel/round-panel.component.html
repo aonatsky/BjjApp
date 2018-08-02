@@ -1,34 +1,28 @@
 ﻿<div class="round-panel-popup" *ngIf="!!matchModel">
     <div class="round-panel-wrapper">
-        <p-dialog appendTo="body" header="Complete Round"
-                  [(visible)]="displayPopup"
-                  [modal]="true"
-                  [resizable]="false"
-                  [showHeader]="false"
-                  [width]="500">
+        <p-dialog appendTo="body" header="Complete Round" [(visible)]="displayPopup" [modal]="true" [resizable]="false" [showHeader]="false"
+            [width]="500">
             <complete-round *ngIf="displayPopup" [matchDetails]="matchDetails" (close)="displayPopup=false;" (complete)="onComplete()"></complete-round>
         </p-dialog>
-        <div class="round-panel-flex-wrapper">
-            <div class="round-panel-user-panel">
-                <div class="round-panel-participant">{{matchModel.aParticipant.firstName}} {{matchModel.aParticipant.lastName}}</div>
-                <div class="round-panel-current-points">{{matchDetails.aParticipantPoints}}</div>
-                <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
-                    <div class="round-panel-large-box">{{matchDetails.aParticipantAdvantages}}</div>
-                    <div class="round-panel-large-box">{{matchDetails.aParticipantPenalties}}</div>
+        <div class="ui-g">
+            <div class="ui-g-4 ui-g">
+                <div class="round-panel-participant ui-g-12">{{matchModel.aParticipant.firstName}} {{matchModel.aParticipant.lastName}}</div>
+                <div class="round-panel-current-points ui-g-12 ui-g-nopad">{{matchDetails.aParticipantPoints}}</div>
+                <div class="ui-g-12 ui-g">
+                    <div class="round-panel-large-box ui-g-5">{{matchDetails.aParticipantAdvantages}}</div>
+                    <div class="round-panel-large-box ui-g-5 ui-g-offset-2">{{matchDetails.aParticipantPenalties}}</div>
+                    <div class="round-panel-label-large ui-g-5 ">ADV.</div>
+                    <div class="round-panel-label-large ui-g-5 ui-g-offset-2">PEN.</div>
                 </div>
-                <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
-                    <div class="round-panel-label-large">ADV.</div>
-                    <div class="round-panel-label-large">PEN.</div>
-                </div>
-                <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
+                <div class="ui-g ui-g-12">
                     <div class="points-container">
                         <div class="round-panel-label">POINTS</div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-green-button" (click)="changeAParticipantPoints(2)">+ 2</div>
                             <div class="round-panel-green-button" (click)="changeAParticipantPoints(3)">+ 3</div>
                             <div class="round-panel-green-button" (click)="changeAParticipantPoints(4)">+ 4</div>
                         </div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-red-button" (click)="changeAParticipantPoints(-2)">- 2</div>
                             <div class="round-panel-red-button" (click)="changeAParticipantPoints(-3)">- 3</div>
                             <div class="round-panel-red-button" (click)="changeAParticipantPoints(-4)">- 4</div>
@@ -36,19 +30,19 @@
                     </div>
                     <div class="advantage-container">
                         <div class="round-panel-label">ADVANTAGE</div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-green-button" (click)="changeAParticipantAdvantages(1)">+ 1</div>
                         </div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-red-button" (click)="changeAParticipantAdvantages(-1)">- 1</div>
                         </div>
                     </div>
                     <div class="penalty-container">
                         <div class="round-panel-label">PENALTY</div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-green-button" (click)="changeAParticipantPenalties(1)">+ 1</div>
                         </div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-red-button" (click)="changeAParticipantPenalties(-1)">- 1</div>
                         </div>
                     </div>
@@ -57,31 +51,30 @@
             </div>
 
 
-            <div class="round-panel-timer-panel">
-                <span class="round-panel-timer">{{matchDetails.countdown | formatTimer}}</span>
+            <div class="ui-g-4">
+                <div class="ui-g-12 round-panel-timer">{{matchDetails.countdown | formatTimer}}</div>
             </div>
 
 
-            <div class="round-panel-user-panel">
-                <div class="round-panel-participant">{{matchModel.bParticipant.firstName}} {{matchModel.bParticipant.lastName}}</div>
-                <div class="round-panel-current-points">{{matchDetails.bParticipantPoints}}</div>
-                <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
-                    <div class="round-panel-large-box">{{matchDetails.bParticipantAdvantages}}</div>
-                    <div class="round-panel-large-box">{{matchDetails.bParticipantPenalties}}</div>
+
+            <div class="ui-g-4 ui-g">
+                <div class="round-panel-participant ui-g-12">{{matchModel.bParticipant.firstName}} {{matchModel.bParticipant.lastName}}</div>
+                <div class="round-panel-current-points ui-g-12 ui-g-nopad">{{matchDetails.bParticipantPoints}}</div>
+                <div class="ui-g-12 ui-g">
+                    <div class="round-panel-large-box ui-g-5">{{matchDetails.bParticipantAdvantages}}</div>
+                    <div class="round-panel-large-box ui-g-5 ui-g-offset-2">{{matchDetails.bParticipantPenalties}}</div>
+                    <div class="round-panel-label-large ui-g-5 ">ADV.</div>
+                    <div class="round-panel-label-large ui-g-5 ui-g-offset-2">PEN.</div>
                 </div>
-                <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
-                    <div class="round-panel-label-large">ADV.</div>
-                    <div class="round-panel-label-large">PEN.</div>
-                </div>
-                <div class="round-panel-flex-wrapper round-panel-margin-wrapper">
+                <div class="ui-g ui-g-12">
                     <div class="points-container">
                         <div class="round-panel-label">POINTS</div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-green-button" (click)="changeBParticipantPoints(2)">+ 2</div>
                             <div class="round-panel-green-button" (click)="changeBParticipantPoints(3)">+ 3</div>
                             <div class="round-panel-green-button" (click)="changeBParticipantPoints(4)">+ 4</div>
                         </div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-red-button" (click)="changeBParticipantPoints(-2)">- 2</div>
                             <div class="round-panel-red-button" (click)="changeBParticipantPoints(-3)">- 3</div>
                             <div class="round-panel-red-button" (click)="changeBParticipantPoints(-4)">- 4</div>
@@ -89,32 +82,31 @@
                     </div>
                     <div class="advantage-container">
                         <div class="round-panel-label">ADVANTAGE</div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-green-button" (click)="changeBParticipantAdvantages(1)">+ 1</div>
                         </div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-red-button" (click)="changeBParticipantAdvantages(-1)">- 1</div>
                         </div>
                     </div>
                     <div class="penalty-container">
                         <div class="round-panel-label">PENALTY</div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-green-button" (click)="changeBParticipantPenalties(1)">+ 1</div>
                         </div>
-                        <div class="round-panel-flex-wrapper">
+                        <div class="ui-g">
                             <div class="round-panel-red-button" (click)="changeBParticipantPenalties(-1)">- 1</div>
                         </div>
                     </div>
                 </div>
 
             </div>
-        </div>
-        <div class="round-panel-flex-wrapper round-panel-center-button-wrapper">
-            <div class="round-panel-button" (click)="onClose();">CANCEL</div>
-            <div class="round-panel-button" [hidden]="isRoundCompleted || timerSubscription" (click)="start()">START</div>
-            <div class="round-panel-button" [hidden]="isRoundCompleted || !timerSubscription" (click)="pause()">PAUSE</div>
-            <div class="round-panel-button" (click)="stop()">COMPLETE ROUND</div>
-            <div class="round-panel-button" (click)="resetTimer()">RESET TIMER</div>
+            <div class="ui-g ui-g-12 round-panel-center-button-wrapper">
+                <div class="round-panel-button" (click)="onClose();">CANCEL</div>
+                <div class="round-panel-button" [hidden]="isRoundCompleted || timerSubscription" (click)="start()">START</div>
+                <div class="round-panel-button" [hidden]="isRoundCompleted || !timerSubscription" (click)="pause()">PAUSE</div>
+                <div class="round-panel-button" (click)="stop()">COMPLETE ROUND</div>
+                <div class="round-panel-button" (click)="resetTimer()">RESET TIMER</div>
+            </div>
         </div>
     </div>
-</div>

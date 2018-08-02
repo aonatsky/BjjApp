@@ -15,9 +15,9 @@ import { MinuteSecondsPipe } from '../../../core/pipes/minutes-seconds.pipe';
 export class CategoryEditComponent {
 
     displayPopup = false;
-    private categoryToEdit = new CategoryModel();
-    private roundTimeFormatted: string;
-    private selectedIndex: number;
+    categoryToEdit = new CategoryModel();
+    matchTimeFormatted: string;
+    selectedIndex: number;
     isNewCategory: boolean;
 
 
@@ -30,7 +30,7 @@ export class CategoryEditComponent {
         this.categoryToEdit.eventId = this.eventId;
         this.isNewCategory = true;
         this.displayPopup = true;
-        this.roundTimeFormatted = '';
+        this.matchTimeFormatted = '';
     }
 
     editCategory(index: number) {
@@ -38,11 +38,11 @@ export class CategoryEditComponent {
         this.isNewCategory = false;
         this.categoryToEdit = this.cloneCategory(this.categories[index]);
         this.displayPopup = true;
-        this.roundTimeFormatted = this.getRoundTimeFormatted();
+        this.matchTimeFormatted = this.getmatchTimeFormatted();
     }
 
     saveCategory(): void {
-        this.categoryToEdit.roundTime = this.getRoundTime();
+        this.categoryToEdit.matchTime = this.getmatchTime();
         if (!this.isNewCategory) {
             this.categories[this.selectedIndex] = this.categoryToEdit;
         } else {
@@ -70,7 +70,7 @@ export class CategoryEditComponent {
     private cloneCategory(category: CategoryModel): CategoryModel {
         let cloned = new CategoryModel();
         cloned.categoryId = category.categoryId;
-        cloned.roundTime = category.roundTime;
+        cloned.matchTime = category.matchTime;
         cloned.eventId = category.eventId;
         cloned.name = category.name;
         cloned.weightDivisionModels = [];
@@ -81,9 +81,9 @@ export class CategoryEditComponent {
 
     }
 
-    getRoundTime(): number {
-        let minutes = Number(this.roundTimeFormatted.split(':')[0]);
-        let seconds = Number(this.roundTimeFormatted.split(':')[1]);
+    getmatchTime(): number {
+        let minutes = Number(this.matchTimeFormatted.split(':')[0]);
+        let seconds = Number(this.matchTimeFormatted.split(':')[1]);
         if (isNaN(minutes) || isNaN(seconds)) {
             return 0;
         } else {
@@ -91,9 +91,9 @@ export class CategoryEditComponent {
         };
     }
 
-    private getRoundTimeFormatted() {
+    private getmatchTimeFormatted() {
         let pipe = new MinuteSecondsPipe();
-        return pipe.transform(this.categoryToEdit.roundTime);
+        return pipe.transform(this.categoryToEdit.matchTime);
     }
 }
 

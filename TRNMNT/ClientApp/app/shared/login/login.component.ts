@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   password: string = '';
   @Input() returnUrl: string;
   @Input() socialLoginEnabled: boolean = true;
+  @Input() registrationEnabled: boolean = true;
   errorMessage: string;
 
   constructor(

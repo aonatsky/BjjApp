@@ -7,13 +7,13 @@
         </div>
         <div class="ui-widget ui-widget-content">
             <p-tabView>
-                <p-tabPanel header="Participants">
+                <p-tabPanel header="{{'EVENT.PARTICIPANTS' | translate}}">
                     <event-management-participants [eventId]="eventId"></event-management-participants>
                 </p-tabPanel>
-                <p-tabPanel header="Brackets">
+                <p-tabPanel header="{{'EVENT.BRACKETS' | translate}}">
                     <bracket-generation [eventId]="eventId"></bracket-generation>
                 </p-tabPanel>
-                <p-tabPanel header="Results">
+                <p-tabPanel header="{{'EVENT.RESULTS' | translate}}">
                     <results [eventId]="eventId"></results>
                 </p-tabPanel>
             </p-tabView>

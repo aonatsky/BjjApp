@@ -35,7 +35,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes, { enableTracing: true })],
+  imports: [RouterModule.forRoot(appRoutes, { enableTracing: false })],
   providers: [RouterModule]
 })
 export class AppRoutingModule {}

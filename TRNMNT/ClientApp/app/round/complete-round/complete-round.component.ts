@@ -28,7 +28,7 @@ export class CompleteRoundComponent implements OnInit {
 
     initRoundResultModel() {
         this.matchResultModel = new MatchResultModel();
-        this.matchResultModel.roundId = this.matchDetails.matchId;
+        this.matchResultModel.matchId = this.matchDetails.matchId;
         this.matchResultModel.aParticipantPoints = this.matchDetails.aParticipantPoints;
         this.matchResultModel.aParticipantAdvantages = this.matchDetails.aParticipantAdvantages;
         this.matchResultModel.aParticipantPenalties = this.matchDetails.aParticipantPenalties;
