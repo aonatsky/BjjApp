@@ -5,12 +5,12 @@ import './event-run.component.scss';
 import { BracketModel, ChangeWeightDivisionModel, RefreshBracketModel } from '../../core/model/bracket.models';
 import { BracketService } from '../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../core/model/category-with-division-filter.model';
-import { RunEventHubService } from '../../core/hubservices/run-event.hub.service';
+
 import { RouterService } from '../../core/services/router.service';
 import { v4 as uuid } from 'uuid';
 import { DefaultValues } from '../../core/consts/default-values';
 import { MatchModel } from '../../core/model/match.models';
-import { RunEventCommunicationService } from '../../core/hubservices/run-event.communication.service';
+import { EventRunCommunicationService } from '../../core/hubservices/event-run.communication.service';
 
 @Component({
   selector: 'event-run',
@@ -43,26 +43,18 @@ export class EventRunComponent implements OnInit, OnDestroy {
     private bracketService: BracketService,
     private route: ActivatedRoute,
     private routerService: RouterService,
-    private runEventHubService: RunEventHubService,
-    private runEventCommunicationService: RunEventCommunicationService
+    
+    private runEventCommunicationService: EventRunCommunicationService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe(p => {
       this.eventId = p['id'];
     });
-    // this.runEventHubService.onRoundComplete().subscribe(m => {
-    //   this.refreshModel(m.bracket);
-    //   this.showRoundPanel = false;
-    // });
-    // this.runEventHubService.onRoundStart().subscribe(x => {
-    //   this.selectedMatch = x;
-    //   this.showRoundPanel = true;
-    // });
+    this.runEventCommunicationService.clearBracket();
     if (sessionStorage.getItem(DefaultValues.RunEventSessionId) == null) {
       sessionStorage.setItem(DefaultValues.RunEventSessionId, uuid());
     }
-    // this.runEventHubService.joinOperatorGroup(this.synchronizationId);
   }
 
   filterSelected($event: CategoryWithDivisionFilterModel) {
@@ -75,18 +67,12 @@ export class EventRunComponent implements OnInit, OnDestroy {
   }
 
   private runWeightDivision() {
-    // localStorage.setItem(`${DefaultValues.RunEventSyncIdPart}${this.synchronizationId}`, this.filter.weightDivisionId);
-    // this.runEventHubService
-    //   .joinWeightDivisionGroup(this.filter.weightDivisionId, this.previousWeightDivisionId)
-    //   .then(() => {
-    //     const model = new ChangeWeightDivisionModel();
-    //     model.weightDivisionId = this.filter.weightDivisionId;
-    //     model.synchronizationId = this.synchronizationId;
-    //     this.runEventHubService.fireWeightDivisionChange(model);
-    //   });
     this.bracketService.runBracket(this.filter.weightDivisionId).subscribe(m => {
       this.refreshModel(m);
-      this.runEventCommunicationService.fireBracketChange({ bracket: m, weightDivisionId: this.filter.weightDivisionId });
+      this.runEventCommunicationService.fireBracketChange({
+        bracket: m,
+        weightDivisionId: this.filter.weightDivisionId
+      });
     });
     this.previousWeightDivisionId = this.filter.weightDivisionId;
   }
@@ -99,7 +85,6 @@ export class EventRunComponent implements OnInit, OnDestroy {
     this.routerService.openEventCategorySpectatorView(this.filter.categoryId);
   }
 
-  
   private showResultSetPopup() {
     this.showResultPopup = true;
   }
@@ -120,7 +105,6 @@ export class EventRunComponent implements OnInit, OnDestroy {
   runMatch(model: MatchModel) {
     this.selectedMatch = model;
     this.selectedMatch.weightDivisionId = this.filter.weightDivisionId;
-    // this.runEventHubService.fireRoundStart(model);
     this.runEventCommunicationService.fireMatchStart(model);
     this.showRoundPanel = true;
   }
@@ -129,11 +113,9 @@ export class EventRunComponent implements OnInit, OnDestroy {
     this.showRoundPanel = false;
     this.selectedMatch = undefined;
     this.filterRefreshTrigger += 1;
-    this.runEventHubService.fireRoundComplete(this.filter.weightDivisionId);
     this.runEventCommunicationService.fireMatchCompleted();
     this.runWeightDivision();
   }
-
 
   ngOnDestroy(): void {
     localStorage.removeItem(`${DefaultValues.RunEventSyncIdPart}${this.synchronizationId}`);

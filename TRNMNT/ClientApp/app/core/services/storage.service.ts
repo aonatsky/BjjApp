@@ -27,9 +27,9 @@ export class StorageService implements OnDestroy {
     return s;
   }
 
-  public getObject(key:string) {
+  public getObject(key: string) {
     const data = localStorage.getItem(key);
-    if(!!data){
+    if (!!data) {
       return JSON.parse(data);
     }
   }
@@ -46,6 +46,12 @@ export class StorageService implements OnDestroy {
     this.onSubject.next({ key: key, value: null });
   }
 
+  public observeByKey<T>(key): Observable<T> {
+    return this.changes.pipe(
+      filter(data => data.key === key),
+      map(data => data.value)
+    );
+  }
 
   private start(): void {
     window.addEventListener('storage', this.storageEventListener.bind(this));

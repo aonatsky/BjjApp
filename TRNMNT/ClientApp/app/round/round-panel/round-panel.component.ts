@@ -4,6 +4,7 @@ import { BaseRoundPanel } from '../round-panel.service';
 import './round-panel.component.scss';
 import { MatchModel } from '../../core/model/match.models';
 import { MatchDetailsModel } from '../../core/model/match-details.model';
+import { EventRunCommunicationService } from '../../core/hubservices/event-run.communication.service';
 
 @Component({
     selector: 'round-panel',
@@ -17,10 +18,10 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     matchDetails: MatchDetailsModel;
 
     private readonly tick: number;
-    private timerSubscription: any;
+    timerSubscription: any;
     private displayPopup: boolean;
 
-    constructor() {
+    constructor(private eventRunCommunicationService: EventRunCommunicationService ) {
         super();
         this.matchDetails = new MatchDetailsModel();
 
@@ -124,7 +125,7 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
     }
 
     send(): void {
-        this.sendHubMessage(this.matchDetails);
+        this.eventRunCommunicationService.fireMatchDetailsUpdate(this.matchDetails);
     }
 
     private startTimer(): void {
@@ -145,11 +146,15 @@ export class RoundPanelComponent extends BaseRoundPanel implements OnInit {
         this.timerSubscription = null;
     }
 
-    private onComplete(): void {
+    onComplete(): void {
+        this.timerSubscription = null;
+        this.stop();
         this.completeRound.emit(null);
     }
 
-    private onClose(): void {
+    onClose(): void {
+        this.timerSubscription = null;
+        this.stop();
         this.close.emit(null);
     }
 }

@@ -21,7 +21,7 @@ import { SelectItem } from 'primeng/components/common/selectitem';
 import { UploadResultCode } from '../../core/model/enum/upload-result-code.enum';
 import { NotificationService } from '../../core/services/notification.service';
 import { BracketService } from '../../core/services/bracket.service';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'event-management-participants',

@@ -8,7 +8,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { CategoryService } from '../../core/services/category.service';
 import { WeightDivisionService } from '../../core/services/weight-division.service';
 import { SelectItem } from 'primeng/components/common/selectitem';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'category-with-division-filter',

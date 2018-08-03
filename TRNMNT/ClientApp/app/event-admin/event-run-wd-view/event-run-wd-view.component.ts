@@ -6,7 +6,7 @@ import { BracketService } from '../../core/services/bracket.service';
 import { DefaultValues } from '../../core/consts/default-values';
 import { MatchModel } from '../../core/model/match.models';
 import { StorageService } from '../../core/services/storage.service';
-import { RunEventCommunicationService } from '../../core/hubservices/run-event.communication.service';
+import { EventRunCommunicationService } from '../../core/hubservices/event-run.communication.service';
 
 @Component({
   selector: 'event-run-wd-view',
@@ -24,7 +24,7 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
     private route: ActivatedRoute,
     private bracketService: BracketService,
     private runEventHubService: RunEventHubService,
-    private runEventCommunicationService: RunEventCommunicationService,
+    private runEventCommunicationService: EventRunCommunicationService,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -45,6 +45,7 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
     const currentRefreshModel = this.runEventCommunicationService.getCurrentBracket();
     this.refreshModel(currentRefreshModel.bracket);
     this.previousWeightDivisionId = currentRefreshModel.weightDivisionId;
+    
     this.runEventCommunicationService.onBracketChange().subscribe(refreshModel => {
       this.refreshModel(refreshModel.bracket);
       this.previousWeightDivisionId = refreshModel.weightDivisionId;
@@ -58,19 +59,7 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
     this.runEventCommunicationService.onMatchComplete().subscribe(() => {
       this.showRoundPanel = false;
     });
-    this.startSubscription();
-  }
-
-  private startSubscription() {
-    const synchronizationId = sessionStorage.getItem(DefaultValues.RunEventSessionId);
-    if (synchronizationId != null) {
-      this.runEventHubService.joinOperatorGroup(synchronizationId);
-      const weightDivisionId = localStorage.getItem(`${DefaultValues.RunEventSyncIdPart}${synchronizationId}`);
-      if (weightDivisionId) {
-        this.bracketService.getBracket(weightDivisionId).subscribe(model => this.refreshModel(model));
-      }
-    }
-  }
+   }
 
   private refreshModel(model: BracketModel): void {
     this.bracket = null;

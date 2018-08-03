@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 import { RefreshBracketModel } from '../model/bracket.models';
 import { filter, map } from 'rxjs/operators';
 import { MatchModel } from '../model/match.models';
+import { MatchDetailsModel } from '../model/match-details.model';
 
 @Injectable()
-export class RunEventCommunicationService {
+export class EventRunCommunicationService {
   constructor(private storageService: StorageService) {}
 
   private bracketChangeKeyName: string = 'BracketChanged';
@@ -15,40 +16,44 @@ export class RunEventCommunicationService {
     this.storageService.store(this.bracketChangeKeyName, bracketRefreshModel);
   }
 
+  clearBracket() {
+    this.storageService.clear(this.bracketChangeKeyName);
+  }
+
   onBracketChange(): Observable<RefreshBracketModel> {
-    return this.storageService.changes.pipe(
-      filter(data => data.key === this.bracketChangeKeyName),
-      map(data => data.value)
-    );
+    return this.storageService.observeByKey<RefreshBracketModel>(this.bracketChangeKeyName);
   }
 
   getCurrentBracket(): RefreshBracketModel {
     return this.storageService.getObject(this.bracketChangeKeyName);
   }
 
-  matchStartEventName = 'MatchStarted';
-  matchCompleteEventName = 'MatchCompleted';
+  private matchStartEventName = 'MatchStarted';
+  private matchCompleteEventName = 'MatchCompleted';
+  private matchDetailsUpdated = 'MatchDetailsUpdated';
 
   fireMatchStart(matchDetails: MatchModel): void {
     this.storageService.store(this.matchStartEventName, matchDetails);
   }
 
   fireMatchCompleted(): void {
-    this.storageService.clear(this.matchCompleteEventName);
-    this.storageService.store(this.matchCompleteEventName, {date: Date.now()});
+    this.storageService.clear(this.matchStartEventName);
+    this.storageService.store(this.matchCompleteEventName, { date: Date.now() });
   }
 
   onMatchStart(): Observable<MatchModel> {
-    return this.storageService.changes.pipe(
-      filter(data => data.key === this.matchStartEventName),
-      map(data => data.value)
-    );
+    return this.storageService.observeByKey<MatchModel>(this.matchStartEventName);
   }
 
   onMatchComplete(): Observable<any> {
-    return this.storageService.changes.pipe(
-      filter(data => data.key === this.matchCompleteEventName),
-      map(m => m)
-    );
+    return this.storageService.observeByKey(this.matchCompleteEventName);
+  }
+
+  fireMatchDetailsUpdate(matchDetails: MatchDetailsModel): any {
+    this.storageService.store(this.matchDetailsUpdated, matchDetails);
+  }
+
+  onMatchDetailsUpdate(): Observable<any> {
+    return this.storageService.observeByKey(this.matchDetailsUpdated);
   }
 }
