@@ -2,8 +2,10 @@
 import { Observable } from 'rxjs';
 import { SignalRHubService } from '../dal/signalr/signalr-hub.service';
 import { HubConnection } from '@aspnet/signalr';
-import { RefreshBracketModel, ChageWeightDivisionModel } from '../model/bracket.models';
+import { RefreshBracketModel, ChangeWeightDivisionModel } from '../model/bracket.models';
 import { MatchModel } from '../model/match.models';
+import { StorageService } from '../services/storage.service';
+import { filter } from 'rxjs/operators';
 
 
 @Injectable()
@@ -15,7 +17,7 @@ export class RunEventHubService {
 
 	isConnected: boolean = false;
 
-	constructor(private signalRService: SignalRHubService) {
+	constructor(private signalRService: SignalRHubService, private storageService: StorageService) {
 		this.hubConnection = this.signalRService.createConnection('/runevent');
 	}
 
@@ -77,7 +79,8 @@ export class RunEventHubService {
 		return this.signalRService.subscribeOnEvent(this.weightDivisionChangeEventName);
 	}
 
-	fireWeightDivisionChange(model: ChageWeightDivisionModel): void {
+	fireWeightDivisionChange(model: ChangeWeightDivisionModel): void {
+		this.storageService.store(this.weightDivisionChangeEventName, model);
 		this.signalRService.fireEvent(this.weightDivisionChangeEventName, model);
 	}
 

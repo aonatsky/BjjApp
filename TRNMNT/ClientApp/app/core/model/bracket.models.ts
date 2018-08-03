@@ -17,7 +17,7 @@ export class RefreshBracketModel {
     weightDivisionId: string;
 }
 
-export class ChageWeightDivisionModel {
+export class ChangeWeightDivisionModel {
     synchronizationId: AAGUID;
     weightDivisionId: AAGUID;
 }

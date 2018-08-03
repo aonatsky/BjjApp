@@ -6,13 +6,14 @@ import { BracketService } from '../../core/services/bracket.service';
 import { DefaultValues } from '../../core/consts/default-values';
 import { MatchModel } from '../../core/model/match.models';
 import { StorageService } from '../../core/services/storage.service';
+import { RunEventCommunicationService } from '../../core/hubservices/run-event.communication.service';
 
 @Component({
   selector: 'event-run-wd-view',
   templateUrl: './event-run-wd-view.component.html'
 })
 export class EventRunWeightDivisionViewComponent implements OnInit {
-  private bracket: BracketModel;
+  bracket: BracketModel;
 
   selectedRoundDetails: MatchModel;
   showRoundPanel: boolean;
@@ -23,7 +24,7 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
     private route: ActivatedRoute,
     private bracketService: BracketService,
     private runEventHubService: RunEventHubService,
-    private storageService: StorageService,
+    private runEventCommunicationService: RunEventCommunicationService,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -32,20 +33,32 @@ export class EventRunWeightDivisionViewComponent implements OnInit {
       this.bracket = model.bracket;
       this.showRoundPanel = false;
     });
-    this.runEventHubService.onRoundStart().subscribe(x => {
-      this.selectedRoundDetails = x;
-      this.showRoundPanel = true;
-    });
-    this.runEventHubService.onWeightDivisionChange().subscribe(refreshModel => {
-      this.runEventHubService.joinWeightDivisionGroup(refreshModel.weightDivisionId, this.previousWeightDivisionId);
+    // this.runEventHubService.onRoundStart().subscribe(x => {
+    //   this.selectedRoundDetails = x;
+    //   this.showRoundPanel = true;
+    // });
+    // this.runEventHubService.onWeightDivisionChange().subscribe(refreshModel => {
+    //   this.runEventHubService.joinWeightDivisionGroup(refreshModel.weightDivisionId, this.previousWeightDivisionId);
+    //   this.refreshModel(refreshModel.bracket);
+    //   this.previousWeightDivisionId = refreshModel.weightDivisionId;
+    // });
+    const currentRefreshModel = this.runEventCommunicationService.getCurrentBracket();
+    this.refreshModel(currentRefreshModel.bracket);
+    this.previousWeightDivisionId = currentRefreshModel.weightDivisionId;
+    this.runEventCommunicationService.onBracketChange().subscribe(refreshModel => {
       this.refreshModel(refreshModel.bracket);
       this.previousWeightDivisionId = refreshModel.weightDivisionId;
     });
-    this.startSubscription();
-    this.storageService.changes.subscribe(r => {
-      debugger;
-      this.sharedObject = r.value;
+
+    this.runEventCommunicationService.onMatchStart().subscribe(model => {
+      this.selectedRoundDetails = model;
+      this.showRoundPanel = true;
     });
+
+    this.runEventCommunicationService.onMatchComplete().subscribe(() => {
+      this.showRoundPanel = false;
+    });
+    this.startSubscription();
   }
 
   private startSubscription() {

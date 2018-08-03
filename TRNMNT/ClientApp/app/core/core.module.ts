@@ -55,6 +55,7 @@ import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
 import { ResultsService } from './services/results.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { StorageService } from './services/storage.service';
+import { RunEventCommunicationService } from './hubservices/run-event.communication.service';
 
 @NgModule({
   imports: [
@@ -106,10 +107,11 @@ import { StorageService } from './services/storage.service';
     SignalRHubService,
     TestSocketService,
     StorageService,
+    RunEventCommunicationService,
     RunEventHubService,
     {
       provide: RunEventHubService,
-      useFactory: (l: LoggerService) => new RunEventHubService(new SignalRHubService(l)),
+      useFactory: (l: LoggerService) => new RunEventHubService(new SignalRHubService(l), new StorageService()),
       deps: [LoggerService]
     },
 

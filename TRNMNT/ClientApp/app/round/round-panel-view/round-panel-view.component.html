@@ -1,4 +1,4 @@
-﻿<div *ngIf="roundModel" class="round-panel-view-wrapper">
+﻿<div *ngIf="matchModel" class="round-panel-view-wrapper">
     <div class="logo ui-g-nopad ui-g-2"></div>
     <div class="title-row ui-g-nopad ui-g-12">
         {{title}}
@@ -6,37 +6,37 @@
 
     <div class="participant-row ui-g-12 ui-g-nopad first-participant">
         <div class="ui-g-9 participant-info">
-            {{roundModel.firstParticipant.firstName}} {{roundModel.firstParticipant.lastName}}
+            {{matchModel.aParticipant.firstName}} {{matchModel.aParticipant.lastName}}
         </div>
         <div class="ui-g-1 ui-g-nopad advantage-box">
             <div class="ui-g-12 ui-g-nopad advantage">
                 <div class="score-label">ADV.</div>
-                <div class="score-value">{{roundDetails.firstParticipantAdvantages}}</div>
+                <div class="score-value">{{matchDetails.aParticipantAdvantages}}</div>
             </div>
             <div class="ui-g-12 ui-g-nopad penalty">
                 <div class="score-label">PEN.</div>
-                <div class="score-value">{{roundDetails.firstParticipantPenalties}}</div>
+                <div class="score-value">{{matchDetails.aParticipantPenalties}}</div>
             </div>
         </div>
-        <div class="ui-g-2 ui-g-nopad point-box">{{roundDetails.firstParticipantPoints}}</div>
+        <div class="ui-g-2 ui-g-nopad point-box">{{matchDetails.aParticipantPoints}}</div>
     </div>
 
-    <div class="ui-g-12 ui-g-nopad timer-row">{{roundDetails.countdown | formatTimer}}</div>
+    <div class="ui-g-12 ui-g-nopad timer-row">{{matchDetails.countdown | formatTimer}}</div>
 
     <div class="participant-row ui-g-12 ui-g-nopad second-participant">
         <div class="ui-g-9 participant-info">
-            {{roundModel.BParticipant.firstName}} {{roundModel.BParticipant.lastName}}
+            {{matchModel.bParticipant.firstName}} {{matchModel.bParticipant.lastName}}
         </div>
         <div class="ui-g-1 ui-g-nopad advantage-box">
             <div class="ui-g-12 ui-g-nopad advantage">
                 <div class="score-label">ADV.</div>
-                <div class="score-value">{{roundDetails.BParticipantAdvantages}}</div>
+                <div class="score-value">{{matchDetails.bParticipantAdvantages}}</div>
             </div>
             <div class="ui-g-12 ui-g-nopad penalty">
                 <div class="score-label">PEN.</div>
-                <div class="score-value">{{roundDetails.BParticipantPenalties}}</div>
+                <div class="score-value">{{matchDetails.bParticipantPenalties}}</div>
             </div>
         </div>
-        <div class="ui-g-2 ui-g-nopad point-box">{{roundDetails.BParticipantPoints}}</div>
+        <div class="ui-g-2 ui-g-nopad point-box">{{matchDetails.bParticipantPoints}}</div>
     </div>
 </div>

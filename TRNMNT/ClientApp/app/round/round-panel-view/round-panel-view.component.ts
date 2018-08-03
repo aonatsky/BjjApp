@@ -14,7 +14,7 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
     @Input() matchModel: MatchModel;
     @Input() title: string;
 
-    private matchDetails: MatchDetailsModel;
+    matchDetails: MatchDetailsModel;
 
     private readonly tick: number;
     private timerSubscription: any;
@@ -23,7 +23,6 @@ export class RoundPanelViewComponent extends BaseRoundPanel implements OnInit {
         super();
 
         this.matchDetails = new MatchDetailsModel();
-
         this.matchDetails.aParticipantPenalties = 0;
         this.matchDetails.bParticipantPenalties = 0;
         this.matchDetails.aParticipantAdvantages = 0;
