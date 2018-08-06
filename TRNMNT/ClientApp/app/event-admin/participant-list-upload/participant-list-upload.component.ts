@@ -6,6 +6,7 @@ import { IUploadResult } from '../../core/model/result/upload-result.model';
 import { UploadResultCode } from '../../core/model/enum/upload-result-code.enum';
 import { Message } from 'primeng/components/common/message';
 import { MessageLevel } from '../../core/consts/message-level.const';
+import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
 
 
 
@@ -24,11 +25,11 @@ export class PrticipantsListUploadComponent {
 
     uploadResultMessages: Message[] = [];
 
-    constructor(private notificationService: NotificationService, private participantService: ParticipantService) {
+    constructor(private notificationService: NotificationService, private participantService: ParticipantService, private translateService : TranslateService) {
         this.onUpload = new EventEmitter<IUploadResult>();
     }
 
-    private onFileUpload($event) {
+    onFileUpload($event) {
         let fi = $event;
         if (fi.files && $event.files[0]) {
             let fileToUpload = fi.files[0];
@@ -42,13 +43,12 @@ export class PrticipantsListUploadComponent {
 
     private processUploadResult(result: IUploadResult) {
         if (result.code == UploadResultCode.Success) {
-            this.showMessage(result, MessageLevel.Success, 'Processed');
+            this.showMessage(result, MessageLevel.Success, this.translateService.instant('UPLOAD_RESULT.PROCESSED'));
         } else if (result.code == UploadResultCode.SuccessWithErrors) {
-            this.showMessage(result, MessageLevel.Warn, 'Porcessed with errors');
+            this.showMessage(result, MessageLevel.Warn, this.translateService.instant('UPLOAD_RESULT.PROCESSED_WITH_ERRORS'));
         } else if (result.code >= UploadResultCode.Error) {
-            this.showMessage(result, MessageLevel.Error, 'Fail');
+            this.showMessage(result, MessageLevel.Error, this.translateService.instant('UPLOAD_RESULT.FAIL'));
         }
-        //Observable.interval(this.hideMessageDelay).take(1).subscribe(() => this.uploadResultMessages = []);
         this.onUpload.emit(result);
     }
 

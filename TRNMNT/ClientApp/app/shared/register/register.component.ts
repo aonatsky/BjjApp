@@ -1,13 +1,11 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterService } from '../../core/services/router.service';
-import { StateService } from '../../services/state.service';
 import { UserRegistrationModel } from '../../core/model/user.models';
 
 @Component({
   selector: 'register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
   model: UserRegistrationModel;
@@ -16,14 +14,11 @@ export class RegisterComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private routerService: RouterService,
-    private stateSerivce: StateService
+    
   ) {}
 
   ngOnInit(): void {
-    this.model = this.stateSerivce.getValue('socialUser');
-    if (!this.model) {
-      this.model = new UserRegistrationModel();
-    }
+    this.model = new UserRegistrationModel();
   }
 
   register(): any {

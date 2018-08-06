@@ -18,3 +18,7 @@ export class TeamRegistrationModel extends TeamModel {
     contactPhone: string;
     contactEmail: string;
 }
+
+export class TeamModelFull extends TeamRegistrationModel {
+    approvalStatus: string;
+}

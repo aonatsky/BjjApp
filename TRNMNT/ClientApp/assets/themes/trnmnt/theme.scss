@@ -233,6 +233,24 @@ body {
     }
   }
 
+  .ui-table {
+    thead {
+      .ui-sortable-column.ui-state-highlight {
+        background-color: $theme_black;
+        border-color: $theme_black;
+        color: $theme_white;
+        .ui-sortable-column-icon{
+          color: $theme_white;
+        }
+      }
+      tr {
+        th {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
+
   .ui-radiobutton {
     .ui-radiobutton-box {
       &.ui-state-active {

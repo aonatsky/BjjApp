@@ -29,6 +29,7 @@ export class RouterService {
   }
 
   goHome(){
+    debugger;
     if(this.isEventPortal()){
       this.goToEventInfo()
     }else{
@@ -74,6 +75,10 @@ export class RouterService {
 
   goToTeamRegistration() {
     this.router.navigateByUrl('/event/team-registration');
+  }
+
+  goToTeamList(){
+    this.router.navigateByUrl('/event-admin/teams');
   }
 
   openEventWeightDivisionSpectatorView() {

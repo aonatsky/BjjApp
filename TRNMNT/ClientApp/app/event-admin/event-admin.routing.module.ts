@@ -10,6 +10,7 @@ import { EventRunCategoryViewComponent } from './event-run-category-view/event-r
 import { AuthGuard } from '../core/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { Roles } from '../core/consts/roles.const';
+import { TeamListComponent } from './team-list/team-list.component';
 
 export const eventAdminRoutes: Routes = [
   {
@@ -45,6 +46,10 @@ export const eventAdminRoutes: Routes = [
       {
         path: 'edit',
         component: EventEditComponent
+      },
+      {
+        path: 'teams',
+        component : TeamListComponent
       }
     ]
   }

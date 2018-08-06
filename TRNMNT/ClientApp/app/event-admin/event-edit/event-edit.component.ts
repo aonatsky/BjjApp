@@ -2,7 +2,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 import { EventModel } from '../../core/model/event.models';
-import { AuthService } from '../../core/services/auth.service';
 import { EventService } from '../../core/services/event.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -14,13 +13,12 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EventEditComponent implements OnInit {
   eventModel: EventModel;
-  private menuItems: MenuItem[] = [];
+  menuItems: MenuItem[] = [];
   currentStep: number = 0;
   categoryCount: number = 0;
   lastStep: number = 3;
 
   constructor(
-    private authService: AuthService,
     private eventService: EventService,
     private route: ActivatedRoute,
     private translateservice: TranslateService

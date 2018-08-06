@@ -8,6 +8,7 @@ export const data = {
     'EMAIL': 'Пошта',
     'PHONE': 'Телефон',
     'DATE_OF_BIRTH': 'Дата народження',
+    'DATE_OF_BIRTH_SHORT': 'Д.Н.',
     'CONTINUE':'Продовжити',
     'BACK':"Назад",
     'SAVE':"Зберегти",
@@ -24,14 +25,22 @@ export const data = {
     'NAME':'Назва',
     'DELETE': 'Видалити',
     'ADD':'Додати',
-    'ANY':'Будь-яка'
-
+    'ANY':'Будь-яка',
+    'TEAMS':'Команди',
+    'MEMBERSHIP':'Членство в федерації',
+    'APPROVAL':{
+      'APPROVED':'Підтверджено',
+      'PENDING':'Очікуєця',
+      'DECLINED':'Відхилено',
+      'APPROVAL_STATUS':'Статус'
+    }
 
   },
   'MENU':{
     'LOGIN':'Увійти',
     'LOGOUT': 'Вийти',
-    'HOME': 'Додому'
+    'HOME': 'Додому',
+    'TEAMS':'Команди'
   },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
@@ -51,13 +60,18 @@ export const data = {
   'PARTICIPANTS':'Учасники',
   'BRACKETS':'Турнірні таблиці',
   'RESULTS':'Результати',
+  'SELECT_WEIGHT_DIVISION':'Виберіть вагову категорію'
 },
 'EVENT_MANAGEMENT':{
   'TITLE':'Управління подією',
   'UPLOAD_LIST':'Завантажити список',
+  'UPLOAD_RESULT':{
+
+  },
   'CREATE_ABSOLUTE_DIVISION':'Турнірні таблиці',
   'GET_BRACKET':'Отриматы таблицю',
-  'UPDATE_BRACKET':''
+  'UPDATE_BRACKET':'Оновити таблицю',
+
 },
 'EVENT_INFO': {
     'EVENT_STARTS':'Захід починаєтся',
@@ -106,5 +120,8 @@ export const data = {
   },
   'TEAM_REGISTRATION':{
     'TITLE':'Реєстрація команди'
+  },
+  'ERROR':{
+    'SOMETHING_WENT_WRONG':'Щось пішло не так'
   }
 };

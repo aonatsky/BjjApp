@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpService } from '../dal/http/http.service';
-import { TeamModel, TeamRegistrationModel } from '../model/team.model';
+import { TeamModel, TeamRegistrationModel, TeamModelFull } from '../model/team.model';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable } from 'rxjs';
 import { PriceModel } from '../model/price.model';
@@ -9,12 +9,12 @@ import { PriceModel } from '../model/price.model';
 export class TeamService {
   constructor(private httpService: HttpService) {}
 
-  getTeams(): Observable<TeamModel[]> {
-    return this.httpService.get<TeamModel[]>(ApiMethods.team.getTeams);
+  getTeamsForEvent(): Observable<TeamModel[]> {
+    return this.httpService.get<TeamModel[]>(ApiMethods.team.getTeamsForEvent);
   }
 
-  addTeam(team: TeamModel): Observable<any> {
-    return this.httpService.post(ApiMethods.team.getTeams, team);
+  getTeamsForAdmin(): Observable<TeamModelFull[]> {
+    return this.httpService.get<TeamModelFull[]>(ApiMethods.team.getTeamsForAdmin);
   }
 
   processTeamRegistration(model: TeamRegistrationModel): Observable<any> {

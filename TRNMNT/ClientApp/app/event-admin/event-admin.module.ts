@@ -20,6 +20,7 @@ import { EventRunCategoryViewComponent } from './event-run-category-view/event-r
 import { AbsoluteWeightDivisionComponent } from './absolute-weight-division/absolute-weight-division.component';
 import { ResultsComponent } from './event-management/results/results.component';
 import { BracketResultSetComponent } from './event-run/bracket-result-set/bracket-result-set.component';
+import { TeamListComponent } from './team-list/team-list.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
@@ -40,7 +41,8 @@ import { TranslateModule } from '@ngx-translate/core';
     AbsoluteWeightDivisionComponent,
     ConnectorComponent,
     ResultsComponent,
-    BracketResultSetComponent
+    BracketResultSetComponent,
+    TeamListComponent
   ],
 
   providers: [],

@@ -1,15 +1,14 @@
-import { OnInit, Component, Input, Output, EventEmitter, OnChanges, ViewChild } from '@angular/core';
+import { OnInit, Component, Input, Output, EventEmitter, OnChanges, ViewChild, TemplateRef } from '@angular/core';
 import { LoaderService } from '../../core/services/loader.service'
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent';
 import { SelectItem } from 'primeng/components/common/selectitem';
 import { DataTable } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/components/common/confirmationservice';
-import '../styles/table-overriden.scss'
 
 @Component({
     selector: 'crud',
     templateUrl: './crud.component.html',
-    styleUrls: ['./crud.component.css'],
+    styleUrls: ['../styles/table-overriden.scss'],
     providers: [ConfirmationService],
 })
 
@@ -48,6 +47,7 @@ export class CrudComponent implements OnInit, OnChanges {
     @Input() readonly totalRecords: number = 0;
     @Input() readonly sortField: string;
     @Input() readonly sortOrder: number = 1;
+    @Input() actionsTemplate: TemplateRef<any>;
 
     private _firstIndex: number = 0;
     @Input() 
@@ -75,6 +75,10 @@ export class CrudComponent implements OnInit, OnChanges {
     displayDialog: boolean;
     private isNewEntity: boolean;
     entityToEdit: any = new Object();
+
+    get selectionMode(){
+        return (this.editEnabled || this.deleteEnabled || this.addEnabled) ? 'single' : '';
+    }
 
     refreshPage() {
         this.firstIndex = 0;
@@ -108,12 +112,12 @@ export class CrudComponent implements OnInit, OnChanges {
         this.displayDialog = false;
     }
 
-    private delete() {
+    delete() {
         this.onDelete.emit(this.entityToEdit);
         this.displayDialog = false;
     }
 
-    private onRowSelect(event) {
+    onRowSelect(event) {
         if (this.editEnabled || this.deleteEnabled) {
             var clone = Object.assign({}, event.data);
             this.showDialogToEdit(clone);
@@ -121,7 +125,7 @@ export class CrudComponent implements OnInit, OnChanges {
         }
     }
 
-    private showConfirm() {
+    showConfirm() {
         this.confirmationService.confirm({
             header : 'Confirmation',
             icon : 'fa fa fa-trash',
@@ -180,6 +184,7 @@ export interface ICrudColumn {
     columnType?: ColumnType;
     useClass?: (value: any) => string;
     transform?: (value: any) => string;
+    layout?: string;
 }
 
 export interface IDdlCrudColumn extends ICrudColumn {

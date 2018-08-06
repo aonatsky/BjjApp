@@ -63,7 +63,7 @@ namespace TRNMNT.Core.Services.Impl
             }).ToListAsync();
         }
 
-        public async Task<IEnumerable<TeamModelBase>> GetTeamsAsync(Guid federationId)
+        public async Task<IEnumerable<TeamModelBase>> GetTeamsForEventAsync(Guid federationId)
         {
             var teams = await _repository.GetAll().Where(t => t.FederationId == federationId).ToListAsync();
             await CheckTeamStatusAsync(teams);
@@ -71,6 +71,22 @@ namespace TRNMNT.Core.Services.Impl
             {
                 TeamId = t.TeamId.ToString(),
                     Name = t.Name
+            });
+        }
+
+        public async Task<IEnumerable<TeamModelFull>> GetTeamsForAdminAsync(Guid federationId)
+        {
+            var teams = await _repository.GetAll().Where(t => t.FederationId == federationId).ToListAsync();
+            await CheckTeamStatusAsync(teams);
+            return teams.Select(t => new TeamModelFull
+            {
+                TeamId = t.TeamId.ToString(),
+                    Name = t.Name,
+                    ContactEmail = t.ContactEmail,
+                    ContactPhone = t.ContactPhone,
+                    Description = t.Description,    
+                    ContactName = t.ContactName,
+                    ApprovalStatus = ApprovalStatus.GetTranslationKey(t.ApprovalStatus)
             });
         }
 

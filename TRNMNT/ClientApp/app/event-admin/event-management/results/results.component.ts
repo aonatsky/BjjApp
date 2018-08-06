@@ -8,54 +8,51 @@ import { ResultsService } from '../../../core/services/results.service';
 import { ICrudColumn as CrudColumn, IColumnOptions } from '../../../shared/crud/crud.component';
 
 @Component({
-    selector: 'results',
-    templateUrl: 'results.component.html',
-    encapsulation: ViewEncapsulation.None
+  selector: 'results',
+  templateUrl: 'results.component.html',
+  encapsulation: ViewEncapsulation.None
 })
 export class ResultsComponent {
-    @Input()
-    eventId: string;
-    private categories: CategorySimpleModel[] = [];
-    private selectedCategories: string[] = [];
-    private teamResults: TeamResultModel[];
-    columns: CrudColumn[] = [
-        { propertyName: 'teamName', displayName: 'Name', isEditable: false, isSortable: false },
-        { propertyName: 'points', displayName: 'Points', isEditable: false, isSortable: true }
-    ];
-    private readonly pageLinks: number = 3;
-    private firstIndex: number = 0;
-    private participantsLoading: boolean = true;
-    private ddlDataLoading: boolean = true;
-    private sortDirection: number = 1;
-    private sortField: string = 'teamName';
-    private columnOptions: IColumnOptions = {};
+  @Input() eventId: string;
+  private categories: CategorySimpleModel[] = [];
+  selectedCategories: string[] = [];
+  teamResults: TeamResultModel[];
+  columns: CrudColumn[] = [
+    { propertyName: 'teamName', displayName: 'Name', isEditable: false, isSortable: false },
+    { propertyName: 'points', displayName: 'Points', isEditable: false, isSortable: true }
+  ];
+  private readonly pageLinks: number = 3;
+  firstIndex: number = 0;
+  private participantsLoading: boolean = true;
+  private ddlDataLoading: boolean = true;
+  sortDirection: number = 1;
+  sortField: string = 'teamName';
+  columnOptions: IColumnOptions = {};
 
-    constructor(private categoryService: CategoryService, private resultsService: ResultsService) {
+  constructor(private categoryService: CategoryService, private resultsService: ResultsService) {}
 
+  ngOnInit() {
+    this.categoryService.getCategoriesByEventId(this.eventId).subscribe(r => {
+      this.categories = r;
+    });
+  }
+
+  getResults() {
+    this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => {
+      this.teamResults = r.sort((r1, r2) => {
+        return r2.points - r1.points;
+      });
+    });
+  }
+
+  getPersonalResultsFile() {
+    this.resultsService.getPersonalResultsFile(this.selectedCategories, 'personalResults.xlsx').subscribe();
+  }
+
+  get totalCount(): number {
+    if (this.teamResults) {
+      return this.teamResults.length;
     }
-
-    ngOnInit() {
-        this.categoryService.getCategoriesByEventId(this.eventId).subscribe(r => {
-            this.categories = r;
-        });
-    }
-
-    getResults() {
-        this.resultsService.getTeamResults(this.selectedCategories).subscribe(r => {
-            this.teamResults = r.sort((r1, r2) => { return r2.points - r1.points });
-        });
-    }
-
-    getPersonalResultsFile() {
-        this.resultsService.getPersonalResultsFile(this.selectedCategories, 'personalResults.xlsx').subscribe();
-    }
-
-    get totalCount(): number {
-        if (this.teamResults) {
-            return this.teamResults.length;
-        }
-        return 0;
-    }
-
+    return 0;
+  }
 }
-

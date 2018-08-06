@@ -46,7 +46,7 @@ export class ParticipantService {
   }
 
   uploadParticipantsFromFile(file: any, eventId: string): Observable<IUploadResult> {
-    return this.httpService.postFile(`${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`, file);
+    return this.httpService.postFile<IUploadResult>(`${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`, file);
   }
 
   updateParticipant(participant: ParticipantTableModel): Observable<any> {

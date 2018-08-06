@@ -22,7 +22,8 @@ export const ApiMethods = Object.freeze({
     getPrice: 'api/event/getPrice'
   },
   team: {
-    getTeams: 'api/team/getTeams',
+    getTeamsForEvent: 'api/team/getTeamsForEvent',
+    getTeamsForAdmin: 'api/team/getTeamsForAdmin',
     processTeamRegistration: 'api/team/processTeamRegistration',
     getTeamRegistrationPrice: 'api/team/getTeamRegistrationPrice'
   },

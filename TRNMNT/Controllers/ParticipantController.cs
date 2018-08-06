@@ -130,7 +130,7 @@ namespace TRNMNT.Web.Controllers
 
             return await HandleRequestWithDataAsync(async() =>
             {
-                var teams = await _teamService.GetTeamsAsync(GetFederationId().Value);
+                var teams = await _teamService.GetTeamsForEventAsync(GetFederationId().Value);
                 var categories = await _categoryService.GetCategoriesByEventIdAsync(eventId);
                 var weightDivisions = await _weightDivisionService.GetWeightDivisionModelsByEventIdAsync(eventId, false);
                 return Success(new ParticipantDdlModel
@@ -142,21 +142,21 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpPost("[action]/{eventId}")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]/{eventId}")]
         public async Task<IActionResult> UploadParticipantsFromFile(IFormFile file, Guid eventId)
         {
-            return await HandleRequestAsync(async() =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var options = new ParticipantListProcessingOptions
                 {
                 EventId = eventId,
                 FederationId = GetFederationId().Value
                 };
-                await _fileProcessiongService.ProcessFileAsync(file, options);
+                return await _fileProcessiongService.ProcessFileAsync(file, options);
             });
         }
 
-        [Authorize, HttpPut("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPut("[action]")]
         public async Task<IActionResult> Update([FromBody] ParticipantTableModel participantModel)
         {
             return await HandleRequestWithDataAsync(async() =>
@@ -165,7 +165,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpDelete("[action]/{participantId}")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpDelete("[action]/{participantId}")]
         public async Task<IActionResult> Delete(Guid participantId)
         {
             return await HandleRequestAsync(async() =>

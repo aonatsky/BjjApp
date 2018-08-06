@@ -44,17 +44,23 @@ namespace TRNMNT.Web.Controllers
         #region Public Methods
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetTeams()
+        public async Task<IActionResult> GetTeamsForEvent()
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                if (GetEventId() != null)
-                {
-                    var data = await _teamService.GetTeamsAsync(GetFederationId().Value);
-                    return Success(data);
-                }
-                return NotFoundResponse();
-            });
+                var data = await _teamService.GetTeamsForEventAsync(GetFederationId().Value);
+                return Success(data);
+            }, true, true);
+        }
+        
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpGet("[action]")]
+        public async Task<IActionResult> GetTeamsForAdmin()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var data = await _teamService.GetTeamsForAdminAsync(GetFederationId().Value);
+                return Success(data);
+            }, false, true);
         }
 
         [HttpGet("[action]")]

@@ -56,7 +56,6 @@ namespace TRNMNT.Web.Controllers
                 var tokenResult = await _authenticationService.GetTokenAsync(credentials.Email, credentials.Password);
                 if (tokenResult != null)
                 {
-                    this.logger.LogError($"id token = {tokenResult.IdToken}");
                     Response.StatusCode = (int) HttpStatusCode.OK;
                     var response = new
                     {

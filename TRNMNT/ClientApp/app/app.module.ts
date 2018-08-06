@@ -7,8 +7,6 @@ import { EventModule } from './event/event.module';
 import { RoundModule } from './round/round.module';
 import { AppRoutingModule } from './app.routing.module';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
 import { CustomLoader } from './core/helpers/custom-loader';
 import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';

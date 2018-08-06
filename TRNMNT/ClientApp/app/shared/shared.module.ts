@@ -16,6 +16,7 @@ import { RoundModule } from '../round/round.module';
 import { SocialLoginModule, AuthServiceConfig } from 'angular5-social-login';
 import { getAuthServiceConfigs } from '../socialLoginConfig';
 import { PopupComponent } from './popup/popup.component';
+import { PageComponent } from './page/page.component';
 
 @NgModule({
   imports: [CoreModule, BrowserAnimationsModule, RoundModule, SocialLoginModule, TranslateModule],
@@ -30,7 +31,8 @@ import { PopupComponent } from './popup/popup.component';
     FooterComponent,
     TopbarComponent,
     LoginPageComponent,
-    PopupComponent
+    PopupComponent,
+    PageComponent
   ],
 
   providers: [
@@ -47,7 +49,8 @@ import { PopupComponent } from './popup/popup.component';
     BracketComponent,
     TablePickerListComponent,
     PopupComponent,
-    LoginComponent
+    LoginComponent,
+    PageComponent
   ]
 })
 export class SharedModule {}

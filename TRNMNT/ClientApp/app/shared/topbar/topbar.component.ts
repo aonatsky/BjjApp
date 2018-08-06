@@ -33,8 +33,13 @@ export class TopbarComponent implements OnInit {
     this.items = [
       {
         label: this.translateService.instant('MENU.HOME'),
-        routerLink: '/',
-        visible: this.isLoggedIn && this.authService.getRole() in [Roles.Admin, Roles.FederationOwner, Roles.Owner]
+        routerLink: ['/'],
+        visible: this.isLoggedIn &&  [Roles.Admin, Roles.FederationOwner, Roles.Owner].some( x=> x === this.authService.getRole())
+      },
+      {
+        label: this.translateService.instant('MENU.TEAMS'),
+        routerLink: ['event-admin/teams'],
+        visible: this.isLoggedIn && [Roles.Admin, Roles.FederationOwner, Roles.Owner].some( x=> x === this.authService.getRole())
       },
       {
         label: this.translateService.instant('MENU.LOGIN'),
@@ -45,7 +50,7 @@ export class TopbarComponent implements OnInit {
       },
       {
         label: this.translateService.instant('MENU.LOGOUT'),
-        routerLink: '/',
+        routerLink: ['/'],
         visible: this.isLoggedIn,
         command: c => {
           this.authService.signout();

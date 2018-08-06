@@ -64,7 +64,7 @@ export class EventRegistrationComponent implements OnInit {
 
   private loadData() {
     forkJoin(
-      this.teamService.getTeams(),
+      this.teamService.getTeamsForEvent(),
       this.categoryService.getCategoriesForCurrentEvent(),
       this.eventService.getCurrentEvent(),
       this.eventService.getPrice()

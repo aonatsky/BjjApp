@@ -41,7 +41,8 @@ import {
   CheckboxModule,
   TabViewModule,
   ToggleButtonModule,
-  ConfirmDialogModule
+  ConfirmDialogModule,
+  
 } from 'primeng/primeng';
 import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';

@@ -1,0 +1,9 @@
+<trnmnt-page title="{{'COMMON.TEAMS' | translate}}" contentClass="ui-g-12">
+    <ng-template #customTemplate let-data>
+        <button type="button" pButton icon="fa fa-plus" style="float: left" (click)="test(data)" label="Add"></button>
+    </ng-template>
+    <crud #crudComponent [entities]="teams" [columns]="columns" [columnOptions]="columnOptions" [showRowNumbers]="false" [addEnabled]="false"
+        [editEnabled]="false" [deleteEnabled]="false" [sortField]="sortField" [sortOrder]="sortDirection" [lazy]="false" [(firstIndex)]="firstIndex"
+        [dialogMinWidth]="500" class="ui-g-12" gridMinHeight="350" [actionsTemplate]="customTemplate">
+    </crud>
+</trnmnt-page>

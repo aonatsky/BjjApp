@@ -48,10 +48,10 @@ export class HttpService {
     return this.handleRequest(() => this.http.delete(url), notifyMessage);
   }
 
-  postFile(name: string, file: any, notifyMessage?: string): Observable<any> {
+  postFile<T>(name: string, file: any, notifyMessage?: string): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.handleRequest(() => this.http.post(name, formData), notifyMessage);
+    return this.handleRequest(() => this.http.post<T>(name, formData), notifyMessage);
   }
 
   getPdf(url, fileName): Observable<any> {

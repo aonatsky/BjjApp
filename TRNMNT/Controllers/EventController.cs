@@ -36,7 +36,7 @@ namespace TRNMNT.Web.Controllers
 
         #region Public Methods
 
-        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]")]
         public async Task<IActionResult> UpdateEvent([FromBody] EventModelFull eventModel)
         {
             return await HandleRequestAsync(async() =>

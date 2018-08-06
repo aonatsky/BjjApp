@@ -80,7 +80,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     }
     return 0;
   }
-  private isAllWinnersSelected: boolean = false;
+  isAllWinnersSelected: boolean = false;
   private targetModel: any[] = [];
 
   constructor(
@@ -113,7 +113,7 @@ export class EventManagementParticipantsComponent implements OnInit {
     },
     {
       propertyName: 'dateOfBirth',
-      displayName: this.translateService.instant('COMMON.DATE_OF_BIRTH'),
+      displayName: this.translateService.instant('COMMON.DATE_OF_BIRTH_SHORT'),
       isEditable: true,
       isSortable: true,
       transform: value => this.dateTransform.call(this, value),
