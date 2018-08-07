@@ -56,4 +56,8 @@ export class ParticipantService {
   deleteParticipant(participantId: string): Observable<any> {
     return this.httpService.deleteById(ApiMethods.participant.delete, participantId, 'Could not delete participant');
   }
+
+  setParticipantWeightIn(participantId: string, status: string): Observable<any> {
+    return this.httpService.post(`${ApiMethods.participant.setWeightInStatus}/${participantId}`, {data: status});
+  }
 }

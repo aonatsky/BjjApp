@@ -13,6 +13,7 @@ import { Roles } from '../../core/consts/roles.const';
 export class TopbarComponent implements OnInit {
   items: MenuItem[];
   isLoggedIn: boolean;
+  role: string;
 
   constructor(
     private routerService: RouterService,
@@ -21,25 +22,30 @@ export class TopbarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isLoggedIn = this.authService.isLoggedIn();
     this.authService.getLoggedInStatus.subscribe(status => {
-      this.isLoggedIn = status;
-      this.initMenu();
+      this.initMenu(status);
     });
-    this.initMenu();
+    this.initMenu(this.authService.isLoggedIn());
   }
 
-  initMenu() {
+  initMenu(loggedIn: boolean) {
+    this.isLoggedIn = loggedIn;
+    this.role = this.authService.getRole();
     this.items = [
       {
         label: this.translateService.instant('MENU.HOME'),
         routerLink: ['/'],
-        visible: this.isLoggedIn &&  [Roles.Admin, Roles.FederationOwner, Roles.Owner].some( x=> x === this.authService.getRole())
+        visible: this.isLoggedIn && [Roles.Admin, Roles.FederationOwner, Roles.Owner].some(x => x === this.role)
       },
       {
         label: this.translateService.instant('MENU.TEAMS'),
         routerLink: ['event-admin/teams'],
-        visible: this.isLoggedIn && [Roles.Admin, Roles.FederationOwner, Roles.Owner].some( x=> x === this.authService.getRole())
+        visible: this.isLoggedIn && [Roles.Admin, Roles.FederationOwner, Roles.Owner].some(x => x === this.role)
+      },
+      {
+        label: this.translateService.instant('MENU.PROFILE'),
+        routerLink: ['profile'],
+        visible: this.isLoggedIn
       },
       {
         label: this.translateService.instant('MENU.LOGIN'),
@@ -59,7 +65,7 @@ export class TopbarComponent implements OnInit {
     ];
   }
 
-  goHome(){
+  goHome() {
     this.routerService.navigateByUrl('/');
   }
 

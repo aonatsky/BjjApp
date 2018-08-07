@@ -4,6 +4,7 @@ import { RegisterComponent } from './shared/register/register.component';
 import { LoginPageComponent } from './shared/login/login-page.component';
 import { TopbarComponent } from './shared/topbar/topbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
+import { ProfileComponent } from './shared/profile/profile.component';
 
 const appRoutes: Routes = [
   {
@@ -19,6 +20,11 @@ const appRoutes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     pathMatch: 'full'
   },
   { path: '**', redirectTo: 'event-admin' },

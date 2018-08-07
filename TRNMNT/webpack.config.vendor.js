@@ -37,7 +37,7 @@ module.exports = (env) => {
                 'event-source-polyfill',
                 'jquery',
                 'zone.js',
-                'font-awesome/css/font-awesome.css',
+                '@fortawesome/fontawesome-free/css/all.min.css',
                 './ClientApp/assets/style/style.css',
                 'primeng/resources/primeng.css',
                 'primeicons/primeicons.css'

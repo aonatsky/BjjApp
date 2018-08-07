@@ -8,6 +8,11 @@
                                    (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
 </div>
 <div class="ui-g">
+        <ng-template #weightInActionsTemplate let-data>
+                <p-button icon="fas fa-check-circle" [styleClass]="data.weightInStatus == approvalStatus.approved? 'status-approved' :'' " (click)="setWeightIn(data,approvalStatus.approved)"></p-button>
+                <p-button icon="fas fa-clock" [styleClass]="data.weightInStatus == approvalStatus.pending? 'status-pending' :'' " (click)="setWeightIn(data,approvalStatus.pending)"></p-button>
+                <p-button icon="fas fa-times-circle" [styleClass]="data.weightInStatus == approvalStatus.declined? 'status-declined' :'' " (click)="setWeightIn(data,approvalStatus.declined)"></p-button>
+            </ng-template>
     <crud #crudComponent
           [entities]="participantsModel"
           [columns]="columns"
@@ -25,7 +30,9 @@
           (onDelete)="onEntityDelete($event)"
           [dialogMinWidth]="500"
           class="ui-g-12"
-          gridMinHeight="350">
+          gridMinHeight="350"
+          [actionsTemplate]="weightInActionsTemplate"
+          [actionsHeader]="'EVENT_MANAGEMENT.WEIGHT_IN' | translate">
     </crud>
 </div>
 <div class="ui-g">

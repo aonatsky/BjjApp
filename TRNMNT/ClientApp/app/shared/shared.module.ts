@@ -17,6 +17,7 @@ import { SocialLoginModule, AuthServiceConfig } from 'angular5-social-login';
 import { getAuthServiceConfigs } from '../socialLoginConfig';
 import { PopupComponent } from './popup/popup.component';
 import { PageComponent } from './page/page.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   imports: [CoreModule, BrowserAnimationsModule, RoundModule, SocialLoginModule, TranslateModule],
@@ -32,7 +33,8 @@ import { PageComponent } from './page/page.component';
     TopbarComponent,
     LoginPageComponent,
     PopupComponent,
-    PageComponent
+    PageComponent,
+    ProfileComponent
   ],
 
   providers: [

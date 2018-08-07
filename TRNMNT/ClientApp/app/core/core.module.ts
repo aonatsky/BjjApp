@@ -41,8 +41,7 @@ import {
   CheckboxModule,
   TabViewModule,
   ToggleButtonModule,
-  ConfirmDialogModule,
-  
+  ConfirmDialogModule
 } from 'primeng/primeng';
 import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';
@@ -57,6 +56,7 @@ import { ResultsService } from './services/results.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { StorageService } from './services/storage.service';
 import { EventRunCommunicationService } from './hubservices/event-run.communication.service';
+import { UserService } from './services/user.service';
 
 @NgModule({
   imports: [
@@ -115,7 +115,7 @@ import { EventRunCommunicationService } from './hubservices/event-run.communicat
       useFactory: (l: LoggerService) => new RunEventHubService(new SignalRHubService(l), new StorageService()),
       deps: [LoggerService]
     },
-
+    UserService,
     CategoryService,
     WeightDivisionService,
     ParticipantService,

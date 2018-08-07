@@ -15,6 +15,7 @@ using TRNMNT.Core.Configurations;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model.Result;
+using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 
@@ -92,7 +93,19 @@ namespace TRNMNT.Core.Services.Impl
         }
         #endregion
 
-        #region Private Methods
+        public async Task UpdateUserAsync(UserModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                throw new BusinessException("ERROR.USER_NOT_FOUND");
+            }
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.DateOfBirth = model.DateOfBirth.Value;
+            user.Email = model.Email;
+            await _userManager.UpdateAsync(user);
+        }
         public async Task<UserRegistrationResult> CreateUserAsync(UserRegistrationModel model, string role)
         {
             var user = new User
@@ -106,6 +119,77 @@ namespace TRNMNT.Core.Services.Impl
             };
             return await CreateUserWithRoleAsync(user, role, model.Password);
         }
+
+        public async Task<AuthTokenResult> FacebookLogin(string fbToken)
+        {
+            var client = new HttpClient();
+            // 1.generate an app access token
+            // _logger.LogInformation($"Getting access token. creds {_configuration["FACEBOOK_APPID"]}, {_configuration["FACEBOOK_APPSECRET"]}");
+            var appAccessTokenResponse =
+                await client.GetStringAsync(string.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials", _configuration["FACEBOOK_APPID"], _configuration["FACEBOOK_APPSECRET"]));
+            var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
+            // 2. validate the user access token
+            // _logger.LogInformation("validation access token");
+            var userAccessTokenValidationResponse =
+                await client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={fbToken}&access_token={appAccessToken.AccessToken}");
+            var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
+
+            if (!userAccessTokenValidation.Data.IsValid)
+            {
+                throw new BusinessException("Invalid facebook data");
+            }
+
+            // 3. we've got a valid token so we can request user data from fb
+            _logger.LogInformation("Getting user info");
+            var userInfoResponse = await client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={fbToken}");
+            var fbUser = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
+            var user = await _userManager.FindByEmailAsync(fbUser.Email);
+            if (user == null)
+            {
+                user = new User()
+                {
+                Email = fbUser.Email,
+                FirstName = fbUser.FirstName,
+                LastName = fbUser.LastName,
+                FacebookId = fbUser.Id,
+                UserName = fbUser.Email,
+                PictureUrl = fbUser.Picture.Data.Url
+                };
+                await CreateUserWithRoleAsync(user, Roles.Participant, "facebookPass1");
+            }
+
+            return await GetTokensAsync(user);
+        }
+
+        public async Task ChangesPasswordAsync(string oldPassword, string newPassword, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new BusinessException("ERROR.USER_NOT_FOUND");
+            }
+            var changeResult = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (!changeResult.Succeeded)
+            {
+                throw new BusinessException("ERROR.CHANGE_PASSWORD.OLD_PASSWORD_IS_INVALID");
+            };
+        }
+
+        public async Task SetPasswordAsync(string password, string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new BusinessException("ERROR.USER_NOT_FOUND");
+            }
+            var setPasswordResult = await _userManager.AddPasswordAsync(user, password);
+            if (setPasswordResult.Succeeded)
+            {
+                throw new BusinessException("ERROR.PASSWORD.OLD_PASSWORD_IS_INVALID");
+            }
+        }
+
+        #region Private Methods
 
         private async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string role, string password)
         {
@@ -183,47 +267,6 @@ namespace TRNMNT.Core.Services.Impl
                 IdToken = await GenerateTokenAsync(user),
                     RefreshToken = GenerateRefreshToken(user)
             };
-        }
-
-        public async Task<AuthTokenResult> FacebookLogin(string fbToken)
-        {
-            var client = new HttpClient();
-            // 1.generate an app access token
-            _logger.LogInformation($"Getting access token. creds {_configuration["FACEBOOK_APPID"]}, {_configuration["FACEBOOK_APPSECRET"]}");
-            var appAccessTokenResponse =
-                await client.GetStringAsync(string.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials", _configuration["FACEBOOK_APPID"], _configuration["FACEBOOK_APPSECRET"]));
-            var appAccessToken = JsonConvert.DeserializeObject<FacebookAppAccessToken>(appAccessTokenResponse);
-            // 2. validate the user access token
-            _logger.LogInformation("validation access token");
-            var userAccessTokenValidationResponse =
-                await client.GetStringAsync($"https://graph.facebook.com/debug_token?input_token={fbToken}&access_token={appAccessToken.AccessToken}");
-            var userAccessTokenValidation = JsonConvert.DeserializeObject<FacebookUserAccessTokenValidation>(userAccessTokenValidationResponse);
-
-            if (!userAccessTokenValidation.Data.IsValid)
-            {
-                throw new BusinessException("Invalid facebook data");
-            }
-
-            // 3. we've got a valid token so we can request user data from fb
-            _logger.LogInformation("Getting user info");
-            var userInfoResponse = await client.GetStringAsync($"https://graph.facebook.com/v2.8/me?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={fbToken}");
-            var fbUser = JsonConvert.DeserializeObject<FacebookUserData>(userInfoResponse);
-            var user = await _userManager.FindByEmailAsync(fbUser.Email);
-            if (user == null)
-            {
-                user = new User()
-                {
-                Email = fbUser.Email,
-                FirstName = fbUser.FirstName,
-                LastName = fbUser.LastName,
-                FacebookId = fbUser.Id,
-                UserName = fbUser.Email,
-                PictureUrl = fbUser.Picture.Data.Url
-                };
-                await CreateUserWithRoleAsync(user, Roles.Participant, "facebookPass1");
-            }
-
-            return await GetTokensAsync(user);
         }
 
         #endregion

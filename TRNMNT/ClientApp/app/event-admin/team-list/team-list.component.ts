@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TeamService } from '../../core/services/team.service';
 import { TeamModelFull } from '../../core/model/team.model';
 import { ICrudColumn as CrudColumn, IColumnOptions } from '../../shared/crud/crud.component';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-team-list',

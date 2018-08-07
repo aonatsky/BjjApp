@@ -9,6 +9,9 @@
                     {{col.displayName}}
                     <p-sortIcon [field]="col.propertyName"></p-sortIcon>
                 </th>
+                <th *ngIf="actionsTemplate">
+                    {{actionsHeader}}
+                </th>
             </tr>
         </ng-template>
         <p-column *ngIf="showRowNumbers" header="#" [style]="{'width':'4%','text-align':'center'}">
@@ -33,7 +36,7 @@
                     </ng-template>
                 </td>
                 <td *ngIf="actionsTemplate">
-                    <ng-container *ngTemplateOutlet="actionsTemplate" ngTemplateOutletContext="rowData"></ng-container>
+                    <ng-container *ngTemplateOutlet="actionsTemplate; context:{$implicit:rowData}" ngTemplateOutletContext="rowData"></ng-container>
                 </td>
             </tr>
         </ng-template>
@@ -46,7 +49,7 @@
     </p-table>
 </div>
 
-<app-popup title="{{title}} Details" [(visible)]="displayDialog" showEffect="fade" appendTo="body" [closable]="true" (onHide)="onEditPopupClose()">
+<trnmnt-popup title="{{title}} Details" [(visible)]="displayDialog" showEffect="fade" appendTo="body" [closable]="true" (onHide)="onEditPopupClose()">
     <div class="ui-g ui-g-nopad ui-fluid" *ngIf="entityToEdit" [ngStyle]="{'min-height': gridMinHeight + 'px'}">
         <div class="ui-g-12" *ngFor="let column of columns">
             <div *ngIf="!isIdColumn(column) || (isIdColumn(column) && !newEntity)" class="ui-g-4">
@@ -76,5 +79,5 @@
         </div>
 
     </div>
-</app-popup>
+</trnmnt-popup>
 <p-confirmDialog width="425"> </p-confirmDialog>

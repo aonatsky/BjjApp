@@ -1,0 +1,10 @@
+﻿@import "../../../assets/themes/trnmnt/_variables.scss";
+.status-approved{
+color: $theme_green !important
+}
+.status-pending{
+  color: $theme_yellow !important
+}
+.status-declined{
+  color: $theme_red !important
+}

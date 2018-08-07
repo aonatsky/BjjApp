@@ -1,0 +1,61 @@
+<trnmnt-page title="{{'PROFILE.TITLE'| translate}}" contentClass="ui-g-8 ui-g-offset-2">
+  <div class="ui-g">
+    <div class="ui-g-3 ui-fluid">
+      <label>{{'COMMON.EMAIL'|translate}}</label>
+    </div>
+    <div class="ui-g-9 ui-fluid">
+      <input pInputText [(ngModel)]="userModel.email" />
+    </div>
+  </div>
+  <div class="ui-g">
+    <div class="ui-g-3 ui-fluid">
+      <label>{{'COMMON.FIRST_NAME'|translate}}</label>
+    </div>
+    <div class="ui-g-9 ui-fluid">
+      <input pInputText [(ngModel)]="userModel.firstName" />
+    </div>
+  </div>
+  <div class="ui-g">
+    <div class="ui-g-3 ui-fluid">
+      <label>{{'COMMON.LAST_NAME'|translate}}</label>
+    </div>
+    <div class="ui-g-9 ui-fluid">
+      <input pInputText [(ngModel)]="userModel.lastName" />
+    </div>
+  </div>
+  <div class="ui-g">
+    <div class="ui-g-3 ui-fluid">
+      <label>{{'COMMON.DATE_OF_BIRTH'|translate}}</label>
+    </div>
+    <div class="ui-g-9 ui-fluid">
+      <p-calendar icon="fa fa-calendar" [(ngModel)]="userModel.dateOfBirth" [showIcon]="true" [utc]="false" dateFormat="dd/mm/yy"></p-calendar>
+    </div>
+  </div>
+  <div class="ui-g-12 ">
+    <p-button (click)="save()" label="{{'COMMON.SAVE'|translate}}" class="float-right" iconPos="left" icon="fa fa-save"></p-button>
+  </div>
+  <div class="ui-g-12 ">
+    <p-button (click)="openChangePasswordPopup()" class="float-right" label="{{'PROFILE.CHANGE_PASSWORD'|translate}}"></p-button>
+  </div>
+  <trnmnt-popup [visible]="displayPopup" [dialogWidth]="400" [closable]="true" (onHide)="displayPopup = false;" [title]="'PROFILE.CHANGE_PASSWORD'|translate">
+    <div class="ui-g">
+      <div class="ui-g-3 ui-fluid">
+        <label>{{'PROFILE.OLD_PASSWORD'|translate}}</label>
+      </div>
+      <div class="ui-g-9 ui-fluid">
+        <input pInputText [(ngModel)]="changePasswordModel.oldPassword" />
+      </div>
+    </div>
+    <div class="ui-g">
+      <div class="ui-g-3 ui-fluid">
+        <label>{{'PROFILE.NEW_PASSWORD'|translate}}</label>
+      </div>
+      <div class="ui-g-9 ui-fluid">
+        <input pInputText [(ngModel)]="changePasswordModel.newPassword" />
+      </div>
+      <div class="ui-g-12 ">
+        <button pButton type="button" (click)="changePassword()" label="{{'PROFILE.CHANGE_PASSWORD'|translate}}"></button>
+      </div>
+    </div>
+  </trnmnt-popup>
+</trnmnt-page>

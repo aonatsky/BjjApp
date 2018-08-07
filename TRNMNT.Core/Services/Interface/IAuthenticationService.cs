@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Result;
+using TRNMNT.Core.Model.User;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
@@ -24,11 +25,36 @@ namespace TRNMNT.Core.Services.Interface
         Task<UserRegistrationResult> CreateParticipantUserAsync(UserRegistrationModel model);
 
         /// <summary>
+        /// Change users password asynchronously 
+        /// </summary>
+        /// <param name="oldPassword">Old password.</param>
+        /// <param name="newPassword">New password.</param>
+        /// <param name="userId">User id.</param>
+        /// <returns></returns>
+        Task ChangesPasswordAsync(string oldPassword, string newPassword, string userId);
+
+        /// <summary>
+        /// Sets user password async.
+        /// </summary>
+        /// <param name="password"> Password.</param>
+        /// <param name="userId">User id.</param>
+        /// <returns></returns>
+        Task SetPasswordAsync(string password, string userId);
+
+        /// <summary>
         /// Creates user asynchronous.
         /// </summary>
         /// <param name="model">Credentials model.</param>
+        /// <param name="role">Role.</param>
         /// <returns></returns>
         Task<UserRegistrationResult> CreateUserAsync(UserRegistrationModel model, string role);
+
+        /// <summary>
+        /// Updates user asynchronous.
+        /// </summary>
+        /// <param name="model">User model.</param>
+        /// <returns></returns>
+        Task UpdateUserAsync(UserModel model);
 
         /// <summary>
         /// Updates the token asynchronous.

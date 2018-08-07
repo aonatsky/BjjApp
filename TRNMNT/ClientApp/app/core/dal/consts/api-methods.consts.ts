@@ -3,6 +3,9 @@ export const ApiMethods = Object.freeze({
     getToken: 'api/auth/gettoken',
     refreshToken: 'api/auth/updateToken',
     register: 'api/auth/registerParticipantUser',
+    updateProfile: 'api/auth/updateProfile',
+    changePassword: 'api/auth/changePassword',
+    setPassword: 'api/auth/setPassword',
     facebookLogin: 'api/auth/facebooklogin'
   },
   log: 'api/log',
@@ -45,7 +48,8 @@ export const ApiMethods = Object.freeze({
     participantsDropdownData: 'api/participant/participantsDropdownData',
     uploadParticipantsFromFile: 'api/participant/uploadParticipantsFromFile',
     update: 'api/participant/update',
-    delete: 'api/participant/delete'
+    delete: 'api/participant/delete',
+    setWeightInStatus: 'api/participant/setWeightInStatus',
   },
   payment: {
     payment: 'api/payment',

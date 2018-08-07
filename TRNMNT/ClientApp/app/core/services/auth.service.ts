@@ -21,7 +21,7 @@ export class AuthService {
    * Stores the URL so we can redirect after signing in.
    */
   redirectUrl: string;
-  
+
   @Output() getLoggedInStatus: EventEmitter<boolean> = new EventEmitter();
   /**
    * User's data.
@@ -38,7 +38,6 @@ export class AuthService {
   ) {
     this.decodeToken();
   }
-
 
   /**
    * Tries to sign in the user.
@@ -73,19 +72,16 @@ export class AuthService {
     );
   }
 
-  register(model: UserRegistrationModel): Observable<string> {
-    return this.http.post<string>(ApiMethods.auth.register, model);
-  }
-
   /**
    * Tries to get a new token using refresh token.
    */
   getNewToken(): Observable<boolean> {
     const refreshToken: string = localStorage.getItem('refreshToken');
-
+    
     if (refreshToken != null) {
       return this.http.post<AuthTokenModel>(ApiMethods.auth.refreshToken, { refreshToken }).pipe(
         map(r => {
+          
           return this.processTokensResponse(r);
         })
       );
@@ -190,9 +186,9 @@ export class AuthService {
 
   getRole(): string {
     if (this.isLoggedIn()) {
-     return this.getUser().role;
+      return this.getUser().role;
     }
-    return "";
+    return '';
   }
 
   facebookLogin(): Observable<boolean> {
@@ -258,6 +254,7 @@ export class AuthService {
   }
 
   private processTokensResponse(body): boolean {
+    
     if (typeof body.idToken !== 'undefined') {
       // Stores access token & refresh token.
       this.store(body);

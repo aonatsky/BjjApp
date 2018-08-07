@@ -48,6 +48,7 @@ export class CrudComponent implements OnInit, OnChanges {
     @Input() readonly sortField: string;
     @Input() readonly sortOrder: number = 1;
     @Input() actionsTemplate: TemplateRef<any>;
+    @Input() actionsHeader: string = "";
 
     private _firstIndex: number = 0;
     @Input() 

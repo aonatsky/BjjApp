@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Model.Participant;
+using TRNMNT.Core.Model.Shared;
 using TRNMNT.Core.Services;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
@@ -171,6 +172,15 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestAsync(async() =>
             {
                 await _participantService.DeleteParticipantAsync(participantId);
+            });
+        }
+
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]/{participantId}")]
+        public async Task<IActionResult> SetWeightInStatus(Guid participantId, [FromBody] SimpleStringModel statusModel)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _participantService.SetWeightInStatus(participantId, statusModel.data);
             });
         }
 

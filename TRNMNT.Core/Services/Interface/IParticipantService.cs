@@ -76,6 +76,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="user">User</param>
         /// <returns></returns>
         Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user);
-
+        /// <summary>
+        /// Set participant weight in status
+        /// </summary>
+        /// <param name="participantId"> participant Id</param>
+        /// <param name="status">status, can be pending, declined or approved</param>
+        /// <returns></returns>
+        Task SetWeightInStatus(Guid participantId, string status);
     }
 }

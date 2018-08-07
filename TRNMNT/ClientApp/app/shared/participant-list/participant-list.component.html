@@ -1,0 +1,30 @@
+<div class="ui-g">
+    <category-with-division-filter *ngIf="!ddlDataLoading"
+                                   [eventId]="eventId"
+                                   useDataFromInput="true"
+                                   [categories]="participantDdlModel.categories"
+                                   [weightDivisions]="participantDdlModel.weightDivisions"
+                                   isMemberFilterEnabled="true"
+                                   (onFilterChanged)="filterParticipants($event)"></category-with-division-filter>
+</div>
+<div class="ui-g">
+    <crud #crudComponent
+          [entities]="participantsModel"
+          [columns]="columns"
+          [columnOptions]="columnOptions"
+          [showRowNumbers]="true"
+          [addEnabled]="false"
+          
+          [sortField]="sortField"
+          [sortOrder]="sortDirection"
+          [lazy]="true"
+          (onLazyLoad)="onLoadData($event)"
+          [totalRecords]="totalCount"
+          [(firstIndex)]="firstIndex"
+          [dialogMinWidth]="500"
+          class="ui-g-12"
+          gridMinHeight="350"
+    </crud>
+</div>
+
+

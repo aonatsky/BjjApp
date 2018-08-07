@@ -195,7 +195,9 @@ namespace TRNMNT.Core.Services.Impl
                     CategoryId = p.CategoryId,
                     WeightDivisionName = p.WeightDivision.Name,
                     WeightDivisionId = p.WeightDivisionId,
-                    IsMember = p.IsMember
+                    IsMember = p.IsMember,
+                    WeightInStatus = p.WeightInStatus,
+                    ApprovalStatus = p.ApprovalStatus
             }).ToListAsync();
 
             return new PagedList<ParticipantTableModel>(anonymList, filter.PageIndex, size, totalCount);
@@ -217,6 +219,31 @@ namespace TRNMNT.Core.Services.Impl
             var order = _orderService.AddNewOrder(OrderTypeEnum.EventParticipation, priceModel.Amount, priceModel.Currency, participantId.ToString(), user.Id);
             AddParticipant(model, eventId, order.OrderId, participantId);
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
+        }
+
+        public async Task SetWeightInStatus(Guid participantId, string status)
+        {
+            var participant = await _repository.GetByIDAsync(participantId);
+
+            if (participant == null)
+            {
+                new BusinessException("ERROR.PARTICIPANT_IS_NOT_FOUND");
+            }
+
+            switch (status)
+            {
+                case ApprovalStatus.Approved:
+                    participant.WeightInStatus = ApprovalStatus.Approved;
+                    break;
+                case ApprovalStatus.Pending:
+                    participant.WeightInStatus = ApprovalStatus.Pending;
+                    break;
+                case ApprovalStatus.Declined:
+                    participant.WeightInStatus = ApprovalStatus.Declined;
+                    break;
+                default: break;
+            }
+            _repository.Update(participant);
         }
 
         #endregion
@@ -266,7 +293,6 @@ namespace TRNMNT.Core.Services.Impl
                 }
             }
         }
-
         #endregion
     }
 }

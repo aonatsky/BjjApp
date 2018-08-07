@@ -40,7 +40,8 @@ export const data = {
     'LOGIN':'Увійти',
     'LOGOUT': 'Вийти',
     'HOME': 'Додому',
-    'TEAMS':'Команди'
+    'TEAMS':'Команди',
+    'PROFILE':'Мій профіль'
   },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
@@ -71,6 +72,7 @@ export const data = {
   'CREATE_ABSOLUTE_DIVISION':'Турнірні таблиці',
   'GET_BRACKET':'Отриматы таблицю',
   'UPDATE_BRACKET':'Оновити таблицю',
+  'WEIGHT_IN':"Зважування"
 
 },
 'EVENT_INFO': {
@@ -121,7 +123,14 @@ export const data = {
   'TEAM_REGISTRATION':{
     'TITLE':'Реєстрація команди'
   },
+  'PROFILE':{
+    'TITLE':'Мій профайл',
+    'OLD_PASSWORD': 'Старий пароль',
+    'NEW_PASSWORD': 'Новий пароль',
+    'CHANGE_PASSWORD': 'Змінити пароль'
+  },
   'ERROR':{
-    'SOMETHING_WENT_WRONG':'Щось пішло не так'
+    'SOMETHING_WENT_WRONG':'Щось пішло не так',
+    'PARTICIPANT_IS_NOT_FOUND': 'Учасника не знайдено'
   }
 };

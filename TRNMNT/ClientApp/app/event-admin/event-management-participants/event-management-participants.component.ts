@@ -22,14 +22,18 @@ import { UploadResultCode } from '../../core/model/enum/upload-result-code.enum'
 import { NotificationService } from '../../core/services/notification.service';
 import { BracketService } from '../../core/services/bracket.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ApprovalStatus } from '../../core/consts/approval-status.const';
 
 @Component({
   selector: 'event-management-participants',
   templateUrl: './event-management-participants.component.html',
+  styleUrls: ['./event-management-participants.component.scss'],
   providers: [DatePipe]
 })
 export class EventManagementParticipantsComponent implements OnInit {
   @Input() eventId: string;
+
+  approvalStatus = ApprovalStatus;
   participantsListModel: PagedList<ParticipantTableModel>;
   participantDdlModel: ParticipantDdlModel;
   filter: CategoryWithDivisionFilterModel;
@@ -151,6 +155,14 @@ export class EventManagementParticipantsComponent implements OnInit {
       isSortable: true,
       useClass: value => this.getClassCallback.call(this, value),
       columnType: ColumnType.Boolean
+    },
+    {
+      propertyName: 'approvalStatus',
+      displayName: this.translateService.instant('COMMON.APPROVAL.APPROVAL_STATUS'),
+      isEditable: false,
+      isSortable: true,
+      useClass: value => this.getApprovalClassCallback.call(this, value),
+      columnType: ColumnType.String
     }
   ];
 
@@ -165,13 +177,30 @@ export class EventManagementParticipantsComponent implements OnInit {
     });
   }
 
-  getClassCallback(value: boolean): string {
+  private getClassCallback(value: boolean): string {
     let classes = 'fa fa-square-o';
     if (value) {
       classes = 'fa fa-check-square-o';
     }
     return `fa ${classes}`;
   }
+
+  private getApprovalClassCallback(value: string): string {
+    let classes = 'ui-g-12 ui-g-nopad text-allign-center ';
+    switch (value) {
+      case ApprovalStatus.approved:
+        classes += 'fas fa-check-circle';
+        break;
+      case ApprovalStatus.pending:
+        classes += 'fas fa-clock';
+        break;
+      case ApprovalStatus.declined:
+        classes += 'fas fa-times-circle';
+        break;
+    }
+    return classes;
+  }
+
   showError(message: string = 'Somethig went wrong', title: string = 'Somethig went wrong') {
     this.notificationService.showError(title, message);
   }
@@ -231,6 +260,14 @@ export class EventManagementParticipantsComponent implements OnInit {
       this.firstIndex = 0;
       this.loadParticipants(this.getFilterModel());
     }
+  }
+
+  setWeightIn(participant: ParticipantTableModel, status: string) {
+    console.log(participant);
+    console.log(status);
+    this.participantService
+      .setParticipantWeightIn(participant.participantId, status)
+      .subscribe(() => (participant.weightInStatus = status));
   }
 
   private onLoadData($event: LazyLoadEvent) {

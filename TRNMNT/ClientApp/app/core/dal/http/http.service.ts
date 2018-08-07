@@ -20,7 +20,9 @@ export class HttpService {
     private notificationService: NotificationService,
     private authService: AuthService,
     private http: HttpClient
-  ) {}
+  ) {
+    
+  }
 
   //#region Public Methods
 

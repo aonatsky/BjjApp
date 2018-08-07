@@ -29,7 +29,7 @@ export class RouterService {
   }
 
   goHome(){
-    debugger;
+    
     if(this.isEventPortal()){
       this.goToEventInfo()
     }else{

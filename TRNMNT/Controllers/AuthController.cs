@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
+using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -111,12 +112,41 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestAsync(async() =>
             {
                 var result = await _authenticationService.CreateParticipantUserAsync(model);
-                if(!result.Success){
+                if (!result.Success)
+                {
                     throw new BusinessException(result.Reason);
                 }
                 return HttpStatusCode.OK;
             });
         }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UserModel model)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _authenticationService.UpdateUserAsync(model);
+            });
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _authenticationService.ChangesPasswordAsync(model.OldPassword, model.NewPassword, model.UserId);
+            });
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> SetPassword([FromBody] ChangePasswordModel model)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _authenticationService.SetPasswordAsync(model.NewPassword, model.UserId);
+            });
+        }
+
 
         [AllowAnonymous, HttpPost("[action]")]
         public async Task<IActionResult> FacebookLogin([FromBody] FacebookLoginModel model)

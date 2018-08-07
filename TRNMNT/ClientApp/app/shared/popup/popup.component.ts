@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-popup',
+  selector: 'trnmnt-popup',
   templateUrl: './popup.component.html',
   styleUrls: ['./popup.component.scss']
 })
 export class PopupComponent implements OnInit {
   constructor() {}
   @Input() title: string;
-  @Input() showHeader: boolean;
+  @Input() showHeader: boolean = true;
   @Input() closable: boolean;
   @Input() readonly dialogWidth?: number = 500;
   @Input() readonly dialogHeight?: number;
@@ -25,6 +25,5 @@ export class PopupComponent implements OnInit {
 
 
   ngOnInit() {
-    this.showHeader = !!this.title;
   }
 }

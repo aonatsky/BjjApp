@@ -12,5 +12,7 @@ namespace TRNMNT.Core.Model.Participant
         public Guid CategoryId { get; set; }
         public Guid WeightDivisionId { get; set; }
         public bool IsMember { get; set; }
+        public string ApprovalStatus { get; set; }
+        public string WeightInStatus { get; set; }
     }
 }

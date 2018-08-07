@@ -38,14 +38,13 @@
     </div>
 </div>
 
-<app-popup title="{{'EVENT_EDIT.EDIT_CATEGORY'|translate}}" [(visible)]="displayPopup"
+<trnmnt-popup title="{{'EVENT_EDIT.EDIT_CATEGORY'|translate}}" [(visible)]="displayPopup"
     [showHeader]="true"> <div class="ui-g">
     <div class="ui-g-3">
         <label class="field-title">{{'COMMON.NAME'|translate}}</label>
     </div>
     <div class="ui-g-9 ui-fluid">
-        <input pInputText [(ngModel)]="categoryToEdit.name"
-        />
+        <input pInputText [(ngModel)]="categoryToEdit.name"/>
     </div>
     </div>
     <div class="ui-g">
@@ -84,4 +83,4 @@
                 (click)="deleteCategory()"></button>
         </div>
     </div>
-</app-popup>
+</trnmnt-popup>

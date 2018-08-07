@@ -28,6 +28,8 @@ export class ParticipantTableModel extends ParticipantModelBase {
     weightDivisionId: string;
     userId: string;
     isMember: boolean;
+    weightInStatus: string;
+    approvalStatus: string;
 }
 
 export class ParticipantInAbsoluteDivisionMobel {

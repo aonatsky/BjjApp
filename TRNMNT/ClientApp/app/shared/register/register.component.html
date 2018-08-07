@@ -2,7 +2,7 @@
     <div class="ui-widget ui-widget-content ui-g-offset-2 ui-g-8">
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid">
-                <label>Email</label>
+                <label>{{'COMMON.EMAIL'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
                 <input pInputText [(ngModel)]="model.email" />
@@ -10,7 +10,7 @@
         </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid">
-                <label>Password</label>
+                <label>{{'COMMON.PASSWORD'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
                 <input pInputText [(ngModel)]="model.password" type="password" />
@@ -18,7 +18,7 @@
         </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid">
-                <label>First Name</label>
+                <label>{{'COMMON.FIRST_NAME'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
                 <input pInputText [(ngModel)]="model.firstName" />
@@ -26,7 +26,7 @@
         </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid">
-                <label>Last Name</label>
+                <label>{{'COMMON.LAST_NAME'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
                 <input pInputText [(ngModel)]="model.lastName" />
@@ -34,14 +34,14 @@
         </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid">
-                <label>Date Of Birth</label>
+                <label>{{'COMMON.DATE_OF_BIRTH'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
                 <p-calendar icon="fa fa-calendar" [(ngModel)]="model.dateOfBirth" [showIcon]="true"></p-calendar>
             </div>
         </div>
         <div class="ui-g-12 ">
-            <button pButton type="button" (click)="register()" label="Create account and continue" cornerStyleClass="none"></button>
+            <button pButton type="button" (click)="register()" label="{{'REGISTER.REGISTER_AND_CONTINUE'|translate}}" cornerStyleClass="none"></button>
         </div>
     </div>
 </div>`
