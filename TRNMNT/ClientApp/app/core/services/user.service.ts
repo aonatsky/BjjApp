@@ -13,19 +13,19 @@ export class UserService {
   constructor(private http: HttpService, private authService : AuthService) {}
 
   register(model: UserRegistrationModel): Observable<string> {
-    return this.http.post<string>(ApiMethods.auth.register, model);
+    return this.http.post<string>(ApiMethods.user.register, model);
   }
 
   updateUser(model: UserModel): Observable<any> {
-    return this.http.post(ApiMethods.auth.updateProfile, model).pipe(flatMap(() => this.authService.getNewToken()));
+    return this.http.post(ApiMethods.user.updateProfile, model).pipe(flatMap(() => this.authService.getNewToken()));
   }
 
   changePassword(model: ChangePasswordModel): Observable<any> {
-    return this.http.post(ApiMethods.auth.changePassword, model);
+    return this.http.post(ApiMethods.user.changePassword, model);
   }
 
   setPassword(model: ChangePasswordModel): Observable<any> {
-    return this.http.post(ApiMethods.auth.setPassword, model);
+    return this.http.post(ApiMethods.user.setPassword, model);
   }
 
   getUser(){

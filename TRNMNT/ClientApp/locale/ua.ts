@@ -83,7 +83,9 @@ export const data = {
     'FOR_FEDERATION_MEMBERS':'для членів федерації',
     'TNC':'Положення',
     'DESCRIPTION':'Опис',
-    'PARTICIPATE':'Прийняти участь'
+    'PARTICIPATE':'Прийняти участь',
+    'REGISTRATION_NOT_STARTED':'Реєстрація ще не почалась',
+    'REGISTRATION_IS_ENDED':'Реєстрація закінчена'
   },
   'EVENT_EDIT':{
     'TITLE':'Редагувати подію',

@@ -9,7 +9,6 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'event-edit',
   templateUrl: './event-edit.component.html',
   styleUrls:['./event-edit.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class EventEditComponent implements OnInit {
   eventModel: EventModel;
@@ -17,6 +16,7 @@ export class EventEditComponent implements OnInit {
   currentStep: number = 0;
   categoryCount: number = 0;
   lastStep: number = 3;
+  cacheRefreshToken: string;
 
   constructor(
     private eventService: EventService,
@@ -50,6 +50,7 @@ export class EventEditComponent implements OnInit {
   }
 
   private modelReload() {
+    this.cacheRefreshToken = Date.now().toString();
     this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
       this.eventModel = r;
     });
@@ -65,27 +66,31 @@ export class EventEditComponent implements OnInit {
 
   private save() {
     this.eventService.updateEvent(this.eventModel).subscribe();
-  }
+  } 
 
   private delete() {
     this.eventService.deleteEvent(this.eventModel.eventId).subscribe();
   }
 
-  private onImageUpload(event) {
+  private onImageUpload(event) : void {
     this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
   }
 
-  private onTncUpload(event) {
+  private onTncUpload(event) : void {
     this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe(r => {
       this.modelReload();
     });
   }
 
-  private onPromoCodeUpload(event) {
+  private onPromoCodeUpload(event) : void {
     this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
   }
 
-  private downloadTnc() {
+  private downloadTnc() : void {
     this.eventService.downloadEventTncFile(this.eventModel.tncFilePath).subscribe();
+  }
+
+  getEventImageUrl() : string {
+    return `${this.eventModel.imgPath}?${this.cacheRefreshToken}`;
   }
 }

@@ -1,7 +1,7 @@
 <div class="trnmnt-table trnmnt-crud">
     <h3 *ngIf="title.length > 0" class="first">{{title}}</h3>
     <p-table #dataTable [value]="entities" [rows]="pageSize" [columns]="columns" [pageLinks]="3" [sortField]="sortField" [sortOrder]="sortOrder"
-        [paginator]="totalRecords > pageSize" [(selection)]="selectedEntity" [selectionMode]="selectionMode" (onRowSelect)="onRowSelect($event)"
+        [paginator]="totalRecords > pageSize" [selectionMode]="selectionMode" (onRowSelect)="onRowSelect($event)"
         [totalRecords]="totalRecords" [lazy]="lazy" [(first)]="firstIndex" (onLazyLoad)="lazyLoadData($event)" [responsive]="true">
         <ng-template pTemplate="header" let-columns>
             <tr>
@@ -64,7 +64,7 @@
 
                 <p-dropdown *ngIf="isDropdownColumn(column)" [options]="columnOptions[column.propertyName]" [disabled]="!column.isEditable"
                     [(ngModel)]="entityToEdit[column.keyPropertyName]" (onChange)="onDdlChange($event, column)" [style]="{'width':'100%'}"></p-dropdown>
-                <p-calendar icon="fa fa-calendar" *ngIf="isDateColumn(column)" dateFormat="dd.mm.yy" [disabled]="!column.isEditable" showIcon="true"
+                <p-calendar icon="fa fa-calendar" *ngIf="isDateColumn(column)" dateFormat="dd/mm/yy" [disabled]="!column.isEditable" showIcon="true"
                     monthNavigator="true" yearNavigator="true" yearRange="1960:2015" [name]="column.propertyName" [(ngModel)]="entityToEdit[column.propertyName]"></p-calendar>
             </div>
             <div *ngIf="isIdColumn(column) && !newEntity" class="ui-g-8">

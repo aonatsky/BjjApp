@@ -23,9 +23,10 @@ namespace TRNMNT.Core.Services.Impl
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly ILogger<AuthenticationService> _logger;
-        #region Dependencies
 
+        #region Dependencies
+        private readonly ILogger<AuthenticationService> _logger;
+        private readonly IUserService _userService;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -37,9 +38,10 @@ namespace TRNMNT.Core.Services.Impl
 
         #region .ctor
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration, IConfiguration configuration, ILogger<AuthenticationService> logger)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IAuthConfiguration authConfiguration, IConfiguration configuration, ILogger<AuthenticationService> logger, IUserService userService)
         {
             _logger = logger;
+            _userService = userService;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -87,39 +89,6 @@ namespace TRNMNT.Core.Services.Impl
             return null;
         }
 
-        public async Task<UserRegistrationResult> CreateParticipantUserAsync(UserRegistrationModel model)
-        {
-            return await CreateUserAsync(model, Roles.Participant);
-        }
-        #endregion
-
-        public async Task UpdateUserAsync(UserModel model)
-        {
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user == null)
-            {
-                throw new BusinessException("ERROR.USER_NOT_FOUND");
-            }
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.DateOfBirth = model.DateOfBirth.Value;
-            user.Email = model.Email;
-            await _userManager.UpdateAsync(user);
-        }
-        public async Task<UserRegistrationResult> CreateUserAsync(UserRegistrationModel model, string role)
-        {
-            var user = new User
-            {
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                CreateTS = DateTime.UtcNow,
-                UserName = model.Email,
-                IsActive = true
-            };
-            return await CreateUserWithRoleAsync(user, role, model.Password);
-        }
-
         public async Task<AuthTokenResult> FacebookLogin(string fbToken)
         {
             var client = new HttpClient();
@@ -153,55 +122,17 @@ namespace TRNMNT.Core.Services.Impl
                 LastName = fbUser.LastName,
                 FacebookId = fbUser.Id,
                 UserName = fbUser.Email,
-                PictureUrl = fbUser.Picture.Data.Url
+                PictureUrl = fbUser.Picture.Data.Url,
+                SocialLogin = SocialLogin.Facebook
                 };
-                await CreateUserWithRoleAsync(user, Roles.Participant, "facebookPass1");
+                await _userService.CreateUserWithRoleAsync(user, Roles.Participant, "facebookPass1");
             }
 
             return await GetTokensAsync(user);
         }
-
-        public async Task ChangesPasswordAsync(string oldPassword, string newPassword, string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new BusinessException("ERROR.USER_NOT_FOUND");
-            }
-            var changeResult = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
-            if (!changeResult.Succeeded)
-            {
-                throw new BusinessException("ERROR.CHANGE_PASSWORD.OLD_PASSWORD_IS_INVALID");
-            };
-        }
-
-        public async Task SetPasswordAsync(string password, string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new BusinessException("ERROR.USER_NOT_FOUND");
-            }
-            var setPasswordResult = await _userManager.AddPasswordAsync(user, password);
-            if (setPasswordResult.Succeeded)
-            {
-                throw new BusinessException("ERROR.PASSWORD.OLD_PASSWORD_IS_INVALID");
-            }
-        }
+        #endregion
 
         #region Private Methods
-
-        private async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string role, string password)
-        {
-            var identityResult = await _userManager.CreateAsync(user, password);
-            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
-
-            if (identityResult.Succeeded)
-            {
-                return new UserRegistrationResult(true);
-            }
-            return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
-        }
 
         private async Task<string> GenerateTokenAsync(User user)
         {

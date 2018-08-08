@@ -1,27 +1,16 @@
 <div class="ui-g-12">
     <div class="filter-section" *ngIf="categories">
-        <p-dropdown [options]="categorySelectItems" 
-                    [(ngModel)]="currentFilterValue.categoryId" 
-                    [autoWidth]="false" 
-                    placeholder="Select Category" 
-                    [style]="{'min-width':'200px'}"
-                    (onChange)="onCategorySelect($event)"></p-dropdown>
+        <p-dropdown [options]="categorySelectItems" [(ngModel)]="currentFilterValue.categoryId" [autoWidth]="false" placeholder="Select Category"
+            [style]="{'min-width':'200px'}" (onChange)="onCategorySelect($event)"></p-dropdown>
     </div>
     <div class="filter-section" *ngIf="weightDivisions != null">
-        <p-dropdown [options]="weightDivisionsSelectItems" 
-                    [(ngModel)]="currentFilterValue.weightDivisionId" 
-                    [autoWidth]="false" 
-                    [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0"
-                    (onChange)="onSelect($event)"
-                    [style]="{'min-width':'200px'}"
-                    placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION' | translate}}"></p-dropdown>
+        <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="currentFilterValue.weightDivisionId" [autoWidth]="false"
+            [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.lenght == 0" (onChange)="onSelect($event)"
+            [style]="{'min-width':'200px'}" placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION' | translate}}"></p-dropdown>
     </div>
-    <div class="filter-section is-member-chbox">
-        <p-checkbox *ngIf="isMemberFilterEnabled"
-                    (onChange)="onSelect($event)"
-                    [(ngModel)]="currentFilterValue.isMembersOnly"
-                    label="Federation Members Only"
-                    binary="true">
+    <div class="filter-section is-member-chbox" *ngIf="isMemberFilterEnabled">
+        <p-checkbox (onChange)="onSelect($event)" [(ngModel)]="currentFilterValue.isMembersOnly" label="Federation Members Only"
+            binary="true">
         </p-checkbox>
     </div>
 </div>

@@ -28,7 +28,7 @@
                         <label>{{'COMMON.DATE_OF_BIRTH'| translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
-                        <p-calendar icon="fa fa-calendar" [(ngModel)]="participant.dateOfBirth" dateFormat="dd.mm.yy" readonlyInput="readonlyInput"
+                        <p-calendar icon="fa fa-calendar" [(ngModel)]="participant.dateOfBirth" dateFormat="dd/mm/yy" readonlyInput="readonlyInput"
                             showIcon="true" monthNavigator="true" yearNavigator="true" yearRange="1960:2015" [defaultDate]="getDefaultDateOfBirth()"
                             required name="dateOfBirth">
                         </p-calendar>

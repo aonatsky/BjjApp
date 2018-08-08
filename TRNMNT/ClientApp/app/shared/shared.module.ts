@@ -18,6 +18,7 @@ import { getAuthServiceConfigs } from '../socialLoginConfig';
 import { PopupComponent } from './popup/popup.component';
 import { PageComponent } from './page/page.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ParticipantListComponent } from './participant-list/participant-list.component';
 
 @NgModule({
   imports: [CoreModule, BrowserAnimationsModule, RoundModule, SocialLoginModule, TranslateModule],
@@ -34,7 +35,8 @@ import { ProfileComponent } from './profile/profile.component';
     LoginPageComponent,
     PopupComponent,
     PageComponent,
-    ProfileComponent
+    ProfileComponent,
+    ParticipantListComponent
   ],
 
   providers: [
@@ -52,7 +54,8 @@ import { ProfileComponent } from './profile/profile.component';
     TablePickerListComponent,
     PopupComponent,
     LoginComponent,
-    PageComponent
+    PageComponent,
+    ParticipantListComponent
   ]
 })
 export class SharedModule {}

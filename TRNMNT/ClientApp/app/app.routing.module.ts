@@ -5,6 +5,7 @@ import { LoginPageComponent } from './shared/login/login-page.component';
 import { TopbarComponent } from './shared/topbar/topbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { ProfileComponent } from './shared/profile/profile.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const appRoutes: Routes = [
   {
@@ -25,7 +26,8 @@ const appRoutes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: 'event-admin' },
   {

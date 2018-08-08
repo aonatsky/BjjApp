@@ -89,63 +89,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [AllowAnonymous, HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
-        {
-            return await HandleRequestAsync(async() =>
-            {
-                if (Request.Headers["password"] == "pizdecpassword")
-                {
-                    await _authenticationService.CreateUserAsync(model, "Owner");
-                    return HttpStatusCode.OK;
-                }
-                else
-                {
-                    return HttpStatusCode.Forbidden;;
-                }
-            });
-        }
-
-        [AllowAnonymous, HttpPost("[action]")]
-        public async Task<IActionResult> RegisterParticipantUser([FromBody] UserRegistrationModel model)
-        {
-            return await HandleRequestAsync(async() =>
-            {
-                var result = await _authenticationService.CreateParticipantUserAsync(model);
-                if (!result.Success)
-                {
-                    throw new BusinessException(result.Reason);
-                }
-                return HttpStatusCode.OK;
-            });
-        }
-
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UserModel model)
-        {
-            return await HandleRequestAsync(async() =>
-            {
-                await _authenticationService.UpdateUserAsync(model);
-            });
-        }
-
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
-        {
-            return await HandleRequestAsync(async() =>
-            {
-                await _authenticationService.ChangesPasswordAsync(model.OldPassword, model.NewPassword, model.UserId);
-            });
-        }
-
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> SetPassword([FromBody] ChangePasswordModel model)
-        {
-            return await HandleRequestAsync(async() =>
-            {
-                await _authenticationService.SetPasswordAsync(model.NewPassword, model.UserId);
-            });
-        }
+        
 
 
         [AllowAnonymous, HttpPost("[action]")]

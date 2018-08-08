@@ -8,11 +8,8 @@
     </div>
 
     <div *ngIf="socialLoginEnabled">
-        <div class="ui-g-6">
-            <button pButton type="button" icon="fa fa-facebook" (click)="facebookLogin()"></button>
-        </div>
-        <div class="ui-g-6">
-            <button pButton type="button" icon="fa fa-google" (click)="facebookLogin()"></button>
+        <div class="ui-g-12 ui-fluid">
+            <p-button styleClass="ui-g-12"  icon="fab fa-facebook-square" (click)="facebookLogin()"></p-button>
         </div>
     </div>
     <div class="ui-g-3 ui-fluid">
@@ -28,8 +25,8 @@
     <div class="ui-g-9 ui-fluid">
         <input type="password" pInputText [(ngModel)]="password" placeholder="" />
     </div>
-    <div class="ui-g-12">
-        <button pButton type="button" (click)="login()" label="{{'LOGIN.SIGN_IN' | translate}}"></button>
+    <div class="ui-g-12 ui-fluid">
+        <p-button styleClass="ui-g-12" (click)="login()" label="{{'LOGIN.SIGN_IN' | translate}}"></p-button>
     </div>
 
 

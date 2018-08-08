@@ -38,9 +38,9 @@ export class CrudComponent implements OnInit, OnChanges {
     @Input() readonly title: string = '';
     @Input() readonly columns: ICrudColumn[] = [];
     @Input() readonly columnOptions: IColumnOptions;
-    @Input() readonly editEnabled: boolean = true;
-    @Input() readonly addEnabled: boolean = true;
-    @Input() readonly deleteEnabled: boolean = true;
+    @Input() readonly editEnabled: boolean = false;
+    @Input() readonly addEnabled: boolean = false;
+    @Input() readonly deleteEnabled: boolean = false;
     @Input() readonly showRowNumbers: boolean = true;
     @Input() readonly lazy: boolean = false;
     @Input() readonly pageSize: number = 10;

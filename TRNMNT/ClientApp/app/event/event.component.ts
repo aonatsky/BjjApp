@@ -3,6 +3,7 @@ import { EventModel } from '../core/model/event.models';
 import { EventService } from '../core/services/event.service';
 import { RouterService } from '../core/services/router.service';
 import { AuthService } from '../core/services/auth.service';
+import  DateHelper from '../core/helpers/date-helper';
 
 @Component({
   selector: 'event',
@@ -38,5 +39,13 @@ export class EventComponent implements OnInit {
     } else {
       this.displayPopup = true;
     }
+  }
+
+  isRegistrationStarted() : boolean {
+    return DateHelper.getCurrentDate() >= DateHelper.getDate(this.eventModel.registrationStartTS);
+  }
+
+  isRegistrationEnded() : boolean {
+    return DateHelper.getCurrentDate() >= DateHelper.getDate(this.eventModel.registrationEndTS);
   }
 }

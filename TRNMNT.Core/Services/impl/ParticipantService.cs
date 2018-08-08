@@ -180,7 +180,6 @@ namespace TRNMNT.Core.Services.Impl
             participantsQuery = participantsQuery.Skip(size * filter.PageIndex).Take(size);
             var participants = await participantsQuery.ToListAsync();
             await CheckParticipantStatus(participants);
-            await CheckParticipantStatus(participants);
 
             var anonymList = await participantsQuery.Select(p => new ParticipantTableModel
             {

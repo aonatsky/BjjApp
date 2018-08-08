@@ -34,8 +34,9 @@ namespace TRNMNT.Core.Services.Interface
         /// Gets the events for owner asynchronous.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
+        /// <param name="role">Role.</param>
         /// <returns></returns>
-        Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId);
+        Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId, string role);
 
         /// <summary>
         /// Get base event information
@@ -81,7 +82,7 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="url">URL prefix</param>
         /// <returns>Event id or NULL if not exist</returns>
-        Task <Guid?>GetEventIdAsync(string url);
+        Task<Guid?> GetEventIdAsync(string url);
 
         /// <summary>
         /// Get owners user id
@@ -91,7 +92,7 @@ namespace TRNMNT.Core.Services.Interface
         Task<string> GetEventOwnerIdAsync(Guid eventId);
 
         /// <summary>
-        /// Returns price model for an event based on user
+        /// Returns price model for an event based on user.
         /// </summary>
         /// <param name="EventId"></param>
         /// <param name="userId"></param>
@@ -105,5 +106,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="federationId">FederationId Id</param>
         /// <returns>Event Id</returns>
         Guid CreateEvent(string userId, Guid federationId);
+
+        /// <summary>
+        /// Sets event inactive.
+        /// </summary>
+        /// <param name="eventId">Event id.</param>
+        /// <returns></returns>
+        Task DeleteEventAsync(string eventId);
     }
 }

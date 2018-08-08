@@ -115,7 +115,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpPost("[action]")]
+        [AllowAnonymous, HttpPost("[action]")]
         public async Task<IActionResult> ParticipantsTable([FromBody] ParticipantFilterModel filter)
         {
             return await HandleRequestWithDataAsync(async() =>
@@ -125,7 +125,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpGet("[action]")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> ParticipantsDropdownData(Guid eventId)
         {
 

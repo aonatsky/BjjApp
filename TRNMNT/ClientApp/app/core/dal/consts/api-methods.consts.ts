@@ -2,11 +2,13 @@ export const ApiMethods = Object.freeze({
   auth: {
     getToken: 'api/auth/gettoken',
     refreshToken: 'api/auth/updateToken',
+    facebookLogin: 'api/auth/facebooklogin'
+  },
+  user: {
     register: 'api/auth/registerParticipantUser',
     updateProfile: 'api/auth/updateProfile',
     changePassword: 'api/auth/changePassword',
-    setPassword: 'api/auth/setPassword',
-    facebookLogin: 'api/auth/facebooklogin'
+    setPassword: 'api/auth/setPassword'
   },
   log: 'api/log',
   event: {
@@ -22,7 +24,7 @@ export const ApiMethods = Object.freeze({
     getEventsForOwner: 'api/event/getEventsForOwner',
     getEventInfo: 'api/event/getEventInfo',
     createEvent: 'api/event/createEvent',
-    getPrice: 'api/event/getPrice'
+    getPrice: 'api/event/getPrice',
   },
   team: {
     getTeamsForEvent: 'api/team/getTeamsForEvent',
@@ -49,7 +51,7 @@ export const ApiMethods = Object.freeze({
     uploadParticipantsFromFile: 'api/participant/uploadParticipantsFromFile',
     update: 'api/participant/update',
     delete: 'api/participant/delete',
-    setWeightInStatus: 'api/participant/setWeightInStatus',
+    setWeightInStatus: 'api/participant/setWeightInStatus'
   },
   payment: {
     payment: 'api/payment',

@@ -83,7 +83,8 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var events = await _eventService.GetEventsForOwnerAsync((await GetUserAsync()).Id);
+                var user = await GetUserAsync();
+                var events = await _eventService.GetEventsForOwnerAsync(user.Id, await UserService.GetUserRoleAsync(user));
                 return Success(events.ToArray());
             });
         }
@@ -164,6 +165,12 @@ namespace TRNMNT.Web.Controllers
         public async Task<IActionResult> GetPrice()
         {
             return await HandleRequestWithDataAsync(async() => await _eventService.GetPriceAsync(GetEventId().Value, (await GetUserAsync()).Id), true, true);
+        }
+
+        [Authorize(Roles = "FederationOwner, Owner"), HttpDelete("[action]")]
+        public async Task<IActionResult> DeleteEvent(string id)
+        {
+            return await HandleRequestAsync(async() => await _eventService.DeleteEventAsync(id));
         }
 
         #endregion

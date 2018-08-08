@@ -12,7 +12,10 @@
 	],
 	"settings": {
 		"cSpell.words": [
-			"signout"
+			"ddls",
+			"particpant",
+			"signout",
+			"topbar"
 		],
 		"cSpell.enabledLanguageIds": [
 			"asciidoc",

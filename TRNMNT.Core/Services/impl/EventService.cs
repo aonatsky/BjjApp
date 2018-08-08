@@ -129,21 +129,26 @@ namespace TRNMNT.Core.Services.Impl
             return @event != null ? GetEventModel(@event) : null;
         }
 
-        public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId)
+        public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId, string role)
         {
-            var models = await _eventRepository.GetAll()
-                //.Where(e => e.OwnerId == userId)
-                .Select(e => new EventModelBase
-                {
-                    EventId = e.EventId,
-                        EventDate = e.EventDate,
-                        RegistrationEndTS = e.RegistrationEndTS,
-                        EarlyRegistrationEndTS = e.EarlyRegistrationEndTS,
-                        RegistrationStartTS = e.RegistrationStartTS,
-                        Title = e.Title
-                }).ToListAsync();
+            var modelsQuery = _eventRepository.GetAll();
+            if (role == Roles.FederationOwner || role == Roles.Admin)
+            {
 
-            return models;
+            }
+            if (role == Roles.Owner)
+            {
+                modelsQuery = modelsQuery.Where(e => e.OwnerId == userId);
+            }
+            return await modelsQuery.Select(e => new EventModelBase
+            {
+                EventId = e.EventId,
+                    EventDate = e.EventDate,
+                    RegistrationEndTS = e.RegistrationEndTS,
+                    EarlyRegistrationEndTS = e.EarlyRegistrationEndTS,
+                    RegistrationStartTS = e.RegistrationStartTS,
+                    Title = e.Title
+            }).ToListAsync();
         }
 
         public async Task<bool> IsEventUrlPrefixExistAsync(string prefix)
@@ -206,7 +211,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 throw new BusinessException("Event not found");
             }
-            
+
             var isMember = await _federationMembershipService.IsFederationMemberAsync(_event.FederationId, userId);
             var priceModel = new PriceModel()
             {
@@ -298,6 +303,17 @@ namespace TRNMNT.Core.Services.Impl
             _eventRepository.Add(_event);
 
             return _event.EventId;
+        }
+
+        public async Task DeleteEventAsync(string eventId)
+        {
+            var _event = await _eventRepository.GetByIDAsync(eventId);
+            if (_event == null)
+            {
+                throw new BusinessException("ERROR.EVENT_NOT_FOUND");
+            }
+            _event.IsActive = false;
+            _eventRepository.Update(_event);
         }
 
         #endregion
