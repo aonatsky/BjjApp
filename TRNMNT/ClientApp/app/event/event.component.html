@@ -14,8 +14,8 @@
                 <label class="ui-g-4 bold">{{'EVENT_INFO.CONTACT' | translate}}</label>
                 <div class="ui-g-8">
                     <label>{{eventModel.contactEmail}}</label>
-                    <button *ngIf="eventModel.fbLink" pButton class="ui-button-icon-only" icon="fa fa-facebook" label="{{eventModel.fbLink}}"></button>
-                    <button *ngIf="eventModel.vkLink" pButton class="ui-button-icon-only" icon="fa fa-vk" label="{{eventModel.vkLink}}"></button>
+                    <button *ngIf="eventModel.fbLink" pButton class="ui-button-icon-only" icon="fab fa-facebook" label="{{eventModel.fbLink}}"></button>
+                    <button *ngIf="eventModel.vkLink" pButton class="ui-button-icon-only" icon="fab fa-vk" label="{{eventModel.vkLink}}"></button>
                 </div>
                 <label class="ui-g-4 bold">{{'EVENT_INFO.TNC' | translate}}</label>
                 <label class="ui-g-8">
@@ -38,8 +38,8 @@
                 </div>
                 <label class="ui-g-12 text-align-center bold"><span class="ui-state-highlight">*</span>{{'EVENT_INFO.FOR_FEDERATION_MEMBERS' | translate}}</label>
                 <p-button class="ui-g-12 ui-fluid" label="{{'EVENT_INFO.PARTICIPATE'|translate}}" (click)="participate()" *ngIf="isRegistrationStarted() && !isRegistrationEnded()"></p-button>
-                <label class="ui-g-12 ui-fluid ui-state-highlight text-allign-center" *ngIf="!isRegistrationStarted() && !isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_NOT_STARTED' | translate}}</label>
-                <label class="ui-g-12 ui-fluid ui-state-highlight text-allign-center" *ngIf="isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_IS_ENDED' | translate}}</label>
+                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="!isRegistrationStarted() && !isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_NOT_STARTED' | translate}}</label>
+                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_IS_ENDED' | translate}}</label>
             </div>
         </div>
     </div>

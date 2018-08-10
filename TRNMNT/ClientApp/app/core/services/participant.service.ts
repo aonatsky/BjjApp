@@ -60,4 +60,8 @@ export class ParticipantService {
   setParticipantWeightIn(participantId: string, status: string): Observable<any> {
     return this.httpService.post(`${ApiMethods.participant.setWeightInStatus}/${participantId}`, {data: status});
   }
+
+  isFederationMember():Observable<boolean>{
+    return this.httpService.get<boolean>(ApiMethods.participant.isFederationMember);
+  }
 }

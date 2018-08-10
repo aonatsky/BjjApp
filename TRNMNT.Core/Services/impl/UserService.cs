@@ -40,7 +40,7 @@ namespace TRNMNT.Core.Services.Impl
         }
 
         public async Task<string> GetUserRoleAsync(User user){
-             return (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+             return (await _userManager.GetClaimsAsync(user)).FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
         }
 
         public async Task<User> GetUserAsync(ClaimsPrincipal claims)
@@ -92,6 +92,7 @@ namespace TRNMNT.Core.Services.Impl
                 LastName = model.LastName,
                 CreateTS = DateTime.UtcNow,
                 UserName = model.Email,
+                DateOfBirth = model.DateOfBirth.Value,
                 IsActive = true
             };
             return await CreateUserWithRoleAsync(user, role, model.Password);

@@ -186,7 +186,7 @@ export class EventManagementParticipantsComponent implements OnInit {
   }
 
   private getApprovalClassCallback(value: string): string {
-    let classes = 'ui-g-12 ui-g-nopad text-allign-center ';
+    let classes = 'ui-g-12 ui-g-nopad text-align-center ';
     switch (value) {
       case ApprovalStatus.approved:
         classes += 'fas fa-check-circle';

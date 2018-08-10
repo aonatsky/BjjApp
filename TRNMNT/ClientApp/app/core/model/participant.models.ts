@@ -16,6 +16,7 @@ export class ParticipantRegistrationModel extends ParticipantModelBase {
     email: string;
     phoneNumber: string;
     promoCode: string;
+    includeMembership: boolean;
 }
 
 export class ParticipantTableModel extends ParticipantModelBase {

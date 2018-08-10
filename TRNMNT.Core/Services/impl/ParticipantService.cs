@@ -24,18 +24,20 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IOrderService _orderService;
         private readonly IPaymentService _paymentService;
         private readonly IEventService _eventService;
+        private readonly IFederationMembershipService _federationMembershipService;
 
         #endregion
 
         #region .ctor
         private readonly IPaymentService paymentService;
 
-        public ParticipantService(IRepository<Participant> repository, IOrderService orderService, IPaymentService paymentService, IEventService eventService)
+        public ParticipantService(IRepository<Participant> repository, IOrderService orderService, IPaymentService paymentService, IEventService eventService, IFederationMembershipService federationMembershipService)
         {
             _paymentService = paymentService;
             _repository = repository;
             _orderService = orderService;
             _eventService = eventService;
+            this._federationMembershipService = federationMembershipService;
         }
 
         #endregion
@@ -51,7 +53,7 @@ namespace TRNMNT.Core.Services.Impl
                 p.DateOfBirth == model.DateOfBirth);
         }
 
-        public void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId)
+        public void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId, bool isFederationMember)
         {
             var participant = new Participant()
             {
@@ -66,6 +68,7 @@ namespace TRNMNT.Core.Services.Impl
                 WeightDivisionId = model.WeightDivisionId,
                 EventId = eventId,
                 UserId = model.UserId,
+                WeightInStatus = ApprovalStatus.Pending,
                 ApprovalStatus = ApprovalStatus.Pending,
                 IsActive = true,
                 UpdateTS = DateTime.UtcNow,
@@ -207,16 +210,31 @@ namespace TRNMNT.Core.Services.Impl
             return await _repository.GetAll(p => p.AbsoluteWeightDivisionId != null).ToListAsync();
         }
 
-        public async Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user)
+        public async Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, Guid federationId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user)
         {
             if (await IsParticipantExistsAsync(model, eventId))
             {
                 throw new BusinessException("REGISTRATION_TO_EVENT.PARTICIPANT_IS_ALREADY_REGISTERED");
             }
+
+            var isFederationMember = await _federationMembershipService.IsFederationMemberAsync(federationId, user.Id);
+            if (model.IncludeMembership && isFederationMember)
+            {
+                model.IncludeMembership = false;
+            }
+
+            var orderType = model.IncludeMembership? OrderTypeEnum.EventParticipationAndMembership : OrderTypeEnum.EventParticipation;
+
             var participantId = Guid.NewGuid();
-            var priceModel = await _eventService.GetPriceAsync(eventId, user.Id);
-            var order = _orderService.AddNewOrder(OrderTypeEnum.EventParticipation, priceModel.Amount, priceModel.Currency, participantId.ToString(), user.Id);
-            AddParticipant(model, eventId, order.OrderId, participantId);
+            var priceModel = await _eventService.GetPriceAsync(eventId, user.Id, model.IncludeMembership);
+            var order = _orderService.AddNewOrder(orderType, priceModel.Amount, priceModel.Currency, participantId.ToString(), user.Id);
+            AddParticipant(model, eventId, order.OrderId, participantId, isFederationMember || model.IncludeMembership);
+
+            if (model.IncludeMembership)
+            {
+                _federationMembershipService.AddFederationMembership(user.Id, federationId, order.OrderId, Guid.NewGuid());
+            }
+
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
@@ -240,7 +258,8 @@ namespace TRNMNT.Core.Services.Impl
                 case ApprovalStatus.Declined:
                     participant.WeightInStatus = ApprovalStatus.Declined;
                     break;
-                default: break;
+                default:
+                    break;
             }
             _repository.Update(participant);
         }
@@ -284,7 +303,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             foreach (var participant in participants)
             {
-                if (participant.ApprovalStatus != ApprovalStatus.Pending && participant.OrderId.HasValue)
+                if (participant.ApprovalStatus == ApprovalStatus.Pending && participant.OrderId.HasValue)
                 {
                     participant.ApprovalStatus = await _orderService.GetApprovalStatus(participant.OrderId.Value);
                     _repository.Update(participant);

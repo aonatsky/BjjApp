@@ -10,7 +10,7 @@ namespace TRNMNT.Core.Services.Interface
 {
     public interface IParticipantService : IPaidEntityService
     {
-    
+
         /// <summary>
         /// Determines whether [is participant exists asynchronous].
         /// </summary>
@@ -25,7 +25,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="eventId"></param>
         /// <param name="orderId"></param>
         /// <param name="participantId"></param>
-        void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId);
+        void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId, bool isFederationMember);
 
         /// <summary>
         /// Select ParticipantTableModel list for specified event with filtration.
@@ -75,7 +75,8 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="redirectUrl">The redirect URL.</param>
         /// <param name="user">User</param>
         /// <returns></returns>
-        Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user);
+        Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, Guid federationId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user);
+
         /// <summary>
         /// Set participant weight in status
         /// </summary>

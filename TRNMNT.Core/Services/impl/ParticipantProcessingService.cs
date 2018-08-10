@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.Team;
 using TRNMNT.Core.Services.Interface;
@@ -76,7 +77,10 @@ namespace TRNMNT.Core.Services.Impl
                     TeamId = ProcessTeam(model.Team, existingTeamsBase, teamsToAdd),
                     WeightDivisionId = eventWeightDivisions.First(wd => wd.Name.Equals(model.WeightDivision, StringComparison.OrdinalIgnoreCase) && wd.CategoryId == category.CategoryId).WeightDivisionId,
                     CategoryId = eventCategories.First(c => c.Name.Equals(model.Category, StringComparison.OrdinalIgnoreCase)).CategoryId,
-                    IsMember = isMember
+                    IsMember = isMember,
+                    IsActive = true,
+                    WeightInStatus = ApprovalStatus.Approved,
+                    ApprovalStatus = ApprovalStatus.Approved
                 };
 
                 if (!existingParticipants.Contains(participant, comparer) && !participantsToAdd.Contains(participant, comparer))

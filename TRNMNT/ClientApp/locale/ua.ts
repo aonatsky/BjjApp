@@ -55,13 +55,15 @@ export const data = {
     'PARTICIPANT_IS_ALREADY_REGISTERED':'Такий учасник вже зареєстрований',
     'YOUR_PRICE': 'Ваша ціна',
     'CONGRATS_YOU_ARE_REGISTERED_TO': 'Вітаємо, ви зареєстровані на {{value}}',
-    'GO_BACK_TO_EVENT_PAGE': 'Повернутись на сторінку події'
+    'GO_BACK_TO_EVENT_PAGE': 'Повернутись на сторінку події',
+    'ADD_MEMBERSHIP': 'Дотати внесок за членство в федерації'
   },
 'EVENT':{
   'PARTICIPANTS':'Учасники',
   'BRACKETS':'Турнірні таблиці',
   'RESULTS':'Результати',
-  'SELECT_WEIGHT_DIVISION':'Виберіть вагову категорію'
+  'SELECT_WEIGHT_DIVISION':'Виберіть вагову категорію',
+  'SELECT_CATEGORY':'Виберіть категорію'
 },
 'EVENT_MANAGEMENT':{
   'TITLE':'Управління подією',
@@ -125,6 +127,11 @@ export const data = {
   'TEAM_REGISTRATION':{
     'TITLE':'Реєстрація команди'
   },
+  'USER_REGISTRATION':{
+    'TITLE':'Реєстрація',
+    'REGISTER_AND_CONTINUE':'Зареєструватись і продовжити'
+  },
+
   'PROFILE':{
     'TITLE':'Мій профайл',
     'OLD_PASSWORD': 'Старий пароль',
@@ -133,6 +140,9 @@ export const data = {
   },
   'ERROR':{
     'SOMETHING_WENT_WRONG':'Щось пішло не так',
-    'PARTICIPANT_IS_NOT_FOUND': 'Учасника не знайдено'
+    'PARTICIPANT_IS_NOT_FOUND': 'Учасника не знайдено',
+    'EMAIL_OR_PASSWORD_IS_INVALID': 'Пошта або пароль введені невірно',
+
+
   }
 };

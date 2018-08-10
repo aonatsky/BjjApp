@@ -27,7 +27,7 @@ namespace TRNMNT.Data.Entities
         public bool IsMember { get; set; }
         public Guid? OrderId { get; set; }
 
-        public Guid TeamId { get; set; }
+        public Guid? TeamId { get; set; }
         public Guid CategoryId { get; set; }
         public Guid EventId { get; set; }
         public Guid WeightDivisionId { get; set; }

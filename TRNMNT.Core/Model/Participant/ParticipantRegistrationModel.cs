@@ -10,5 +10,6 @@ namespace TRNMNT.Core.Model.Participant
         public Guid CategoryId { get; set; }
         public Guid WeightDivisionId { get; set; }
         public string PromoCode { get; set; }
+        public bool IncludeMembership { get; set; }
     }
 }

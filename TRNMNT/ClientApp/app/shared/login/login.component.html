@@ -1,16 +1,14 @@
 ﻿<div class="ui-fluid">
     <div class="ui-g-12 center-block federation-logo">
     </div>
-    <div *ngIf="registrationEnabled" class="ui-g-12">
+    <div *ngIf="registrationEnabled" class="ui-g-12 text-align-center">
         {{'LOGIN.SIGN_IN_OR' | translate}}
         <a class="btn-link" (click)="signUp()">{{'LOGIN.SIGN_UP' | translate}}</a>
         {{'LOGIN.IF_YOU_DONT_HAVE_ACCOUNT' | translate}}
     </div>
 
     <div *ngIf="socialLoginEnabled">
-        <div class="ui-g-12 ui-fluid">
-            <p-button styleClass="ui-g-12"  icon="fab fa-facebook-square" (click)="facebookLogin()"></p-button>
-        </div>
+        <p-button class="ui-g-12" icon="fab fa-facebook-square" (click)="facebookLogin()"></p-button>
     </div>
     <div class="ui-g-3 ui-fluid">
         <label class="field-title">{{'COMMON.EMAIL' | translate}}</label>
@@ -25,14 +23,14 @@
     <div class="ui-g-9 ui-fluid">
         <input type="password" pInputText [(ngModel)]="password" placeholder="" />
     </div>
-    <div class="ui-g-12 ui-fluid">
-        <p-button styleClass="ui-g-12" (click)="login()" label="{{'LOGIN.SIGN_IN' | translate}}"></p-button>
-    </div>
+    <div class="ui-g-12" *ngIf="errorMessage">
+            <span class="ui-state-highlight ">{{errorMessage}}</span>
+        </div>
+    <p-button class="ui-g-12" (click)="login()" label="{{'LOGIN.SIGN_IN' | translate}}"></p-button>
 
 
-    <div class="ui-g-12">
-        <span class="ui-messages-error">{{errorMessage}}</span>
-    </div>
+
+    
     <div class="ui-g-12">
         <span class="float-right">trnmnt.pro</span>
     </div>

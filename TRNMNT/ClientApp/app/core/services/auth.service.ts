@@ -192,6 +192,7 @@ export class AuthService {
   }
 
   facebookLogin(): Observable<boolean> {
+    console.log(`${this.routerService.getMainDomainUrl()}/${ApiMethods.auth.facebookLogin}`)
     const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
     return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(
       flatMap((userData: SocialUser) => {

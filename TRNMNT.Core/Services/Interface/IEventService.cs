@@ -94,10 +94,11 @@ namespace TRNMNT.Core.Services.Interface
         /// <summary>
         /// Returns price model for an event based on user.
         /// </summary>
-        /// <param name="EventId"></param>
-        /// <param name="userId"></param>
+        /// <param name="EventId">Event id.</param>
+        /// <param name="userId">User id.</param>
+        /// <param name="includeMembership">Is membership price included</param>
         /// <returns>Price</returns>
-        Task<PriceModel> GetPriceAsync(Guid EventId, string userId);
+        Task<PriceModel> GetPriceAsync(Guid EventId, string userId, bool includeMembership);
 
         /// <summary>
         /// Creates new event to edit.

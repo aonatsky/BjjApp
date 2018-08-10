@@ -24,5 +24,14 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="user"></param>
         /// <returns></returns>
         Task<PaymentDataModel> ProcessFederationMembershipAsync(Guid federationId, string callbackUrl, string redirectUrl, User user);
+
+        /// <summary>
+        /// Adds federation membership
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="federationId"></param>
+        /// <param name="orderId"></param>
+        /// <param name="federationMembershipId"></param>
+        void AddFederationMembership(string userId, Guid federationId, Guid orderId, Guid federationMembershipId);
     }
 }

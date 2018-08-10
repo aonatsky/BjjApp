@@ -90,7 +90,7 @@ namespace TRNMNT.Web.Controllers
                     var user = await GetUserAsync();
                     var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
                     var redirectUrl = $"{Request.Host}/event/event-registration-complete";
-                    var result = await _participantService.ProcessParticipantRegistrationAsync(eventId.Value, model, callbackUrl, redirectUrl, await GetUserAsync());
+                    var result = await _participantService.ProcessParticipantRegistrationAsync(eventId.Value, GetFederationId().Value, model, callbackUrl, redirectUrl, await GetUserAsync());
                     return Success(result);
                 }
                 return (null, HttpStatusCode.NotFound);
@@ -150,8 +150,8 @@ namespace TRNMNT.Web.Controllers
             {
                 var options = new ParticipantListProcessingOptions
                 {
-                EventId = eventId,
-                FederationId = GetFederationId().Value
+                    EventId = eventId,
+                        FederationId = GetFederationId().Value
                 };
                 return await _fileProcessiongService.ProcessFileAsync(file, options);
             });
@@ -182,6 +182,15 @@ namespace TRNMNT.Web.Controllers
             {
                 await _participantService.SetWeightInStatus(participantId, statusModel.data);
             });
+        }
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<IActionResult> IsFederationMember()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                return await _federationMembershipService.IsFederationMemberAsync(GetFederationId().Value, (await GetUserAsync()).Id);
+            }, false, true);
         }
 
         #endregion

@@ -1,11 +1,11 @@
-﻿<div class="ui-container">
-    <div class="ui-widget ui-widget-content ui-g-offset-2 ui-g-8">
+﻿<trnmnt-page title="{{'USER_REGISTRATION.TITLE'|translate}}" contentClass="ui-g-offset-2 ui-g-8">
+    <form novalidate #userForm="ngForm">
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid">
                 <label>{{'COMMON.EMAIL'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <input pInputText [(ngModel)]="model.email" />
+                <input pInputText [(ngModel)]="model.email" required name="email" email/>
             </div>
         </div>
         <div class="ui-g">
@@ -13,7 +13,7 @@
                 <label>{{'COMMON.PASSWORD'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <input pInputText [(ngModel)]="model.password" type="password" />
+                <input pInputText [(ngModel)]="model.password" type="password" required name="password"/>
             </div>
         </div>
         <div class="ui-g">
@@ -21,7 +21,7 @@
                 <label>{{'COMMON.FIRST_NAME'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <input pInputText [(ngModel)]="model.firstName" />
+                <input pInputText [(ngModel)]="model.firstName" required name="firstName"/>
             </div>
         </div>
         <div class="ui-g">
@@ -29,7 +29,7 @@
                 <label>{{'COMMON.LAST_NAME'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <input pInputText [(ngModel)]="model.lastName" />
+                <input pInputText [(ngModel)]="model.lastName" required name="lastName"/>
             </div>
         </div>
         <div class="ui-g">
@@ -37,11 +37,14 @@
                 <label>{{'COMMON.DATE_OF_BIRTH'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <p-calendar icon="fa fa-calendar" dateFormat="dd/mm/yy" [(ngModel)]="model.dateOfBirth" [showIcon]="true"></p-calendar>
+                    <p-calendar icon="fa fa-calendar" [(ngModel)]="model.dateOfBirth" dateFormat="dd/mm/yy" readonlyInput="readonlyInput"
+                    showIcon="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="1960:2015" [defaultDate]="dateHelper.getDefaultDateOfBirth()"
+                    required name="dateOfBirth">
+                </p-calendar>
             </div>
         </div>
         <div class="ui-g-12 ">
-            <button pButton type="button" (click)="register()" label="{{'REGISTER.REGISTER_AND_CONTINUE'|translate}}" cornerStyleClass="none"></button>
+            <p-button class="float-right" (click)="register()" label="{{'USER_REGISTRATION.REGISTER_AND_CONTINUE'|translate}}" cornerStyleClass="none" [disabled]="userForm.invalid"></p-button>
         </div>
-    </div>
-</div>`
+    </form>
+</trnmnt-page>

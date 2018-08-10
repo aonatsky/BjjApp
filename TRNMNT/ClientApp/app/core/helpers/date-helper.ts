@@ -8,4 +8,10 @@ export default class DateHelper {
     const dateWithoutTime = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     return dateWithoutTime;
   }
+
+  static getDefaultDateOfBirth() {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 20);
+    return date;
+  }
 }

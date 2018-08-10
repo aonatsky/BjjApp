@@ -5,6 +5,7 @@ import { EventModel, EventPreviewModel } from '../model/event.models';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PriceModel } from '../model/price.model';
 
 @Injectable()
 export class EventService {
@@ -77,8 +78,9 @@ export class EventService {
     return this.httpService.get(ApiMethods.event.createEvent);
   }
 
-  getPrice(): Observable<number> {
-    return this.httpService.get<number>(ApiMethods.event.getPrice);
+  getPrice(includeMembership : boolean): Observable<PriceModel> {
+    debugger;
+    return this.httpService.get<number>(ApiMethods.event.getPrice, {includeMembership});
   }
 
   //private methods

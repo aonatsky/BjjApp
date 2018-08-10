@@ -3,6 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../../core/services/logger.service';
 import { RouterService } from '../../core/services/router.service';
+import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
 
 @Component({
   selector: 'login',
@@ -12,26 +13,35 @@ import { RouterService } from '../../core/services/router.service';
 export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
-  @Input() returnUrl: string;
-  @Input() socialLoginEnabled: boolean = true;
-  @Input() registrationEnabled: boolean = true;
-  errorMessage: string;
+  @Input()
+  returnUrl: string;
+  @Input()
+  socialLoginEnabled: boolean = true;
+  @Input()
+  registrationEnabled: boolean = true;
+  errorMessage: string = '';
 
   constructor(
-    private route: ActivatedRoute,
     private authService: AuthService,
     private routerService: RouterService,
-    private loggerService: LoggerService
+    private loggerService: LoggerService,
+    private translateService: TranslateService
   ) {}
 
-  ngOnInit() {
-    // this.authService.signout();
-  }
+  ngOnInit() {}
 
   login(): any {
-    this.authService
-      .signin(this.username, this.password)
-      .subscribe(data => this.processLogin(data), error => this.loggerService.logError(error));
+    this.errorMessage = '';
+    this.authService.signin(this.username, this.password).subscribe(
+      data => this.processLogin(data),
+      error => {
+        if ((error.status = 401)) {
+          this.processLogin(false);
+        } else {
+          this.loggerService.logError(error);
+        }
+      }
+    );
   }
 
   signUp(): any {
@@ -44,7 +54,7 @@ export class LoginComponent implements OnInit {
         this.routerService.navigateByUrl(this.returnUrl);
       }
     } else {
-      this.errorMessage = 'Authentication failed, please check your credentials';
+      this.errorMessage = this.translateService.instant('ERROR.EMAIL_OR_PASSWORD_IS_INVALID');
     }
   }
 

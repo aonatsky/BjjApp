@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'event-edit',
   templateUrl: './event-edit.component.html',
-  styleUrls:['./event-edit.component.scss'],
+  styleUrls: ['./event-edit.component.scss']
 })
 export class EventEditComponent implements OnInit {
   eventModel: EventModel;
@@ -21,7 +21,7 @@ export class EventEditComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private route: ActivatedRoute,
-    private translateservice: TranslateService
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -41,20 +41,41 @@ export class EventEditComponent implements OnInit {
   }
 
   private initMenu() {
-    this.translateservice
-      .get('EVENT_EDIT.GENERAL_INFORMATION')
-      .subscribe((r: string) => this.menuItems.push({ label: r }));
-    this.translateservice.get('EVENT_EDIT.PRICES').subscribe((r: string) => this.menuItems.push({ label: r }));
-    this.translateservice.get('EVENT_EDIT.CATEGORIES').subscribe((r: string) => this.menuItems.push({ label: r }));
-    this.translateservice.get('EVENT_EDIT.ADDITIONAL').subscribe((r: string) => this.menuItems.push({ label: r }));
+    this.menuItems = [
+      {
+        label: this.translateService.instant('EVENT_EDIT.GENERAL_INFORMATION')
+      },
+      {
+        label: this.translateService.instant('EVENT_EDIT.PRICES')
+      },
+      {
+        label: this.translateService.instant('EVENT_EDIT.CATEGORIES')
+      },
+      {
+        label: this.translateService.instant('EVENT_EDIT.ADDITIONAL')
+      }
+    ];
   }
 
   private modelReload() {
-    this.cacheRefreshToken = Date.now().toString();
     this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
       this.eventModel = r;
     });
   }
+
+  private imageReload() {
+    this.cacheRefreshToken = Date.now().toString();
+    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
+      this.eventModel.imgPath = r.imgPath;
+    });
+  }
+  
+  private tncReload() {
+    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
+      this.eventModel.tncFilePath = r.tncFilePath;
+    });
+  }
+
 
   private nextStep() {
     this.currentStep++;
@@ -66,31 +87,31 @@ export class EventEditComponent implements OnInit {
 
   private save() {
     this.eventService.updateEvent(this.eventModel).subscribe();
-  } 
+  }
 
   private delete() {
     this.eventService.deleteEvent(this.eventModel.eventId).subscribe();
   }
 
-  private onImageUpload(event) : void {
-    this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
+  private onImageUpload(event): void {
+    this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe(r => this.imageReload());
   }
 
-  private onTncUpload(event) : void {
+  private onTncUpload(event): void {
     this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe(r => {
-      this.modelReload();
+      this.tncReload();
     });
   }
 
-  private onPromoCodeUpload(event) : void {
+  private onPromoCodeUpload(event): void {
     this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
   }
 
-  private downloadTnc() : void {
+  private downloadTnc(): void {
     this.eventService.downloadEventTncFile(this.eventModel.tncFilePath).subscribe();
   }
 
-  getEventImageUrl() : string {
+  getEventImageUrl(): string {
     return `${this.eventModel.imgPath}?${this.cacheRefreshToken}`;
   }
 }

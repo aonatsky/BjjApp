@@ -15,6 +15,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { RouterService } from '../../core/services/router.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PriceModel } from '../../core/model/price.model';
+import DateHelper from '../../core/helpers/date-helper';
 
 @Component({
   selector: 'event-registration',
@@ -23,8 +24,10 @@ import { PriceModel } from '../../core/model/price.model';
   encapsulation: ViewEncapsulation.None
 })
 export class EventRegistrationComponent implements OnInit {
-  @ViewChild('formPrivatElement') formPrivat: ElementRef;
+  @ViewChild('formPrivatElement')
+  formPrivat: ElementRef;
   participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
+  isFederationMember: boolean = false;
   categories: CategorySimpleModel[] = [];
   weightDivisions: WeightDivisionSimpleModel[] = [];
   categorySelectItems: SelectItem[];
@@ -40,6 +43,7 @@ export class EventRegistrationComponent implements OnInit {
   tncAccepted: boolean = false;
   paymentData: string = '';
   paymentSignature: string = '';
+  dateHelper = DateHelper;
 
   constructor(
     private weightDivisionService: WeightDivisionService,
@@ -49,7 +53,7 @@ export class EventRegistrationComponent implements OnInit {
     private authService: AuthService,
     private eventService: EventService,
     private routerService: RouterService,
-    private translateService : TranslateService
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -59,6 +63,7 @@ export class EventRegistrationComponent implements OnInit {
     this.participant.firstName = user.firstName;
     this.participant.lastName = user.lastName;
     this.participant.email = user.email;
+    this.participant.includeMembership = false;
     this.loadData();
   }
 
@@ -67,7 +72,7 @@ export class EventRegistrationComponent implements OnInit {
       this.teamService.getTeamsForEvent(),
       this.categoryService.getCategoriesForCurrentEvent(),
       this.eventService.getCurrentEvent(),
-      this.eventService.getPrice()
+      this.participantService.isFederationMember()
     ).subscribe(data => this.initData(data));
   }
 
@@ -75,15 +80,13 @@ export class EventRegistrationComponent implements OnInit {
     this.teams = data[0];
     this.categories = data[1];
     this.eventTitleParameter = { value: data[2].title };
-    this.price = data[3];
-    this.initCategoryDropdown();
+    (this.isFederationMember = data[3]), this.initCategoryDropdown();
     this.initTeamDropdown();
+    this.initPrice();
   }
 
   private getDefaultDateOfBirth() {
-    const date = new Date();
-    date.setFullYear(date.getFullYear() - 20);
-    return date;
+    return DateHelper.getDefaultDateOfBirth();
   }
 
   private initTeamDropdown() {
@@ -112,14 +115,17 @@ export class EventRegistrationComponent implements OnInit {
   }
 
   getTeam(): string {
-    return this.teams.find(t => t.teamId == this.participant.teamId).name;
+    if (this.participant.teamId) {
+      return this.teams.find(t => t.teamId == this.participant.teamId).name;
+    }
+    return this.translateService.instant('COMMON.NO_TEAM');
   }
 
-  getCategory() : string{
+  getCategory(): string {
     return this.categories.find(c => c.categoryId == this.participant.categoryId).name;
   }
 
-  getWeightDivision(){
+  getWeightDivision() {
     return this.weightDivisions.find(w => w.weightDivisionId == this.participant.weightDivisionId).name;
   }
 
@@ -136,9 +142,13 @@ export class EventRegistrationComponent implements OnInit {
   }
 
   goToPayment() {
-      this.participantService.processParticipantRegistration(this.participant).subscribe((r: PaymentDataModel) => {
+    this.participantService.processParticipantRegistration(this.participant).subscribe((r: PaymentDataModel) => {
       this.submitPaymentForm(r);
     });
+  }
+
+  initPrice() {
+    this.eventService.getPrice(this.participant.includeMembership).subscribe(p => (this.price = p));
   }
 
   private submitPaymentForm(paymentData: PaymentDataModel) {

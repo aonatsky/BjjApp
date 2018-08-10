@@ -3,6 +3,8 @@ import { AuthService } from '../../core/services/auth.service';
 import { RouterService } from '../../core/services/router.service';
 import { UserRegistrationModel } from '../../core/model/user.models';
 import { UserService } from '../../core/services/user.service';
+import { ActivatedRoute } from '@angular/router';
+import DateHelper from '../../core/helpers/date-helper';
 
 @Component({
   selector: 'register',
@@ -11,16 +13,19 @@ import { UserService } from '../../core/services/user.service';
 export class RegisterComponent implements OnInit {
   model: UserRegistrationModel;
   returnUrl: string;
+  dateHelper = DateHelper;
 
   constructor(
     private authService: AuthService,
     private routerService: RouterService,
     private userService: UserService,
-    
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.model = new UserRegistrationModel();
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    console.log(this.returnUrl);
   }
 
   register(): any {

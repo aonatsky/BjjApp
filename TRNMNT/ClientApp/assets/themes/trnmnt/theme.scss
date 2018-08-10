@@ -146,7 +146,7 @@ body {
     background-color: transparent;
 
     .ui-tabview-panel {
-      overflow: auto;
+      overflow: visible;
     }
 
     &.ui-tabview-top {
@@ -239,7 +239,7 @@ body {
         background-color: $theme_black;
         border-color: $theme_black;
         color: $theme_white;
-        .ui-sortable-column-icon{
+        .ui-sortable-column-icon {
           color: $theme_white;
         }
       }
@@ -315,6 +315,23 @@ body {
   }
 }
 
+p-dropdown.ng-valid[required] .ui-dropdown,
+p-calendar.ng-valid[required] span input,
+input.ng-valid[required],
+.ng-valid.required {
+  border-left: 5px solid #42a948; /* green */
+}
+
+p-dropdown.ng-invalid.ng-touched:not(form) .ui-dropdown,
+p-calendar.ng-invalid.ng-touched:not(form) span input,
+input.ng-invalid.ng-touched:not(form) {
+  border-left: 5px solid rgb(146, 9, 9); /* red */
+}
+
 textarea {
   resize: none;
+}
+
+label {
+  min-height: 1em;
 }

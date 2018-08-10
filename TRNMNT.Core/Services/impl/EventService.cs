@@ -132,23 +132,32 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId, string role)
         {
             var modelsQuery = _eventRepository.GetAll();
-            if (role == Roles.FederationOwner || role == Roles.Admin)
+            if (role == Roles.Admin)
             {
-
+                return await GetModels(_eventRepository.GetAll());
+            }
+            if (role == Roles.FederationOwner)
+            {
+                return await GetModels(_eventRepository.GetAll());
             }
             if (role == Roles.Owner)
             {
-                modelsQuery = modelsQuery.Where(e => e.OwnerId == userId);
+                return await GetModels(_eventRepository.GetAll().Where(e => e.OwnerId == userId));
             }
-            return await modelsQuery.Select(e => new EventModelBase
+            return new List<EventModelBase>();
+
+            async Task<List<EventModelBase>> GetModels(IQueryable<Event> query)
             {
-                EventId = e.EventId,
-                    EventDate = e.EventDate,
-                    RegistrationEndTS = e.RegistrationEndTS,
-                    EarlyRegistrationEndTS = e.EarlyRegistrationEndTS,
-                    RegistrationStartTS = e.RegistrationStartTS,
-                    Title = e.Title
-            }).ToListAsync();
+                return await modelsQuery.Select(e => new EventModelBase
+                {
+                    EventId = e.EventId,
+                        EventDate = e.EventDate,
+                        RegistrationEndTS = e.RegistrationEndTS,
+                        EarlyRegistrationEndTS = e.EarlyRegistrationEndTS,
+                        RegistrationStartTS = e.RegistrationStartTS,
+                        Title = e.Title
+                }).ToListAsync();
+            }
         }
 
         public async Task<bool> IsEventUrlPrefixExistAsync(string prefix)
@@ -204,7 +213,7 @@ namespace TRNMNT.Core.Services.Impl
             return string.Empty;
         }
 
-        public async Task<PriceModel> GetPriceAsync(Guid eventId, string userId)
+        public async Task<PriceModel> GetPriceAsync(Guid eventId, string userId, bool includeMembership)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
             if (_event == null)
@@ -220,11 +229,16 @@ namespace TRNMNT.Core.Services.Impl
 
             if (DateTime.UtcNow <= _event.EarlyRegistrationEndTS)
             {
-                priceModel.Amount = isMember? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+                priceModel.Amount = isMember || includeMembership ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
             }
             else
             {
-                priceModel.Amount = isMember? _event.LateRegistrationPrice : _event.LateRegistrationPrice;
+                priceModel.Amount = isMember || includeMembership ? _event.LateRegistrationPrice : _event.LateRegistrationPrice;
+            }
+
+            if (includeMembership)
+            {
+                priceModel.Amount += (await _federationService.GetMembershipPriceAsync(_event.FederationId)).Amount;
             }
 
             return priceModel;

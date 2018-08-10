@@ -29,7 +29,7 @@
                     </div>
                     <div class="ui-g-9 ui-fluid">
                         <p-calendar icon="fa fa-calendar" [(ngModel)]="participant.dateOfBirth" dateFormat="dd/mm/yy" readonlyInput="readonlyInput"
-                            showIcon="true" monthNavigator="true" yearNavigator="true" yearRange="1960:2015" [defaultDate]="getDefaultDateOfBirth()"
+                            showIcon="true" monthNavigator="true" [yearNavigator]="true" yearRange="1960:2015" [defaultDate]="dateHelper.getDefaultDateOfBirth()"
                             required name="dateOfBirth">
                         </p-calendar>
                     </div>
@@ -40,7 +40,7 @@
                     </div>
                     <div class="ui-g-9 ui-fluid">
                         <p-dropdown [options]="teamSelectItems" [(ngModel)]="participant.teamId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_TEAM'|translate}}"
-                            name="team" required></p-dropdown>
+                            name="team"></p-dropdown>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -53,7 +53,7 @@
                         <label>{{'COMMON.CATEGORY'|translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
-                        <p-dropdown [options]="categorySelectItems" [(ngModel)]="participant.categoryId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_CATEGORY'|translate}}"
+                        <p-dropdown [options]="categorySelectItems" [(ngModel)]="participant.categoryId" [autoWidth]="false" placeholder="{{'EVENT.SELECT_CATEGORY'|translate}}"
                             (onChange)="initWeightDivisionDropdown($event)" name="category" required></p-dropdown>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                         <label>{{'COMMON.WEIGHT_DIVISION'|translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
-                        <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="participant.weightDivisionId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_WEIGHT_DIVISION'|translate}}"
+                        <p-dropdown [options]="weightDivisionsSelectItems" [(ngModel)]="participant.weightDivisionId" [autoWidth]="false" placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION'|translate}}"
                             [disabled]="!weightDivisionsSelectItems || weightDivisionsSelectItems.length == 0" name="weightDivision"
                             required></p-dropdown>
                     </div>
@@ -204,6 +204,12 @@
         </div>
         <div class="ui-g ui-g-12 price">
             <span class="price">{{price.amount}} {{price.currency}}</span>
+        </div>
+    </div>
+    <div class="ui-g ui-g-4 price-box" *ngIf="!isFederationMember">
+        <div class="ui-g ui-g-12">
+            <p-checkbox [(ngModel)]="participant.includeMembership" binary="true" label="{{'REGISTRATION_TO_EVENT.ADD_MEMBERSHIP'|translate}}"
+                (onChange)="initPrice()"></p-checkbox>
         </div>
     </div>
 </div>

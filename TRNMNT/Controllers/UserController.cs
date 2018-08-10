@@ -104,7 +104,6 @@ namespace TRNMNT.Web.Controllers
                 await _userService.SetPasswordAsync(model.NewPassword, model.UserId);
             });
         }
-
         #endregion
     }
 }

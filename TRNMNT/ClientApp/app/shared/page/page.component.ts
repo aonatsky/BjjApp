@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'trnmnt-page',
@@ -9,9 +10,10 @@ export class PageComponent implements OnInit {
 
   @Input() title : string;
   @Input() contentClass : string = "";
-  constructor() { }
+  constructor(private titleService: Title) { }
 
   ngOnInit() {
+    this.titleService.setTitle(this.title);
   }
 
 }

@@ -145,12 +145,12 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpGet("[action]/{eventId}")]
-        public async Task<IActionResult> GetPrice(string eventId)
+        public async Task<IActionResult> GetPrice(string eventId, [FromQuery(Name = "includeMembership")] bool includeMembership)
         {
             return await HandleRequestWithDataAsync(async() =>
             {
                 var user = await GetUserAsync();
-                var price = _eventService.GetPriceAsync(Guid.Parse(eventId), user.Id);
+                var price = _eventService.GetPriceAsync(Guid.Parse(eventId), user.Id, includeMembership);
                 return price;
             });
         }
@@ -162,9 +162,9 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpGet("[action]")]
-        public async Task<IActionResult> GetPrice()
+        public async Task<IActionResult> GetPrice([FromQuery(Name = "includeMembership")] bool includeMembership)
         {
-            return await HandleRequestWithDataAsync(async() => await _eventService.GetPriceAsync(GetEventId().Value, (await GetUserAsync()).Id), true, true);
+            return await HandleRequestWithDataAsync(async() => await _eventService.GetPriceAsync(GetEventId().Value, (await GetUserAsync()).Id, includeMembership), true, true);
         }
 
         [Authorize(Roles = "FederationOwner, Owner"), HttpDelete("[action]")]

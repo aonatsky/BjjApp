@@ -71,7 +71,7 @@ namespace TRNMNT.Core.Services.Impl
         #endregion
 
         #region
-        private void AddFederationMembership(string userId, Guid federationId, Guid orderId, Guid federationMembershipId)
+        public void AddFederationMembership(string userId, Guid federationId, Guid orderId, Guid federationMembershipId)
         {
             var federationMembership = new FederationMembership()
             {
@@ -88,7 +88,7 @@ namespace TRNMNT.Core.Services.Impl
 
         private async Task CheckMembershipStatusAsync(FederationMembership membership)
         {
-            if (membership.ApprovalStatus != ApprovalStatus.Pending && membership.OrderId.HasValue)
+            if (membership.ApprovalStatus == ApprovalStatus.Pending && membership.OrderId.HasValue)
             {
                 membership.ApprovalStatus = await _orderService.GetApprovalStatus(membership.OrderId.Value);
                 _repository.Update(membership);

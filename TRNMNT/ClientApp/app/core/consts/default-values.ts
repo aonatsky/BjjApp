@@ -11,4 +11,5 @@ class DefaultValues {
 
     static RunEventSyncIdPart = 'runevent-wd-view-sync-id_';
     static RunEventSessionId = 'runevent-sessin-id';
+    static NoTeamValue = '00000000-0000-0000-0000-000000000000'
 }
