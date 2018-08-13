@@ -4,6 +4,7 @@ import { TeamModel, TeamRegistrationModel, TeamModelFull } from '../model/team.m
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable } from 'rxjs';
 import { PriceModel } from '../model/price.model';
+import { UserModelAthlete } from '../model/user.models';
 
 @Injectable()
 export class TeamService {
@@ -20,7 +21,19 @@ export class TeamService {
   processTeamRegistration(model: TeamRegistrationModel): Observable<any> {
     return this.httpService.post(ApiMethods.team.processTeamRegistration, model);
   }
+
   getTeamRegistrationPrice(): Observable<PriceModel> {
     return this.httpService.get<PriceModel>(ApiMethods.team.getTeamRegistrationPrice);
+  }
+
+  getTeamMembers(): Observable<UserModelAthlete[]> {
+    return this.httpService.get<UserModelAthlete[]>(ApiMethods.team.getTeamMembers);
+  }
+
+  approveTeamMembership(userId: string): Observable<any> {
+    return this.httpService.post(`${ApiMethods.team.approveTeamMembership}/${userId}`);
+  }
+  declineTeamMembership(userId: string): Observable<any> {
+    return this.httpService.post(`${ApiMethods.team.declineTeamMembership}/${userId}`);
   }
 }

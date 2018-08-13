@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
@@ -48,13 +49,13 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task<IActionResult> Register([FromBody] UserRegistrationModel model)
+        public async Task<IActionResult> Register([FromBody] UserModelRegistration model)
         {
             return await HandleRequestAsync(async() =>
             {
                 if (Request.Headers["password"] == "pizdecpassword")
                 {
-                    await _userService.CreateUserAsync(model, "Owner");
+                    await _userService.CreateUserAsync(model, new string[]{ Roles.Owner});
                     return HttpStatusCode.OK;
                 }
                 else
@@ -65,7 +66,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [AllowAnonymous, HttpPost("[action]")]
-        public async Task<IActionResult> RegisterParticipantUser([FromBody] UserRegistrationModel model)
+        public async Task<IActionResult> RegisterParticipantUser([FromBody] UserModelRegistration model)
         {
             return await HandleRequestAsync(async() =>
             {

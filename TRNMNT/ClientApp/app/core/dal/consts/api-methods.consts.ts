@@ -30,7 +30,14 @@ export const ApiMethods = Object.freeze({
     getTeamsForEvent: 'api/team/getTeamsForEvent',
     getTeamsForAdmin: 'api/team/getTeamsForAdmin',
     processTeamRegistration: 'api/team/processTeamRegistration',
-    getTeamRegistrationPrice: 'api/team/getTeamRegistrationPrice'
+    getTeamRegistrationPrice: 'api/team/getTeamRegistrationPrice',
+    getTeamMembers: 'api/team/getTeamMembers',
+    approveTeamMembership: 'api/team/approveTeamMembership',
+    declineTeamMembership: 'api/team/declineTeamMembership'
+  },
+  federation: {
+    getFederation: 'api/getFederation',
+    updateFederation: 'api/updateFederation'
   },
   weightDivision: {
     weightDivision: 'api/weightdivision',

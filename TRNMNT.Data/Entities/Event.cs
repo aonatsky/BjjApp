@@ -49,7 +49,7 @@ namespace TRNMNT.Data.Entities
         public Guid FederationId { get; set; }
         public bool PromoCodeEnabled { get; set; }
         public string PromoCodeListPath { get; set; }
-
+        public string PaymentType {get;set;}
         public int EarlyRegistrationPrice { get; set; }
         public int LateRegistrationPrice { get; set; }
         public int EarlyRegistrationPriceForMembers { get; set; }

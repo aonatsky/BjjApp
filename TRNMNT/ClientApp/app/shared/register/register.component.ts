@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterService } from '../../core/services/router.service';
-import { UserRegistrationModel } from '../../core/model/user.models';
+import { UserModelRegistration } from '../../core/model/user.models';
 import { UserService } from '../../core/services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import DateHelper from '../../core/helpers/date-helper';
@@ -11,7 +11,7 @@ import DateHelper from '../../core/helpers/date-helper';
   templateUrl: './register.component.html',
 })
 export class RegisterComponent implements OnInit {
-  model: UserRegistrationModel;
+  model: UserModelRegistration;
   returnUrl: string;
   dateHelper = DateHelper;
 
@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.model = new UserRegistrationModel();
+    this.model = new UserModelRegistration();
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
     console.log(this.returnUrl);
   }

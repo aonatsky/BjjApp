@@ -1,8 +1,7 @@
 namespace TRNMNT.Core.Model.User
 {
-    public class UserModel : UserRegistrationModel
+    public class UserModel : UserModelRegistration
     {
-        public string UserId {get;set;}
         public string Role {get;set;}
     }
 }

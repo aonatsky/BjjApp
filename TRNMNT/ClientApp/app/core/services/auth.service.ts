@@ -9,7 +9,7 @@ import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { RefreshTokenModel } from '../model/auth.models';
 import { AuthTokenModel } from '../model/auth.models';
 import { CredentialsModel } from '../model/credentials.model';
-import { UserModel, UserRegistrationModel } from '../model/user.models';
+import { UserModel, UserModelRegistration } from '../model/user.models';
 import { RouterService } from './router.service';
 
 /**

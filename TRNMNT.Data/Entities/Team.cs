@@ -29,7 +29,7 @@ namespace TRNMNT.Data.Entities
 
         public DateTime CreateTs { get; set; }
         public DateTime? UpdateTs { get; set; }
-        public string CreateBy { get; set; }
+        public string OwnerId { get; set; }
         public Guid FederationId { get; set; }
         public Guid? OrderId { get; set; }
         public string ApprovalStatus { get; set; }

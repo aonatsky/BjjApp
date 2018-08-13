@@ -1,4 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Model.User;
@@ -14,6 +17,27 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
         Task<User> GetUserAsync(string userId);
+
+        /// <summary>
+        /// Returns users by query
+        /// </summary>
+        /// <param name="predicate">Query</param>
+        /// <returns></returns>
+        Task<IEnumerable<User>> GetUsersAsync(Expression<Func<User, bool>> predicate);
+
+        /// <summary>
+        /// Declines team membership by user Id.
+        /// </summary>
+        /// <param name="userId">User Id.</param>
+        /// <returns></returns>
+        Task DeclineTeamMembershipAsync(string userId);
+
+        /// <summary>
+        /// Approves team membership by user Id.
+        /// </summary>
+        /// <param name="userId">User Id.</param>
+        /// <returns></returns>
+        Task ApproveTeamMembershipAsync(string userId);
 
         /// <summary>
         /// Returns user role.
@@ -42,7 +66,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateParticipantUserAsync(UserRegistrationModel model);
+        Task<UserRegistrationResult> CreateParticipantUserAsync(UserModelRegistration model);
 
         /// <summary>
         /// Change users password asynchronously 
@@ -65,9 +89,9 @@ namespace TRNMNT.Core.Services.Interface
         /// Creates user asynchronous.
         /// </summary>
         /// <param name="model">Credentials model.</param>
-        /// <param name="role">Role.</param>
+        /// <param name="roles">Roles.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateUserAsync(UserRegistrationModel model, string role);
+        Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, string[] roles);
 
         /// <summary>
         /// Updates user asynchronous.
@@ -80,9 +104,9 @@ namespace TRNMNT.Core.Services.Interface
         /// Adds user with role
         /// </summary>
         /// <param name="user">User object.</param>
-        /// <param name="role">Role.</param>
+        /// <param name="roles">Roles.</param>
         /// <param name="password">Password.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string role, string password);
+        Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string[] roles, string password);
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Helpers.Exceptions;
@@ -10,6 +13,7 @@ using TRNMNT.Core.Model.Result;
 using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
+using TRNMNT.Data.Repositories;
 
 namespace TRNMNT.Core.Services.Impl
 {
@@ -19,15 +23,17 @@ namespace TRNMNT.Core.Services.Impl
 
         private readonly UserManager<User> _userManager;
         private readonly ILogger<UserService> _logger;
+        private readonly IRepository<User> _repository;
 
         #endregion
 
         #region .ctor
 
-        public UserService(UserManager<User> userManager, ILogger<UserService> logger)
+        public UserService(UserManager<User> userManager, ILogger<UserService> logger, IRepository<User> repository)
         {
             _userManager = userManager;
             _logger = logger;
+            _repository = repository;
         }
 
         #endregion
@@ -39,8 +45,14 @@ namespace TRNMNT.Core.Services.Impl
             return await _userManager.FindByIdAsync(userId);
         }
 
-        public async Task<string> GetUserRoleAsync(User user){
-             return (await _userManager.GetClaimsAsync(user)).FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+        public async Task<IEnumerable<User>> GetUsersAsync(Expression<Func<User, bool>> predicate)
+        {
+            return await _repository.GetAll(predicate).ToListAsync();
+        }
+
+        public async Task<string> GetUserRoleAsync(User user)
+        {
+            return (await _userManager.GetClaimsAsync(user)).FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
         }
 
         public async Task<User> GetUserAsync(ClaimsPrincipal claims)
@@ -65,9 +77,13 @@ namespace TRNMNT.Core.Services.Impl
             _logger.LogDebug($"User '{secretUserCreationModel.UserName}' is created with role Owner.");
         }
 
-        public async Task<UserRegistrationResult> CreateParticipantUserAsync(UserRegistrationModel model)
+        public async Task<UserRegistrationResult> CreateParticipantUserAsync(UserModelRegistration model)
         {
-            return await CreateUserAsync(model, Roles.Participant);
+            var roles = new [] { Roles.Participant };
+            if( model.IsTeamOwner){
+                roles.Append(Roles.TeamOwner);
+            }
+            return await CreateUserAsync(model, new string[] { Roles.Participant });
         }
 
         public async Task UpdateUserAsync(UserModel model)
@@ -83,7 +99,7 @@ namespace TRNMNT.Core.Services.Impl
             user.Email = model.Email;
             await _userManager.UpdateAsync(user);
         }
-        public async Task<UserRegistrationResult> CreateUserAsync(UserRegistrationModel model, string role)
+        public async Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, string[] roles)
         {
             var user = new User
             {
@@ -93,9 +109,11 @@ namespace TRNMNT.Core.Services.Impl
                 CreateTS = DateTime.UtcNow,
                 UserName = model.Email,
                 DateOfBirth = model.DateOfBirth.Value,
-                IsActive = true
+                IsActive = true,
+                TeamId = model.TeamId,
+                TeamMembershipApprovalStatus = ApprovalStatus.Pending
             };
-            return await CreateUserWithRoleAsync(user, role, model.Password);
+            return await CreateUserWithRoleAsync(user, roles, model.Password);
         }
 
         public async Task ChangesPasswordAsync(string oldPassword, string newPassword, string userId)
@@ -126,16 +144,41 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string role, string password)
+        public async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string[] roles, string password)
         {
             var identityResult = await _userManager.CreateAsync(user, password);
-            await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
-
+            foreach (string role in roles)
+            {
+                await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
+            }
             if (identityResult.Succeeded)
             {
                 return new UserRegistrationResult(true);
             }
             return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
+        }
+
+        public async Task DeclineTeamMembershipAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return;
+            }
+            user.TeamMembershipApprovalStatus = ApprovalStatus.Pending;
+            user.TeamId = null;
+            await _userManager.UpdateAsync(user);
+        }
+
+        public async Task ApproveTeamMembershipAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return;
+            }
+            user.TeamMembershipApprovalStatus = ApprovalStatus.Approved;
+            await _userManager.UpdateAsync(user);
         }
 
         #endregion

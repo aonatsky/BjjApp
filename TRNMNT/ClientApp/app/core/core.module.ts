@@ -57,6 +57,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { StorageService } from './services/storage.service';
 import { EventRunCommunicationService } from './hubservices/event-run.communication.service';
 import { UserService } from './services/user.service';
+import { FederationService } from './services/federation.service';
 
 @NgModule({
   imports: [
@@ -125,7 +126,8 @@ import { UserService } from './services/user.service';
     AuthGuard,
     RedirectGuard,
     RouterService,
-    PaymentService
+    PaymentService,
+    FederationService
   ],
 
   exports: [

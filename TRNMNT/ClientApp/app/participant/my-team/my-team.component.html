@@ -1,0 +1,11 @@
+<trnmnt-page contentClass="ui-g-8 ui-g-offset-2" title="{{'MY_TEAM.ATHLETES' | translate}}">
+    <ng-template #approveTemplate let-data>
+        <button type="button" pButton icon="fa fa-plus" style="float: left" (click)="approveAthlete(data)" label="{{'COMMON.APPROVAL.APPROVE | translate'}}"></button>
+        <button type="button" pButton icon="fa fa-plus" style="float: left" (click)="declineAthlete(data)" label="{{'COMMON.APPROVAL.DECLINE| translate'}}"></button>
+    </ng-template>
+    <crud #crudComponent [entities]="teams" [columns]="columns" [columnOptions]="columnOptions" [showRowNumbers]="false" [addEnabled]="false"
+        [editEnabled]="false" [deleteEnabled]="false" [sortField]="sortField" [sortOrder]="sortDirection" [lazy]="false" [(firstIndex)]="firstIndex"
+        [dialogMinWidth]="500" class="ui-g-12" gridMinHeight="350" [actionsTemplate]="approveTemplate"
+        [actionsHeader]="'APPROVAL_STATUS' | translate">
+    </crud>
+  <trnmnt-page

@@ -20,6 +20,7 @@ namespace TRNMNT.Web.Controllers
 
         private readonly ITeamService _teamService;
         private readonly IFederationService _federationService;
+        private readonly IUserService _userService;
 
         #endregion
 
@@ -35,6 +36,7 @@ namespace TRNMNT.Web.Controllers
             IConfiguration configuration
         ) : base(logger, userService, eventService, context, configuration)
         {
+            _userService = userService;
             _teamService = teamService;
             _federationService = federationService;
         }
@@ -52,7 +54,7 @@ namespace TRNMNT.Web.Controllers
                 return Success(data);
             }, true, true);
         }
-        
+
         [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpGet("[action]")]
         public async Task<IActionResult> GetTeamsForAdmin()
         {
@@ -77,6 +79,34 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
+        [Authorize(Roles = "Admin, TeamOwner"), HttpGet("[action]")]
+        public async Task<IActionResult> GetTeamMembers()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var data = await _teamService.GetAthletes((await GetUserAsync()).Id);
+                return Success(data);
+            }, false, true);
+        }
+
+        [Authorize(Roles = "Admin, TeamOwner"),HttpPost("[action]/{userId}")]
+        public async Task<IActionResult> ApproveTeamMembership(string userId)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _userService.ApproveTeamMembershipAsync(userId);
+            }, false, true);
+        }
+
+        [Authorize(Roles = "Admin, TeamOwner"),HttpPost("[action]/{userId}")]
+        public async Task<IActionResult> DeclineTeamMembership(string userId)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _userService.DeclineTeamMembershipAsync(userId);
+            }, false, true);
+        }
+
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> ProcessTeamRegistration([FromBody] TeamModelFull model)
         {
@@ -94,6 +124,7 @@ namespace TRNMNT.Web.Controllers
                 return (null, HttpStatusCode.NotFound);
             });
         }
+
         #endregion
     }
 }

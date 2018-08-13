@@ -22,6 +22,7 @@ import { ResultsComponent } from './event-management/results/results.component';
 import { BracketResultSetComponent } from './event-run/bracket-result-set/bracket-result-set.component';
 import { TeamListComponent } from './team-list/team-list.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { FederationEditComponent } from './federation-edit/federation-edit.component';
 
 @NgModule({
   imports: [CoreModule, SharedModule, RoundModule, EventAdminRoutingModule, TranslateModule],
@@ -42,7 +43,8 @@ import { TranslateModule } from '@ngx-translate/core';
     ConnectorComponent,
     ResultsComponent,
     BracketResultSetComponent,
-    TeamListComponent
+    TeamListComponent,
+    FederationEditComponent
   ],
 
   providers: [],

@@ -11,6 +11,7 @@ import { AuthGuard } from '../core/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { Roles } from '../core/consts/roles.const';
 import { TeamListComponent } from './team-list/team-list.component';
+import { FederationEditComponent } from './federation-edit/federation-edit.component';
 
 export const eventAdminRoutes: Routes = [
   {
@@ -46,6 +47,12 @@ export const eventAdminRoutes: Routes = [
       {
         path: 'edit',
         component: EventEditComponent
+      },
+      {
+        path: 'federation-edit',
+        component: FederationEditComponent,
+        data: { expectedRoles: [Roles.Admin, Roles.FederationOwner] },
+        canActivate: [AuthGuard]
       },
       {
         path: 'teams',

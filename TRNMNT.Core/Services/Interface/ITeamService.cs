@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Team;
+using TRNMNT.Core.Model.User;
 using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
@@ -35,7 +36,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="federationId"></param>
         /// <returns></returns>
         Task<IEnumerable<TeamModelFull>> GetTeamsForAdminAsync(Guid federationId);
-        
 
         /// <summary>
         /// Processes the team registration asynchronous. Returns payment data
@@ -47,6 +47,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="user">User</param>
         /// <returns></returns>
         Task<PaymentDataModel> ProcessTeamRegistrationAsync(Guid federationId, TeamModelFull model, string callbackUrl, string redirectUrl, User user);
-        
+
+        /// <summary>
+        ///  Returns athletes for the team;
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<IEnumerable<UserModelAthlete>> GetAthletes(string userId);
     }
 }

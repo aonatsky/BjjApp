@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable } from 'rxjs';
-import { UserRegistrationModel, UserModel } from '../model/user.models';
+import { UserModelRegistration, UserModel } from '../model/user.models';
 import { AuthService } from './auth.service';
 import { ChangePasswordModel } from '../model/change-password.model';
 import { map, flatMap } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { HttpService } from '../dal/http/http.service';
 export class UserService {
   constructor(private http: HttpService, private authService : AuthService) {}
 
-  register(model: UserRegistrationModel): Observable<string> {
+  register(model: UserModelRegistration): Observable<string> {
     return this.http.post<string>(ApiMethods.user.register, model);
   }
 

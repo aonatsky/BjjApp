@@ -48,6 +48,11 @@ export class TopbarComponent implements OnInit {
         visible: this.isLoggedIn
       },
       {
+        label: this.translateService.instant('MENU.PROFILE'),
+        routerLink: ['profile'],
+        visible:  this.isLoggedIn && [Roles.Admin, Roles.FederationOwner].some(x => x === this.role)
+      },
+      {
         label: this.translateService.instant('MENU.LOGIN'),
         command: event => {
           this.routerService.goToLogin();

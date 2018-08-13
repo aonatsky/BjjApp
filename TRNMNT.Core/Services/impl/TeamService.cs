@@ -8,6 +8,7 @@ using TRNMNT.Core.Enum;
 using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Team;
+using TRNMNT.Core.Model.User;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Entities;
 using TRNMNT.Data.Repositories;
@@ -22,13 +23,15 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IOrderService _orderService;
         private readonly IFederationService _federationService;
         private readonly IPaymentService _paymentService;
+        private readonly IUserService _userService;
         #endregion
 
         #region .ctor
 
-        public TeamService(IRepository<Team> repository, IOrderService orderService, IFederationService federationService, IPaymentService paymentService)
+        public TeamService(IRepository<Team> repository, IOrderService orderService, IFederationService federationService, IPaymentService paymentService, IUserService userService)
         {
             _paymentService = paymentService;
+            this._userService = userService;
             _federationService = federationService;
             _repository = repository;
             _orderService = orderService;
@@ -84,7 +87,7 @@ namespace TRNMNT.Core.Services.Impl
                     Name = t.Name,
                     ContactEmail = t.ContactEmail,
                     ContactPhone = t.ContactPhone,
-                    Description = t.Description,    
+                    Description = t.Description,
                     ContactName = t.ContactName,
                     ApprovalStatus = ApprovalStatus.GetTranslationKey(t.ApprovalStatus)
             });
@@ -103,6 +106,26 @@ namespace TRNMNT.Core.Services.Impl
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
+        public async Task<IEnumerable<UserModelAthlete>> GetAthletes(string userId)
+        {
+            var result = new List<UserModelAthlete>();
+            var team = await _repository.GetAll().Where(t => t.OwnerId == userId).FirstOrDefaultAsync();
+            if (team == null)
+            {
+                return result;
+            }
+
+            return (await _userService.GetUsersAsync(u => u.TeamId.HasValue && (u.TeamId == team.TeamId))).Select(u => new UserModelAthlete()
+            {
+                FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    DateOfBirth = u.DateOfBirth,
+                    Email = u.Email,
+                    UserId = u.Id,
+                    TeamMembershipApprovalStatus = ApprovalStatus.GetTranslationKey(u.TeamMembershipApprovalStatus)
+            });
+        }
+        
         #endregion
 
         #region private methods
@@ -117,7 +140,7 @@ namespace TRNMNT.Core.Services.Impl
                 ContactEmail = model.ContactEmail,
                 ContactName = model.ContactName,
                 ContactPhone = model.ContactPhone,
-                CreateBy = userId,
+                OwnerId = userId,
                 CreateTs = DateTime.UtcNow,
                 Description = model.Description,
                 FederationId = federationId,

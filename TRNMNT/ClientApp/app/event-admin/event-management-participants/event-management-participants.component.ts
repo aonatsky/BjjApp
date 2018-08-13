@@ -263,8 +263,6 @@ export class EventManagementParticipantsComponent implements OnInit {
   }
 
   setWeightIn(participant: ParticipantTableModel, status: string) {
-    console.log(participant);
-    console.log(status);
     this.participantService
       .setParticipantWeightIn(participant.participantId, status)
       .subscribe(() => (participant.weightInStatus = status));

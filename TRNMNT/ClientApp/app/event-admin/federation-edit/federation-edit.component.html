@@ -1,0 +1,65 @@
+<trnmnt-page title="{{'FEDERATION_EDIT.TITLE'|translate}}" contentClass="ui-g-offset-2 ui-g-8">
+    <form novalidate #federationForm="ngForm">
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
+                <label>{{'COMMON.NAME'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <input pInputText [(ngModel)]="model.name" required name="name" email/>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
+                <label>{{'FEDERATION_EDIT.DESCRIPTION'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <input pInputText [(ngModel)]="model.description"/>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
+                <label>{{'FEDERATION_EDIT.MEMBERSHIP_PRICE'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <input pInputText [(ngModel)]="model.membershipPrice" required type="number" name="membershipPrice"/>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
+                <label>{{'FEDERATION_EDIT.TEAM_REGISTRATION_PRICE'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <input pInputText [(ngModel)]="model.teamRegistrationPrice" required type="number" name="teamRegistrationPrice"/>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
+                <label>{{'FEDERATION_EDIT.MIN_COMMISSION'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <input pInputText [(ngModel)]="model.minCommission" required type="number" name="minCommission"/>
+            </div>
+        </div>
+        
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
+                <label>{{'FEDERATION_EDIT.COMMISSION_PERCENTAGE'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <input pInputText [(ngModel)]="model.commissionPercentage" required type="number" name="commissionPercentage"/>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
+                <label>{{'FEDERATION_EDIT.CONTACTS'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <textarea pInputTextarea [(ngModel)]="model.contactInformation" style="resize:none; height:8em"></textarea>
+            </div>
+        </div>
+        
+        <div class="ui-g-12 ">
+            <p-button class="float-right" (click)="save()" label="{{'COMMON.SAVE'|translate}}" cornerStyleClass="none" [disabled]="federationForm.invalid"></p-button>
+        </div>
+    </form>
+</trnmnt-page>

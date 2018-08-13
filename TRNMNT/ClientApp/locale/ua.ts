@@ -30,8 +30,10 @@ export const data = {
     'MEMBERSHIP':'Членство в федерації',
     'APPROVAL':{
       'APPROVED':'Підтверджено',
+      'APPROVE':'Підтвердити',
       'PENDING':'Очікуєця',
       'DECLINED':'Відхилено',
+      'DECLINE':'Відхилити',
       'APPROVAL_STATUS':'Статус'
     }
 
@@ -64,6 +66,16 @@ export const data = {
   'RESULTS':'Результати',
   'SELECT_WEIGHT_DIVISION':'Виберіть вагову категорію',
   'SELECT_CATEGORY':'Виберіть категорію'
+},
+'FEDERATION_EDIT':{
+  'DESCRIPTION':'Опис',
+  'TITLE': 'Федерація',
+  'MEMBERSHIP_PRICE':'Ціна внеску спортсмена',
+  'TEAM_REGISTRATION_PRICE':'Ціна реєстрації команди',
+  'MIN_COMMISSION':'Мінімальна комісія',
+  'COMMISSION_PERCENTAGE':'Відсоток комісії',
+  'CONTACTS':'Контакти',
+  'IMAGE': 'Зображення'
 },
 'EVENT_MANAGEMENT':{
   'TITLE':'Управління подією',
@@ -129,7 +141,8 @@ export const data = {
   },
   'USER_REGISTRATION':{
     'TITLE':'Реєстрація',
-    'REGISTER_AND_CONTINUE':'Зареєструватись і продовжити'
+    'REGISTER_AND_CONTINUE':'Зареєструватись і продовжити',
+    'I_AM_TEAM_OWNER': 'Я тренер команди'
   },
 
   'PROFILE':{

@@ -9,6 +9,7 @@ namespace TRNMNT.Data.Entities
     {
         [Key]
         public Guid FederationId { get; set; }
+        [MaxLength(200)]
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime? UpdateTs { get; set; }
@@ -16,9 +17,10 @@ namespace TRNMNT.Data.Entities
         public int MembershipPrice { get; set; }
         public int TeamRegistrationPrice { get; set; }
         public String Currency { get; set; }
+        public int CommissionPercentage { get; set; }
+        public int MinCommission { get; set; }
         public string ContactInformation { get; set; }
         public string ImgPath { get; set; }
-
 
         [ForeignKey("OwnerId")]
         public User Owner { get; set; }
