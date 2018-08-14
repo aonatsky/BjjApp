@@ -38,6 +38,28 @@ namespace TRNMNT.Core.Services.Impl
 
         #endregion
 
+        #region Private Methods
+
+        private async Task ValidateSecretUserCreation(SecretUserCreationModel secretUserCreationModel)
+        {
+            if (!secretUserCreationModel.AccessKey.Equals("supersecretkeyprostopizdec", StringComparison.CurrentCulture))
+            {
+                throw new Exception("Unable to create user. Wrong Access Key.");
+            }
+            var emailUserCheck = await _userManager.FindByEmailAsync(secretUserCreationModel.Email);
+            if (emailUserCheck != null)
+            {
+                throw new Exception("Unable to create user. User with such Email is already exists.");
+            }
+
+            var userNameUserCheck = await _userManager.FindByNameAsync(secretUserCreationModel.UserName);
+            if (userNameUserCheck != null)
+            {
+                throw new Exception("Unable to create user. User with such User Name is already exists.");
+            }
+        }
+        #endregion
+
         #region Public Methods
 
         public async Task<User> GetUserAsync(string userId)
@@ -79,11 +101,12 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<UserRegistrationResult> CreateParticipantUserAsync(UserModelRegistration model)
         {
-            var roles = new [] { Roles.Participant };
-            if( model.IsTeamOwner){
-                roles.Append(Roles.TeamOwner);
+            var roles = new List<string> { Roles.Participant };
+            if (model.IsTeamOwner)
+            {
+                roles.Add(Roles.TeamOwner);
             }
-            return await CreateUserAsync(model, new string[] { Roles.Participant });
+            return await CreateUserAsync(model, roles);
         }
 
         public async Task UpdateUserAsync(UserModel model)
@@ -99,7 +122,7 @@ namespace TRNMNT.Core.Services.Impl
             user.Email = model.Email;
             await _userManager.UpdateAsync(user);
         }
-        public async Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, string[] roles)
+        public async Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, List<string> roles)
         {
             var user = new User
             {
@@ -144,7 +167,7 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string[] roles, string password)
+        public async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, List<string> roles, string password)
         {
             var identityResult = await _userManager.CreateAsync(user, password);
             foreach (string role in roles)
@@ -158,10 +181,10 @@ namespace TRNMNT.Core.Services.Impl
             return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
         }
 
-        public async Task DeclineTeamMembershipAsync(string userId)
+        public async Task DeclineTeamMembershipAsync(Guid teamId, string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            if (user == null || user.TeamId != teamId)
             {
                 return;
             }
@@ -170,10 +193,10 @@ namespace TRNMNT.Core.Services.Impl
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task ApproveTeamMembershipAsync(string userId)
+        public async Task ApproveTeamMembershipAsync(Guid teamId, string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            if (user == null || user.TeamId != teamId)
             {
                 return;
             }
@@ -181,29 +204,19 @@ namespace TRNMNT.Core.Services.Impl
             await _userManager.UpdateAsync(user);
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private async Task ValidateSecretUserCreation(SecretUserCreationModel secretUserCreationModel)
+        public async Task SetTeamForUserAsync(Guid teamId, string userId, bool isOwner = false)
         {
-            if (!secretUserCreationModel.AccessKey.Equals("supersecretkeyprostopizdec", StringComparison.CurrentCulture))
+            var user = await _userManager.FindByIdAsync(userId);
+            user.TeamId = teamId;
+            user.TeamMembershipApprovalStatus = ApprovalStatus.Pending;
+            if (isOwner)
             {
-                throw new Exception("Unable to create user. Wrong Access Key.");
+                user.TeamMembershipApprovalStatus = ApprovalStatus.Approved;
             }
-            var emailUserCheck = await _userManager.FindByEmailAsync(secretUserCreationModel.Email);
-            if (emailUserCheck != null)
-            {
-                throw new Exception("Unable to create user. User with such Email is already exists.");
-            }
-
-            var userNameUserCheck = await _userManager.FindByNameAsync(secretUserCreationModel.UserName);
-            if (userNameUserCheck != null)
-            {
-                throw new Exception("Unable to create user. User with such User Name is already exists.");
-            }
+            await _userManager.UpdateAsync(user);
         }
 
         #endregion
+
     }
 }

@@ -16,14 +16,15 @@ import { RouterService } from '../../core/services/router.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PriceModel } from '../../core/model/price.model';
 import DateHelper from '../../core/helpers/date-helper';
+import { Roles } from '../../core/consts/roles.const';
 
 @Component({
-  selector: 'event-registration',
-  templateUrl: './event-registration.component.html',
-  styleUrls: ['./event-registration.component.scss'],
+  selector: 'participant-registration',
+  templateUrl: './participant-registration.component.html',
+  styleUrls: ['./participant-registration.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class EventRegistrationComponent implements OnInit {
+export class ParticipantRegistrationComponent implements OnInit {
   @ViewChild('formPrivatElement')
   formPrivat: ElementRef;
   participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
@@ -44,6 +45,7 @@ export class EventRegistrationComponent implements OnInit {
   paymentData: string = '';
   paymentSignature: string = '';
   dateHelper = DateHelper;
+  isTeamOwner : boolean;
 
   constructor(
     private weightDivisionService: WeightDivisionService,
@@ -64,6 +66,7 @@ export class EventRegistrationComponent implements OnInit {
     this.participant.lastName = user.lastName;
     this.participant.email = user.email;
     this.participant.includeMembership = false;
+    this.isTeamOwner = user.roles.includes(Roles.TeamOwner);
     this.loadData();
   }
 

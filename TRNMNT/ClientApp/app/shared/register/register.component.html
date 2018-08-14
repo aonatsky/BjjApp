@@ -34,6 +34,15 @@
         </div>
         <div class="ui-g">
             <div class="ui-g-3 ui-fluid">
+                <label>{{'COMMON.TEAM'|translate}}</label>
+            </div>
+            <div class="ui-g-9 ui-fluid">
+                <p-dropdown [options]="teamSelectItems" [(ngModel)]="model.teamId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_TEAM'|translate}}"
+                    name="team" [disabled]="model.isTeamOwner"></p-dropdown>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-3 ui-fluid">
                 <label>{{'COMMON.DATE_OF_BIRTH'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
@@ -43,7 +52,7 @@
                 </p-calendar>
             </div>
         </div>
-        <p-checkbox [(ngModel)]="model.isTeamOwner" binary="true" label="{{'USER_REGISTRATION.I_AM_TEAM_OWNER'|translate}}"></p-checkbox>
+        <p-checkbox [(ngModel)]="model.isTeamOwner" [binary]="true" label="{{'USER_REGISTRATION.I_AM_TEAM_OWNER'|translate}}" name="isTeamOwner"  (onChange)="setNoTeam()"></p-checkbox>
         <div class="ui-g-12 ">
             <p-button class="float-right" (click)="register()" label="{{'USER_REGISTRATION.REGISTER_AND_CONTINUE'|translate}}" cornerStyleClass="none" [disabled]="userForm.invalid"></p-button>
         </div>

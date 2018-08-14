@@ -52,7 +52,7 @@ namespace TRNMNT.Web.Controllers
             {
                 var data = await _teamService.GetTeamsForEventAsync(GetFederationId().Value);
                 return Success(data);
-            }, true, true);
+            }, false, true);
         }
 
         [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpGet("[action]")]
@@ -89,21 +89,31 @@ namespace TRNMNT.Web.Controllers
             }, false, true);
         }
 
-        [Authorize(Roles = "Admin, TeamOwner"),HttpPost("[action]/{userId}")]
+        [Authorize(Roles = "Admin, TeamOwner"), HttpPost("[action]/{userId}")]
         public async Task<IActionResult> ApproveTeamMembership(string userId)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _userService.ApproveTeamMembershipAsync(userId);
+                var team = await _teamService.GetTeamForOwnerAsync((await GetUserAsync()).Id);
+                if (team == null)
+                {
+                    return;
+                }
+                await _userService.ApproveTeamMembershipAsync(team.TeamId, userId);
             }, false, true);
         }
 
-        [Authorize(Roles = "Admin, TeamOwner"),HttpPost("[action]/{userId}")]
+        [Authorize(Roles = "Admin, TeamOwner"), HttpPost("[action]/{userId}")]
         public async Task<IActionResult> DeclineTeamMembership(string userId)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _userService.DeclineTeamMembershipAsync(userId);
+                var team = await _teamService.GetTeamForOwnerAsync((await GetUserAsync()).Id);
+                if (team == null)
+                {
+                    return;
+                }
+                await _userService.DeclineTeamMembershipAsync(team.TeamId, userId);
             }, false, true);
         }
 

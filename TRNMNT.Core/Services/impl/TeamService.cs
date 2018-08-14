@@ -103,6 +103,7 @@ namespace TRNMNT.Core.Services.Impl
             var priceModel = await _federationService.GetTeamRegistrationPriceAsync(federationId);
             var order = _orderService.AddNewOrder(OrderTypeEnum.TeamRegistration, priceModel.Amount, priceModel.Currency, teamId.ToString(), user.Id);
             AddTeam(model, teamId, order.OrderId, federationId, user.Id);
+            await _userService.SetTeamForUserAsync(teamId, user.Id, true);
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
@@ -125,7 +126,12 @@ namespace TRNMNT.Core.Services.Impl
                     TeamMembershipApprovalStatus = ApprovalStatus.GetTranslationKey(u.TeamMembershipApprovalStatus)
             });
         }
-        
+
+
+        public async Task<Team> GetTeamForOwnerAsync(string ownerId){
+            return await _repository.FirstOrDefaultAsync(t => t.OwnerId == ownerId);
+        }
+
         #endregion
 
         #region private methods
@@ -164,7 +170,6 @@ namespace TRNMNT.Core.Services.Impl
                 }
             }
         }
-
         #endregion
 
     }

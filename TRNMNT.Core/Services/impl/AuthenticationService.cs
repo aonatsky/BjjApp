@@ -125,7 +125,7 @@ namespace TRNMNT.Core.Services.Impl
                 PictureUrl = fbUser.Picture.Data.Url,
                 SocialLogin = SocialLogin.Facebook
                 };
-                await _userService.CreateUserWithRoleAsync(user, new string[] { Roles.Participant }, "facebookPass1");
+                await _userService.CreateUserWithRoleAsync(user, new List<string> { Roles.Participant }, "facebookPass1");
             }
 
             return await GetTokensAsync(user);

@@ -10,6 +10,7 @@
 
 export class ParticipantRegistrationModel extends ParticipantModelBase {
     teamId: string;
+    teamName: string;
     categoryId: string;
     weightDivisionId: string;
     userId: string;

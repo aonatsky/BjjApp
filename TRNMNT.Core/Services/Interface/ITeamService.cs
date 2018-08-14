@@ -54,5 +54,12 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<IEnumerable<UserModelAthlete>> GetAthletes(string userId);
+
+        /// <summary>
+        /// Retruns team for owner
+        /// </summary>
+        /// <param name="ownerId"> Owner Id.</param>
+        /// <returns></returns>
+        Task<Team> GetTeamForOwnerAsync(string ownerId);
     }
 }

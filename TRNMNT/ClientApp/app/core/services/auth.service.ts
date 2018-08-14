@@ -22,7 +22,8 @@ export class AuthService {
    */
   redirectUrl: string;
 
-  @Output() getLoggedInStatus: EventEmitter<boolean> = new EventEmitter();
+  @Output()
+  getLoggedInStatus: EventEmitter<boolean> = new EventEmitter();
   /**
    * User's data.
    */
@@ -77,11 +78,10 @@ export class AuthService {
    */
   getNewToken(): Observable<boolean> {
     const refreshToken: string = localStorage.getItem('refreshToken');
-    
+
     if (refreshToken != null) {
       return this.http.post<AuthTokenModel>(ApiMethods.auth.refreshToken, { refreshToken }).pipe(
         map(r => {
-          
           return this.processTokensResponse(r);
         })
       );
@@ -173,26 +173,26 @@ export class AuthService {
    */
   getUser(): UserModel {
     if (this.isLoggedIn()) {
-      return new UserModel(
-        this.user.userId,
-        this.user.firstName,
-        this.user.lastName,
-        this.user.email,
-        this.user.role,
-        new Date(this.user.dateOfBirth)
-      );
+      var userModel = new UserModel();
+      userModel.userId = this.user.userId;
+      userModel.firstName = this.user.firstName;
+      userModel.lastName = this.user.lastName;
+      userModel.email = this.user.email;
+      userModel.roles = this.user.role;
+      userModel.dateOfBirth = new Date(this.user.dateOfBirth);
+      return userModel;
     }
   }
 
-  getRole(): string {
+  getRole(): string[] {
     if (this.isLoggedIn()) {
-      return this.getUser().role;
+      return this.getUser().roles;
     }
-    return '';
+    return [''];
   }
 
   facebookLogin(): Observable<boolean> {
-    console.log(`${this.routerService.getMainDomainUrl()}/${ApiMethods.auth.facebookLogin}`)
+    console.log(`${this.routerService.getMainDomainUrl()}/${ApiMethods.auth.facebookLogin}`);
     const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
     return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(
       flatMap((userData: SocialUser) => {
@@ -255,7 +255,6 @@ export class AuthService {
   }
 
   private processTokensResponse(body): boolean {
-    
     if (typeof body.idToken !== 'undefined') {
       // Stores access token & refresh token.
       this.store(body);

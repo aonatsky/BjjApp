@@ -70,7 +70,7 @@ export class RouterService {
   }
 
   goToEventRegistration() {
-    this.router.navigateByUrl('/event/event-registration');
+    this.router.navigateByUrl('/event/participant-registration');
   }
 
   goToTeamRegistration() {

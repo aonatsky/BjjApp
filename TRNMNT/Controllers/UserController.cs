@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -55,7 +56,7 @@ namespace TRNMNT.Web.Controllers
             {
                 if (Request.Headers["password"] == "pizdecpassword")
                 {
-                    await _userService.CreateUserAsync(model, new string[]{ Roles.Owner});
+                    await _userService.CreateUserAsync(model, new List<string>{ Roles.Owner});
                     return HttpStatusCode.OK;
                 }
                 else

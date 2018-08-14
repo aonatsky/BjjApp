@@ -1,9 +1,9 @@
 ﻿import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CoreModule } from '../core/core.module';
-import { EventRegistrationComponent } from './event-registration/event-registration.component';
+import { ParticipantRegistrationComponent } from './participant-registration/participant-registration.component';
 // tslint:disable-next-line:max-line-length
-import { EventRegistrationCompleteComponent } from './event-registration-complete/event-registration-complete.component';
+import { ParticipantRegistrationCompleteComponent } from './participant-registration-complete/participant-registration-complete.component';
 import { EventComponent } from './event.component';
 import { EventRoutingModule } from './event.routing.module';
 import { SharedModule } from '../shared/shared.module';
@@ -20,8 +20,8 @@ import { TeamRegistrationCompleteComponent } from './team-registration-complete/
   ],
   declarations: [
     EventComponent,
-    EventRegistrationComponent,
-    EventRegistrationCompleteComponent,
+    ParticipantRegistrationComponent,
+    ParticipantRegistrationCompleteComponent,
     TeamRegistrationComponent,
     TeamRegistrationCompleteComponent
   ],

@@ -9,6 +9,6 @@ namespace TRNMNT.Core.Model.User
         public string LastName { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string Email { get; set; }
-        public Guid TeamId { get; set; }
+        public Guid? TeamId { get; set; }
     }
 }

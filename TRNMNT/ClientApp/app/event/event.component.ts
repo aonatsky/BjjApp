@@ -4,7 +4,7 @@ import { EventService } from '../core/services/event.service';
 import { RouterService } from '../core/services/router.service';
 import { AuthService } from '../core/services/auth.service';
 import  DateHelper from '../core/helpers/date-helper';
-import { Title } from '../../../node_modules/@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'event',

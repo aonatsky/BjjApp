@@ -48,8 +48,8 @@ export class TopbarComponent implements OnInit {
         visible: this.isLoggedIn
       },
       {
-        label: this.translateService.instant('MENU.PROFILE'),
-        routerLink: ['profile'],
+        label: this.translateService.instant('MENU.MY_TEAM'),
+        routerLink: ['participant/my-team'],
         visible:  this.isLoggedIn && [Roles.Admin, Roles.FederationOwner].some(x => x === this.role)
       },
       {

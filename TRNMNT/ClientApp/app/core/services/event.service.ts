@@ -79,7 +79,6 @@ export class EventService {
   }
 
   getPrice(includeMembership : boolean): Observable<PriceModel> {
-    debugger;
     return this.httpService.get<number>(ApiMethods.event.getPrice, {includeMembership});
   }
 

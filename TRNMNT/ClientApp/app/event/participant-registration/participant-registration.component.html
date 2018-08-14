@@ -45,7 +45,7 @@
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-9 ui-fluid ui-g-offset-3">
-                        <span class="btn-link" (click)="goToTeamRegistration()">{{'COMMON.ADD_TEAM' | translate}}</span>
+                        <span class="btn-link" (click)="goToTeamRegistration()" *ngIf="isTeamOwner">{{'COMMON.ADD_TEAM' | translate}}</span>
                     </div>
                 </div>
                 <div class="ui-g">

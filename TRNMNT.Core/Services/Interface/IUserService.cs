@@ -28,16 +28,18 @@ namespace TRNMNT.Core.Services.Interface
         /// <summary>
         /// Declines team membership by user Id.
         /// </summary>
+        /// <param name="teamId">Team Id.</param>
         /// <param name="userId">User Id.</param>
         /// <returns></returns>
-        Task DeclineTeamMembershipAsync(string userId);
+        Task DeclineTeamMembershipAsync(Guid teamId, string userId);
 
         /// <summary>
         /// Approves team membership by user Id.
         /// </summary>
+        /// <param name="teamId">Team Id.</param>
         /// <param name="userId">User Id.</param>
         /// <returns></returns>
-        Task ApproveTeamMembershipAsync(string userId);
+        Task ApproveTeamMembershipAsync(Guid teamId, string userId);
 
         /// <summary>
         /// Returns user role.
@@ -91,7 +93,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="model">Credentials model.</param>
         /// <param name="roles">Roles.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, string[] roles);
+        Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, List<string> roles);
 
         /// <summary>
         /// Updates user asynchronous.
@@ -107,6 +109,13 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="roles">Roles.</param>
         /// <param name="password">Password.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, string[] roles, string password);
+        Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, List<string> roles, string password);
+        
+        /// <summary>
+        /// Sets team for user
+        /// </summary>
+        /// <param name="teamId">Team Id.</param>
+        /// <param name="userId">User Id.</param>
+        Task SetTeamForUserAsync(Guid teamId, string userId, bool isOwner = false);
     }
 }

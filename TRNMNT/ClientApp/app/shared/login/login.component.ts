@@ -3,7 +3,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../../core/services/logger.service';
 import { RouterService } from '../../core/services/router.service';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'login',

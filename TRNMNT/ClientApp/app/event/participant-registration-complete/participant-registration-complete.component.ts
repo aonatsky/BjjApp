@@ -4,10 +4,10 @@ import { EventService } from '../../core/services/event.service';
 import { EventModel } from '../../core/model/event.models';
 
 @Component({
-  selector: 'event-registration-complete',
-  templateUrl: './event-registration-complete.component.html'
+  selector: 'participant-registration-complete',
+  templateUrl: './participant-registration-complete.component.html'
 })
-export class EventRegistrationCompleteComponent implements OnInit {
+export class ParticipantRegistrationCompleteComponent implements OnInit {
   eventModel: EventModel;
   eventTitleParameter: object;
   constructor(private eventService: EventService, private routerService:RouterService) {}

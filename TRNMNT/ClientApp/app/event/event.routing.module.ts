@@ -1,8 +1,8 @@
 ﻿import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EventRegistrationComponent } from './event-registration/event-registration.component';
+import { ParticipantRegistrationComponent } from './participant-registration/participant-registration.component';
 // tslint:disable-next-line:max-line-length
-import { EventRegistrationCompleteComponent } from './event-registration-complete/event-registration-complete.component';
+import { ParticipantRegistrationCompleteComponent } from './participant-registration-complete/participant-registration-complete.component';
 import { EventComponent } from './event.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { TopbarComponent } from '../shared/topbar/topbar.component';
@@ -16,13 +16,13 @@ const routes: Routes = [
     component: EventComponent
   },
   {
-    path: 'event/event-registration',
-    component: EventRegistrationComponent,
+    path: 'event/participant-registration',
+    component: ParticipantRegistrationComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'event/event-registration-complete',
-    component: EventRegistrationCompleteComponent
+    path: 'event/participant-registration-complete',
+    component: ParticipantRegistrationCompleteComponent
   },
   {
     path: 'event/team-registration',
