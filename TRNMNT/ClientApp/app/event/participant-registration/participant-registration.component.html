@@ -39,8 +39,7 @@
                         <label>{{'COMMON.TEAM'|translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
-                        <p-dropdown [options]="teamSelectItems" [(ngModel)]="participant.teamId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_TEAM'|translate}}"
-                            name="team"></p-dropdown>
+                        <input pInputText [(ngModel)]="participant.teamName" required name="team" [value]="participant.teamName" [disabled]=true [maxLength]=100/>
                     </div>
                 </div>
                 <div class="ui-g">

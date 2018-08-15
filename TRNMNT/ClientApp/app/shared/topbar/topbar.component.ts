@@ -30,17 +30,16 @@ export class TopbarComponent implements OnInit {
 
   initMenu(loggedIn: boolean) {
     this.isLoggedIn = loggedIn;
-    this.role = this.authService.getRole();
     this.items = [
       {
         label: this.translateService.instant('MENU.HOME'),
         routerLink: ['/'],
-        visible: this.isLoggedIn && [Roles.Admin, Roles.FederationOwner, Roles.Owner].some(x => x === this.role)
+        visible: this.isLoggedIn && this.authService.checkRoles([Roles.Admin, Roles.FederationOwner, Roles.Owner])
       },
       {
         label: this.translateService.instant('MENU.TEAMS'),
         routerLink: ['event-admin/teams'],
-        visible: this.isLoggedIn && [Roles.Admin, Roles.FederationOwner, Roles.Owner].some(x => x === this.role)
+        visible: this.isLoggedIn && this.authService.checkRoles([Roles.Admin, Roles.FederationOwner, Roles.Owner])
       },
       {
         label: this.translateService.instant('MENU.PROFILE'),
@@ -50,7 +49,7 @@ export class TopbarComponent implements OnInit {
       {
         label: this.translateService.instant('MENU.MY_TEAM'),
         routerLink: ['participant/my-team'],
-        visible:  this.isLoggedIn && [Roles.Admin, Roles.FederationOwner].some(x => x === this.role)
+        visible:  this.isLoggedIn && this.authService.checkRoles([Roles.TeamOwner])
       },
       {
         label: this.translateService.instant('MENU.LOGIN'),

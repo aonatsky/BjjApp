@@ -8,6 +8,7 @@ import { ProfileComponent } from './shared/profile/profile.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const appRoutes: Routes = [
+  
   {
     path: '',
     redirectTo: 'event-admin',
@@ -27,7 +28,7 @@ const appRoutes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     pathMatch: 'full',
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard]
   },
   { path: '**', redirectTo: 'event-admin' },
   {
@@ -43,7 +44,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes, { enableTracing: false })],
+  imports: [RouterModule.forRoot(appRoutes, { enableTracing: true })],
   providers: [RouterModule]
 })
 export class AppRoutingModule {}

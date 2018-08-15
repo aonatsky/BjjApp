@@ -184,11 +184,22 @@ export class AuthService {
     }
   }
 
-  getRole(): string[] {
+  getRoles(): string[] {
     if (this.isLoggedIn()) {
-      return this.getUser().roles;
+      var roles = this.getUser().roles;
+      if (Array.isArray(roles)){
+        return roles;
+      }
+      return [roles]
     }
-    return [''];
+    return [];
+  }
+
+  checkRoles(roles: string[]): boolean {
+    if (this.isLoggedIn()) {
+      return this.getRoles().filter(r => roles.indexOf(r) !== -1).length > 0;
+    }
+    return false;
   }
 
   facebookLogin(): Observable<boolean> {

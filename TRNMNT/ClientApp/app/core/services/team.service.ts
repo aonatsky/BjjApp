@@ -36,4 +36,8 @@ export class TeamService {
   declineTeamMembership(userId: string): Observable<any> {
     return this.httpService.post(`${ApiMethods.team.declineTeamMembership}/${userId}`);
   }
+
+  getCurrentAthlete(): Observable<UserModelAthlete> {
+    return this.httpService.get<UserModelAthlete>(ApiMethods.team.getCurrentAthlete);
+  }
 }

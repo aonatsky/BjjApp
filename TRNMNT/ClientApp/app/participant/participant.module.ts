@@ -8,9 +8,10 @@ import { EventInfoPanelComponent } from './event-info-panel/event-info-panel.com
 import { MyTeamComponent } from './my-team/my-team.component';
 import { CustomLoader } from '../core/helpers/custom-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ParticipantRoutingModule } from './participant.routing.module';
 
 @NgModule({
-  imports: [CommonModule, SharedModule, CoreModule, TranslateModule.forChild({ loader: { provide: TranslateLoader, useClass: CustomLoader } })],
+  imports: [CommonModule, SharedModule, CoreModule, TranslateModule.forChild({ loader: { provide: TranslateLoader, useClass: CustomLoader } }), ParticipantRoutingModule],
   declarations: [ParticipantComponent, MyEventsComponent, EventInfoPanelComponent, MyTeamComponent]
 })
 export class ParticipantModule {}

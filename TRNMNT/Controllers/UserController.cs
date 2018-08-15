@@ -56,7 +56,7 @@ namespace TRNMNT.Web.Controllers
             {
                 if (Request.Headers["password"] == "pizdecpassword")
                 {
-                    await _userService.CreateUserAsync(model, new List<string>{ Roles.Owner});
+                    await _userService.CreateUserAsync(model, new List<string> { Roles.Owner });
                     return HttpStatusCode.OK;
                 }
                 else

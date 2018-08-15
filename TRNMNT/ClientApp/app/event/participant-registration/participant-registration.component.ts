@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { PriceModel } from '../../core/model/price.model';
 import DateHelper from '../../core/helpers/date-helper';
 import { Roles } from '../../core/consts/roles.const';
+import { ApprovalStatus } from '../../core/consts/approval-status.const';
 
 @Component({
   selector: 'participant-registration',
@@ -28,6 +29,7 @@ export class ParticipantRegistrationComponent implements OnInit {
   @ViewChild('formPrivatElement')
   formPrivat: ElementRef;
   participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
+  teamMembershipConfirmed: boolean;
   isFederationMember: boolean = false;
   categories: CategorySimpleModel[] = [];
   weightDivisions: WeightDivisionSimpleModel[] = [];
@@ -45,7 +47,7 @@ export class ParticipantRegistrationComponent implements OnInit {
   paymentData: string = '';
   paymentSignature: string = '';
   dateHelper = DateHelper;
-  isTeamOwner : boolean;
+  isTeamOwner: boolean;
 
   constructor(
     private weightDivisionService: WeightDivisionService,
@@ -59,14 +61,18 @@ export class ParticipantRegistrationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const user = this.authService.getUser();
-    this.participant.userId = user.userId;
-    this.participant.dateOfBirth = user.dateOfBirth ? user.dateOfBirth : this.getDefaultDateOfBirth();
-    this.participant.firstName = user.firstName;
-    this.participant.lastName = user.lastName;
-    this.participant.email = user.email;
-    this.participant.includeMembership = false;
-    this.isTeamOwner = user.roles.includes(Roles.TeamOwner);
+    this.teamService.getCurrentAthlete().subscribe(r => {
+      this.participant.userId = r.userId;
+      this.participant.dateOfBirth = r.dateOfBirth ? r.dateOfBirth : this.getDefaultDateOfBirth();
+      this.participant.firstName = r.firstName;
+      this.participant.lastName = r.lastName;
+      this.participant.email = r.email;
+      this.participant.includeMembership = false;
+      this.participant.teamId = r.teamId;
+      this.participant.teamName = r.teamName;
+      this.teamMembershipConfirmed = r.teamMembershipApprovalStatus == ApprovalStatus.approved;
+    });
+    this.isTeamOwner = this.authService.checkRoles([Roles.TeamOwner]);
     this.loadData();
   }
 
@@ -83,7 +89,8 @@ export class ParticipantRegistrationComponent implements OnInit {
     this.teams = data[0];
     this.categories = data[1];
     this.eventTitleParameter = { value: data[2].title };
-    (this.isFederationMember = data[3]), this.initCategoryDropdown();
+    this.isFederationMember = data[3];
+    this.initCategoryDropdown();
     this.initTeamDropdown();
     this.initPrice();
   }
@@ -118,10 +125,7 @@ export class ParticipantRegistrationComponent implements OnInit {
   }
 
   getTeam(): string {
-    if (this.participant.teamId) {
-      return this.teams.find(t => t.teamId == this.participant.teamId).name;
-    }
-    return this.translateService.instant('COMMON.NO_TEAM');
+    return this.participant.teamName ? this.participant.teamName : this.translateService.instant('COMMON.NO_TEAM');
   }
 
   getCategory(): string {

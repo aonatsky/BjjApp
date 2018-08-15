@@ -11,6 +11,7 @@ import { CustomLoader } from './core/helpers/custom-loader';
 import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import localeUa from '@angular/common/locales/ru-UA';
+import { ParticipantModule } from './participant/participant.module';
 
 registerLocaleData(localeEn, 'en');
 registerLocaleData(localeUa, 'ua')
@@ -24,6 +25,7 @@ registerLocaleData(localeUa, 'ua')
     EventAdminModule,
     EventModule,
     RoundModule,
+    ParticipantModule,
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: { provide: TranslateLoader, useClass: CustomLoader }

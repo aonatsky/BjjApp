@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ParticipantComponent } from './participant.component';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { MyEventsComponent } from './my-events/my-events.component';
+import { MyTeamComponent } from './my-team/my-team.component';
 
 const routes: Routes = [
   {
@@ -12,12 +13,19 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'my-events'
+        redirectTo: 'my-events',
+        pathMatch: 'full'
       },
       {
         path: 'my-events',
-        component: MyEventsComponent
-      }
+        component: MyEventsComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'my-team',
+        component: MyTeamComponent,
+        pathMatch: 'full'
+      },
     ]
   }
 ];
@@ -25,4 +33,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class EventRoutingModule {}
+export class ParticipantRoutingModule {}

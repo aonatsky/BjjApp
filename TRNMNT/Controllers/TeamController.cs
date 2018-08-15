@@ -80,12 +80,25 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, TeamOwner"), HttpGet("[action]")]
-        public async Task<IActionResult> GetTeamMembers()
+        public async Task<IActionResult> GetAthletes()
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var data = await _teamService.GetAthletes((await GetUserAsync()).Id);
-                return Success(data);
+                var teamId = (await GetUserAsync()).TeamId;
+                if (teamId.HasValue)
+                {
+                    return Success(await _teamService.GetAthletes(teamId.Value));
+                };
+                return (null, HttpStatusCode.NotFound);
+            }, false, true);
+        }
+
+        [Authorize(), HttpGet("[action]")]
+        public async Task<IActionResult> GetCurrentAthlete()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                return Success(await _teamService.GetAthlete(await GetUserAsync()));
             }, false, true);
         }
 

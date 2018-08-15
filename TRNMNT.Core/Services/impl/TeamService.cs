@@ -107,10 +107,10 @@ namespace TRNMNT.Core.Services.Impl
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
-        public async Task<IEnumerable<UserModelAthlete>> GetAthletes(string userId)
+        public async Task<IEnumerable<UserModelAthlete>> GetAthletes(Guid teamId)
         {
             var result = new List<UserModelAthlete>();
-            var team = await _repository.GetAll().Where(t => t.OwnerId == userId).FirstOrDefaultAsync();
+            var team = await _repository.GetAll().FirstOrDefaultAsync(t => t.TeamId == teamId);
             if (team == null)
             {
                 return result;
@@ -123,12 +123,34 @@ namespace TRNMNT.Core.Services.Impl
                     DateOfBirth = u.DateOfBirth,
                     Email = u.Email,
                     UserId = u.Id,
-                    TeamMembershipApprovalStatus = ApprovalStatus.GetTranslationKey(u.TeamMembershipApprovalStatus)
+                    TeamMembershipApprovalStatus = u.TeamMembershipApprovalStatus,
             });
         }
 
+        public async Task<UserModelAthlete> GetAthlete(User user)
+        {
+            var model = new UserModelAthlete()
+            {
+                UserId = user.Id,
+                TeamId = user.TeamId,
+                TeamMembershipApprovalStatus = user.TeamMembershipApprovalStatus,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                Email = user.Email
 
-        public async Task<Team> GetTeamForOwnerAsync(string ownerId){
+            };
+            if (user.TeamId.HasValue)
+            {
+                var team = await _repository.GetByIDAsync(user.TeamId.Value);
+                model.TeamName = team != null ? team.Name : null;
+            }
+            return model;
+
+        }
+
+        public async Task<Team> GetTeamForOwnerAsync(string ownerId)
+        {
             return await _repository.FirstOrDefaultAsync(t => t.OwnerId == ownerId);
         }
 

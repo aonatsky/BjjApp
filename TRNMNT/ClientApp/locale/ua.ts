@@ -43,7 +43,8 @@ export const data = {
     'LOGOUT': 'Вийти',
     'HOME': 'Додому',
     'TEAMS':'Команди',
-    'PROFILE':'Мій профіль'
+    'PROFILE':'Мій профіль',
+    'MY_TEAM':'Моя команда'
   },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
@@ -76,6 +77,10 @@ export const data = {
   'COMMISSION_PERCENTAGE':'Відсоток комісії',
   'CONTACTS':'Контакти',
   'IMAGE': 'Зображення'
+},
+'MY_TEAM':{
+  'TITLE':'Моя команда',
+  'ATHLETES':'Спортсмени'
 },
 'EVENT_MANAGEMENT':{
   'TITLE':'Управління подією',
