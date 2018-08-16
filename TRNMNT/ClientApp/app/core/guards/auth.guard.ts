@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
     const url: string = state.url;
     if (this.authService.isLoggedIn()) {
       if (expectedRoles) {
-        if (this.authService.checkRoles(expectedRoles)) {
+        if (!this.authService.ifRolesMatch(expectedRoles)) {
           this.authService.redirectUrl = url;
           // Not signed in so redirects to signin page.
           this.routerService.goToLogin(url);

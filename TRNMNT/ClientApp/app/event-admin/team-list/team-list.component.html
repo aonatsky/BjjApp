@@ -1,9 +1,11 @@
 <trnmnt-page title="{{'COMMON.TEAMS' | translate}}" contentClass="ui-g-12">
-    <ng-template #customTemplate let-data>
-        <button type="button" pButton icon="fa fa-plus" style="float: left" (click)="test(data)" label="Add"></button>
+    <ng-template #approveTemplate let-data>
+        <p-button icon="fas fa-check-circle" [styleClass]="getApproveButtonStyleClass('approve',data)" (click)="approveTeam(data)"></p-button>
+        <p-button icon="fas fa-clock" [styleClass]="getApproveButtonStyleClass('pending',data)"></p-button>
+        <p-button icon="fas fa-times-circle" [styleClass]="getApproveButtonStyleClass('decline',data)" (click)="declineTeam(data)"></p-button>
     </ng-template>
     <crud #crudComponent [entities]="teams" [columns]="columns" [columnOptions]="columnOptions" [showRowNumbers]="false" [addEnabled]="false"
         [editEnabled]="false" [deleteEnabled]="false" [sortField]="sortField" [sortOrder]="sortDirection" [lazy]="false" [(firstIndex)]="firstIndex"
-        [dialogMinWidth]="500" class="ui-g-12" gridMinHeight="350">
+        [dialogMinWidth]="500" class="ui-g-12" gridMinHeight="350" [actionsTemplate]="approveTemplate"  actionsHeader="{{'COMMON.APPROVAL.APPROVAL_STATUS'| translate}}">
     </crud>
 </trnmnt-page>

@@ -13,7 +13,7 @@
                 <label>{{'COMMON.PASSWORD'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <input pInputText [(ngModel)]="model.password" type="password" required name="password"/>
+                <input pInputText [(ngModel)]="model.password" type="password" required name="password" />
             </div>
         </div>
         <div class="ui-g">
@@ -21,7 +21,7 @@
                 <label>{{'COMMON.FIRST_NAME'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <input pInputText [(ngModel)]="model.firstName" required name="firstName"/>
+                <input pInputText [(ngModel)]="model.firstName" required name="firstName" />
             </div>
         </div>
         <div class="ui-g">
@@ -29,7 +29,7 @@
                 <label>{{'COMMON.LAST_NAME'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                <input pInputText [(ngModel)]="model.lastName" required name="lastName"/>
+                <input pInputText [(ngModel)]="model.lastName" required name="lastName" />
             </div>
         </div>
         <div class="ui-g">
@@ -38,7 +38,16 @@
             </div>
             <div class="ui-g-9 ui-fluid">
                 <p-dropdown [options]="teamSelectItems" [(ngModel)]="model.teamId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_TEAM'|translate}}"
-                    name="team" [disabled]="model.isTeamOwner"></p-dropdown>
+                    name="team" [disabled]="model.isTeamOwner">
+                    <ng-template let-team pTemplate="selectedItem">
+                        {{team.label}}
+                        <span *ngIf="!getIsApproved(team.value)" class="float-right ui-state-highlight">{{'COMMON.APPROVAL.NOT_APPROVED'|translate}}</span>
+                    </ng-template>
+                    <ng-template let-team pTemplate="item">
+                        {{team.label}}
+                        <span *ngIf="!getIsApproved(team.value)" class="float-right ui-state-highlight">{{'COMMON.APPROVAL.NOT_APPROVED'|translate}}</span>
+                    </ng-template>
+                </p-dropdown>
             </div>
         </div>
         <div class="ui-g">
@@ -46,15 +55,17 @@
                 <label>{{'COMMON.DATE_OF_BIRTH'|translate}}</label>
             </div>
             <div class="ui-g-9 ui-fluid">
-                    <p-calendar icon="fa fa-calendar" [(ngModel)]="model.dateOfBirth" dateFormat="dd/mm/yy" readonlyInput="readonlyInput"
-                    showIcon="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="1960:2015" [defaultDate]="dateHelper.getDefaultDateOfBirth()"
+                <p-calendar icon="fa fa-calendar" [(ngModel)]="model.dateOfBirth" dateFormat="dd/mm/yy" readonlyInput="readonlyInput" showIcon="true"
+                    [monthNavigator]="true" [yearNavigator]="true" yearRange="1960:2015" [defaultDate]="dateHelper.getDefaultDateOfBirth()"
                     required name="dateOfBirth">
                 </p-calendar>
             </div>
         </div>
-        <p-checkbox [(ngModel)]="model.isTeamOwner" [binary]="true" label="{{'USER_REGISTRATION.I_AM_TEAM_OWNER'|translate}}" name="isTeamOwner"  (onChange)="setNoTeam()"></p-checkbox>
+        <p-checkbox [(ngModel)]="model.isTeamOwner" [binary]="true" label="{{'USER_REGISTRATION.I_AM_TEAM_OWNER'|translate}}" name="isTeamOwner"
+            (onChange)="setNoTeam()"></p-checkbox>
         <div class="ui-g-12 ">
-            <p-button class="float-right" (click)="register()" label="{{'USER_REGISTRATION.REGISTER_AND_CONTINUE'|translate}}" cornerStyleClass="none" [disabled]="userForm.invalid"></p-button>
+            <p-button class="float-right" (click)="register()" label="{{'USER_REGISTRATION.REGISTER_AND_CONTINUE'|translate}}" cornerStyleClass="none"
+                [disabled]="userForm.invalid"></p-button>
         </div>
     </form>
 </trnmnt-page>

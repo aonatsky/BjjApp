@@ -19,6 +19,7 @@ import { PopupComponent } from './popup/popup.component';
 import { PageComponent } from './page/page.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ParticipantListComponent } from './participant-list/participant-list.component';
+import { TeamDisplayComponent } from './team-display/team-display.component';
 
 @NgModule({
   imports: [CoreModule, BrowserAnimationsModule, RoundModule, SocialLoginModule, TranslateModule],
@@ -36,7 +37,8 @@ import { ParticipantListComponent } from './participant-list/participant-list.co
     PopupComponent,
     PageComponent,
     ProfileComponent,
-    ParticipantListComponent
+    ParticipantListComponent,
+    TeamDisplayComponent
   ],
 
   providers: [
@@ -55,7 +57,8 @@ import { ParticipantListComponent } from './participant-list/participant-list.co
     PopupComponent,
     LoginComponent,
     PageComponent,
-    ParticipantListComponent
+    ParticipantListComponent,
+    TeamDisplayComponent
   ]
 })
 export class SharedModule {}

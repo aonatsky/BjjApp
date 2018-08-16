@@ -195,7 +195,7 @@ export class AuthService {
     return [];
   }
 
-  checkRoles(roles: string[]): boolean {
+  ifRolesMatch(roles: string[]): boolean {
     if (this.isLoggedIn()) {
       return this.getRoles().filter(r => roles.indexOf(r) !== -1).length > 0;
     }

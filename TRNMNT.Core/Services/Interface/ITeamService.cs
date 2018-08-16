@@ -68,5 +68,18 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="ownerId"> Owner Id.</param>
         /// <returns></returns>
         Task<Team> GetTeamForOwnerAsync(string ownerId);
+
+         /// <summary>
+         /// Sets federation approval status to Declined.
+         /// </summary>
+         /// <param name="teamId">Team Id.</param>
+         /// <returns></returns>
+         Task DeclineTeam(Guid teamId);
+         /// <summary>
+         /// Sets federation approval status to Approved.
+         /// </summary>
+         /// <param name="teamId">Team Id.</param>
+         /// <returns></returns>
+         Task ApproveTeam(Guid teamId);
     }
 }

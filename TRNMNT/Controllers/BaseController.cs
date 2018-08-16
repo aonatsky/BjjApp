@@ -56,6 +56,7 @@ namespace TRNMNT.Web.Controllers
         protected void HandleException(Exception ex)
         {
             Logger.LogError(ex.Message);
+            Logger.LogError(ex.StackTrace);
         }
 
         protected async Task<User> GetUserAsync()
@@ -227,6 +228,7 @@ namespace TRNMNT.Web.Controllers
                     return StatusCode((int) result.Code);
                 }
                 await Context.SaveAsync();
+
                 return Ok(JsonConvert.SerializeObject(result.Response, JsonSerializerSettings));
             }
             catch (BusinessException be)

@@ -3,6 +3,7 @@ import { TeamService } from '../../core/services/team.service';
 import { TeamModelFull } from '../../core/model/team.model';
 import { ICrudColumn as CrudColumn, IColumnOptions } from '../../shared/crud/crud.component';
 import { TranslateService } from '@ngx-translate/core';
+import { ApprovalStatus } from '../../core/consts/approval-status.const';
 
 @Component({
   selector: 'app-team-list',
@@ -38,7 +39,7 @@ export class TeamListComponent implements OnInit {
     },
     {
       propertyName: 'approvalStatus',
-      displayName: this.translateService.instant('COMMON.APPROVAL.APPROVAL_STATUS'),
+      displayName: this.translateService.instant('COMMON.APPROVAL.PAYMENT_APPROVAL_STATUS'),
       isEditable: false,
       isSortable: true,
       transform: value => this.translateService.instant(value)
@@ -48,6 +49,7 @@ export class TeamListComponent implements OnInit {
   sortDirection: number = 1;
   sortField: string = 'name';
   columnOptions: IColumnOptions = {};
+  approvalStatus = ApprovalStatus;
 
   constructor(private teamService: TeamService, private translateService: TranslateService) {}
 
@@ -55,7 +57,30 @@ export class TeamListComponent implements OnInit {
     this.teamService.getTeamsForAdmin().subscribe(data => (this.teams = data));
   }
 
-  test(data){
-    console.log(data);
+  approveTeam(data) {
+    this.teamService.approveTeam(data.teamId).subscribe(() => {
+      data.federationApprovalStatus = ApprovalStatus.approved;
+    });
+  }
+
+  declineTeam(data) {
+    this.teamService.declineTeam(data.teamId).subscribe(() => {
+      data.federationApprovalStatus = ApprovalStatus.declined;
+    });
+  }
+
+  getApproveButtonStyleClass(buttonType: string, data: TeamModelFull) {
+    switch (buttonType) {
+      case 'pending': {
+        return data.federationApprovalStatus == ApprovalStatus.pending ? 'status-pending' : '';
+      }
+      case 'decline': {
+        return data.federationApprovalStatus == ApprovalStatus.declined ? 'status-declined' : '';
+      }
+      case 'approve':{
+        return data.federationApprovalStatus == ApprovalStatus.approved? 'status-approved' :'' 
+      }
+    }
+    return ''
   }
 }

@@ -72,7 +72,7 @@ export class ParticipantRegistrationComponent implements OnInit {
       this.participant.teamName = r.teamName;
       this.teamMembershipConfirmed = r.teamMembershipApprovalStatus == ApprovalStatus.approved;
     });
-    this.isTeamOwner = this.authService.checkRoles([Roles.TeamOwner]);
+    this.isTeamOwner = this.authService.ifRolesMatch([Roles.TeamOwner]);
     this.loadData();
   }
 

@@ -34,11 +34,13 @@ export const ApiMethods = Object.freeze({
     getTeamMembers: 'api/team/GetAthletes',
     getCurrentAthlete: 'api/team/GetCurrentAthlete',
     approveTeamMembership: 'api/team/approveTeamMembership',
-    declineTeamMembership: 'api/team/declineTeamMembership'
+    declineTeamMembership: 'api/team/declineTeamMembership',
+    declineTeam:'api/team/declineTeam',
+    approveTeam:'api/team/approveTeam',
   },
   federation: {
-    getFederation: 'api/getFederation',
-    updateFederation: 'api/updateFederation'
+    getFederation: 'api/federation/getFederation',
+    updateFederation: 'api/federation/updateFederation'
   },
   weightDivision: {
     weightDivision: 'api/weightdivision',

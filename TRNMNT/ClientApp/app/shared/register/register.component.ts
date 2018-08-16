@@ -9,6 +9,7 @@ import { TeamModel } from '../../core/model/team.model';
 import { TeamService } from '../../core/services/team.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SelectItem } from 'primeng/primeng';
+import { ApprovalStatus } from '../../core/consts/approval-status.const';
 
 @Component({
   selector: 'register',
@@ -16,6 +17,7 @@ import { SelectItem } from 'primeng/primeng';
 })
 export class RegisterComponent implements OnInit {
   model: UserModelRegistration;
+  teams: TeamModel[];
   returnUrl: string;
   dateHelper = DateHelper;
   teamSelectItems: SelectItem[] = [];
@@ -30,7 +32,9 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.model = new UserModelRegistration();
-    this.teamService.getTeamsForEvent().subscribe(r => this.initTeamDropdown(r));
+    this.teamService.getTeamsForEvent().subscribe(r => {
+      this.teams = r;
+      this.initTeamDropdown(r)});
     this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
 
@@ -38,7 +42,11 @@ export class RegisterComponent implements OnInit {
     this.userService.register(this.model).subscribe(r => {
       this.authService.signin(this.model.email, this.model.password).subscribe((r: boolean) => {
         if (r === true) {
-          this.routerService.navigateByUrl(this.returnUrl);
+          if (this.model.isTeamOwner) {
+            this.routerService.goToTeamRegistration(this.returnUrl);
+          } else {
+            this.routerService.navigateByUrl(this.returnUrl);
+          }
         }
       });
     });
@@ -56,5 +64,13 @@ export class RegisterComponent implements OnInit {
     if (this.model.isTeamOwner) {
       this.model.teamId = null;
     }
+  }
+
+  getIsApproved(teamId): boolean{
+    if(!teamId){
+      return true;
+    }
+    const team = this.teams.filter(t => t.teamId = teamId)[0];
+    return team.federationApprovalStatus == ApprovalStatus.approved && team.approvalStatus == ApprovalStatus.approved;
   }
 }

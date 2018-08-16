@@ -5,6 +5,5 @@ namespace TRNMNT.Core.Model.Team
         public string ContactName { get; set; }
         public string ContactEmail { get; set; }
         public string ContactPhone { get; set; }
-        public string ApprovalStatus { get; set; }
     }
 }

@@ -78,7 +78,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "FederationOwner, Owner"), HttpGet("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpGet("[action]")]
         public async Task<IActionResult> GetEventsForOwner()
         {
             return await HandleRequestWithDataAsync(async() =>

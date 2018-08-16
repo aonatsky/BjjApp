@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -116,6 +117,24 @@ namespace TRNMNT.Web.Controllers
             }, false, true);
         }
 
+        [Authorize(Roles = "Admin, FederationOwner"), HttpPost("[action]/{teamId}")]
+        public async Task<IActionResult> ApproveTeam(string teamId)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _teamService.ApproveTeam(Guid.Parse(teamId));
+            }, false, true);
+        }
+
+        [Authorize(Roles = "Admin, FederationOwner"), HttpPost("[action]/{teamId}")]
+        public async Task<IActionResult> DeclineTeam(string teamId)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _teamService.DeclineTeam(Guid.Parse(teamId));
+            }, false, true);
+        }
+
         [Authorize(Roles = "Admin, TeamOwner"), HttpPost("[action]/{userId}")]
         public async Task<IActionResult> DeclineTeamMembership(string userId)
         {
@@ -131,7 +150,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> ProcessTeamRegistration([FromBody] TeamModelFull model)
+        public async Task<IActionResult> ProcessTeamRegistration([FromBody] TeamModelRegistration model)
         {
             return await HandleRequestWithDataAsync(async() =>
             {
@@ -141,6 +160,10 @@ namespace TRNMNT.Web.Controllers
                     var user = await GetUserAsync();
                     var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
                     var redirectUrl = $"{Request.Host}/event/team-registration-complete";
+                    if (!string.IsNullOrEmpty(model.returnUrl))
+                    {
+                        redirectUrl = model.returnUrl;
+                    }
                     var result = await _teamService.ProcessTeamRegistrationAsync(GetFederationId().Value, model, callbackUrl, redirectUrl, await GetUserAsync());
                     return Success(result);
                 }

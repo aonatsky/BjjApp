@@ -164,7 +164,9 @@ namespace TRNMNT.Core.Services.Impl
                     team = new Team
                     {
                         TeamId = Guid.NewGuid(),
-                        Name = name
+                        Name = name,
+                        ApprovalStatus = ApprovalStatus.Approved,
+                        FederationApprovalStatus = ApprovalStatus.Pending
                     };
                     teamsToAdd.Add(team);
                 }

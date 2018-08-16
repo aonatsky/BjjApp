@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Helpers.Exceptions;
@@ -24,14 +25,16 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IFederationService _federationService;
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
+        private readonly ILogger<TeamService> logger;
         #endregion
 
         #region .ctor
 
-        public TeamService(IRepository<Team> repository, IOrderService orderService, IFederationService federationService, IPaymentService paymentService, IUserService userService)
+        public TeamService(IRepository<Team> repository, IOrderService orderService, IFederationService federationService, IPaymentService paymentService, IUserService userService, ILogger<TeamService> logger)
         {
             _paymentService = paymentService;
             this._userService = userService;
+            this.logger = logger;
             _federationService = federationService;
             _repository = repository;
             _orderService = orderService;
@@ -68,13 +71,35 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<IEnumerable<TeamModelBase>> GetTeamsForEventAsync(Guid federationId)
         {
-            var teams = await _repository.GetAll().Where(t => t.FederationId == federationId).ToListAsync();
+            var teams = await _repository.GetAll().Where(t => t.FederationId == federationId && t.FederationApprovalStatus != ApprovalStatus.Declined).ToListAsync();
             await CheckTeamStatusAsync(teams);
-            return teams.Where(t => t.ApprovalStatus == ApprovalStatus.Approved).Select(t => new TeamModelBase
+            return teams.Select(t => new TeamModelBase
             {
                 TeamId = t.TeamId.ToString(),
-                    Name = t.Name
+                    Name = t.Name,
+                    ApprovalStatus = t.ApprovalStatus,
+                    FederationApprovalStatus = t.FederationApprovalStatus
             });
+        }
+
+        public async Task DeclineTeam(Guid teamId)
+        {
+            var team = await _repository.GetByIDAsync(teamId);
+            if (team != null)
+            {
+                team.FederationApprovalStatus = ApprovalStatus.Declined;
+                _repository.Update(team);
+            }
+        }
+
+        public async Task ApproveTeam(Guid teamId)
+        {
+            var team = await _repository.GetByIDAsync(teamId);
+            if (team != null)
+            {
+                team.FederationApprovalStatus = ApprovalStatus.Approved;
+                _repository.Update(team);
+            }
         }
 
         public async Task<IEnumerable<TeamModelFull>> GetTeamsForAdminAsync(Guid federationId)
@@ -89,7 +114,8 @@ namespace TRNMNT.Core.Services.Impl
                     ContactPhone = t.ContactPhone,
                     Description = t.Description,
                     ContactName = t.ContactName,
-                    ApprovalStatus = ApprovalStatus.GetTranslationKey(t.ApprovalStatus)
+                    ApprovalStatus = ApprovalStatus.GetTranslationKey(t.ApprovalStatus),
+                    FederationApprovalStatus = t.FederationApprovalStatus
             });
         }
 
@@ -164,6 +190,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 TeamId = teamId,
                 ApprovalStatus = ApprovalStatus.Pending,
+                FederationApprovalStatus = ApprovalStatus.Pending,
                 OrderId = orderId,
                 ContactEmail = model.ContactEmail,
                 ContactName = model.ContactName,

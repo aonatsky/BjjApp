@@ -6,9 +6,12 @@ namespace TRNMNT.Core.Const
         public const string Declined = "declined";
         public const string Pending = "pending";
 
-        public static string GetTranslationKey(string name)
+        public static string GetTranslationKey(string status)
         {
-            return $"COMMON.APPROVAL.{name.ToUpper()}";
+            if(string.IsNullOrEmpty(status)){
+                return "";
+            }
+            return $"COMMON.APPROVAL.{status.ToUpper()}";
         }
     }
 }

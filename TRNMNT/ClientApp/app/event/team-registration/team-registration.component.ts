@@ -3,6 +3,8 @@ import { TeamRegistrationModel } from '../../core/model/team.model';
 import { PaymentDataModel } from '../../core/model/payment-data.model';
 import { TeamService } from '../../core/services/team.service';
 import { PriceModel } from '../../core/model/price.model';
+import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'team-registration',
@@ -10,17 +12,22 @@ import { PriceModel } from '../../core/model/price.model';
   styleUrls: ['./team-registration.component.scss']
 })
 export class TeamRegistrationComponent implements OnInit {
-  constructor(private teamService: TeamService) {}
+  constructor(private teamService: TeamService, private route: ActivatedRoute, private userService: UserService) {}
   price: PriceModel;
   paymentData: string;
   paymentSignature: string;
   model: TeamRegistrationModel = new TeamRegistrationModel();
-  @ViewChild('formPrivatElement') formPrivat: ElementRef;
+  @ViewChild('formPrivatElement')
+  formPrivat: ElementRef;
 
   ngOnInit() {
     this.teamService.getTeamRegistrationPrice().subscribe(r => {
       this.price = r;
     });
+    this.model.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    const user = this.userService.getUser();
+    this.model.contactEmail = user.email;
+    this.model.contactName = `${user.firstName} ${user.lastName}`;
   }
 
   goToPayment() {

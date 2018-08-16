@@ -12,7 +12,9 @@ export class FederationEditComponent implements OnInit {
   constructor(private federationService: FederationService) {}
 
   ngOnInit() {
-    this.federationService.getFederation().subscribe(r => (this.model = r));
+    this.federationService.getFederation().subscribe(r =>{
+      this.model = r;}
+      );
   }
 
   save() {

@@ -34,7 +34,9 @@ export const data = {
       'PENDING':'Очікуєця',
       'DECLINED':'Відхилено',
       'DECLINE':'Відхилити',
-      'APPROVAL_STATUS':'Статус'
+      'APPROVAL_STATUS':'Статус',
+      'PAYMENT_APPROVAL_STATUS':'Статус отплати',
+      'NOT_APPROVED':'!'
     }
 
   },
@@ -147,7 +149,7 @@ export const data = {
   'USER_REGISTRATION':{
     'TITLE':'Реєстрація',
     'REGISTER_AND_CONTINUE':'Зареєструватись і продовжити',
-    'I_AM_TEAM_OWNER': 'Я тренер команди'
+    'I_AM_TEAM_OWNER': 'Я тренер, хочу зареєструвати команду.'
   },
 
   'PROFILE':{
