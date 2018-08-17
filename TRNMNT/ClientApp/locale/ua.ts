@@ -54,14 +54,17 @@ export const data = {
     'SIGN_IN':'Увійти',
     'IF_YOU_DONT_HAVE_ACCOUNT':'якщо у вас немає акаунту',
   },
-  'REGISTRATION_TO_EVENT':{
+  'PARTICIPATION':{
     'I_ACCEPT_TNC':'Я приймаю положення',
     'TITLE':'Реєстрація на {{value}}',
     'PARTICIPANT_IS_ALREADY_REGISTERED':'Такий учасник вже зареєстрований',
     'YOUR_PRICE': 'Ваша ціна',
     'CONGRATS_YOU_ARE_REGISTERED_TO': 'Вітаємо, ви зареєстровані на {{value}}',
     'GO_BACK_TO_EVENT_PAGE': 'Повернутись на сторінку події',
-    'ADD_MEMBERSHIP': 'Дотати внесок за членство в федерації'
+    'ADD_MEMBERSHIP': 'Дотати внесок за членство в федерації',
+    'TEAM_PARTICIPATION_TITLE':'Реєстрація команди на {{value}}',
+    'PARTICIPATE':'Приняти участь',
+    'ADD':'Додати'
   },
 'EVENT':{
   'PARTICIPANTS':'Учасники',

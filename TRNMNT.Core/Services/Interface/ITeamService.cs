@@ -53,7 +53,17 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="teamId">Team Id.</param>
         /// <returns></returns>
-        Task<IEnumerable<UserModelAthlete>> GetAthletes(Guid teamId);
+        Task<IEnumerable<UserModelAthlete>> GetAthletesAsync(Guid teamId);
+
+         /// <summary>
+        ///  Returns athletes for the team;
+        /// </summary>
+        /// <param name="teamId">Team Id.</param>
+        /// <param name="eventId">Event Id.</param>
+        /// <param name="federationId">Federation Id.</param>
+        /// <returns></returns>
+        Task<IEnumerable<UserModelAthlete>> GetAthletesForParticipationAsync(Guid teamId, Guid eventId, Guid federationId);
+        
 
         /// <summary>
         ///  Returns athletes for the team;

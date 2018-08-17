@@ -59,7 +59,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             if (await IsFederationMemberAsync(federationId, user.Id))
             {
-                throw new BusinessException("REGISTRATION_TO_EVENT.PARTICIPANT_IS_ALREADY_MEMBER");
+                throw new BusinessException("PARTICIPATION.PARTICIPANT_IS_ALREADY_MEMBER");
             }
             var federationMembershipId = Guid.NewGuid();
             var priceModel = await _federationService.GetTeamRegistrationPriceAsync(federationId);

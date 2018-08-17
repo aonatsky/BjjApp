@@ -53,6 +53,14 @@ namespace TRNMNT.Core.Services.Impl
                 p.DateOfBirth == model.DateOfBirth);
         }
 
+
+        public async Task<bool> IsParticipantExistsAsync(string userId, Guid eventId)
+        {
+            return await _repository.GetAll().AnyAsync(p =>
+                p.EventId == eventId &&
+                p.UserId == userId);
+        }
+
         public void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId, bool isFederationMember)
         {
             var participant = new Participant()
@@ -214,7 +222,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             if (await IsParticipantExistsAsync(model, eventId))
             {
-                throw new BusinessException("REGISTRATION_TO_EVENT.PARTICIPANT_IS_ALREADY_REGISTERED");
+                throw new BusinessException("PARTICIPATION.PARTICIPANT_IS_ALREADY_REGISTERED");
             }
 
             var isFederationMember = await _federationMembershipService.IsFederationMemberAsync(federationId, user.Id);

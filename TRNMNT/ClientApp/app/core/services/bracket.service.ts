@@ -41,7 +41,7 @@ export class BracketService {
   }
 
   getWinnersByCategory(categoryId): Observable<ParticipantInAbsoluteDivisionMobel[]> {
-    return this.httpService.get(ApiMethods.bracket.getParticipnatsForAbsoluteDivision + '/' + categoryId);
+    return this.httpService.get(ApiMethods.bracket.getParticipantsForAbsoluteDivision + '/' + categoryId);
   }
 
   manageAbsoluteWeightDivision(participantsIds, categoryId): Observable<void> {

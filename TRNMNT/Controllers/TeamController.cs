@@ -88,10 +88,24 @@ namespace TRNMNT.Web.Controllers
                 var teamId = (await GetUserAsync()).TeamId;
                 if (teamId.HasValue)
                 {
-                    return Success(await _teamService.GetAthletes(teamId.Value));
+                    return Success(await _teamService.GetAthletesAsync(teamId.Value));
                 };
                 return (null, HttpStatusCode.NotFound);
             }, false, true);
+        }
+
+        [Authorize(Roles = "Admin, TeamOwner"), HttpGet("[action]")]
+        public async Task<IActionResult> GetAthletesForParticipation()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var teamId = (await GetUserAsync()).TeamId;
+                if (teamId.HasValue)
+                {
+                    return Success(await _teamService.GetAthletesForParticipationAsync(teamId.Value, GetEventId().Value, GetFederationId().Value));
+                };
+                return (null, HttpStatusCode.NotFound);
+            }, true, true);
         }
 
         [Authorize(), HttpGet("[action]")]

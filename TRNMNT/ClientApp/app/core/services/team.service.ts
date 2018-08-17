@@ -27,7 +27,7 @@ export class TeamService {
   }
 
   getTeamMembers(): Observable<UserModelAthlete[]> {
-    return this.httpService.get<UserModelAthlete[]>(ApiMethods.team.getTeamMembers);
+    return this.httpService.get<UserModelAthlete[]>(ApiMethods.team.getAthletes);
   }
 
   approveTeamMembership(userId: string): Observable<any> {

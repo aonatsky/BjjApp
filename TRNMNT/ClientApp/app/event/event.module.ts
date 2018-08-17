@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CoreModule } from '../core/core.module';
 import { ParticipantRegistrationComponent } from './participant-registration/participant-registration.component';
+import { ParticipantTeamRegistrationComponent } from './participant-team-registration/participant-team-registration.component';
 // tslint:disable-next-line:max-line-length
 import { ParticipantRegistrationCompleteComponent } from './participant-registration-complete/participant-registration-complete.component';
 import { EventComponent } from './event.component';
@@ -23,7 +24,8 @@ import { TeamRegistrationCompleteComponent } from './team-registration-complete/
     ParticipantRegistrationComponent,
     ParticipantRegistrationCompleteComponent,
     TeamRegistrationComponent,
-    TeamRegistrationCompleteComponent
+    TeamRegistrationCompleteComponent,
+    ParticipantTeamRegistrationComponent
   ],
   providers: [],
   exports: []

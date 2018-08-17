@@ -1,7 +1,7 @@
 ﻿<div class="ui-container">
     <div class="ui-g">
         <div class="ui-g-12 ui-g-nopad page-title">
-            {{'REGISTRATION_TO_EVENT.TITLE'|translate:eventTitleParameter}}
+            {{'PARTICIPATION.TITLE'|translate:eventTitleParameter}}
         </div>
     </div>
     <div class="ui-widget ui-widget-content ui-corner-all ui-g-8">
@@ -175,7 +175,7 @@
             </div>
             <div class="ui-g">
                 <div class="ui-g-3 ui-fluid">
-                    <label>{{'REGISTRATION_TO_EVENT.I_ACCEPT_TNC'|translate}}</label>
+                    <label>{{'PARTICIPATION.I_ACCEPT_TNC'|translate}}</label>
                 </div>
                 <p-checkbox [(ngModel)]="tncAccepted"></p-checkbox>
             </div>
@@ -199,7 +199,7 @@
     </div>
     <div class="ui-g ui-g-4 price-box" *ngIf="price">
         <div class="ui-g ui-g-12">
-            {{'REGISTRATION_TO_EVENT.YOUR_PRICE'|translate}}:
+            {{'PARTICIPATION.YOUR_PRICE'|translate}}:
         </div>
         <div class="ui-g ui-g-12 price">
             <span class="price">{{price.amount}} {{price.currency}}</span>
@@ -207,7 +207,7 @@
     </div>
     <div class="ui-g ui-g-4 price-box" *ngIf="!isFederationMember">
         <div class="ui-g ui-g-12">
-            <p-checkbox [(ngModel)]="participant.includeMembership" binary="true" label="{{'REGISTRATION_TO_EVENT.ADD_MEMBERSHIP'|translate}}"
+            <p-checkbox [(ngModel)]="participant.includeMembership" binary="true" label="{{'PARTICIPATION.ADD_MEMBERSHIP'|translate}}"
                 (onChange)="initPrice()"></p-checkbox>
         </div>
     </div>

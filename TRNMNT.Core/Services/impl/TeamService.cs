@@ -23,21 +23,31 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IRepository<Team> _repository;
         private readonly IOrderService _orderService;
         private readonly IFederationService _federationService;
+        private readonly IFederationMembershipService _federationMembershipService;
+        private readonly IParticipantService _participantService;
         private readonly IPaymentService _paymentService;
         private readonly IUserService _userService;
-        private readonly ILogger<TeamService> logger;
         #endregion
 
         #region .ctor
 
-        public TeamService(IRepository<Team> repository, IOrderService orderService, IFederationService federationService, IPaymentService paymentService, IUserService userService, ILogger<TeamService> logger)
+        public TeamService(IRepository<Team> repository,
+            IOrderService orderService,
+            IFederationService federationService,
+            IPaymentService paymentService,
+            IUserService userService,
+            IFederationMembershipService federationMembershipService,
+            IParticipantService participantService
+        )
         {
             _paymentService = paymentService;
-            this._userService = userService;
-            this.logger = logger;
+            _userService = userService;
+            _federationMembershipService = federationMembershipService;
+            _participantService = participantService;
             _federationService = federationService;
             _repository = repository;
             _orderService = orderService;
+
         }
 
         #endregion
@@ -133,24 +143,44 @@ namespace TRNMNT.Core.Services.Impl
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
-        public async Task<IEnumerable<UserModelAthlete>> GetAthletes(Guid teamId)
+        public async Task<IEnumerable<UserModelAthlete>> GetAthletesAsync(Guid teamId)
         {
             var result = new List<UserModelAthlete>();
-            var team = await _repository.GetAll().FirstOrDefaultAsync(t => t.TeamId == teamId);
-            if (team == null)
+            var users = await GetTeamUsersAsync(teamId);
+            users.ToList().ForEach(async u =>
             {
-                return result;
-            }
-
-            return (await _userService.GetUsersAsync(u => u.TeamId.HasValue && (u.TeamId == team.TeamId))).Select(u => new UserModelAthlete()
-            {
-                FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    DateOfBirth = u.DateOfBirth,
-                    Email = u.Email,
-                    UserId = u.Id,
-                    TeamMembershipApprovalStatus = u.TeamMembershipApprovalStatus,
+                result.Append(new UserModelAthlete()
+                {
+                    FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        DateOfBirth = u.DateOfBirth,
+                        Email = u.Email,
+                        UserId = u.Id,
+                        TeamMembershipApprovalStatus = u.TeamMembershipApprovalStatus,
+                });
             });
+            return result;
+        }
+
+        public async Task<IEnumerable<UserModelAthlete>> GetAthletesForParticipationAsync(Guid teamId, Guid eventId, Guid federationId)
+        {
+            var result = new List<UserModelAthlete>();
+            var users = await GetTeamUsersAsync(teamId);
+            users.ToList().ForEach(async u =>
+            {
+                result.Append(new UserModelAthlete()
+                {
+                    FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        DateOfBirth = u.DateOfBirth,
+                        Email = u.Email,
+                        UserId = u.Id,
+                        TeamMembershipApprovalStatus = u.TeamMembershipApprovalStatus,
+                        IsFederationMember = await _federationMembershipService.IsFederationMemberAsync(federationId, u.Id),
+                        IsParticipant = await _participantService.IsParticipantExistsAsync(u.Id, eventId)
+                });
+            });
+            return result;
         }
 
         public async Task<UserModelAthlete> GetAthlete(User user)
@@ -219,6 +249,17 @@ namespace TRNMNT.Core.Services.Impl
                 }
             }
         }
+
+        private async Task<IEnumerable<User>> GetTeamUsersAsync(Guid teamId)
+        {
+            var team = await _repository.GetAll().FirstOrDefaultAsync(t => t.TeamId == teamId);
+            if (team != null)
+            {
+                return await _userService.GetUsersAsync(u => u.TeamId.HasValue && (u.TeamId == team.TeamId));
+            }
+            return new List<User>();
+        }
+
         #endregion
 
     }

@@ -18,6 +18,14 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
         Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant, Guid eventId);
+        
+        /// <summary>
+        /// Determines whether [is participant exists asynchronous].
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <param name="eventId">The event identifier.</param>
+        /// <returns></returns>
+        Task<bool> IsParticipantExistsAsync(string userId, Guid eventId);
 
         /// Adds new participant;
         /// </summary>

@@ -108,7 +108,7 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize, HttpGet("[action]/{categoryId}")]
-        public async Task<IActionResult> GetParticipnatsForAbsoluteDivision(Guid categoryId)
+        public async Task<IActionResult> GetParticipantsForAbsoluteDivision(Guid categoryId)
         {
             return await HandleRequestWithDataAsync(async () =>
             {

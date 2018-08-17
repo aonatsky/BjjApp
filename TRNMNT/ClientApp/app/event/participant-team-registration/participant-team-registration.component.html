@@ -1,0 +1,15 @@
+<trnmnt-page contentClass="ui-g-8 ui-g-offset-2" [title]="'PARTICIPATION.TEAM_PARTICIPATION_TITLE'|translate">
+  <ng-template #participateTemplate let-data>
+    <div>
+      <button type="button" pButton icon="fa fa-check" (click)="Add(data)" label="{{'PARTICIPATION.ADD' | translate}}"
+        *ngIf="!isAthleteApproved(data)"></button>
+    </div>
+  </ng-template>
+  <span class="page-subtitle">{{'MY_TEAM.ATHLETES' | translate}}</span>
+  <crud #crudComponent [entities]="allAthletes" [columns]="columns" [columnOptions]="columnOptions" [showRowNumbers]="false"
+    [addEnabled]="false" [editEnabled]="false" [deleteEnabled]="false" [sortField]="sortField" [sortOrder]="sortDirection"
+    [lazy]="false" [(firstIndex)]="firstIndex" [dialogMinWidth]="500" class="ui-g-12" gridMinHeight="350" [actionsTemplate]="participateTemplate"
+    [actionsHeader]="'PARTICIPATION.PARTICIPATE' | translate">
+  </crud>
+
+</trnmnt-page>

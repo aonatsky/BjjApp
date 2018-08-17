@@ -23,4 +23,5 @@ export class UserModel extends UserModelRegistration {
 export class UserModelAthlete extends UserModelBase {
   teamMembershipApprovalStatus: string;
   teamName: string;
+  isFederationMember: boolean;
 }
