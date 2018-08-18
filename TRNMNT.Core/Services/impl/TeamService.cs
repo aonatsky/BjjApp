@@ -149,7 +149,7 @@ namespace TRNMNT.Core.Services.Impl
             var users = await GetTeamUsersAsync(teamId);
             users.ToList().ForEach(async u =>
             {
-                result.Append(new UserModelAthlete()
+                result.Add(new UserModelAthlete()
                 {
                     FirstName = u.FirstName,
                         LastName = u.LastName,
@@ -168,7 +168,7 @@ namespace TRNMNT.Core.Services.Impl
             var users = await GetTeamUsersAsync(teamId);
             users.ToList().ForEach(async u =>
             {
-                result.Append(new UserModelAthlete()
+                result.Add(new UserModelAthlete()
                 {
                     FirstName = u.FirstName,
                         LastName = u.LastName,

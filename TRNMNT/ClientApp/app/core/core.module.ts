@@ -48,7 +48,6 @@ import { RedirectGuard } from './guards/redirect.guard';
 import { BracketService } from './services/bracket.service';
 import { MinuteSecondsPipe } from './pipes/minutes-seconds.pipe';
 import { SignalRHubService } from './dal/signalr/signalr-hub.service';
-import { TestSocketService } from './services/test-socket.service';
 import { FormatTimerPipe } from './pipes/format-timer.pipe';
 import { RunEventHubService } from './hubservices/run-event.hub.service';
 import { ToDictionaryPipe } from './pipes/to-dictionary.pipe';
@@ -107,7 +106,6 @@ import { FederationService } from './services/federation.service';
     EventService,
     TeamService,
     SignalRHubService,
-    TestSocketService,
     StorageService,
     EventRunCommunicationService,
     RunEventHubService,

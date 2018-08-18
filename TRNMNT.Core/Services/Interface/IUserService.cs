@@ -68,7 +68,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="login">The login.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateParticipantUserAsync(UserModelRegistration model);
+        Task CreateParticipantUserAsync(UserModelRegistration model);
 
         /// <summary>
         /// Change users password asynchronously 
@@ -93,7 +93,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="model">Credentials model.</param>
         /// <param name="roles">Roles.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, List<string> roles);
+        Task CreateUserAsync(UserModelRegistration model, List<string> roles);
 
         /// <summary>
         /// Updates user asynchronous.
@@ -109,7 +109,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="roles">Roles.</param>
         /// <param name="password">Password.</param>
         /// <returns></returns>
-        Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, List<string> roles, string password);
+        Task CreateUserWithRoleAsync(User user, List<string> roles, string password);
         
         /// <summary>
         /// Sets team for user

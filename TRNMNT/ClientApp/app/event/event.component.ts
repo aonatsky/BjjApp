@@ -5,6 +5,7 @@ import { RouterService } from '../core/services/router.service';
 import { AuthService } from '../core/services/auth.service';
 import  DateHelper from '../core/helpers/date-helper';
 import { Title } from '@angular/platform-browser';
+import { Roles } from '../core/consts/roles.const';
 
 @Component({
   selector: 'event',
@@ -26,7 +27,8 @@ export class EventComponent implements OnInit {
     private routerService: RouterService,
     private eventService: EventService,
     private authService: AuthService,
-    private titleService: Title
+    private titleService: Title,
+    
   ) {}
 
   ngOnInit() {
@@ -42,7 +44,12 @@ export class EventComponent implements OnInit {
 
   participate() {
     if (this.authService.isLoggedIn()) {
-      this.routerService.goToEventRegistration();
+      if(this.authService.ifRolesMatch([Roles.TeamOwner])){
+        this.routerService.goToParticipantTeamRegistration();
+      }else{
+        this.routerService.goToParticipantRegistration();
+      }
+      
     } else {
       this.displayPopup = true;
     }

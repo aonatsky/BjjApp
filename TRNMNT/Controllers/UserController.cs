@@ -71,12 +71,7 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestAsync(async() =>
             {
-                var result = await _userService.CreateParticipantUserAsync(model);
-                if (!result.Success)
-                {
-                    throw new BusinessException(result.Reason);
-                }
-                return HttpStatusCode.OK;
+                await _userService.CreateParticipantUserAsync(model);
             });
         }
 

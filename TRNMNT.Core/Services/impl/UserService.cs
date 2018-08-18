@@ -99,14 +99,14 @@ namespace TRNMNT.Core.Services.Impl
             _logger.LogDebug($"User '{secretUserCreationModel.UserName}' is created with role Owner.");
         }
 
-        public async Task<UserRegistrationResult> CreateParticipantUserAsync(UserModelRegistration model)
+        public async Task CreateParticipantUserAsync(UserModelRegistration model)
         {
             var roles = new List<string> { Roles.Participant };
             if (model.IsTeamOwner)
             {
                 roles.Add(Roles.TeamOwner);
             }
-            return await CreateUserAsync(model, roles);
+            await CreateUserAsync(model, roles);
         }
 
         public async Task UpdateUserAsync(UserModel model)
@@ -122,7 +122,7 @@ namespace TRNMNT.Core.Services.Impl
             user.Email = model.Email;
             await _userManager.UpdateAsync(user);
         }
-        public async Task<UserRegistrationResult> CreateUserAsync(UserModelRegistration model, List<string> roles)
+        public async Task CreateUserAsync(UserModelRegistration model, List<string> roles)
         {
             var user = new User
             {
@@ -136,7 +136,7 @@ namespace TRNMNT.Core.Services.Impl
                 TeamId = model.TeamId,
                 TeamMembershipApprovalStatus = ApprovalStatus.Pending
             };
-            return await CreateUserWithRoleAsync(user, roles, model.Password);
+            await CreateUserWithRoleAsync(user, roles, model.Password);
         }
 
         public async Task ChangesPasswordAsync(string oldPassword, string newPassword, string userId)
@@ -167,18 +167,21 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public async Task<UserRegistrationResult> CreateUserWithRoleAsync(User user, List<string> roles, string password)
+        public async Task CreateUserWithRoleAsync(User user, List<string> roles, string password)
         {
             var identityResult = await _userManager.CreateAsync(user, password);
             foreach (string role in roles)
             {
                 await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
             }
-            if (identityResult.Succeeded)
+            if (!identityResult.Succeeded)
             {
-                return new UserRegistrationResult(true);
+                if(identityResult.Errors.Any(e => e.Code == "DuplicateUserName"))
+                {
+                    throw new BusinessException("ERROR.DUPLICATE_EMAIL");
+                }
+                throw new BusinessException("ERROR.REGISTRATION_FAILED");
             }
-            return new UserRegistrationResult(false, identityResult.Errors.FirstOrDefault()?.Description);
         }
 
         public async Task DeclineTeamMembershipAsync(Guid teamId, string userId)

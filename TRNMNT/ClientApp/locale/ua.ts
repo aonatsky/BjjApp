@@ -64,7 +64,8 @@ export const data = {
     'ADD_MEMBERSHIP': 'Дотати внесок за членство в федерації',
     'TEAM_PARTICIPATION_TITLE':'Реєстрація команди на {{value}}',
     'PARTICIPATE':'Приняти участь',
-    'ADD':'Додати'
+    'ADD':'Додати',
+    'ALREADY_PARTICIPANT':'Вже приймає участь'
   },
 'EVENT':{
   'PARTICIPANTS':'Учасники',
@@ -165,6 +166,7 @@ export const data = {
     'SOMETHING_WENT_WRONG':'Щось пішло не так',
     'PARTICIPANT_IS_NOT_FOUND': 'Учасника не знайдено',
     'EMAIL_OR_PASSWORD_IS_INVALID': 'Пошта або пароль введені невірно',
+    'DUPLICATE_EMAIL':'Такий користувач вже зареєстрований'
 
 
   }

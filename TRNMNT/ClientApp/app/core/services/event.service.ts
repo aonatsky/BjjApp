@@ -6,6 +6,7 @@ import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PriceModel } from '../model/price.model';
+import { ParticipantRegistrationModel } from '../model/participant.models';
 
 @Injectable()
 export class EventService {
@@ -80,6 +81,10 @@ export class EventService {
 
   getPrice(includeMembership : boolean): Observable<PriceModel> {
     return this.httpService.get<number>(ApiMethods.event.getPrice, {includeMembership});
+  }
+
+  getTeamPrice(participants : ParticipantRegistrationModel[]): Observable<PriceModel> {
+    return this.httpService.get<number>(ApiMethods.event.getTeamPrice, participants);
   }
 
   //private methods

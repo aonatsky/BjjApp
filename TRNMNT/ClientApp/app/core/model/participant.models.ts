@@ -19,6 +19,7 @@ export class ParticipantRegistrationModel extends ParticipantModelBase {
     promoCode: string;
     includeMembership: boolean;
     federationMember: boolean;
+    isParticipant : boolean;
 }
 
 export class ParticipantTableModel extends ParticipantModelBase {

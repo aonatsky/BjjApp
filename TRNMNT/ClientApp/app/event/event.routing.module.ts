@@ -9,6 +9,8 @@ import { TopbarComponent } from '../shared/topbar/topbar.component';
 import { AuthGuard } from '../core/guards/auth.guard';
 import { TeamRegistrationComponent } from './team-registration/team-registration.component';
 import { TeamRegistrationCompleteComponent } from './team-registration-complete/team-registration-complete.component';
+import { ParticipantTeamRegistrationComponent } from './participant-team-registration/participant-team-registration.component';
+import { Roles } from '../core/consts/roles.const';
 
 const routes: Routes = [
   {
@@ -19,6 +21,12 @@ const routes: Routes = [
     path: 'event/participant-registration',
     component: ParticipantRegistrationComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'event/participant-team-registration',
+    component: ParticipantTeamRegistrationComponent,
+    canActivate: [AuthGuard],
+    data: { expectedRoles: [Roles.TeamOwner] },
   },
   {
     path: 'event/participant-registration-complete',

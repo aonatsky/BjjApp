@@ -69,8 +69,12 @@ export class RouterService {
     this.router.navigateByUrl('/event');
   }
 
-  goToEventRegistration() {
+  goToParticipantRegistration() {
     this.router.navigateByUrl('/event/participant-registration');
+  }
+  
+  goToParticipantTeamRegistration() {
+    this.router.navigateByUrl('/event/participant-team-registration');
   }
 
   goToTeamRegistration(returnUrl? : string) {
