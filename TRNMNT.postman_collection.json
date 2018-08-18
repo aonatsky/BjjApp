@@ -1,0 +1,148 @@
+{
+	"variables": [],
+	"info": {
+		"name": "TRNMNT",
+		"_postman_id": "c1b7e03f-8556-12a8-c3d0-b1f8c39f0cb6",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TRNMNT.Register User",
+			"request": {
+				"url": "http://localhost:5000/api/user/Register/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "password",
+						"value": "pizdecpassword",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FirstName",
+							"value": "Owner",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "LastName",
+							"value": "Owner",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "Email",
+							"value": "owner@t.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "Role",
+							"value": "Owner",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "TRNMNT.Register User",
+			"request": {
+				"url": "https://localhost:44356/api/auth/updateToken",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"UserName\":\"Mat1\",\n\t\"Password\":\"Mat1Password\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "TRNMNT.Register Owner",
+			"request": {
+				"url": "{{url}}/api/user/Register/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "password",
+						"value": "pizdecpassword",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"FirstName\":\"Owner\",\n  \"LastName\":\"Owner\",\n  \"Email\":\"Owner@t.com\",\n  \"Password\":\"1\",\n  \"Role\":\"Owner\",\n  \"DateOfBirth\":\"1989-04-23T18:25:43.511Z\"\n}"
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "TRNMNT.Register Admin",
+			"request": {
+				"url": "{{url}}/api/user/Register/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "password",
+						"value": "pizdecpassword",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"FirstName\":\"newadmin\",\n  \"LastName\":\"newadmin\",\n  \"Email\":\"admin@t.com\",\n  \"Password\":\"1\",\n  \"Role\":\"Admin\",\n  \"DateOfBirth\":\"1989-04-23T18:25:43.511Z\"\n}"
+				},
+				"description": null
+			},
+			"response": []
+		},
+		{
+			"name": "TRNMNT.Register FederationOwner",
+			"request": {
+				"url": "{{url}}/api/user/Register/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "password",
+						"value": "pizdecpassword",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"FirstName\":\"federationOwner\",\n  \"LastName\":\"federationOwner\",\n  \"Email\":\"federationOwner@t.com\",\n  \"Password\":\"1\",\n  \"Role\":\"FederationOwner\",\n  \"DateOfBirth\":\"1989-04-23T18:25:43.511Z\"\n}"
+				},
+				"description": null
+			},
+			"response": []
+		}
+	]
+}
