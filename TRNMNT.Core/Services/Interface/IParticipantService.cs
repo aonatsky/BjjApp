@@ -18,7 +18,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="eventId">The event identifier.</param>
         /// <returns></returns>
         Task<bool> IsParticipantExistsAsync(ParticipantModelBase participant, Guid eventId);
-        
+
         /// <summary>
         /// Determines whether [is participant exists asynchronous].
         /// </summary>
@@ -84,6 +84,17 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="user">User</param>
         /// <returns></returns>
         Task<PaymentDataModel> ProcessParticipantRegistrationAsync(Guid eventId, Guid federationId, ParticipantRegistrationModel model, string callbackUrl, string redirectUrl, User user);
+
+        /// <summary>
+        /// Processes the participant registration asynchronous. Returns payment data
+        /// </summary>
+        /// <param name="eventId">The event identifier.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="callbackUrl">The callback URL.</param>
+        /// <param name="redirectUrl">The redirect URL.</param>
+        /// <param name="teamOwner">Team Owner user</param>
+        /// <returns></returns>
+        Task<PaymentDataModel> ProcessParticipantTeamRegistrationAsync(Guid eventId, Guid federationId, List<ParticipantRegistrationModel> models, string callbackUrl, string redirectUrl, User teamOwner);
 
         /// <summary>
         /// Set participant weight in status

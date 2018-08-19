@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Event;
+using TRNMNT.Core.Model.Participant;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -99,6 +100,14 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="includeMembership">Is membership price included</param>
         /// <returns>Price</returns>
         Task<PriceModel> GetPriceAsync(Guid EventId, string userId, bool includeMembership);
+        
+        /// <summary>
+        /// Returns price for team participation.
+        /// </summary>
+        /// <param name="eventId">Event Id.</param>
+        /// <param name="participants">Participnants.</param>
+        /// <returns></returns>
+        Task<PriceModel> GetTeamPriceAsync(Guid eventId, List<ParticipantRegistrationModel> participants);
 
         /// <summary>
         /// Creates new event to edit.

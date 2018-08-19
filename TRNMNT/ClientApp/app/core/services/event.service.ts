@@ -80,11 +80,11 @@ export class EventService {
   }
 
   getPrice(includeMembership : boolean): Observable<PriceModel> {
-    return this.httpService.get<number>(ApiMethods.event.getPrice, {includeMembership});
+    return this.httpService.get<PriceModel>(ApiMethods.event.getPrice, {includeMembership});
   }
 
   getTeamPrice(participants : ParticipantRegistrationModel[]): Observable<PriceModel> {
-    return this.httpService.get<number>(ApiMethods.event.getTeamPrice, participants);
+    return this.httpService.post<PriceModel>(ApiMethods.event.getTeamPrice, participants);
   }
 
   //private methods

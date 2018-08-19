@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model.Event;
+using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -26,8 +28,7 @@ namespace TRNMNT.Web.Controllers
 
         #region .ctor
 
-        public EventController(IEventService eventService, ILogger<EventController> logger, IUserService userService, IAppDbContext context, IConfiguration configuration) 
-        : base(logger, userService, eventService, context, configuration)
+        public EventController(IEventService eventService, ILogger<EventController> logger, IUserService userService, IAppDbContext context, IConfiguration configuration) : base(logger, userService, eventService, context, configuration)
         {
             _eventService = eventService;
         }
@@ -155,6 +156,16 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> GetTeamPrice([FromBody] List<ParticipantRegistrationModel> participants)
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var price = await _eventService.GetTeamPriceAsync(GetEventId().Value, participants);
+                return price;
+            }, true, true);
+        }
+
         [Authorize(Roles = "FederationOwner, Owner"), HttpGet("[action]")]
         public async Task<IActionResult> CreateEvent()
         {
@@ -164,7 +175,8 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpGet("[action]")]
         public async Task<IActionResult> GetPrice([FromQuery(Name = "includeMembership")] bool includeMembership)
         {
-            return await HandleRequestWithDataAsync(async() => await _eventService.GetPriceAsync(GetEventId().Value, (await GetUserAsync()).Id, includeMembership), true, true);
+            return await HandleRequestWithDataAsync(async() => await _eventService.GetPriceAsync(GetEventId().Value, (await GetUserAsync()).Id, includeMembership),
+                true, true);
         }
 
         [Authorize(Roles = "FederationOwner, Owner"), HttpDelete("[action]")]

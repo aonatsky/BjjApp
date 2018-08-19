@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TRNMNT.Core.Const;
@@ -93,6 +94,11 @@ namespace TRNMNT.Core.Services.Impl
                 membership.ApprovalStatus = await _orderService.GetApprovalStatus(membership.OrderId.Value);
                 _repository.Update(membership);
             }
+        }
+
+        public async Task<List<FederationMembership>> GetFederationMembershipsForUsersAsync(Guid federationId, List<string> userIds)
+        {
+            return await _repository.GetAll(fm => userIds.Contains(fm.UserId)).ToListAsync();
         }
     }
 }

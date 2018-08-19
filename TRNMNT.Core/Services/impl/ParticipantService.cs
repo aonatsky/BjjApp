@@ -53,7 +53,6 @@ namespace TRNMNT.Core.Services.Impl
                 p.DateOfBirth == model.DateOfBirth);
         }
 
-
         public async Task<bool> IsParticipantExistsAsync(string userId, Guid eventId)
         {
             return await _repository.GetAll().AnyAsync(p =>
@@ -246,6 +245,44 @@ namespace TRNMNT.Core.Services.Impl
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
+        public async Task<PaymentDataModel> ProcessParticipantTeamRegistrationAsync(Guid eventId, Guid federationId, List<ParticipantRegistrationModel> models, string callbackUrl, string redirectUrl, User teamOwner)
+        {
+            if (!models.Any())
+            {
+                throw new BusinessException("ERROR.NO_PARTICIPANTS_SELECTED");
+            }
+            
+            var existingParticipnatsUserIds = await IsUsersParticipants(models.Select(m => m.UserId).ToList(), eventId);
+            models.RemoveAll(m => existingParticipnatsUserIds.Contains(m.UserId));
+
+            var federationMemberships =
+                await _federationMembershipService.GetFederationMembershipsForUsersAsync(federationId, models.Select(m => m.UserId).ToList());
+            var priceModel = await _eventService.GetTeamPriceAsync(eventId, models);
+            var orderType = OrderTypeEnum.TeamEventParticipation;
+            var orderReferance = $"{models.FirstOrDefault().TeamName}";
+            var orderId = Guid.NewGuid();
+
+            foreach (var model in models)
+            {
+                if (await IsParticipantExistsAsync(model, eventId))
+                {
+                    break;
+                    //throw new BusinessException("PARTICIPATION.PARTICIPANT_IS_ALREADY_REGISTERED");
+                }
+                var isFederationMember = federationMemberships.Any(fm => fm.UserId == model.UserId);
+                var participantId = Guid.NewGuid();
+                orderReferance += $"{participantId.ToString()}_";
+                AddParticipant(model, eventId, orderId, participantId, isFederationMember || model.IncludeMembership);
+
+                if (model.IncludeMembership)
+                {
+                    _federationMembershipService.AddFederationMembership(model.UserId, federationId, orderId, Guid.NewGuid());
+                }
+            }
+            var order = _orderService.AddNewOrder(orderType, priceModel.Amount, priceModel.Currency, orderReferance, teamOwner.Id, orderId);
+            return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
+        }
+
         public async Task SetWeightInStatus(Guid participantId, string status)
         {
             var participant = await _repository.GetByIDAsync(participantId);
@@ -319,6 +356,12 @@ namespace TRNMNT.Core.Services.Impl
                 }
             }
         }
+
+        private async Task<List<string>> IsUsersParticipants(List<string> userIds, Guid eventId)
+        {
+            return await _repository.GetAll(p => p.EventId == eventId && userIds.Contains(p.UserId)).Select(p => p.UserId).ToListAsync();
+        }
+
         #endregion
     }
 }

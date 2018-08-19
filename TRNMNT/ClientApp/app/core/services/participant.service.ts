@@ -23,6 +23,12 @@ export class ParticipantService {
   ): Observable<PaymentDataModel> {
     return this.httpService.post<PaymentDataModel>(ApiMethods.participant.processParticipantRegistration, participant);
   }
+  
+  processParticipantTeamRegistration(
+    participants: ParticipantRegistrationModel[]
+  ): Observable<PaymentDataModel> {
+    return this.httpService.post<PaymentDataModel>(ApiMethods.participant.processParticipantTeamRegistration, participants);
+  }
 
   isParticipantExists(participant: ParticipantModelBase): Observable<boolean> {
     return this.httpService.post<boolean>(ApiMethods.participant.isParticipantExist, participant);

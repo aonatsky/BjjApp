@@ -15,8 +15,9 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="currency">The currency.</param>
         /// <param name="reference">The reference.</param>
         /// <param name="userId">User id.</param>
+        /// <param name="orderId">Order id. Optional.</param>
         /// <returns></returns>
-        Order AddNewOrder(OrderTypeEnum orderType, int amount, string currency, string reference, string userId);
+        Order AddNewOrder(OrderTypeEnum orderType, int amount, string currency, string reference, string userId, Guid? orderId = null);
 
         /// <summary>
         /// Approves the order asynchronous.

@@ -9,6 +9,7 @@ using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Category;
 using TRNMNT.Core.Model.Event;
+using TRNMNT.Core.Model.Participant;
 using TRNMNT.Core.Model.WeightDivision;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
@@ -218,7 +219,7 @@ namespace TRNMNT.Core.Services.Impl
             var _event = await _eventRepository.GetByIDAsync(eventId);
             if (_event == null)
             {
-                throw new BusinessException("Event not found");
+                throw new BusinessException("ERROR.EVENT_IS_NOT_FOUND");
             }
 
             var isMember = await _federationMembershipService.IsFederationMemberAsync(_event.FederationId, userId);
@@ -236,7 +237,7 @@ namespace TRNMNT.Core.Services.Impl
                 priceModel.Amount = isMember || includeMembership ? _event.LateRegistrationPrice : _event.LateRegistrationPrice;
             }
 
-            if (includeMembership)
+            if (!isMember && includeMembership)
             {
                 priceModel.Amount += (await _federationService.GetMembershipPriceAsync(_event.FederationId)).Amount;
             }
@@ -244,40 +245,62 @@ namespace TRNMNT.Core.Services.Impl
             return priceModel;
         }
 
-        public async Task<int> GetPriceAsync(Guid eventId, string userId, string promoCode = "")
+        public async Task<PriceModel> GetTeamPriceAsync(Guid eventId, List<ParticipantRegistrationModel> participants)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
-            if (_event != null)
+            if (_event == null)
             {
-                var isPromoCodeUsed = false;
-                if (string.IsNullOrEmpty(promoCode))
-                {
-                    isPromoCodeUsed = await _promoCodeService.ValidateCodeAsync(eventId, promoCode, userId);
-                }
-                var dateNow = DateTime.UtcNow;
-                if (dateNow <= _event.EarlyRegistrationEndTS)
-                {
-                    return isPromoCodeUsed ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
-                }
-                return isPromoCodeUsed ? _event.LateRegistrationPriceForMembers : _event.LateRegistrationPrice;
+                throw new BusinessException("ERROR.EVENT_IS_NOT_FOUND");
             }
-            return 0;
+
+            var memberships = await _federationMembershipService.GetFederationMembershipsForUsersAsync(_event.FederationId, participants.Select(p => p.UserId).ToList());
+            var priceModel = new PriceModel()
+            {
+                Currency = await _federationService.GetFederationCurrencyAsync(_event.FederationId)
+            };
+            var membershipPrice = (await _federationService.GetMembershipPriceAsync(_event.FederationId)).Amount;
+
+            foreach (var participant in participants)
+            {
+                var isMember = memberships.Any(m => m.UserId == participant.UserId);
+                if (DateTime.UtcNow <= _event.EarlyRegistrationEndTS)
+                {
+                    priceModel.Amount += isMember ||
+                        participant.IncludeMembership ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+                }
+                else
+                {
+                    priceModel.Amount += isMember ||
+                        participant.IncludeMembership ? _event.LateRegistrationPrice : _event.LateRegistrationPrice;
+                }
+
+                if (!isMember && participant.IncludeMembership)
+                {
+                    priceModel.Amount += membershipPrice;
+                }
+            }
+            return priceModel;
         }
 
-        public async Task<int> GetPriceAsync(Guid eventId, bool specialPrice)
-        {
-            var _event = await _eventRepository.GetByIDAsync(eventId);
-            if (_event != null)
-            {
-                var dateNow = DateTime.UtcNow;
-                if (dateNow <= _event.EarlyRegistrationEndTS)
-                {
-                    return specialPrice ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
-                }
-                return specialPrice ? _event.LateRegistrationPriceForMembers : _event.LateRegistrationPrice;
-            }
-            return 0;
-        }
+        // public async Task<int> GetPriceAsync(Guid eventId, string userId, string promoCode = "")
+        // {
+        //     var _event = await _eventRepository.GetByIDAsync(eventId);
+        //     if (_event != null)
+        //     {
+        //         var isPromoCodeUsed = false;
+        //         if (string.IsNullOrEmpty(promoCode))
+        //         {
+        //             isPromoCodeUsed = await _promoCodeService.ValidateCodeAsync(eventId, promoCode, userId);
+        //         }
+        //         var dateNow = DateTime.UtcNow;
+        //         if (dateNow <= _event.EarlyRegistrationEndTS)
+        //         {
+        //             return isPromoCodeUsed ? _event.EarlyRegistrationPriceForMembers : _event.EarlyRegistrationPrice;
+        //         }
+        //         return isPromoCodeUsed ? _event.LateRegistrationPriceForMembers : _event.LateRegistrationPrice;
+        //     }
+        //     throw new BusinessException("ERROR.EVENT_IS_NOT_FOUND");
+        // }
 
         public async Task<EventModelBase> GetEventBaseInfoAsync(Guid id)
         {

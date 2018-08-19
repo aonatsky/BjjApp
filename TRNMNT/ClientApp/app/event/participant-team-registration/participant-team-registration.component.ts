@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { EventService } from '../../core/services/event.service';
 import { WeightDivisionService } from '../../core/services/weight-division.service';
 import { CategoryService } from '../../core/services/category.service';
 import { TeamService } from '../../core/services/team.service';
 import { ParticipantService } from '../../core/services/participant.service';
-import { AuthService } from '../../../../node_modules/angular5-social-login';
-import { RouterService } from '../../core/services/router.service';
 import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
 import { UserModelAthlete } from '../../core/model/user.models';
 import { ICrudColumn as CrudColumn, IColumnOptions } from '../../shared/crud/crud.component';
-import { ParticipantModelBase, ParticipantRegistrationModel } from '../../core/model/participant.models';
-import { forkJoin } from '../../../../node_modules/rxjs';
+import { ParticipantRegistrationModel } from '../../core/model/participant.models';
 import { SelectItem } from '../../../../node_modules/primeng/primeng';
-import { WeightDivisionModel, WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
-import { CategoryModel } from '../../core/model/category.models';
+import { WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
+import { CategorySimpleModel } from '../../core/model/category.models';
 import { PriceModel } from '../../core/model/price.model';
+import DateHelper from '../../core/helpers/date-helper';
+import { PaymentDataModel } from '../../core/model/payment-data.model';
 
 @Component({
   selector: 'participant-team-registration',
@@ -22,7 +21,7 @@ import { PriceModel } from '../../core/model/price.model';
   styleUrls: ['./participant-team-registration.component.scss']
 })
 export class ParticipantTeamRegistrationComponent implements OnInit {
-  categories: CategoryModel[];
+  categories: CategorySimpleModel[];
   eventTitleParameter: { value: any };
   categorySelectItems: SelectItem[];
   weightDivisionsSelectItems: SelectItem[];
@@ -33,16 +32,19 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
     private categoryService: CategoryService,
     private teamService: TeamService,
     private participantService: ParticipantService,
-    private authService: AuthService,
     private eventService: EventService,
-    private routerService: RouterService,
     private translateService: TranslateService
   ) {}
 
+  dateHelper = DateHelper;
+  @ViewChild('formPrivatElement')
+  formPrivat: ElementRef;
   allAthletes: UserModelAthlete[];
-  selectedAthletes: ParticipantRegistrationModel[] = [];
+  participationData: ParticipationData[] = [];
   currentStep = 0;
-  lastStep = 2;
+  lastStep = 1;
+  paymentData: string = '';
+  paymentSignature: string = '';
 
   columns: CrudColumn[] = [
     {
@@ -69,40 +71,31 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
   sortField: string = 'name';
   columnOptions: IColumnOptions = {};
   ngOnInit() {
+    this.eventService.getCurrentEvent().subscribe(r => (this.eventTitleParameter = { value: r.title }));
     this.teamService.getAthletesForParticipation().subscribe(r => {
       this.allAthletes = r;
     });
-    this.loadData();
   }
 
-  private loadData() {
-    forkJoin(
-      this.categoryService.getCategoriesForCurrentEvent(),
-      this.eventService.getCurrentEvent(),
-      this.participantService.isFederationMember()
-    ).subscribe(data => this.initData(data));
+  private initDataForParticipation() {
+    this.categoryService.getCategoriesForCurrentEvent().subscribe(r => {
+      this.categories = r;
+      this.initCategorySelectItems();
+    });
   }
 
-  private initData(data) {
-    this.categories = data[1];
-    this.eventTitleParameter = { value: data[2].title };
-    this.initCategoryDropdown();
-    this.initPrice();
-  }
-
-  private initCategoryDropdown() {
+  private initCategorySelectItems() {
     this.categorySelectItems = [];
     for (const category of this.categories) {
       this.categorySelectItems.push({ label: category.name, value: category.categoryId });
     }
   }
 
-  initWeightDivisionDropdown(event) {
-    this.weightDivisionService.getWeightDivisionsByCategory(event.value).subscribe(w => {
-      this.weightDivisions = w;
-      this.weightDivisionsSelectItems = [];
-      this.weightDivisions.forEach(wd => {
-        this.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId });
+  initWeightDivisionDropdown(participationData: ParticipationData) {
+    this.weightDivisionService.getWeightDivisionsByCategory(participationData.participant.categoryId).subscribe(w => {
+      participationData.weightDivisionsSelectItems = [];
+      w.forEach(wd => {
+        participationData.weightDivisionsSelectItems.push({ label: wd.name, value: wd.weightDivisionId });
       });
     });
   }
@@ -110,28 +103,55 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
   addToParicipation(data: UserModelAthlete) {
     const participant = new ParticipantRegistrationModel();
     participant.firstName = data.firstName;
+    participant.lastName = data.lastName;
     participant.teamId = data.teamId;
     participant.teamName = data.teamName;
     participant.dateOfBirth = data.dateOfBirth;
     participant.email = data.email;
-    this.selectedAthletes.push(participant);
+    this.participationData.push({ participant: participant, weightDivisionsSelectItems: [] });
   }
 
   removeFromParticipation(userId: string) {
-    const index = this.selectedAthletes.findIndex(p => p.userId == userId);
+    const index = this.participationData.findIndex(p => p.participant.userId == userId);
     if (index > 0) {
-      this.selectedAthletes.splice(index, 1);
+      this.participationData.splice(index, 1);
     }
   }
 
   nextStep() {
     this.currentStep++;
     if (this.currentStep == 1) {
-      // initPrice()
+      this.initDataForParticipation();
+      this.initPrice();
+    }
+  }
+
+  previousStep() {
+    this.currentStep--;
+    if (this.currentStep == 1) {
+      this.initDataForParticipation();
+      this.initPrice();
     }
   }
 
   initPrice() {
-    this.eventService.getTeamPrice(this.selectedAthletes).subscribe(p => (this.price = p));
+    this.eventService.getTeamPrice(this.participationData.map(p => p.participant)).subscribe(p => (this.price = p));
   }
+
+  goToPayment() {
+    this.participantService.processParticipantTeamRegistration(this.participationData.map(p => p.participant)).subscribe((r: PaymentDataModel) => {
+      this.submitPaymentForm(r);
+    });
+  }
+
+  private submitPaymentForm(paymentData: PaymentDataModel) {
+    this.formPrivat.nativeElement.elements[0].value = paymentData.data;
+    this.formPrivat.nativeElement.elements[1].value = paymentData.signature;
+    this.formPrivat.nativeElement.submit();
+  }
+}
+
+export class ParticipationData {
+  participant: ParticipantRegistrationModel;
+  weightDivisionsSelectItems: SelectItem[];
 }

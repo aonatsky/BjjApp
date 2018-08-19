@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
@@ -10,10 +11,18 @@ namespace TRNMNT.Core.Services.Interface
         /// <summary>
         /// Checks if user is a member of selected federation.
         /// </summary>
-        /// <param name="federationId"></param>
-        /// <param name="userId"></param>
+        /// <param name="federationId">Federation Id</param>
+        /// <param name="userId">User Id</param>
         /// <returns></returns>
         Task<bool> IsFederationMemberAsync(Guid federationId, string userId);
+
+        /// <summary>
+        /// Gets federation memberships for users
+        /// </summary>
+        /// <param name="federationId"> Federation Id.</param>
+        /// <param name="userIds">User's Ids.</param>
+        /// <returns></returns>
+        Task<List<FederationMembership>> GetFederationMembershipsForUsersAsync(Guid federationId, List<string> userIds);
 
         /// <summary>
         /// Returns payment data for membersip registration.

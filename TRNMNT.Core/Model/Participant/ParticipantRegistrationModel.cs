@@ -11,5 +11,6 @@ namespace TRNMNT.Core.Model.Participant
         public Guid WeightDivisionId { get; set; }
         public string PromoCode { get; set; }
         public bool IncludeMembership { get; set; }
+        public bool federationMember {get;set;}
     }
 }

@@ -165,6 +165,7 @@ export const data = {
   'ERROR':{
     'SOMETHING_WENT_WRONG':'Щось пішло не так',
     'PARTICIPANT_IS_NOT_FOUND': 'Учасника не знайдено',
+    'EVENT_IS_NOT_FOUND': 'Подію не знайдено',
     'EMAIL_OR_PASSWORD_IS_INVALID': 'Пошта або пароль введені невірно',
     'DUPLICATE_EMAIL':'Такий користувач вже зареєстрований'
 

@@ -36,8 +36,10 @@
         "TRNMNT_DB_CONNECTION":
           "User ID=trnmnt_app_dev;Password=1;Host=127.0.0.1;Port=5432;Database=trnmnt_dev;Pooling=true;Integrated Security=true;",
         "HOSTNAME": "localhost",
-        "FACEBOOK_APPID": "",
-        "FACEBOOK_APPSECRET": ""
+        "FACEBOOK_APPID":"1400305110017831",
+        "FACEBOOK_APPSECRET": "47e63378649a292ca50e7d86e455d9d5",
+        "LIQPAY_PRIVATEKEY":"5LuNGU02o2lpaZebNzrMVz0pl1pRbjEFhZ1nkBvU",
+        "LIQPAY_PUBLICKEY":"i86046309604"
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"

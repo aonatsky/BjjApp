@@ -5,6 +5,7 @@ namespace TRNMNT.Core.Enum
         EventParticipation = 0,
         TeamRegistration = 1,
         FederationMembership = 2,
-        EventParticipationAndMembership = 3
+        EventParticipationAndMembership = 3,
+        TeamEventParticipation = 4
     }
 }

@@ -6,7 +6,7 @@
       </div>
     </div>
   </div>
-  <div class="ui-widget ui-widget-content {{contentClass}}">
+  <div [ngClass]="getContentClass()">
     <ng-content></ng-content>
   </div>
 </div>

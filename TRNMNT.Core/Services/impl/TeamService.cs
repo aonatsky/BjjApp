@@ -166,20 +166,21 @@ namespace TRNMNT.Core.Services.Impl
         {
             var result = new List<UserModelAthlete>();
             var users = await GetTeamUsersAsync(teamId);
-            users.ToList().ForEach(async u =>
+            foreach (var user in users)
             {
                 result.Add(new UserModelAthlete()
                 {
-                    FirstName = u.FirstName,
-                        LastName = u.LastName,
-                        DateOfBirth = u.DateOfBirth,
-                        Email = u.Email,
-                        UserId = u.Id,
-                        TeamMembershipApprovalStatus = u.TeamMembershipApprovalStatus,
-                        IsFederationMember = await _federationMembershipService.IsFederationMemberAsync(federationId, u.Id),
-                        IsParticipant = await _participantService.IsParticipantExistsAsync(u.Id, eventId)
+                    FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        DateOfBirth = user.DateOfBirth,
+                        Email = user.Email,
+                        UserId = user.Id,
+                        TeamMembershipApprovalStatus = user.TeamMembershipApprovalStatus,
+                        IsFederationMember = await _federationMembershipService.IsFederationMemberAsync(federationId, user.Id),
+                        IsParticipant = await _participantService.IsParticipantExistsAsync(user.Id, eventId)
                 });
-            });
+            }
+
             return result;
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -84,17 +85,23 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var eventId = GetEventId();
-                if (eventId != null)
-                {
-                    var user = await GetUserAsync();
-                    var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
-                    var redirectUrl = $"{Request.Host}/event/participant-registration-complete";
-                    var result = await _participantService.ProcessParticipantRegistrationAsync(eventId.Value, GetFederationId().Value, model, callbackUrl, redirectUrl, await GetUserAsync());
-                    return Success(result);
-                }
-                return (null, HttpStatusCode.NotFound);
-            });
+                var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
+                var redirectUrl = $"{Request.Host}/event/participant-registration-complete";
+                var result = await _participantService.ProcessParticipantRegistrationAsync(GetEventId().Value, GetFederationId().Value, model, callbackUrl, redirectUrl, await GetUserAsync());
+                return Success(result);
+            }, true, true);
+        }
+
+        [Authorize, HttpPost("[action]")]
+        public async Task<IActionResult> ProcessParticipantTeamRegistration([FromBody] List<ParticipantRegistrationModel> models)
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
+                var redirectUrl = $"{Request.Host}/event/participant-registration-complete";
+                var result = await _participantService.ProcessParticipantTeamRegistrationAsync(GetEventId().Value, GetFederationId().Value, models, callbackUrl, redirectUrl, await GetUserAsync());
+                return Success(result);
+            }, true, true);
         }
 
         [Authorize, HttpPost("[action]")]
@@ -128,7 +135,6 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> ParticipantsDropdownData(Guid eventId)
         {
-
             return await HandleRequestWithDataAsync(async() =>
             {
                 var teams = await _teamService.GetTeamsForEventAsync(GetFederationId().Value);
