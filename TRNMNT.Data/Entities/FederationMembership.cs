@@ -13,8 +13,10 @@ namespace TRNMNT.Data.Entities
         public DateTime CreateTs { get; set; }
         public DateTime? UpdateTs { get; set; }
         public Guid? OrderId {get;set;}
+        public bool IsActive {get;set;}
         public string ApprovalStatus {get;set;}
         public virtual Federation Federation { get; set; }
+        
         public virtual User User { get; set; }
     }
 }

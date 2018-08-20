@@ -39,7 +39,7 @@ namespace TRNMNT.Core.Services.Impl
         #region public methods
         public async Task<bool> IsFederationMemberAsync(Guid federationId, string userId)
         {
-            var membership = await _repository.GetAll().FirstOrDefaultAsync(fm => fm.UserId == userId && fm.FederationId == federationId);
+            var membership = await _repository.GetAll().FirstOrDefaultAsync(fm => fm.UserId == userId && fm.FederationId == federationId && fm.IsActive);
             if (membership == null || membership.ApprovalStatus == ApprovalStatus.Declined)
             {
                 return false;
@@ -81,7 +81,8 @@ namespace TRNMNT.Core.Services.Impl
                 OrderId = orderId,
                 UserId = userId,
                 CreateTs = DateTime.UtcNow,
-                FederationId = federationId
+                FederationId = federationId,
+                IsActive = true
             };
             _repository.Add(federationMembership);
         }
@@ -92,13 +93,16 @@ namespace TRNMNT.Core.Services.Impl
             if (membership.ApprovalStatus == ApprovalStatus.Pending && membership.OrderId.HasValue)
             {
                 membership.ApprovalStatus = await _orderService.GetApprovalStatus(membership.OrderId.Value);
+                if(membership.ApprovalStatus == ApprovalStatus.PaymentNotFound){
+                    membership.IsActive = false;
+                }
                 _repository.Update(membership);
             }
         }
 
         public async Task<List<FederationMembership>> GetFederationMembershipsForUsersAsync(Guid federationId, List<string> userIds)
         {
-            return await _repository.GetAll(fm => userIds.Contains(fm.UserId)).ToListAsync();
+            return await _repository.GetAll(fm => userIds.Contains(fm.UserId) && fm.IsActive).ToListAsync();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public Order AddNewOrder(OrderTypeEnum orderType, int amount, string currency, string reference, string userId)
+        public Order AddNewOrder(OrderTypeEnum orderType, int amount, string currency, string reference, string userId, Guid? orderId)
         {
             var order = new Order
             {
@@ -55,7 +55,7 @@ namespace TRNMNT.Core.Services.Impl
                 Currency = currency,
                 Reference = reference,
                 UserId = userId,
-                OrderId = new Guid(),
+                OrderId = orderId.HasValue? orderId.Value : new Guid(),
                 Status = OrderStatus.Pending
             };
             _repository.Add(order);
@@ -93,6 +93,11 @@ namespace TRNMNT.Core.Services.Impl
             if (order.Status == OrderStatus.Success)
             {
                 return ApprovalStatus.Approved;
+            }
+
+            if (order.Status == OrderStatus.NotFound)
+            {
+                return ApprovalStatus.PaymentNotFound;
             }
             return ApprovalStatus.Pending;
         }

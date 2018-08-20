@@ -100,7 +100,7 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
     });
   }
 
-  addToParicipation(data: UserModelAthlete) {
+  addToParticipation(data: UserModelAthlete) {
     const participant = new ParticipantRegistrationModel();
     participant.firstName = data.firstName;
     participant.lastName = data.lastName;
@@ -108,12 +108,20 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
     participant.teamName = data.teamName;
     participant.dateOfBirth = data.dateOfBirth;
     participant.email = data.email;
-    this.participationData.push({ participant: participant, weightDivisionsSelectItems: [] });
+    participant.userId = data.userId;
+    let pData = new ParticipationData();
+    pData.participant = participant;
+    pData.weightDivisionsSelectItems = [];
+    this.participationData.push(pData);
   }
 
-  removeFromParticipation(userId: string) {
-    const index = this.participationData.findIndex(p => p.participant.userId == userId);
-    if (index > 0) {
+  isAlreadyAdded(data: UserModelAthlete) {
+    return this.participationData.filter(d => d.participant.userId == data.userId).length > 0;
+  }
+
+  removeFromParticipation(data: UserModelAthlete) {
+    const index = this.participationData.findIndex(p => p.participant.userId == data.userId);
+    if (index > -1) {
       this.participationData.splice(index, 1);
     }
   }
@@ -128,10 +136,6 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
 
   previousStep() {
     this.currentStep--;
-    if (this.currentStep == 1) {
-      this.initDataForParticipation();
-      this.initPrice();
-    }
   }
 
   initPrice() {
@@ -139,9 +143,15 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
   }
 
   goToPayment() {
-    this.participantService.processParticipantTeamRegistration(this.participationData.map(p => p.participant)).subscribe((r: PaymentDataModel) => {
-      this.submitPaymentForm(r);
-    });
+    this.participantService
+      .processParticipantTeamRegistration(this.participationData.map(p => p.participant))
+      .subscribe((r: PaymentDataModel) => {
+        this.submitPaymentForm(r);
+      });
+  }
+
+  isDataValid(): boolean {
+    return this.participationData.filter(d => !d.isValid()).length == 0;
   }
 
   private submitPaymentForm(paymentData: PaymentDataModel) {
@@ -154,4 +164,13 @@ export class ParticipantTeamRegistrationComponent implements OnInit {
 export class ParticipationData {
   participant: ParticipantRegistrationModel;
   weightDivisionsSelectItems: SelectItem[];
+  isValid(): boolean {
+    return (
+      this.participant.firstName &&
+      this.participant.lastName &&
+      this.participant.categoryId &&
+      this.participant.weightDivisionId &&
+      !!this.participant.dateOfBirth
+    );
+  }
 }

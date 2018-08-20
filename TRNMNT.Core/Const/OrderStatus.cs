@@ -6,5 +6,6 @@ namespace TRNMNT.Core.Const
         public const string Failed = "failed";
         public const string Refund = "refund";
         public const string Pending = "pending";
+        public const string NotFound = "NotFound";
     }
 }

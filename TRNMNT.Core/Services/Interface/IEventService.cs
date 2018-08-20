@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.Participant;
+using TRNMNT.Data.Entities;
 
 namespace TRNMNT.Core.Services.Interface
 {
@@ -30,6 +31,22 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<EventModelFull> GetEventInfoAsync(Guid? id);
+
+         /// <summary>
+        /// Gets the event asynchronous.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        Task<Event> GetEventAsync(Guid? id);
+
+        
+        /// <summary>
+        /// Returns if correction allowed.
+        /// </summary>
+        /// <param name="_event">The event object.</param>
+        /// <returns></returns>
+        bool IsCorrectionAllowed(Event _event);
+
 
         /// <summary>
         /// Gets the events for owner asynchronous.

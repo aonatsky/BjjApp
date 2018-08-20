@@ -94,7 +94,7 @@ export class HttpService {
 
   private handleRequest(httpHandler: () => Observable<any>, notifyMessage?: string): Observable<any> {
     this.loaderService.showLoader();
-    return httpHandler().pipe(
+    return httpHandler().pipe(map(r => this.convertDate(r)),
       catchError((error: Response | any) => this.handleErrorRepeater(error, () => httpHandler(), notifyMessage)),
       finalize(() => this.loaderService.hideLoader())
     );

@@ -3,7 +3,7 @@ import { EventModel } from '../core/model/event.models';
 import { EventService } from '../core/services/event.service';
 import { RouterService } from '../core/services/router.service';
 import { AuthService } from '../core/services/auth.service';
-import  DateHelper from '../core/helpers/date-helper';
+import DateHelper from '../core/helpers/date-helper';
 import { Title } from '@angular/platform-browser';
 import { Roles } from '../core/consts/roles.const';
 
@@ -14,21 +14,21 @@ import { Roles } from '../core/consts/roles.const';
 })
 export class EventComponent implements OnInit {
   eventModel: EventModel;
-  
-  eventImageUrl():string{
-    if(this.eventModel.imgPath){
-      return this.eventModel.imgPath.replace(/\\/g, "/");
+  loginReturnUrls = [{roles:[Roles.TeamOwner], returnUrl: '/event/participant-team-registration'}];
+
+  eventImageUrl(): string {
+    if (this.eventModel.imgPath) {
+      return this.eventModel.imgPath.replace(/\\/g, '/');
     }
-    return ''
-  };
+    return '';
+  }
 
   displayPopup: boolean = false;
   constructor(
     private routerService: RouterService,
     private eventService: EventService,
     private authService: AuthService,
-    private titleService: Title,
-    
+    private titleService: Title
   ) {}
 
   ngOnInit() {
@@ -39,27 +39,25 @@ export class EventComponent implements OnInit {
         this.routerService.goToMainDomain();
       }
     });
-
   }
 
   participate() {
     if (this.authService.isLoggedIn()) {
-      if(this.authService.ifRolesMatch([Roles.TeamOwner])){
+      if (this.authService.ifRolesMatch([Roles.TeamOwner])) {
         this.routerService.goToParticipantTeamRegistration();
-      }else{
+      } else {
         this.routerService.goToParticipantRegistration();
       }
-      
     } else {
       this.displayPopup = true;
     }
   }
 
-  isRegistrationStarted() : boolean {
+  isRegistrationStarted(): boolean {
     return DateHelper.getCurrentDate() >= DateHelper.getDate(this.eventModel.registrationStartTS);
   }
 
-  isRegistrationEnded() : boolean {
+  isRegistrationEnded(): boolean {
     return DateHelper.getCurrentDate() >= DateHelper.getDate(this.eventModel.registrationEndTS);
   }
 }

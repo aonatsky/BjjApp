@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -42,12 +43,8 @@ namespace TRNMNT.Web.Controllers
         {
             return await HandleRequestAsync(async() =>
             {
-                //if (await CheckEventOwnerAsync(eventModel.EventId))
-                //{
                 await _eventService.UpdateEventAsync(eventModel);
                 return HttpStatusCode.OK;
-                //}
-                //return HttpStatusCode.Unauthorized;
             });
         }
 
@@ -85,7 +82,7 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(async() =>
             {
                 var user = await GetUserAsync();
-                var events = await _eventService.GetEventsForOwnerAsync(user.Id, await UserService.GetUserRoleAsync(user));
+                var events = await _eventService.GetEventsForOwnerAsync(user.Id, (await UserService.GetUserRolesAsync(user)).FirstOrDefault());
                 return Success(events.ToArray());
             });
         }

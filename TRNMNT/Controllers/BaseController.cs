@@ -346,6 +346,12 @@ namespace TRNMNT.Web.Controllers
         {
             return (value, HttpStatusCode.OK);
         }
+
+        protected(object, HttpStatusCode) UnauthorizedResponse()
+        {
+            return (null, HttpStatusCode.Unauthorized);
+        }
+
         #endregion
     }
 }

@@ -65,7 +65,9 @@ export const ApiMethods = Object.freeze({
     update: 'api/participant/update',
     delete: 'api/participant/delete',
     setWeightInStatus: 'api/participant/setWeightInStatus',
-    isFederationMember: 'api/participant/isFederationMember'
+    isFederationMember: 'api/participant/isFederationMember',
+    getUserParticipations: 'api/participant/GetUserParticipations',
+
   },
   payment: {
     payment: 'api/payment',

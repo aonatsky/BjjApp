@@ -5,6 +5,7 @@ namespace TRNMNT.Core.Const
         public const string Approved = "approved";
         public const string Declined = "declined";
         public const string Pending = "pending";
+        public const string PaymentNotFound = "paymentNotFound";
 
         public static string GetTranslationKey(string status)
         {

@@ -44,9 +44,52 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
+        public async Task<List<ParticipantEventModel>> GetUserParticipantsAsync(User user, bool isTeamOwner)
+        {
+            List<Participant> participants;
+            List<ParticipantEventModel> participantModels = new List<ParticipantEventModel>();
+
+            if (isTeamOwner)
+            {
+                participants = await _repository.GetAll(p => p.TeamId == user.TeamId && p.IsActive).ToListAsync();
+            }
+            else
+            {
+                participants = await _repository.GetAll(p => p.UserId == user.Id).ToListAsync();
+            }
+
+            if (participants.Any())
+            {
+                var groupsByEvent = participants.GroupBy(p => p.EventId).Select(g => new { EventId = g.Key, Participants = g.Select(p => p) });
+                foreach (var group in groupsByEvent)
+                {
+                    var _event = await _eventService.GetEventAsync(group.EventId);
+                    participantModels.AddRange(group.Participants.Select(p => new ParticipantEventModel()
+                    {
+                        CategoryId = p.CategoryId,
+                            WeightDivisionId = p.WeightDivisionId,
+                            DateOfBirth = p.DateOfBirth,
+                            EventDate = _event.EventDate,
+                            Email = p.Email,
+                            EventName = _event.Title,
+                            FirstName = p.FirstName,
+                            LastName = p.LastName,
+                            EventId = p.EventId,
+                            TeamId = p.TeamId,
+                            PhoneNumber = p.PhoneNumber,
+                            ParticipantId = p.ParticipantId,
+                            CorrectionAllowed = _eventService.IsCorrectionAllowed(_event)
+                    }));
+                }
+            }
+            return participantModels;
+
+        }
+
         public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model, Guid eventId)
         {
             return await _repository.GetAll().AnyAsync(p =>
+                p.IsActive &&
                 p.EventId == eventId &&
                 p.FirstName == model.FirstName &&
                 p.LastName == model.LastName &&
@@ -56,6 +99,7 @@ namespace TRNMNT.Core.Services.Impl
         public async Task<bool> IsParticipantExistsAsync(string userId, Guid eventId)
         {
             return await _repository.GetAll().AnyAsync(p =>
+                p.IsActive &&
                 p.EventId == eventId &&
                 p.UserId == userId);
         }
@@ -251,15 +295,15 @@ namespace TRNMNT.Core.Services.Impl
             {
                 throw new BusinessException("ERROR.NO_PARTICIPANTS_SELECTED");
             }
-            
-            var existingParticipnatsUserIds = await IsUsersParticipants(models.Select(m => m.UserId).ToList(), eventId);
-            models.RemoveAll(m => existingParticipnatsUserIds.Contains(m.UserId));
+
+            var existingParticipantsUserIds = await IsUsersParticipants(models.Select(m => m.UserId).ToList(), eventId);
+            models.RemoveAll(m => existingParticipantsUserIds.Contains(m.UserId));
 
             var federationMemberships =
                 await _federationMembershipService.GetFederationMembershipsForUsersAsync(federationId, models.Select(m => m.UserId).ToList());
             var priceModel = await _eventService.GetTeamPriceAsync(eventId, models);
             var orderType = OrderTypeEnum.TeamEventParticipation;
-            var orderReferance = $"{models.FirstOrDefault().TeamName}";
+            var orderReference = $"{models.FirstOrDefault().TeamName}";
             var orderId = Guid.NewGuid();
 
             foreach (var model in models)
@@ -271,7 +315,7 @@ namespace TRNMNT.Core.Services.Impl
                 }
                 var isFederationMember = federationMemberships.Any(fm => fm.UserId == model.UserId);
                 var participantId = Guid.NewGuid();
-                orderReferance += $"{participantId.ToString()}_";
+                orderReference += $"{participantId.ToString()}_";
                 AddParticipant(model, eventId, orderId, participantId, isFederationMember || model.IncludeMembership);
 
                 if (model.IncludeMembership)
@@ -279,7 +323,7 @@ namespace TRNMNT.Core.Services.Impl
                     _federationMembershipService.AddFederationMembership(model.UserId, federationId, orderId, Guid.NewGuid());
                 }
             }
-            var order = _orderService.AddNewOrder(orderType, priceModel.Amount, priceModel.Currency, orderReferance, teamOwner.Id, orderId);
+            var order = _orderService.AddNewOrder(orderType, priceModel.Amount, priceModel.Currency, orderReference, teamOwner.Id, orderId);
             return _paymentService.GetPaymentDataModel(order, callbackUrl, redirectUrl);
         }
 
@@ -351,15 +395,18 @@ namespace TRNMNT.Core.Services.Impl
                 if (participant.ApprovalStatus == ApprovalStatus.Pending && participant.OrderId.HasValue)
                 {
                     participant.ApprovalStatus = await _orderService.GetApprovalStatus(participant.OrderId.Value);
+                    if (participant.ApprovalStatus == ApprovalStatus.PaymentNotFound)
+                    {
+                        participant.IsActive = false;
+                    }
                     _repository.Update(participant);
-
                 }
             }
         }
 
         private async Task<List<string>> IsUsersParticipants(List<string> userIds, Guid eventId)
         {
-            return await _repository.GetAll(p => p.EventId == eventId && userIds.Contains(p.UserId)).Select(p => p.UserId).ToListAsync();
+            return await _repository.GetAll(p => p.EventId == eventId && !string.IsNullOrEmpty(p.UserId) && userIds.Contains(p.UserId)).Select(p => p.UserId).ToListAsync();
         }
 
         #endregion

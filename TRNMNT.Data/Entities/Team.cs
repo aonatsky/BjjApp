@@ -33,6 +33,7 @@ namespace TRNMNT.Data.Entities
         public Guid FederationId { get; set; }
         public Guid? OrderId { get; set; }
         public string ApprovalStatus { get; set; }
+        public bool IsActive {get;set;}
         public string FederationApprovalStatus { get; set; }
 
         [JsonIgnore]

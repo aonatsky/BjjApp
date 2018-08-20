@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.FileProcessingOptions;
 using TRNMNT.Core.Model.Participant;
@@ -86,7 +87,7 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(async() =>
             {
                 var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
-                var redirectUrl = $"{Request.Host}/event/participant-registration-complete";
+                var redirectUrl = $"{Request.Host}/participant/my-events";
                 var result = await _participantService.ProcessParticipantRegistrationAsync(GetEventId().Value, GetFederationId().Value, model, callbackUrl, redirectUrl, await GetUserAsync());
                 return Success(result);
             }, true, true);
@@ -98,7 +99,7 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(async() =>
             {
                 var callbackUrl = Url.Action("ConfirmPayment", "Payment", null, "http");
-                var redirectUrl = $"{Request.Host}/event/participant-registration-complete";
+                var redirectUrl = $"{Request.Host}/participant/my-events";
                 var result = await _participantService.ProcessParticipantTeamRegistrationAsync(GetEventId().Value, GetFederationId().Value, models, callbackUrl, redirectUrl, await GetUserAsync());
                 return Success(result);
             }, true, true);
@@ -119,6 +120,18 @@ namespace TRNMNT.Web.Controllers
                     return Success(result);
                 }
                 return (null, HttpStatusCode.NotFound);
+            });
+        }
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<IActionResult> GetUserParticipations()
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                var user = await GetUserAsync();
+                var roles = await UserService.GetUserRolesAsync(user);
+                var participants = await _participantService.GetUserParticipantsAsync(user, roles.Contains(Roles.TeamOwner));
+                return Success(participants);
             });
         }
 
@@ -163,12 +176,33 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPut("[action]")]
+        [Authorize, HttpPut("[action]")]
         public async Task<IActionResult> Update([FromBody] ParticipantTableModel participantModel)
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                return await _participantService.UpdateParticipantAsync(participantModel);
+                var user = await GetUserAsync();
+                var roles = await UserService.GetUserRolesAsync(user);
+                if (roles.Contains(Roles.TeamOwner))
+                {
+                    var team = await _teamService.GetTeamForOwnerAsync(user.Id);
+                    if (participantModel.TeamId == team.TeamId)
+                    {
+                        return Success(await _participantService.UpdateParticipantAsync(participantModel));
+                    }
+                }
+                if (roles.Contains(Roles.Participant))
+                {
+                    if (participantModel.UserId == user.Id)
+                    {
+                        return Success(await _participantService.UpdateParticipantAsync(participantModel));
+                    }
+                }
+                if (roles.Contains(Roles.Admin) || roles.Contains(Roles.Owner) || roles.Contains(Roles.FederationOwner))
+                {
+                    return Success(await _participantService.UpdateParticipantAsync(participantModel));
+                }
+                return UnauthorizedResponse();
             });
         }
 

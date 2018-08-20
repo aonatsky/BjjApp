@@ -72,9 +72,9 @@ namespace TRNMNT.Core.Services.Impl
             return await _repository.GetAll(predicate).ToListAsync();
         }
 
-        public async Task<string> GetUserRoleAsync(User user)
+        public async Task<List<string>> GetUserRolesAsync(User user)
         {
-            return (await _userManager.GetClaimsAsync(user)).FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+            return (await _userManager.GetClaimsAsync(user)).Where(c => c.Type == ClaimTypes.Role).Select(r => r.Value).ToList();
         }
 
         public async Task<User> GetUserAsync(ClaimsPrincipal claims)

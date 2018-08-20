@@ -13,10 +13,13 @@
 	"settings": {
 		"cSpell.words": [
 			"ddls",
+			"get",
 			"nopad",
+			"participations",
 			"particpant",
 			"signout",
-			"topbar"
+			"topbar",
+			"user"
 		],
 		"cSpell.enabledLanguageIds": [
 			"asciidoc",

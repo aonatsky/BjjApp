@@ -24,6 +24,7 @@ export const data = {
     'WEIGHT_DIVISIONS':'Вагові категорії',
     'NAME':'Назва',
     'DELETE': 'Видалити',
+    'CORRECT': 'Коррегувати',
     'ADD':'Додати',
     'ANY':'Будь-яка',
     'TEAMS':'Команди',
@@ -46,7 +47,8 @@ export const data = {
     'HOME': 'Додому',
     'TEAMS':'Команди',
     'PROFILE':'Мій профіль',
-    'MY_TEAM':'Моя команда'
+    'MY_TEAM':'Моя команда',
+    'MY_EVENTS':'Мої змагання'
   },
   'LOGIN':{
     'SIGN_IN_OR':'Увійдіть або',
@@ -62,9 +64,10 @@ export const data = {
     'CONGRATS_YOU_ARE_REGISTERED_TO': 'Вітаємо, ви зареєстровані на {{value}}',
     'GO_BACK_TO_EVENT_PAGE': 'Повернутись на сторінку події',
     'ADD_MEMBERSHIP': 'Дотати внесок за членство в федерації',
-    'TEAM_PARTICIPATION_TITLE':'Реєстрація команди на {{value}}',
+    'TEAM_PARTICIPATION':'Командна реєстрація',
     'PARTICIPATE':'Приняти участь',
     'ADD':'Додати',
+    'CANCEL':'ВІДМІНИТИ',
     'ALREADY_PARTICIPANT':'Вже приймає участь'
   },
 'EVENT':{
@@ -87,6 +90,11 @@ export const data = {
 'MY_TEAM':{
   'TITLE':'Моя команда',
   'ATHLETES':'Спортсмени'
+},
+
+'MY_EVENTS':{
+  'TITLE':'Мої змагання',
+  'CORRECT':'Корегувати'
 },
 'EVENT_MANAGEMENT':{
   'TITLE':'Управління подією',
@@ -168,7 +176,5 @@ export const data = {
     'EVENT_IS_NOT_FOUND': 'Подію не знайдено',
     'EMAIL_OR_PASSWORD_IS_INVALID': 'Пошта або пароль введені невірно',
     'DUPLICATE_EMAIL':'Такий користувач вже зареєстрований'
-
-
   }
 };

@@ -1,9 +1,9 @@
 <trnmnt-page contentClass="ui-g-12" title="{{'MY_TEAM.TITLE' | translate}}">
 
     <ng-template #approveTemplate let-data>
-        <div *ngIf="data.userId != ownerId">
-            <button type="button" pButton icon="fa fa-check" (click)="approveAthlete(data)" label="{{'COMMON.APPROVAL.APPROVE' | translate}}" *ngIf="!isAthleteApproved(data)"></button>
-            <button type="button" pButton icon="fa fa-delete" (click)="declineAthlete(data)" label="{{'COMMON.APPROVAL.DECLINE' | translate}}" *ngIf="isAthleteApproved(data)"></button>
+        <div *ngIf="data.userId != ownerId" class="ui-fluid">
+            <p-button icon="fa fa-check" class="ui-g-12 ui-g-nopad" (click)="approveAthlete(data)" label="{{'COMMON.APPROVAL.APPROVE' | translate}}" *ngIf="!isAthleteApproved(data)"></p-button>
+            <p-button icon="fas fa-times" class="ui-g-12 ui-g-nopad" (click)="declineAthlete(data)" label="{{'COMMON.APPROVAL.DECLINE' | translate}}" *ngIf="isAthleteApproved(data)"></p-button>
         </div>
     </ng-template>
     <span class="page-subtitle">{{'MY_TEAM.ATHLETES' | translate}}</span>

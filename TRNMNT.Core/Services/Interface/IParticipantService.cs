@@ -43,7 +43,15 @@ namespace TRNMNT.Core.Services.Interface
         Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(ParticipantFilterModel eventId);
 
         /// <summary>
-        /// Deletes paraticipant by id
+        /// Returns participants for user.
+        /// </summary>
+        /// <param name="userId"> User Id.</param>
+        /// <param name="isTeamOwner">Is team owner</param>
+        /// <returns></returns>
+        Task<List<ParticipantEventModel>> GetUserParticipantsAsync(User user, bool isTeamOwner);
+
+        /// <summary>
+        /// Deletes participant by id
         /// </summary>
         /// <param name="participantId"></param>
         /// <returns></returns>

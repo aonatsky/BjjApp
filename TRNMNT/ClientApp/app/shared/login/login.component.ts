@@ -14,7 +14,9 @@ export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   @Input()
-  returnUrl: string;
+  returnUrl: string = '/';
+  @Input()
+  returnUrlsByRoles: ReturnURLRoleModel[];
   @Input()
   socialLoginEnabled: boolean = true;
   @Input()
@@ -50,9 +52,15 @@ export class LoginComponent implements OnInit {
 
   processLogin(isAuthenticated: boolean) {
     if (isAuthenticated) {
-      if (this.returnUrl) {
-        this.routerService.navigateByUrl(this.returnUrl);
+      let url = this.returnUrl;
+      if (this.returnUrlsByRoles) {
+        this.returnUrlsByRoles.forEach(m => {
+          if (this.authService.ifRolesMatch(m.roles)) {
+            url = m.returnUrl;
+          }
+        });
       }
+      this.routerService.navigateByUrl(url);
     } else {
       this.errorMessage = this.translateService.instant('ERROR.EMAIL_OR_PASSWORD_IS_INVALID');
     }
@@ -63,4 +71,9 @@ export class LoginComponent implements OnInit {
       return this.processLogin(r);
     });
   }
+}
+
+export class ReturnURLRoleModel {
+  roles: string[];
+  returnUrl: string;
 }

@@ -22,7 +22,7 @@ namespace TRNMNT.Core.Services.Impl
     {
         #region Dependencies
 
-        private readonly IRepository<Event> _eventRepository;
+        private readonly IRepository<Event> _repository;
         private readonly IRepository<Category> _categoryRepository;
         private readonly IRepository<WeightDivision> _weightDivisionRepository;
         private readonly IFileService _fileService;
@@ -44,7 +44,7 @@ namespace TRNMNT.Core.Services.Impl
             IFederationService federationService
         )
         {
-            _eventRepository = eventRepository;
+            _repository = eventRepository;
             _categoryRepository = categoryRepository;
             _weightDivisionRepository = weightDivisionRepository;
             _federationMembershipService = federationMembershipService;
@@ -59,13 +59,13 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task UpdateEventAsync(EventModelFull eventModel)
         {
-            var existingEvent = await _eventRepository.GetAll(e => e.EventId == eventModel.EventId).Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(); // GetByIDAsync<Guid>(eventModel.EventId);
+            var existingEvent = await _repository.GetAll(e => e.EventId == eventModel.EventId).Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(); // GetByIDAsync<Guid>(eventModel.EventId);
             var updatedEvent = GetEventFromModel(eventModel);
             updatedEvent.UpdateTS = DateTime.UtcNow;
             updatedEvent.IsActive = true;
             updatedEvent.FederationId = existingEvent.FederationId;
             updatedEvent.OwnerId = existingEvent.OwnerId;
-            _eventRepository.UpdateValues(existingEvent, updatedEvent);
+            _repository.UpdateValues(existingEvent, updatedEvent);
             UpdateCategories(existingEvent.Categories, updatedEvent.Categories);
         }
 
@@ -97,6 +97,15 @@ namespace TRNMNT.Core.Services.Impl
 
         }
 
+        public async Task<Event> GetEventAsync(Guid? id)
+        {
+            return await _repository.GetByIDAsync(id);
+        }
+
+        public bool IsCorrectionAllowed(Event _event){
+            return DateTime.UtcNow < _event.RegistrationEndTS.AddHours(18);
+        }
+
         public void UpdateWeightDivisions(IEnumerable<WeightDivision> existingDivisions,
             IEnumerable<WeightDivision> updatedDivisions)
         {
@@ -126,24 +135,24 @@ namespace TRNMNT.Core.Services.Impl
         }
         public async Task<EventModelFull> GetFullEventModelAsync(Guid id)
         {
-            var @event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
+            var @event = await _repository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
             return @event != null ? GetEventModel(@event) : null;
         }
 
         public async Task<List<EventModelBase>> GetEventsForOwnerAsync(string userId, string role)
         {
-            var modelsQuery = _eventRepository.GetAll();
+            var modelsQuery = _repository.GetAll();
             if (role == Roles.Admin)
             {
-                return await GetModels(_eventRepository.GetAll());
+                return await GetModels(_repository.GetAll());
             }
             if (role == Roles.FederationOwner)
             {
-                return await GetModels(_eventRepository.GetAll());
+                return await GetModels(_repository.GetAll());
             }
             if (role == Roles.Owner)
             {
-                return await GetModels(_eventRepository.GetAll().Where(e => e.OwnerId == userId));
+                return await GetModels(_repository.GetAll().Where(e => e.OwnerId == userId));
             }
             return new List<EventModelBase>();
 
@@ -163,40 +172,40 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<bool> IsEventUrlPrefixExistAsync(string prefix)
         {
-            return await _eventRepository.GetAll().AnyAsync();
+            return await _repository.GetAll().AnyAsync();
         }
 
         public async Task SaveEventImageAsync(Stream stream, string eventId)
         {
             var fileName = FilePath.EventImageFile;
             var path = Path.Combine(FilePath.EventDataFolder, eventId, FilePath.EventImageFolder, FilePath.EventImageFile);
-            var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
+            var _event = await _repository.GetByIDAsync(new Guid(eventId));
             await _fileService.SaveImageAsync(path, stream, fileName);
             _event.ImgPath = path;
-            _eventRepository.Update(_event);
+            _repository.Update(_event);
         }
 
         public async Task SaveEventTncAsync(Stream stream, string eventId, string fileName)
         {
             var path = Path.Combine(FilePath.EventDataFolder, eventId, FilePath.EventTncFolder, fileName);
             await _fileService.SaveFileAsync(path, stream);
-            var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
+            var _event = await _repository.GetByIDAsync(new Guid(eventId));
             _event.TNCFilePath = path;
-            _eventRepository.Update(_event);
+            _repository.Update(_event);
         }
 
         public async Task SavePromoCodeListAsync(Stream stream, string eventId)
         {
             var path = Path.Combine(FilePath.EventDataFolder, eventId, FilePath.EventTncFolder, FilePath.EventPromocodeListFile);
             await _fileService.SaveFileAsync(path, stream);
-            var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
+            var _event = await _repository.GetByIDAsync(new Guid(eventId));
             _event.PromoCodeListPath = path;
-            _eventRepository.Update(_event);
+            _repository.Update(_event);
         }
 
         public async Task<Guid?> GetEventIdAsync(string url)
         {
-            var ids = await _eventRepository.GetAll().Where(e => e.UrlPrefix == url && e.IsActive).Select(e => e.EventId).ToListAsync();
+            var ids = await _repository.GetAll().Where(e => e.UrlPrefix == url && e.IsActive).Select(e => e.EventId).ToListAsync();
             if (ids.Any())
             {
                 return ids.FirstOrDefault();
@@ -206,7 +215,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<string> GetEventOwnerIdAsync(Guid eventId)
         {
-            var existingEvent = await _eventRepository.GetByIDAsync(eventId);
+            var existingEvent = await _repository.GetByIDAsync(eventId);
             if (existingEvent != null)
             {
                 return existingEvent.OwnerId;
@@ -216,7 +225,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<PriceModel> GetPriceAsync(Guid eventId, string userId, bool includeMembership)
         {
-            var _event = await _eventRepository.GetByIDAsync(eventId);
+            var _event = await _repository.GetByIDAsync(eventId);
             if (_event == null)
             {
                 throw new BusinessException("ERROR.EVENT_IS_NOT_FOUND");
@@ -247,7 +256,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<PriceModel> GetTeamPriceAsync(Guid eventId, List<ParticipantRegistrationModel> participants)
         {
-            var _event = await _eventRepository.GetByIDAsync(eventId);
+            var _event = await _repository.GetByIDAsync(eventId);
             if (_event == null)
             {
                 throw new BusinessException("ERROR.EVENT_IS_NOT_FOUND");
@@ -304,7 +313,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<EventModelBase> GetEventBaseInfoAsync(Guid id)
         {
-            var model = await _eventRepository.GetAll().Where(e => e.EventId == id)
+            var model = await _repository.GetAll().Where(e => e.EventId == id)
                 .Select(e => new EventModelBase { EventId = e.EventId, EventDate = e.EventDate, RegistrationEndTS = e.RegistrationEndTS, EarlyRegistrationEndTS = e.EarlyRegistrationEndTS, RegistrationStartTS = e.RegistrationStartTS, Title = e.Title })
                 .FirstOrDefaultAsync();
             return model;
@@ -316,7 +325,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 return null;
             }
-            var _event = await _eventRepository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
+            var _event = await _repository.GetAll().Include(e => e.Categories).ThenInclude(c => c.WeightDivisions).FirstOrDefaultAsync(e => e.EventId == id);
             if (_event != null)
             {
                 return GetEventModel(_event);
@@ -337,20 +346,20 @@ namespace TRNMNT.Core.Services.Impl
                 RegistrationEndTS = DateTime.UtcNow.AddDays(21).Date,
                 IsActive = false
             };
-            _eventRepository.Add(_event);
+            _repository.Add(_event);
 
             return _event.EventId;
         }
 
         public async Task DeleteEventAsync(string eventId)
         {
-            var _event = await _eventRepository.GetByIDAsync(eventId);
+            var _event = await _repository.GetByIDAsync(eventId);
             if (_event == null)
             {
                 throw new BusinessException("ERROR.EVENT_NOT_FOUND");
             }
             _event.IsActive = false;
-            _eventRepository.Update(_event);
+            _repository.Update(_event);
         }
 
         #endregion

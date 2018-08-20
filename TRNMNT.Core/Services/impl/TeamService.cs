@@ -71,7 +71,7 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<IEnumerable<TeamModel>> GetTeamsAsync()
         {
-            return await _repository.GetAll().Select(t => new TeamModel
+            return await _repository.GetAll(t => t.IsActive).Select(t => new TeamModel
             {
                 TeamId = t.TeamId.ToString(),
                     Name = t.Name,
@@ -166,6 +166,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             var result = new List<UserModelAthlete>();
             var users = await GetTeamUsersAsync(teamId);
+            var name = await _repository.GetAll(t => t.TeamId == teamId).Select(t => t.Name).FirstOrDefaultAsync();
             foreach (var user in users)
             {
                 result.Add(new UserModelAthlete()
@@ -176,6 +177,8 @@ namespace TRNMNT.Core.Services.Impl
                         Email = user.Email,
                         UserId = user.Id,
                         TeamMembershipApprovalStatus = user.TeamMembershipApprovalStatus,
+                        TeamId =  teamId,
+                        TeamName = name,
                         IsFederationMember = await _federationMembershipService.IsFederationMemberAsync(federationId, user.Id),
                         IsParticipant = await _participantService.IsParticipantExistsAsync(user.Id, eventId)
                 });
@@ -195,7 +198,6 @@ namespace TRNMNT.Core.Services.Impl
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 Email = user.Email
-
             };
             if (user.TeamId.HasValue)
             {
@@ -231,12 +233,13 @@ namespace TRNMNT.Core.Services.Impl
                 Description = model.Description,
                 FederationId = federationId,
                 Name = model.Name,
+                IsActive = true
             };
             _repository.Add(team);
         }
         private async Task<bool> IsTeamExistAsync(string name)
         {
-            return await _repository.GetAll(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).AnyAsync();
+            return await _repository.GetAll(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && t.IsActive).AnyAsync();
         }
 
         private async Task CheckTeamStatusAsync(List<Team> teams)
@@ -246,6 +249,9 @@ namespace TRNMNT.Core.Services.Impl
                 if (team.ApprovalStatus == ApprovalStatus.Pending && team.OrderId.HasValue)
                 {
                     team.ApprovalStatus = await _orderService.GetApprovalStatus(team.OrderId.Value);
+                    if(team.ApprovalStatus == ApprovalStatus.PaymentNotFound){
+                        team.IsActive = false;
+                    }
                     _repository.Update(team);
                 }
             }

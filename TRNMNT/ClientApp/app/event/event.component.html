@@ -61,5 +61,5 @@
     </div>
 </div>
 <trnmnt-popup [visible]="displayPopup" [showHeader]="false" [dialogWidth]="400">
-    <login returnUrl="/event/participant-registration"></login>
+    <login returnUrl="/event/participant-registration" [returnUrlsByRoles] = "loginReturnUrls"></login>
 </trnmnt-popup>

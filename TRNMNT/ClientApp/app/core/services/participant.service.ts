@@ -4,7 +4,8 @@ import { HttpService } from '../dal/http/http.service';
 import {
   ParticipantRegistrationModel,
   ParticipantModelBase,
-  ParticipantTableModel
+  ParticipantTableModel,
+  ParticipantEventModel
 } from '../model/participant.models';
 import { ParticipantDdlModel } from '../model/participant-ddl.model';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
@@ -18,16 +19,15 @@ import { PaymentDataModel } from '../model/payment-data.model';
 export class ParticipantService {
   constructor(private loggerService: LoggerService, private httpService: HttpService) {}
 
-  processParticipantRegistration(
-    participant: ParticipantRegistrationModel
-  ): Observable<PaymentDataModel> {
+  processParticipantRegistration(participant: ParticipantRegistrationModel): Observable<PaymentDataModel> {
     return this.httpService.post<PaymentDataModel>(ApiMethods.participant.processParticipantRegistration, participant);
   }
-  
-  processParticipantTeamRegistration(
-    participants: ParticipantRegistrationModel[]
-  ): Observable<PaymentDataModel> {
-    return this.httpService.post<PaymentDataModel>(ApiMethods.participant.processParticipantTeamRegistration, participants);
+
+  processParticipantTeamRegistration(participants: ParticipantRegistrationModel[]): Observable<PaymentDataModel> {
+    return this.httpService.post<PaymentDataModel>(
+      ApiMethods.participant.processParticipantTeamRegistration,
+      participants
+    );
   }
 
   isParticipantExists(participant: ParticipantModelBase): Observable<boolean> {
@@ -52,7 +52,10 @@ export class ParticipantService {
   }
 
   uploadParticipantsFromFile(file: any, eventId: string): Observable<IUploadResult> {
-    return this.httpService.postFile<IUploadResult>(`${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`, file);
+    return this.httpService.postFile<IUploadResult>(
+      `${ApiMethods.participant.uploadParticipantsFromFile}/${eventId}`,
+      file
+    );
   }
 
   updateParticipant(participant: ParticipantTableModel): Observable<any> {
@@ -64,10 +67,14 @@ export class ParticipantService {
   }
 
   setParticipantWeightIn(participantId: string, status: string): Observable<any> {
-    return this.httpService.post(`${ApiMethods.participant.setWeightInStatus}/${participantId}`, {data: status});
+    return this.httpService.post(`${ApiMethods.participant.setWeightInStatus}/${participantId}`, { data: status });
   }
 
-  isFederationMember():Observable<boolean>{
+  isFederationMember(): Observable<boolean> {
     return this.httpService.get<boolean>(ApiMethods.participant.isFederationMember);
+  }
+
+  getUserParticipations(): Observable<ParticipantEventModel[]> {
+    return this.httpService.get<boolean>(ApiMethods.participant.getUserParticipations);
   }
 }

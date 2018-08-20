@@ -1,91 +1,74 @@
-<trnmnt-page [useCommonContentStyle]="false" [title]="'PARTICIPATION.TEAM_PARTICIPATION_TITLE'|translate:eventTitleParameter">
+<trnmnt-page [useCommonContentStyle]="false" [title]="'PARTICIPATION.TEAM_PARTICIPATION_TITLE'|translate">
   <div class="ui-widget ui-widget-content ui-g-8">
     <div *ngIf="currentStep == 0">
       <ng-template #participateTemplate let-data>
-        <div *ngIf="!data.isParticipant">
-          <p-button icon="fa fa-check" (click)="addToParicipation(data)"
-            label="{{'PARTICIPATION.ADD' | translate}}"></p-button>
+        <div *ngIf="!data.isParticipant && !isAlreadyAdded(data)" class="ui-fluid">
+          <p-button icon="fas fa-plus" class="ui-g-12 ui-g-nopad" (click)="addToParticipation(data)" label="{{'PARTICIPATION.ADD' | translate}}"></p-button>
+        </div>
+        <div *ngIf="isAlreadyAdded(data)" class="ui-fluid">
+          <p-button icon="fas fa-times" class="ui-g-12 ui-g-nopad" (click)="removeFromParticipation(data)" label="{{'PARTICIPATION.CANCEL' | translate}}"></p-button>
         </div>
         <label *ngIf="data.isParticipant">{{'PARTICIPATION.ALREADY_PARTICIPANT' | translate}}</label>
       </ng-template>
       <span class="page-subtitle">{{'MY_TEAM.ATHLETES' | translate}}</span>
-      <crud #crudComponent [entities]="allAthletes" [columns]="columns"
-        [columnOptions]="columnOptions" [showRowNumbers]="false"
-        [addEnabled]="false" [editEnabled]="false" [deleteEnabled]="false"
-        [sortField]="sortField" [sortOrder]="sortDirection"
-        [lazy]="false" [(firstIndex)]="firstIndex" [dialogMinWidth]="500"
-        class="ui-g-12" gridMinHeight="350" [actionsTemplate]="participateTemplate"
+      <crud #crudComponent [entities]="allAthletes" [columns]="columns" [columnOptions]="columnOptions" [showRowNumbers]="false"
+        [addEnabled]="false" [editEnabled]="false" [deleteEnabled]="false" [sortField]="sortField" [sortOrder]="sortDirection"
+        [lazy]="false" [(firstIndex)]="firstIndex" [dialogMinWidth]="500" class="ui-g-12" gridMinHeight="350" [actionsTemplate]="participateTemplate"
         [actionsHeader]="'PARTICIPATION.PARTICIPATE' | translate">
       </crud>
       <div class="ui-g-12">
         <div class="float-right">
-          <button pButton type="button" class="float-right" label="{{'COMMON.CONTINUE'|translate}}"
-            (click)="nextStep()" *ngIf="currentStep != lastStep"
+          <button pButton type="button" class="float-right" label="{{'COMMON.CONTINUE'|translate}}" (click)="nextStep()" *ngIf="currentStep != lastStep"
             [disabled]="participationData.length == 0"></button>
         </div>
       </div>
     </div>
-    <div *ngIf="currentStep == 1">
+    <div *ngIf="currentStep == 1 && participationData.length > 0">
       <div *ngFor="let pData of participationData" class="ui-g ui-g-12 participant-box">
+
         <div class="ui-g-6 ui-fluid">
-          <input pInputText [(ngModel)]="pData.participant.firstName"
-            [placeholder]="'COMMON.FIRST_NAME'|translate"
-            required name="firstName" [value]="pData.participant.firstName"
-            [maxLength]=100/>
+          <input pInputText [(ngModel)]="pData.participant.firstName" [placeholder]="'COMMON.FIRST_NAME'|translate" required name="firstName"
+            [value]="pData.participant.firstName" [maxLength]=100/>
         </div>
         <div class="ui-g-6 ui-fluid">
-          <input pInputText [(ngModel)]="pData.participant.lastName"
-            required name="lastName" [value]="pData.participant.lastName"
-            [placeholder]="'COMMON.LAST_NAME'|translate"
-            [maxLength]=100/>
+          <input pInputText [(ngModel)]="pData.participant.lastName" required name="lastName" [value]="pData.participant.lastName"
+            [placeholder]="'COMMON.LAST_NAME'|translate" [maxLength]=100/>
         </div>
         <div class="ui-g-6 ui-fluid">
-          <p-dropdown [options]="categorySelectItems" [(ngModel)]="pData.participant.categoryId"
-            [autoWidth]="false" placeholder="{{'EVENT.SELECT_CATEGORY'|translate}}"
-            (onChange)="initWeightDivisionDropdown(pData)"
-            name="category" required></p-dropdown>
+          <p-dropdown [options]="categorySelectItems" [(ngModel)]="pData.participant.categoryId" [autoWidth]="false" placeholder="{{'EVENT.SELECT_CATEGORY'|translate}}"
+            (onChange)="initWeightDivisionDropdown(pData)" name="category" required></p-dropdown>
         </div>
         <div class="ui-g-6 ui-fluid">
-          <p-dropdown [options]="pData.weightDivisionsSelectItems"
-            [(ngModel)]="pData.participant.weightDivisionId"
-            [autoWidth]="false" placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION'|translate}}"
-            [disabled]="!pData.weightDivisionsSelectItems || pData.weightDivisionsSelectItems.length == 0"
+          <p-dropdown [options]="pData.weightDivisionsSelectItems" [(ngModel)]="pData.participant.weightDivisionId" [autoWidth]="false"
+            placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION'|translate}}" [disabled]="!pData.weightDivisionsSelectItems || pData.weightDivisionsSelectItems.length == 0"
             name="weightDivision" required></p-dropdown>
         </div>
         <div class="ui-g-6 ui-fluid">
-          <p-calendar icon="fa fa-calendar" [(ngModel)]="pData.participant.dateOfBirth"
-            dateFormat="dd/mm/yy" readonlyInput="readonlyInput"
-            showIcon="true" monthNavigator="true" [yearNavigator]="true"
-            yearRange="1960:2015" [defaultDate]="dateHelper.getDefaultDateOfBirth()"
+          <p-calendar icon="fa fa-calendar" [(ngModel)]="pData.participant.dateOfBirth" dateFormat="dd/mm/yy" readonlyInput="readonlyInput"
+            showIcon="true" monthNavigator="true" [yearNavigator]="true" yearRange="1960:2015" [defaultDate]="dateHelper.getDefaultDateOfBirth()"
             required name="dateOfBirth">
           </p-calendar>
         </div>
         <div class="ui-g-6">
           <p-checkbox [(ngModel)]="pData.participant.includeMembership" binary="true" label="{{'PARTICIPATION.ADD_MEMBERSHIP'|translate}}"
-          (onChange)="initPrice()"></p-checkbox>
+            (onChange)="initPrice()"></p-checkbox>
         </div>
       </div>
       <div class="ui-g-12 display-none">
-        <form #formPrivat="ngForm" #formPrivatElement method="POST"
-          action="https://www.liqpay.ua/api/3/checkout"
-          accept-charset="utf-8" novalidate>
-          <input type="hidden" name="data" value="{{paymentData}}"
-          />
-          <input type="hidden" name="signature" value={{paymentSignature}}
-          />
-          <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png"
-          />
+        <form #formPrivat="ngForm" #formPrivatElement method="POST" action="https://www.liqpay.ua/api/3/checkout" accept-charset="utf-8"
+          novalidate>
+          <input type="hidden" name="data" value="{{paymentData}}" />
+          <input type="hidden" name="signature" value={{paymentSignature}} />
+          <input type="image" src="//static.liqpay.ua/buttons/p1ru.radius.png" />
         </form>
       </div>
 
       <div class="ui-g-12">
         <div class="float-right">
-          <button pButton type="button" class="float-right" label="{{'COMMON.GO_TO_PAYMENT'| translate}}"
-            (click)="goToPayment()" [disabled]="!tncAccepted"></button>
+          <button pButton type="button" class="float-right" label="{{'COMMON.GO_TO_PAYMENT'| translate}}" (click)="goToPayment()" [disabled]="!isDataValid()"></button>
         </div>
         <div class="float-left">
-          <button pButton type="button" class="float-left" label="{{'COMMON.BACK'| translate}}"
-            (click)="previousStep()"></button>
+          <button pButton type="button" class="float-left" label="{{'COMMON.BACK'| translate}}" (click)="previousStep()"></button>
         </div>
       </div>
     </div>
