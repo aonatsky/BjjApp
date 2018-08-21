@@ -49,7 +49,7 @@ export class TopbarComponent implements OnInit {
       {
         label: this.translateService.instant('MENU.MY_EVENTS'),
         routerLink: ['participant/my-events'],
-        visible: this.isLoggedIn
+        visible: this.isLoggedIn && this.authService.ifRolesMatch([Roles.TeamOwner, Roles.Participant])
       },
       {
         label: this.translateService.instant('MENU.MY_TEAM'),

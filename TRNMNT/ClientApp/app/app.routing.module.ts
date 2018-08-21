@@ -11,7 +11,7 @@ const appRoutes: Routes = [
   
   {
     path: '',
-    redirectTo: 'event-admin',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -30,7 +30,7 @@ const appRoutes: Routes = [
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },
-  { path: '**', redirectTo: 'event-admin' },
+  { path: '**', redirectTo: 'login' },
   {
     path: '',
     outlet: 'topmenu',

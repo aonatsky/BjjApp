@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ParticipantEventModel } from '../../core/model/participant.models';
 import { ParticipantService } from '../../core/services/participant.service';
-import { SelectItem } from '../../../../node_modules/primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import { WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
 import { WeightDivisionService } from '../../core/services/weight-division.service';
 import { CategoryService } from '../../core/services/category.service';

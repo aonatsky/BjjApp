@@ -1,7 +1,7 @@
 ﻿import { NgModule } from '@angular/core';
 import { CoreModule } from '../core/core.module';
 import { EventAdminPageComponent } from './event-admin.page.component';
-import { EventOverviewComponent } from './event-overview/event-overview.component';
+import { EventListComponent } from './event-list/event-list.component';
 import { EventEditComponent } from './event-edit/event-edit.component';
 import { EventAdminRoutingModule } from './event-admin.routing.module';
 import { BracketGenerationComponent } from './event-management/brackets-generation/bracket-generation.component';
@@ -22,12 +22,14 @@ import { BracketResultSetComponent } from './event-run/bracket-result-set/bracke
 import { TeamListComponent } from './team-list/team-list.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { FederationEditComponent } from './federation-edit/federation-edit.component';
+import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 
 @NgModule({
   imports: [CoreModule, SharedModule, RoundModule, EventAdminRoutingModule, TranslateModule],
   declarations: [
     EventAdminPageComponent,
-    EventOverviewComponent,
+    EventDashboardComponent,
+    EventListComponent,
     EventEditComponent,
     BracketGenerationComponent,
     EventManagementComponent,

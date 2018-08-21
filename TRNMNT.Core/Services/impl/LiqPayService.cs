@@ -106,7 +106,7 @@ namespace TRNMNT.Core.Services.Impl
             return (OrderStatus.Failed, jResponse.liqpay_order_id);
         }
 
-        public PaymentDataModel GetPaymentDataModel(Order order, string serverUrl, string redirectUrl)
+        public PaymentDataModel GetPaymentDataModel(Order order, string serverUrl, string redirectUrl, List<(string target, int amount)> splitSettings)
         {
             var encodedData = EncodeData(order, serverUrl, redirectUrl);
             var encodedsignature = GetSignature(encodedData);

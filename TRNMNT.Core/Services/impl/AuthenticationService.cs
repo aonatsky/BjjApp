@@ -137,9 +137,8 @@ namespace TRNMNT.Core.Services.Impl
         private async Task<string> GenerateTokenAsync(User user)
         {
             var handler = new JwtSecurityTokenHandler();
-            var identity = new ClaimsIdentity(
-                GetTokenClaims(user).Union(await _userManager.GetClaimsAsync(user))
-            );
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            var identity = new ClaimsIdentity(GetTokenClaims(user).Union(userClaims));
             _logger.LogDebug($"Configuration is {_authConfiguration != null}");
             _logger.LogDebug($"Configuration key is {_authConfiguration.Key}");
             var expiresIn = DateTime.Now + TimeSpan.FromMinutes(_authConfiguration.AccessTokenLifetime);

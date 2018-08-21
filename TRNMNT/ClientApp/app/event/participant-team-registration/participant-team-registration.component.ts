@@ -4,11 +4,11 @@ import { WeightDivisionService } from '../../core/services/weight-division.servi
 import { CategoryService } from '../../core/services/category.service';
 import { TeamService } from '../../core/services/team.service';
 import { ParticipantService } from '../../core/services/participant.service';
-import { TranslateService } from '../../../../node_modules/@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { UserModelAthlete } from '../../core/model/user.models';
 import { ICrudColumn as CrudColumn, IColumnOptions } from '../../shared/crud/crud.component';
 import { ParticipantRegistrationModel } from '../../core/model/participant.models';
-import { SelectItem } from '../../../../node_modules/primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import { WeightDivisionSimpleModel } from '../../core/model/weight-division.models';
 import { CategorySimpleModel } from '../../core/model/category.models';
 import { PriceModel } from '../../core/model/price.model';

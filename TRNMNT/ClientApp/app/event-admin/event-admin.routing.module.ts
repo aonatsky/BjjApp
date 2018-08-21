@@ -1,7 +1,7 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
 import { RedirectGuard } from '../core/guards/redirect.guard';
 import { EventAdminPageComponent } from './event-admin.page.component';
-import { EventOverviewComponent } from './event-overview/event-overview.component';
+import { EventListComponent } from './event-list/event-list.component';
 import { EventEditComponent } from './event-edit/event-edit.component';
 import { EventManagementComponent } from './event-management/event-management.component';
 import { EventRunComponent } from './event-run/event-run.component';
@@ -12,6 +12,7 @@ import { NgModule } from '@angular/core';
 import { Roles } from '../core/consts/roles.const';
 import { TeamListComponent } from './team-list/team-list.component';
 import { FederationEditComponent } from './federation-edit/federation-edit.component';
+import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 
 export const eventAdminRoutes: Routes = [
   {
@@ -22,11 +23,19 @@ export const eventAdminRoutes: Routes = [
     children: [
       {
         path: '',
-        component: EventOverviewComponent
+        component: EventListComponent
+      },
+      {
+        path: 'event-list',
+        component: EventListComponent
       },
       {
         path: 'edit/:id',
         component: EventEditComponent
+      },
+      {
+        path: 'dashboard/:id',
+        component: EventDashboardComponent
       },
       {
         path: 'management/:id',

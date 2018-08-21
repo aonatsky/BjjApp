@@ -26,15 +26,15 @@
     </div>
     <div class="ui-g-12">
         <div class="float-right">
-            <button pButton type="button" iconPos="left" icon="fa fa-pencil"
+            <button pButton type="button" iconPos="left" icon="fas fa-edit"
                 (click)="editCategory(i)" label="{{'COMMON.EDIT'|translate}}"></button>
         </div>
     </div>
 </div>
 <div class="ui-g">
     <div class="ui-g-3 ui-g-nopad">
-        <button pButton type="button" (click)="addCategory()"
-            label="{{'EVENT_EDIT.ADD_CATEGORY'|translate}}"></button>
+        <p-button type="button" icon="fa fa-plus" (click)="addCategory()"
+            label="{{'EVENT_EDIT.ADD_CATEGORY'|translate}}"></p-button>
     </div>
 </div>
 
@@ -64,9 +64,8 @@
         <div class="ui-g-10 ui-fluid">
             <input pInputText [(ngModel)]="wd.name" />
         </div>
-        <div class="ui-g-2">
-            <button class="float-right" pButton type="button" iconPos="left"
-                icon="fa fa-times" (click)="deleteWeightDivision(j)"></button>
+        <div class="ui-g-2 ui-fluid">
+            <p-button styleClass="ui-button-danger" icon="fa fa-times" (click)="deleteWeightDivision(j)"></p-button>
         </div>
     </div>
     <div class="ui-g">

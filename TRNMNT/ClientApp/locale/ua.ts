@@ -108,6 +108,10 @@ export const data = {
   'WEIGHT_IN':"Зважування"
 
 },
+'EVENT_LIST':{
+  'TITLE':'Події',
+  'CREATE_EVENT':'Створити подію'
+},
 'EVENT_INFO': {
     'EVENT_STARTS':'Захід починаєтся',
     'EARLY_REGISTRATION':'Рання реєстрація',

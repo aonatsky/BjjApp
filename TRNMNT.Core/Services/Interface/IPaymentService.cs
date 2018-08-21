@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TRNMNT.Core.Model;
 using TRNMNT.Data.Entities;
@@ -14,7 +15,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="redirectUrl">The redirect URL.</param>
         /// <returns></returns>
-        PaymentDataModel GetPaymentDataModel(Order order, string serverUrl, string redirectUrl);
+        PaymentDataModel GetPaymentDataModel(Order order, string serverUrl, string redirectUrl, List<(string target, int amount)> splitSettings = null);
 
         /// <summary>
         /// Confirms the payment asynchronous.

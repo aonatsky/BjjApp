@@ -187,10 +187,10 @@ export class AuthService {
   getRoles(): string[] {
     if (this.isLoggedIn()) {
       var roles = this.getUser().roles;
-      if (Array.isArray(roles)){
+      if (Array.isArray(roles)) {
         return roles;
       }
-      return [roles]
+      return [roles];
     }
     return [];
   }
@@ -213,7 +213,6 @@ export class AuthService {
         );
       }),
       map(r => {
-        this.getLoggedInStatus.emit(true);
         return this.processTokensResponse(r);
       }),
       catchError(e => {
@@ -269,6 +268,7 @@ export class AuthService {
     if (typeof body.idToken !== 'undefined') {
       // Stores access token & refresh token.
       this.store(body);
+      this.getLoggedInStatus.emit(true);
       return true;
     }
     return false;

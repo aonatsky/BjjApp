@@ -158,7 +158,7 @@ namespace TRNMNT.Core.Services.Impl
 
             async Task<List<EventModelBase>> GetModels(IQueryable<Event> query)
             {
-                return await modelsQuery.Select(e => new EventModelBase
+                return await query.Select(e => new EventModelBase
                 {
                     EventId = e.EventId,
                         EventDate = e.EventDate,

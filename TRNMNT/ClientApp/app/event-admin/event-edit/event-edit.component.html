@@ -76,7 +76,7 @@
                             </div>
                             <div class="ui-g-4 ui-fluid">
                                 <p-fileUpload #fubauto mode="basic" maxFileSize="10000000" accept="image/*" (onUpload)="onImageUpload($event)" auto="true"
-                                    chooseLabel="{{'COMMON.CHOOSE_IMAGE'|translate}}"></p-fileUpload>
+                                    chooseLabel="{{'COMMON.CHOOSE_IMAGE'|translate}}" ></p-fileUpload>
                             </div>
                             <img *ngIf="eventModel.imgPath" src="{{getEventImageUrl()}}" class="ui-g-9 ui-g-offset-3" />
                         </div>
@@ -86,7 +86,7 @@
                             </div>
                             <div class="ui-g-4 ui-fluid">
                                 <p-fileUpload #fubauto mode="basic" accept="application/pdf" maxFileSize="10000000" (onUpload)="onTncUpload($event)" auto="true"
-                                    chooseLabel="{{'COMMON.CHOOSE_FILE'|translate}}"></p-fileUpload>
+                                    chooseLabel="{{'COMMON.CHOOSE_FILE'|translate}}" ></p-fileUpload>
                             </div>
                             <div class="ui-g-4 ui-fluid">
                                 <button pButton type="button" label="{{'COMMON.DOWNLOAD'|translate}}" (click)="downloadTnc()" [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button>
