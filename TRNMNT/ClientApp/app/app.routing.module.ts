@@ -6,6 +6,7 @@ import { TopbarComponent } from './shared/topbar/topbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { ProfileComponent } from './shared/profile/profile.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { RedirectGuard } from './core/guards/redirect.guard';
 
 const appRoutes: Routes = [
   
@@ -17,7 +18,8 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [RedirectGuard]
   },
   {
     path: 'register',
