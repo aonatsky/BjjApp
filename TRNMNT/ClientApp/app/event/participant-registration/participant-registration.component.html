@@ -5,7 +5,7 @@
         </div>
     </div>
     <div class="ui-widget ui-widget-content ui-corner-all ui-g-8">
-        <div *ngIf="currentStep == 0">
+        <div *ngIf="currentStep == 0 && participant">
             <form novalidate #participantForm="ngForm">
                 <div class="ui-g">
                     <div class="ui-g-3 ui-fluid">
@@ -39,12 +39,16 @@
                         <label>{{'COMMON.TEAM'|translate}}</label>
                     </div>
                     <div class="ui-g-9 ui-fluid">
-                        <input pInputText [(ngModel)]="participant.teamName" required name="team" [value]="participant.teamName" [disabled]=true [maxLength]=100/>
+                        <label class="bold">{{participant.teamName}}</label>
+                        <label pTooltip="{{'TEAM.TEAM_OR_MEMBERSHIP_NOT_APPROVED_TOOLTIP'|translate}}" appendTo="target" class="ui-state-highlight float-right" *ngIf="!getIsApproved(participant.teamId)">{{'TEAM.NOT_APPROVED'|translate}}</label>
                     </div>
                 </div>
                 <div class="ui-g">
                     <div class="ui-g-9 ui-fluid ui-g-offset-3">
-                        <span class="btn-link" (click)="goToTeamRegistration()" *ngIf="isTeamOwner">{{'COMMON.ADD_TEAM' | translate}}</span>
+                        <span class="btn-link" (click)="goToTeamRegistration()" *ngIf="isTeamOwner">{{'COMMON.ADD_TEAM' |
+                            translate}}
+                        </span>
+                        <span class="btn-link" (click)="goToProfile()" *ngIf="!participant.teamId">{{'PARTICIPATION.CHANGE_TEAM'| translate}}</span>
                     </div>
                 </div>
                 <div class="ui-g">
@@ -205,7 +209,7 @@
             <span class="price">{{price.amount}} {{price.currency}}</span>
         </div>
     </div>
-    <div class="ui-g ui-g-4 price-box" *ngIf="!isFederationMember">
+    <div class="ui-g ui-g-4 price-box" *ngIf="!isFederationMember" pTooltip="{{'PARTICIPATION.ADD_MEMBERSHIP_TOOLTIP'|translate}}" appendTo="target"  tooltipPosition="bottom">
         <div class="ui-g ui-g-12">
             <p-checkbox [(ngModel)]="participant.includeMembership" binary="true" label="{{'PARTICIPATION.ADD_MEMBERSHIP'|translate}}"
                 (onChange)="initPrice()"></p-checkbox>

@@ -1,38 +1,64 @@
 <trnmnt-page title="{{'PROFILE.TITLE'| translate}}" contentClass="ui-g-8 ui-g-offset-2">
-  <div class="ui-g">
-    <div class="ui-g-3 ui-fluid">
-      <label>{{'COMMON.EMAIL'|translate}}</label>
+  <form novalidate #userForm="ngForm">
+    <div  *ngIf="userModel">
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'COMMON.EMAIL'|translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <input pInputText [(ngModel)]="userModel.email" required email name="email"/>
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'COMMON.FIRST_NAME'|translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <input pInputText [(ngModel)]="userModel.firstName" required name="firstName"/>
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'COMMON.LAST_NAME'|translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <input pInputText [(ngModel)]="userModel.lastName" required name="lastName" />
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'COMMON.TEAM'|translate}}</label>
+        </div>
+        <div  class="ui-g-9 ui-fluid">
+          <p-dropdown [options]="teamSelectItems" [(ngModel)]="userModel.teamId" [autoWidth]="false" placeholder="{{'COMMON.SELECT_TEAM'|translate}}"
+            name="team" [disabled]="userModel.isTeamOwner">
+            <ng-template  let-team  pTemplate="selectedItem">
+              <div class="" #teamDdl pTooltip="{{'TEAM.TEAM_OR_MEMBERSHIP_NOT_APPROVED_TOOLTIP'|translate}}" [appendTo]="teamDdl"  tooltipPosition="right" [tooltipDisabled]="getIsApproved(team.value)" >
+                {{team.label}}
+                <span *ngIf="!getIsApproved(team.value)" class="float-right ui-state-highlight" >{{'TEAM.NOT_APPROVED'|translate}}</span>
+              </div>
+            </ng-template>
+            <ng-template let-team pTemplate="item">
+              {{team.label}}
+              <span *ngIf="!getIsApproved(team.value)" class="float-right ui-state-highlight">{{'TEAM.NOT_APPROVED'|translate}}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="ui-g">
+        <div class="ui-g-3 ui-fluid">
+          <label>{{'COMMON.DATE_OF_BIRTH'|translate}}</label>
+        </div>
+        <div class="ui-g-9 ui-fluid">
+          <p-calendar icon="fa fa-calendar" [(ngModel)]="userModel.dateOfBirth" [showIcon]="true" [utc]="false" dateFormat="dd/mm/yy" required name="dateOfBirth"  ></p-calendar>
+        </div>
+      </div>
     </div>
-    <div class="ui-g-9 ui-fluid">
-      <input pInputText [(ngModel)]="userModel.email" />
-    </div>
-  </div>
-  <div class="ui-g">
-    <div class="ui-g-3 ui-fluid">
-      <label>{{'COMMON.FIRST_NAME'|translate}}</label>
-    </div>
-    <div class="ui-g-9 ui-fluid">
-      <input pInputText [(ngModel)]="userModel.firstName" />
-    </div>
-  </div>
-  <div class="ui-g">
-    <div class="ui-g-3 ui-fluid">
-      <label>{{'COMMON.LAST_NAME'|translate}}</label>
-    </div>
-    <div class="ui-g-9 ui-fluid">
-      <input pInputText [(ngModel)]="userModel.lastName" />
-    </div>
-  </div>
-  <div class="ui-g">
-    <div class="ui-g-3 ui-fluid">
-      <label>{{'COMMON.DATE_OF_BIRTH'|translate}}</label>
-    </div>
-    <div class="ui-g-9 ui-fluid">
-      <p-calendar icon="fa fa-calendar" [(ngModel)]="userModel.dateOfBirth" [showIcon]="true" [utc]="false" dateFormat="dd/mm/yy"></p-calendar>
-    </div>
-  </div>
+  </form>
   <div class="ui-g-12 ">
-    <p-button (click)="save()" label="{{'COMMON.SAVE'|translate}}" class="float-right" iconPos="left" icon="fa fa-save"></p-button>
+    <p-button *ngIf="!returnUrl" (click)="save()" label="{{'COMMON.SAVE'|translate}}" class="float-right" iconPos="left" [disabled]="!userForm.valid" icon="fa fa-save"></p-button>
+    <p-button *ngIf="returnUrl" (click)="saveAndContinue()" label="{{'COMMON.SAVE_AND_CONTINUE'|translate}}" class="float-right" iconPos="left"
+      icon="fa fa-save" [disabled]="!userForm.valid" ></p-button>
   </div>
   <div class="ui-g-12 ">
     <p-button (click)="openChangePasswordPopup()" class="float-right" label="{{'PROFILE.CHANGE_PASSWORD'|translate}}"></p-button>

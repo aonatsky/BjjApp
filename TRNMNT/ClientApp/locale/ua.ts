@@ -12,6 +12,7 @@ export const data = {
     'CONTINUE':'Продовжити',
     'BACK':"Назад",
     'SAVE':"Зберегти",
+    'SAVE_AND_CONTINUE':'Зберегти та продовжити',
     'GO_TO_PAYMENT':'Перейти до оплати',
     'PASSWORD':'Пароль',
     'DOWNLOAD':'Завантажити',
@@ -64,12 +65,14 @@ export const data = {
     'CONGRATS_YOU_ARE_REGISTERED_TO': 'Вітаємо, ви зареєстровані на {{value}}',
     'GO_BACK_TO_EVENT_PAGE': 'Повернутись на сторінку події',
     'ADD_MEMBERSHIP': 'Дотати внесок за членство в федерації',
+    'ADD_MEMBERSHIP_TOOLTIP': 'Очень важный текст почему нужно заплатить денег',
     'TEAM_PARTICIPATION':'Командна реєстрація',
     'PARTICIPATE':'Приняти участь',
     'ADD':'Додати',
     'CANCEL':'ВІДМІНИТИ',
-    'ALREADY_PARTICIPANT':'Вже приймає участь'
-  },
+    'ALREADY_PARTICIPANT':'Вже приймає участь',
+    'CHANGE_TEAM':'Змінити команду'},
+    
 'EVENT':{
   'PARTICIPANTS':'Учасники',
   'BRACKETS':'Турнірні таблиці',
@@ -158,6 +161,10 @@ export const data = {
     'CONTACT_PHONE':'Контактний номер телефону',
     'CONTACT_EMAIL':'Контактна електронна пошта',
     'DESCRIPTION':'Опис',
+    'NOT_APPROVED':'Не підтверджено',
+    'TEAM_NOT_APPROVED_TOOLTIP':'Ваша команда не підтвердженна',
+    'TEAM_OR_MEMBERSHIP_NOT_APPROVED_TOOLTIP':'Ваша команда не підтвердженна або ви не підтвердженні як її учасник, зв`яжіться з вашим тренером щоб вас затвердили як члена команди'
+
   },
   'TEAM_REGISTRATION':{
     'TITLE':'Реєстрація команди'

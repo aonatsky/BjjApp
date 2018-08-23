@@ -66,6 +66,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
+
         [AllowAnonymous, HttpPost("[action]")]
         public async Task<IActionResult> RegisterParticipantUser([FromBody] UserModelRegistration model)
         {

@@ -20,7 +20,7 @@ export class UserModel extends UserModelRegistration {
   roles: string[];
 }
 
-export class UserModelAthlete extends UserModelBase {
+export class UserModelAthlete extends UserModel {
   teamMembershipApprovalStatus: string;
   teamName: string;
   isFederationMember: boolean;

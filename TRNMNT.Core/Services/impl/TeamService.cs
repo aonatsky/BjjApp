@@ -203,6 +203,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 var team = await _repository.GetByIDAsync(user.TeamId.Value);
                 model.TeamName = team != null ? team.Name : null;
+                model.IsTeamOwner = team.OwnerId == user.Id;
             }
             return model;
 

@@ -120,6 +120,7 @@ namespace TRNMNT.Core.Services.Impl
             user.LastName = model.LastName;
             user.DateOfBirth = model.DateOfBirth.Value;
             user.Email = model.Email;
+            user.TeamId = model.TeamId;
             await _userManager.UpdateAsync(user);
         }
         public async Task CreateUserAsync(UserModelRegistration model, List<string> roles)

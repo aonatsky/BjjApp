@@ -49,7 +49,5 @@ export class TeamService {
     return this.httpService.post(`${ApiMethods.team.approveTeam}/${teamId}`);
   }
 
-  getCurrentAthlete(): Observable<UserModelAthlete> {
-    return this.httpService.get<UserModelAthlete>(ApiMethods.team.getCurrentAthlete);
-  }
+  
 }

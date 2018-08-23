@@ -107,10 +107,10 @@
                                 <label class="field-title">{{'EVENT_EDIT.EARLY_REGISTRATION' | translate}}</label>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" />
+                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" type="number" min="0" />
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers" />
+                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers" type="number" min="0"/>
                             </div>
                         </div>
                         <div class="ui-g">
@@ -118,37 +118,12 @@
                                 <label class="field-title">{{'EVENT_EDIT.LATE_REGISTRATION'|translate}}</label>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPrice" />
+                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPrice" type="number" min="0"/>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers" />
+                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers" type="number" min="0"/>
                             </div>
                         </div>
-                        <!-- <div class="ui-g">
-                            <div class="ui-g-3 ui-g-offset-3 price-column"></div>
-                            <div class="ui-g-3 price-column"></div>
-                            <div class="ui-g-3 price-column"></div>
-                        </div> -->
-                        <!-- <div class="ui-g">
-                            <div class="ui-g-3 ui-fluid">
-                                <label class="field-title">Enable Promocode</label>
-                            </div>
-                            <div class="ui-g-3 ui-fluid">
-                                <p-checkbox [(ngModel)]="eventModel.promoCodeEnabled"
-                                    binary="true"></p-checkbox>
-                            </div>
-                        </div>
-                        <div class="ui-g">
-                            <div class="ui-g-3 ui-fluid">
-                                <label class="field-title">Promocode List</label>
-                            </div>
-                            <div class="ui-g-4 ui-fluid">
-                                <button pButton type="button" label="Upload" (disabled)="true"></button>
-                            </div>
-                            <div class="ui-g-4 ui-fluid">
-                                <button pButton type="button" label="Remove" [disabled]="true"></button>
-                            </div>
-                        </div> -->
                     </div>
                     <div *ngIf="currentStep==2" class="">
                         <category-edit [categories]="eventModel.categoryModels" [eventId]="eventModel.eventId">

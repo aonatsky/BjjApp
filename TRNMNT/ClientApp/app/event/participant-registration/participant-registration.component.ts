@@ -18,6 +18,7 @@ import { PriceModel } from '../../core/model/price.model';
 import DateHelper from '../../core/helpers/date-helper';
 import { Roles } from '../../core/consts/roles.const';
 import { ApprovalStatus } from '../../core/consts/approval-status.const';
+import { UserService } from '../../core/services/user.service';
 
 @Component({
   selector: 'participant-registration',
@@ -29,7 +30,7 @@ export class ParticipantRegistrationComponent implements OnInit {
   @ViewChild('formPrivatElement')
   formPrivat: ElementRef;
   participant: ParticipantRegistrationModel = new ParticipantRegistrationModel();
-  teamMembershipConfirmed: boolean;
+  teamMembershipApproved: boolean;
   isFederationMember: boolean = false;
   categories: CategorySimpleModel[] = [];
   weightDivisions: WeightDivisionSimpleModel[] = [];
@@ -54,14 +55,14 @@ export class ParticipantRegistrationComponent implements OnInit {
     private categoryService: CategoryService,
     private teamService: TeamService,
     private participantService: ParticipantService,
-    private authService: AuthService,
     private eventService: EventService,
     private routerService: RouterService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.teamService.getCurrentAthlete().subscribe(r => {
+    this.userService.getUserAthlete().subscribe(r => {
       this.participant.userId = r.userId;
       this.participant.dateOfBirth = r.dateOfBirth ? r.dateOfBirth : this.getDefaultDateOfBirth();
       this.participant.firstName = r.firstName;
@@ -70,9 +71,9 @@ export class ParticipantRegistrationComponent implements OnInit {
       this.participant.includeMembership = false;
       this.participant.teamId = r.teamId;
       this.participant.teamName = r.teamName;
-      this.teamMembershipConfirmed = r.teamMembershipApprovalStatus == ApprovalStatus.approved;
+      this.teamMembershipApproved = r.teamMembershipApprovalStatus == ApprovalStatus.approved;
+      this.isTeamOwner = r.isTeamOwner;
     });
-    this.isTeamOwner = this.authService.ifRolesMatch([Roles.TeamOwner]);
     this.loadData();
   }
 
@@ -148,6 +149,10 @@ export class ParticipantRegistrationComponent implements OnInit {
     this.routerService.goToTeamRegistration();
   }
 
+  goToProfile() {
+    this.routerService.goToMyProfile("/event/participant-registration");
+  }
+
   goToPayment() {
     this.participantService.processParticipantRegistration(this.participant).subscribe((r: PaymentDataModel) => {
       this.submitPaymentForm(r);
@@ -156,6 +161,17 @@ export class ParticipantRegistrationComponent implements OnInit {
 
   initPrice() {
     this.eventService.getPrice(this.participant.includeMembership).subscribe(p => (this.price = p));
+  }
+
+  getIsApproved(teamId): boolean{
+    if(!teamId){
+      return true;
+    }
+    const team = this.teams.filter(t => t.teamId == teamId)[0];
+    if(!team){
+      return true;
+    }
+    return team.federationApprovalStatus == ApprovalStatus.approved && team.approvalStatus == ApprovalStatus.approved && this.teamMembershipApproved;
   }
 
   private submitPaymentForm(paymentData: PaymentDataModel) {

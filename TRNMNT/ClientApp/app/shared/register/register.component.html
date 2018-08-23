@@ -64,7 +64,7 @@
         <p-checkbox [(ngModel)]="model.isTeamOwner" [binary]="true" label="{{'USER_REGISTRATION.I_AM_TEAM_OWNER'|translate}}" name="isTeamOwner"
             (onChange)="setNoTeam()"></p-checkbox>
         <div class="ui-g-12 ">
-            <p-button class="float-right" (click)="register()" label="{{'USER_REGISTRATION.REGISTER_AND_CONTINUE'|translate}}" cornerStyleClass="none"
+            <p-button class="float-right" (click)="register()" label="{{'USER_REGISTRATION.REGISTER_AND_CONTINUE'|translate}}"
                 [disabled]="userForm.invalid"></p-button>
         </div>
     </form>

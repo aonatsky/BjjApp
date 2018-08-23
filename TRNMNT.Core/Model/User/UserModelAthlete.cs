@@ -6,5 +6,6 @@ namespace TRNMNT.Core.Model.User
         public string TeamName { get; set; }
         public bool IsFederationMember {get;set;}
         public bool IsParticipant {get;set;}
+        public bool IsTeamOwner {get;set;}
     }
 }

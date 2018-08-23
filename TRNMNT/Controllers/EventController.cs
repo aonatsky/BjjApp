@@ -163,7 +163,7 @@ namespace TRNMNT.Web.Controllers
             }, true, true);
         }
 
-        [Authorize(Roles = "FederationOwner, Owner"), HttpGet("[action]")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]")]
         public async Task<IActionResult> CreateEvent()
         {
             return await HandleRequestWithDataAsync(async() => _eventService.CreateEvent((await GetUserAsync()).Id, GetFederationId().Value), false, true);

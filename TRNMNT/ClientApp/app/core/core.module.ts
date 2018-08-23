@@ -41,7 +41,8 @@ import {
   CheckboxModule,
   TabViewModule,
   ToggleButtonModule,
-  ConfirmDialogModule
+  ConfirmDialogModule,
+  TooltipModule
 } from 'primeng/primeng';
 import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';
@@ -94,7 +95,8 @@ import { FederationService } from './services/federation.service';
     TableModule,
     RadioButtonModule,
     MenubarModule,
-    TranslateModule
+    TranslateModule,
+    TooltipModule
   ],
   declarations: [MinuteSecondsPipe, ToDictionaryPipe, FormatTimerPipe],
   providers: [
@@ -155,6 +157,7 @@ import { FederationService } from './services/federation.service';
     ConfirmDialogModule,
     TableModule,
     RadioButtonModule,
+    TooltipModule,
     MenubarModule,
     FormatTimerPipe
   ]

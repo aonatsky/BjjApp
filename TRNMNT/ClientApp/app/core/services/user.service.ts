@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable } from 'rxjs';
-import { UserModelRegistration, UserModel } from '../model/user.models';
+import { UserModelRegistration, UserModel, UserModelAthlete } from '../model/user.models';
 import { AuthService } from './auth.service';
 import { ChangePasswordModel } from '../model/change-password.model';
 import { map, flatMap } from 'rxjs/operators';
 import { HttpService } from '../dal/http/http.service';
 
-
 @Injectable()
 export class UserService {
-  constructor(private http: HttpService, private authService : AuthService) {}
+  constructor(private http: HttpService, private authService: AuthService) {}
 
   register(model: UserModelRegistration): Observable<string> {
     return this.http.post<string>(ApiMethods.user.register, model);
@@ -28,7 +27,11 @@ export class UserService {
     return this.http.post(ApiMethods.user.setPassword, model);
   }
 
-  getUser(){
-      return this.authService.getUser();
+  getUser() {
+    return this.authService.getUser();
+  }
+
+  getUserAthlete(): Observable<UserModelAthlete> {
+    return this.http.get<UserModelAthlete>(ApiMethods.team.getCurrentAthlete);
   }
 }
