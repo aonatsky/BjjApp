@@ -351,3 +351,9 @@ label {
 .status-declined {
   color: $theme_red !important;
 }
+
+
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}

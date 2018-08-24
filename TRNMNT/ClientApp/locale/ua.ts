@@ -1,5 +1,8 @@
 export const data = {
   'COMMON': {
+    'YES':'Так',
+    'NO':'Ні',
+    'CONFIRMATION':'Підтвердити',
     'FIRST_NAME': 'Ім`я',
     'LAST_NAME': 'Призвіще',
     'WEIGHT_DIVISION': 'Вагова категорія',
@@ -101,6 +104,7 @@ export const data = {
 },
 'EVENT_MANAGEMENT':{
   'TITLE':'Управління подією',
+  'DO_YOU_WANT_TO_DELETE_RECORD': 'Ви хочете видалити запис?',
   'UPLOAD_LIST':'Завантажити список',
   'UPLOAD_RESULT':{
 

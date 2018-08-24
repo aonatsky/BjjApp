@@ -18,8 +18,8 @@ using TRNMNT.Web.Hubs;
 namespace TRNMNT.Web.Controllers
 {
     [Route("api/[controller]")]
-    public class 
-        BracketController : BaseController
+    public class
+    BracketController : BaseController
     {
         #region dependencies
 
@@ -36,8 +36,7 @@ namespace TRNMNT.Web.Controllers
             IWeightDivisionService weightDivisionService,
             IBracketService bracketService,
             ICategoryService categoryService,
-            IConfiguration configuration)
-            : base(logger, userService, eventService, context, configuration)
+            IConfiguration configuration) : base(logger, userService, eventService, context, configuration)
         {
             _bracketService = bracketService;
             _categoryService = categoryService;
@@ -46,10 +45,10 @@ namespace TRNMNT.Web.Controllers
         #region Public Methods
 
         [HttpGet("[action]/{weightDivisionId}")]
-        [Authorize]
+        [Authorize(Roles = "FederationOwner, Owner, Admin")]
         public async Task<IActionResult> CreateBracket(Guid weightDivisionId)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var bracketModel = await _bracketService.GetBracketModelAsync(weightDivisionId);
                 if (bracketModel != null)
@@ -61,13 +60,23 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
+        [HttpGet("[action]/{eventId}")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin")]
+        public async Task<IActionResult> CreateBrackets(Guid eventId)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _bracketService.CreateBracketsForEventAsync(eventId);
+            });
+        }
+
         [HttpGet("[action]/{weightDivisionId}")]
-        [Authorize]
+        [Authorize(Roles = "FederationOwner, Owner, Admin")]
         public async Task<IActionResult> RunBracket(Guid weightDivisionId)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
-                var bracketModel = await _bracketService.RunWeightDivision(weightDivisionId);
+                var bracketModel = await _bracketService.RunWeightDivisionAsync(weightDivisionId);
                 if (bracketModel != null)
                 {
                     return Success(bracketModel);
@@ -77,23 +86,21 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-
-
         [HttpGet("[action]/{weightDivisionId}")]
-        [Authorize]
+        [Authorize(Roles = "FederationOwner, Owner, Admin")]
         public async Task<IActionResult> DownloadFile(Guid weightDivisionId)
         {
-            return await HandleRequestWithFileAsync(async () =>
+            return await HandleRequestWithFileAsync(async() =>
             {
                 var file = await _bracketService.GetBracketFileAsync(weightDivisionId);
                 return Success<CustomFile>(file);
             });
         }
 
-        [HttpPost("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]")]
         public async Task<IActionResult> UpdateBracket([FromBody] BracketModel bracketModel)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 await _bracketService.UpdateBracket(bracketModel);
                 return HttpStatusCode.OK;
@@ -103,60 +110,60 @@ namespace TRNMNT.Web.Controllers
         [HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetBracketsByCategory(Guid categoryId)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
                 Success(await _bracketService.GetBracketsByCategoryAsync(categoryId)));
         }
 
-        [Authorize, HttpGet("[action]/{categoryId}")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> GetParticipantsForAbsoluteDivision(Guid categoryId)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var winners = await _bracketService.GetParticipantsForAbsoluteDivisionAsync(categoryId);
                 return Success(winners);
             });
         }
 
-        [Authorize, HttpGet("[action]/{categoryId}")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpGet("[action]/{categoryId}")]
         public async Task<IActionResult> IsCategoryCompleted(Guid categoryId)
         {
-            return await HandleRequestWithDataAsync(async () =>
+            return await HandleRequestWithDataAsync(async() =>
             {
                 var isCompleted = await _categoryService.IsCategoryCompletedAsync(categoryId);
                 return Success(isCompleted);
             });
         }
 
-        [Authorize, HttpPost("[action]")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]")]
         public async Task<IActionResult> ManageAbsoluteWeightDivision([FromBody] CreateAbsoluteDivisionModel model)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 await _bracketService.EditAbsoluteWeightDivisionAsync(model);
                 return HttpStatusCode.OK;
             });
         }
 
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> SetRoundResult([FromBody]MatchResultModel roundResultModel)
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]")]
+        public async Task<IActionResult> SetRoundResult([FromBody] MatchResultModel roundResultModel)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 await _bracketService.SetRoundResultAsync(roundResultModel);
                 return HttpStatusCode.OK;
             });
-            
+
         }
 
-        [Authorize, HttpPost("[action]")]
-        public async Task<IActionResult> SetBracketResult([FromBody]BracketResultModel bracketResultModel)
+        [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]")]
+        public async Task<IActionResult> SetBracketResult([FromBody] BracketResultModel bracketResultModel)
         {
-            return await HandleRequestAsync(async () =>
+            return await HandleRequestAsync(async() =>
             {
                 await _bracketService.SetBracketResultAsync(bracketResultModel);
                 return HttpStatusCode.OK;
             });
-            
+
         }
 
         #endregion

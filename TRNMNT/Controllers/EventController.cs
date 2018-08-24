@@ -93,20 +93,43 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(async() =>(await _eventService.GetEventInfoAsync(GetEventId()), HttpStatusCode.OK), true);
         }
 
-        [Authorize, HttpGet("[action]")]
-        public async Task<IActionResult> IsPrefixExists(string prefix)
+        [Authorize, HttpGet("[action/{id}")]
+        public async Task<IActionResult> IsPrefixExists(Guid id, [FromQuery(Name = "prefix")] string prefix)
         {
-            return await HandleRequestAsync(async() =>
+            return await HandleRequestWithDataAsync(async() =>
             {
-                if (await _eventService.IsEventUrlPrefixExistAsync(prefix))
-                {
-                    return HttpStatusCode.Found;
-                }
-                return HttpStatusCode.OK;
+                return await _eventService.IsEventUrlPrefixExistAsync(id, prefix);
             });
         }
 
-        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]/{id}")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action/{id}]")]
+        public async Task<IActionResult> DisableCorrections(Guid id)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _eventService.DisableCorrectionsAsync(id);
+            });
+        }
+
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action/{id}]")]
+        public async Task<IActionResult> PublishParticipantLists(Guid id)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _eventService.PublishParticipantListsAsync(id);
+            });
+        }
+
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action/{id}]")]
+        public async Task<IActionResult> PublishBrackets(Guid id)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _eventService.PublishBracketsAsync(id);
+            });
+        }
+
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventImage(IFormFile file, string id)
         {
             return await HandleRequestAsync(async() =>
@@ -118,7 +141,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]/{id}")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadEventTnc(IFormFile file, string id)
         {
             return await HandleRequestAsync(async() =>
@@ -130,7 +153,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "FederationOwner, Owner"), HttpPost("[action]/{id}")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpPost("[action]/{id}")]
         public async Task<IActionResult> UploadPromoCodeList(IFormFile file, string id)
         {
             return await HandleRequestAsync(async() =>
@@ -176,7 +199,7 @@ namespace TRNMNT.Web.Controllers
                 true, true);
         }
 
-        [Authorize(Roles = "FederationOwner, Owner"), HttpDelete("[action]")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpDelete("[action]")]
         public async Task<IActionResult> DeleteEvent(string id)
         {
             return await HandleRequestAsync(async() => await _eventService.DeleteEventAsync(id));

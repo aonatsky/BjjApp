@@ -1,14 +1,18 @@
-﻿import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+﻿import { Component, OnInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MenuItem } from 'primeng/primeng';
+import { MenuItem, ConfirmationService } from 'primeng/primeng';
 import { EventModel } from '../../core/model/event.models';
 import { EventService } from '../../core/services/event.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NgForm } from '@angular/forms';
+import { RouterService } from '../../core/services/router.service';
+import DateHelper from '../../core/helpers/date-helper';
 
 @Component({
   selector: 'event-edit',
   templateUrl: './event-edit.component.html',
-  styleUrls: ['./event-edit.component.scss']
+  styleUrls: ['./event-edit.component.scss'],
+  providers: [ConfirmationService]
 })
 export class EventEditComponent implements OnInit {
   eventModel: EventModel;
@@ -18,10 +22,17 @@ export class EventEditComponent implements OnInit {
   lastStep: number = 3;
   cacheRefreshToken: string;
 
+  @ViewChild('mainDataForm')
+  mainDataForm: NgForm;
+  @ViewChild('priceForm')
+  priceForm: NgForm;
+
   constructor(
     private eventService: EventService,
     private route: ActivatedRoute,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private routerservice: RouterService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -63,34 +74,65 @@ export class EventEditComponent implements OnInit {
     });
   }
 
+  isDatesValid(): boolean {
+    if (
+      !this.eventModel.registrationStartTS ||
+      !this.eventModel.earlyRegistrationEndTS ||
+      !this.eventModel.eventDate ||
+      !this.eventModel.registrationEndTS
+    ) {
+      return true;
+    }
+    return (
+      this.eventModel.eventDate > this.eventModel.registrationEndTS &&
+      this.eventModel.registrationEndTS > this.eventModel.earlyRegistrationEndTS &&
+      this.eventModel.earlyRegistrationEndTS > this.eventModel.registrationStartTS &&
+      this.eventModel.eventDate > DateHelper.getCurrentDate()
+    );
+  }
+
   private imageReload() {
     this.cacheRefreshToken = Date.now().toString();
     this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
       this.eventModel.imgPath = r.imgPath;
     });
   }
-  
+
   private tncReload() {
     this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
       this.eventModel.tncFilePath = r.tncFilePath;
     });
   }
 
+  isEventValid(): boolean {
+    return (
+      (this.currentStep == 0 &&
+        !!this.mainDataForm &&
+        this.mainDataForm.valid &&
+        !!this.eventModel.tncFilePath &&
+        this.isDatesValid()) ||
+      (!!this.priceForm && this.priceForm.valid && this.currentStep == 1)
+    );
+  }
 
-  private nextStep() {
+  nextStep() {
     this.currentStep++;
   }
 
-  private previousStep() {
+  previousStep() {
     this.currentStep--;
   }
 
-  private save() {
+  save() {
     this.eventService.updateEvent(this.eventModel).subscribe();
   }
 
+  deleteEvent() {
+    this.showConfirm(this.delete);
+  }
+
   private delete() {
-    this.eventService.deleteEvent(this.eventModel.eventId).subscribe();
+    this.eventService.deleteEvent(this.eventModel.eventId).subscribe(() => this.routerservice.goToEventAdmin());
   }
 
   private onImageUpload(event): void {
@@ -113,5 +155,16 @@ export class EventEditComponent implements OnInit {
 
   getEventImageUrl(): string {
     return `${this.eventModel.imgPath}?${this.cacheRefreshToken}`;
+  }
+
+  showConfirm(method: Function) {
+    this.confirmationService.confirm({
+      header: this.translateService.instant('COMMON.CONFIRMATION'),
+      icon: 'fa fa fa-trash',
+      message: this.translateService.instant('EVENT_EDIT.DO_YOU_WANT_TO_DELETE_EVENT'),
+      acceptLabel: this.translateService.instant('COMMON.YES'),
+      rejectLabel: this.translateService.instant('COMMON.NO'),
+      accept: () => method()
+    });
   }
 }

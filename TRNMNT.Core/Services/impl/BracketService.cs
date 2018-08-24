@@ -53,7 +53,16 @@ namespace TRNMNT.Core.Services.impl
             return GetBracketModel(weightDivision, matches);
         }
 
-        public async Task<BracketModel> RunWeightDivision(Guid weightDivisionId)
+        public async Task CreateBracketsForEventAsync(Guid eventId)
+        {
+            var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId, false);
+            foreach (var weightDivision in weightDivisions)
+            {
+                await _matchService.GetMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId);
+            }
+        }
+
+        public async Task<BracketModel> RunWeightDivisionAsync(Guid weightDivisionId)
         {
             var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId, true);
             List<Match> matches;
@@ -132,7 +141,6 @@ namespace TRNMNT.Core.Services.impl
 
         #region Private methods
 
-
         private BracketModel GetBracketModel(WeightDivision weightDivision, List<Match> matches)
         {
             var model = new BracketModel
@@ -166,24 +174,24 @@ namespace TRNMNT.Core.Services.impl
                 model.WinnerParticipant = GetParticipantSimpleModel(match.WinnerParticipant);
                 if (match.WinnerParticipantId == match.AParticipantId)
                 {
-                    if (match.MatchResultType != (int)MatchResultTypeEnum.DQ)
+                    if (match.MatchResultType != (int) MatchResultTypeEnum.DQ)
                     {
-                        model.AParticipantResult = ((MatchResultTypeEnum)match.MatchResultType).ToString();
+                        model.AParticipantResult = ((MatchResultTypeEnum) match.MatchResultType).ToString();
                     }
                     else
                     {
-                        model.BParticipantResult = ((MatchResultTypeEnum)match.MatchResultType).ToString();
+                        model.BParticipantResult = ((MatchResultTypeEnum) match.MatchResultType).ToString();
                     }
                 }
                 else
                 {
-                    if (match.MatchResultType != (int)MatchResultTypeEnum.DQ)
+                    if (match.MatchResultType != (int) MatchResultTypeEnum.DQ)
                     {
-                        model.BParticipantResult = ((MatchResultTypeEnum)match.MatchResultType).ToString();
+                        model.BParticipantResult = ((MatchResultTypeEnum) match.MatchResultType).ToString();
                     }
                     else
                     {
-                        model.AParticipantResult = ((MatchResultTypeEnum)match.MatchResultType).ToString();
+                        model.AParticipantResult = ((MatchResultTypeEnum) match.MatchResultType).ToString();
                     }
                 }
             }
@@ -197,17 +205,15 @@ namespace TRNMNT.Core.Services.impl
             return new ParticipantSimpleModel
             {
                 FirstName = participant.FirstName,
-                LastName = participant.LastName,
-                ParticipantId = participant.ParticipantId,
-                DateOfBirth = participant.DateOfBirth,
-                TeamName = participant.Team.Name
+                    LastName = participant.LastName,
+                    ParticipantId = participant.ParticipantId,
+                    DateOfBirth = participant.DateOfBirth,
+                    TeamName = participant.Team.Name
             };
         }
-
 
         private string GetBracketTtitle(Category category, WeightDivision weightDivision) => $"{category.Name} / {weightDivision.Name}";
 
         #endregion
     }
 }
-

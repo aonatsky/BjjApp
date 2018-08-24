@@ -1,45 +1,53 @@
-﻿import { CategoryModel } from './category.models'
-
+﻿import { CategoryModel } from './category.models';
 
 export class EventModelBase {
-    eventId: AAGUID;
-    title: string;
-    eventDate: Date;
-    registrationStartTS: Date;
-    earlyRegistrationEndTS: Date;
-    registrationEndTS: Date;
-};
+  eventId: AAGUID;
+  title: string;
+  eventDate: Date;
+  registrationStartTS: Date;
+  earlyRegistrationEndTS: Date;
+  registrationEndTS: Date;
+}
 
 export class EventModel extends EventModelBase {
-    constructor() {
-        super();
-        this.categoryModels = [];
-    }
+  constructor() {
+    super();
+    this.categoryModels = [];
+  }
 
-    description: string;
-    address: string;
-    imgPath: string;
-    urlPrefix: string;
-    descritpion : string;
-    tncFilePath: string;
-    cardNumber: string;
-    contactEmail : string;
-    contactPhone : string;
-    fbLink : string;
-    vkLink : string;
-    additionalData: string;
-    promoCodeEnabled: boolean;
-    promoCodeListPath: string
-    earlyRegistrationPrice: number;
-    lateRegistrationPrice: number;
-    earlyRegistrationPriceForMembers: number;
-    lateRegistrationPriceForMembers: number;
-    categoryModels: CategoryModel[];
-};
+  description: string;
+  address: string;
+  imgPath: string;
+  urlPrefix: string;
+  descritpion: string;
+  tncFilePath: string;
+  cardNumber: string;
+  contactEmail: string;
+  contactPhone: string;
+  fbLink: string;
+  vkLink: string;
+  additionalData: string;
+  promoCodeEnabled: boolean;
+  promoCodeListPath: string;
+  earlyRegistrationPrice: number;
+  lateRegistrationPrice: number;
+  earlyRegistrationPriceForMembers: number;
+  lateRegistrationPriceForMembers: number;
+  categoryModels: CategoryModel[];
+}
 
 export class EventPreviewModel extends EventModelBase {
-    constructor() {
-        super();
-    }
-};
+  constructor() {
+    super();
+  }
+}
 
+export class EventDashboardModel extends EventModelBase {
+  constructor() {
+    super();
+  }
+  isBracketsCreated: boolean;
+  correctionsEnabled: boolean;
+  participantListsPublished: boolean;
+  bracketPublished: boolean;
+}

@@ -29,6 +29,7 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IFederationMembershipService _federationMembershipService;
         private readonly IPromoCodeService _promoCodeService;
         private readonly IFederationService _federationService;
+        private readonly IMatchService _matchService;
 
         #endregion
 
@@ -41,7 +42,8 @@ namespace TRNMNT.Core.Services.Impl
             IFederationMembershipService federationMembershipService,
             IFileService fileService,
             IPromoCodeService promoCodeService,
-            IFederationService federationService
+            IFederationService federationService,
+            IMatchService matchService
         )
         {
             _repository = eventRepository;
@@ -51,6 +53,7 @@ namespace TRNMNT.Core.Services.Impl
             _fileService = fileService;
             _promoCodeService = promoCodeService;
             _federationService = federationService;
+            _matchService = matchService;
         }
 
         #endregion
@@ -102,7 +105,8 @@ namespace TRNMNT.Core.Services.Impl
             return await _repository.GetByIDAsync(id);
         }
 
-        public bool IsCorrectionAllowed(Event _event){
+        public bool IsCorrectionAllowed(Event _event)
+        {
             return DateTime.UtcNow < _event.RegistrationEndTS.AddHours(18);
         }
 
@@ -170,9 +174,36 @@ namespace TRNMNT.Core.Services.Impl
             }
         }
 
-        public async Task<bool> IsEventUrlPrefixExistAsync(string prefix)
+        public async Task<bool> IsEventUrlPrefixExistAsync(Guid eventId, string prefix)
         {
-            return await _repository.GetAll().AnyAsync();
+            var restrictedUrls = new List<string>() { "admin", "uabjj", "bjj" };
+
+            return await _repository.GetAll(e => e.UrlPrefix.Equals(prefix, StringComparison.OrdinalIgnoreCase) && e.EventId != eventId).AnyAsync() ||
+                restrictedUrls.Contains(prefix);
+        }
+
+        public async Task DisableCorrectionsAsync(Guid eventId)
+        {
+            var _event = await _repository.GetByIDAsync(eventId);
+            _event.CorrectionsEnabled = false;
+            _repository.Update(_event);
+        }
+
+        public async Task PublishBracketsAsync(Guid eventId)
+        {
+            var _event = await _repository.GetByIDAsync(eventId);
+            if (!_event.CorrectionsEnabled && await _matchService.AreMatchesCreatedForEvent(eventId))
+            {
+                _event.BracketsPublished = true;
+                _repository.Update(_event);
+            }
+        }
+
+        public async Task PublishParticipantListsAsync(Guid eventId)
+        {
+            var _event = await _repository.GetByIDAsync(eventId);
+            _event.ParticipantListsPublished = true;
+            _repository.Update(_event);
         }
 
         public async Task SaveEventImageAsync(Stream stream, string eventId)

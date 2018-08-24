@@ -32,21 +32,19 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns></returns>
         Task<EventModelFull> GetEventInfoAsync(Guid? id);
 
-         /// <summary>
+        /// <summary>
         /// Gets the event asynchronous.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         Task<Event> GetEventAsync(Guid? id);
 
-        
         /// <summary>
         /// Returns if correction allowed.
         /// </summary>
         /// <param name="_event">The event object.</param>
         /// <returns></returns>
         bool IsCorrectionAllowed(Event _event);
-
 
         /// <summary>
         /// Gets the events for owner asynchronous.
@@ -67,9 +65,28 @@ namespace TRNMNT.Core.Services.Interface
         /// Checks is event url prefix is already used
         /// </summary>
         /// <param name="prefix">URL prefix</param>
+        /// <param name="eventId">Event Id.</param>
         /// <returns>True if prefix is already used</returns>
-        Task<bool> IsEventUrlPrefixExistAsync(string prefix);
+        Task<bool> IsEventUrlPrefixExistAsync(Guid eventId, string prefix);
 
+        /// <summary>
+        /// Disabling corrections for participants for the event asynchronous
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        Task DisableCorrectionsAsync(Guid eventId);
+        /// <summary>
+        /// Publish brackets (set value to true) asynchronous
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        Task PublishBracketsAsync(Guid eventId);
+        /// <summary>
+        /// Publish lists of participants (set value to true) asynchronous
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        Task PublishParticipantListsAsync(Guid eventId);
         /// <summary>
         /// Saves event image
         /// </summary>
@@ -117,7 +134,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="includeMembership">Is membership price included</param>
         /// <returns>Price</returns>
         Task<PriceModel> GetPriceAsync(Guid EventId, string userId, bool includeMembership);
-        
+
         /// <summary>
         /// Returns price for team participation.
         /// </summary>

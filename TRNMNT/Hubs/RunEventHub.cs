@@ -48,7 +48,7 @@ namespace TRNMNT.Web.Hubs
             var errorMessage = $"Bracket model for weightDivision with id {weightDivisionId} could not be found or created!";
             try
             {
-                var bracketModel = await _bracketService.RunWeightDivision(weightDivisionId);
+                var bracketModel = await _bracketService.RunWeightDivisionAsync(weightDivisionId);
                 if (bracketModel == null)
                 {
                     _logger.LogError(errorMessage);

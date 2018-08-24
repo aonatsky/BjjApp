@@ -13,10 +13,32 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="categoryId">The category identifier.</param>
         /// <returns></returns>
-        Task<IEnumerable<WeightDivisionModelBase>> GetWeightDivisionModelsByCategoryIdAsync(Guid categoryId);
-        Task<IEnumerable<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId, bool includeCategory = false);
-        Task<IEnumerable<WeightDivisionModel>> GetWeightDivisionModelsByEventIdAsync(Guid eventId, bool isWithAbsolute);
+        Task<List<WeightDivisionModelBase>> GetWeightDivisionModelsByCategoryIdAsync(Guid categoryId);
+        Task<List<WeightDivision>> GetWeightDivisionsByCategoryIdAsync(Guid categoryId, bool includeCategory = false);
+        
+        /// <summary>
+        /// Gets weightdivision model by event Id asynchronous
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="isWithAbsolute"></param>
+        /// <returns></returns>
+        Task<List<WeightDivisionModel>> GetWeightDivisionModelsByEventIdAsync(Guid eventId, bool isWithAbsolute);
+        
+        /// <summary>
+        /// Gets weightdivision by event Id asynchronous
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="isWithAbsolute"></param>
+        /// <returns></returns>
+        Task<List<WeightDivision>> GetWeightDivisionsByEventIdAsync(Guid eventId, bool isWithAbsolute);
+        
         Task<WeightDivision> GetAbsoluteWeightDivisionAsync(Guid categoryId);
+        /// <summary>
+        /// Gets weightdivision by Id asynchronous.
+        /// </summary>
+        /// <param name="weightDivisionId"></param>
+        /// <param name="includeCategory"></param>
+        /// <returns></returns>
         Task<WeightDivision> GetWeightDivisionAsync(Guid weightDivisionId, bool includeCategory = false);
 
         Task SetWeightDivisionStartedAsync(Guid weightDivisionId);

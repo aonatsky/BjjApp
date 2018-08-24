@@ -49,11 +49,15 @@ namespace TRNMNT.Data.Entities
         public Guid FederationId { get; set; }
         public bool PromoCodeEnabled { get; set; }
         public string PromoCodeListPath { get; set; }
-        public string PaymentType {get;set;}
+        public string PaymentType { get; set; }
         public int EarlyRegistrationPrice { get; set; }
         public int LateRegistrationPrice { get; set; }
         public int EarlyRegistrationPriceForMembers { get; set; }
         public int LateRegistrationPriceForMembers { get; set; }
+
+        public bool CorrectionsEnabled { get; set; }
+        public bool ParticipantListsPublished { get; set; }
+        public bool BracketsPublished { get; set; }
 
         [ForeignKey("OwnerId")]
         public User Owner { get; set; }
