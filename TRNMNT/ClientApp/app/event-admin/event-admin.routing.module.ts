@@ -42,6 +42,11 @@ export const eventAdminRoutes: Routes = [
         component: EventManagementComponent
       },
       {
+        path: 'dashboard/:id',
+        component: EventDashboardComponent
+      },
+      
+      {
         path: 'run/:id',
         component: EventRunComponent
       },

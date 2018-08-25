@@ -93,7 +93,7 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(async() =>(await _eventService.GetEventInfoAsync(GetEventId()), HttpStatusCode.OK), true);
         }
 
-        [Authorize, HttpGet("[action/{id}")]
+        [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> IsPrefixExists(Guid id, [FromQuery(Name = "prefix")] string prefix)
         {
             return await HandleRequestWithDataAsync(async() =>
@@ -102,16 +102,16 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize, HttpGet("[action/{id}")]
+        [Authorize, HttpGet("[action]/{id}")]
         public async Task<IActionResult> GetEventDashboardData(Guid id)
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                return await _eventService.IsEventUrlPrefixExistAsync(id, prefix);
+                return await _eventService.GetEventDashboardDataAsync(id);
             });
         }
 
-        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action/{id}]")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
         public async Task<IActionResult> DisableCorrections(Guid id)
         {
             return await HandleRequestAsync(async() =>
@@ -120,7 +120,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action/{id}]")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
         public async Task<IActionResult> PublishParticipantLists(Guid id)
         {
             return await HandleRequestAsync(async() =>
@@ -129,7 +129,7 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action/{id}]")]
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
         public async Task<IActionResult> PublishBrackets(Guid id)
         {
             return await HandleRequestAsync(async() =>

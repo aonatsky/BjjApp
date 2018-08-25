@@ -1,5 +1,5 @@
 ﻿<trnmnt-page [title]="'Event Overview'|translate" contentClass="ui-g-8 ui-g-offset-2">
-    <div class="ui-widget-content ui-g-12 event-plate" *ngFor="let event of events">
+    <div class="ui-widget-content ui-g-12 event-plate" *ngFor="let event of events" (click)="dashboard(event.eventId)">
         <div class="ui-g-6">
             <b>{{event.title}}</b>
         </div>

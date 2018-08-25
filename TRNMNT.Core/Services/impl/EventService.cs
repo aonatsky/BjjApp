@@ -29,8 +29,8 @@ namespace TRNMNT.Core.Services.Impl
         private readonly IFederationMembershipService _federationMembershipService;
         private readonly IPromoCodeService _promoCodeService;
         private readonly IFederationService _federationService;
-        private readonly IMatchService _matchService;
-        private readonly IRepository<Participant> _participnatRepository;
+        private readonly IRepository<Participant> _participantRepository;
+        private IRepository<Match> _matchRepository;
 
         #endregion
 
@@ -40,12 +40,12 @@ namespace TRNMNT.Core.Services.Impl
             IRepository<Event> eventRepository,
             IRepository<Category> categoryRepository,
             IRepository<WeightDivision> weightDivisionRepository,
-            IRepository<Participant> participnatRepository,
+            IRepository<Participant> participantRepository,
             IFederationMembershipService federationMembershipService,
             IFileService fileService,
             IPromoCodeService promoCodeService,
             IFederationService federationService,
-            IMatchService matchService
+            IRepository<Match> matchRepository
         )
         {
             _eventRepository = eventRepository;
@@ -55,8 +55,8 @@ namespace TRNMNT.Core.Services.Impl
             _fileService = fileService;
             _promoCodeService = promoCodeService;
             _federationService = federationService;
-            _matchService = matchService;
-            _participnatRepository = participnatRepository
+            _matchRepository = matchRepository;
+            _participantRepository = participantRepository;
         }
 
         #endregion
@@ -195,7 +195,7 @@ namespace TRNMNT.Core.Services.Impl
         public async Task PublishBracketsAsync(Guid eventId)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
-            if (!_event.CorrectionsEnabled && await _matchService.AreMatchesCreatedForEvent(eventId))
+            if (!_event.CorrectionsEnabled && await AreMatchesCreatedForEvent(eventId))
             {
                 _event.BracketsPublished = true;
                 _eventRepository.Update(_event);
@@ -360,7 +360,7 @@ namespace TRNMNT.Core.Services.Impl
             {
                 throw new BusinessException("ERROR.EVENT_NOT_FOUND");
             }
-            var participantGroups = await _participnatRepository.GetAll(p => p.EventId == id && p.IsActive)
+            var participantGroups = await _participantRepository.GetAll(p => p.EventId == id && p.IsActive)
                 .Include(p => p.Category).Include(p => p.WeightDivision)
                 .GroupBy(x => new { CName = x.Category.Name, WDName = x.WeightDivision.Name })
                 .Select(g => new CategoryWeightDivisionParticipants { CategoryName = g.Key.CName, WeightDivisionName = g.Key.WDName, ParticipantsCount = g.Count() }).ToListAsync();
@@ -369,13 +369,18 @@ namespace TRNMNT.Core.Services.Impl
                 EventId = _event.EventId,
                     EventDate = _event.EventDate,
                     Title = _event.Title,
-                    BracketsCreated = await _matchService.AreMatchesCreatedForEvent(id),
+                    BracketsCreated = await AreMatchesCreatedForEvent(id),
                     BracketsPublished = _event.BracketsPublished,
                     ParticipantListsPublished = _event.ParticipantListsPublished,
                     EventStatus = GetEventStatus(_event),
                     CorrectionsEnabled = _event.CorrectionsEnabled,
                     ParticipantGroups = participantGroups
             };
+        }
+
+        private async Task<bool> AreMatchesCreatedForEvent(Guid eventId)
+        {
+            return await _matchRepository.GetAll(m => m.Category.EventId == eventId).AnyAsync();
         }
 
         private string GetEventStatus(Event _event)

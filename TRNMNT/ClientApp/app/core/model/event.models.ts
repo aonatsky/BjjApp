@@ -56,6 +56,6 @@ export class EventDashboardModel extends EventModelBase {
 
 export class CategoryWeightDivisionParticipants {
   categoryName: string;
-  WeightDivisionName: string;
-  ParticipantsCount: number;
+  weightDivisionName: string;
+  participantsCount: number;
 }

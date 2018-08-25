@@ -61,6 +61,9 @@ export class RouterService {
     this.router.navigateByUrl(`/event-admin/management/${id}`);
   }
 
+  goToEventDashboard(id: string) {
+    this.router.navigateByUrl(`/event-admin/dashboard/${id}`);
+  }
   goToEventRun(id: string) {
     this.router.navigateByUrl(`/event-admin/run/${id}`);
   }

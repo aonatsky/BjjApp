@@ -21,7 +21,7 @@ export class EventEditComponent implements OnInit {
   categoryCount: number = 0;
   lastStep: number = 3;
   cacheRefreshToken: string;
-
+  isUrlPrefixExists: boolean = false; 
   @ViewChild('mainDataForm')
   mainDataForm: NgForm;
   @ViewChild('priceForm')
@@ -153,6 +153,8 @@ export class EventEditComponent implements OnInit {
     this.eventService.downloadEventTncFile(this.eventModel.tncFilePath).subscribe();
   }
 
+  
+
   getEventImageUrl(): string {
     return `${this.eventModel.imgPath}?${this.cacheRefreshToken}`;
   }
@@ -166,5 +168,9 @@ export class EventEditComponent implements OnInit {
       rejectLabel: this.translateService.instant('COMMON.NO'),
       accept: () => method()
     });
+  }
+
+  checkIfPrefixExist(){
+    this.eventService.isPrefixExists(this.eventModel.eventId,this.eventModel.urlPrefix).subscribe(r => this.isUrlPrefixExists = r);
   }
 }

@@ -17,14 +17,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns></returns>
         Task<List<Match>> GetMatchesAsync(Guid categoryId, Guid weightDivisionId);
 
-         /// <summary>
-        /// Creates matches for corresponding category/weightdivision asynchronous
-        /// </summary>
-        /// <param name="weightDivisionId"></param>
-        /// <param name="categoryId"></param>
-        /// <returns></returns>
-        Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId);
-
         /// <summary>
         /// Updates matches from models asynchronous
         /// </summary>

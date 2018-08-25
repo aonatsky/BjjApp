@@ -28,6 +28,9 @@ export class EventListComponent implements OnInit {
   runEvent(id: string) {
     this.routerService.goToEventRun(id);
   }
+  dashboard(id: string) {
+    this.routerService.goToEventDashboard(id);
+  }
 
   ngOnInit() {
     this.eventService.getEventsForOwner().subscribe(res => (this.events = res));

@@ -40,7 +40,7 @@ export class CrudComponent implements OnInit, OnChanges {
   @Input()
   readonly columns: ICrudColumn[] = [];
   @Input()
-  readonly columnOptions: IColumnOptions;
+  readonly columnOptions: IColumnOptions = {};
   @Input()
   readonly editEnabled: boolean = false;
   @Input()

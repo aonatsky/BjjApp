@@ -26,11 +26,14 @@
                             <div class="ui-g-6 ui-sm-8 ui-fluid">
                                 <input pInputText [(ngModel)]="eventModel.urlPrefix"
                                     pattern="[^_\W]+" required
-                                    name="url" />
+                                    name="url" (blur)="checkIfPrefixExist()" />
                             </div>
                             <div class="ui-g-3 ui-sm-4 ui-fluid">
                                 <label>trnmnt.pro</label>
                             </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-state-highlight " *ngIf=isUrlPrefixExists>{{'EVENT_EDIT.URL_PREFIX_ALREADY_USED'|translate}}</div>
                         </div>
                         <div class="ui-g">
                             <div class="ui-g-3 ui-fluid">

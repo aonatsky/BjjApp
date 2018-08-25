@@ -75,12 +75,16 @@ export class EventService {
     );
   }
 
-  getEventDashboardData(eventId : AAGUID) {
+  getEventDashboardData(eventId: AAGUID) {
     return this.httpService.get<EventDashboardModel>(ApiMethods.event.getEventDashboardData + '/' + eventId);
   }
 
   createEvent(): Observable<string> {
     return this.httpService.get(ApiMethods.event.createEvent);
+  }
+
+  isPrefixExists(eventId: string, prefix: string): Observable<boolean> {
+    return this.httpService.get<boolean>(ApiMethods.event.isPrefixExists + '/' + eventId, {prefix}, '', false);
   }
 
   getPrice(includeMembership: boolean): Observable<PriceModel> {

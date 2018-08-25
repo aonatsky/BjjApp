@@ -82,12 +82,27 @@ export const data = {
   'RESULTS':'Результати',
   'SELECT_WEIGHT_DIVISION':'Виберіть вагову категорію',
   'SELECT_CATEGORY':'Виберіть категорію',
+  'PARTICIPANT_COUNT':'Кількість учасників',
   'STATUS':{
     'REGISTRATION_NOT_STARTED':'Реєстрація не почалась',
     'EARLY_REGISTRATION':'Рання реєстрація',
     'LATE_REGISTRATION':'Пізня реєстрація',
     'REGISTRATION_ENDED':'Реєстрація закінчилась'
   }
+},
+
+'EVENT_DASHBOARD':{
+  'EDIT_EVENT':'Корегування події',
+  'EDIT_EVENT_DESCRIPTION':'Корегування події _DESCRIPTION',
+  'MANAGE_EVENT':'Управління подією',
+  'MANAGE_EVENT_DESCRIPTION':'Управління подією _DESCRIPTION',
+  'RUN_EVENT':'Провести події',
+  'RUN_EVENT_DESCRIPTION':'Провести події _DESCRIPTION',
+  'EVENT_STATUS':'Статус події',
+  'CORRECTIONS_ENABLED':'Корегування дозволені',
+  'BRACKETS_CREATED':'Турнірні сітки створені',
+  'BRACKETS_PUBLISHED':'Турнірні опубліковані',
+  'PARTICIPANT_LISTS_PUBLISHED':'Списки опубліковані',
 },
 'FEDERATION_EDIT':{
   'DESCRIPTION':'Опис',
