@@ -29,6 +29,7 @@ export const ApiMethods = Object.freeze({
     disableCorrections: 'api/event/disableCorrections',
     publishParticipantLists: 'api/event/publishParticipantLists',
     publishBrackets: 'api/event/publishBrackets',
+    getEventDashboardData: 'api/event/getEventDashboardData'
   },
   team: {
     getTeamsForEvent: 'api/team/getTeamsForEvent',

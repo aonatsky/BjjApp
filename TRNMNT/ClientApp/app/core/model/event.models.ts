@@ -46,8 +46,16 @@ export class EventDashboardModel extends EventModelBase {
   constructor() {
     super();
   }
-  isBracketsCreated: boolean;
+  bracketsCreated: boolean;
   correctionsEnabled: boolean;
   participantListsPublished: boolean;
   bracketPublished: boolean;
+  eventStatus: boolean;
+  participantGroups: CategoryWeightDivisionParticipants[]
+}
+
+export class CategoryWeightDivisionParticipants {
+  categoryName: string;
+  WeightDivisionName: string;
+  ParticipantsCount: number;
 }

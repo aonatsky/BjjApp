@@ -102,6 +102,15 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
+        [Authorize, HttpGet("[action/{id}")]
+        public async Task<IActionResult> GetEventDashboardData(Guid id)
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                return await _eventService.IsEventUrlPrefixExistAsync(id, prefix);
+            });
+        }
+
         [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action/{id}]")]
         public async Task<IActionResult> DisableCorrections(Guid id)
         {

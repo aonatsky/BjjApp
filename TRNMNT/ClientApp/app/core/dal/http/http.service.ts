@@ -20,16 +20,14 @@ export class HttpService {
     private notificationService: NotificationService,
     private authService: AuthService,
     private http: HttpClient
-  ) {
-    
-  }
+  ) {}
 
   //#region Public Methods
 
-  get<T>(name: string, paramsHolder?: object, notifyMessage?: string): Observable<any> {
+  get<T>(name: string, paramsHolder?: object, notifyMessage?: string, showLoader: boolean = true): Observable<any> {
     return this.handleRequest(
       () => this.http.get<T>(name, { params: this.convertParams(paramsHolder) }),
-      notifyMessage
+      notifyMessage, showLoader
     );
   }
 
@@ -92,9 +90,16 @@ export class HttpService {
 
   //#region Private Methods
 
-  private handleRequest(httpHandler: () => Observable<any>, notifyMessage?: string): Observable<any> {
-    this.loaderService.showLoader();
-    return httpHandler().pipe(map(r => this.convertDate(r)),
+  private handleRequest(
+    httpHandler: () => Observable<any>,
+    notifyMessage?: string,
+    showLoader: boolean = true
+  ): Observable<any> {
+    if (showLoader) {
+      this.loaderService.showLoader();
+    }
+    return httpHandler().pipe(
+      map(r => this.convertDate(r)),
       catchError((error: Response | any) => this.handleErrorRepeater(error, () => httpHandler(), notifyMessage)),
       finalize(() => this.loaderService.hideLoader())
     );

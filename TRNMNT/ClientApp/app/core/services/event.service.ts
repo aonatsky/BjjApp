@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { LoggerService } from './logger.service';
 import { HttpService } from '../dal/http/http.service';
-import { EventModel, EventPreviewModel } from '../model/event.models';
+import { EventModel, EventPreviewModel, EventDashboardModel } from '../model/event.models';
 import { ApiMethods } from '../dal/consts/api-methods.consts';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -75,15 +75,19 @@ export class EventService {
     );
   }
 
+  getEventDashboardData(eventId : AAGUID) {
+    return this.httpService.get<EventDashboardModel>(ApiMethods.event.getEventDashboardData + '/' + eventId);
+  }
+
   createEvent(): Observable<string> {
     return this.httpService.get(ApiMethods.event.createEvent);
   }
 
-  getPrice(includeMembership : boolean): Observable<PriceModel> {
-    return this.httpService.get<PriceModel>(ApiMethods.event.getPrice, {includeMembership});
+  getPrice(includeMembership: boolean): Observable<PriceModel> {
+    return this.httpService.get<PriceModel>(ApiMethods.event.getPrice, { includeMembership });
   }
 
-  getTeamPrice(participants : ParticipantRegistrationModel[]): Observable<PriceModel> {
+  getTeamPrice(participants: ParticipantRegistrationModel[]): Observable<PriceModel> {
     return this.httpService.post<PriceModel>(ApiMethods.event.getTeamPrice, participants);
   }
 

@@ -81,7 +81,13 @@ export const data = {
   'BRACKETS':'Турнірні таблиці',
   'RESULTS':'Результати',
   'SELECT_WEIGHT_DIVISION':'Виберіть вагову категорію',
-  'SELECT_CATEGORY':'Виберіть категорію'
+  'SELECT_CATEGORY':'Виберіть категорію',
+  'STATUS':{
+    'REGISTRATION_NOT_STARTED':'Реєстрація не почалась',
+    'EARLY_REGISTRATION':'Рання реєстрація',
+    'LATE_REGISTRATION':'Пізня реєстрація',
+    'REGISTRATION_ENDED':'Реєстрація закінчилась'
+  }
 },
 'FEDERATION_EDIT':{
   'DESCRIPTION':'Опис',

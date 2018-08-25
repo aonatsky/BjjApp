@@ -62,6 +62,13 @@ namespace TRNMNT.Core.Services.Interface
         Task<EventModelBase> GetEventBaseInfoAsync(Guid id);
 
         /// <summary>
+        /// Get event dashboard data
+        /// </summary>
+        /// <param name="id">Event Id</param>
+        /// <returns></returns>
+        Task<EventDashboardModel> GetEventDashboardDataAsync(Guid id);
+
+        /// <summary>
         /// Checks is event url prefix is already used
         /// </summary>
         /// <param name="prefix">URL prefix</param>
