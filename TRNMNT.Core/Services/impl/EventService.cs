@@ -185,27 +185,27 @@ namespace TRNMNT.Core.Services.Impl
                 restrictedUrls.Contains(prefix);
         }
 
-        public async Task DisableCorrectionsAsync(Guid eventId)
+        public async Task SetCorrectionsEnabledAsync(Guid eventId, bool value)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
-            _event.CorrectionsEnabled = false;
+            _event.CorrectionsEnabled = value;
             _eventRepository.Update(_event);
         }
 
-        public async Task PublishBracketsAsync(Guid eventId)
+        public async Task SetBracketsPublishAsync(Guid eventId, bool value)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
             if (!_event.CorrectionsEnabled && await AreMatchesCreatedForEvent(eventId))
             {
-                _event.BracketsPublished = true;
+                _event.BracketsPublished = value;
                 _eventRepository.Update(_event);
             }
         }
 
-        public async Task PublishParticipantListsAsync(Guid eventId)
+        public async Task SetParticipantListsPublishAsync(Guid eventId, bool value)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
-            _event.ParticipantListsPublished = true;
+            _event.ParticipantListsPublished = value;
             _eventRepository.Update(_event);
         }
 

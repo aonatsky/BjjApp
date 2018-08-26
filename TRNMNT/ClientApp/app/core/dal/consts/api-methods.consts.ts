@@ -27,9 +27,9 @@ export const ApiMethods = Object.freeze({
     isPrefixExists: 'api/event/isPrefixExists',
     getPrice: 'api/event/getPrice',
     getTeamPrice: 'api/event/getTeamPrice',
-    disableCorrections: 'api/event/disableCorrections',
-    publishParticipantLists: 'api/event/publishParticipantLists',
-    publishBrackets: 'api/event/publishBrackets',
+    setCorrectionsEnabled: 'api/event/SetCorrectionsEnabled',
+    setParticipantListsPublish: 'api/event/SetParticipantListsPublish',
+    setBracketsPublish: 'api/event/SetBracketsPublish',
     getEventDashboardData: 'api/event/getEventDashboardData'
   },
   team: {

@@ -112,29 +112,29 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
-        public async Task<IActionResult> DisableCorrections(Guid id)
+        public async Task<IActionResult> SetCorrectionsEnabled(Guid id, [FromQuery(Name = "value")] bool value)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _eventService.DisableCorrectionsAsync(id);
+                await _eventService.SetCorrectionsEnabledAsync(id, value);
             });
         }
 
         [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
-        public async Task<IActionResult> PublishParticipantLists(Guid id)
+        public async Task<IActionResult> SetParticipantListsPublish(Guid id, [FromQuery(Name = "value")] bool value)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _eventService.PublishParticipantListsAsync(id);
+                await _eventService.SetParticipantListsPublishAsync(id, value);
             });
         }
 
         [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
-        public async Task<IActionResult> PublishBrackets(Guid id)
+        public async Task<IActionResult> SetBracketsPublish(Guid id, [FromQuery(Name = "value")] bool value)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _eventService.PublishBracketsAsync(id);
+                await _eventService.SetBracketsPublishAsync(id, value);
             });
         }
 

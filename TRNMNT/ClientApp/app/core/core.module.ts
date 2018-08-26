@@ -42,7 +42,8 @@ import {
   TabViewModule,
   ToggleButtonModule,
   ConfirmDialogModule,
-  TooltipModule
+  TooltipModule,
+  InputSwitchModule
 } from 'primeng/primeng';
 import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';
@@ -96,7 +97,8 @@ import { FederationService } from './services/federation.service';
     RadioButtonModule,
     MenubarModule,
     TranslateModule,
-    TooltipModule
+    TooltipModule,
+    InputSwitchModule
   ],
   declarations: [MinuteSecondsPipe, ToDictionaryPipe, FormatTimerPipe],
   providers: [
@@ -159,7 +161,8 @@ import { FederationService } from './services/federation.service';
     RadioButtonModule,
     TooltipModule,
     MenubarModule,
-    FormatTimerPipe
+    FormatTimerPipe,
+    InputSwitchModule
   ]
 })
 export class CoreModule {}

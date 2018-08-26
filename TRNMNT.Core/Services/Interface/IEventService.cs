@@ -77,23 +77,26 @@ namespace TRNMNT.Core.Services.Interface
         Task<bool> IsEventUrlPrefixExistAsync(Guid eventId, string prefix);
 
         /// <summary>
-        /// Disabling corrections for participants for the event asynchronous
+        /// Sets corrections availability for participants for the event asynchronous
         /// </summary>
         /// <param name="eventId"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        Task DisableCorrectionsAsync(Guid eventId);
+        Task SetCorrectionsEnabledAsync(Guid eventId, bool value);
         /// <summary>
-        /// Publish brackets (set value to true) asynchronous
+        /// Set publish brackets status asynchronous
         /// </summary>
         /// <param name="eventId"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        Task PublishBracketsAsync(Guid eventId);
+        Task SetBracketsPublishAsync(Guid eventId, bool value);
         /// <summary>
-        /// Publish lists of participants (set value to true) asynchronous
+        /// Sets publish lists of participants status asynchronous
         /// </summary>
         /// <param name="eventId"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        Task PublishParticipantListsAsync(Guid eventId);
+        Task SetParticipantListsPublishAsync(Guid eventId, bool value);
         /// <summary>
         /// Saves event image
         /// </summary>

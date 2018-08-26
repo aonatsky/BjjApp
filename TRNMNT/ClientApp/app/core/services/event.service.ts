@@ -84,7 +84,7 @@ export class EventService {
   }
 
   isPrefixExists(eventId: string, prefix: string): Observable<boolean> {
-    return this.httpService.get<boolean>(ApiMethods.event.isPrefixExists + '/' + eventId, {prefix}, '', false);
+    return this.httpService.get<boolean>(ApiMethods.event.isPrefixExists + '/' + eventId, { prefix }, '', false);
   }
 
   getPrice(includeMembership: boolean): Observable<PriceModel> {
@@ -93,6 +93,18 @@ export class EventService {
 
   getTeamPrice(participants: ParticipantRegistrationModel[]): Observable<PriceModel> {
     return this.httpService.post<PriceModel>(ApiMethods.event.getTeamPrice, participants);
+  }
+
+  setCorrectionsEnabled(eventId: AAGUID, value: boolean): Observable<any> {
+    return this.httpService.post(ApiMethods.event.setCorrectionsEnabled + '/' + eventId, { value });
+  }
+
+  setParticipantListsPublish(eventId: AAGUID, value: boolean): Observable<any> {
+    return this.httpService.post(ApiMethods.event.setParticipantListsPublish + '/' + eventId, { value });
+  }
+
+  setBracketsPublish(eventId: AAGUID, value: boolean): Observable<any> {
+    return this.httpService.post(ApiMethods.event.setBracketsPublish + '/' + eventId, { value });
   }
 
   //private methods
