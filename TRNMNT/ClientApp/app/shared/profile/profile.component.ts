@@ -41,7 +41,6 @@ export class ProfileComponent implements OnInit {
   }
 
   save() {
-    debugger;
     this.userService.updateUser(this.userModel).subscribe();
   }
 

@@ -25,6 +25,7 @@ namespace TRNMNT.Web.Controllers
 
         private readonly IBracketService _bracketService;
         private readonly ICategoryService _categoryService;
+        private readonly IMatchService _matchService;
 
         #endregion
 
@@ -36,10 +37,12 @@ namespace TRNMNT.Web.Controllers
             IWeightDivisionService weightDivisionService,
             IBracketService bracketService,
             ICategoryService categoryService,
+            IMatchService matchService,
             IConfiguration configuration) : base(logger, userService, eventService, context, configuration)
         {
             _bracketService = bracketService;
             _categoryService = categoryService;
+            this._matchService = matchService;
         }
 
         #region Public Methods
@@ -62,11 +65,31 @@ namespace TRNMNT.Web.Controllers
 
         [HttpGet("[action]/{eventId}")]
         [Authorize(Roles = "FederationOwner, Owner, Admin")]
+        public async Task<IActionResult> AreBracketsCreated(Guid eventId)
+        {
+            return await HandleRequestWithDataAsync(async() =>
+            {
+                return await _matchService.AreMatchesCreatedForEventAsync(eventId);
+            });
+        }
+
+        [HttpPost("[action]/{eventId}")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin")]
         public async Task<IActionResult> CreateBrackets(Guid eventId)
         {
             return await HandleRequestAsync(async() =>
             {
                 await _bracketService.CreateBracketsForEventAsync(eventId);
+            });
+        }
+
+        [HttpPost("[action]/{eventId}")]
+        [Authorize(Roles = "FederationOwner, Owner, Admin")]
+        public async Task<IActionResult> DeleteBrackets(Guid eventId)
+        {
+            return await HandleRequestAsync(async() =>
+            {
+                await _bracketService.DeleteBracketsForEventAsync(eventId);
             });
         }
 

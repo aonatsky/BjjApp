@@ -25,6 +25,13 @@ namespace TRNMNT.Core.Services.Interface
         /// <returns></returns>
         Task CreateBracketsForEventAsync(Guid eventId);
 
+        /// <summary>
+        /// Deletes all matches for event
+        /// </summary>
+        /// <param name="eventId">Event Id.</param>
+        /// <returns></returns>
+        Task DeleteBracketsForEventAsync(Guid eventId);
+
         ///<summary>
         /// Returns bracket for weightdivision
         /// </summary>

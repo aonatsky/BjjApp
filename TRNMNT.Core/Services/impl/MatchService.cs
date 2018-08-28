@@ -39,18 +39,20 @@ namespace TRNMNT.Core.Services.impl
             if (!matches.Any())
             {
                 matches = await CreateMatchesAsync(categoryId, weightDivisionId);
-                _matchRepository.AddRange(matches);
+
                 return matches;
             }
             return matches;
         }
 
-        private async Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId)
+        public async Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId)
         {
             var participants =
                 await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
             var orderedParticapants = GetParticipantsForBracket(participants.ToList());
-            return CreateMatches(orderedParticapants, weightDivisionId, categoryId);
+            var matches = CreateMatches(orderedParticapants, weightDivisionId, categoryId);
+            _matchRepository.AddRange(matches);
+            return matches;
         }
 
         public async Task UpdateMatchesParticipantsAsync(List<MatchModel> matchModels)
@@ -82,12 +84,14 @@ namespace TRNMNT.Core.Services.impl
                     _matchRepository.Update(match);
                 }
             }
-            else
-            {
-                matches = await CreateMatchesAsync(categoryId, weightDivisionId);
-                matches = ProcessMatches(matches);
-                _matchRepository.AddRange(matches);
-            }
+
+            // CANNOT RUN BRACKET WITHOUT MATCHES CREATED
+            // else
+            // {
+            //     matches = await CreateMatchesAsync(categoryId, weightDivisionId);
+            //     matches = ProcessMatches(matches);
+            //     _matchRepository.AddRange(matches);
+            // }
             return matches;
         }
 
@@ -306,6 +310,11 @@ namespace TRNMNT.Core.Services.impl
 
         private int GetBracketSize(int participantCount)
         {
+            if (participantCount == 0)
+            {
+                return 0;
+            }
+
             if (participantCount == 3)
             {
                 return 3;
@@ -326,6 +335,10 @@ namespace TRNMNT.Core.Services.impl
 
         private List<Participant> GetParticipantsForBracket(List<Participant> participants)
         {
+            if (!participants.Any())
+            {
+                return participants;
+            }
             var bracketSize = GetBracketSize(participants.Count);
             for (var i = 0; i < bracketSize - participants.Count; i++)
             {
@@ -373,6 +386,17 @@ namespace TRNMNT.Core.Services.impl
             Order = order,
             NextMatchId = nextMatchId
             };
+        }
+
+        public async Task<bool> AreMatchesCreatedForEventAsync(Guid eventId)
+        {
+            return await _matchRepository.GetAll(m => m.Category.EventId == eventId).AnyAsync();
+        }
+
+        public async Task DeleteMatchesForEventAsync(Guid eventId)
+        {
+            var matches = await _matchRepository.GetAll(m => m.Category.EventId == eventId).ToListAsync();
+            _matchRepository.DeleteRange(matches);
         }
 
         #endregion

@@ -1,52 +1,54 @@
 ﻿<div class="ui-g">
-    <category-with-division-filter [eventId]="eventId" (onFilterChanged)="setFilter($event)"></category-with-division-filter>
-</div>
-<div class="ui-g">
     <div class="ui-g-12">
-        <button pButton type="button" iconPos="left" icon="fa fa-bars" label="Get Bracket" [disabled]="filter.weightDivisionId == ''" (click)="createBracket();"></button>
-        <button pButton type="button" iconPos="left" icon="fa fa-save" label="Update" [disabled]="!bracket || !isEdited" (click)="updateBracket();"></button>
-        <button pButton type="button" iconPos="left" icon="fa fa-file-excel-o" label="Download" [disabled]="!bracket || isEdited" (click)="downloadBracket();"></button>
+        <p-button [label]="'EVENT_MANAGEMENT.CREATE_BRACKETS' | translate" [disabled]="bracketsCreated" (onClick)="createBrackets()"></p-button>
+        <p-button [label]="'EVENT_MANAGEMENT.DELETE_BRACKETS' | translate" styleClass="ui-button-danger" icon="fa fa-times" [disabled]="!bracketsCreated"
+            (onClick)="deleteBrackets()"></p-button>
     </div>
 </div>
-<div class="ui-g brackets" *ngIf="bracket">
+<div *ngIf="bracketsCreated">
+    <div class="ui-g">
+        <category-with-division-filter [eventId]="eventId" (onFilterChanged)="setFilter($event)"></category-with-division-filter>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <button pButton type="button" iconPos="left" icon="fa fa-bars" label="Get Bracket" [disabled]="filter.weightDivisionId == ''"
+                (click)="createBracket();"></button>
+            <button pButton type="button" iconPos="left" icon="fa fa-save" label="Update" [disabled]="!bracket || !isEdited" (click)="updateBracket();"></button>
+            <button pButton type="button" iconPos="left" icon="fa fa-file-excel-o" label="Download" [disabled]="!bracket || isEdited"
+                (click)="downloadBracket();"></button>
+        </div>
+    </div>
+    <div class="ui-g brackets" *ngIf="bracket">
 
-    <div *ngIf="rounds.length > 1" class="ui-g-10 ui-g-offset-1">
-        <div class="ui-g-4 ui-g-nopad" *ngFor="let col of getColumns();">
-            <div *ngIf="col % 2 == 0">
-                <div *ngFor="let row of getRows();">
-                    <div *ngIf="row % 2 == 0" class="bracket ui-g-12 ui-g-nopad">
-                        <div *ngFor="let num of [1,2]"
-                             class="bracket-participant-plate ui-g-12"
-                             [class.droppable]="dragMode"
-                             [class.buffer]="getDraggable(getMatch(col,row),num) === ''"
-                             [dragEffect]="'move'"
-                             [pDraggable]="getDraggable(getMatch(col,row),num)"
-                             [pDroppable]="getDraggable(getMatch(col,row),num)"
-                             (onDragStart)="dragStart(getMatchIndex(col,row),num)"
-                             (onDrop)="onDrop(getMatchIndex(col,row),num,$event)"
-                             (onDragEnd)="dragEnd()"
-                             (onDragEnter)="dragEnter($event)"
-                             (onDragLeave)="dragLeave($event);">
-                            {{displayParticipantInfo(getMatch(col,row),num)}}
+        <div *ngIf="rounds.length > 1" class="ui-g-10 ui-g-offset-1">
+            <div class="ui-g-4 ui-g-nopad" *ngFor="let col of getColumns();">
+                <div *ngIf="col % 2 == 0">
+                    <div *ngFor="let row of getRows();">
+                        <div *ngIf="row % 2 == 0" class="bracket ui-g-12 ui-g-nopad">
+                            <div *ngFor="let num of [1,2]" class="bracket-participant-plate ui-g-12" [class.droppable]="dragMode" [class.buffer]="getDraggable(getMatch(col,row),num) === ''"
+                                [dragEffect]="'move'" [pDraggable]="getDraggable(getMatch(col,row),num)" [pDroppable]="getDraggable(getMatch(col,row),num)"
+                                (onDragStart)="dragStart(getMatchIndex(col,row),num)" (onDrop)="onDrop(getMatchIndex(col,row),num,$event)"
+                                (onDragEnd)="dragEnd()" (onDragEnter)="dragEnter($event)" (onDragLeave)="dragLeave($event);">
+                                {{displayParticipantInfo(getMatch(col,row),num)}}
+                            </div>
                         </div>
+                        <div *ngIf="row %2 != 0" class="ui-g-12 table-block ui-g-nopad"></div>
                     </div>
-                    <div *ngIf="row %2 != 0" class="ui-g-12 table-block ui-g-nopad"></div>
                 </div>
-            </div>
-            <div *ngIf="col % 2 != 0">
-                <div class="inline-block ui-g-nopad" [ngStyle]="{'width':(100/rounds.length)+'%'}" *ngFor="let round of rounds">
-                    <div *ngFor="let row of getRows();" class="ui-g-12 ui-g-nopad">
-                        <connector [row]="row" [round]="round" [maxRound]="2 * maxRound -1"></connector>
+                <div *ngIf="col % 2 != 0">
+                    <div class="inline-block ui-g-nopad" [ngStyle]="{'width':(100/rounds.length)+'%'}" *ngFor="let round of rounds">
+                        <div *ngFor="let row of getRows();" class="ui-g-12 ui-g-nopad">
+                            <connector [row]="row" [round]="round" [maxRound]="2 * maxRound -1"></connector>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div *ngIf="rounds.length == 1" class="ui-g-10 ui-g-offset-1">
-        <div class="bracket ui-g-4 ui-g-offset-4 ui-g-nopad">
-            <div *ngFor="let num of [1,2]"
-                 class="bracket-participant-plate ui-g-12">
-                {{displayParticipantInfo(getMatch(0,0),num)}}
+        <div *ngIf="rounds.length == 1" class="ui-g-10 ui-g-offset-1">
+            <div class="bracket ui-g-4 ui-g-offset-4 ui-g-nopad">
+                <div *ngFor="let num of [1,2]" class="bracket-participant-plate ui-g-12">
+                    {{displayParticipantInfo(getMatch(0,0),num)}}
+                </div>
             </div>
         </div>
     </div>

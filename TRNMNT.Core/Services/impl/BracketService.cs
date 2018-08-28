@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TRNMNT.Core.Enum;
+using TRNMNT.Core.Helpers.Exceptions;
 using TRNMNT.Core.Model;
 using TRNMNT.Core.Model.Bracket;
 using TRNMNT.Core.Model.Participant;
@@ -58,8 +59,18 @@ namespace TRNMNT.Core.Services.impl
             var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId, false);
             foreach (var weightDivision in weightDivisions)
             {
-                await _matchService.GetMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId);
+                await _matchService.CreateMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId);
             }
+        }
+
+        public async Task DeleteBracketsForEventAsync(Guid eventId)
+        {
+            var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId, false);
+            if (weightDivisions.Any(wd => wd.StartTs != null))
+            {
+                throw new BusinessException("ERROR.EVENT_ALREADY_STARTED");
+            }
+            await _matchService.DeleteMatchesForEventAsync(eventId);
         }
 
         public async Task<BracketModel> RunWeightDivisionAsync(Guid weightDivisionId)

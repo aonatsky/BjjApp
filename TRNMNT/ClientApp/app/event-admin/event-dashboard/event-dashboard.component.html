@@ -1,23 +1,53 @@
-<trnmnt-page *ngIf="model" contentClass='ui-g-12' [useCommonContentStyle]="false"
-  [title]="model.title">
+<trnmnt-page *ngIf="model" contentClass='ui-g-12' [useCommonContentStyle]="true" [title]="model.title">
   <div class="ui-g-4 ui-fluid">
     <div class="ui-g-12 action-box">
-      <p-button class="ui-g-12 ui-g-nopad" (click)="routerService.goToEditEvent(eventId)"
-        label="{{'EVENT_DASHBOARD.EDIT_EVENT' | translate}}"></p-button>
+      <p-button class="ui-g-nopad" (click)="routerService.goToEditEvent(eventId)" label="{{'EVENT_DASHBOARD.EDIT_EVENT' | translate}}"></p-button>
       <div class="ui-g-12">
         {{'EVENT_DASHBOARD.EDIT_EVENT_DESCRIPTION' | translate}}
       </div>
     </div>
     <div class="ui-g-12 action-box">
-      <p-button class="ui-g-12 ui-g-nopad" (click)="routerService.goToEventManagement(eventId)"
-        label="{{'EVENT_DASHBOARD.MANAGE_EVENT' | translate}}"></p-button>
+      <p-button class="ui-g-nopad" (click)="routerService.goToEventManagement(eventId)" label="{{'EVENT_DASHBOARD.MANAGE_EVENT' | translate}}"></p-button>
       <div class="ui-g-12">
         {{'EVENT_DASHBOARD.MANAGE_EVENT_DESCRIPTION' | translate}}
       </div>
     </div>
     <div class="ui-g-12 action-box">
-      <p-button class="ui-g-12 ui-g-nopad" (click)="routerService.goToEventRun(eventId)"
-        label="{{'EVENT_DASHBOARD.RUN_EVENT' | translate}}"></p-button>
+      <div class=ui-g-8>
+        {{'EVENT_DASHBOARD.PARTICIPANT_LISTS_PUBLISHED' | translate}}
+      </div>
+      <div class=" ui-g-4">
+          <p-inputSwitch class="float-right" [(ngModel)]="model.participantListsPublished" (onChange)="setParticipantListsPublished($event)"></p-inputSwitch>
+      </div>
+      <div class="ui-g-12">
+        {{'EVENT_DASHBOARD.PARTICIPANT_LISTS_PUBLISHED_DESCRIPTION' | translate}}
+      </div>
+    </div>
+    <div class="ui-g-12 action-box">
+        <div class=ui-g-8>
+            {{'EVENT_DASHBOARD.CORRECTIONS_ENABLED' | translate}}
+          </div>
+          <div class=" ui-g-4">
+              <p-inputSwitch class="float-right" [(ngModel)]="model.correctionsEnabled" (onChange)="setCorrectionsEnabled($event)" [disabled]="model.correctionsEnabled && (model.bracketsCreated || model.bracketsPublished)"></p-inputSwitch>
+          </div>
+          <div class="ui-g-12">
+              {{'EVENT_DASHBOARD.CORRECTIONS_ENABLED_DESCRIPTION' | translate}}
+            </div>
+    </div>
+    <div class="ui-g-12 action-box">
+        <div class=ui-g-8>
+            {{'EVENT_DASHBOARD.BRACKETS_PUBLISHED' | translate}}
+          </div>
+          <div class=" ui-g-4">
+              <p-inputSwitch class="float-right" [(ngModel)]="model.bracketsPublished" (onChange)="setBracketsPublished($event)" [disabled]="model.correctionsEnabled || !model.bracketsCreated"></p-inputSwitch>
+          </div>
+          <div class="ui-g-12">
+              {{'EVENT_DASHBOARD.BRACKETS_PUBLISHED_DESCRIPTION' | translate}}
+              <a class="btn-link" (click)="routerService.goToEventManagement(eventId,'brackets')">{{'EVENT_DASHBOARD.CREATE_BRACKETS' | translate}}</a>
+            </div>
+    </div>
+    <div class="ui-g-12 action-box">
+      <p-button class="ui-g-nopad" (click)="routerService.goToEventRun(eventId)" label="{{'EVENT_DASHBOARD.RUN_EVENT' | translate}}"></p-button>
       <div class="ui-g-12">
         {{'EVENT_DASHBOARD.RUN_EVENT_DESCRIPTION' | translate}}
       </div>
@@ -31,36 +61,19 @@
     <div class="ui-g-8 bold">
       {{model.eventStatus | translate}}
     </div>
-    <div class=ui-g-4>
-      {{'EVENT_DASHBOARD.CORRECTIONS_ENABLED' | translate}}
-    </div>
-    <div class=" ui-g-8 bold">{{model.correctionsEnabled?
-      ('COMMON.YES' | translate) : ('COMMON.NO' | translate)}}
-    </div>
+
+    
+
     <div class=ui-g-4>
       {{'EVENT_DASHBOARD.BRACKETS_CREATED' | translate}}
     </div>
-    <div class=" ui-g-8 bold">{{model.bracketsCreated?
-      ('COMMON.YES' | translate) : ('COMMON.NO' | translate)}}
-    </div>
-    <div class=ui-g-4>
-      {{'EVENT_DASHBOARD.BRACKETS_PUBLISHED' | translate}}
-    </div>
-    <div class=" ui-g-8 bold">{{model.bracketPublished?
-      ('COMMON.YES' | translate) : ('COMMON.NO' | translate)}}
-    </div>
-    <div class=ui-g-4>
-      {{'EVENT_DASHBOARD.PARTICIPANT_LISTS_PUBLISHED' | translate}}
-    </div>
-    <div class=" ui-g-8 bold">{{model.participantListsPublished?
-      ('COMMON.YES' | translate) : ('COMMON.NO' | translate)}}
+    <div class=" ui-g-8 bold">
+      {{model.bracketsCreated? ('COMMON.YES' | translate) : ('COMMON.NO' | translate)}}
     </div>
     <div class=ui-g-12>
-      {{'EVENT.TOTAL_PARTICIPANTS' | translate}} <span
-        class="bold">{{totalCount}}</span>
+      {{'EVENT.TOTAL_PARTICIPANTS' | translate}} <span class="bold">{{totalCount}}</span>
     </div>
-    <crud #crudComponent [entities]="model.participantGroups"
-      [columns]="columns" sortField="categoryName" [dialogMinWidth]="500"
+    <crud #crudComponent [entities]="model.participantGroups" [columns]="columns" sortField="categoryName" [dialogMinWidth]="500"
       class="ui-g-12" gridMinHeight="350">
     </crud>
 

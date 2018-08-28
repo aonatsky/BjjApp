@@ -49,7 +49,7 @@ export class EventDashboardModel extends EventModelBase {
   bracketsCreated: boolean;
   correctionsEnabled: boolean;
   participantListsPublished: boolean;
-  bracketPublished: boolean;
+  bracketsPublished: boolean;
   eventStatus: boolean;
   participantGroups: CategoryWeightDivisionParticipants[]
 }

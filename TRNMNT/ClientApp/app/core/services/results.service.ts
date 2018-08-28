@@ -18,7 +18,7 @@ export class ResultsService {
     }
 
     getPersonalResultsFile(categoryIds: string[], fileName: string) {
-        return this.httpService.post(ApiMethods.results.getPersonalResultsFile, categoryIds, ResponseContentType.Blob)
+        return this.httpService.post<Blob>(ApiMethods.results.getPersonalResultsFile, categoryIds)
             .pipe(map(r => this.httpService.getExcelFile(r, fileName)));
     }
 }

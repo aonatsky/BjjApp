@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="ui-widget ui-widget-content">
-            <p-tabView>
+            <p-tabView [activeIndex]="activeTabIndex">
                 <p-tabPanel header="{{'EVENT.PARTICIPANTS' | translate}}">
                     <event-management-participants [eventId]="eventId"></event-management-participants>
                 </p-tabPanel>

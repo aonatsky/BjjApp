@@ -43,6 +43,23 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        Task<bool> AreMatchesCreatedForEvent(Guid eventId);
+        Task<bool> AreMatchesCreatedForEventAsync(Guid eventId);
+
+        /// <summary>
+        /// Deletes matches for event async
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        Task DeleteMatchesForEventAsync(Guid eventId);
+
+        /// <summary>
+        /// Creates matches for category and weightdivision
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <param name="weightDivisionId"></param>
+        /// <returns></returns>
+        Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId);
+
+
     }
 }

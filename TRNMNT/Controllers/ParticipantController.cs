@@ -216,11 +216,11 @@ namespace TRNMNT.Web.Controllers
         }
 
         [Authorize(Roles = "FederationOwner, Owner, Admin"), HttpPost("[action]/{participantId}")]
-        public async Task<IActionResult> SetWeightInStatus(Guid participantId, [FromBody] SimpleStringModel statusModel)
+        public async Task<IActionResult> SetWeightInStatus(Guid participantId, [FromBody] SimpleModel statusModel)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _participantService.SetWeightInStatus(participantId, statusModel.data);
+                await _participantService.SetWeightInStatus(participantId, (string) statusModel.Data);
             });
         }
 

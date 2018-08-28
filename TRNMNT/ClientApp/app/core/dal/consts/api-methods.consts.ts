@@ -27,8 +27,8 @@ export const ApiMethods = Object.freeze({
     isPrefixExists: 'api/event/isPrefixExists',
     getPrice: 'api/event/getPrice',
     getTeamPrice: 'api/event/getTeamPrice',
-    setCorrectionsEnabled: 'api/event/SetCorrectionsEnabled',
-    setParticipantListsPublish: 'api/event/SetParticipantListsPublish',
+    setCorrectionsEnabled: 'api/event/setCorrectionsEnabled',
+    setParticipantListsPublish: 'api/event/setParticipantListsPublish',
     setBracketsPublish: 'api/event/SetBracketsPublish',
     getEventDashboardData: 'api/event/getEventDashboardData'
   },
@@ -88,7 +88,11 @@ export const ApiMethods = Object.freeze({
     isCategoryCompleted: 'api/bracket/isCategoryCompleted',
     manageAbsoluteWeightDivision: 'api/bracket/manageAbsoluteWeightDivision',
     setRoundResult: 'api/bracket/setRoundResult',
-    setBracketResult: 'api/bracket/setBracketResult'
+    setBracketResult: 'api/bracket/setBracketResult',
+    areBracketsCreated: 'api/bracket/areBracketsCreated',
+    createBrackets: 'api/bracket/createBrackets',
+    deleteBrackets: 'api/bracket/deleteBrackets',
+    
   },
   results: {
     getTeamResutls: 'api/results/getTeamResults',

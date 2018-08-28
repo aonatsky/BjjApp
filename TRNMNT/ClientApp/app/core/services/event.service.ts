@@ -96,15 +96,15 @@ export class EventService {
   }
 
   setCorrectionsEnabled(eventId: AAGUID, value: boolean): Observable<any> {
-    return this.httpService.post(ApiMethods.event.setCorrectionsEnabled + '/' + eventId, { value });
+    return this.httpService.post(ApiMethods.event.setCorrectionsEnabled + '/' + eventId, { data: value });
   }
 
   setParticipantListsPublish(eventId: AAGUID, value: boolean): Observable<any> {
-    return this.httpService.post(ApiMethods.event.setParticipantListsPublish + '/' + eventId, { value });
+    return this.httpService.post(ApiMethods.event.setParticipantListsPublish + '/' + eventId, { data: value });
   }
 
   setBracketsPublish(eventId: AAGUID, value: boolean): Observable<any> {
-    return this.httpService.post(ApiMethods.event.setBracketsPublish + '/' + eventId, { value });
+    return this.httpService.post(ApiMethods.event.setBracketsPublish + '/' + eventId, { data: value });
   }
 
   //private methods

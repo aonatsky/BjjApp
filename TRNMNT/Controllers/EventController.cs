@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using TRNMNT.Core.Model.Event;
 using TRNMNT.Core.Model.Participant;
+using TRNMNT.Core.Model.Shared;
 using TRNMNT.Core.Services.Interface;
 using TRNMNT.Data.Context;
 
@@ -111,30 +112,30 @@ namespace TRNMNT.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
-        public async Task<IActionResult> SetCorrectionsEnabled(Guid id, [FromQuery(Name = "value")] bool value)
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpPost("[action]/{id}")]
+        public async Task<IActionResult> SetCorrectionsEnabled(Guid id, [FromBody] SimpleModel model)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _eventService.SetCorrectionsEnabledAsync(id, value);
+                await _eventService.SetCorrectionsEnabledAsync(id, (bool) model.Data);
             });
         }
 
-        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
-        public async Task<IActionResult> SetParticipantListsPublish(Guid id, [FromQuery(Name = "value")] bool value)
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpPost("[action]/{id}")]
+        public async Task<IActionResult> SetParticipantListsPublish(Guid id, [FromBody] SimpleModel model)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _eventService.SetParticipantListsPublishAsync(id, value);
+                await _eventService.SetParticipantListsPublishAsync(id, (bool) model.Data);
             });
         }
 
-        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpGet("[action]/{id}")]
-        public async Task<IActionResult> SetBracketsPublish(Guid id, [FromQuery(Name = "value")] bool value)
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpPost("[action]/{id}")]
+        public async Task<IActionResult> SetBracketsPublish(Guid id, [FromBody] SimpleModel model)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _eventService.SetBracketsPublishAsync(id, value);
+                await _eventService.SetBracketsPublishAsync(id, (bool) model.Data);
             });
         }
 

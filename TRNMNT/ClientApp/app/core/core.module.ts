@@ -43,7 +43,8 @@ import {
   ToggleButtonModule,
   ConfirmDialogModule,
   TooltipModule,
-  InputSwitchModule
+  InputSwitchModule,
+  SelectButtonModule
 } from 'primeng/primeng';
 import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';
@@ -98,6 +99,7 @@ import { FederationService } from './services/federation.service';
     MenubarModule,
     TranslateModule,
     TooltipModule,
+    SelectButtonModule,
     InputSwitchModule
   ],
   declarations: [MinuteSecondsPipe, ToDictionaryPipe, FormatTimerPipe],
@@ -162,6 +164,7 @@ import { FederationService } from './services/federation.service';
     TooltipModule,
     MenubarModule,
     FormatTimerPipe,
+    SelectButtonModule,
     InputSwitchModule
   ]
 })

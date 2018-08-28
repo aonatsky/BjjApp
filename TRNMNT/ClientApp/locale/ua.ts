@@ -131,7 +131,9 @@ export const data = {
 
   },
   'CREATE_ABSOLUTE_DIVISION':'Турнірні таблиці',
-  'GET_BRACKET':'Отриматы таблицю',
+  'CREATE_BRACKETS':'Створити таблиці',
+  'DELETE_BRACKETS':'Видалити таблиці',
+  'GET_BRACKET':'Показати таблицю',
   'UPDATE_BRACKET':'Оновити таблицю',
   'WEIGHT_IN':"Зважування"
 
@@ -211,6 +213,7 @@ export const data = {
     'PARTICIPANT_IS_NOT_FOUND': 'Учасника не знайдено',
     'EVENT_IS_NOT_FOUND': 'Подію не знайдено',
     'EMAIL_OR_PASSWORD_IS_INVALID': 'Пошта або пароль введені невірно',
-    'DUPLICATE_EMAIL':'Такий користувач вже зареєстрований'
+    'DUPLICATE_EMAIL':'Такий користувач вже зареєстрований',
+    'EVENT_ALREADY_STARTED': 'Неможливо видалити турнірні таблиці. Подія вже почалася'
   }
 };

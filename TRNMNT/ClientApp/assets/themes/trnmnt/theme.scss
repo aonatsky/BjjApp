@@ -357,3 +357,15 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none; 
   margin: 0; 
 }
+
+p-inputswitch{
+  .ui-inputswitch-onlabel{
+    background-color: $theme_green;
+    color: transparent;
+  }
+
+  .ui-inputswitch-offlabel{
+    color: transparent;
+    background-color: $theme_white;
+  }
+}

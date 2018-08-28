@@ -28,12 +28,11 @@ export class RouterService {
     }
   }
 
-  goHome(){
-    
-    if(this.isEventPortal()){
-      this.goToEventInfo()
-    }else{
-      this.goToEventAdmin()
+  goHome() {
+    if (this.isEventPortal()) {
+      this.goToEventInfo();
+    } else {
+      this.goToEventAdmin();
     }
   }
 
@@ -57,8 +56,13 @@ export class RouterService {
     this.router.navigateByUrl(`/event-admin/edit/${id}`);
   }
 
-  goToEventManagement(id: string) {
-    this.router.navigateByUrl(`/event-admin/management/${id}`);
+  goToEventManagement(id: string, page?: string) {
+    if(page){
+      this.router.navigateByUrl(`/event-admin/management/${id}`, { queryParams: { page } });
+    }else{
+      this.router.navigateByUrl(`/event-admin/management/${id}`);
+    }
+    
   }
 
   goToEventDashboard(id: string) {
@@ -76,19 +80,19 @@ export class RouterService {
     this.router.navigateByUrl('/event/participant-registration');
   }
 
-  goToMyProfile(returnUrl? : string) {
-    this.router.navigateByUrl('/profile',{ queryParams: { returnUrl } });
+  goToMyProfile(returnUrl?: string) {
+    this.router.navigateByUrl('/profile', { queryParams: { returnUrl } });
   }
-  
+
   goToParticipantTeamRegistration() {
     this.router.navigateByUrl('/event/participant-team-registration');
   }
 
-  goToTeamRegistration(returnUrl? : string) {
-    this.router.navigateByUrl('/event/team-registration',{ queryParams: { returnUrl } });
+  goToTeamRegistration(returnUrl?: string) {
+    this.router.navigateByUrl('/event/team-registration', { queryParams: { returnUrl } });
   }
 
-  goToTeamList(){
+  goToTeamList() {
     this.router.navigateByUrl('/event-admin/teams');
   }
 
@@ -122,7 +126,7 @@ export class RouterService {
     return location.protocol + '//' + path;
   }
 
-  isEventPortal() : boolean{
+  isEventPortal(): boolean {
     return this.getSubdomains().length > 0;
   }
 }

@@ -27,12 +27,16 @@ export class HttpService {
   get<T>(name: string, paramsHolder?: object, notifyMessage?: string, showLoader: boolean = true): Observable<any> {
     return this.handleRequest(
       () => this.http.get<T>(name, { params: this.convertParams(paramsHolder) }),
-      notifyMessage, showLoader
+      notifyMessage,
+      showLoader
     );
   }
 
-  post<T>(name: string, model?: any, responseType?: ResponseContentType, notifyMessage?: string): Observable<any> {
-    return this.handleRequest(() => this.http.post<T>(name, model), notifyMessage);
+  post<T>(name: string, model?: any, paramsHolder?: object, notifyMessage?: string): Observable<any> {
+    return this.handleRequest(
+      () => this.http.post<T>(name, model, { params: this.convertParams(paramsHolder) }),
+      notifyMessage
+    );
   }
 
   put<T>(name: string, model: any, notifyMessage?: string): Observable<any> {

@@ -58,4 +58,18 @@ export class BracketService {
   setBracketResult(bracketResult: BracketResultModel) {
     return this.httpService.post(ApiMethods.bracket.setBracketResult, bracketResult);
   }
+  
+  areBracketsCreated(eventId: AAGUID): Observable<boolean> {
+    return this.httpService.get<boolean>(ApiMethods.bracket.areBracketsCreated + '/' + eventId);
+  }
+
+  createBrackets(eventId: AAGUID): Observable<boolean> {
+    return this.httpService.post(ApiMethods.bracket.createBrackets + '/' + eventId);
+  }
+
+  deleteBrackets(eventId: AAGUID): Observable<boolean> {
+    return this.httpService.post(ApiMethods.bracket.deleteBrackets + '/' + eventId);
+  }
+
+
 }

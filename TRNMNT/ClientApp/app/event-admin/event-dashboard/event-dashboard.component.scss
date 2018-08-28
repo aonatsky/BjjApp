@@ -1,4 +1,15 @@
-.action-box{
-    border: 1px solid black;
-    margin-bottom: 10px;
+@import '../../../assets/themes/trnmnt/_variables.scss';
+.action-box {
+  border: 1px solid black;
+  margin-bottom: 10px;
+}
+
+.ui-selectbutton {
+  .ui-button {
+    width: 50px !important;
+    padding: 0.1em 0.05em;
+    .ui-state-active {
+      color: $theme_orange;
+    }
+  }
 }
