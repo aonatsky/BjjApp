@@ -14,7 +14,7 @@
         <button pButton type="button" label="Set Bracket Results" (click)="showResultSetPopup()" [disabled]="!bracket"></button>
     </div>
 </div>
-<bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runMatch($event);"></bracket>
+<bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runMatch($event);" [adminView]="true"></bracket>
 <round-panel *ngIf="showRoundPanel" [matchModel]="selectedMatch" (close)="completeMatch()" (completeRound)="completeMatch()"></round-panel>
 <p-dialog width="500" [modal]="true" [(visible)]="showResultPopup" (onHide)="hideResultSetPopup();">
     <bracket-result-set *ngIf="bracket" [bracket]="bracket"></bracket-result-set>

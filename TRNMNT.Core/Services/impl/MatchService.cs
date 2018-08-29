@@ -243,6 +243,20 @@ namespace TRNMNT.Core.Services.impl
                     1 :
                     (int) Math.Log(orderedParticipants.Count(), 2) - 1;
 
+                if (orderedParticipants.Count <= 2)
+                {
+                    var finalMatch = GetMatch(weightDivisionId, categoryId, 0, 0, null);
+                    finalMatch.AParticipantId = orderedParticipants.FirstOrDefault().ParticipantId;
+                    finalMatch.AParticipant = orderedParticipants.FirstOrDefault();
+                    var bParticipant = orderedParticipants.ElementAtOrDefault(1);
+                    if (bParticipant != null){
+                        finalMatch.BParticipantId = bParticipant.ParticipantId;
+                        finalMatch.BParticipant = bParticipant;
+                    }
+                    matches.Add(finalMatch);
+                    return matches;
+                }
+
                 matches.Add(GetMatch(weightDivisionId, categoryId, 0, 0, null));
                 if (orderedParticipants.Count() > 2)
                 {
@@ -340,7 +354,8 @@ namespace TRNMNT.Core.Services.impl
                 return participants;
             }
             var bracketSize = GetBracketSize(participants.Count);
-            for (var i = 0; i < bracketSize - participants.Count; i++)
+            int participantsToAddCount = bracketSize - participants.Count;
+            for (var i = 0; i < participantsToAddCount; i++)
             {
                 participants.Add(null);
             }

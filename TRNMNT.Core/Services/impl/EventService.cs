@@ -478,6 +478,9 @@ namespace TRNMNT.Core.Services.Impl
                     LateRegistrationPriceForMembers = @event.LateRegistrationPriceForMembers,
                     PromoCodeEnabled = @event.PromoCodeEnabled,
                     PromoCodeListPath = @event.PromoCodeListPath,
+                    ParticipantListsPublished = @event.ParticipantListsPublished,
+                    CorrectionsEnabled = @event.CorrectionsEnabled,
+                    BracketsPublished = @event.BracketsPublished,
                     CategoryModels = GetCategoryModels(@event.Categories)
             };
         }

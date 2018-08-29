@@ -1,28 +1,20 @@
-﻿<div class="ui-g-5">
-    <div class="ui-g-12" *ngFor="let category of categories">
-        <p-checkbox name="categories" [value]="category.categoryId" [label]="category.name" [(ngModel)]="selectedCategories" inputId="ny"></p-checkbox>
+﻿<div class="ui-g">
+
+    <div class="ui-g-5">
+        <div class="ui-g-12" *ngFor="let category of categories">
+            <p-checkbox name="categories" [value]="category.categoryId" [label]="category.name" [(ngModel)]="selectedCategories" inputId="ny"></p-checkbox>
+        </div>
     </div>
-</div>
-<div class="ui-g-7">
-    <crud #crudComponent
-          [entities]="teamResults"
-          [columns]="columns"
-          [columnOptions]="columnOptions"
-          [showRowNumbers]="false"
-          [addEnabled]="false"
-          [editEnabled]="false"
-          [deleteEnabled]="false"
-          [sortField]="sortField"
-          [sortOrder]="sortDirection"
-          [lazy]="true"
-          [totalRecords]="totalCount"
-          [(firstIndex)]="firstIndex"
-          [dialogMinWidth]="500"
-          class="ui-g-12"
-          gridMinHeight="350">
-    </crud>
-</div>
-<div class="ui-g-12">
-    <button pButton type="button" iconPos="left" icon="fa fa-bars" label="Get Results" (click)="getResults()"></button>
-    <button pButton type="button" iconPos="left" icon="fa fa-file-excel-o" label="Download Personal Results" [disabled]="selectedCategories.length === 0" (click)="getPersonalResultsFile();"></button>
+    <div class="ui-g-7">
+        <crud #crudComponent [entities]="teamResults" [columns]="columns" [columnOptions]="columnOptions" [showRowNumbers]="false"
+            [addEnabled]="false" [editEnabled]="false" [deleteEnabled]="false" [sortField]="sortField" [sortOrder]="sortDirection"
+            [lazy]="true" [totalRecords]="totalCount" [(firstIndex)]="firstIndex" [dialogMinWidth]="500" class="ui-g-12" gridMinHeight="350">
+        </crud>
+    </div>
+    <div class="ui-g-12">
+        <button pButton type="button" iconPos="left" icon="fa fa-bars" label="Get Results" (click)="getResults()"></button>
+        <button pButton type="button" iconPos="left" icon="fa fa-file-excel-o" label="Download Personal Results" [disabled]="selectedCategories.length === 0"
+            (click)="getPersonalResultsFile();"></button>
+    </div>
+
 </div>

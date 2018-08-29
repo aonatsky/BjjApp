@@ -4,9 +4,9 @@ import { ViewEncapsulation } from '@angular/core';
 import { BracketService } from '../../../core/services/bracket.service';
 import { CategoryWithDivisionFilterModel } from '../../../core/model/category-with-division-filter.model';
 import { BracketModel } from '../../../core/model/bracket.models';
-import Participantmodels = require('../../../core/model/participant.models');
-import ParticipantModelBase = Participantmodels.ParticipantModelBase;
 import { MatchModel } from '../../../core/model/match.models';
+import { ParticipantModelBase } from '../../../core/model/participant.models';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'bracket-generation',
@@ -16,9 +16,10 @@ import { MatchModel } from '../../../core/model/match.models';
 export class BracketGenerationComponent implements OnInit {
   @Input()
   eventId: string;
+
   matches: MatchModel[] = [];
   bracket: BracketModel;
-  coumnsCount: number = 3;
+  columnsCount: number = 3;
   dragMode: boolean = false;
   dragModel: DragModel;
   isEdited: boolean = false;
@@ -27,7 +28,7 @@ export class BracketGenerationComponent implements OnInit {
   bracketsCreated: boolean;
   filter: CategoryWithDivisionFilterModel = new CategoryWithDivisionFilterModel('', '');
 
-  constructor(private bracketService: BracketService) {}
+  constructor(private bracketService: BracketService, private translateService: TranslateService) {}
 
   ngOnInit(): void {
     this.bracketService.areBracketsCreated(this.eventId).subscribe(r => {
@@ -35,11 +36,11 @@ export class BracketGenerationComponent implements OnInit {
     });
   }
 
-  private createBracket() {
+  public getBracket() {
     this.bracket = undefined;
     this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(r => {
       this.bracket = r;
-      this.maxRound = this.getMaxMatch(this.bracket.matchModels.filter(m => m.matchType !== 1).length);
+      this.maxRound = this.getMaxRound(this.bracket.matchModels.filter(m => m.matchType !== 1).length);
       this.matches = this.bracket.matchModels.filter(m => m.round === this.maxRound).sort((r1, r2) => {
         return r1.order - r2.order;
       });
@@ -59,10 +60,10 @@ export class BracketGenerationComponent implements OnInit {
     return [0, 1, 2];
   }
 
-  private getMaxMatch(matchsCount: number): number {
+  private getMaxRound(matchesCount: number): number {
     for (let i = 0; i < 5; i++) {
-      matchsCount -= Math.pow(2, i);
-      if (matchsCount === 0) {
+      matchesCount -= Math.pow(2, i);
+      if (matchesCount === 0) {
         return i;
       }
     }
@@ -86,7 +87,7 @@ export class BracketGenerationComponent implements OnInit {
       participant = match.aParticipant;
     } else if (participantNumber == 2) {
       if (match.matchType) {
-        return 'Lost in previous match';
+        return this.translateService.instant('EVENT.LOST_IN_PREVIOUS_MATCH');
       }
       participant = match.bParticipant;
     }
@@ -107,11 +108,11 @@ export class BracketGenerationComponent implements OnInit {
   }
 
   private dragEnter($event) {
-    $event.target.style.backgmatchColor = '#b5e8b1';
+    $event.target.style.backgroundColor = '#b5e8b1';
   }
 
   private dragLeave($event) {
-    $event.target.style.backgmatchColor = 'white';
+    $event.target.style.backgroundColor = 'white';
   }
 
   private onDrop(matchIndex: number, participantNumber: number, $event) {
@@ -170,9 +171,12 @@ export class BracketGenerationComponent implements OnInit {
     this.isEdited = false;
   }
 
-  private initRounds(maxStage: number) {
+  private initRounds(maxRound: number) {
     this.rounds = [];
-    for (let i = 0; i < 2 * maxStage; i++) {
+    if (maxRound == 0) {
+      this.rounds.push(0);
+    }
+    for (let i = 0; i < 2 * maxRound; i++) {
       this.rounds.push(i);
     }
   }
@@ -180,9 +184,12 @@ export class BracketGenerationComponent implements OnInit {
   createBrackets() {
     this.bracketService.createBrackets(this.eventId).subscribe(() => (this.bracketsCreated = true));
   }
-  
+
   deleteBrackets() {
-    this.bracketService.deleteBrackets(this.eventId).subscribe(() => (this.bracketsCreated = false));
+    this.bracketService.deleteBrackets(this.eventId).subscribe(() => {
+      this.bracketsCreated = false;
+      this.bracket = undefined;
+    });
   }
 }
 

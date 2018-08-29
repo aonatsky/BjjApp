@@ -49,7 +49,10 @@
                 {{eventModel.additionalData}}
             </p-tabPanel>
             <p-tabPanel header="{{'EVENT.PARTICIPANTS' | translate}}">
-                <participant-list [eventId]="eventModel.eventId"></participant-list>
+                <participant-list *ngIf="eventModel.participantListsPublished" [eventId]="eventModel.eventId"></participant-list>
+                <div class="ui-g-12 layout-padding-lg ui-state-highlight text-align-center" *ngIf="!eventModel.participantListsPublished">
+                        {{'EVENT_INFO.PARTICIPANT_LISTS_NOT_PUBLISHED_YET' | translate}}
+                    </div>
             </p-tabPanel>
             <p-tabPanel header="{{'EVENT.BRACKETS' | translate}}">
                 Brackets

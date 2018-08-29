@@ -20,8 +20,6 @@ export class CategoryEditComponent {
     selectedIndex: number;
     isNewCategory: boolean;
 
-
-
     @Input() categories: CategoryModel[];
     @Input() eventId: string;
 

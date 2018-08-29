@@ -1,6 +1,6 @@
 <div *ngIf="!!bracketsList && !!weightDivisions">
     <div *ngFor="let item of bracketsList | toDictionary" [@visibilityChanged]="getDivisionById(item.key).isVisible">
-        <bracket *ngIf="item.value" [bracket]="item.value"></bracket>
+        <bracket *ngIf="item.value" [bracket]="item.value" [adminView]="false"></bracket>
     </div>
 </div>
 

@@ -1,17 +1,19 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { BracketModel } from '../../core/model/bracket.models';
-import './../../event-admin/event-management/brackets-generation/bracket-generation.component.scss';
-import './bracket.component.scss';
+// import './../../event-admin/event-management/brackets-generation/bracket-generation.component.scss';
 import { ViewEncapsulation } from '@angular/core';
 import { MatchModel } from '../../core/model/match.models';
 
 @Component({
   selector: 'bracket',
   templateUrl: './bracket.component.html',
+  styleUrls:['./bracket.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class BracketComponent implements OnInit {
   @Input() bracket: BracketModel;
+  @Input() fullView: boolean = true;
+  @Input() adminView: boolean = false;
   @Output() roundClick: EventEmitter<MatchModel> = new EventEmitter();
   maxRound: number = 0;
   columns: number[];
@@ -24,11 +26,11 @@ export class BracketComponent implements OnInit {
   }
 
   private getMaxRound(): number {
-    let roundsCount = this.bracket.matchModels.filter(r => r.matchType !== 1).length;
+    let matchesCount = this.bracket.matchModels.filter(r => r.matchType !== 1).length;
 
     for (let i = 0; i < 5; i++) {
-      roundsCount -= Math.pow(2, i);
-      if (roundsCount === 0) {
+      matchesCount -= Math.pow(2, i);
+      if (matchesCount === 0) {
         return i;
       }
     }
@@ -123,6 +125,9 @@ export class BracketComponent implements OnInit {
   }
 
   private isEditable(model: MatchModel): boolean {
+    if(!this.adminView){
+      return false;
+    }
     if (model.aParticipant && model.bParticipant) {
       if (model.winnerParticipant && model.nextMatchId) {
         const nextRound = this.bracket.matchModels.filter(r => r.matchId === model.nextMatchId)[0];
@@ -136,5 +141,12 @@ export class BracketComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  getFullViewClass(colNumber: number){
+    if(!this.fullView && colNumber != this.maxRound * 2 && colNumber != 0){
+      return 'collapsed';
+    }
+    return ''
   }
 }

@@ -83,6 +83,7 @@ export const data = {
   'SELECT_WEIGHT_DIVISION':'Виберіть вагову категорію',
   'SELECT_CATEGORY':'Виберіть категорію',
   'PARTICIPANT_COUNT':'Кількість учасників',
+  'LOST_IN_PREVIOUS_MATCH': 'Програв в попередньому матчі',
   'STATUS':{
     'REGISTRATION_NOT_STARTED':'Реєстрація не почалась',
     'EARLY_REGISTRATION':'Рання реєстрація',
@@ -133,6 +134,7 @@ export const data = {
   'CREATE_ABSOLUTE_DIVISION':'Турнірні таблиці',
   'CREATE_BRACKETS':'Створити таблиці',
   'DELETE_BRACKETS':'Видалити таблиці',
+  'NO_PARTICIPANTS_FOR_WEIGHT_DIVISION':'Для вибраної вагової категорії немає учасників',
   'GET_BRACKET':'Показати таблицю',
   'UPDATE_BRACKET':'Оновити таблицю',
   'WEIGHT_IN':"Зважування"
@@ -152,7 +154,9 @@ export const data = {
     'DESCRIPTION':'Опис',
     'PARTICIPATE':'Прийняти участь',
     'REGISTRATION_NOT_STARTED':'Реєстрація ще не почалась',
-    'REGISTRATION_IS_ENDED':'Реєстрація закінчена'
+    'REGISTRATION_IS_ENDED':'Реєстрація закінчена',
+    'PARTICIPANT_LISTS_NOT_PUBLISHED_YET': 'Списки учасників ще не опубліковані',
+    'BRACKETS_NOT_PUBLISHED_YET': 'Турнірні сітки ще не опубліковані'
   },
   'EVENT_EDIT':{
     'TITLE':'Редагувати подію',

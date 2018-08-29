@@ -7,6 +7,9 @@ export class EventModelBase {
   registrationStartTS: Date;
   earlyRegistrationEndTS: Date;
   registrationEndTS: Date;
+  correctionsEnabled: boolean;
+  participantListsPublished: boolean;
+  bracketsPublished: boolean;
 }
 
 export class EventModel extends EventModelBase {
@@ -19,7 +22,6 @@ export class EventModel extends EventModelBase {
   address: string;
   imgPath: string;
   urlPrefix: string;
-  descritpion: string;
   tncFilePath: string;
   cardNumber: string;
   contactEmail: string;
@@ -47,11 +49,9 @@ export class EventDashboardModel extends EventModelBase {
     super();
   }
   bracketsCreated: boolean;
-  correctionsEnabled: boolean;
-  participantListsPublished: boolean;
-  bracketsPublished: boolean;
+
   eventStatus: boolean;
-  participantGroups: CategoryWeightDivisionParticipants[]
+  participantGroups: CategoryWeightDivisionParticipants[];
 }
 
 export class CategoryWeightDivisionParticipants {
