@@ -66,11 +66,10 @@ export class TopbarComponent implements OnInit {
         command: event => {
           this.routerService.goToLogin();
         },
-        visible: !this.isLoggedIn && !this.routerService.isEventPortal()
+        visible: !this.isLoggedIn
       },
       {
         label: this.translateService.instant('MENU.LOGOUT'),
-        routerLink: ['/'],
         visible: this.isLoggedIn,
         command: c => {
           this.authService.signout();

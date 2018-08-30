@@ -181,7 +181,7 @@ namespace TRNMNT.Core.Services.Impl
         {
             var restrictedUrls = new List<string>() { "admin", "uabjj", "bjj" };
 
-            return await _eventRepository.GetAll(e => e.UrlPrefix.Equals(prefix, StringComparison.OrdinalIgnoreCase) && e.EventId != eventId).AnyAsync() ||
+            return await _eventRepository.GetAll(e => e.UrlPrefix == prefix && e.EventId != eventId).AnyAsync() ||
                 restrictedUrls.Contains(prefix);
         }
 
@@ -211,10 +211,9 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task SaveEventImageAsync(Stream stream, string eventId)
         {
-            var fileName = FilePath.EventImageFile;
             var path = Path.Combine(FilePath.EventDataFolder, eventId, FilePath.EventImageFolder, FilePath.EventImageFile);
             var _event = await _eventRepository.GetByIDAsync(new Guid(eventId));
-            await _fileService.SaveImageAsync(path, stream, fileName);
+            await _fileService.SaveFileAsync(path, stream);
             _event.ImgPath = path;
             _eventRepository.Update(_event);
         }

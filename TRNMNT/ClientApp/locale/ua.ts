@@ -84,6 +84,7 @@ export const data = {
   'SELECT_CATEGORY':'Виберіть категорію',
   'PARTICIPANT_COUNT':'Кількість учасників',
   'LOST_IN_PREVIOUS_MATCH': 'Програв в попередньому матчі',
+  'CORRECTIONS_NOT_ALLOWED': 'Корегування не допускаються',
   'STATUS':{
     'REGISTRATION_NOT_STARTED':'Реєстрація не почалась',
     'EARLY_REGISTRATION':'Рання реєстрація',

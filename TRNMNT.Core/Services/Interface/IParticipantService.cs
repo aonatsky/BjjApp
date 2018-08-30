@@ -38,7 +38,7 @@ namespace TRNMNT.Core.Services.Interface
         /// <summary>
         /// Select ParticipantTableModel list for specified event with filtration.
         /// </summary>
-        /// <param name="eventId">evetId participants selected for</param>
+        /// <param name="eventId">eventId participants selected for</param>
         /// <returns>filtered ParticipantTableModel list</returns>
         Task<IPagedList<ParticipantTableModel>> GetFilteredParticipantsAsync(ParticipantFilterModel eventId);
 

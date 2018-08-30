@@ -14,6 +14,7 @@ try {
     Push-Location -Path $DataProjectPath;
     dotnet ef --startup-project $StartupProjectPath migrations script -i -o $FullPublishPath;
     Pop-Location;
+    Write-Host "Done" -ForegroundColor DarkGreen;
     # Pause;
 }
 catch {

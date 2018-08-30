@@ -42,10 +42,10 @@ export class ParticipantEventModel extends ParticipantTableModel {
     eventDate: string;
     result: string;
     eventId : AAGUID;
-    correctionAllowed: boolean;
+    correctionsAllowed: boolean;
   }
 
-export class ParticipantInAbsoluteDivisionMobel {
+export class ParticipantInAbsoluteDivisionModel {
   participantId: string;
   firstName: string;
   lastName: string;

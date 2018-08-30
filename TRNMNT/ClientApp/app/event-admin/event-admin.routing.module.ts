@@ -1,4 +1,4 @@
-﻿import { Routes, RouterModule } from '@angular/router';
+﻿import { Routes, RouterModule, RunGuardsAndResolvers } from '@angular/router';
 import { RedirectGuard } from '../core/guards/redirect.guard';
 import { EventAdminPageComponent } from './event-admin.page.component';
 import { EventListComponent } from './event-list/event-list.component';
@@ -20,14 +20,16 @@ export const eventAdminRoutes: Routes = [
     component: EventAdminPageComponent,
     data: { expectedRoles: [Roles.Admin, Roles.Owner, Roles.FederationOwner] },
     canActivate: [RedirectGuard, AuthGuard],
+    runGuardsAndResolvers: 'always',
     children: [
       {
         path: '',
-        component: EventListComponent
+        redirectTo: 'event-list',
+        pathMatch : 'full'
       },
       {
         path: 'event-list',
-        component: EventListComponent
+        component: EventListComponent,
       },
       {
         path: 'edit/:id',

@@ -28,7 +28,7 @@
             {{'EVENT_DASHBOARD.CORRECTIONS_ENABLED' | translate}}
           </div>
           <div class=" ui-g-4">
-              <p-inputSwitch class="float-right" [(ngModel)]="model.correctionsEnabled" (onChange)="setCorrectionsEnabled($event)" [disabled]="model.correctionsEnabled && (model.bracketsCreated || model.bracketsPublished)"></p-inputSwitch>
+              <p-inputSwitch class="float-right" [(ngModel)]="model.correctionsEnabled" (onChange)="setCorrectionsEnabled($event)" [disabled]="!model.correctionsEnabled && (model.bracketsCreated || model.bracketsPublished)"></p-inputSwitch>
           </div>
           <div class="ui-g-12">
               {{'EVENT_DASHBOARD.CORRECTIONS_ENABLED_DESCRIPTION' | translate}}

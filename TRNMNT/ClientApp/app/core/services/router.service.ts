@@ -57,12 +57,11 @@ export class RouterService {
   }
 
   goToEventManagement(id: string, page?: string) {
-    if(page){
+    if (page) {
       this.router.navigateByUrl(`/event-admin/management/${id}`, { queryParams: { page } });
-    }else{
+    } else {
       this.router.navigateByUrl(`/event-admin/management/${id}`);
     }
-    
   }
 
   goToEventDashboard(id: string) {

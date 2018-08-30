@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { LoggerService } from '../../core/services/logger.service';
 import { BracketService } from '../../core/services/bracket.service';
-import { ParticipantInAbsoluteDivisionMobel as ParticipantSmallTableModel } from '../../core/model/participant.models';
+import { ParticipantInAbsoluteDivisionModel as ParticipantSmallTableModel } from '../../core/model/participant.models';
 
 @Component({
     selector: 'absolute-weight-division',

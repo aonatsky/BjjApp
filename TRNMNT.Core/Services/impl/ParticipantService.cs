@@ -78,7 +78,8 @@ namespace TRNMNT.Core.Services.Impl
                             TeamId = p.TeamId,
                             PhoneNumber = p.PhoneNumber,
                             ParticipantId = p.ParticipantId,
-                            CorrectionAllowed = _eventService.IsCorrectionAllowed(_event)
+                            CorrectionsAllowed = _eventService.IsCorrectionAllowed(_event),
+                            UserId = p.UserId
                     }));
                 }
             }

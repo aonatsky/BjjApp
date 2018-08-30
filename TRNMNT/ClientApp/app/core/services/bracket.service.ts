@@ -7,7 +7,7 @@ import { HttpService } from '../dal/http/http.service';
 import { BracketResultModel } from '../model/bracket-result.model';
 import { BracketArrayModel, BracketModel } from '../model/bracket.models';
 import { MatchResultModel } from '../model/match-result.model';
-import { ParticipantInAbsoluteDivisionMobel } from '../model/participant.models';
+import { ParticipantInAbsoluteDivisionModel } from '../model/participant.models';
 import { LoggerService } from './logger.service';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class BracketService {
     return this.httpService.get(ApiMethods.bracket.isCategoryCompleted + '/' + categoryId);
   }
 
-  getWinnersByCategory(categoryId): Observable<ParticipantInAbsoluteDivisionMobel[]> {
+  getWinnersByCategory(categoryId): Observable<ParticipantInAbsoluteDivisionModel[]> {
     return this.httpService.get(ApiMethods.bracket.getParticipantsForAbsoluteDivision + '/' + categoryId);
   }
 
