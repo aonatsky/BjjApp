@@ -21,6 +21,7 @@ export const data = {
     'DOWNLOAD':'Завантажити',
     'ADD_TEAM':'Зареєструвати команду',
     'NO_TEAM':'Без команди',
+	'SELECT_TEAM':'Оберіть команду',
     'CHOOSE_FILE':'Вибрати файл',
     'CHOOSE_IMAGE':'Вибрати зображення',
     'EDIT':'Редагувати',
@@ -48,7 +49,7 @@ export const data = {
   'MENU':{
     'LOGIN':'Увійти',
     'LOGOUT': 'Вийти',
-    'HOME': 'Додому',
+    'HOME': 'На Головну',
     'TEAMS':'Команди',
     'PROFILE':'Мій профіль',
     'MY_TEAM':'Моя команда',
@@ -68,14 +69,15 @@ export const data = {
     'CONGRATS_YOU_ARE_REGISTERED_TO': 'Вітаємо, ви зареєстровані на {{value}}',
     'GO_BACK_TO_EVENT_PAGE': 'Повернутись на сторінку події',
     'ADD_MEMBERSHIP': 'Дотати внесок за членство в федерації',
-    'ADD_MEMBERSHIP_TOOLTIP': 'Очень важный текст почему нужно заплатить денег',
+    'ADD_MEMBERSHIP_TOOLTIP': 'Членство у UBJJF Федерація Бразильського Джиу Джитсу України, дає можливість участі у річному заліку, знижки на участь у змаганнях, а також цінні призи за найкращі показники атлетів',
     'TEAM_PARTICIPATION':'Командна реєстрація',
-    'PARTICIPATE':'Приняти участь',
+    'PARTICIPATE':'Прийняти участь',
     'ADD':'Додати',
     'CANCEL':'ВІДМІНИТИ',
     'ALREADY_PARTICIPANT':'Вже приймає участь',
-    'CHANGE_TEAM':'Змінити команду'},
-    
+    'CHANGE_TEAM':'Змінити команду'
+	},
+	
 'EVENT':{
   'PARTICIPANTS':'Учасники',
   'BRACKETS':'Турнірні таблиці',
@@ -85,6 +87,7 @@ export const data = {
   'PARTICIPANT_COUNT':'Кількість учасників',
   'LOST_IN_PREVIOUS_MATCH': 'Програв в попередньому матчі',
   'CORRECTIONS_NOT_ALLOWED': 'Корегування не допускаються',
+  'TOTAL_PARTICIPANTS': 'Всього зареєстрованих учасників:',
   'STATUS':{
     'REGISTRATION_NOT_STARTED':'Реєстрація не почалась',
     'EARLY_REGISTRATION':'Рання реєстрація',
@@ -95,16 +98,20 @@ export const data = {
 
 'EVENT_DASHBOARD':{
   'EDIT_EVENT':'Корегування події',
-  'EDIT_EVENT_DESCRIPTION':'Корегування події _DESCRIPTION',
+  'EDIT_EVENT_DESCRIPTION':'Змінюйте інформацію про подію, категорії та контактні дані',
   'MANAGE_EVENT':'Управління подією',
-  'MANAGE_EVENT_DESCRIPTION':'Управління подією _DESCRIPTION',
+  'MANAGE_EVENT_DESCRIPTION':'Керуйте списком учасників та сітками',
   'RUN_EVENT':'Провести події',
-  'RUN_EVENT_DESCRIPTION':'Провести події _DESCRIPTION',
+  'RUN_EVENT_DESCRIPTION':'Нарешті провести подію',
   'EVENT_STATUS':'Статус події',
   'CORRECTIONS_ENABLED':'Корегування дозволені',
   'BRACKETS_CREATED':'Турнірні сітки створені',
   'BRACKETS_PUBLISHED':'Турнірні опубліковані',
   'PARTICIPANT_LISTS_PUBLISHED':'Списки опубліковані',
+  'PARTICIPANT_LISTS_PUBLISHED_DESCRIPTION':'Керуйте публікацією списків учасників',
+  'CORRECTIONS_ENABLED_DESCRIPTION': 'Вмикайте або вимикайте можливість корегування для атлетів',
+  'BRACKETS_PUBLISHED_DESCRIPTION ': 'Керуйте публікацією сіток, не забудьте їх створити перед публікацією',
+  'CREATE_BRACKETS': 'Сітки можна створити тут'
 },
 'FEDERATION_EDIT':{
   'DESCRIPTION':'Опис',
@@ -185,7 +192,7 @@ export const data = {
     'ADDITIONAL':'Додатково',
     'ADD_CATEGORY':'Додати категорію',
     'EDIT_CATEGORY':'Редагувати категорію',
-    
+	'DATES_SEQUENCE_INCORRECT':'Будь ласка, перевірте порядок дат',
   },
   'TEAM':{
     'NAME':'Назва',
@@ -195,7 +202,7 @@ export const data = {
     'DESCRIPTION':'Опис',
     'NOT_APPROVED':'Не підтверджено',
     'TEAM_NOT_APPROVED_TOOLTIP':'Ваша команда не підтвердженна',
-    'TEAM_OR_MEMBERSHIP_NOT_APPROVED_TOOLTIP':'Ваша команда не підтвердженна або ви не підтвердженні як її учасник, зв`яжіться з вашим тренером щоб вас затвердили як члена команди'
+    'TEAM_OR_MEMBERSHIP_NOT_APPROVED_TOOLTIP':'Ваша команда не підтвердженна або ви не підтвердженні як її учасник,будь ласка, зв`яжіться з вашим тренером для затвердження'
 
   },
   'TEAM_REGISTRATION':{
