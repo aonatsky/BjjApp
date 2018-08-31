@@ -59,7 +59,10 @@ namespace TRNMNT.Core.Services.impl
             var weightDivisions = await _weightDivisionService.GetWeightDivisionsByEventIdAsync(eventId, false);
             foreach (var weightDivision in weightDivisions)
             {
-                await _matchService.CreateMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId);
+                var participants =
+                    await _participantService.GetParticipantsByWeightDivisionAsync(weightDivision.WeightDivisionId, true);
+                var orderedParticapants = OrderParticipantsForBracket(participants.ToList());
+                await _matchService.CreateMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId, orderedParticapants);
             }
         }
 
@@ -102,6 +105,10 @@ namespace TRNMNT.Core.Services.impl
         public async Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId)
         {
             //TODO 
+            // var participants =
+            //     await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
+            // var orderedParticapants = GetParticipantsForBracket(participants.ToList());
+            // _fileService.GetBracketsFileAsync()
             return new CustomFile();
         }
 
@@ -224,6 +231,75 @@ namespace TRNMNT.Core.Services.impl
         }
 
         private string GetBracketTtitle(Category category, WeightDivision weightDivision) => $"{category.Name} / {weightDivision.Name}";
+
+        private const int ParticipantsMaxCount = 64;
+
+        private int GetBracketSize(int participantCount)
+        {
+            if (participantCount == 0)
+            {
+                return 0;
+            }
+
+            if (participantCount == 3)
+            {
+                return 3;
+            }
+
+            for (var i = 1; i <= Math.Log(ParticipantsMaxCount, 2); i++)
+            {
+                var size = Math.Pow(2, i);
+                if (size >= participantCount)
+                {
+                    return (int) size;
+                }
+            }
+
+            return 2;
+
+        }
+
+        private List<Participant> OrderParticipantsForBracket(List<Participant> participants)
+        {
+            if (!participants.Any())
+            {
+                return participants;
+            }
+            var bracketSize = GetBracketSize(participants.Count);
+            int participantsToAddCount = bracketSize - participants.Count;
+            for (var i = 0; i < participantsToAddCount; i++)
+            {
+                participants.Add(null);
+            }
+            return DistributeParticipants(participants);
+        }
+
+        private List<Participant> DistributeParticipants(List<Participant> participantList)
+        {
+
+            var orderedbyTeam = participantList.GroupBy(f => f?.TeamId).OrderByDescending(g => g.Count()).SelectMany(f => f).ToList();
+            if (participantList.Count > 2)
+            {
+                var sideA = new List<Participant>();
+                var sideB = new List<Participant>();
+                for (var i = 0; i < orderedbyTeam.Count; i++)
+                {
+                    var participant = orderedbyTeam.ElementAtOrDefault(i);
+                    if (i % 2 == 0)
+                    {
+                        sideA.Add(participant);
+                    }
+                    else
+                    {
+                        sideB.Add(participant);
+                    }
+                }
+
+                return DistributeParticipants(sideA).Concat(DistributeParticipants(sideB)).ToList();
+            }
+
+            return participantList;
+        }
 
         #endregion
     }

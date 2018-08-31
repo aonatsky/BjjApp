@@ -18,6 +18,7 @@ export class UserModelRegistration extends UserModelBase {
 
 export class UserModel extends UserModelRegistration {
   roles: string[];
+  isParticipantForEvent: boolean;
 }
 
 export class UserModelAthlete extends UserModel {

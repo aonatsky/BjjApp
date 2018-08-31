@@ -1,39 +1,52 @@
-<trnmnt-page [useCommonContentStyle]='true' contentClass="ui-g-8 ui-g-offset-2" title="{{'MY_EVENTS.TITLE'|translate}}">
+<trnmnt-page [useCommonContentStyle]='true' contentClass="ui-g-8 ui-g-offset-2"
+    title="{{'MY_EVENTS.TITLE'|translate}}">
     <div *ngFor="let pData of participationData" class="ui-g ui-g-12 participant-box">
         <div class="ui-g-6">
             <label>{{'EVENT_EDIT.EVENT_TITLE'|translate}}</label>
         </div>
-        <div class="ui-g-6">{{pData.participant.eventName}}</div>
+        <div class="ui-g-6"><label class="bold">{{pData.participant.eventName}}</label></div>
         <div class="ui-g-6">
             <label>{{'EVENT_EDIT.DATE'|translate}}</label>
         </div>
-        <div class="ui-g-6">{{pData.participant.eventDate | date}}</div>
+        <div class="ui-g-6"><label class="bold">{{pData.participant.eventDate
+                | date}}</label></div>
         <div class="ui-g-6 ui-fluid">
-            <input pInputText [(ngModel)]="pData.participant.firstName" [placeholder]="'COMMON.FIRST_NAME'|translate" required name="firstName"
-                [value]="pData.participant.firstName" [maxLength]=100 [disabled]="!pData.participant.correctionsAllowed" />
-        </div>
-        <div class="ui-g-6 ui-fluid">
-            <input pInputText [(ngModel)]="pData.participant.lastName" required name="lastName" [value]="pData.participant.lastName"
-                [placeholder]="'COMMON.LAST_NAME'|translate" [maxLength]=100 [disabled]="!pData.participant.correctionsAllowed"
+            <input pInputText [(ngModel)]="pData.participant.firstName"
+                [placeholder]="'COMMON.FIRST_NAME'|translate"
+                required name="firstName" [value]="pData.participant.firstName"
+                [maxLength]=100 [disabled]="!pData.participant.correctionsAllowed"
             />
         </div>
         <div class="ui-g-6 ui-fluid">
-            <p-dropdown [options]="pData.categorySelectItems" [(ngModel)]="pData.participant.categoryId" [autoWidth]="false" placeholder="{{'EVENT.SELECT_CATEGORY'|translate}}"
-                (onChange)="initWeightDivisionDropdown(pData)" name="category" required [disabled]="!pData.participant.correctionsAllowed"></p-dropdown>
+            <input pInputText [(ngModel)]="pData.participant.lastName"
+                required name="lastName" [value]="pData.participant.lastName"
+                [placeholder]="'COMMON.LAST_NAME'|translate"
+                [maxLength]=100 [disabled]="!pData.participant.correctionsAllowed"
+            />
         </div>
         <div class="ui-g-6 ui-fluid">
-            <p-dropdown [options]="pData.weightDivisionsSelectItems" [(ngModel)]="pData.participant.weightDivisionId" [autoWidth]="false"
-                placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION'|translate}}" [disabled]="!pData.weightDivisionsSelectItems || pData.weightDivisionsSelectItems.length == 0"
+            <p-dropdown [options]="pData.categorySelectItems" [(ngModel)]="pData.participant.categoryId"
+                [autoWidth]="false" placeholder="{{'EVENT.SELECT_CATEGORY'|translate}}"
+                (onChange)="initWeightDivisionDropdown(pData)"
+                name="category" required [disabled]="!pData.participant.correctionsAllowed"></p-dropdown>
+        </div>
+        <div class="ui-g-6 ui-fluid">
+            <p-dropdown [options]="pData.weightDivisionsSelectItems"
+                [(ngModel)]="pData.participant.weightDivisionId"
+                [autoWidth]="false" placeholder="{{'EVENT.SELECT_WEIGHT_DIVISION'|translate}}"
+                [disabled]="!pData.weightDivisionsSelectItems || pData.weightDivisionsSelectItems.length == 0"
                 name="weightDivision" required [disabled]="!pData.participant.correctionsAllowed"></p-dropdown>
         </div>
 
         <div class="ui-g-12" *ngIf="pData.participant.correctionsAllowed">
             <div class="float-right">
-                <button pButton type="button" class="float-right" label="{{'MY_EVENTS.CORRECT'| translate}}" (click)="update(pData.participant)"
+                <button pButton type="button" class="float-right" label="{{'MY_EVENTS.CORRECT'| translate}}"
+                    (click)="update(pData.participant)"
                     [disabled]="!pData.isValid()"></button>
             </div>
         </div>
-        <div class="ui-g-12 layout-padding-lg ui-state-highlight text-align-center" *ngIf="!pData.participant.correctionsAllowed">
+        <div class="ui-g-12 layout-padding-lg ui-state-highlight text-align-center"
+            *ngIf="!pData.participant.correctionsAllowed">
             {{'EVENT.CORRECTIONS_NOT_ALLOWED' | translate}}
         </div>
     </div>

@@ -25,7 +25,8 @@ const routes: Routes = [
         path: 'my-team',
         component: MyTeamComponent,
         pathMatch: 'full'
-      },
+      }
+      ,
     ]
   }
 ];

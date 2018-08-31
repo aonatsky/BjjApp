@@ -52,13 +52,6 @@ namespace TRNMNT.Core.Services.Impl
             throw new NotImplementedException();
         }
 
-        public async Task SaveImageAsync(string relativePath, Stream stream, string fileName)
-        {
-            var path = Path.Combine(_rootPath, relativePath);
-            CheckPath(path);
-            var img = Image.FromStream(stream, true, true);
-            img.Save(path, ImageFormat.Jpeg);
-        }
 
         #endregion
 

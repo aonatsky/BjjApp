@@ -65,20 +65,21 @@ namespace TRNMNT.Web.Controllers
         [Authorize, HttpPost("[action]")]
         public async Task<IActionResult> IsParticipantExist([FromBody] ParticipantRegistrationModel model)
         {
-            try
+            return await HandleRequestWithDataAsync(async() =>
             {
-                if (GetEventId() != null)
-                {
-                    var result = await _participantService.IsParticipantExistsAsync(model, GetEventId().Value);
-                    return Ok(JsonConvert.SerializeObject(result, JsonSerializerSettings));
-                }
-                return NotFound();
-            }
-            catch (Exception ex)
+                return await _participantService.IsParticipantExistsAsync(model, GetEventId().Value);
+            }, true, true);
+
+        }
+
+        [Authorize, HttpGet("[action]")]
+        public async Task<IActionResult> IsParticipantExist()
+        {
+            return await HandleRequestWithDataAsync(async() =>
             {
-                HandleException(ex);
-                return StatusCode((int) HttpStatusCode.InternalServerError);
-            }
+                return await _participantService.IsParticipantExistsAsync((await GetUserAsync()).Id, GetEventId().Value);
+            }, true, true);
+
         }
 
         [Authorize, HttpPost("[action]")]

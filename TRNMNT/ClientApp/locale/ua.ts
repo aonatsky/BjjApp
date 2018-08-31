@@ -164,7 +164,8 @@ export const data = {
     'REGISTRATION_NOT_STARTED':'Реєстрація ще не почалась',
     'REGISTRATION_IS_ENDED':'Реєстрація закінчена',
     'PARTICIPANT_LISTS_NOT_PUBLISHED_YET': 'Списки учасників ще не опубліковані',
-    'BRACKETS_NOT_PUBLISHED_YET': 'Турнірні сітки ще не опубліковані'
+    'BRACKETS_NOT_PUBLISHED_YET': 'Турнірні сітки ще не опубліковані',
+    'YOU_ARE_ALREADY_PARTICIPANT':'Ви вже зареєстровані як учасник'
   },
   'EVENT_EDIT':{
     'TITLE':'Редагувати подію',

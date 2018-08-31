@@ -58,8 +58,6 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="categoryId"></param>
         /// <param name="weightDivisionId"></param>
         /// <returns></returns>
-        Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId);
-
-
+        Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId, List<Participant> orderedParticipants);
     }
 }

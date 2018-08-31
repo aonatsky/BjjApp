@@ -36,20 +36,14 @@ namespace TRNMNT.Core.Services.impl
                 .Include(m => m.BParticipant).ThenInclude(p => p.Team)
                 .Include(m => m.WinnerParticipant).ThenInclude(p => p.Team)
                 .ToListAsync();
-            if (!matches.Any())
-            {
-                matches = await CreateMatchesAsync(categoryId, weightDivisionId);
-
-                return matches;
-            }
             return matches;
         }
 
-        public async Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId)
+        public async Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId, List<Participant> orderedParticapants)
         {
-            var participants =
-                await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
-            var orderedParticapants = GetParticipantsForBracket(participants.ToList());
+            // var participants =
+            //     await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
+            // var orderedParticapants = OrderParticipantsForBracket(participants.ToList());
             var matches = CreateMatches(orderedParticapants, weightDivisionId, categoryId);
             _matchRepository.AddRange(matches);
             return matches;
@@ -320,74 +314,7 @@ namespace TRNMNT.Core.Services.impl
             return matchesForRound;
         }
 
-        private const int ParticipantsMaxCount = 64;
-
-        private int GetBracketSize(int participantCount)
-        {
-            if (participantCount == 0)
-            {
-                return 0;
-            }
-
-            if (participantCount == 3)
-            {
-                return 3;
-            }
-
-            for (var i = 1; i <= Math.Log(ParticipantsMaxCount, 2); i++)
-            {
-                var size = Math.Pow(2, i);
-                if (size >= participantCount)
-                {
-                    return (int) size;
-                }
-            }
-
-            return 2;
-
-        }
-
-        private List<Participant> GetParticipantsForBracket(List<Participant> participants)
-        {
-            if (!participants.Any())
-            {
-                return participants;
-            }
-            var bracketSize = GetBracketSize(participants.Count);
-            int participantsToAddCount = bracketSize - participants.Count;
-            for (var i = 0; i < participantsToAddCount; i++)
-            {
-                participants.Add(null);
-            }
-            return DistributeParticipants(participants);
-        }
-
-        private List<Participant> DistributeParticipants(List<Participant> participantList)
-        {
-
-            var orderedbyTeam = participantList.GroupBy(f => f?.TeamId).OrderByDescending(g => g.Count()).SelectMany(f => f).ToList();
-            if (participantList.Count > 2)
-            {
-                var sideA = new List<Participant>();
-                var sideB = new List<Participant>();
-                for (var i = 0; i < orderedbyTeam.Count; i++)
-                {
-                    var participant = orderedbyTeam.ElementAtOrDefault(i);
-                    if (i % 2 == 0)
-                    {
-                        sideA.Add(participant);
-                    }
-                    else
-                    {
-                        sideB.Add(participant);
-                    }
-                }
-
-                return DistributeParticipants(sideA).Concat(DistributeParticipants(sideB)).ToList();
-            }
-
-            return participantList;
-        }
+       
 
         private Match GetMatch(Guid weightDivisionId, Guid categoryId, int round, int order, Guid? nextMatchId, int matchType = (int) MatchTypeEnum.Standard)
         {

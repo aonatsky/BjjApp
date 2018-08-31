@@ -6,6 +6,7 @@ import { AuthService } from '../core/services/auth.service';
 import DateHelper from '../core/helpers/date-helper';
 import { Title } from '@angular/platform-browser';
 import { Roles } from '../core/consts/roles.const';
+import { UserService } from '../core/services/user.service';
 
 @Component({
   selector: 'event',
@@ -14,7 +15,9 @@ import { Roles } from '../core/consts/roles.const';
 })
 export class EventComponent implements OnInit {
   eventModel: EventModel;
-  loginReturnUrls = [{roles:[Roles.TeamOwner], returnUrl: '/event/participant-team-registration'}];
+  loginReturnUrls = [{ roles: [Roles.TeamOwner], returnUrl: '/event/participant-team-registration' }];
+  isParticipant: boolean;
+  displayPopup: boolean = false;
 
   eventImageUrl(): string {
     if (this.eventModel.imgPath) {
@@ -23,12 +26,12 @@ export class EventComponent implements OnInit {
     return '';
   }
 
-  displayPopup: boolean = false;
   constructor(
     private routerService: RouterService,
     private eventService: EventService,
     private authService: AuthService,
-    private titleService: Title
+    private titleService: Title,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -39,6 +42,10 @@ export class EventComponent implements OnInit {
         this.routerService.goToMainDomain();
       }
     });
+    this.authService.isLoggedIn();
+    {
+      this.userService.getIsParticipant().subscribe(r => (this.isParticipant = r));
+    }
   }
 
   participate() {
@@ -46,7 +53,11 @@ export class EventComponent implements OnInit {
       if (this.authService.ifRolesMatch([Roles.TeamOwner])) {
         this.routerService.goToParticipantTeamRegistration();
       } else {
-        this.routerService.goToParticipantRegistration();
+        if (this.isParticipant) {
+          this.routerService.goToMyEvents();
+        } else {
+          this.routerService.goToParticipantRegistration();
+        }
       }
     } else {
       this.displayPopup = true;

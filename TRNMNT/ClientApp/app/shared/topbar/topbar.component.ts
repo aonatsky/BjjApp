@@ -59,7 +59,7 @@ export class TopbarComponent implements OnInit {
       {
         label: this.translateService.instant('MENU.FEDERATION'),
         routerLink: ['event-admin/federation-edit'],
-        visible:  this.isLoggedIn && this.authService.ifRolesMatch([Roles.FederationOwner])
+        visible:  this.isLoggedIn && this.authService.ifRolesMatch([Roles.FederationOwner, Roles.Admin])
       },
       {
         label: this.translateService.instant('MENU.LOGIN'),

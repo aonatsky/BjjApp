@@ -83,6 +83,10 @@ export class RouterService {
     this.router.navigateByUrl('/profile', { queryParams: { returnUrl } });
   }
 
+  goToMyEvents() {
+    this.router.navigateByUrl('/participant/my-events');
+  }
+
   goToParticipantTeamRegistration() {
     this.router.navigateByUrl('/event/participant-team-registration');
   }

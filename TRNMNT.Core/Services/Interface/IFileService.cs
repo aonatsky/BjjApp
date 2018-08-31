@@ -26,15 +26,5 @@ namespace TRNMNT.Core.Services.Interface
         /// <param name="path">The path.</param>
         /// <returns></returns>
         Task<bool> IsFileExistAsync(string path);
-
-        /// <summary>
-        /// Saves the image asynchronous.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="stream">The stream.</param>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
-        Task SaveImageAsync(string path, Stream stream, string fileName);
-
     }
 }

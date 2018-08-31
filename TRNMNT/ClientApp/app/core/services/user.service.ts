@@ -9,6 +9,7 @@ import { HttpService } from '../dal/http/http.service';
 
 @Injectable()
 export class UserService {
+  IsParticipant: boolean = undefined;
   constructor(private http: HttpService, private authService: AuthService) {}
 
   register(model: UserModelRegistration): Observable<string> {
@@ -29,6 +30,10 @@ export class UserService {
 
   getUser() {
     return this.authService.getUser();
+  }
+
+  getIsParticipant(): Observable<boolean> {
+    return this.http.get<boolean>(ApiMethods.participant.isParticipantExist);
   }
 
   getUserAthlete(): Observable<UserModelAthlete> {

@@ -37,9 +37,10 @@
                     </div>
                 </div>
                 <label class="ui-g-12 text-align-center bold"><span class="ui-state-highlight">*</span>{{'EVENT_INFO.FOR_FEDERATION_MEMBERS' | translate}}</label>
-                <p-button class="ui-g-12 ui-fluid" label="{{'EVENT_INFO.PARTICIPATE'|translate}}" (click)="participate()" *ngIf="isRegistrationStarted() && !isRegistrationEnded()"></p-button>
+                <p-button class="ui-g-12 ui-fluid" label="{{'EVENT_INFO.PARTICIPATE'|translate}}" (click)="participate()" *ngIf="isRegistrationStarted() && !isRegistrationEnded() && !isParticipant"></p-button>
                 <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="!isRegistrationStarted() && !isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_NOT_STARTED' | translate}}</label>
                 <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_IS_ENDED' | translate}}</label>
+                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="isParticipant">{{'EVENT_INFO.YOU_ARE_ALREADY_PARTICIPANT' | translate}}</label>
             </div>
         </div>
     </div>
