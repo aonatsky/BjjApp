@@ -16,16 +16,14 @@ namespace TRNMNT.Core.Services.impl
     {
         private readonly IRepository<Match> _matchRepository;
         private readonly IWeightDivisionService _weightDivisionService;
-        private readonly IParticipantService _participantService;
 
         public MatchService(
             IRepository<Match> matchRepository,
-            IWeightDivisionService weightDivisionService,
-            IParticipantService participantService)
+            IWeightDivisionService weightDivisionService
+        )
         {
             _matchRepository = matchRepository;
             _weightDivisionService = weightDivisionService;
-            _participantService = participantService;
         }
 
         public async Task<List<Match>> GetMatchesAsync(Guid categoryId, Guid weightDivisionId)
@@ -39,11 +37,8 @@ namespace TRNMNT.Core.Services.impl
             return matches;
         }
 
-        public async Task<List<Match>> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId, List<Participant> orderedParticapants)
+        public List<Match> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId, List<Participant> orderedParticapants)
         {
-            // var participants =
-            //     await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
-            // var orderedParticapants = OrderParticipantsForBracket(participants.ToList());
             var matches = CreateMatches(orderedParticapants, weightDivisionId, categoryId);
             _matchRepository.AddRange(matches);
             return matches;
@@ -243,7 +238,8 @@ namespace TRNMNT.Core.Services.impl
                     finalMatch.AParticipantId = orderedParticipants.FirstOrDefault().ParticipantId;
                     finalMatch.AParticipant = orderedParticipants.FirstOrDefault();
                     var bParticipant = orderedParticipants.ElementAtOrDefault(1);
-                    if (bParticipant != null){
+                    if (bParticipant != null)
+                    {
                         finalMatch.BParticipantId = bParticipant.ParticipantId;
                         finalMatch.BParticipant = bParticipant;
                     }
@@ -313,8 +309,6 @@ namespace TRNMNT.Core.Services.impl
             }
             return matchesForRound;
         }
-
-       
 
         private Match GetMatch(Guid weightDivisionId, Guid categoryId, int round, int order, Guid? nextMatchId, int matchType = (int) MatchTypeEnum.Standard)
         {

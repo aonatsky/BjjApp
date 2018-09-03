@@ -34,12 +34,12 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Public Methods
 
-        public async Task<CustomFile> GetBracketsFileAsync(List<Participant> participants, string title)
+        public CustomFile GetBracketsFileAsync(List<Participant> orderedparticipants, string title)
         {
             //todo use matches
-            var settings = GetSettings(participants.Count);
+            var settings = GetSettings(orderedparticipants.Count);
 
-            if (participants.Count == 4 && participants.Count(p => p != null) == 3)
+            if (orderedparticipants.Count == 4 && orderedparticipants.Count(p => p != null) == 3)
             {
                 settings = GetSettings(3);
             }
@@ -65,7 +65,7 @@ namespace TRNMNT.Core.Services.Impl
                             sheet.Cells[settings.TitleCell].Value = title;
                             for (var i = 0; i < settings.Count; i++)
                             {
-                                var participant = participants.ElementAtOrDefault(i);
+                                var participant = orderedparticipants.ElementAtOrDefault(i);
                                 sheet.Cells[settings.NameCells[i]].Value = !string.IsNullOrEmpty(participant?.FirstName)
                                     ? $"{i + 1}. {participant.FirstName} {participant.LastName}"
                                     : " - ";
@@ -83,7 +83,7 @@ namespace TRNMNT.Core.Services.Impl
                 };
             }
 
-            throw new Exception($"Brackets settings are not found for count {participants.Count}");
+            throw new Exception($"Brackets settings are not found for count {orderedparticipants.Count}");
         }
 
 
