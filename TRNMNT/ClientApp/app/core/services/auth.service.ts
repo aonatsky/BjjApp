@@ -159,7 +159,6 @@ export class AuthService {
    * Removes user and revokes tokens.
    */
   signout(): void {
-    debugger;
     this.redirectUrl = null;
     this.user = {};
     this.removeTokens();

@@ -67,7 +67,12 @@ export class HttpService {
   }
 
   getExcelFile(response: any, fileName: string): void {
+    debugger;
     FileSaver.saveAs(response.blob(), fileName);
+  }
+
+  getExcelFile1(url: string, fileName: string): Observable<any> {
+    return this.http.get(url,{responseType:'blob'}).pipe(map(r => FileSaver.saveAs(r, fileName)));
   }
 
   convertDate(input) {

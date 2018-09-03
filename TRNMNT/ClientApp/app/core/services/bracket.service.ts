@@ -22,10 +22,8 @@ export class BracketService {
     return this.httpService.get(ApiMethods.bracket.runBracket + '/' + weightDivisionId);
   }
 
-  downloadBracket(weightDivisionId: string, fileName: string) {
-    return this.httpService
-      .get(ApiMethods.bracket.downloadFile + '/' + weightDivisionId)
-      .pipe(map((r) => this.httpService.getExcelFile(r, fileName)));
+  downloadBracket(weightDivisionId: string, fileName: string): Observable<any> {
+    return this.httpService.getExcelFile1(ApiMethods.bracket.downloadFile + '/' + weightDivisionId, fileName);
   }
 
   updateBracket(model: BracketModel): Observable<void> {
@@ -58,7 +56,7 @@ export class BracketService {
   setBracketResult(bracketResult: BracketResultModel) {
     return this.httpService.post(ApiMethods.bracket.setBracketResult, bracketResult);
   }
-  
+
   areBracketsCreated(eventId: AAGUID): Observable<boolean> {
     return this.httpService.get<boolean>(ApiMethods.bracket.areBracketsCreated + '/' + eventId);
   }
@@ -70,6 +68,4 @@ export class BracketService {
   deleteBrackets(eventId: AAGUID): Observable<boolean> {
     return this.httpService.post(ApiMethods.bracket.deleteBrackets + '/' + eventId);
   }
-
-
 }

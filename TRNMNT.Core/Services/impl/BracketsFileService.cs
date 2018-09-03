@@ -126,18 +126,18 @@ namespace TRNMNT.Core.Services.Impl
 
         #region Settings
 
-        private interface IBracketFileSettings
+        public class BracketFileSettings
         {
-            int Count { get; set; }
-            string TitleCell { get; set; }
-            string[] NameCells { get; set; }
+            public int Count { get; set; }
+            public string TitleCell { get; set; }
+            public string[] NameCells { get; set; }
         }
 
-        private IBracketFileSettings GetSettings(int fightersCount)
+        private BracketFileSettings GetSettings(int fightersCount)
         {
             var stringJson = File.ReadAllText(Path.Combine(_env.WebRootPath, "Config", "barcketsSettings.json"));
-            var settingsList = JsonConvert.DeserializeObject<IBracketFileSettings[]>(stringJson).ToList();
-            return settingsList.FirstOrDefault(s => s.Count == fightersCount);
+            var settingsList = JsonConvert.DeserializeObject<BracketFileSettings[]>(stringJson).ToList();
+            return settingsList.FirstOrDefault((BracketFileSettings s) => s.Count == fightersCount);
         }
 
         #endregion
