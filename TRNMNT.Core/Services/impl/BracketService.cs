@@ -108,7 +108,8 @@ namespace TRNMNT.Core.Services.impl
                 await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
             var orderedParticapants = OrderParticipantsForBracket(participants.ToList());
             var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId, true);
-            return _fileService.GetBracketsFileAsync(orderedParticapants, GetBracketTtitle(weightDivision.Category, weightDivision));
+            var matches = await  _matchService.GetFirstMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId);
+            return _fileService.GetBracketsFileAsync(matches, GetBracketTtitle(weightDivision.Category, weightDivision));
         }
 
         public async Task<Dictionary<string, BracketModel>> GetBracketsByCategoryAsync(Guid categoryId)

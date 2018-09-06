@@ -37,6 +37,14 @@ namespace TRNMNT.Core.Services.impl
             return matches;
         }
 
+        public async Task<List<Match>> GetFirstMatchesAsync(Guid categoryId, Guid weightDivisionId)
+        {
+            var matches = await GetMatchesAsync(categoryId, weightDivisionId);
+            var maxRound = matches.Select(m => m.Round).Max();
+            return matches.Where(m => m.Round == maxRound).OrderBy(m => m.Order).ToList();
+
+        }
+
         public List<Match> CreateMatchesAsync(Guid categoryId, Guid weightDivisionId, List<Participant> orderedParticapants)
         {
             var matches = CreateMatches(orderedParticapants, weightDivisionId, categoryId);

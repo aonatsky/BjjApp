@@ -23,7 +23,7 @@ export class BracketService {
   }
 
   downloadBracket(weightDivisionId: string, fileName: string): Observable<any> {
-    return this.httpService.getExcelFile1(ApiMethods.bracket.downloadFile + '/' + weightDivisionId, fileName);
+    return this.httpService.getExcelFile(ApiMethods.bracket.downloadFile + '/' + weightDivisionId, fileName);
   }
 
   updateBracket(model: BracketModel): Observable<void> {
