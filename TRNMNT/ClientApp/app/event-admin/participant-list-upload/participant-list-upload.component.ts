@@ -12,7 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'participant-list-upload',
   templateUrl: './participant-list-upload.component.html'
 })
-export class PrticipantsListUploadComponent {
+export class ParticipantsListUploadComponent {
   @Input() eventId: string;
   @Input() hideMessageDelay: number = 10000;
 

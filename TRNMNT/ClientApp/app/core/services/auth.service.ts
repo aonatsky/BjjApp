@@ -173,7 +173,7 @@ export class AuthService {
    */
   getUser(): UserModel {
     if (this.isLoggedIn()) {
-      var userModel = new UserModel();
+      const userModel = new UserModel();
       userModel.userId = this.user.userId;
       userModel.firstName = this.user.firstName;
       userModel.lastName = this.user.lastName;
@@ -186,7 +186,7 @@ export class AuthService {
 
   getRoles(): string[] {
     if (this.isLoggedIn()) {
-      var roles = this.getUser().roles;
+      const roles = this.getUser().roles;
       if (Array.isArray(roles)) {
         return roles;
       }
@@ -203,7 +203,7 @@ export class AuthService {
   }
 
   facebookLogin(): Observable<boolean> {
-    console.log(`${this.routerService.getMainDomainUrl()}/${ApiMethods.auth.facebookLogin}`);
+    // console.log(`${this.routerService.getMainDomainUrl()}/${ApiMethods.auth.facebookLogin}`);
     const socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
     return from(this.socialAuthService.signIn(socialPlatformProvider)).pipe(
       flatMap((userData: SocialUser) => {

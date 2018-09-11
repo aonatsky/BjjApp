@@ -15,16 +15,8 @@ import { UserService } from '../core/services/user.service';
 })
 export class EventComponent implements OnInit {
   eventModel: EventModel;
-  loginReturnUrls = [{ roles: [Roles.TeamOwner], returnUrl: '/event/participant-team-registration' }];
   isParticipant: boolean;
   displayPopup: boolean = false;
-
-  eventImageUrl(): string {
-    if (this.eventModel.imgPath) {
-      return this.eventModel.imgPath.replace(/\\/g, '/');
-    }
-    return '';
-  }
 
   constructor(
     private routerService: RouterService,
@@ -34,6 +26,13 @@ export class EventComponent implements OnInit {
     private userService: UserService
   ) {}
 
+  eventImageUrl(): string {
+    if (this.eventModel.imgPath) {
+      return this.eventModel.imgPath.replace(/\\/g, '/');
+    }
+    return '';
+  }
+
   ngOnInit() {
     this.eventService.getEventInfo().subscribe(r => {
       this.eventModel = r;
@@ -42,23 +41,12 @@ export class EventComponent implements OnInit {
         this.routerService.goToMainDomain();
       }
     });
-    this.authService.isLoggedIn();
-    {
-      this.userService.getIsParticipant().subscribe(r => (this.isParticipant = r));
-    }
+    this.checkIsParticipant();
   }
 
   participate() {
     if (this.authService.isLoggedIn()) {
-      if (this.authService.ifRolesMatch([Roles.TeamOwner])) {
-        this.routerService.goToParticipantTeamRegistration();
-      } else {
-        if (this.isParticipant) {
-          this.routerService.goToMyEvents();
-        } else {
-          this.routerService.goToParticipantRegistration();
-        }
-      }
+      this.processToParticipation();
     } else {
       this.displayPopup = true;
     }
@@ -70,5 +58,26 @@ export class EventComponent implements OnInit {
 
   isRegistrationEnded(): boolean {
     return DateHelper.getCurrentDate() >= DateHelper.getDate(this.eventModel.registrationEndTS);
+  }
+
+  processToParticipation() {
+    this.userService.getIsParticipant().subscribe(r => {
+      this.isParticipant = r;
+      if (this.authService.ifRolesMatch([Roles.TeamOwner])) {
+        this.routerService.goToParticipantTeamRegistration();
+      } else {
+        if (this.isParticipant) {
+          this.routerService.goToMyEvents();
+        } else {
+          this.routerService.goToParticipantRegistration();
+        }
+      }
+    });
+  }
+
+  private checkIsParticipant() {
+    if (this.authService.isLoggedIn()) {
+      this.userService.getIsParticipant().subscribe(r => (this.isParticipant = r));
+    }
   }
 }

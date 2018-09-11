@@ -2,7 +2,7 @@
     <div class="brackets-live stages-{{getMaxRound()}}" *ngIf="bracket">
         <div class="bracket-header">
             <div class="ui-g-12">
-                <h2>{{bracket.title}}</h2>
+                <h2 *ngIf="fullView">{{bracket.title}}</h2>
             </div>
             <div class="medalists" *ngIf="bracket.medalists.length > 0">
                 <div class="" *ngFor="let medalist of bracket.medalists"><b>{{medalist.place}}</b> {{medalist.participant.firstName}}

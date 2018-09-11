@@ -15,7 +15,7 @@
                 (click)="getBracket();"></button>
             <button pButton type="button" iconPos="left" icon="fa fa-save" [label]="'EVENT_MANAGEMENT.UPDATE_BRACKET' | translate" [disabled]="!bracket || !isEdited"
                 (click)="updateBracket();"></button>
-            <button pButton type="button" iconPos="left" icon="fa fa-file-excel-o" [label]="'COMMON.DOWNLOAD' | translate" [disabled]="!bracket || isEdited"
+            <button pButton type="button" iconPos="left" icon="fas fa-file-download" [label]="'COMMON.DOWNLOAD' | translate" [disabled]="!bracket || isEdited"
                 (click)="downloadBracket();"></button>
         </div>
     </div>

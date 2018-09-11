@@ -6,15 +6,15 @@
 </div>
 <div class="ui-g">
     <div class="ui-g-12">
-        <button pButton type="button" label="Run Weight Division" iconPos="right" icon="fa fa-play-circle" (click)="runWeightDivision()" [disabled]="!isFilterSelected"></button>
-        <button pButton type="button" label="Referee TV Mode" iconPos="right" icon="fa fa-tv" (click)="runWeightDivisionSpectatorView()" [disabled]="!isFilterSelected"></button>
-        <button pButton type="button" label="Category Overview TV Mode" icon="fa fa-tv" iconPos="right" (click)="runCategorySpectatorView()" [disabled]="!isCategorySelected"></button>
+        <button pButton type="button" label="{{'EVENT_RUN.RUN_WEIGHT_DIVISION' | translate}}" iconPos="left" icon="fa fa-play-circle" (click)="runWeightDivision()" [disabled]="!isFilterSelected"></button>
+        <button pButton type="button" label="{{'EVENT_RUN.MAT_SPECTATOR_SCREEN' | translate}}" iconPos="left" icon="fa fa-tv" (click)="runWeightDivisionSpectatorView()" [disabled]="!isFilterSelected"></button>
+        <button pButton type="button" label="{{'EVENT_RUN.CATEGORY_OVERVIEW' | translate}}" icon="fa fa-tv" iconPos="left" (click)="runCategorySpectatorView()" [disabled]="!isCategorySelected"></button>
     </div>
     <div class="ui-g-12">
-        <button pButton type="button" label="Set Bracket Results" (click)="showResultSetPopup()" [disabled]="!bracket"></button>
+        <button pButton type="button" label="{{'EVENT_RUN.SET_RESULTS' | translate}}" (click)="showResultSetPopup()" [disabled]="!bracket"></button>
     </div>
 </div>
-<bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runMatch($event);" [adminView]="true"></bracket>
+<bracket *ngIf="bracket" [bracket]="bracket" (roundClick)="runMatch($event);" [adminView]="true" [fullView]="false"></bracket>
 <round-panel *ngIf="showRoundPanel" [matchModel]="selectedMatch" (close)="completeMatch()" (completeRound)="completeMatch()"></round-panel>
 <p-dialog width="500" [modal]="true" [(visible)]="showResultPopup" (onHide)="hideResultSetPopup();">
     <bracket-result-set *ngIf="bracket" [bracket]="bracket"></bracket-result-set>

@@ -73,7 +73,7 @@
       display: block;
       height: calc(50% + 1px);
       position: absolute;
-      width: 10px;
+      width: 20px;
     }
 
     .match {
@@ -275,22 +275,23 @@
       }
     }
 
-    &.collapsed{
+    &.collapsed {
+      max-width: 20px;
+      .match {
         width: 0px;
-        flex-grow: unset;
-        .match{
-            width: 0px;
-            margin: 0px;
-            padding: 0px;
-        }
+        margin: 0px 10px;
+        padding: 10px 0px;
+        border: 0px;
+      }
 
-        .match-content{
-            visibility: collapse;
-        }
+      .match-content {
+        visibility: collapse;
+        width: 0px;
+      }
 
-        .participant-plate{
-            display: none;
-        }
+      .participant-plate {
+        display: none;
+      }
     }
   }
 }

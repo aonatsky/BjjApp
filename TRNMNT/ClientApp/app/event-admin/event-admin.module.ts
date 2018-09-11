@@ -9,7 +9,7 @@ import { EventManagementComponent } from './event-management/event-management.co
 // tslint:disable-next-line:max-line-length
 import { EventManagementParticipantsComponent } from './event-management-participants/event-management-participants.component';
 import { SharedModule } from '../shared/shared.module';
-import { PrticipantsListUploadComponent } from './participant-list-upload/participant-list-upload.component';
+import { ParticipantsListUploadComponent } from './participant-list-upload/participant-list-upload.component';
 import { CategoryEditComponent } from './event-edit/category-edit/category-edit.component';
 import { ConnectorComponent } from './event-management/brackets-generation/connector.component';
 import { EventRunComponent } from './event-run/event-run.component';
@@ -35,7 +35,7 @@ import { EventDashboardComponent } from './event-dashboard/event-dashboard.compo
     EventManagementComponent,
     CategoryEditComponent,
     EventManagementParticipantsComponent,
-    PrticipantsListUploadComponent,
+    ParticipantsListUploadComponent,
     EventRunComponent,
     EventRunWeightDivisionViewComponent,
     EventRunCategoryViewComponent,

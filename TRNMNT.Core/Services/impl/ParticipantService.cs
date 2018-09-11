@@ -89,20 +89,20 @@ namespace TRNMNT.Core.Services.Impl
 
         public async Task<bool> IsParticipantExistsAsync(ParticipantModelBase model, Guid eventId)
         {
-            return await _repository.GetAll().AnyAsync(p =>
+            return await _repository.GetAll(p =>
                 p.IsActive &&
                 p.EventId == eventId &&
                 p.FirstName == model.FirstName &&
                 p.LastName == model.LastName &&
-                p.DateOfBirth == model.DateOfBirth);
+                p.DateOfBirth == model.DateOfBirth).AnyAsync();
         }
 
         public async Task<bool> IsParticipantExistsAsync(string userId, Guid eventId)
         {
-            return await _repository.GetAll().AnyAsync(p =>
+            return await _repository.GetAll(p =>
                 p.IsActive &&
                 p.EventId == eventId &&
-                p.UserId == userId);
+                p.UserId == userId).AnyAsync();
         }
 
         public void AddParticipant(ParticipantRegistrationModel model, Guid eventId, Guid orderId, Guid participantId, bool isFederationMember)

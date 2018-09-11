@@ -8,12 +8,12 @@
 }
 
 export class UserModelRegistration extends UserModelBase {
+  password: string;
+  isTeamOwner: boolean;
   constructor() {
     super();
     this.isTeamOwner = false;
   }
-  password: string;
-  isTeamOwner: boolean;
 }
 
 export class UserModel extends UserModelRegistration {

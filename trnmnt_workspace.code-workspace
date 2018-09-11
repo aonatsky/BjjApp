@@ -19,7 +19,8 @@
 			"particpant",
 			"signout",
 			"topbar",
-			"user"
+			"user",
+			"реєстрація"
 		],
 		"cSpell.enabledLanguageIds": [
 			"asciidoc",

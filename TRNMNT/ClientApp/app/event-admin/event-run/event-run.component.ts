@@ -43,7 +43,6 @@ export class EventRunComponent implements OnInit, OnDestroy {
     private bracketService: BracketService,
     private route: ActivatedRoute,
     private routerService: RouterService,
-    
     private runEventCommunicationService: EventRunCommunicationService
   ) {}
 
@@ -85,19 +84,19 @@ export class EventRunComponent implements OnInit, OnDestroy {
     this.routerService.openEventCategorySpectatorView(this.filter.categoryId);
   }
 
-  private showResultSetPopup() {
+  showResultSetPopup() {
     this.showResultPopup = true;
   }
 
-  private hideResultSetPopup() {
+  hideResultSetPopup() {
     this.showResultPopup = false;
   }
 
-  private cancelRound() {
+  cancelRound() {
     this.selectedMatch = undefined;
   }
 
-  private refreshModel(model: BracketModel) {
+  refreshModel(model: BracketModel) {
     this.bracket = model;
     console.log('RECIEVED', model);
   }

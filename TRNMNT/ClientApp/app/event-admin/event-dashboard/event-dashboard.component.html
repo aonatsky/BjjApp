@@ -47,7 +47,7 @@
             </div>
     </div>
     <div class="ui-g-12 action-box">
-      <p-button class="ui-g-nopad" (click)="routerService.goToEventRun(eventId)" label="{{'EVENT_DASHBOARD.RUN_EVENT' | translate}}"></p-button>
+      <p-button class="ui-g-nopad" (click)="routerService.goToEventRun(eventId)" label="{{'EVENT_DASHBOARD.RUN_EVENT' | translate}}" [disabled]="!model.bracketsCreated" ></p-button>
       <div class="ui-g-12">
         {{'EVENT_DASHBOARD.RUN_EVENT_DESCRIPTION' | translate}}
       </div>

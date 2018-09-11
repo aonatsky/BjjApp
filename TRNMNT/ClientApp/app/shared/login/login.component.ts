@@ -1,15 +1,16 @@
-﻿import { Component, OnInit, Input } from '@angular/core';
+﻿import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { LoggerService } from '../../core/services/logger.service';
 import { RouterService } from '../../core/services/router.service';
 import { TranslateService } from '@ngx-translate/core';
+import { UserModel } from '../../core/model/user.models';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   username: string = '';
   password: string = '';
   @Input()
@@ -22,6 +23,9 @@ export class LoginComponent implements OnInit {
   registrationEnabled: boolean = true;
   errorMessage: string = '';
 
+  @Output()
+  onLogin: EventEmitter<UserModel>;
+
   constructor(
     private authService: AuthService,
     private routerService: RouterService,
@@ -29,14 +33,12 @@ export class LoginComponent implements OnInit {
     private translateService: TranslateService
   ) {}
 
-  ngOnInit() {}
-
   login(): any {
     this.errorMessage = '';
     this.authService.signin(this.username, this.password).subscribe(
       data => this.processLogin(data),
       error => {
-        if ((error.status = 401)) {
+        if (error.status === 401) {
           this.processLogin(false);
         } else {
           this.loggerService.logError(error);
@@ -51,6 +53,7 @@ export class LoginComponent implements OnInit {
 
   processLogin(isAuthenticated: boolean) {
     if (isAuthenticated) {
+      this.onLogin.emit(this.authService.getUser());
       let url = this.returnUrl;
       if (this.returnUrlsByRoles) {
         this.returnUrlsByRoles.forEach(m => {

@@ -10,12 +10,12 @@ import { RouterService } from '../../core/services/router.service';
 })
 export class LoginPageComponent implements OnInit {
   returnUrl: string;
-
-  constructor(private route: ActivatedRoute, private authService: AuthService, private routerService: RouterService) {}
   loginReturnUrls = [
     { roles: [Roles.TeamOwner, Roles.Participant], returnUrl: '/participant/my-events' },
     { roles: [Roles.Admin, Roles.FederationOwner, Roles.Owner], returnUrl: '/event-admin/event-list' }
   ];
+
+  constructor(private route: ActivatedRoute, private authService: AuthService, private routerService: RouterService) {}
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams.returnUrl;
