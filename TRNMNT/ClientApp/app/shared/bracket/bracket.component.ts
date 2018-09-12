@@ -112,8 +112,8 @@ export class BracketComponent implements OnInit {
     }
   }
 
-  private getWinnerClass(model: MatchModel) {
-    if (model.winnerParticipant) {
+  getWinnerClass(model: MatchModel) {
+    if (this.fullView && model.winnerParticipant) {
       if (!!model.aParticipant && model.winnerParticipant.participantId === model.aParticipant.participantId) {
         return 'winner-1';
       } else {

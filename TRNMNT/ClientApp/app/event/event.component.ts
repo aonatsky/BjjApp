@@ -7,6 +7,9 @@ import DateHelper from '../core/helpers/date-helper';
 import { Title } from '@angular/platform-browser';
 import { Roles } from '../core/consts/roles.const';
 import { UserService } from '../core/services/user.service';
+import { CategoryWithDivisionFilterModel } from '../core/model/category-with-division-filter.model';
+import { BracketModel } from '../core/model/bracket.models';
+import { BracketService } from '../core/services/bracket.service';
 
 @Component({
   selector: 'event',
@@ -17,13 +20,16 @@ export class EventComponent implements OnInit {
   eventModel: EventModel;
   isParticipant: boolean;
   displayPopup: boolean = false;
+  filter: CategoryWithDivisionFilterModel;
+  bracket: BracketModel;
 
   constructor(
     private routerService: RouterService,
     private eventService: EventService,
     private authService: AuthService,
     private titleService: Title,
-    private userService: UserService
+    private userService: UserService,
+    private bracketService: BracketService
   ) {}
 
   eventImageUrl(): string {

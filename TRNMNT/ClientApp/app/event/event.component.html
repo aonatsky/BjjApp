@@ -5,42 +5,64 @@
     <div class="ui-widget ui-g-nopad main-info box-shadow">
         <div class="ui-g">
             <div class="ui-g-8 ui-widget-content info">
-                <label class="ui-g-4 bold">{{'EVENT_INFO.EVENT_STARTS' | translate}}</label>
-                <label class="ui-g-8 ">{{eventModel.eventDate | date:'dd/MM/yyyy'}}</label>
-                <label class="ui-g-4 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</label>
-                <label class="ui-g-8">{{eventModel.registrationStartTS | date:'dd/MM/yyyy'}}</label>
-                <label class="ui-g-4 bold">{{'EVENT_INFO.LATE_REGISTRATION' | translate}}</label>
-                <label class="ui-g-8">{{eventModel.earlyRegistrationEndTS | date:'dd/MM/yyyy'}}</label>
-                <label class="ui-g-4 bold">{{'EVENT_INFO.CONTACT' | translate}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.EVENT_STARTS'
+                    | translate}}</label>
+                <label class="ui-g-8 ">{{eventModel.eventDate
+                    | date:'dd/MM/yyyy'}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.EARLY_REGISTRATION'
+                    | translate}}</label>
+                <label class="ui-g-8">{{eventModel.registrationStartTS
+                    | date:'dd/MM/yyyy'}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.LATE_REGISTRATION'
+                    | translate}}</label>
+                <label class="ui-g-8">{{eventModel.earlyRegistrationEndTS
+                    | date:'dd/MM/yyyy'}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.CONTACT'
+                    | translate}}</label>
                 <div class="ui-g-8">
                     <label>{{eventModel.contactEmail}}</label>
-                    <button *ngIf="eventModel.fbLink" pButton class="ui-button-icon-only" icon="fab fa-facebook" label="{{eventModel.fbLink}}"></button>
-                    <button *ngIf="eventModel.vkLink" pButton class="ui-button-icon-only" icon="fab fa-vk" label="{{eventModel.vkLink}}"></button>
+                    <button *ngIf="eventModel.fbLink" pButton class="ui-button-icon-only"
+                        icon="fab fa-facebook" label="{{eventModel.fbLink}}"></button>
+                    <button *ngIf="eventModel.vkLink" pButton class="ui-button-icon-only"
+                        icon="fab fa-vk" label="{{eventModel.vkLink}}"></button>
                 </div>
-                <label class="ui-g-4 bold">{{'EVENT_INFO.TNC' | translate}}</label>
+                <label class="ui-g-4 bold">{{'EVENT_INFO.TNC'
+                    | translate}}</label>
                 <label class="ui-g-8">
-                    <a href="{{eventModel.tncFilePath}}" class="btn-link">{{'COMMON.DOWNLOAD' | translate}}</a>
+                    <a href="{{eventModel.tncFilePath}}" class="btn-link">{{'COMMON.DOWNLOAD'
+                        | translate}}</a>
                 </label>
 
             </div>
             <div class="ui-g-4 ui-widget-content prices">
                 <div class='ui-g ui-g-12 prices-details'>
-                    <div class="ui-g-12 bold">{{'EVENT_INFO.EARLY_REGISTRATION' | translate}}</div>
+                    <div class="ui-g-12 bold">{{'EVENT_INFO.EARLY_REGISTRATION'
+                        | translate}}</div>
                     <div class="ui-g-6">{{eventModel.earlyRegistrationPrice}}</div>
                     <div class="ui-g-6">{{eventModel.earlyRegistrationPriceForMembers}}
                         <span class="ui-state-highlight">*</span>
                     </div>
-                    <div class="ui-g-12 bold">{{'EVENT_INFO.LATE_REGISTRATION' | translate}}</div>
+                    <div class="ui-g-12 bold">{{'EVENT_INFO.LATE_REGISTRATION'
+                        | translate}}</div>
                     <div class="ui-g-6">{{eventModel.lateRegistrationPrice}}</div>
                     <div class="ui-g-6">{{eventModel.lateRegistrationPriceForMembers}}
                         <span class="ui-state-highlight">*</span>
                     </div>
                 </div>
-                <label class="ui-g-12 text-align-center bold"><span class="ui-state-highlight">*</span>{{'EVENT_INFO.FOR_FEDERATION_MEMBERS' | translate}}</label>
-                <p-button class="ui-g-12 ui-fluid" label="{{'EVENT_INFO.PARTICIPATE'|translate}}" (click)="participate()" *ngIf="isRegistrationStarted() && !isRegistrationEnded() && !isParticipant"></p-button>
-                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="!isRegistrationStarted() && !isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_NOT_STARTED' | translate}}</label>
-                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_IS_ENDED' | translate}}</label>
-                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center" *ngIf="isParticipant">{{'EVENT_INFO.YOU_ARE_ALREADY_PARTICIPANT' | translate}}</label>
+                <label class="ui-g-12 text-align-center bold"><span
+                        class="ui-state-highlight">*</span>{{'EVENT_INFO.FOR_FEDERATION_MEMBERS'
+                    | translate}}</label>
+                <p-button class="ui-g-12 ui-fluid" label="{{'EVENT_INFO.PARTICIPATE'|translate}}"
+                    (click)="participate()" *ngIf="isRegistrationStarted() && !isRegistrationEnded() && !isParticipant"></p-button>
+                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center"
+                    *ngIf="!isRegistrationStarted() && !isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_NOT_STARTED'
+                    | translate}}</label>
+                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center"
+                    *ngIf="isRegistrationEnded()">{{'EVENT_INFO.REGISTRATION_IS_ENDED'
+                    | translate}}</label>
+                <label class="ui-g-12 ui-fluid ui-state-highlight text-align-center"
+                    *ngIf="isParticipant">{{'EVENT_INFO.YOU_ARE_ALREADY_PARTICIPANT'
+                    | translate}}</label>
             </div>
         </div>
     </div>
@@ -50,13 +72,31 @@
                 {{eventModel.additionalData}}
             </p-tabPanel>
             <p-tabPanel header="{{'EVENT.PARTICIPANTS' | translate}}">
-                <participant-list *ngIf="eventModel.participantListsPublished" [eventId]="eventModel.eventId"></participant-list>
-                <div class="ui-g-12 layout-padding-lg ui-state-highlight text-align-center" *ngIf="!eventModel.participantListsPublished">
-                        {{'EVENT_INFO.PARTICIPANT_LISTS_NOT_PUBLISHED_YET' | translate}}
-                    </div>
+                <participant-list *ngIf="eventModel.participantListsPublished"
+                    [eventId]="eventModel.eventId"></participant-list>
+                <div class="ui-g-12 layout-padding-lg ui-state-highlight text-align-center"
+                    *ngIf="!eventModel.participantListsPublished">
+                    {{'EVENT_INFO.PARTICIPANT_LISTS_NOT_PUBLISHED_YET'
+                    | translate}}
+                </div>
             </p-tabPanel>
             <p-tabPanel header="{{'EVENT.BRACKETS' | translate}}">
-                Brackets
+                <div *ngIf="eventModel.bracketsPublished">
+                    <div class="ui-g">
+                        <category-with-division-filter [eventId]="eventModel.eventId"
+                            [refreshTrigger]="0"
+                            autoSelectFirstWeightDivision="true"
+                            (onFilterChanged)="filterSelected($event)"></category-with-division-filter>
+                    </div>
+
+                    <bracket *ngIf="bracket" [bracket]="bracket"
+                        [adminView]="false" [fullView]="false"></bracket>
+
+                </div>
+                <div class="ui-g-12 layout-padding-lg ui-state-highlight text-align-center"
+                    *ngIf="!eventModel.bracketsPublished">
+                    {{'EVENT_INFO.BRACKETS_NOT_PUBLISHED_YET' | translate}}
+                </div>
             </p-tabPanel>
             <p-tabPanel header="{{'EVENT.RESULTS' | translate}}">
                 Results
