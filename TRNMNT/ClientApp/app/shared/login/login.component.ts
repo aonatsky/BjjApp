@@ -24,7 +24,7 @@ export class LoginComponent {
   errorMessage: string = '';
 
   @Output()
-  onLogin: EventEmitter<UserModel>;
+  onLogin: EventEmitter<UserModel> = new EventEmitter();
 
   constructor(
     private authService: AuthService,
@@ -53,16 +53,19 @@ export class LoginComponent {
 
   processLogin(isAuthenticated: boolean) {
     if (isAuthenticated) {
-      this.onLogin.emit(this.authService.getUser());
-      let url = this.returnUrl;
-      if (this.returnUrlsByRoles) {
-        this.returnUrlsByRoles.forEach(m => {
-          if (this.authService.ifRolesMatch(m.roles)) {
-            url = m.returnUrl;
-          }
-        });
+      if (this.returnUrl || this.returnUrlsByRoles) {
+        let url = this.returnUrl;
+        if (this.returnUrlsByRoles) {
+          this.returnUrlsByRoles.forEach(m => {
+            if (this.authService.ifRolesMatch(m.roles)) {
+              url = m.returnUrl;
+            }
+          });
+        }
+        this.routerService.navigateByUrl(url);
+      } else {
+        this.onLogin.emit(this.authService.getUser());
       }
-      this.routerService.navigateByUrl(url);
     } else {
       this.errorMessage = this.translateService.instant('ERROR.EMAIL_OR_PASSWORD_IS_INVALID');
     }

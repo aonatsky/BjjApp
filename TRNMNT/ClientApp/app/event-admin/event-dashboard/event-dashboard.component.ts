@@ -13,12 +13,6 @@ import { SelectItem } from 'primeng/primeng';
   styleUrls: ['./event-dashboard.component.scss']
 })
 export class EventDashboardComponent implements OnInit {
-  constructor(
-    public route: ActivatedRoute,
-    private routerService: RouterService,
-    private translateService: TranslateService,
-    private eventService: EventService
-  ) {}
   eventId: AAGUID;
   model: EventDashboardModel;
   sortField: string = 'categoryName';
@@ -48,6 +42,12 @@ export class EventDashboardComponent implements OnInit {
     { label: this.translateService.instant('COMMON.YES'), value: true },
     { label: this.translateService.instant('COMMON.NO'), value: false }
   ];
+  constructor(
+    public route: ActivatedRoute,
+    public routerService: RouterService,
+    private translateService: TranslateService,
+    private eventService: EventService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(p => {
@@ -67,11 +67,11 @@ export class EventDashboardComponent implements OnInit {
     }
   }
 
-  setParticipantListsPublished($event){
+  setParticipantListsPublished($event) {
     this.eventService.setParticipantListsPublish(this.model.eventId, $event.checked).subscribe();
   }
 
-  setBracketsPublished($event){
+  setBracketsPublished($event) {
     this.eventService.setBracketsPublish(this.model.eventId, $event.checked).subscribe();
   }
 }

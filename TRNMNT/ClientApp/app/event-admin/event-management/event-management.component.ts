@@ -17,6 +17,7 @@ export class EventManagementComponent implements OnInit {
       this.eventId = p['id'];
     });
     this.route.queryParams.subscribe(p => {
+      debugger;
       switch (p.page) {
         case 'brackets': {
           this.activeTabIndex = 1;
@@ -30,8 +31,8 @@ export class EventManagementComponent implements OnInit {
           this.activeTabIndex = 2;
           break;
         }
-        default:{
-          this.activeTabIndex = 0
+        default: {
+          this.activeTabIndex = 0;
         }
       }
     });

@@ -52,7 +52,8 @@ export const data = {
     TEAMS: 'Команди',
     PROFILE: 'Мій профіль',
     MY_TEAM: 'Моя команда',
-    MY_EVENTS: 'Мої змагання'
+    MY_EVENTS: 'Мої змагання',
+    FEDERATION: 'Федерація'
   },
   LOGIN: {
     SIGN_IN_OR: 'Увійдіть або',
@@ -196,7 +197,8 @@ export const data = {
     ADDITIONAL: 'Додатково',
     ADD_CATEGORY: 'Додати категорію',
     EDIT_CATEGORY: 'Редагувати категорію',
-    DATES_SEQUENCE_INCORRECT: 'Будь ласка, перевірте порядок дат'
+    DATES_SEQUENCE_INCORRECT: 'Будь ласка, перевірте порядок дат',
+    DO_YOU_WANT_TO_DELETE_EVENT: 'Ви хочете видалити подію?'
   },
   TEAM: {
     NAME: 'Назва',
@@ -207,6 +209,7 @@ export const data = {
     NOT_APPROVED: 'Не підтверджено',
     TEAM_NOT_APPROVED_TOOLTIP: 'Ваша команда не підтвердженна',
     TEAM_OR_MEMBERSHIP_NOT_APPROVED_TOOLTIP:
+      // tslint:disable-next-line:max-line-length
       'Ваша команда не підтвердженна або ви не підтвердженні як її учасник,будь ласка, зв`яжіться з вашим тренером для затвердження'
   },
   TEAM_REGISTRATION: {

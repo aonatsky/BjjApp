@@ -128,10 +128,10 @@ namespace TRNMNT.Core.Services.Impl
             //updating
             foreach (var updatedDivision in updatedDivisions)
             {
-                var exsistingDivision = existingDivisions.FirstOrDefault(c => c.WeightDivisionId == updatedDivision.WeightDivisionId);
-                if (exsistingDivision != null)
+                var existingDivision = existingDivisions.FirstOrDefault(c => c.WeightDivisionId == updatedDivision.WeightDivisionId);
+                if (existingDivision != null)
                 {
-                    _weightDivisionRepository.UpdateValues(exsistingDivision, updatedDivision);
+                    _weightDivisionRepository.UpdateValues(existingDivision, updatedDivision);
                 }
                 else
                 {
@@ -151,15 +151,15 @@ namespace TRNMNT.Core.Services.Impl
             var modelsQuery = _eventRepository.GetAll();
             if (role == Roles.Admin)
             {
-                return await GetModels(_eventRepository.GetAll());
+                return await GetModels(_eventRepository.GetAll(e => e.IsActive));
             }
             if (role == Roles.FederationOwner)
             {
-                return await GetModels(_eventRepository.GetAll());
+                return await GetModels(_eventRepository.GetAll(e => e.IsActive));
             }
             if (role == Roles.Owner)
             {
-                return await GetModels(_eventRepository.GetAll().Where(e => e.OwnerId == userId));
+                return await GetModels(_eventRepository.GetAll(e => e.IsActive && e.OwnerId == userId));
             }
             return new List<EventModelBase>();
 
@@ -436,7 +436,7 @@ namespace TRNMNT.Core.Services.Impl
             return _event.EventId;
         }
 
-        public async Task DeleteEventAsync(string eventId)
+        public async Task DeleteEventAsync(Guid eventId)
         {
             var _event = await _eventRepository.GetByIDAsync(eventId);
             if (_event == null)

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
@@ -93,7 +94,7 @@ namespace TRNMNT.Web.Controllers
                     HttpContext.Response.Redirect($"{HttpContext.Request.Scheme}://{hostName}/");
                 }
             }
-            //hadrcoded federationid
+            //hardcoded federationId
             _federationId = new Guid("673ea3ce-2530-48c0-b84c-a3de492cab25");
 
         }
@@ -214,7 +215,7 @@ namespace TRNMNT.Web.Controllers
             }, checkEventId, checkFederationId);
         }
 
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<Task<(T Response, HttpStatusCode Code)>> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func < Task < (T Response, HttpStatusCode Code) >> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
@@ -247,7 +248,7 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(async() =>(await action(), HttpStatusCode.OK), checkEventId, checkFederationId);
         }
 
-        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func<(T Response, HttpStatusCode Code)> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestWithDataAsync<T>(Func < (T Response, HttpStatusCode Code) > action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
@@ -279,7 +280,7 @@ namespace TRNMNT.Web.Controllers
             return await HandleRequestWithDataAsync(() =>(action(), HttpStatusCode.OK), checkEventId, checkFederationId);
         }
 
-        protected async Task<IActionResult> HandleRequestWithFileAsync(Func<(CustomFile Response, HttpStatusCode Code)> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestWithFileAsync(Func < (CustomFile Response, HttpStatusCode Code) > action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {
@@ -306,7 +307,7 @@ namespace TRNMNT.Web.Controllers
             }
         }
 
-        protected async Task<IActionResult> HandleRequestWithFileAsync(Func<Task<(CustomFile Response, HttpStatusCode Code)>> action, bool checkEventId = false, bool checkFederationId = false)
+        protected async Task<IActionResult> HandleRequestWithFileAsync(Func < Task < (CustomFile Response, HttpStatusCode Code) >> action, bool checkEventId = false, bool checkFederationId = false)
         {
             try
             {

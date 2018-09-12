@@ -1,15 +1,16 @@
-﻿<trnmnt-page [title]="'Event Overview'|translate" contentClass="ui-g-8 ui-g-offset-2">
+﻿<trnmnt-page [title]="'EVENT_LIST.TITLE'|translate" contentClass="ui-g-8 ui-g-offset-2">
     <div class="ui-widget-content ui-g-12 event-plate" *ngFor="let event of events" (click)="dashboard(event.eventId)">
-        <div class="ui-g-6">
+        <div class="ui-g-4">
             <b>{{event.title}}</b>
+            {{event.eventDate | date}}
         </div>
-        <div class="float-right">
+        <!-- <div class="float-right">
             <button pButton type="button" class="ui-button-icon-only" icon="fas fa-edit" (click)="editEvent(event.eventId)"></button>
             <button pButton type="button" class="ui-button-icon-only" icon="fa fa-cog" (click)="openDetails(event.eventId)"></button>
             <button pButton type="button" class="ui-button-icon-only" icon="fa fa-play" (click)="runEvent(event.eventId)"></button>
-        </div>
+        </div> -->
     </div>
     <div class="ui-g-12 ui-g-nopad">
-        <button pButton type="button" label="Create Event" (click)="createEvent()"></button>
+        <button pButton type="button" label="{{'EVENT_LIST.CREATE_EVENT'|translate}}" (click)="createEvent()"></button>
     </div>
 </trnmnt-page>

@@ -166,6 +166,6 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="eventId">Event id.</param>
         /// <returns></returns>
-        Task DeleteEventAsync(string eventId);
+        Task DeleteEventAsync(Guid eventId);
     }
 }

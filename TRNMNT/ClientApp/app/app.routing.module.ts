@@ -9,7 +9,6 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RedirectGuard } from './core/guards/redirect.guard';
 
 const appRoutes: Routes = [
-  
   {
     path: '',
     redirectTo: 'login',
@@ -18,8 +17,7 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent,
-    pathMatch: 'full',
-    canActivate: [RedirectGuard]
+    pathMatch: 'full'
   },
   {
     path: 'register',
@@ -46,7 +44,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes, { enableTracing: false, onSameUrlNavigation : 'reload' })],
+  imports: [RouterModule.forRoot(appRoutes, { enableTracing: false, onSameUrlNavigation: 'reload' })],
   providers: [RouterModule]
 })
 export class AppRoutingModule {}

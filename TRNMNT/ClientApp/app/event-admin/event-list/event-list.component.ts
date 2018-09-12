@@ -2,11 +2,11 @@
 import { RouterService } from '../../core/services/router.service';
 import { EventPreviewModel } from '../../core/model/event.models';
 import { Component, OnInit } from '@angular/core';
-import './event-list.component.scss';
 
 @Component({
   selector: 'event-list',
-  templateUrl: './event-list.component.html'
+  templateUrl: './event-list.component.html',
+  styleUrls: ['./event-list.component.scss']
 })
 export class EventListComponent implements OnInit {
   events: EventPreviewModel[] = [];

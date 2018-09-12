@@ -5,18 +5,17 @@
                 {{'EVENT_EDIT.TITLE'|translate}}
             </div>
         </div>
-        <p-steps [model]="menuItems" [activeIndex]="currentStep"></p-steps>
+        <p-steps [model]="menuItems" [activeIndex]="currentStep" [readonly]="false"></p-steps>
         <div class="ui-g-8 ui-g-offset-2 steps-content" *ngIf="eventModel">
             <div class="ui-widget ui-widget-content form">
-                <div *ngIf="currentStep==0" class="">
+                <div [hidden]="currentStep!=0" class="">
                     <form novalidate #mainDataForm="ngForm" ngControl="mainDataForm">
                         <div class="ui-g">
                             <div class="ui-g-3 ui-sm-12 ui-fluid">
                                 <label class="field-title">{{'EVENT_EDIT.EVENT_TITLE'|translate}}</label>
                             </div>
                             <div class="ui-g-9 ui-sm-12 ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.title" required
-                                    name="title" />
+                                <input pInputText [(ngModel)]="eventModel.title" required name="title" />
                             </div>
                         </div>
                         <div class="ui-g">
@@ -24,9 +23,8 @@
                                 <label class="field-title">{{'EVENT_EDIT.DOMAIN'|translate}}</label>
                             </div>
                             <div class="ui-g-6 ui-sm-8 ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.urlPrefix"
-                                    pattern="[^_\W]+" required
-                                    name="url" (blur)="checkIfPrefixExist()" />
+                                <input pInputText [(ngModel)]="eventModel.urlPrefix" pattern="[^_\W]+" required name="url" (blur)="checkIfPrefixExist()"
+                                />
                             </div>
                             <div class="ui-g-3 ui-sm-4 ui-fluid">
                                 <label>trnmnt.pro</label>
@@ -40,10 +38,7 @@
                                 <label class="field-title">{{'EVENT_EDIT.DATE'|translate}}</label>
                             </div>
                             <div class="ui-g-9 ui-fluid">
-                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar"
-                                    [(ngModel)]="eventModel.eventDate"
-                                    [showIcon]="true" required
-                                    name="date"></p-calendar>
+                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar" [(ngModel)]="eventModel.eventDate" [showIcon]="true" required name="date"></p-calendar>
                             </div>
                         </div>
                         <div class="ui-g">
@@ -51,9 +46,7 @@
                                 <label class="field-title">{{'EVENT_EDIT.REGISTRATION_START'|translate}}</label>
                             </div>
                             <div class="ui-g-9 ui-fluid">
-                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar"
-                                    [(ngModel)]="eventModel.registrationStartTS"
-                                    [showIcon]="true" required
+                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar" [(ngModel)]="eventModel.registrationStartTS" [showIcon]="true" required
                                     name="registrationStartDate"></p-calendar>
                             </div>
                         </div>
@@ -62,10 +55,8 @@
                                 <label class="field-title">{{'EVENT_EDIT.EARLY_REGISTRATION_ENDS'|translate}}</label>
                             </div>
                             <div class="ui-g-9 ui-fluid">
-                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar"
-                                    [(ngModel)]="eventModel.earlyRegistrationEndTS"
-                                    [showIcon]="true" required
-                                    name="earlyRegistrationEnd"></p-calendar>
+                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar" [(ngModel)]="eventModel.earlyRegistrationEndTS" [showIcon]="true"
+                                    required name="earlyRegistrationEnd"></p-calendar>
                             </div>
                         </div>
                         <div class="ui-g">
@@ -73,9 +64,7 @@
                                 <label class="field-title">{{'EVENT_EDIT.REGISTRATION_ENDS'|translate}}</label>
                             </div>
                             <div class="ui-g-9 ui-fluid">
-                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar"
-                                    [(ngModel)]="eventModel.registrationEndTS"
-                                    [showIcon]="true" required
+                                <p-calendar dateFormat="dd/mm/yy" icon="fa fa-calendar" [(ngModel)]="eventModel.registrationEndTS" [showIcon]="true" required
                                     name="registrationEnd"></p-calendar>
                             </div>
                         </div>
@@ -87,9 +76,7 @@
                                 <label class="field-title">{{'EVENT_EDIT.LOCATION'|translate}}</label>
                             </div>
                             <div class="ui-g-9 ui-fluid">
-                                <textarea pInputTextarea [(ngModel)]="eventModel.address"
-                                    style="resize:none; height:8em"
-                                    name="address"></textarea>
+                                <textarea pInputTextarea [(ngModel)]="eventModel.address" style="resize:none; height:8em" name="address"></textarea>
                             </div>
                         </div>
 
@@ -98,35 +85,27 @@
                                 <label class="field-title">{{'EVENT_EDIT.IMAGE'|translate}}</label>
                             </div>
                             <div class="ui-g-4 ui-fluid">
-                                <p-fileUpload #fubauto mode="basic" maxFileSize="10000000"
-                                    accept="image/*" (onUpload)="onImageUpload($event)"
-                                    auto="true" chooseLabel="{{'COMMON.CHOOSE_IMAGE'|translate}}"></p-fileUpload>
+                                <p-fileUpload #fubauto mode="basic" maxFileSize="10000000" accept="image/*" (onUpload)="onImageUpload($event)" auto="true"
+                                    chooseLabel="{{'COMMON.CHOOSE_IMAGE'|translate}}"></p-fileUpload>
                             </div>
-                            <img *ngIf="eventModel.imgPath" src="{{getEventImageUrl()}}"
-                                class="ui-g-9 ui-g-offset-3"
-                            />
+                            <img *ngIf="eventModel.imgPath" src="{{getEventImageUrl()}}" class="ui-g-9 ui-g-offset-3" />
                         </div>
                         <div class="ui-g">
                             <div class="ui-g-3 ui-fluid">
                                 <label>{{'EVENT_EDIT.TERMS_AND_CONDITIONS'|translate}}</label>
                             </div>
                             <div class="ui-g-4 ui-fluid">
-                                <p-fileUpload #fubauto mode="basic" accept="application/pdf"
-                                    maxFileSize="10000000"
-                                    (onUpload)="onTncUpload($event)"
-                                    auto="true" chooseLabel="{{'COMMON.CHOOSE_FILE'|translate}}"
-                                    validate></p-fileUpload>
+                                <p-fileUpload #fubauto mode="basic" accept="application/pdf" maxFileSize="10000000" (onUpload)="onTncUpload($event)" auto="true"
+                                    chooseLabel="{{'COMMON.CHOOSE_FILE'|translate}}" validate></p-fileUpload>
                             </div>
                             <div class="ui-g-4 ui-fluid">
-                                <button pButton type="button" label="{{'COMMON.DOWNLOAD'|translate}}"
-                                    (click)="downloadTnc()"
-                                    [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button>
+                                <button pButton type="button" label="{{'COMMON.DOWNLOAD'|translate}}" (click)="downloadTnc()" [disabled]="eventModel.tncFilePath == null || eventModel.tncFilePath==''"></button>
                             </div>
                         </div>
                     </form>
 
                 </div>
-                <div *ngIf="currentStep===1" class="">
+                <div [hidden]="currentStep!==1" class="">
                     <form novalidate #priceForm="ngForm" ngControl="priceForm">
                         <div class="ui-g">
                             <div class="ui-g-4 ui-g-offset-3 price-column">
@@ -138,19 +117,14 @@
                         </div>
                         <div class="ui-g">
                             <div class="ui-g-3">
-                                <label class="field-title">{{'EVENT_EDIT.EARLY_REGISTRATION'
-                                    | translate}}</label>
+                                <label class="field-title">{{'EVENT_EDIT.EARLY_REGISTRATION' | translate}}</label>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice"
-                                    type="number" min="0"
-                                    max="10000" name="earlyRegistrationPrice"
+                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPrice" type="number" min="0" max="10000" name="earlyRegistrationPrice"
                                     required />
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers"
-                                    type="number" min="0"
-                                    max="10000" name="earlyRegistrationPriceForMembers"
+                                <input pInputText [(ngModel)]="eventModel.earlyRegistrationPriceForMembers" type="number" min="0" max="10000" name="earlyRegistrationPriceForMembers"
                                     required />
                             </div>
                         </div>
@@ -159,34 +133,27 @@
                                 <label class="field-title">{{'EVENT_EDIT.LATE_REGISTRATION'|translate}}</label>
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPrice"
-                                    type="number" min="0"
-                                    max="10000" name="lateRegistrationPrice"
+                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPrice" type="number" min="0" max="10000" name="lateRegistrationPrice"
                                     required />
                             </div>
                             <div class="ui-g-4 price-column ui-fluid">
-                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers"
-                                    type="number" min="0"
-                                    max="10000" pattern="^\d+$"
-                                    name="lateRegistrationPriceForMembers"
-                                    required />
+                                <input pInputText [(ngModel)]="eventModel.lateRegistrationPriceForMembers" type="number" min="0" max="10000" pattern="^\d+$"
+                                    name="lateRegistrationPriceForMembers" required />
                             </div>
                         </div>
                     </form>
                 </div>
-                <div *ngIf="currentStep==2" class="">
-                    <category-edit [categories]="eventModel.categoryModels"
-                        [eventId]="eventModel.eventId">
+                <div [hidden]="currentStep!=2" class="">
+                    <category-edit [categories]="eventModel.categoryModels" [eventId]="eventModel.eventId">
                     </category-edit>
                 </div>
-                <div *ngIf="currentStep==3">
+                <div [hidden]="currentStep!=3">
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid">
                             <label class="field-title">{{'EVENT_EDIT.CONTACT_PHONE'|translate}}</label>
                         </div>
                         <div class="ui-g-9 ui-fluid">
-                            <input pInputText [(ngModel)]="eventModel.contactPhone"
-                            />
+                            <input pInputText [(ngModel)]="eventModel.contactPhone" />
                         </div>
                     </div>
                     <div class="ui-g">
@@ -194,8 +161,7 @@
                             <label class="field-title">{{'EVENT_EDIT.CONTACT_EMAIL'|translate}}</label>
                         </div>
                         <div class="ui-g-9 ui-fluid">
-                            <input pInputText [(ngModel)]="eventModel.contactEmail"
-                            />
+                            <input pInputText [(ngModel)]="eventModel.contactEmail" />
                         </div>
                     </div>
                     <div class="ui-g">
@@ -208,40 +174,26 @@
                     </div>
                     <div class="ui-g">
                         <div class="ui-g-3 ui-fluid">
-                            <label class="field-title">{{'EVENT_EDIT.VK_LINK'|translate}}</label>
-                        </div>
-                        <div class="ui-g-9 ui-fluid">
-                            <input pInputText [(ngModel)]="eventModel.vkLink" />
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-3 ui-fluid">
                             <label class="field-title">{{'EVENT_EDIT.ADDITIONAL_INFO'|translate}}</label>
                         </div>
                         <div class="ui-g-9 ui-fluid">
-                            <textarea pInputTextarea [(ngModel)]="eventModel.additionalData"
-                                style="resize:none; height:10em"></textarea>
+                            <textarea pInputTextarea [(ngModel)]="eventModel.additionalData" style="resize:none; height:10em"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="ui-g-12 navigation-buttons" *ngIf="eventModel">
                 <div class="float-left">
-                    <button pButton type="button" iconPos="left" icon="fa fa fa-arrow-left"
-                        label="{{'COMMON.BACK'|translate}}"
-                        (click)="previousStep()" *ngIf="currentStep != 0"></button>
+                    <button pButton type="button" iconPos="left" icon="fa fa fa-arrow-left" label="{{'COMMON.BACK'|translate}}" (click)="previousStep()"
+                        *ngIf="currentStep != 0"></button>
                 </div>
                 <div class="float-right">
-                    <p-button styleClass="ui-button-danger" icon="fa fa-times"
-                        label="{{'COMMON.DELETE'|translate}}"
-                        (click)="deleteEvent()"></p-button>
-                    <button pButton type="button" iconPos="left" icon="fa fa fa-save"
-                        label="{{'COMMON.SAVE'|translate}}"
-                        (click)="save()" [disabled]="!isEventValid()"></button>
-                    <button pButton type="button" iconPos="right" icon="fa fa fa-arrow-right"
-                        label="{{'COMMON.CONTINUE'|translate}}"
-                        (click)="nextStep()" [disabled]="!isEventValid()"
-                        *ngIf="currentStep != lastStep"></button>
+                    <p-button styleClass="ui-button-danger" icon="fa fa-times" label="{{'COMMON.DELETE'|translate}}" (click)="deleteEvent()"></p-button>
+
+                    <button pButton type="button" iconPos="right" icon="fa fa fa-arrow-right" label="{{'COMMON.CONTINUE'|translate}}" (click)="nextStep()"
+                        [disabled]="!isEventStepValid()" *ngIf="currentStep != lastStep"></button>
+                    <button pButton type="button" iconPos="left" icon="fa fa fa-save" label="{{'COMMON.SAVE_AND_CONTINUE'|translate}}" [disabled]="!isEventValid()" (click)="saveAndExit()"
+                        *ngIf="currentStep == lastStep"></button>
                 </div>
             </div>
             <p-confirmDialog width="425"> </p-confirmDialog>

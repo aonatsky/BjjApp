@@ -49,6 +49,13 @@ namespace TRNMNT.Core.Services.Interface
         Task<List<string>> GetUserRolesAsync(User user);
 
         /// <summary>
+        /// Returns is user admin async.
+        /// </summary>
+        /// <param name="userId">User id.</param>
+        /// <returns></returns>
+        Task<bool> IsAdminAsync(User user);
+
+        /// <summary>
         /// Gets the user asynchronous.
         /// </summary>
         /// <param name="claims">The claims.</param>

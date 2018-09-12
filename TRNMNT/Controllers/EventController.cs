@@ -209,10 +209,10 @@ namespace TRNMNT.Web.Controllers
                 true, true);
         }
 
-        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpDelete("[action]")]
-        public async Task<IActionResult> DeleteEvent(string id)
+        [Authorize(Roles = "Admin, FederationOwner, Owner"), HttpDelete("[action]/{eventId}")]
+        public async Task<IActionResult> DeleteEvent(Guid eventId)
         {
-            return await HandleRequestAsync(async() => await _eventService.DeleteEventAsync(id));
+            return await HandleRequestAsync(async() => await _eventService.DeleteEventAsync(eventId));
         }
 
         #endregion

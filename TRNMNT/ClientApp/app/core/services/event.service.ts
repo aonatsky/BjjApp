@@ -66,7 +66,7 @@ export class EventService {
   }
 
   getEventInfo() {
-    return this.httpService.get<EventModel>(ApiMethods.event.getEventInfo + '/').pipe(
+    return this.httpService.get<EventModel>(ApiMethods.event.getEventInfo).pipe(
       map(res => this.httpService.convertDate(res)),
       map(res => {
         this.currentEvent = res;
@@ -106,6 +106,4 @@ export class EventService {
   setBracketsPublish(eventId: AAGUID, value: boolean): Observable<any> {
     return this.httpService.post(ApiMethods.event.setBracketsPublish + '/' + eventId, { data: value });
   }
-
-  //private methods
 }

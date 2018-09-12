@@ -60,7 +60,7 @@ namespace TRNMNT.Core.Services.impl
             foreach (var weightDivision in weightDivisions)
             {
                 var participants =
-                    await _participantService.GetParticipantsByWeightDivisionAsync(weightDivision.WeightDivisionId, true);
+                    await _participantService.GetParticipantsByWeightDivisionAsync(weightDivision.WeightDivisionId, true, false, true);
                 var orderedParticapants = OrderParticipantsForBracket(participants.ToList());
                 _matchService.CreateMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId, orderedParticapants);
             }
@@ -105,11 +105,11 @@ namespace TRNMNT.Core.Services.impl
         public async Task<CustomFile> GetBracketFileAsync(Guid weightDivisionId)
         {
             var participants =
-                await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true);
+                await _participantService.GetParticipantsByWeightDivisionAsync(weightDivisionId, true, false, true);
             var orderedParticapants = OrderParticipantsForBracket(participants.ToList());
             var weightDivision = await _weightDivisionService.GetWeightDivisionAsync(weightDivisionId, true);
             var matches = await  _matchService.GetFirstMatchesAsync(weightDivision.CategoryId, weightDivision.WeightDivisionId);
-            return _fileService.GetBracketsFileAsync(matches, GetBracketTtitle(weightDivision.Category, weightDivision));
+            return _fileService.GetBracketsFileAsync(matches, GetBracketTitle(weightDivision.Category, weightDivision));
         }
 
         public async Task<Dictionary<string, BracketModel>> GetBracketsByCategoryAsync(Guid categoryId)
@@ -164,7 +164,7 @@ namespace TRNMNT.Core.Services.impl
             var model = new BracketModel
             {
                 WeightDivisionId = weightDivision.WeightDivisionId,
-                Title = GetBracketTtitle(weightDivision.Category, weightDivision),
+                Title = GetBracketTitle(weightDivision.Category, weightDivision),
                 Medalists = new List<MedalistModel>(),
                 MatchModels = matches.Select(m => GetMatchModel(m, weightDivision.Category.MatchTime)).ToList()
             };
@@ -230,7 +230,7 @@ namespace TRNMNT.Core.Services.impl
             };
         }
 
-        private string GetBracketTtitle(Category category, WeightDivision weightDivision) => $"{category.Name} / {weightDivision.Name}";
+        private string GetBracketTitle(Category category, WeightDivision weightDivision) => $"{category.Name} / {weightDivision.Name}";
 
         private const int ParticipantsMaxCount = 64;
 

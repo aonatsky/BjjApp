@@ -177,7 +177,7 @@ namespace TRNMNT.Core.Services.Impl
             }
             if (!identityResult.Succeeded)
             {
-                if(identityResult.Errors.Any(e => e.Code == "DuplicateUserName"))
+                if (identityResult.Errors.Any(e => e.Code == "DuplicateUserName"))
                 {
                     throw new BusinessException("ERROR.DUPLICATE_EMAIL");
                 }
@@ -220,6 +220,10 @@ namespace TRNMNT.Core.Services.Impl
             await _userManager.UpdateAsync(user);
         }
 
+        public async Task<bool> IsAdminAsync(User user)
+        {
+            return (await GetUserRolesAsync(user)).Any(r => r == Roles.Admin);
+        }
         #endregion
 
     }

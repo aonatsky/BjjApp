@@ -166,7 +166,7 @@ namespace TRNMNT.Core.Services.Impl
             return participant;
         }
 
-        public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId, bool includeTeam = false, bool showInactive = true)
+        public async Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId, bool includeTeam = false, bool showInactive = true, bool onlyPayed = false)
         {
             var query = _repository.GetAll(p =>
                 p.WeightDivisionId == weightDivisionId || p.AbsoluteWeightDivisionId == weightDivisionId);
@@ -174,7 +174,10 @@ namespace TRNMNT.Core.Services.Impl
             {
                 query = query.Where(p => p.IsActive);
             }
-
+            if (onlyPayed)
+            {
+                query = query.Where(p => p.ApprovalStatus == ApprovalStatus.Approved);
+            }
             if (includeTeam)
             {
                 query = query.Include(p => p.Team);

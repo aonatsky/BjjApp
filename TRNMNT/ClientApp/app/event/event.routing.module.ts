@@ -15,7 +15,8 @@ import { Roles } from '../core/consts/roles.const';
 const routes: Routes = [
   {
     path: 'event',
-    component: EventComponent
+    component: EventComponent,
+    runGuardsAndResolvers: 'always'
   },
   {
     path: 'event/participant-registration',
@@ -26,7 +27,7 @@ const routes: Routes = [
     path: 'event/participant-team-registration',
     component: ParticipantTeamRegistrationComponent,
     canActivate: [AuthGuard],
-    data: { expectedRoles: [Roles.TeamOwner] },
+    data: { expectedRoles: [Roles.TeamOwner] }
   },
   {
     path: 'event/participant-registration-complete',

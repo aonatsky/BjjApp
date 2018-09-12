@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using TRNMNT.Core.Const;
 using TRNMNT.Core.Enum;
 using TRNMNT.Core.Model.Round;
 using TRNMNT.Core.Services.Interface;
@@ -81,14 +82,6 @@ namespace TRNMNT.Core.Services.impl
                     _matchRepository.Update(match);
                 }
             }
-
-            // CANNOT RUN BRACKET WITHOUT MATCHES CREATED
-            // else
-            // {
-            //     matches = await CreateMatchesAsync(categoryId, weightDivisionId);
-            //     matches = ProcessMatches(matches);
-            //     _matchRepository.AddRange(matches);
-            // }
             return matches;
         }
 
@@ -182,11 +175,11 @@ namespace TRNMNT.Core.Services.impl
             var maxRound = matchesToProcess.Max(m => m.Round);
             foreach (var matchToProcess in matchesToProcess.Where(m => m.Round == maxRound))
             {
-                if (matchToProcess.AParticipantId == null)
+                if (matchToProcess.AParticipantId == null || (matchToProcess.AParticipant != null && matchToProcess.AParticipant.WeightInStatus == ApprovalStatus.Declined))
                 {
                     SetMatchNoContest(matchToProcess, matchToProcess.BParticipant);
                 }
-                else if (matchToProcess.BParticipantId == null)
+                else if (matchToProcess.BParticipantId == null || (matchToProcess.BParticipant != null && matchToProcess.BParticipant.WeightInStatus == ApprovalStatus.Declined))
                 {
                     SetMatchNoContest(matchToProcess, matchToProcess.AParticipant);
                 }

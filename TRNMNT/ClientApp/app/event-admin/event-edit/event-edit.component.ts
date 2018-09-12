@@ -31,7 +31,7 @@ export class EventEditComponent implements OnInit {
     private eventService: EventService,
     private route: ActivatedRoute,
     private translateService: TranslateService,
-    private routerservice: RouterService,
+    private routerService: RouterService,
     private confirmationService: ConfirmationService
   ) {}
 
@@ -39,41 +39,6 @@ export class EventEditComponent implements OnInit {
     this.initMenu();
     this.initData();
   }
-
-  private initData() {
-    this.route.params.subscribe(p => {
-      let id = p['id'];
-      if (id && id != '') {
-        this.eventService.getEvent(id).subscribe(r => (this.eventModel = r));
-      } else {
-        alert('No data to display');
-      }
-    });
-  }
-
-  private initMenu() {
-    this.menuItems = [
-      {
-        label: this.translateService.instant('EVENT_EDIT.GENERAL_INFORMATION')
-      },
-      {
-        label: this.translateService.instant('EVENT_EDIT.PRICES')
-      },
-      {
-        label: this.translateService.instant('EVENT_EDIT.CATEGORIES')
-      },
-      {
-        label: this.translateService.instant('EVENT_EDIT.ADDITIONAL')
-      }
-    ];
-  }
-
-  private modelReload() {
-    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
-      this.eventModel = r;
-    });
-  }
-
   isDatesValid(): boolean {
     if (
       !this.eventModel.registrationStartTS ||
@@ -90,30 +55,27 @@ export class EventEditComponent implements OnInit {
       this.eventModel.eventDate > DateHelper.getCurrentDate()
     );
   }
-
-  private imageReload() {
-    this.cacheRefreshToken = Date.now().toString();
-    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
-      this.eventModel.imgPath = r.imgPath;
-    });
-  }
-
-  private tncReload() {
-    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
-      this.eventModel.tncFilePath = r.tncFilePath;
-    });
-  }
-
-  isEventValid(): boolean {
+  isEventStepValid(): boolean {
     return (
-      (this.currentStep == 0 &&
+      (this.currentStep === 0 &&
         !!this.mainDataForm &&
         this.mainDataForm.valid &&
         !!this.eventModel.tncFilePath &&
         this.isDatesValid()) ||
-      (!!this.priceForm && this.priceForm.valid && this.currentStep == 1) ||
-      this.currentStep == 2 ||
-      this.currentStep == 3
+      (!!this.priceForm && this.priceForm.valid && this.currentStep === 1) ||
+      this.currentStep === 2 ||
+      this.currentStep === 3
+    );
+  }
+
+  isEventValid(): boolean {
+    return (
+      !!this.mainDataForm &&
+      this.mainDataForm.valid &&
+      !!this.eventModel.tncFilePath &&
+      this.isDatesValid() &&
+      this.priceForm &&
+      this.priceForm.valid
     );
   }
 
@@ -129,45 +91,38 @@ export class EventEditComponent implements OnInit {
     this.eventService.updateEvent(this.eventModel).subscribe();
   }
 
+  saveAndExit() {
+    this.eventService.updateEvent(this.eventModel).subscribe(() => this.routerService.goToEventAdmin());
+  }
+
   deleteEvent() {
     this.showConfirm(this.delete);
   }
 
-  private delete() {
-    this.eventService.deleteEvent(this.eventModel.eventId).subscribe(() => this.routerservice.goToEventAdmin());
+  delete() {
+    this.eventService.deleteEvent(this.eventModel.eventId).subscribe(() => this.routerService.goToEventAdmin());
   }
 
-  private onImageUpload(event): void {
+  onImageUpload(event): void {
     this.eventService.uploadEventImage(event.files[0], this.eventModel.eventId).subscribe(r => this.imageReload());
   }
 
-  private onTncUpload(event): void {
+  onTncUpload(event): void {
     this.eventService.uploadEventTncFile(event.files[0], this.eventModel.eventId).subscribe(r => {
       this.tncReload();
     });
   }
 
-  private onPromoCodeUpload(event): void {
+  onPromoCodeUpload(event): void {
     this.eventService.uploadPromoCodeList(event.files[0], this.eventModel.eventId).subscribe(r => this.modelReload());
   }
 
-  private downloadTnc(): void {
+  downloadTnc(): void {
     this.eventService.downloadEventTncFile(this.eventModel.tncFilePath).subscribe();
   }
 
   getEventImageUrl(): string {
     return `${this.eventModel.imgPath}?${this.cacheRefreshToken}`;
-  }
-
-  showConfirm(method: Function) {
-    this.confirmationService.confirm({
-      header: this.translateService.instant('COMMON.CONFIRMATION'),
-      icon: 'fa fa fa-trash',
-      message: this.translateService.instant('EVENT_EDIT.DO_YOU_WANT_TO_DELETE_EVENT'),
-      acceptLabel: this.translateService.instant('COMMON.YES'),
-      rejectLabel: this.translateService.instant('COMMON.NO'),
-      accept: () => method()
-    });
   }
 
   checkIfPrefixExist() {
@@ -176,5 +131,73 @@ export class EventEditComponent implements OnInit {
         .isPrefixExists(this.eventModel.eventId, this.eventModel.urlPrefix)
         .subscribe(r => (this.isUrlPrefixExists = r));
     }
+  }
+
+  private showConfirm(method: (() => void)) {
+    this.confirmationService.confirm({
+      header: this.translateService.instant('COMMON.CONFIRMATION'),
+      icon: 'fa fa fa-trash',
+      message: this.translateService.instant('EVENT_EDIT.DO_YOU_WANT_TO_DELETE_EVENT'),
+      acceptLabel: this.translateService.instant('COMMON.YES'),
+      rejectLabel: this.translateService.instant('COMMON.NO'),
+      accept: () => method.call(this)
+    });
+  }
+
+  private initData() {
+    this.route.params.subscribe(p => {
+      const id = p['id'];
+      if (id && id !== '') {
+        this.eventService.getEvent(id).subscribe(r => (this.eventModel = r));
+      }
+    });
+  }
+
+  private initMenu() {
+    this.menuItems = [
+      {
+        label: this.translateService.instant('EVENT_EDIT.GENERAL_INFORMATION'),
+        command: () => {
+          this.currentStep = 0;
+        }
+      },
+      {
+        label: this.translateService.instant('EVENT_EDIT.PRICES'),
+        command: () => {
+          this.currentStep = 1;
+        }
+      },
+      {
+        label: this.translateService.instant('EVENT_EDIT.CATEGORIES'),
+        command: () => {
+          this.currentStep = 2;
+        }
+      },
+      {
+        label: this.translateService.instant('EVENT_EDIT.ADDITIONAL'),
+        command: () => {
+          this.currentStep = 3;
+        }
+      }
+    ];
+  }
+
+  private modelReload() {
+    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
+      this.eventModel = r;
+    });
+  }
+
+  private imageReload() {
+    this.cacheRefreshToken = Date.now().toString();
+    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
+      this.eventModel.imgPath = r.imgPath;
+    });
+  }
+
+  private tncReload() {
+    this.eventService.getEvent(this.eventModel.eventId).subscribe(r => {
+      this.eventModel.tncFilePath = r.tncFilePath;
+    });
   }
 }

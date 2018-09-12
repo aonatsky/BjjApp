@@ -13,11 +13,6 @@ export class EventModelBase {
 }
 
 export class EventModel extends EventModelBase {
-  constructor() {
-    super();
-    this.categoryModels = [];
-  }
-
   description: string;
   address: string;
   imgPath: string;
@@ -36,6 +31,11 @@ export class EventModel extends EventModelBase {
   earlyRegistrationPriceForMembers: number;
   lateRegistrationPriceForMembers: number;
   categoryModels: CategoryModel[];
+
+  constructor() {
+    super();
+    this.categoryModels = [];
+  }
 }
 
 export class EventPreviewModel extends EventModelBase {
@@ -45,13 +45,12 @@ export class EventPreviewModel extends EventModelBase {
 }
 
 export class EventDashboardModel extends EventModelBase {
+  bracketsCreated: boolean;
+  eventStatus: boolean;
+  participantGroups: CategoryWeightDivisionParticipants[];
   constructor() {
     super();
   }
-  bracketsCreated: boolean;
-
-  eventStatus: boolean;
-  participantGroups: CategoryWeightDivisionParticipants[];
 }
 
 export class CategoryWeightDivisionParticipants {

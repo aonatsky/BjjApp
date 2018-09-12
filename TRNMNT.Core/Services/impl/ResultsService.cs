@@ -48,11 +48,11 @@ namespace TRNMNT.Core.Services.impl
                     $"For Weight divisions for category with id {categoryId} not all rounds has winners");
             }
 
-            var absoluteDivisionPaticipants = new List<ParticipantInAbsoluteDivisionModel>();
+            var absoluteDivisionParticipants = new List<ParticipantInAbsoluteDivisionModel>();
             var selectedParticipantIds = (await _participantService.GetParticipantsInAbsoluteDivisionByCategoryAsync(categoryId)).Select(p => p.ParticipantId);
             foreach (var weightDivision in weightDivisions)
             {
-                absoluteDivisionPaticipants.AddRange(
+                absoluteDivisionParticipants.AddRange(
                     (await GetWeightDivisionMedalistsAsync(weightDivision.WeightDivisionId))
                     .Select(p => new ParticipantInAbsoluteDivisionModel()
                     {
@@ -64,7 +64,7 @@ namespace TRNMNT.Core.Services.impl
                         IsSelectedIntoDivision = selectedParticipantIds.Contains(p.Participant.ParticipantId)
                     }).ToList());
             }
-            return absoluteDivisionPaticipants;
+            return absoluteDivisionParticipants;
         }
 
 
@@ -132,11 +132,11 @@ namespace TRNMNT.Core.Services.impl
 
         public async Task<IEnumerable<CategoryWeightDivisionMedalistGroup>> GetGrouppedPersonalResultsAsync(IEnumerable<Guid> categoryIds)
         {
-            var categoryWeightDivisioMedalistGroups = new List<CategoryWeightDivisionMedalistGroup>();
+            var categoryWeightDivisionMedalistGroups = new List<CategoryWeightDivisionMedalistGroup>();
             foreach (var categoryId in categoryIds)
             {
                 var weightDivisions = await _weightDivisionService.GetWeightDivisionsByCategoryIdAsync(categoryId, true);
-                var categoryWeightDivisioMedalistGroup = new CategoryWeightDivisionMedalistGroup()
+                var categoryWeightDivisionMedalistGroup = new CategoryWeightDivisionMedalistGroup()
                 {
                     CategoryName = weightDivisions.FirstOrDefault()?.Category.Name,
                     WeightDivisionMedalistGroups = new List<WeightDivisionMedalistGroup>()
@@ -144,16 +144,16 @@ namespace TRNMNT.Core.Services.impl
 
                 foreach (var weightDivision in weightDivisions)
                 {
-                    categoryWeightDivisioMedalistGroup.WeightDivisionMedalistGroups.Add(new WeightDivisionMedalistGroup()
+                    categoryWeightDivisionMedalistGroup.WeightDivisionMedalistGroups.Add(new WeightDivisionMedalistGroup()
                     {
                         WeightDivisionName = weightDivision.Name,
                         Medalists = await GetWeightDivisionMedalistsAsync(weightDivision.WeightDivisionId)
 
                     });
                 }
-                categoryWeightDivisioMedalistGroups.Add(categoryWeightDivisioMedalistGroup);
+                categoryWeightDivisionMedalistGroups.Add(categoryWeightDivisionMedalistGroup);
             }
-            return categoryWeightDivisioMedalistGroups;
+            return categoryWeightDivisionMedalistGroups;
         }
     }
 }

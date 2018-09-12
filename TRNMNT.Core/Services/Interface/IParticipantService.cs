@@ -69,9 +69,10 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="weightDivisionId"></param>
         /// <param name="includeTeam"></param>
-        /// <param name="showInactive"></param>
+        /// <param name="showInactive">Add not active participants  </param>
+        /// <param name="onlyPayed">Only particpants with payment approval</param>
         /// <returns>List of participants</returns>
-        Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId, bool includeTeam = false, bool showInactive = false);
+        Task<IEnumerable<Participant>> GetParticipantsByWeightDivisionAsync(Guid weightDivisionId, bool includeTeam = false, bool showInactive = false, bool onlyPayed = false);
 
         /// <summary>
         /// Returns participants for absolute division by category

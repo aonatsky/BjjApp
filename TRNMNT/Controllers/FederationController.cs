@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -41,12 +42,14 @@ namespace TRNMNT.Web.Controllers
 
         #region Public Methods
 
-        [HttpGet("[action]")]
+        [Authorize(Roles = "FederationOwner,Admin"), HttpGet("[action]")]
         public async Task<IActionResult> GetFederation()
         {
             return await HandleRequestWithDataAsync(async() =>
             {
-                var federationModel = await _federationService.GetFederationModelAsync(GetFederationId().Value, (await GetUserAsync()).Id);
+
+                var user = await GetUserAsync();
+                var federationModel = await _federationService.GetFederationModelAsync(GetFederationId().Value, user.Id, await UserService.IsAdminAsync(user));
                 if (federationModel == null)
                 {
                     return NotFoundResponse();
@@ -55,12 +58,13 @@ namespace TRNMNT.Web.Controllers
             }, false, true);
         }
 
-        [HttpGet("[action]/{eventId}")]
+        [Authorize(Roles = "FederationOwner,Admin"), HttpGet("[action]/{eventId}")]
         public async Task<IActionResult> UpdateFederation([FromBody] FederationModel model)
         {
             return await HandleRequestAsync(async() =>
             {
-                await _federationService.UpdateFederationAsync(model, GetFederationId().Value, (await GetUserAsync()).Id);
+                var user = await GetUserAsync();
+                await _federationService.UpdateFederationAsync(model, GetFederationId().Value, user.Id, await UserService.IsAdminAsync(user));
             });
         }
 

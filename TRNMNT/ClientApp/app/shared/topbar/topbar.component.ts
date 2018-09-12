@@ -54,12 +54,12 @@ export class TopbarComponent implements OnInit {
       {
         label: this.translateService.instant('MENU.MY_TEAM'),
         routerLink: ['participant/my-team'],
-        visible:  this.isLoggedIn && this.authService.ifRolesMatch([Roles.TeamOwner])
+        visible: this.isLoggedIn && this.authService.ifRolesMatch([Roles.TeamOwner])
       },
       {
         label: this.translateService.instant('MENU.FEDERATION'),
         routerLink: ['event-admin/federation-edit'],
-        visible:  this.isLoggedIn && this.authService.ifRolesMatch([Roles.FederationOwner, Roles.Admin])
+        visible: this.isLoggedIn && this.authService.ifRolesMatch([Roles.FederationOwner, Roles.Admin])
       },
       {
         label: this.translateService.instant('MENU.LOGIN'),
@@ -78,8 +78,11 @@ export class TopbarComponent implements OnInit {
     ];
   }
 
-  goHome() {
-    this.routerService.navigateByUrl('/');
+  getHomeLink(): string {
+    if (this.routerService.isEventPortal()) {
+      return '/event';
+    }
+    return '/';
   }
 
   isTopbarShown(): boolean {

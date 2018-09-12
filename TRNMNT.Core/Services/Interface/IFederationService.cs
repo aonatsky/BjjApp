@@ -32,15 +32,17 @@ namespace TRNMNT.Core.Services.Interface
         /// </summary>
         /// <param name="federationId">Federation Id.</param>
         /// <param name="userId">User Id.</param>
+        /// /// <param name="isAdmin">Is User admin.</param>
         /// <returns></returns>
-        Task<FederationModel> GetFederationModelAsync(Guid federationId, string userId);
+        Task<FederationModel> GetFederationModelAsync(Guid federationId, string userId, bool isAdmin = false);
 
         /// <summary>
         /// Updates federation model
         /// </summary>
         /// <param name="model">Federation model.</param>
-        /// /// <param name="userId">User Id.</param>
+        /// <param name="userId">User Id.</param>
+        /// <param name="isAdmin">Is User admin.</param>
         /// <returns></returns>
-        Task UpdateFederationAsync(FederationModel model, Guid federationId, string userId);
+        Task UpdateFederationAsync(FederationModel model, Guid federationId, string userId, bool isAdmin = false);
     }
 }

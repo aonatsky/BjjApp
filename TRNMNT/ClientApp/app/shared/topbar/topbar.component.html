@@ -1,6 +1,6 @@
 <div class="ui-g topbar" *ngIf="isTopbarShown()">
     <div class="ui-container ui-g-nopad">
-        <a [routerLink]="'/'" class="ui-g-1 logo">
+        <a [routerLink]="getHomeLink()" class="ui-g-1 logo">
             <b>coming soon</b>
         </a>
         <p-menubar [model]="items" [autoDisplay]="false">
