@@ -48,7 +48,6 @@ namespace TRNMNT.Web.Controllers
         #region Public Methods
 
         [HttpGet("[action]/{weightDivisionId}")]
-        [Authorize(Roles = "FederationOwner, Owner, Admin")]
         public async Task<IActionResult> CreateBracket(Guid weightDivisionId)
         {
             return await HandleRequestWithDataAsync(async() =>
