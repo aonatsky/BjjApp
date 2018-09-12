@@ -15,7 +15,7 @@ export class BracketService {
   constructor(private loggerService: LoggerService, private httpService: HttpService) {}
 
   getBracket(weightDivisionId): Observable<BracketModel> {
-    return this.httpService.get(ApiMethods.bracket.createBracket + '/' + weightDivisionId);
+    return this.httpService.get(ApiMethods.bracket.getBracket + '/' + weightDivisionId);
   }
 
   runBracket(weightDivisionId): Observable<BracketModel> {

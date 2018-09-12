@@ -81,6 +81,12 @@ export class EventComponent implements OnInit {
     });
   }
 
+  filterSelected($event: CategoryWithDivisionFilterModel) {
+    this.filter = $event;
+    this.bracket = null;
+    this.bracketService.getBracket(this.filter.weightDivisionId).subscribe(r => (this.bracket = r));
+  }
+
   private checkIsParticipant() {
     if (this.authService.isLoggedIn()) {
       this.userService.getIsParticipant().subscribe(r => (this.isParticipant = r));

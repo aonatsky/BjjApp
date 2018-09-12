@@ -47,8 +47,8 @@ namespace TRNMNT.Web.Controllers
 
         #region Public Methods
 
-        [HttpGet("[action]/{weightDivisionId}")]
-        public async Task<IActionResult> CreateBracket(Guid weightDivisionId)
+        [AllowAnonymous,HttpGet("[action]/{weightDivisionId}")]
+        public async Task<IActionResult> GetBracket(Guid weightDivisionId)
         {
             return await HandleRequestWithDataAsync(async() =>
             {

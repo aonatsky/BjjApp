@@ -79,7 +79,7 @@ export const ApiMethods = Object.freeze({
     getPaymentData: 'api/payment/GetPaymentDataForParticipant'
   },
   bracket: {
-    createBracket: 'api/bracket/createBracket',
+    getBracket: 'api/bracket/getBracket',
     runBracket: 'api/bracket/runBracket',
     downloadFile: 'api/bracket/downloadFile',
     updateBracket: 'api/bracket/updateBracket',
@@ -91,8 +91,7 @@ export const ApiMethods = Object.freeze({
     setBracketResult: 'api/bracket/setBracketResult',
     areBracketsCreated: 'api/bracket/areBracketsCreated',
     createBrackets: 'api/bracket/createBrackets',
-    deleteBrackets: 'api/bracket/deleteBrackets',
-    
+    deleteBrackets: 'api/bracket/deleteBrackets'
   },
   results: {
     getTeamResutls: 'api/results/getTeamResults',

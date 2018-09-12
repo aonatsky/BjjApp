@@ -17,7 +17,8 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canActivate: [RedirectGuard]
   },
   {
     path: 'register',
