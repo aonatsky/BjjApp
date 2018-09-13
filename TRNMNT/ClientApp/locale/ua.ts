@@ -69,8 +69,7 @@ export const data = {
     CONGRATS_YOU_ARE_REGISTERED_TO: 'Вітаємо, ви зареєстровані на {{value}}',
     GO_BACK_TO_EVENT_PAGE: 'Повернутись на сторінку події',
     ADD_MEMBERSHIP: 'Дотати внесок за членство в федерації',
-    ADD_MEMBERSHIP_TOOLTIP:
-      'Членство у UBJJF Федерація Бразильського Джиу Джитсу України, дає можливість участі у річному заліку, знижки на участь у змаганнях, а також цінні призи за найкращі показники атлетів',
+    ADD_MEMBERSHIP_TOOLTIP: 'Членство у UBJJF Федерація Бразильського Джиу Джитсу України, дає можливість участі у річному заліку, знижки на участь у змаганнях, а також цінні призи за найкращі показники атлетів',
     TEAM_PARTICIPATION: 'Командна реєстрація',
     PARTICIPATE: 'Прийняти участь',
     ADD: 'Додати',
@@ -102,8 +101,8 @@ export const data = {
     EDIT_EVENT_DESCRIPTION: 'Змінюйте інформацію про подію, категорії та контактні дані',
     MANAGE_EVENT: 'Управління подією',
     MANAGE_EVENT_DESCRIPTION: 'Керуйте списком учасників та сітками',
-    RUN_EVENT: 'Провести події',
-    RUN_EVENT_DESCRIPTION: 'Нарешті провести подію',
+    RUN_EVENT: 'Провести подію',
+    RUN_EVENT_DESCRIPTION: 'Нехай вже поборяться за перемогу',
     EVENT_STATUS: 'Статус події',
     CORRECTIONS_ENABLED: 'Корегування дозволені',
     BRACKETS_CREATED: 'Турнірні сітки створені',
@@ -111,7 +110,7 @@ export const data = {
     PARTICIPANT_LISTS_PUBLISHED: 'Списки опубліковані',
     PARTICIPANT_LISTS_PUBLISHED_DESCRIPTION: 'Керуйте публікацією списків учасників',
     CORRECTIONS_ENABLED_DESCRIPTION: 'Вмикайте або вимикайте можливість корегування для атлетів',
-    'BRACKETS_PUBLISHED_DESCRIPTION ': 'Керуйте публікацією сіток, не забудьте їх створити перед публікацією',
+    BRACKETS_PUBLISHED_DESCRIPTION: 'Керуйте публікацією сіток, не забудьте їх створити перед публікацією',
     CREATE_BRACKETS: 'Сітки можна створити тут'
   },
   FEDERATION_EDIT: {
